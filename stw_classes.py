@@ -235,13 +235,13 @@ There are parts of another man or men scattered around you.{rst}""")
 
         if weapon_data['name'] in ('Pistol','Revolver','Rifle','Shotgun','Crossbow') and 'Tench Eyes' in self.perks:
             base_accuracy += 0.05
-            print(f"{p}\nAccuracy increased by 5% with Tench Eyes.")
+            print(f"\n{p}Accuracy increased by 5% with Tench Eyes.")
             t.sleep(1)
 
         if self.blind:
             base_accuracy *= (1 - self.blind_effect)
             reduction = int(self.blind_effect * 100)
-            print(f"{p}Your accuracy is down {reduction}% from {self.blinded_by}!{rst}")
+            print(f"\n{p}Your accuracy is down {reduction}% from {self.blinded_by}!{rst}")
             t.sleep(1)
 
         if random.random() <= base_accuracy: # if float 0-1 is less than the decimal accuracy value
@@ -354,7 +354,7 @@ There are parts of another man or men scattered around you.{rst}""")
                 self.blind = False
                 self.blinded_by = ''
                 self.blind_effect = 0.0
-                print(f"{p}{self.name} is no longer blinded!{rst}")
+                print(f"\n{p}You are no longer blinded!{rst}")
                 t.sleep(1)
 
 
@@ -899,7 +899,7 @@ class Enemy:
         if self.blind:
             accuracy = weapon_data['accuracy'] * (1 - self.blind_effect)
             reduction = int(self.blind_effect * 100)
-            print(f"{p}Accuracy down {reduction}% from {self.blinded_by}!{rst}")
+            print(f"\n{p}Accuracy down {reduction}% from {self.blinded_by}!{rst}")
             t.sleep(1)
         else:
             accuracy = weapon_data['accuracy']
@@ -996,7 +996,7 @@ class Enemy:
                 self.blind = False
                 self.blinded_by = ''
                 self.blind_effect = 0.0
-                print(f"{p}{self.name} is no longer blinded!{rst}")
+                print(f"\n{p}{self.name} is no longer blinded!{rst}")
                 t.sleep(1)
         
 
