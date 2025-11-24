@@ -515,7 +515,7 @@ def do_casino(player):
         t.sleep(3)
         return
     
-    print(f"{b}\nWelcome to Riverbroat Crasino.{rst}\n")
+    print(f"{b}Welcome to Riverbroat Crasino.{rst}\n")
     t.sleep(3)
     print(f"{b}One-to-one bets.\nClassic riverbroat grambling.{rst}\n")
     t.sleep(2)
