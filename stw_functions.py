@@ -495,7 +495,7 @@ def actions_menu(gs, player, shop):
                     overview(gs, player)
                 elif choice == "r":
                     page_two = False
-        elif choice == "r":
+        elif choice == "q":
             actions_main_menu()
         elif choice == "b" and remaining == 0 and not victory:
             do_boss_battle(gs, player, shop)
