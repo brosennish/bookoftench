@@ -91,7 +91,7 @@ def battle_header(player, enemy):
     ec = e_color(enemy)
 
     # Player battle header
-    print(f"\n{o}{player.name}{rst} {d}-{rst} {pc}{player.hp} HP{rst}\n{c}{p_weapon_data['name']}{rst}\n{d}Damage: {rst}{r}{p_weapon_data['damage']}{rst} {d}| Accuracy: {rst}{y}{p_weapon_data['accuracy']}{rst} {d}| Uses: {rst}{p_uses_left}")
+    print(f"\n{o}{player.name}{rst} {d}-{rst} {pc}{player.hp} HP {rst}\n{c}{p_weapon_data['name']}{rst}\n{d}Damage: {rst}{r}{p_weapon_data['damage']}{rst} {d}| Accuracy: {rst}{y}{p_weapon_data['accuracy']}{rst} {d}| Uses: {rst}{p_uses_left}")
     # Enemy battle header
     print(f"\n{p}{enemy.name}{rst} {d}-{rst} {ec}{enemy.hp} HP{rst}\n{c}{e_weapon_data['name']}{rst}\n{d}Damage: {rst}{r}{e_weapon_data['damage']}{rst} {d}| Accuracy: {rst}{y}{e_weapon_data['accuracy']}{rst} {d}| Uses: {rst}{e_uses_left}")
 
@@ -695,7 +695,7 @@ def do_equip_weapon(player):
             print(
                 f"[{idx}] {c}{p_weapon_data['name']}{rst}\n"
                 f"{d}Damage:{rst} {r}{p_weapon_data['damage']:<2}{rst} {d}| "
-                f"Accuracy:{rst} {y}{p_weapon_data['accuracy']}{rst} {d}| "
+                f"Accuracy:{rst} {y}{p_weapon_data['accuracy']:<3}{rst} {d}| "
                 f"Uses:{rst} {p_uses_left}"
             )
 
@@ -1058,7 +1058,7 @@ def battle(player, enemy, gs, shop):
                 stop_music()
                 play_area_theme(player)
                 return False # battle over, player dead
-            
+                        
 
 # ----- MAIN: START GAME LOGIC -----
 def main():

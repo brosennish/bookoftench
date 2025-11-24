@@ -69,6 +69,7 @@ class Player:
     hp: int = 100
     max_hp: int = 100
     xp: int = 0
+
     coins: int = 0
     bank: int = 0
     bank_interest_rate: float = 0.10
@@ -76,6 +77,12 @@ class Player:
     casino_won: int = 0
     casino_lost: int = 0
     plays: int = 10
+
+    blind: bool = False
+    blinded_by: str = ''
+    blind_effect: float = 0.0
+    blind_turns: int = 0
+
     current_weapon: str = 'Bare Hands'
     perks: List[str] = field(default_factory=list)
     cheat_death_ready: bool = False
@@ -231,6 +238,12 @@ There are parts of another man or men scattered around you.{rst}""")
             print(f"{p}\nAccuracy increased by 5% with Tench Eyes.")
             t.sleep(1)
 
+        if self.blind:
+            base_accuracy *= (1 - self.blind_effect)
+            reduction = int(self.blind_effect * 100)
+            print(f"{p}Your accuracy is down {reduction}% from {self.blinded_by}!{rst}")
+            t.sleep(1)
+
         if random.random() <= base_accuracy: # if float 0-1 is less than the decimal accuracy value
             spread = weapon_data.get('spread', 10)     # spread set to value (default 10 if none)
             base = weapon_data['damage'] + random.randint(-spread, spread) # base set to damage + random int within spread range
@@ -261,7 +274,38 @@ There are parts of another man or men scattered around you.{rst}""")
                         print(f'\n{p}Ambrose Blade increased damage by 3!{rst}')
                         dmg += 3
                         t.sleep(1)
-                
+            if weapon_data['name'] == 'Pepper Spray':
+                enemy.blind = True
+                enemy.blinded_by = 'Pepper Spray'
+                enemy.blind_effect = 0.50
+                reduction = int(enemy.blind_effect * 100)
+                enemy.blind_turns = 1
+                print(f'\n{p}{enemy.name} has been pepper sprayed! Accuracy down {reduction}% for one turn.{rst}')
+                t.sleep(1)
+            if weapon_data['name'] == 'Bear Spray':
+                enemy.blind = True
+                enemy.blinded_by = 'Bear Spray'
+                enemy.blind_effect = 0.75
+                reduction = int(enemy.blind_effect * 100)
+                enemy.blind_turns = 1
+                print(f'\n{p}{enemy.name} has been bear sprayed! Accuracy down {reduction}% for one turn.{rst}')
+                t.sleep(1)
+            if weapon_data['name'] == 'Chili Powder':
+                enemy.blind = True
+                enemy.blinded_by = 'Chili Powder'
+                enemy.blind_effect = 0.15
+                reduction = int(enemy.blind_effect * 100)
+                enemy.blind_turns = random.randint(3,5)
+                print(f'\n{p}{enemy.name} has been blinded by chili powder! Accuracy down {reduction}% for {enemy.blind_turns} turns.{rst}')
+                t.sleep(1)
+            if weapon_data['name'] == 'Pocket Sand':
+                enemy.blind = True
+                enemy.blinded_by = 'Pocket Sand'
+                enemy.blind_effect = 0.10
+                reduction = int(enemy.blind_effect * 100)
+                enemy.blind_turns = random.randint(2,4)
+                print(f'\n{p}{enemy.name} has been blinded by pocket sand! Accuracy down {reduction}% for {enemy.blind_turns} turns.{rst}')
+                t.sleep(1)
 
             print(f'\nYou attacked {enemy.name} with your {self.current_weapon} for {r}{dmg} {rst}damage!')
             if crit:
@@ -294,12 +338,24 @@ There are parts of another man or men scattered around you.{rst}""")
                         self.current_weapon = 'Bare Hands'
                     if 'Bare Hands' not in self.weapons:
                         self.weapons.append('Bare Hands')
-
             enemy.take_damage(dmg)
+            self.blind_reset()
     
         else:
             print(f'\n{y}You missed.')
+            self.blind_reset()
             t.sleep(1)
+
+
+    def blind_reset(self):
+        if self.blind_turns > 0:
+            self.blind_turns -= 1
+            if self.blind_turns == 0:
+                self.blind = False
+                self.blinded_by = ''
+                self.blind_effect = 0.0
+                print(f"{p}{self.name} is no longer blinded!{rst}")
+                t.sleep(1)
 
 
     def use_item(self):
@@ -672,6 +728,10 @@ class Enemy:
     type: str
     coins: int
     current_area: str
+    blind: bool = False
+    blinded_by: str = ''
+    blind_effect: float = 0.0
+    blind_turns: int = 0
     alive: bool = True
     weapon_uses: Dict[str, int] = field(
     default_factory=lambda: {
@@ -836,7 +896,15 @@ class Enemy:
             weapon_data = get_weapon_data('Bare Hands')
             self.current_weapon = 'Bare Hands'
 
-        if random.random() <= weapon_data['accuracy']:
+        if self.blind:
+            accuracy = weapon_data['accuracy'] * (1 - self.blind_effect)
+            reduction = int(self.blind_effect * 100)
+            print(f"{p}Accuracy down {reduction}% from {self.blinded_by}!{rst}")
+            t.sleep(1)
+        else:
+            accuracy = weapon_data['accuracy']
+
+        if random.random() <= accuracy:
             spread = weapon_data.get('spread', 10) # Weapon spread, default 10 if no value
             base = weapon_data['damage'] + random.randint(-spread, spread) # Base damage +/- 10
             base_floor = max(5, base) # Damage >= 5
@@ -844,8 +912,42 @@ class Enemy:
             dmg = base_floor * 2 if crit else base_floor # 2x damage if crit, otherwise dmg after spread
             if weapon_data['name'] in ('Pistol','Rifle','Revolver','Shotgun') and 'Bulletproof' in player.perks:
                 print(f"\n{p}Bulletproof absorbs 10% of the damage!{rst}")
-                t.sleep(1)
                 dmg = int(dmg * 0.9)
+                t.sleep(1)
+
+            # blind effects on player
+            if weapon_data['name'] == 'Pepper Spray':
+                player.blind = True
+                player.blinded_by = 'Pepper Spray'
+                player.blind_effect = 0.50
+                reduction = int(self.blind_effect * 100)
+                player.blind_turns = 1
+                print(f'\n{y}You have been pepper sprayed! Accuracy down {reduction}% for one turn.{rst}')
+                t.sleep(1)
+            if weapon_data['name'] == 'Bear Spray':
+                player.blind = True
+                player.blinded_by = 'Bear Spray'
+                player.blind_effect = 0.75
+                reduction = int(self.blind_effect * 100)
+                player.blind_turns = 1
+                print(f'\n{y}You have been bear sprayed! Accuracy down {reduction}% for one turn.{rst}')
+                t.sleep(1)
+            if weapon_data['name'] == 'Chili Powder':
+                player.blind = True
+                player.blinded_by = 'Chili Powder'
+                player.blind_effect = 0.15
+                reduction = int(self.blind_effect * 100)
+                player.blind_turns = random.randint(3,5)
+                print(f'\nYou have been blinded by chili powder! Accuracy down {reduction}% for {player.blind_turns} turns.{rst}')
+                t.sleep(1)
+            if weapon_data['name'] == 'Pocket Sand':
+                player.blind = True
+                player.blinded_by = 'Pocket Sand'
+                player.blind_effect = 0.10
+                reduction = int(self.blind_effect * 100)
+                player.blind_turns = random.randint(2,4)
+                print(f'\n{r}You have been blinded by pocket sand! Accuracy down {reduction}% for {player.blind_turns} turns.{rst}')
+                t.sleep(1)
 
             if self.name == 'The Mayor' and player.hp > 0:
                 coke = random.random() < 0.10
@@ -862,7 +964,7 @@ class Enemy:
                     print(f"{p}Mama Gator attacked you causing {bite} damage!{rst}")
                     play_sound('gator')
                     t.sleep(2)
-            
+
             if player.alive:
                 print(f"\n{self.name} attacked you with their {self.current_weapon} for {r}{dmg}{rst} damage!")
                 if crit:
@@ -873,6 +975,9 @@ class Enemy:
                                 
                 self.switch_weapon()
                 alive = player.take_damage(dmg)  # T/F if the player survived or died 
+                
+                # blind reset logic 
+                self.blind_reset()
                 return alive
 
             return False 
@@ -880,7 +985,19 @@ class Enemy:
         else:
             print(f"\n{y}{self.name} missed!")
             t.sleep(1)
+            self.blind_reset()
             return True # missed, player still alive
+        
+    
+    def blind_reset(self):
+        if self.blind_turns > 0:
+            self.blind_turns -= 1
+            if self.blind_turns == 0:
+                self.blind = False
+                self.blinded_by = ''
+                self.blind_effect = 0.0
+                print(f"{p}{self.name} is no longer blinded!{rst}")
+                t.sleep(1)
         
 
     # === Weapons: Selection & Switching ===
@@ -905,6 +1022,15 @@ class Enemy:
                 self.weapons.remove(self.current_weapon)
                 if self.weapons:
                     self.current_weapon = self.weapons[0]
+                else:
+                    self.weapons.append('Bare Hands')
+                    self.current_weapon = 'Bare Hands'
+                    self.weapon_uses['Bare Hands'] = -1
+            elif weapon_data['type'] == 'blind':
+                # For blind weapons, switch to a different weapon if available
+                available_weapons = [w for w in self.weapons if w != self.current_weapon]
+                if available_weapons:
+                    self.current_weapon = random.choice(available_weapons)
                 else:
                     self.weapons.append('Bare Hands')
                     self.current_weapon = 'Bare Hands'
@@ -1045,9 +1171,9 @@ class Shop:
                     f"[{actual}] "
                     f"{c}{weapon['name']:<24}{rst} {d}|{rst} "
                     f"Cost: {o}{weapon['cost']:<3}{rst} {d}|{rst} "
-                    f"DMG: {r}{weapon['damage']:<3}{rst} {d}|{rst} "
-                    f"ACC: {y}{acc:<4}{rst} {d}|{rst} "
-                    f"Uses: {uses:<3} "
+                    f"DMG: {r}{weapon['damage']:<2}{rst} {d}|{rst} "
+                    f"ACC: {y}{acc:<3}{rst} {d}|{rst} "
+                    f"Uses: {uses} "
                 )
         else:
             print(f"{d}No weapons available at the moment.{rst}")
@@ -1187,7 +1313,7 @@ class Shop:
         log_event('sell_item')
 
 
-    def calculate_sell_price(weapon_name, current_uses):
+    def calculate_sell_price(self, weapon_name, current_uses):
         from stw_functions import get_weapon_data
 
         data = get_weapon_data(weapon_name)

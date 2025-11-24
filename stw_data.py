@@ -182,47 +182,59 @@ Perks = [
 
 
 Enemies = [
-    # --- CITY ---
-    {'name': 'Bandit',         'hp': 80,  'weapon': ['Knife', 'Bat'],                     'bounty': 30, 'type': 'normal'},
-    {'name': 'Goon',           'hp': 100, 'weapon': ['Bat', 'Brass Knuckles', 'Pistol'],  'bounty': 40, 'type': 'normal'},
-    {'name': 'Pimp',           'hp': 120, 'weapon': ['Bat', 'Brass Knuckles', 'Revolver'],'bounty': 60, 'type': 'normal'},
-    {'name': 'Hobo',           'hp': 80,  'weapon': ['Broken Bottle', 'Knife'],           'bounty': 25, 'type': 'normal'},
-    {'name': 'Serial Killer',  'hp': 120, 'weapon': ['Knife', 'Hatchet', 'Machete'],      'bounty': 65, 'type': 'normal'},
+    # ========================
+#        CITY ENEMIES
+# ========================
+{'name': 'Bandit',        'hp': 80,  'weapon': ['Knife', 'Bat'],                              'bounty': 30, 'type': 'normal'},
+{'name': 'Goon',          'hp': 100, 'weapon': ['Chili Powder', 'Bat', 'Pistol'],             'bounty': 40, 'type': 'normal'},
+{'name': 'Pimp',          'hp': 120, 'weapon': ['Pepper Spray', 'Brass Knuckles', 'Revolver'],'bounty': 60, 'type': 'normal'},
+{'name': 'Hobo',          'hp': 80,  'weapon': ['Broken Bottle', 'Knife', 'Pocket Sand'],     'bounty': 25, 'type': 'normal'},
+{'name': 'Serial Killer', 'hp': 120, 'weapon': ['Knife', 'Machete'],                          'bounty': 65, 'type': 'normal'},
 
-    # --- FOREST ---
-    {'name': 'Hiker',            'hp': 80,  'weapon': ['Hatchet', 'Knife'],               'bounty': 30, 'type': 'normal'},
-    {'name': 'Hunter',           'hp': 100, 'weapon': ['Machete', 'Shotgun', 'Rifle'],    'bounty': 50, 'type': 'normal'},
-    {'name': 'Poacher',          'hp': 120, 'weapon': ['Crossbow', 'Machete'],            'bounty': 60, 'type': 'normal'},
-    {'name': 'Disgraced Exile',  'hp': 100, 'weapon': ['Hatchet', 'Shovel'],              'bounty': 45, 'type': 'normal'},
+# ========================
+#       FOREST ENEMIES
+# ========================
+{'name': 'Hiker',            'hp': 80,  'weapon': ['Hatchet', 'Knife', 'Bear Spray'],       'bounty': 30, 'type': 'normal'},
+{'name': 'Hunter',           'hp': 100, 'weapon': ['Knife', 'Rifle', 'Bear Spray'],         'bounty': 50, 'type': 'normal'},
+{'name': 'Poacher',          'hp': 120, 'weapon': ['Crossbow', 'Machete', 'Bear Spray'],    'bounty': 60, 'type': 'normal'},
+{'name': 'Disgraced Exile',  'hp': 100, 'weapon': ['Hatchet', 'Shovel'],                    'bounty': 45, 'type': 'normal'},
 
-    # --- CAVE ---
-    {'name': 'Miner',                 'hp': 80,  'weapon': ['Pickaxe', 'Knife'],          'bounty': 35, 'type': 'normal'},
-    {'name': 'Spelunker',             'hp': 100, 'weapon': ['Pickaxe', 'Knife'],          'bounty': 40, 'type': 'normal'},
-    {'name': 'Mole Person',           'hp': 120, 'weapon': ['Claws', 'Pickaxe'],          'bounty': 55, 'type': 'normal'},
-    {'name': 'Humanoid Cave Creature','hp': 120, 'weapon': ['Claws', 'Sledgehammer'],     'bounty': 65, 'type': 'normal'},
+# ========================
+#        CAVE ENEMIES
+# ========================
+{'name': 'Miner',                 'hp': 80,  'weapon': ['Pickaxe', 'Knife'],                'bounty': 35, 'type': 'normal'},
+{'name': 'Spelunker',             'hp': 100, 'weapon': ['Pickaxe', 'Knife'],                'bounty': 40, 'type': 'normal'},
+{'name': 'Mole Person',           'hp': 120, 'weapon': ['Claws', 'Pickaxe'],                'bounty': 55, 'type': 'normal'},
+{'name': 'Humanoid Cave Creature','hp': 120, 'weapon': ['Claws', 'Sledgehammer'],           'bounty': 65, 'type': 'normal'},
 
-    # --- SWAMP ---
-    {'name': 'Hand Fisherman',   'hp': 80,  'weapon': ['Hatchet', 'Knife'],                 'bounty': 30, 'type': 'normal'},
-    {'name': 'Bayou Man',        'hp': 100, 'weapon': ['Machete', 'Shotgun'],               'bounty': 45, 'type': 'normal'},
-    {'name': 'Voodoo Priestess', 'hp': 120, 'weapon': ['Voodoo Staff'],                     'bounty': 70, 'type': 'normal'},
-    {'name': 'Skin Collector',   'hp': 110, 'weapon': ['Machete', 'Chainsaw', 'Harpoon'],   'bounty': 75, 'type': 'normal'},
+# ========================
+#        SWAMP ENEMIES
+# ========================
+{'name': 'Hand Fisherman',  'hp': 80,  'weapon': ['Hatchet', 'Knife'],                      'bounty': 30, 'type': 'normal'},
+{'name': 'Bayou Man',       'hp': 100, 'weapon': ['Machete', 'Shotgun'],                    'bounty': 45, 'type': 'normal'},
+{'name': 'Voodoo Priestess','hp': 120, 'weapon': ['Voodoo Staff', 'Knife', 'Chili Powder'], 'bounty': 70, 'type': 'normal'},
+{'name': 'Skin Collector',  'hp': 110, 'weapon': ['Machete', 'Chainsaw'],                   'bounty': 75, 'type': 'normal'},
 
-    # --- AREA BOSSES ---
-    {'name': 'Sledge Hammond',  'hp': 220, 'weapon': ['Sledgehammer', 'Axe', 'Chainsaw', 'Brass Knuckles'], 'bounty': 0,
-     'type': 'boss', 'area': 'Forest'},
+# ========================
+#        AREA BOSSES
+# ========================
+{'name': 'Sledge Hammond', 'hp': 220, 'weapon': ['Sledgehammer', 'Axe', 'Chainsaw', 'Brass Knuckles'],
+ 'bounty': 0, 'type': 'boss', 'area': 'Forest'},
 
-    {'name': 'The Mayor',      'hp': 200, 'weapon': ['Pistol', 'Shotgun', 'Revolver'], 'bounty': 0,
-     'type': 'boss', 'area': 'City'},
+{'name': 'The Mayor',      'hp': 200, 'weapon': ['Pistol', 'Shotgun', 'Revolver', 'Brass Knuckles'],
+ 'bounty': 0, 'type': 'boss', 'area': 'City'},
 
-    {'name': 'Bayou Bill',     'hp': 200, 'weapon': ['Machete', 'Sledgehammer', 'Shotgun', 'Chainsaw'], 'bounty': 0,
-     'type': 'boss', 'area': 'Swamp'},
+{'name': 'Bayou Bill',     'hp': 200, 'weapon': ['Machete', 'Sledgehammer', 'Shotgun', 'Chainsaw'],
+ 'bounty': 0, 'type': 'boss', 'area': 'Swamp'},
 
-    {'name': 'Captain Hole',   'hp': 200, 'weapon': ['Revolver', 'Harpoon', 'Pickaxe'], 'bounty': 0,
-     'type': 'boss', 'area': 'Cave'},
+{'name': 'Captain Hole',   'hp': 200, 'weapon': ['Rifle', 'Harpoon', 'Knife', 'Pistol'],
+ 'bounty': 0, 'type': 'boss', 'area': 'Cave'},
 
-    # --- FINAL BOSS ---
-    {'name': 'Denny Biltmore', 'hp': 275, 'weapon': ['Brass Knuckles', 'Pistol', 'Revolver', 'Shotgun'], 'bounty': 0,
-     'type': 'boss_final', 'area': None},
+# ========================
+#        FINAL BOSS
+# ========================
+{'name': 'Denny Biltmore','hp': 275, 'weapon': ['Brass Knuckles', 'Pistol', 'Revolver', 'Shotgun'],
+ 'bounty': 0, 'type': 'boss_final', 'area': None},
 ]
 
 
@@ -253,7 +265,7 @@ Items = [
     {'name': 'Crabs on Rye',         'hp': 28, 'cost': 28, 'sell_value': 11},
 
     # --- Tier 4 (30–35 HP) ---
-    {'name': 'Adolescent Lunch Box', 'hp': 30, 'cost': 30, 'sell_value': 12},
+    {'name': "Ocean Man Lunch Box",  'hp': 30, 'cost': 30, 'sell_value': 12},
     {'name': 'Gator Testicles',      'hp': 32, 'cost': 34, 'sell_value': 14},
     {'name': 'Moonshine',            'hp': 35, 'cost': 36, 'sell_value': 15},
     {'name': 'Chicken of the Cave',  'hp': 35, 'cost': 38, 'sell_value': 16},
@@ -269,8 +281,21 @@ Items = [
 
 Weapons = [
     # --- Default ---
-    {'name': 'Bare Hands',  'damage': 10, 'uses': -1, 'accuracy': 0.90, 'spread': 3, 'crit': 0.10,
+    {'name': 'Bare Hands',    'damage': 10, 'uses': -1, 'accuracy': 0.90, 'spread': 3, 'crit': 0.10,
      'cost': 0,  'sell_value': 0, 'type': 'melee'},
+
+    # --- Blinding / Debuff ---
+    {'name': 'Pepper Spray', 'damage': 6, 'uses': 3, 'accuracy': 0.85, 'spread': 2,
+    'crit': 0.05, 'cost': 25, 'sell_value': 12, 'type': 'blind'},
+
+    {'name': 'Bear Spray', 'damage': 0, 'uses': 1, 'accuracy': 0.85, 'spread': 0, 'crit': 0.00,
+    'cost': 60, 'sell_value': 30, 'type': 'blind'},
+
+    {'name': 'Chili Powder', 'damage': 4, 'uses': 1, 'accuracy': 0.90, 'spread': 1,
+    'crit': 0.02, 'cost': 30, 'sell_value': 15, 'type': 'blind'},
+
+    {'name': 'Pocket Sand', 'damage': 0, 'uses': 1, 'accuracy': 0.90, 'spread': 0, 'crit': 0.00,
+    'cost': 20, 'sell_value': 8, 'type': 'blind'},
 
     # --- Tier 1 ---
     {'name': 'Knife',          'damage': 16, 'uses': 8, 'accuracy': 0.88, 'spread': 4, 'crit': 0.22,
