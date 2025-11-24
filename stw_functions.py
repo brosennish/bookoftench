@@ -401,6 +401,10 @@ def run_game():
         player.alive = True
         actions_menu(gs, player, shop)
 
+    if player.lives == 0 and play_again():
+        run_game()
+
+
 
 def actions_menu(gs, player, shop):
     get_current_music()
