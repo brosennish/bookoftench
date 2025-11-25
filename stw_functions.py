@@ -1079,7 +1079,6 @@ def battle(player, enemy, gs, shop):
                     print(f'{p}You survived the attack with Death Can Wait!{rst}')
                     player.cheat_death_ready = False
                     t.sleep(1)
-                    return True # player survived from Death Can Wait
                 else:
                     refresh_wanted(gs)
                     stop_music()
