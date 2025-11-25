@@ -1077,21 +1077,21 @@ class Inventory:
 @dataclass
 class Shop:
     item_inventory: List[Dict[str, Union [str, int]]] = field(
-        default_factory=lambda: random.sample(Items, k=min(3, len(Items))
+        default_factory=lambda: random.sample(Items, k=min(4, len(Items))
     )
 )
     
     weapon_inventory: List[Dict] = field(
     default_factory=lambda: random.sample(
         [w for w in Weapons if w['name'] not in ('Bare Hands', 'Claws', 'Voodoo Staff')],
-        k=3
+        k=4
     )
-) 
+)
     
     perk_inventory: List[Dict] = field(
     default_factory=lambda: random.sample(
         [p for p in Perks],
-        k=3
+        k=4
     )
 )
 
@@ -1137,7 +1137,7 @@ class Shop:
         if filtered_items:
             for idx, item in enumerate(filtered_items, 1):
                 print(
-                    f"[{idx}] "
+                    f"[{idx:<2}] "
                     f"{c}{item['name']:<24}{rst} {d}|{rst} "
                     f"Cost: {o}{item['cost']:<3}{rst} {d}|{rst} "
                     f"HP: {g}+{item['hp']:<3}"
@@ -1157,7 +1157,7 @@ class Shop:
                 actual = base_index + idx
 
                 print(
-                    f"[{actual}] "
+                    f"[{actual:<2}] "
                     f"{c}{weapon['name']:<24}{rst} {d}|{rst} "
                     f"Cost: {o}{weapon['cost']:<3}{rst} {d}|{rst} "
                     f"DMG: {r}{weapon['damage']:<3}{rst} {d}|{rst} "
@@ -1174,7 +1174,7 @@ class Shop:
             for idx, perk in enumerate(self.perk_inventory, perks_index):
                 perk_cost = int(perk['cost'] * discount)
                 print(
-                    f"[{idx}] "
+                    f"[{idx:>2}] "
                     f"{c}{perk['name']:<24}{rst} {d}|{rst} "
                     f"Cost: {o}{perk_cost:<3}{rst} {d}|{rst} "
                     f"{perk['description']}{rst}"
