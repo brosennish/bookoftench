@@ -1160,8 +1160,8 @@ class Shop:
                     f"[{actual}] "
                     f"{c}{weapon['name']:<24}{rst} {d}|{rst} "
                     f"Cost: {o}{weapon['cost']:<3}{rst} {d}|{rst} "
-                    f"DMG: {r}{weapon['damage']:<2}{rst} {d}|{rst} "
-                    f"ACC: {y}{acc:<3}{rst} {d}|{rst} "
+                    f"DMG: {r}{weapon['damage']:<3}{rst} {d}|{rst} "
+                    f"ACC: {y}{acc:<4}{rst} {d}|{rst} "
                     f"Uses: {uses} "
                 )
         else:
