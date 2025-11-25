@@ -819,13 +819,15 @@ def do_shop(player, shop, gs):
             for i, (kind, name) in enumerate(entries, 1):
                 if kind == "item":
                     data = get_item_data(name)
-                    print(f"[{i}] {c}{name:<24}{rst} {d}|{rst} Value:{rst} {g}{data['sell_value']:<3} {d}|{rst} HP: {g}+{data['hp']}")
+                    print(f"[{i}] {c}{name:<24}{rst} {d}|{rst} Value:{rst} {g}{data['sell_value']:<3}{rst} {d}|{rst} HP: {g}+{data['hp']}")
                 else:
                     data, uses_display = p_uses_weapons(player, name)
+                    current_uses = player.weapon_uses.get(name, data['uses'])
+                    sell_value = shop.calculate_sell_price(name, current_uses)
                 
                     print(
                         f"[{i}] {c}{name:<24}{rst} {d}|{rst} "
-                        f"Value: {g}{data['sell_value']:<3}{rst} {d}|{rst} "
+                        f"Value: {g}{sell_value:<3}{rst} {d}|{rst} "
                         f"DMG: {r}{data['damage']:<3}{rst} {d}|{rst} "
                         f"Accuracy: {y}{data['accuracy']:<4}{rst} {d}|{rst} "
                         f"Uses: {uses_display}"
