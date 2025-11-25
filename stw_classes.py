@@ -1359,3 +1359,11 @@ class Shop:
         play_sound('purchase')
         t.sleep(1)
         log_event('sell_weapon')
+
+
+@dataclass
+class SaveGameState:
+    game_state: GameState
+    player: Player
+    shop: Shop
+
