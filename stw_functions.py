@@ -1083,7 +1083,7 @@ def load_game():
 
     saves = set(fn.split(".")[0] for fn in os.listdir(save_dir))
     if len(saves) == 0:
-        print("\nNo saved games exist.")
+        print(f"\n{r}No saved games exist.")
         t.sleep(1)
         return
 
@@ -1105,7 +1105,7 @@ def save_game(save_state: SaveGameState):
     with open(f"{save_dir}/{save_file}", "wb") as f:
         pickle.dump(save_state, f)
 
-    print("\nGame saved successfully.")
+    print(f"\n{c}Game saved successfully.")
 
 
 # ----- MAIN: START GAME LOGIC -----
