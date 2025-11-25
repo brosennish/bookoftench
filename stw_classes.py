@@ -88,11 +88,12 @@ class Player:
     cheat_death_ready: bool = False
     max_weapons: int = 5
     max_items: int = 5
-    weapons: List[str] = field(default_factory=lambda: ['Bare Hands'])
+    weapons: List[str] = field(default_factory=lambda: ['Bare Hands','Knife'])
     # no helper function used here, direct lookup from Weapons table:
     weapon_uses: Dict[str, int] = field(    # creates new list of dicts for player
         default_factory=lambda: {           # resets each game
-            'Bare Hands': next(w for w in Weapons if w['name'] == 'Bare Hands')['uses']
+            'Bare Hands': next(w for w in Weapons if w['name'] == 'Bare Hands')['uses'],
+            'Knife': next(w for w in Weapons if w['name'] == 'Knife')['uses']
         }
     )
     
@@ -159,9 +160,10 @@ class Player:
         else:
             self.coins = 0
         self.items = ['Tench Filet']
-        self.weapons = ['Bare Hands']
+        self.weapons = ['Bare Hands','Knife']
         self.weapon_uses = {
-            'Bare Hands': next(w for w in Weapons if w['name'] == 'Bare Hands')['uses']
+            'Bare Hands': next(w for w in Weapons if w['name'] == 'Bare Hands')['uses'],
+            'Knife': next(w for w in Weapons if w['name'] == 'Knife')['uses']
         }
         self.current_weapon = 'Bare Hands'
         if 'Death Can Wait' in self.perks:
