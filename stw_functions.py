@@ -429,10 +429,7 @@ def actions_menu(gs, player, shop):
         # Enemies killed and remaining 
         remaining = gs.area_enemies.get(c_area, 0)
         killed = gs.area_kills[c_area]
-        victory = gs.boss_defeated[c_area]['defeated'] 
-
-        # XP needed logic
-        required = 100 + (player.lvl - 1) * 50
+        victory = gs.boss_defeated[c_area]['defeated']
 
         # Variable HP color coding
         pc = p_color(player)
@@ -445,7 +442,7 @@ def actions_menu(gs, player, shop):
             print(f"\nArea: {b}{c_area} {rst}{d}|{rst} Killed: {r}{killed}{rst} {d}|{rst} Remaining: {y}{remaining} {rst}{d}|{rst} Wanted: {p}{gs.wanted} {rst}{d}|{rst} Bounty: {p}{bounty} {rst}coins")
         else:
             print(f"\nArea: {b}{c_area} {rst}{d}|{rst} Killed: {r}{killed} {rst}{d}|{rst} Wanted: {p}{gs.wanted} {rst}{d}|{rst} Bounty: {p}{gs.bounty} {rst}coins")
-        print(f"\n{o}{player.name}{rst} {d}-{rst} Level: {c}{player.lvl} {rst}{d}|{rst} XP: {c}{player.xp}/{required} {rst}{d}|{rst} HP: {rst}{pc}{player.hp}/{player.max_hp} {rst}{d}|{rst} Coins: {g}{player.coins} {rst}{d}|{rst} Lives: {y}{player.lives}")
+        print(f"\n{o}{player.name}{rst} {d}-{rst} Level: {c}{player.lvl} {rst}{d}|{rst} XP: {c}{player.xp}/{player.xp_needed} {rst}{d}|{rst} HP: {rst}{pc}{player.hp}/{player.max_hp} {rst}{d}|{rst} Coins: {g}{player.coins} {rst}{d}|{rst} Lives: {y}{player.lives}")
         
         # List choices
         if remaining > 0:
