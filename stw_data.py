@@ -10,6 +10,12 @@ Perks = [
         'type': 'perk',
     },
     {
+        'name': 'Beer Goggles',
+        'cost': 85,
+        'description': "Prevents blindness",
+        'type': 'perk',
+    },
+    {
         'name': 'Brown Friday',
         'cost': 120,
         'description': "Shop inventories contain +1 listing",
