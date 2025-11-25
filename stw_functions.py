@@ -1,9 +1,11 @@
+import os.path
+import pickle
 import random
 import time as t
 import sys
 
 from stw_data import Weapons, Items, Enemies, Areas, Perks, Results
-from stw_classes import GameState, Player, Enemy, Shop
+from stw_classes import GameState, Player, Enemy, Shop, SaveGameState
 from stw_colors import red as r, green as g, blue as b, purple as p, yellow as y, cyan as c, orange as o
 from stw_colors import dim as d, reset as rst
 from stw_audio import play_sound, play_music, get_current_music, stop_music
@@ -310,8 +312,8 @@ def log_event(event: str):
 # GAME LOOP FUNCTIONS
 # --------------------------------------------------------------------------------------------------
 
-def get_choice(prompt: str, options: dict) -> str:    # prompt is a str and options are a dict, return a str
-    print("" + prompt)                              # print a new line and the prompt (MAIN MENU, etc.)
+def get_choice_from_dict(prompt: str, options: dict) -> str:    # prompt is a str and options are a dict, return a str
+    print("\n" + prompt)                              # print a new line and the prompt (MAIN MENU, etc.)
     for key, label in options.items():                # for the key/label for each dict pair in options
         print(f"[{key.upper()}] {label}")             # print the key in caps and the label as is
     while True:
@@ -322,24 +324,43 @@ def get_choice(prompt: str, options: dict) -> str:    # prompt is a str and opti
         t.sleep(1)        
 
 
+def get_choice_from_list(prompt: str, options: list) -> str:
+    print("\n" + prompt)
+    for option in options:
+        print(option)
+    options_lower = [option.lower() for option in options]
+    while True:
+        choice = input(f"{b}>{rst} ").strip().lower()
+        if choice in options_lower:
+            return choice
+        print(f"\n{y}Invalid choice.")
+        t.sleep(1)
+
 def main_menu():
     while True:
-        choice = get_choice("MAIN MENU", {"n": "New Game", "q": "Quit"})
+        choice = get_choice_from_dict("MAIN MENU", {"n": "New Game", "l": "Load Game", "q": "Quit"})
         
         if choice == "n":
-            run_game()  
+            run_game()
+        elif choice == "l":
+            load_game()
         elif choice == "q":
             sys.exit()
         else: 
             continue
 
 
-def actions_main_menu():
+def actions_main_menu(gs, player, shop):
     while True:
-        choice = get_choice("MAIN MENU", {"n": "New Game", "r": "Return", "q": "Quit"})
+        choice = get_choice_from_dict("MAIN MENU",
+                                      {"n": "New Game", "s": "Save Game", "l": "Load Game", "r": "Return", "q": "Quit"})
         
         if choice == "n":
-            run_game()  
+            run_game()
+        elif choice == "s":
+            save_game(SaveGameState(gs, player, shop))
+        elif choice == "l":
+            load_game()
         elif choice == "r":
             return
         elif choice == "q":
@@ -350,13 +371,9 @@ def actions_main_menu():
             continue
 
 
-def run_game():
-    gs = GameState()
-    player = Player()
-    shop = Shop()
+def run_game(gs=GameState(), player=Player(), shop=Shop(), name=True, tutorial=True):
 
     play_music('intro_theme')
-    name = True
     while name:
         choice = input(f"What is your name?:\n{b}>{rst} ")
         if choice != '':
@@ -365,7 +382,6 @@ def run_game():
         else:
             continue
 
-    tutorial = True
     while tutorial:
         choice = input(f"\nDo you need a tutorial? (y or n):\n{b}>{rst} ").strip().lower()
         if choice == 'n':
@@ -433,7 +449,7 @@ def actions_menu(gs, player, shop):
         
         # List choices
         if remaining > 0:
-            choice = get_choice(f"{rst}", {
+            choice = get_choice_from_dict(f"{rst}", {
                 "e": "Explore",
                 "i": "Use Item",
                 "w": "Equip Weapon",
@@ -443,7 +459,7 @@ def actions_menu(gs, player, shop):
                 "q": "Main Menu",
             })
         elif remaining == 0 and not victory:
-            choice = get_choice("", {
+            choice = get_choice_from_dict("", {
                 "b": "Fight Boss",
                 "i": "Use Item",
                 "w": "Equip Weapon",
@@ -454,7 +470,7 @@ def actions_menu(gs, player, shop):
             })
         elif remaining == 0 and victory:
             print(f"{d}The {player.current_area} is dry.{rst}")
-            choice = get_choice("", {
+            choice = get_choice_from_dict("", {
                 "i": "Use Item",
                 "w": "Equip Weapon",
                 "s": "Shop",
@@ -477,7 +493,7 @@ def actions_menu(gs, player, shop):
         elif choice == "m":
             page_two = True
             while page_two:
-                choice = get_choice("", {
+                choice = get_choice_from_dict("", {
                 "c": "Casino",
                 "p": "View Perks",
                 "b": "Bank Balance",
@@ -496,7 +512,7 @@ def actions_menu(gs, player, shop):
                 elif choice == "r":
                     page_two = False
         elif choice == "q":
-            actions_main_menu()
+            actions_main_menu(gs, player, shop)
         elif choice == "b" and remaining == 0 and not victory:
             do_boss_battle(gs, player, shop)
         else:
@@ -1059,10 +1075,43 @@ def battle(player, enemy, gs, shop):
                 play_area_theme(player)
                 return False # battle over, player dead
                         
+# ----- SAVE/LOAD GAME LOGIC -----
+
+
+def load_game():
+    save_dir = "saves"
+
+    saves = set(fn.split(".")[0] for fn in os.listdir(save_dir))
+    if len(saves) == 0:
+        print(f"\n{r}No saved games exist.")
+        t.sleep(1)
+        return
+
+    name = get_choice_from_list("Select a save: ", list(saves))
+    save_file = f"{name}.tench"
+
+    with open(f"{save_dir}/{save_file}", "rb") as f:
+        save_state: SaveGameState = pickle.load(f)
+
+    run_game(save_state.game_state, save_state.player, save_state.shop, False, False)
+
+
+def save_game(save_state: SaveGameState):
+    save_dir = "saves"
+    save_file = f"{save_state.player.name}.tench"
+
+    if not os.path.isdir(save_dir):
+        os.mkdir(save_dir)
+    with open(f"{save_dir}/{save_file}", "wb") as f:
+        pickle.dump(save_state, f)
+
+    print(f"\n{c}Game saved successfully.")
+
 
 # ----- MAIN: START GAME LOGIC -----
 def main():
     main_menu()
+
 
 if __name__ == "__main__":
     main()

@@ -502,7 +502,7 @@ There are parts of another man or men scattered around you.{rst}""")
         leveled_up = False
 
         # handles cases where a big XP chunk might give multiple levels
-        while self.xp >= 100 * self.lvl:
+        while self.xp >= self.xp_needed:
             self.level_up()
             leveled_up = True
 
@@ -1361,3 +1361,11 @@ class Shop:
         play_sound('purchase')
         t.sleep(1)
         log_event('sell_weapon')
+
+
+@dataclass
+class SaveGameState:
+    game_state: GameState
+    player: Player
+    shop: Shop
+
