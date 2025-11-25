@@ -158,7 +158,7 @@ class Player:
             self.coins = int(self.coins * 0.25)
         else:
             self.coins = 0
-        self.items.clear()
+        self.items = ['Tench Filet']
         self.weapons = ['Bare Hands']
         self.weapon_uses = {
             'Bare Hands': next(w for w in Weapons if w['name'] == 'Bare Hands')['uses']
