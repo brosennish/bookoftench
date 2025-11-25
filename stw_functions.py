@@ -823,8 +823,8 @@ def do_shop(player, shop, gs):
                     data = get_item_data(name)
                     print(f"[{i}] {c}{name:<24}{rst} {d}|{rst} Value:{rst} {g}{data['sell_value']:<3} {d}|{rst} HP: {g}+{data['hp']}")
                 else:
-                    data, uses_display = p_uses_weapons(player, weapon)
-
+                    data, uses_display = p_uses_weapons(player, name)
+                
                     print(
                         f"[{i}] {c}{name:<24}{rst} {d}|{rst} "
                         f"Value: {g}{data['sell_value']:<3}{rst} {d}|{rst} "
