@@ -1078,13 +1078,13 @@ def battle(player, enemy, gs, shop):
 def load_game():
     save_dir = "saves"
 
-    saves = set(fn.split(".")[0] for fn in os.listdir(save_dir))
+    saves = dict((str(i), n) for (i, n) in enumerate(set(fn.split(".")[0] for fn in os.listdir(save_dir))))
     if len(saves) == 0:
         print(f"\n{r}No saved games exist.")
         t.sleep(1)
         return
 
-    name = get_choice_from_list("Select a save: ", list(saves))
+    name = saves[get_choice_from_dict("Select a save: ", saves)]
     save_file = f"{name}.tench"
 
     with open(f"{save_dir}/{save_file}", "rb") as f:
