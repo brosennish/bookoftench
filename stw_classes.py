@@ -268,7 +268,7 @@ There are parts of another man or men scattered around you.{rst}""")
                 enemy.blinded_by = 'Pepper Spray'
                 enemy.blind_effect = 0.50
                 reduction = int(enemy.blind_effect * 100)
-                enemy.blind_turns = 1
+                enemy.blind_turns = 3
                 print(f'\n{p}{enemy.name} has been pepper sprayed! Accuracy down {reduction}% for one turn.{rst}')
                 t.sleep(1)
             if weapon_data['name'] == 'Bear Spray':
@@ -276,7 +276,7 @@ There are parts of another man or men scattered around you.{rst}""")
                 enemy.blinded_by = 'Bear Spray'
                 enemy.blind_effect = 0.75
                 reduction = int(enemy.blind_effect * 100)
-                enemy.blind_turns = 1
+                enemy.blind_turns = 3
                 print(f'\n{p}{enemy.name} has been bear sprayed! Accuracy down {reduction}% for one turn.{rst}')
                 t.sleep(1)
             if weapon_data['name'] == 'Chili Powder':
@@ -292,7 +292,7 @@ There are parts of another man or men scattered around you.{rst}""")
                 enemy.blinded_by = 'Pocket Sand'
                 enemy.blind_effect = 0.10
                 reduction = int(enemy.blind_effect * 100)
-                enemy.blind_turns = random.randint(2,4)
+                enemy.blind_turns = random.randint(3,5)
                 print(f'\n{p}{enemy.name} has been blinded by pocket sand! Accuracy down {reduction}% for {enemy.blind_turns} turns.{rst}')
                 t.sleep(1)
 
@@ -910,7 +910,7 @@ class Enemy:
                     player.blinded_by = 'Pepper Spray'
                     player.blind_effect = 0.50
                     reduction = int(self.blind_effect * 100)
-                    player.blind_turns = 1
+                    player.blind_turns = 3
                     print(f'\n{y}You have been pepper sprayed! Accuracy down {reduction}% for one turn.{rst}')
                     t.sleep(1)
                 if weapon_data['name'] == 'Bear Spray':
@@ -918,7 +918,7 @@ class Enemy:
                     player.blinded_by = 'Bear Spray'
                     player.blind_effect = 0.75
                     reduction = int(self.blind_effect * 100)
-                    player.blind_turns = 1
+                    player.blind_turns = 3
                     print(f'\n{y}You have been bear sprayed! Accuracy down {reduction}% for one turn.{rst}')
                     t.sleep(1)
                 if weapon_data['name'] == 'Chili Powder':
@@ -934,7 +934,7 @@ class Enemy:
                     player.blinded_by = 'Pocket Sand'
                     player.blind_effect = 0.10
                     reduction = int(self.blind_effect * 100)
-                    player.blind_turns = random.randint(2,4)
+                    player.blind_turns = random.randint(3,5)
                     print(f'\n{r}You have been blinded by pocket sand! Accuracy down {reduction}% for {player.blind_turns} turns.{rst}')
                     t.sleep(1)
 
