@@ -430,10 +430,7 @@ def actions_menu(gs, player, shop):
         # Enemies killed and remaining 
         remaining = gs.area_enemies.get(c_area, 0)
         killed = gs.area_kills[c_area]
-        victory = gs.boss_defeated[c_area]['defeated'] 
-
-        # XP needed logic
-        required = 100 + (player.lvl - 1) * 50
+        victory = gs.boss_defeated[c_area]['defeated']
 
         # Variable HP color coding
         pc = p_color(player)
@@ -446,7 +443,7 @@ def actions_menu(gs, player, shop):
             print(f"\nArea: {b}{c_area} {rst}{d}|{rst} Killed: {r}{killed}{rst} {d}|{rst} Remaining: {y}{remaining} {rst}{d}|{rst} Wanted: {p}{gs.wanted} {rst}{d}|{rst} Bounty: {p}{bounty} {rst}coins")
         else:
             print(f"\nArea: {b}{c_area} {rst}{d}|{rst} Killed: {r}{killed} {rst}{d}|{rst} Wanted: {p}{gs.wanted} {rst}{d}|{rst} Bounty: {p}{gs.bounty} {rst}coins")
-        print(f"\n{o}{player.name}{rst} {d}-{rst} Level: {c}{player.lvl} {rst}{d}|{rst} XP: {c}{player.xp}/{required} {rst}{d}|{rst} HP: {rst}{pc}{player.hp}/{player.max_hp} {rst}{d}|{rst} Coins: {g}{player.coins} {rst}{d}|{rst} Lives: {y}{player.lives}")
+        print(f"\n{o}{player.name}{rst} {d}-{rst} Level: {c}{player.lvl} {rst}{d}|{rst} XP: {c}{player.xp}/{player.xp_needed} {rst}{d}|{rst} HP: {rst}{pc}{player.hp}/{player.max_hp} {rst}{d}|{rst} Coins: {g}{player.coins} {rst}{d}|{rst} Lives: {y}{player.lives}")
         
         # List choices
         if remaining > 0:
@@ -1091,13 +1088,13 @@ def battle(player, enemy, gs, shop):
 def load_game():
     save_dir = "saves"
 
-    saves = set(fn.split(".")[0] for fn in os.listdir(save_dir))
+    saves = dict((str(i), n) for (i, n) in enumerate(set(fn.split(".")[0] for fn in os.listdir(save_dir))))
     if len(saves) == 0:
         print(f"\n{r}No saved games exist.")
         t.sleep(1)
         return
 
-    name = get_choice_from_list("Select a save: ", list(saves))
+    name = saves[get_choice_from_dict("Select a save: ", saves)]
     save_file = f"{name}.tench"
 
     with open(f"{save_dir}/{save_file}", "rb") as f:

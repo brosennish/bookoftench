@@ -435,8 +435,7 @@ There are parts of another man or men scattered around you.{rst}""")
 # ---------- XP & Leveling ----------
     @property # specifically made for returning a calculated value: print(player.xp_needed)
     def xp_needed(self):
-        required = 100 + (self.lvl - 1) * 10
-        return required - self.xp
+        return 100 + (self.lvl - 1) * 10
     
     def level_up(self):
         # ---- core level-up effects live here ----
@@ -1280,6 +1279,8 @@ class Shop:
             player.max_weapons += 1; player.max_items += 1
         if perk_data['name'] == 'Sledge Fund':
             player.bank_interest_rate += 0.05
+        if perk_data['name'] == 'Death Can Wait':
+            player.cheat_death_ready = True
         
         t.sleep(1)
         return True
