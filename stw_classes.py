@@ -185,10 +185,6 @@ There are parts of another man or men scattered around you.{rst}""")
             t.sleep(3)
             print(f"\n{r}You are now in Hell.")
             t.sleep(10)
-            if play_again():
-                return
-            else:
-                sys.exit()
 
 
     # ---------- Combat ----------

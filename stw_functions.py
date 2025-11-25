@@ -417,6 +417,10 @@ def run_game(gs=GameState(), player=Player(), shop=Shop(), name=True, tutorial=T
         player.alive = True
         actions_menu(gs, player, shop)
 
+    if play_again():
+        run_game()
+
+
 
 def actions_menu(gs, player, shop):
     get_current_music()
