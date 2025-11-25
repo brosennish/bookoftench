@@ -13,8 +13,8 @@ from stw_audio import play_sound, play_music, get_current_music, stop_music
 
 # FUNCTIONS: Record Kill, Win Game
 
-def record_kill(gs, player) -> bool:     # accesses GameState/player and returns T/F
-    '''Decrement area enemy count and check win; return True if game won'''
+def record_kill(gs, player):     # accesses GameState/player and returns T/F
+    '''Decrement area enemy count and increase kills per area count'''
     area = player.current_area    # define area to be where player is when enemy killed
 
     # updating area kill counts
@@ -22,9 +22,6 @@ def record_kill(gs, player) -> bool:     # accesses GameState/player and returns
 
     # decrement & clamp
     gs.area_enemies[area] = max(0, gs.area_enemies[area] - 1)
-
-    if 'Death Can Wait' in player.perks:
-        player.cheat_death_ready = True
 
 
 def win_game(gs): 
@@ -960,6 +957,9 @@ def do_final_boss_battle(gs, player, shop):
 
 
 def battle(player, enemy, gs, shop):
+    # Death Can Wait check
+    if 'Death Can Wait' in player.perks:
+        player.cheat_death_ready = True
 
     if enemy.name in ('Sledge Hammond','Bayou Bill','Captain Hole','Denny Biltmore'):
         if enemy.name == 'Bayou Bill':
@@ -1074,10 +1074,16 @@ def battle(player, enemy, gs, shop):
                 t.sleep(1)
             alive = enemy.attack(player)
             if not alive:
-                refresh_wanted(gs)
-                stop_music()
-                play_area_theme(player)
-                return False # battle over, player dead
+                if player.cheat_death_ready:
+                    player.hp = 1
+                    print(f'{p}You survived the attack with Death Can Wait!{rst}')
+                    player.cheat_death_ready = False
+                    t.sleep(1)
+                else:
+                    refresh_wanted(gs)
+                    stop_music()
+                    play_area_theme(player)
+                    return False # battle over, player dead
                         
 # ----- SAVE/LOAD GAME LOGIC -----
 

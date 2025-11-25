@@ -135,13 +135,6 @@ class Player:
         if self.hp > 0:
             t.sleep(1)
             return True  # player survived / continue battle
-        else:
-            if self.cheat_death_ready:
-                self.hp = 1
-                print(f'{p}You survived the attack with Death Can Wait!{rst}')
-                self.cheat_death_ready = False
-                t.sleep(1)
-                return True
 
         self.handle_death()
         return False  # player died / end battle
@@ -166,8 +159,6 @@ class Player:
             'Knife': next(w for w in Weapons if w['name'] == 'Knife')['uses']
         }
         self.current_weapon = 'Bare Hands'
-        if 'Death Can Wait' in self.perks:
-            self.cheat_death_ready = True
 
         # Remaining lives check
         if self.lives > 0:
@@ -914,38 +905,39 @@ class Enemy:
                 t.sleep(1)
 
             # blind effects on player
-            if weapon_data['name'] == 'Pepper Spray':
-                player.blind = True
-                player.blinded_by = 'Pepper Spray'
-                player.blind_effect = 0.50
-                reduction = int(self.blind_effect * 100)
-                player.blind_turns = 1
-                print(f'\n{y}You have been pepper sprayed! Accuracy down {reduction}% for one turn.{rst}')
-                t.sleep(1)
-            if weapon_data['name'] == 'Bear Spray':
-                player.blind = True
-                player.blinded_by = 'Bear Spray'
-                player.blind_effect = 0.75
-                reduction = int(self.blind_effect * 100)
-                player.blind_turns = 1
-                print(f'\n{y}You have been bear sprayed! Accuracy down {reduction}% for one turn.{rst}')
-                t.sleep(1)
-            if weapon_data['name'] == 'Chili Powder':
-                player.blind = True
-                player.blinded_by = 'Chili Powder'
-                player.blind_effect = 0.15
-                reduction = int(self.blind_effect * 100)
-                player.blind_turns = random.randint(3,5)
-                print(f'\nYou have been blinded by chili powder! Accuracy down {reduction}% for {player.blind_turns} turns.{rst}')
-                t.sleep(1)
-            if weapon_data['name'] == 'Pocket Sand':
-                player.blind = True
-                player.blinded_by = 'Pocket Sand'
-                player.blind_effect = 0.10
-                reduction = int(self.blind_effect * 100)
-                player.blind_turns = random.randint(2,4)
-                print(f'\n{r}You have been blinded by pocket sand! Accuracy down {reduction}% for {player.blind_turns} turns.{rst}')
-                t.sleep(1)
+            if 'Beer Goggles' not in player.perks:
+                if weapon_data['name'] == 'Pepper Spray':
+                    player.blind = True
+                    player.blinded_by = 'Pepper Spray'
+                    player.blind_effect = 0.50
+                    reduction = int(self.blind_effect * 100)
+                    player.blind_turns = 1
+                    print(f'\n{y}You have been pepper sprayed! Accuracy down {reduction}% for one turn.{rst}')
+                    t.sleep(1)
+                if weapon_data['name'] == 'Bear Spray':
+                    player.blind = True
+                    player.blinded_by = 'Bear Spray'
+                    player.blind_effect = 0.75
+                    reduction = int(self.blind_effect * 100)
+                    player.blind_turns = 1
+                    print(f'\n{y}You have been bear sprayed! Accuracy down {reduction}% for one turn.{rst}')
+                    t.sleep(1)
+                if weapon_data['name'] == 'Chili Powder':
+                    player.blind = True
+                    player.blinded_by = 'Chili Powder'
+                    player.blind_effect = 0.15
+                    reduction = int(self.blind_effect * 100)
+                    player.blind_turns = random.randint(3,5)
+                    print(f'\nYou have been blinded by chili powder! Accuracy down {reduction}% for {player.blind_turns} turns.{rst}')
+                    t.sleep(1)
+                if weapon_data['name'] == 'Pocket Sand':
+                    player.blind = True
+                    player.blinded_by = 'Pocket Sand'
+                    player.blind_effect = 0.10
+                    reduction = int(self.blind_effect * 100)
+                    player.blind_turns = random.randint(2,4)
+                    print(f'\n{r}You have been blinded by pocket sand! Accuracy down {reduction}% for {player.blind_turns} turns.{rst}')
+                    t.sleep(1)
 
             if self.name == 'The Mayor' and player.hp > 0:
                 coke = random.random() < 0.10
