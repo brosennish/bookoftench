@@ -4,6 +4,7 @@ import random
 import time as t
 import sys
 
+import stw_constants as const
 from stw_data import Weapons, Items, Enemies, Areas, Perks
 from stw_colors import red as r, green as g, blue as b, purple as p, yellow as y, cyan as c, orange as o
 from stw_colors import dim as d, reset as rst
@@ -25,10 +26,10 @@ class GameState:
 
     boss_defeated: Dict[str, dict] = field(
     default_factory=lambda: {
-        'Cave':   {'name': 'Captain Hole',  'defeated': False},
-        'City':   {'name': 'The Mayor',     'defeated': False},
-        'Forest': {'name': 'Sledge Hammond', 'defeated': False},
-        'Swamp':  {'name': 'Bayou Bill',    'defeated': False},
+        const.Areas.CAVE:   {'name': const.Enemies.CAPTAIN_HOLE,  'defeated': False},
+        const.Areas.CITY:   {'name': const.Enemies.THE_MAYOR,     'defeated': False},
+        const.Areas.FOREST: {'name': const.Enemies.SLEDGE_HAMMOND, 'defeated': False},
+        const.Areas.SWAMP:  {'name': const.Enemies.BAYOU_BILL,    'defeated': False},
         }
     )
 
@@ -36,19 +37,19 @@ class GameState:
 
     area_enemies: Dict[str, int] = field(
         default_factory=lambda:
-        {'Cave': random.randint(10, 15),
-        'City': random.randint(10, 15),
-        'Forest': random.randint(10, 15),
-        'Swamp': random.randint(10, 15),
+        {const.Areas.CAVE: random.randint(10, 15),
+        const.Areas.CITY: random.randint(10, 15),
+        const.Areas.FOREST: random.randint(10, 15),
+        const.Areas.SWAMP: random.randint(10, 15),
         }
     )
 
     area_kills: Dict[str, int] = field(
         default_factory=lambda: 
-        {'Cave': 0,
-        'City': 0,
-        'Forest': 0,
-        'Swamp': 0
+        {const.Areas.CAVE: 0,
+        const.Areas.CITY: 0,
+        const.Areas.FOREST: 0,
+        const.Areas.SWAMP: 0
         }
     )
     
@@ -83,23 +84,23 @@ class Player:
     blind_effect: float = 0.0
     blind_turns: int = 0
 
-    current_weapon: str = 'Bare Hands'
+    current_weapon: str = const.Weapons.BARE_HANDS
     perks: List[str] = field(default_factory=list)
     cheat_death_ready: bool = False
     max_weapons: int = 5
     max_items: int = 5
-    weapons: List[str] = field(default_factory=lambda: ['Bare Hands','Knife'])
+    weapons: List[str] = field(default_factory=lambda: [const.Weapons.BARE_HANDS,const.Weapons.KNIFE])
     # no helper function used here, direct lookup from Weapons table:
     weapon_uses: Dict[str, int] = field(    # creates new list of dicts for player
         default_factory=lambda: {           # resets each game
-            'Bare Hands': next(w for w in Weapons if w['name'] == 'Bare Hands')['uses'],
-            'Knife': next(w for w in Weapons if w['name'] == 'Knife')['uses']
+            const.Weapons.BARE_HANDS: next(w for w in Weapons if w['name'] == const.Weapons.BARE_HANDS)['uses'],
+            const.Weapons.KNIFE: next(w for w in Weapons if w['name'] == const.Weapons.KNIFE)['uses']
         }
     )
     
     # player starts in City with a Tench and 3 lives
-    current_area: str = 'City'   
-    items: List[str] = field(default_factory=lambda: ['Tench Filet'])
+    current_area: str = const.Areas.CITY   
+    items: List[str] = field(default_factory=lambda: [const.Items.TENCH_FILET])
     alive: bool = True
     lives: int = 3
 
@@ -114,13 +115,13 @@ class Player:
         train_chance = 0.1
 
         # Apply Leather Skin first
-        if 'Leather Skin' in self.perks:
+        if const.Perks.LEATHER_SKIN in self.perks:
             dmg = int(amount * 0.9)
         else:
             dmg = amount
 
         # Solomon Train: 10% chance to reverse a fatal blow
-        if enemy is not None and 'Solomon Train' in self.perks:
+        if enemy is not None and const.Perks.SOLOMON_TRAIN in self.perks:
             if self.hp - dmg <= 0:  # this hit would kill you
                 if random.random() < train_chance:
                     print(f'{p}You were saved by Solomon Train!{rst}')
@@ -155,18 +156,18 @@ class Player:
         t.sleep(2)
 
         # Death penalties 
-        if 'Wallet Chain' in self.perks:
+        if const.Perks.WALLET_CHAIN in self.perks:
             self.coins = int(self.coins * 0.25)
         else:
             self.coins = 0
-        self.items = ['Tench Filet']
-        self.weapons = ['Bare Hands','Knife']
+        self.items = [const.Items.TENCH_FILET]
+        self.weapons = [const.Weapons.BARE_HANDS,const.Weapons.KNIFE]
         self.weapon_uses = {
-            'Bare Hands': next(w for w in Weapons if w['name'] == 'Bare Hands')['uses'],
-            'Knife': next(w for w in Weapons if w['name'] == 'Knife')['uses']
+            const.Weapons.BARE_HANDS: next(w for w in Weapons if w['name'] == const.Weapons.BARE_HANDS)['uses'],
+            const.Weapons.KNIFE: next(w for w in Weapons if w['name'] == const.Weapons.KNIFE)['uses']
         }
-        self.current_weapon = 'Bare Hands'
-        if 'Death Can Wait' in self.perks:
+        self.current_weapon = const.Weapons.BARE_HANDS
+        if const.Perks.DEATH_CAN_WAIT in self.perks:
             self.cheat_death_ready = True
 
         # Remaining lives check
@@ -192,25 +193,25 @@ There are parts of another man or men scattered around you.{rst}""")
     # sound effects
     def play_weapon_sfx(self): 
         w = self.current_weapon
-        if w in ('Pistol','Revolver'):
+        if w in (const.Weapons.PISTOL,const.Weapons.REVOLVER):
             play_sound('pistol')
-        elif w in ('Bare Hands','Brass Knuckles','Claws'):
+        elif w in (const.Weapons.BARE_HANDS,const.Weapons.BRASS_KNUCKLES,const.Weapons.CLAWS):
             play_sound('punch')
-        elif w in ('Knife','Broken Bottle','Hatchet','Machete'):
+        elif w in (const.Weapons.KNIFE,const.Weapons.BROKEN_BOTTLE,const.Weapons.HATCHET,const.Weapons.MACHETE):
             play_sound('blade')
-        elif w in ('Axe','Fire Axe'):
+        elif w in (const.Weapons.AXE,const.Weapons.FIRE_AXE):
             play_sound('axe')
-        elif w in ('Bat','Crowbar','Pickaxe','Sledgehammer','Shovel'):
+        elif w in (const.Weapons.BAT,const.Weapons.CROWBAR,const.Weapons.PICKAXE,const.Weapons.SLEDGEHAMMER,const.Weapons.SHOVEL):
             play_sound('blunt')
-        elif w == 'Chainsaw':
+        elif w == const.Weapons.CHAINSAW:
             play_sound('chainsaw')
-        elif w == 'Rifle':
+        elif w == const.Weapons.RIFLE:
             play_sound('rifle')
-        elif w == 'Shotgun':
+        elif w == const.Weapons.SHOTGUN:
             play_sound('shotgun')
-        elif w in ('Crossbow','Harpoon'):
+        elif w in (const.Weapons.CROSSBOW,const.Weapons.HARPOON):
             play_sound('arrow')
-        elif w == 'Voodoo Staff':
+        elif w == const.Weapons.VOODOO_STAFF:
             play_sound('magic')
 
     
@@ -218,20 +219,20 @@ There are parts of another man or men scattered around you.{rst}""")
         from stw_functions import get_weapon_data, log_event
 
         # choose a valid weapon; fall back to Bare Hands
-        weapon_name = self.current_weapon if self.current_weapon in self.weapons else 'Bare Hands'
+        weapon_name = self.current_weapon if self.current_weapon in self.weapons else const.Weapons.BARE_HANDS
         self.current_weapon = weapon_name
         weapon_data = get_weapon_data(weapon_name) # use helper to define weapon_data variable
         if not weapon_data:
             print(f"{y}{weapon_name} not found, resorting to Bare Hands.")
             t.sleep(1)
-            weapon_name = 'Bare Hands'
-            weapon_data = get_weapon_data('Bare Hands') # use helper to return Bare Hands weapon
-            self.current_weapon = 'Bare Hands'
+            weapon_name = const.Weapons.BARE_HANDS
+            weapon_data = get_weapon_data(const.Weapons.BARE_HANDS) # use helper to return Bare Hands weapon
+            self.current_weapon = const.Weapons.BARE_HANDS
 
         # accuracy & damage
         base_accuracy = weapon_data['accuracy']
 
-        if weapon_data['name'] in ('Pistol','Revolver','Rifle','Shotgun','Crossbow') and 'Tench Eyes' in self.perks:
+        if weapon_data['name'] in (const.Weapons.PISTOL,const.Weapons.REVOLVER,const.Weapons.RIFLE,const.Weapons.SHOTGUN,const.Weapons.CROSSBOW) and const.Perks.TENCH_EYES in self.perks:
             base_accuracy += 0.05
             print(f"\n{p}Accuracy increased by 5% with Tench Eyes.")
             t.sleep(1)
@@ -247,58 +248,58 @@ There are parts of another man or men scattered around you.{rst}""")
             base = weapon_data['damage'] + random.randint(-spread, spread) # base set to damage + random int within spread range
             base_floor = max(5, base) # clamp min damage to 5
 
-            if "Lucky Tench's Fin" in self.perks:
-                crit = random.random() < (weapon_data['crit'] + 0.05)
+            if const.Perks.LUCKY_TENCHS_FIN in self.perks:
+                crit = random.random() < (weapon_data[const.Events.CRIT] + 0.05)
             else:
-                crit = random.random() < weapon_data['crit']
+                crit = random.random() < weapon_data[const.Events.CRIT]
             dmg = base_floor * 2 if crit else base_floor # damage determination before PERKS
-            if weapon_data['name'] == 'Bare Hands':    
-                if 'Karate Lessons' in self.perks:
+            if weapon_data['name'] == const.Weapons.BARE_HANDS:    
+                if const.Perks.KARATE_LESSONS in self.perks:
                     print(f'\n{p}Karate Lessons increased damage by 5!')
                     dmg += 5
                     t.sleep(1)
-                if 'Martial Arts Training' in self.perks:
+                if const.Perks.MARTIAL_ARTS_TRAINING in self.perks:
                     print(f'\n{p}Martial Arts Training increased damage by 10!')
                     dmg += 10
                     t.sleep(1)
             if weapon_data['type'] == 'melee':
-                if 'Rosetti the Gym Rat' in self.perks:
+                if const.Perks.ROSETTI_THE_GYM_RAT in self.perks:
                     amount = int(weapon_data['damage']*0.1)
                     print(f'\n{p}Rosetti the Gym Rat increased damage by {amount}!{rst}')
                     dmg += amount
                     t.sleep(1)
-                if weapon_data['name'] in ('Knife','Machete','Axe','Fire Axe'):
-                    if 'Ambrose Blade' in self.perks:
+                if weapon_data['name'] in (const.Weapons.KNIFE,const.Weapons.MACHETE,const.Weapons.AXE,const.Weapons.FIRE_AXE):
+                    if const.Perks.AMBROSE_BLADE in self.perks:
                         print(f'\n{p}Ambrose Blade increased damage by 3!{rst}')
                         dmg += 3
                         t.sleep(1)
-            if weapon_data['name'] == 'Pepper Spray':
+            if weapon_data['name'] == const.Weapons.PEPPER_SPRAY:
                 enemy.blind = True
-                enemy.blinded_by = 'Pepper Spray'
+                enemy.blinded_by = const.Weapons.PEPPER_SPRAY
                 enemy.blind_effect = 0.50
                 reduction = int(enemy.blind_effect * 100)
                 enemy.blind_turns = 1
                 print(f'\n{p}{enemy.name} has been pepper sprayed! Accuracy down {reduction}% for one turn.{rst}')
                 t.sleep(1)
-            if weapon_data['name'] == 'Bear Spray':
+            if weapon_data['name'] == const.Weapons.BEAR_SPRAY:
                 enemy.blind = True
-                enemy.blinded_by = 'Bear Spray'
+                enemy.blinded_by = const.Weapons.BEAR_SPRAY
                 enemy.blind_effect = 0.75
                 reduction = int(enemy.blind_effect * 100)
                 enemy.blind_turns = 1
                 print(f'\n{p}{enemy.name} has been bear sprayed! Accuracy down {reduction}% for one turn.{rst}')
                 t.sleep(1)
-            if weapon_data['name'] == 'Chili Powder':
+            if weapon_data['name'] == const.Weapons.CHILI_POWDER:
                 enemy.blind = True
-                enemy.blinded_by = 'Chili Powder'
+                enemy.blinded_by = const.Weapons.CHILI_POWDER
                 enemy.blind_effect = 0.15
                 reduction = int(enemy.blind_effect * 100)
                 enemy.blind_turns = random.randint(3,5)
                 print(f'\n{p}{enemy.name} has been blinded by chili powder! Accuracy down {reduction}% for {enemy.blind_turns} turns.{rst}')
                 t.sleep(1)
-            if weapon_data['name'] == 'Pocket Sand':
+            if weapon_data['name'] == const.Weapons.POCKET_SAND:
                 enemy.blind = True
-                enemy.blinded_by = 'Pocket Sand'
+                enemy.blinded_by = const.Weapons.POCKET_SAND
                 enemy.blind_effect = 0.10
                 reduction = int(enemy.blind_effect * 100)
                 enemy.blind_turns = random.randint(2,4)
@@ -309,8 +310,8 @@ There are parts of another man or men scattered around you.{rst}""")
             if crit:
                 print(f"\n{r}***Critical Hit***{rst}")
                 self.play_weapon_sfx()
-                log_event('crit')
-            if 'Vampiric Sperm' in self.perks and weapon_data['type'] == 'melee':
+                log_event(const.Events.CRIT)
+            if const.Perks.VAMPIRIC_SPERM in self.perks and weapon_data['type'] == 'melee':
                 if self.hp < self.max_hp:
                     diff = self.max_hp - self.hp
                     gain = min(3, diff)
@@ -329,13 +330,13 @@ There are parts of another man or men scattered around you.{rst}""")
                 self.weapon_uses[weapon_name] = uses  # update player inventory with correct uses
                 if uses == 0:
                     print(f"\n{y}{weapon_name} broke!")
-                    play_sound('weapon_broke')
+                    play_sound(const.Events.WEAPON_BROKE)
                     t.sleep(1)
                     self.weapons.remove(weapon_name) 
                     if self.current_weapon == weapon_name:
-                        self.current_weapon = 'Bare Hands'
-                    if 'Bare Hands' not in self.weapons:
-                        self.weapons.append('Bare Hands')
+                        self.current_weapon = const.Weapons.BARE_HANDS
+                    if const.Weapons.BARE_HANDS not in self.weapons:
+                        self.weapons.append(const.Weapons.BARE_HANDS)
             enemy.take_damage(dmg)
             self.blind_reset()
     
@@ -397,8 +398,8 @@ There are parts of another man or men scattered around you.{rst}""")
             self.gain_hp(item_data['hp'])
 
             base = item_data['hp']
-            has_nut = 'Health Nut' in self.perks
-            has_fish = 'Doctor Fish' in self.perks
+            has_nut = const.Perks.HEALTH_NUT in self.perks
+            has_fish = const.Perks.DOCTOR_FISH in self.perks
 
             bonus = 0
             if has_nut and has_fish:
@@ -406,10 +407,10 @@ There are parts of another man or men scattered around you.{rst}""")
                 label = "Health Nut and Doctor Fish"
             elif has_nut:
                 bonus = int(base * 0.25)
-                label = "Health Nut"
+                label = const.Perks.HEALTH_NUT
             elif has_fish:
                 bonus = 2
-                label = "Doctor Fish"
+                label = const.Perks.DOCTOR_FISH
 
             if bonus > 0:
                 gain = min(self.max_hp - self.hp, bonus)
@@ -431,11 +432,11 @@ There are parts of another man or men scattered around you.{rst}""")
 
         
     def flee(self) -> bool:
-        if 'Used Sneakers' and 'New Sneakers' in self.perks:
+        if const.Perks.USED_SNEAKERS and const.Perks.NEW_SNEAKERS in self.perks:
             return random.random() < 0.65
-        elif 'Used Sneakers' in self.perks:
+        elif const.Perks.USED_SNEAKERS in self.perks:
             return random.random() < 0.55
-        elif 'New Sneakers' in self.perks:
+        elif const.Perks.NEW_SNEAKERS in self.perks:
             return random.random() < 0.60
         else:
             return random.random() < 0.5
@@ -453,11 +454,11 @@ There are parts of another man or men scattered around you.{rst}""")
         self.coins += cash_reward
         
         # casino
-        if "Gramblin' Man" in self.perks and "Grambling Addict" in self.perks:
+        if const.Perks.GRAMBLIN_MAN in self.perks and const.Perks.GRAMBLING_ADDICT in self.perks:
             self.plays = 20
-        elif "Gramblin' Man" in self.perks:
+        elif const.Perks.GRAMBLIN_MAN in self.perks:
             self.plays = 15
-        elif "Grambling Addict" in self.perks:
+        elif const.Perks.GRAMBLING_ADDICT in self.perks:
             self.plays = 15
         
         # reset xp
@@ -549,7 +550,7 @@ There are parts of another man or men scattered around you.{rst}""")
                             self.bank += num
                             self.coins -= num
                             print(f'\nYou successfully deposited {g}{num}{rst} coins into the bank.')
-                            log_event('deposit')
+                            log_event(const.Events.DEPOSIT)
                             t.sleep(1)
                             continue
                         elif num > self.coins:
@@ -572,7 +573,7 @@ There are parts of another man or men scattered around you.{rst}""")
                             self.bank -= num
                             self.coins += num
                             print(f'\nYou successfully withdrew {g}{num}{rst} coins from the bank.')
-                            log_event('withdraw')
+                            log_event(const.Events.WITHDRAW)
                             t.sleep(1)
                             continue
                         elif num > self.bank:
@@ -613,7 +614,7 @@ There are parts of another man or men scattered around you.{rst}""")
             t.sleep(1)
             return
         # add to list if new and room in sack
-        elif weapon_name not in self.weapons and weapon_name not in ('Bare Hands', 'Claws', 'Voodoo Staff'):
+        elif weapon_name not in self.weapons and weapon_name not in (const.Weapons.BARE_HANDS, const.Weapons.CLAWS, const.Weapons.VOODOO_STAFF):
             self.weapons.append(weapon_name)
             if remaining_uses is not None:
                 self.weapon_uses[weapon_name] = remaining_uses
@@ -624,7 +625,7 @@ There are parts of another man or men scattered around you.{rst}""")
                 if data:
                     uses = data['uses']
                 else:
-                    data = get_weapon_data('Bare Hands')
+                    data = get_weapon_data(const.Weapons.BARE_HANDS)
                     uses = data['uses']
                 self.weapon_uses[weapon_name] = uses
                 print(f"{c}{data['name']} added to weapons. Uses: {uses}{rst}")
@@ -732,7 +733,7 @@ class Enemy:
     alive: bool = True
     weapon_uses: Dict[str, int] = field(
     default_factory=lambda: {
-        'Bare Hands': next(w for w in Weapons if w['name'] == 'Bare Hands')['uses']
+        const.Weapons.BARE_HANDS: next(w for w in Weapons if w['name'] == const.Weapons.BARE_HANDS)['uses']
     })
 
     # === Spawning / Construction ===
@@ -793,7 +794,7 @@ class Enemy:
             weapons=list(weapon_names),
             weapon_uses=weapon_uses,
             current_weapon=start_weapon,
-            items=['Tench Filet'],
+            items=[const.Items.TENCH_FILET],
             type=boss_data['type'],
             coins=boss_data['bounty'],
             current_area=boss_data['area'],
@@ -802,7 +803,7 @@ class Enemy:
     
     # === Combat: Taking & Dealing Damage ===
     def denny_biltmore_dialogue(self):
-        if self.name != 'Denny Biltmore':
+        if self.name != const.Enemies.DENNY_BILTMORE:
             return
         if self.hp <= 0:
             return
@@ -822,7 +823,7 @@ class Enemy:
 
     
     def bayou_bill_dialogue(self):
-        if self.name != 'Bayou Bill':
+        if self.name != const.Enemies.BAYOU_BILL:
             return
         if self.hp <= 0:
             return
@@ -847,7 +848,7 @@ class Enemy:
         if self.hp == 0:
             print(f"\n{r}{self.name} is now in Hell.{rst}\n")
             play_sound('devil_thunder')
-            if self.name in ('The Mayor','Denny Biltmore'):
+            if self.name in (const.Enemies.THE_MAYOR,const.Enemies.DENNY_BILTMORE):
                 play_sound('welcome_to_hell')
                 t.sleep(2)
             t.sleep(2)
@@ -860,25 +861,25 @@ class Enemy:
     # sound effects
     def play_weapon_sfx(self): 
         w = self.current_weapon
-        if w in ('Pistol','Revolver'):
+        if w in (const.Weapons.PISTOL,const.Weapons.REVOLVER):
             play_sound('pistol')
-        elif w in ('Bare Hands','Brass Knuckles','Claws'):
+        elif w in (const.Weapons.BARE_HANDS,const.Weapons.BRASS_KNUCKLES,const.Weapons.CLAWS):
             play_sound('punch')
-        elif w in ('Knife','Broken Bottle','Hatchet','Machete'):
+        elif w in (const.Weapons.KNIFE,const.Weapons.BROKEN_BOTTLE,const.Weapons.HATCHET,const.Weapons.MACHETE):
             play_sound('blade')# slash
-        elif w in ('Axe','Fire Axe'):
+        elif w in (const.Weapons.AXE,const.Weapons.FIRE_AXE):
             play_sound('axe')# chop
-        elif w in ('Bat','Crowbar','Pickaxe','Sledgehammer','Shovel'):
+        elif w in (const.Weapons.BAT,const.Weapons.CROWBAR,const.Weapons.PICKAXE,const.Weapons.SLEDGEHAMMER,const.Weapons.SHOVEL):
             play_sound('blunt')# thud
-        elif w == 'Chainsaw':
+        elif w == const.Weapons.CHAINSAW:
             play_sound('chainsaw')# chainsaw
-        elif w == 'Rifle':
+        elif w == const.Weapons.RIFLE:
             play_sound('rifle')# rifle
-        elif w == 'Shotgun':
+        elif w == const.Weapons.SHOTGUN:
             play_sound('shotgun')# shotgun
-        elif w in ('Crossbow','Harpoon'):
+        elif w in (const.Weapons.CROSSBOW,const.Weapons.HARPOON):
             play_sound('arrow')# thunk
-        elif w == 'Voodoo Staff':
+        elif w == const.Weapons.VOODOO_STAFF:
             play_sound('magic')# magic whoosh
 
 
@@ -890,8 +891,8 @@ class Enemy:
         if not weapon_data: 
             print(f"\n{self.current_weapon} not found, resorting to Bare Hands.")
             t.sleep(2)
-            weapon_data = get_weapon_data('Bare Hands')
-            self.current_weapon = 'Bare Hands'
+            weapon_data = get_weapon_data(const.Weapons.BARE_HANDS)
+            self.current_weapon = const.Weapons.BARE_HANDS
 
         if self.blind:
             accuracy = weapon_data['accuracy'] * (1 - self.blind_effect)
@@ -905,55 +906,55 @@ class Enemy:
             spread = weapon_data.get('spread', 10) # Weapon spread, default 10 if no value
             base = weapon_data['damage'] + random.randint(-spread, spread) # Base damage +/- 10
             base_floor = max(5, base) # Damage >= 5
-            crit = random.random() < weapon_data['crit']
+            crit = random.random() < weapon_data[const.Events.CRIT]
             dmg = base_floor * 2 if crit else base_floor # 2x damage if crit, otherwise dmg after spread
-            if weapon_data['name'] in ('Pistol','Rifle','Revolver','Shotgun') and 'Bulletproof' in player.perks:
+            if weapon_data['name'] in (const.Weapons.PISTOL,const.Weapons.RIFLE,const.Weapons.REVOLVER,const.Weapons.SHOTGUN) and const.Perks.BULLETPROOF in player.perks:
                 print(f"\n{p}Bulletproof absorbs 10% of the damage!{rst}")
                 dmg = int(dmg * 0.9)
                 t.sleep(1)
 
             # blind effects on player
-            if weapon_data['name'] == 'Pepper Spray':
+            if weapon_data['name'] == const.Weapons.PEPPER_SPRAY:
                 player.blind = True
-                player.blinded_by = 'Pepper Spray'
+                player.blinded_by = const.Weapons.PEPPER_SPRAY
                 player.blind_effect = 0.50
                 reduction = int(self.blind_effect * 100)
                 player.blind_turns = 1
                 print(f'\n{y}You have been pepper sprayed! Accuracy down {reduction}% for one turn.{rst}')
                 t.sleep(1)
-            if weapon_data['name'] == 'Bear Spray':
+            if weapon_data['name'] == const.Weapons.BEAR_SPRAY:
                 player.blind = True
-                player.blinded_by = 'Bear Spray'
+                player.blinded_by = const.Weapons.BEAR_SPRAY
                 player.blind_effect = 0.75
                 reduction = int(self.blind_effect * 100)
                 player.blind_turns = 1
                 print(f'\n{y}You have been bear sprayed! Accuracy down {reduction}% for one turn.{rst}')
                 t.sleep(1)
-            if weapon_data['name'] == 'Chili Powder':
+            if weapon_data['name'] == const.Weapons.CHILI_POWDER:
                 player.blind = True
-                player.blinded_by = 'Chili Powder'
+                player.blinded_by = const.Weapons.CHILI_POWDER
                 player.blind_effect = 0.15
                 reduction = int(self.blind_effect * 100)
                 player.blind_turns = random.randint(3,5)
                 print(f'\nYou have been blinded by chili powder! Accuracy down {reduction}% for {player.blind_turns} turns.{rst}')
                 t.sleep(1)
-            if weapon_data['name'] == 'Pocket Sand':
+            if weapon_data['name'] == const.Weapons.POCKET_SAND:
                 player.blind = True
-                player.blinded_by = 'Pocket Sand'
+                player.blinded_by = const.Weapons.POCKET_SAND
                 player.blind_effect = 0.10
                 reduction = int(self.blind_effect * 100)
                 player.blind_turns = random.randint(2,4)
                 print(f'\n{r}You have been blinded by pocket sand! Accuracy down {reduction}% for {player.blind_turns} turns.{rst}')
                 t.sleep(1)
 
-            if self.name == 'The Mayor' and player.hp > 0:
+            if self.name == const.Enemies.THE_MAYOR and player.hp > 0:
                 coke = random.random() < 0.10
                 if coke:
                     dmg *= 1.1
                     print(f"{p}The Mayor snorted something and increased damage by 10%!{rst}")
                     t.sleep(1)
 
-            if self.name == 'Bayou Bill' and player.hp > 0:
+            if self.name == const.Enemies.BAYOU_BILL and player.hp > 0:
                 gator = random.random() < 0.10
                 if gator:
                     bite = random.randint(3,5)
@@ -967,7 +968,7 @@ class Enemy:
                 if crit:
                     print(f"\n{r}*** Critical hit ***{rst}")
                     self.play_weapon_sfx()
-                    log_event('crit')
+                    log_event(const.Events.CRIT)
                     t.sleep(1)
                                 
                 self.switch_weapon()
@@ -1014,24 +1015,24 @@ class Enemy:
             self.weapon_uses[self.current_weapon] = uses
             if uses == 0:
                 print(f"{y}\n{self.current_weapon} broke!{rst}")
-                play_sound('weapon_broke')
+                play_sound(const.Events.WEAPON_BROKE)
                 t.sleep(1)
                 self.weapons.remove(self.current_weapon)
                 if self.weapons:
                     self.current_weapon = self.weapons[0]
                 else:
-                    self.weapons.append('Bare Hands')
-                    self.current_weapon = 'Bare Hands'
-                    self.weapon_uses['Bare Hands'] = -1
+                    self.weapons.append(const.Weapons.BARE_HANDS)
+                    self.current_weapon = const.Weapons.BARE_HANDS
+                    self.weapon_uses[const.Weapons.BARE_HANDS] = -1
             elif weapon_data['type'] == 'blind':
                 # For blind weapons, switch to a different weapon if available
                 available_weapons = [w for w in self.weapons if w != self.current_weapon]
                 if available_weapons:
                     self.current_weapon = random.choice(available_weapons)
                 else:
-                    self.weapons.append('Bare Hands')
-                    self.current_weapon = 'Bare Hands'
-                    self.weapon_uses['Bare Hands'] = -1
+                    self.weapons.append(const.Weapons.BARE_HANDS)
+                    self.current_weapon = const.Weapons.BARE_HANDS
+                    self.weapon_uses[const.Weapons.BARE_HANDS] = -1
 
 
     # === Loot / Rewards ===
@@ -1042,12 +1043,12 @@ class Enemy:
         uses = self.weapon_uses.get(self.current_weapon, weapon_data['uses'])
 
         player.coins += self.coins
-        if 'Rickety Pickpocket' in player.perks:
+        if const.Perks.RICKETY_PICKPOCKET in player.perks:
             bonus = random.randint(20,30)
             player.coins += bonus
             print(f"{p}You scrounged {bonus} extra coins with Rickety Pickpocket!{rst}")
 
-        if self.current_weapon not in ('Claws', 'Voodoo Staff', 'Bare Hands'):
+        if self.current_weapon not in (const.Weapons.CLAWS, const.Weapons.VOODOO_STAFF, const.Weapons.BARE_HANDS):
             if self.current_weapon in player.weapons:
                 return
             elif len(player.weapons) >= player.max_weapons:        
@@ -1060,7 +1061,7 @@ class Enemy:
 
 @dataclass
 class Inventory:
-    bag: Dict[str, int] = field(default_factory=dict)        # e.g., {"Tench": 2, "Krill": 1}
+    bag: Dict[str, int] = field(default_factory=dict)        # e.g., {"Tench": 2, const.Items.KRILL: 1}
 
     def add(self, name: str, qty: int = 1) -> None:          # add() to add an item
         self.bag[name] = self.bag.get(name, 0) + qty         # for bag, add the item name + qty
@@ -1091,7 +1092,7 @@ class Shop:
     
     weapon_inventory: List[Dict] = field(
     default_factory=lambda: random.sample(
-        [w for w in Weapons if w['name'] not in ('Bare Hands', 'Claws', 'Voodoo Staff')],
+        [w for w in Weapons if w['name'] not in (const.Weapons.BARE_HANDS, const.Weapons.CLAWS, const.Weapons.VOODOO_STAFF)],
         k=3
     )
 ) 
@@ -1105,12 +1106,12 @@ class Shop:
 
     def reset_inventory(self, player): # shop inventory resets upon level up, used in player.gain_xp
         listings = 3
-        if 'Brown Friday' in player.perks:
+        if const.Perks.BROWN_FRIDAY in player.perks:
             listings = 4
         self.item_inventory = random.sample(Items, k=listings)
         
         self.weapon_inventory = random.sample(
-        [w for w in Weapons if w['name'] not in ('Bare Hands', 'Claws', 'Voodoo Staff')],
+        [w for w in Weapons if w['name'] not in (const.Weapons.BARE_HANDS, const.Weapons.CLAWS, const.Weapons.VOODOO_STAFF)],
         k=listings
         )
 
@@ -1128,13 +1129,13 @@ class Shop:
         perks = set(player.perks)
         discount = 1.0
 
-        if 'Barter Sauce' in perks and 'Trade Ship' in perks:
+        if const.Perks.BARTER_SAUCE in perks and const.Perks.TRADE_SHIP in perks:
             print(f"{p}Prices down 30% with Barter Sauce and Trade Ship!{rst}")
             discount = 0.7
-        elif 'Trade Ship' in perks:
+        elif const.Perks.TRADE_SHIP in perks:
             print(f"{p}Prices down 20% with Trade Ship!{rst}")
             discount = 0.8
-        elif 'Barter Sauce' in perks:
+        elif const.Perks.BARTER_SAUCE in perks:
             print(f"{p}Prices down 10% with Barter Sauce!{rst}")
             discount = 0.9
     
@@ -1218,7 +1219,7 @@ class Shop:
         print(f'{rst}{g}You purchased {item_name} for {cost} coins.')
         play_sound('purchase')
         t.sleep(1)
-        log_event('buy_item')
+        log_event(const.Events.BUY_ITEM)
 
     def buy_weapon(self, weapon_name: str, player): # player buys weapon
         from stw_functions import get_weapon_data, log_event
@@ -1246,7 +1247,7 @@ class Shop:
         play_sound('purchase')
         player.add_weapon(weapon_name)
         self.weapon_inventory.remove(weapon_data)
-        log_event('buy_weapon')
+        log_event(const.Events.BUY_WEAPON)
 
     def buy_perk(self, perk_name: str, player): # player buys perk
         from stw_functions import get_perk_data, log_event
@@ -1279,15 +1280,15 @@ class Shop:
         self.perk_inventory.remove(perk_data)
         print(f"{g}You purchased {perk_data['name']} for {cost} coins.")
         play_sound('purchase')
-        log_event('buy_perk')
+        log_event(const.Events.BUY_PERK)
         
-        if perk_data['name'] == 'Vagabondage':
+        if perk_data['name'] == const.Perks.VAGABONDAGE:
             player.max_weapons += 1; player.max_items += 1
-        if perk_data['name'] == "Nomad's Land":
+        if perk_data['name'] == const.Perks.NOMADS_LAND:
             player.max_weapons += 1; player.max_items += 1
-        if perk_data['name'] == 'Sledge Fund':
+        if perk_data['name'] == const.Perks.SLEDGE_FUND:
             player.bank_interest_rate += 0.05
-        if perk_data['name'] == 'Death Can Wait':
+        if perk_data['name'] == const.Perks.DEATH_CAN_WAIT:
             player.cheat_death_ready = True
         
         t.sleep(1)
@@ -1309,7 +1310,7 @@ class Shop:
         print(f'{g}You sold {item_name} for {sell_value} coins.')
         play_sound('purchase')
         t.sleep(1)
-        log_event('sell_item')
+        log_event(const.Events.SELL_ITEM)
 
 
     def calculate_sell_price(self, weapon_name, current_uses):
@@ -1357,7 +1358,7 @@ class Shop:
         print(f"\n{g}You sold {weapon_name} ({current_uses} uses left) for {sell_value} coins.")
         play_sound('purchase')
         t.sleep(1)
-        log_event('sell_weapon')
+        log_event(const.Events.SELL_WEAPON)
 
 
 @dataclass

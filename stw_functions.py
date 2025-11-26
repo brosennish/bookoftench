@@ -4,6 +4,7 @@ import random
 import time as t
 import sys
 
+import stw_constants as const
 from stw_data import Weapons, Items, Enemies, Areas, Perks, Results
 from stw_classes import GameState, Player, Enemy, Shop, SaveGameState
 from stw_colors import red as r, green as g, blue as b, purple as p, yellow as y, cyan as c, orange as o
@@ -23,7 +24,7 @@ def record_kill(gs, player) -> bool:     # accesses GameState/player and returns
     # decrement & clamp
     gs.area_enemies[area] = max(0, gs.area_enemies[area] - 1)
 
-    if 'Death Can Wait' in player.perks:
+    if const.Perks.DEATH_CAN_WAIT in player.perks:
         player.cheat_death_ready = True
 
 
@@ -56,13 +57,13 @@ def play_again():
 # --- MUSIC ---
 def play_area_theme(player):
     area = player.current_area
-    if area == 'City' and get_current_music() != 'city_theme':
+    if area == const.Areas.CITY and get_current_music() != 'city_theme':
         play_music('city_theme')
-    elif area == 'Forest' and get_current_music() != 'forest_theme':
+    elif area == const.Areas.FOREST and get_current_music() != 'forest_theme':
         play_music('forest_theme')
-    elif area == 'Swamp' and get_current_music() != 'swamp_theme':
+    elif area == const.Areas.SWAMP and get_current_music() != 'swamp_theme':
         play_music('swamp_theme')
-    elif area == 'Cave' and get_current_music() != 'cave_theme':
+    elif area == const.Areas.CAVE and get_current_music() != 'cave_theme':
         play_music('cave_theme')
 
 # --- GET DATA ---
@@ -134,11 +135,11 @@ def do_boss_battle(gs, player, shop):
 
 
 def calculate_flee(player):
-    if 'Used Sneakers' in player.perks:
+    if const.Perks.USED_SNEAKERS in player.perks:
         flee = 0.55
-    elif 'New Sneakers' in player.perks:
+    elif const.Perks.NEW_SNEAKERS in player.perks:
         flee = 0.60
-    elif 'Used Sneakers' and 'New Sneakers' in player.perks:
+    elif const.Perks.USED_SNEAKERS and const.Perks.NEW_SNEAKERS in player.perks:
         flee = 0.65
     else:
         flee = 0.5
@@ -234,7 +235,7 @@ def e_uses(enemy):
 
 # --- BOUNTY ---
 def bounty_update(gs, player):
-    if 'Tench the Bounty Hunter' in player.perks:
+    if const.Perks.TENCH_THE_BOUNTY_HUNTER in player.perks:
             bounty = (gs.bounty + 25)
     else:
         bounty = gs.bounty
@@ -266,7 +267,7 @@ def do_bank_balance(player):
 # --- WEAPONS ---
 def find_weapon(player):
     weapon_dict = random.choice(Weapons)
-    while weapon_dict['name'] in ('Bare Hands','Claws','Voodoo Staff'):
+    while weapon_dict['name'] in (const.Weapons.BARE_HANDS,const.Weapons.CLAWS,const.Weapons.VOODOO_STAFF):
         weapon_dict = random.choice(Weapons)
     max_uses = weapon_dict['uses']
     found_uses = random.randint(1, max_uses) if max_uses >= 1 else max_uses
@@ -289,7 +290,7 @@ def do_view_perks(player, gs):
         t.sleep(1)
     else:
         print(f"Your Perks:\n")
-        if 'Wench Location' in player.perks:
+        if const.Perks.WENCH_LOCATION in player.perks:
             print(f'Wench Location: {b}{gs.wench_area}{rst}')
 
         for perk in player.perks:
@@ -442,7 +443,7 @@ def actions_menu(gs, player, shop):
         bounty = bounty_update(gs, player)
 
         # Overview and Status menu
-        if "Crow's Nest" in player.perks:
+        if const.Perks.CROWS_NEST in player.perks:
             print(f"\nArea: {b}{c_area} {rst}{d}|{rst} Killed: {r}{killed}{rst} {d}|{rst} Remaining: {y}{remaining} {rst}{d}|{rst} Wanted: {p}{gs.wanted} {rst}{d}|{rst} Bounty: {p}{bounty} {rst}coins")
         else:
             print(f"\nArea: {b}{c_area} {rst}{d}|{rst} Killed: {r}{killed} {rst}{d}|{rst} Wanted: {p}{gs.wanted} {rst}{d}|{rst} Bounty: {p}{gs.bounty} {rst}coins")
@@ -566,7 +567,7 @@ def do_casino(player):
                 elif pick == winner:
                     print(f"\n{g}Lucky guess, bozo! You won {wager} coins.{rst}\n")
                     play_sound('golf_clap')
-                    if 'Grambling Addict' in player.perks:
+                    if const.Perks.GRAMBLING_ADDICT in player.perks:
                         print(f"{p}Payout increased 5% with Grambling Addict!{rst}\n")
                         player.coins += int(wager * 1.05)
                         player.casino_won += int(wager * 1.05)
@@ -613,19 +614,19 @@ def overview(gs, player):
 
     print(f"{'Coins':<{width}} {d}|{rst} {g}{player.coins}{rst}")
     print(f"{'Bank':<{width}} {d}|{rst} {g}{player.bank}{rst}")
-    print(f"{'Deposits':<{width}} {d}|{rst} {o}{Results['deposit']}{rst}")
-    print(f"{'Withdrawals':<{width}} {d}|{rst} {o}{Results['withdraw']}{rst}")
+    print(f"{'Deposits':<{width}} {d}|{rst} {o}{Results[const.Events.DEPOSIT]}{rst}")
+    print(f"{'Withdrawals':<{width}} {d}|{rst} {o}{Results[const.Events.WITHDRAW]}{rst}")
     print(f"{'Interest Earned':<{width}} {d}|{rst} {g}{player.interest}{rst}")
 
     print(f"{'Casino Won':<{width}} {d}|{rst} {g}+{player.casino_won}{rst}")
     print(f"{'Casino Lost':<{width}} {d}|{rst} {r}-{player.casino_lost}{rst}")
 
-    print(f"{'Hits':<{width}} {d}|{rst} {c}{Results['hit']}{rst}")
-    print(f"{'Misses':<{width}} {d}|{rst} {c}{Results['miss']}{rst}")
-    print(f"{'Critical Hits':<{width}} {d}|{rst} {c}{Results['crit']}{rst}")
+    print(f"{'Hits':<{width}} {d}|{rst} {c}{Results[const.Events.HIT]}{rst}")
+    print(f"{'Misses':<{width}} {d}|{rst} {c}{Results[const.Events.MISS]}{rst}")
+    print(f"{'Critical Hits':<{width}} {d}|{rst} {c}{Results[const.Events.CRIT]}{rst}")
 
-    print(f"{'Enemies Killed':<{width}} {d}|{rst} {r}{Results['kill']}{rst}")
-    print(f"{'Bounties Claimed':<{width}} {d}|{rst} {p}{Results['bounty_collected']}{rst}")
+    print(f"{'Enemies Killed':<{width}} {d}|{rst} {r}{Results[const.Events.KILL]}{rst}")
+    print(f"{'Bounties Claimed':<{width}} {d}|{rst} {p}{Results[const.Events.BOUNTY_COLLECTED]}{rst}")
 
     areas_cleared = sum(1 for count in gs.area_enemies.values() if count == 0)
     print(f"{'Areas Cleared':<{width}} {d}|{rst} {b}{areas_cleared}{rst}")
@@ -633,12 +634,12 @@ def overview(gs, player):
     bosses_defeated = sum(1 for data in gs.boss_defeated.values() if data['defeated'])
     print(f"{'Bosses Defeated':<{width}} {d}|{rst} {r}{bosses_defeated}{rst}")
 
-    print(f"{'Items Purchased':<{width}} {d}|{rst} {c}{Results['buy_item']}{rst}")
-    print(f"{'Items Used':<{width}} {d}|{rst} {c}{Results['use_item']}{rst}")
-    print(f"{'Weapons Purchased':<{width}} {d}|{rst} {c}{Results['buy_weapon']}{rst}")
-    print(f"{'Perks Owned':<{width}} {d}|{rst} {c}{Results['buy_perk']}{rst}")
+    print(f"{'Items Purchased':<{width}} {d}|{rst} {c}{Results[const.Events.BUY_ITEM]}{rst}")
+    print(f"{'Items Used':<{width}} {d}|{rst} {c}{Results[const.Events.USE_ITEM]}{rst}")
+    print(f"{'Weapons Purchased':<{width}} {d}|{rst} {c}{Results[const.Events.BUY_WEAPON]}{rst}")
+    print(f"{'Perks Owned':<{width}} {d}|{rst} {c}{Results[const.Events.BUY_PERK]}{rst}")
 
-    print(f"{'Times Traveled':<{width}} {d}|{rst} {b}{Results['travel']}{rst}")
+    print(f"{'Times Traveled':<{width}} {d}|{rst} {b}{Results[const.Events.TRAVEL]}{rst}")
     input(f"{b}>{rst} ")
 
 
@@ -689,7 +690,7 @@ def do_explore(gs, player, Enemy, shop):
             t.sleep(1)
             return
     elif 0.7 <= roll < 0.9:
-        if 'Metal Detective' in player.perks:
+        if const.Perks.METAL_DETECTIVE in player.perks:
             coins = random.randint(10, 50)
         else:
             coins = random.randint(10, 30)
@@ -786,10 +787,10 @@ def do_shop(player, shop, gs):
                 if 0 <= index < perk_count:
                     perk = shop.perk_inventory[index]
                     shop.buy_perk(perk['name'], player)
-                    if perk['name'] == 'Wench Location' and perk['name'] in player.perks:
+                    if perk['name'] == const.Perks.WENCH_LOCATION and perk['name'] in player.perks:
                         print(f"\n{y}Shopkeeper: The wench is in the {gs.wench_area}. Don't ask me how I know.")
                         t.sleep(3)
-                    if perk['name'] in ("Gramblin' Man","Grambling Addict"):
+                    if perk['name'] in (const.Perks.GRAMBLIN_MAN,const.Perks.GRAMBLING_ADDICT):
                         player.plays += 5
                 else:
                     print(f"\n{y}Perk not found.")
@@ -809,7 +810,7 @@ def do_shop(player, shop, gs):
             for item in player.items:
                 entries.append(("item", item))  # for items in inventory, append them to new entries list
             # Then weapons
-            sellable = [w for w in player.weapons if w != 'Bare Hands']
+            sellable = [w for w in player.weapons if w != const.Weapons.BARE_HANDS]
             for weapon in sellable:
                 entries.append(("weapon", weapon))
 
@@ -889,7 +890,7 @@ def do_travel(gs, player):
             player.current_area = area
             print(f'\n{c}Traveling by six by eight to the {area}...')
             play_music('travel_theme')
-            log_event('travel')
+            log_event(const.Events.TRAVEL)
             t.sleep(5)
             # stop travel music, then start the new area's theme
             stop_music()
@@ -927,7 +928,7 @@ def do_final_boss_battle(gs, player, shop):
         hp=denny_data['hp'],
         max_hp=denny_data['hp'],
         weapons=list(weapon_names),
-        items=['Tench Filet'],
+        items=[const.Items.TENCH_FILET],
         current_weapon=start_weapon,
         type=denny_data['type'],
         coins=denny_data['bounty'],
@@ -958,12 +959,12 @@ def do_final_boss_battle(gs, player, shop):
 
 def battle(player, enemy, gs, shop):
 
-    if enemy.name in ('Sledge Hammond','Bayou Bill','Captain Hole','Denny Biltmore'):
-        if enemy.name == 'Bayou Bill':
+    if enemy.name in (const.Enemies.SLEDGE_HAMMOND,const.Enemies.BAYOU_BILL,const.Enemies.CAPTAIN_HOLE,const.Enemies.DENNY_BILTMORE):
+        if enemy.name == const.Enemies.BAYOU_BILL:
             bayou_bill_intro()
         get_current_music()
         play_music('area_boss_theme')
-    elif enemy.name == 'The Mayor':
+    elif enemy.name == const.Enemies.THE_MAYOR:
         play_music('final_boss_theme')
     elif enemy.type not in ('boss','boss_final'):
         get_current_music()
@@ -972,13 +973,13 @@ def battle(player, enemy, gs, shop):
     while player.hp > 0 and enemy.hp > 0:
 
         # Captain Hole event
-        if enemy.name == 'Captain Hole' and 'Tench Filet' in player.items:
+        if enemy.name == const.Enemies.CAPTAIN_HOLE and const.Items.TENCH_FILET in player.items:
             print("Captain Hole has offered to shoot himself in the jines in exchange for your Tench Filet.")
             t.sleep(4)
             filet = input(f"Do you accept? (y or n):\n{b}> ").strip().lower()
             if filet == 'y':
                 stop_music()
-                player.items.remove('Tench Filet')
+                player.items.remove(const.Items.TENCH_FILET)
                 injury = random.randint(25,50)
                 enemy.hp -= injury
                 print('You hand your filet over to Captain Hole.\n')
@@ -1009,7 +1010,7 @@ def battle(player, enemy, gs, shop):
 
             elif choice == 'f':        # try to flee
                 fled = player.flee()   # T/F
-                if enemy.name == 'Denny Biltmore':
+                if enemy.name == const.Enemies.DENNY_BILTMORE:
                     print("There's no turning back now!")
                     t.sleep(2)
                     continue
@@ -1033,8 +1034,8 @@ def battle(player, enemy, gs, shop):
                 continue
     
         if enemy.hp <= 0:
-            log_event('kill')
-            if enemy.name == 'The Mayor':
+            log_event(const.Events.KILL)
+            if enemy.name == const.Enemies.THE_MAYOR:
                 play_sound('kids_cheer')
             if enemy.name == gs.wanted:
                 bounty = bounty_update(gs, player)
@@ -1042,7 +1043,7 @@ def battle(player, enemy, gs, shop):
                     bounty *= 1.5
                 player.coins += bounty
                 print(f"{g}You killed {enemy.name} and collected a bounty of {bounty} coins!{rst}")
-                log_event('bounty_collected')
+                log_event(const.Events.BOUNTY_COLLECTED)
                 t.sleep(1)
             
             is_boss(gs, player, enemy)
@@ -1065,7 +1066,7 @@ def battle(player, enemy, gs, shop):
             return False # battle over, enemy dead
 
         else:
-            if enemy.name == 'Sledge Hammond':
+            if enemy.name == const.Enemies.SLEDGE_HAMMOND:
                 enemy.hp += 3
                 print(f"\n{p}Sledge Hammond took steroids and restored 3 HP!{rst}")
                 t.sleep(1)
