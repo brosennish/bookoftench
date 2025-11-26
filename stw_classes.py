@@ -268,7 +268,7 @@ There are parts of another man or men scattered around you.{rst}""")
                 enemy.blinded_by = 'Pepper Spray'
                 enemy.blind_effect = 0.50
                 reduction = int(enemy.blind_effect * 100)
-                enemy.blind_turns = 1
+                enemy.blind_turns = 3
                 print(f'\n{p}{enemy.name} has been pepper sprayed! Accuracy down {reduction}% for one turn.{rst}')
                 t.sleep(1)
             if weapon_data['name'] == 'Bear Spray':
@@ -276,7 +276,7 @@ There are parts of another man or men scattered around you.{rst}""")
                 enemy.blinded_by = 'Bear Spray'
                 enemy.blind_effect = 0.75
                 reduction = int(enemy.blind_effect * 100)
-                enemy.blind_turns = 1
+                enemy.blind_turns = 3
                 print(f'\n{p}{enemy.name} has been bear sprayed! Accuracy down {reduction}% for one turn.{rst}')
                 t.sleep(1)
             if weapon_data['name'] == 'Chili Powder':
@@ -292,7 +292,7 @@ There are parts of another man or men scattered around you.{rst}""")
                 enemy.blinded_by = 'Pocket Sand'
                 enemy.blind_effect = 0.10
                 reduction = int(enemy.blind_effect * 100)
-                enemy.blind_turns = random.randint(2,4)
+                enemy.blind_turns = random.randint(3,5)
                 print(f'\n{p}{enemy.name} has been blinded by pocket sand! Accuracy down {reduction}% for {enemy.blind_turns} turns.{rst}')
                 t.sleep(1)
 
@@ -910,7 +910,7 @@ class Enemy:
                     player.blinded_by = 'Pepper Spray'
                     player.blind_effect = 0.50
                     reduction = int(self.blind_effect * 100)
-                    player.blind_turns = 1
+                    player.blind_turns = 3
                     print(f'\n{y}You have been pepper sprayed! Accuracy down {reduction}% for one turn.{rst}')
                     t.sleep(1)
                 if weapon_data['name'] == 'Bear Spray':
@@ -918,7 +918,7 @@ class Enemy:
                     player.blinded_by = 'Bear Spray'
                     player.blind_effect = 0.75
                     reduction = int(self.blind_effect * 100)
-                    player.blind_turns = 1
+                    player.blind_turns = 3
                     print(f'\n{y}You have been bear sprayed! Accuracy down {reduction}% for one turn.{rst}')
                     t.sleep(1)
                 if weapon_data['name'] == 'Chili Powder':
@@ -934,7 +934,7 @@ class Enemy:
                     player.blinded_by = 'Pocket Sand'
                     player.blind_effect = 0.10
                     reduction = int(self.blind_effect * 100)
-                    player.blind_turns = random.randint(2,4)
+                    player.blind_turns = random.randint(3,5)
                     print(f'\n{r}You have been blinded by pocket sand! Accuracy down {reduction}% for {player.blind_turns} turns.{rst}')
                     t.sleep(1)
 
@@ -1077,21 +1077,21 @@ class Inventory:
 @dataclass
 class Shop:
     item_inventory: List[Dict[str, Union [str, int]]] = field(
-        default_factory=lambda: random.sample(Items, k=min(3, len(Items))
+        default_factory=lambda: random.sample(Items, k=min(4, len(Items))
     )
 )
     
     weapon_inventory: List[Dict] = field(
     default_factory=lambda: random.sample(
         [w for w in Weapons if w['name'] not in ('Bare Hands', 'Claws', 'Voodoo Staff')],
-        k=3
+        k=4
     )
-) 
+)
     
     perk_inventory: List[Dict] = field(
     default_factory=lambda: random.sample(
         [p for p in Perks],
-        k=3
+        k=4
     )
 )
 
@@ -1137,7 +1137,7 @@ class Shop:
         if filtered_items:
             for idx, item in enumerate(filtered_items, 1):
                 print(
-                    f"[{idx}] "
+                    f"[{idx:<2}] "
                     f"{c}{item['name']:<24}{rst} {d}|{rst} "
                     f"Cost: {o}{item['cost']:<3}{rst} {d}|{rst} "
                     f"HP: {g}+{item['hp']:<3}"
@@ -1157,11 +1157,11 @@ class Shop:
                 actual = base_index + idx
 
                 print(
-                    f"[{actual}] "
+                    f"[{actual:<2}] "
                     f"{c}{weapon['name']:<24}{rst} {d}|{rst} "
                     f"Cost: {o}{weapon['cost']:<3}{rst} {d}|{rst} "
-                    f"DMG: {r}{weapon['damage']:<2}{rst} {d}|{rst} "
-                    f"ACC: {y}{acc:<3}{rst} {d}|{rst} "
+                    f"DMG: {r}{weapon['damage']:<3}{rst} {d}|{rst} "
+                    f"ACC: {y}{acc:<4}{rst} {d}|{rst} "
                     f"Uses: {uses} "
                 )
         else:
@@ -1174,7 +1174,7 @@ class Shop:
             for idx, perk in enumerate(self.perk_inventory, perks_index):
                 perk_cost = int(perk['cost'] * discount)
                 print(
-                    f"[{idx}] "
+                    f"[{idx:>2}] "
                     f"{c}{perk['name']:<24}{rst} {d}|{rst} "
                     f"Cost: {o}{perk_cost:<3}{rst} {d}|{rst} "
                     f"{perk['description']}{rst}"
