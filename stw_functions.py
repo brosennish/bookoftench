@@ -14,8 +14,8 @@ from stw_audio import play_sound, play_music, get_current_music, stop_music
 
 # FUNCTIONS: Record Kill, Win Game
 
-def record_kill(gs, player) -> bool:     # accesses GameState/player and returns T/F
-    '''Decrement area enemy count and check win; return True if game won'''
+def record_kill(gs, player):     # accesses GameState/player and returns T/F
+    '''Decrement area enemy count and increase kills per area count'''
     area = player.current_area    # define area to be where player is when enemy killed
 
     # updating area kill counts
@@ -23,9 +23,6 @@ def record_kill(gs, player) -> bool:     # accesses GameState/player and returns
 
     # decrement & clamp
     gs.area_enemies[area] = max(0, gs.area_enemies[area] - 1)
-
-    if const.Perks.DEATH_CAN_WAIT in player.perks:
-        player.cheat_death_ready = True
 
 
 def win_game(gs): 
@@ -823,13 +820,15 @@ def do_shop(player, shop, gs):
             for i, (kind, name) in enumerate(entries, 1):
                 if kind == "item":
                     data = get_item_data(name)
-                    print(f"[{i}] {c}{name:<24}{rst} {d}|{rst} Value:{rst} {g}{data['sell_value']:<3} {d}|{rst} HP: {g}+{data['hp']}")
+                    print(f"[{i}] {c}{name:<24}{rst} {d}|{rst} Value:{rst} {g}{data['sell_value']:<3}{rst} {d}|{rst} HP: {g}+{data['hp']}")
                 else:
                     data, uses_display = p_uses_weapons(player, name)
+                    current_uses = player.weapon_uses.get(name, data['uses'])
+                    sell_value = shop.calculate_sell_price(name, current_uses)
                 
                     print(
                         f"[{i}] {c}{name:<24}{rst} {d}|{rst} "
-                        f"Value: {g}{data['sell_value']:<3}{rst} {d}|{rst} "
+                        f"Value: {g}{sell_value:<3}{rst} {d}|{rst} "
                         f"DMG: {r}{data['damage']:<3}{rst} {d}|{rst} "
                         f"Accuracy: {y}{data['accuracy']:<4}{rst} {d}|{rst} "
                         f"Uses: {uses_display}"
@@ -958,6 +957,9 @@ def do_final_boss_battle(gs, player, shop):
 
 
 def battle(player, enemy, gs, shop):
+    # Death Can Wait check
+    if 'Death Can Wait' in player.perks:
+        player.cheat_death_ready = True
 
     if enemy.name in (const.Enemies.SLEDGE_HAMMOND,const.Enemies.BAYOU_BILL,const.Enemies.CAPTAIN_HOLE,const.Enemies.DENNY_BILTMORE):
         if enemy.name == const.Enemies.BAYOU_BILL:
@@ -1072,10 +1074,16 @@ def battle(player, enemy, gs, shop):
                 t.sleep(1)
             alive = enemy.attack(player)
             if not alive:
-                refresh_wanted(gs)
-                stop_music()
-                play_area_theme(player)
-                return False # battle over, player dead
+                if player.cheat_death_ready:
+                    player.hp = 1
+                    print(f'{p}You survived the attack with Death Can Wait!{rst}')
+                    player.cheat_death_ready = False
+                    t.sleep(1)
+                else:
+                    refresh_wanted(gs)
+                    stop_music()
+                    play_area_theme(player)
+                    return False # battle over, player dead
                         
 # ----- SAVE/LOAD GAME LOGIC -----
 

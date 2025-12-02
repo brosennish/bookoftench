@@ -77,6 +77,7 @@ class Items:
 class Perks:
 	AMBROSE_BLADE = "Ambrose Blade"
 	BARTER_SAUCE = "Barter Sauce"
+	BEER_GOGGLES = "Beer Goggles"
 	BROWN_FRIDAY = "Brown Friday"
 	BULLETPROOF = "Bulletproof"
 	CROWS_NEST = "Crow's Nest"

@@ -11,6 +11,12 @@ Perks = [
         'type': 'perk',
     },
     {
+        'name': const.Perks.BEER_GOGGLES,
+        'cost': 85,
+        'description': "Prevents blindness",
+        'type': 'perk',
+    },
+    {
         'name': const.Perks.BROWN_FRIDAY,
         'cost': 120,
         'description': "Shop inventories contain +1 listing",
