@@ -440,7 +440,7 @@ There are parts of another man or men scattered around you.{rst}""")
     def level_up(self):
         # ---- core level-up effects live here ----
         self.lvl += 1
-        cash_reward = 10 * self.lvl
+        cash_reward = random.randint(100, 200)
         self.coins += cash_reward
         
         # casino
@@ -474,7 +474,7 @@ There are parts of another man or men scattered around you.{rst}""")
         play_sound('great_job')
         t.sleep(2)
         print(f"{g}MAX HP: {old_max} -> {self.max_hp}{rst}")
-        if reward != None:
+        if reward is not None:
             print(f"\n{c}Reward: {reward['name']}{rst}")
         print(f"\n{g}You were awarded {cash_reward} coins.{rst}")
         t.sleep(2)
@@ -752,7 +752,7 @@ class Enemy:
             current_weapon = random.choice(enemy_data['weapon']), # assigns random weapon from their list
             items = [],
             type = enemy_data['type'],
-            coins = random.randint(5, 50),
+            coins = random.randint(50, 75),
             current_area = area_name
         )
     

@@ -687,9 +687,9 @@ def do_explore(gs, player, Enemy, shop):
             return
     elif 0.7 <= roll < 0.9:
         if 'Metal Detective' in player.perks:
-            coins = random.randint(10, 50)
+            coins = random.randint(25, 75)
         else:
-            coins = random.randint(10, 30)
+            coins = random.randint(25, 50)
         print(f'{g}You found {coins} coins!')
         t.sleep(1)
         player.coins += coins

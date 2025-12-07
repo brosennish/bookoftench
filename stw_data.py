@@ -132,7 +132,7 @@ Perks = [
     {
         'name': 'Metal Detective',
         'cost': 110,
-        'description': "Find up to 20 extra coins when exploring",
+        'description': "Find up to 25 extra coins when exploring",
         'type': 'perk',
     },
     {
