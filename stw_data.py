@@ -18,13 +18,13 @@ Perks = [
     },
     {
         'name': const.Perks.BROWN_FRIDAY,
-        'cost': 120,
+        'cost': 150,  # 120 → 150
         'description': "Shop inventories contain +1 additional item",
         'type': 'perk',
     },
     {
         'name': const.Perks.SLEDGE_FUND,
-        'cost': 160,
+        'cost': 180,  # 160 → 180
         'description': "Bank interest rate +5%",
         'type': 'perk',
     },
@@ -36,7 +36,7 @@ Perks = [
     },
     {
         'name': const.Perks.DOCTOR_FISH,
-        'cost': 110,
+        'cost': 120,  # 110 → 120
         'description': "Healing items restore +2 additional HP",
         'type': 'perk',
     },
@@ -54,13 +54,13 @@ Perks = [
     },
     {
         'name': const.Perks.RICKETY_PICKPOCKET,
-        'cost': 130,
+        'cost': 160,  # 130 → 160
         'description': "Steal an extra 20–30 coins from every enemy you defeat",
         'type': 'perk',
     },
     {
         'name': const.Perks.MARTIAL_ARTS_TRAINING,
-        'cost': 100,
+        'cost': 120,  # 100 → 120
         'description': "Bare Hands +3 damage",
         'type': 'perk',
     },
@@ -72,25 +72,25 @@ Perks = [
     },
     {
         'name': const.Perks.LEATHER_SKIN,
-        'cost': 160,
+        'cost': 180,  # 160 → 180
         'description': "Take 10% less damage from all attacks",
         'type': 'perk',
     },
     {
         'name': const.Perks.HEALTH_NUT,
-        'cost': 150,
+        'cost': 170,  # 150 → 170
         'description': "Gain +25% health from items",
         'type': 'perk',
     },
     {
         'name': const.Perks.ROSETTI_THE_GYM_RAT,
-        'cost': 140,
+        'cost': 160,  # 140 → 160
         'description': "Melee weapons do +10% damage",
         'type': 'perk',
     },
     {
         'name': const.Perks.AMBROSE_BLADE,
-        'cost': 130,
+        'cost': 140,  # 130 → 140
         'description': "Melee weapons do +3 damage",
         'type': 'perk',
     },
@@ -102,7 +102,7 @@ Perks = [
     },
     {
         'name': const.Perks.BULLETPROOF,
-        'cost': 130,
+        'cost': 140,  # 130 → 140
         'description': "Take 10% less damage from guns",
         'type': 'perk',
     },
@@ -126,37 +126,37 @@ Perks = [
     },
     {
         'name': const.Perks.VAMPIRIC_SPERM,
-        'cost': 200,
+        'cost': 250,  # 200 → 250
         'description': 'Heal 3 HP every time you land a melee attack',
         'type': 'perk',
     },
     {
         'name': const.Perks.METAL_DETECTIVE,
-        'cost': 110,
+        'cost': 120,  # 110 → 120
         'description': "Find up to 25 more coins when exploring",
         'type': 'perk',
     },
     {
         'name': const.Perks.TENCH_THE_BOUNTY_HUNTER,
-        'cost': 120,
+        'cost': 110,  # 120 → 110 (bounties are rare)
         'description': "Earn +25 coins from each bounty enemy you defeat",
         'type': 'perk',
     },
     {
         'name': const.Perks.TENCH_EYES,
-        'cost': 130,
+        'cost': 120,  # 130 → 120
         'description': "Projectile weapon accuracy +5%",
         'type': 'perk',
     },
     {
         'name': const.Perks.DEATH_CAN_WAIT,
-        'cost': 150,
+        'cost': 200,  # 150 → 200
         'description': "Once per battle, a fatal blow leaves you at 1 HP",
         'type': 'perk',
     },
     {
         'name': const.Perks.BARTER_SAUCE,
-        'cost': 140,
+        'cost': 180,  # 140 → 180
         'description': "Shop prices are 10% lower",
         'type': 'perk',
     },
@@ -166,16 +166,15 @@ Perks = [
         'description': "Shop prices are 20% lower",
         'type': 'perk',
     },
-
     {
         'name': const.Perks.CROWS_NEST,
-        'cost': 200,
+        'cost': 180,  # 200 → 180
         'description': "View enemies remaining in each area",
         'type': 'perk',
     },
     {
         'name': const.Perks.SOLOMON_TRAIN,
-        'cost': 300,
+        'cost': 350,  # 300 → 350
         'description': "10% chance to negate a fatal blow and instantly kill the enemy instead",
         'type': 'perk',
     },
@@ -186,7 +185,6 @@ Perks = [
         'type': 'perk',
     },
 ]
-
 
 Enemies = [
     # ========================
@@ -255,7 +253,7 @@ Areas = [
 
 Items = [
     # --- Tier 1 (10 HP) ---
-    {'name': const.Items.FROZEN_WAFFLE,         'hp': 10, 'cost':  8, 'sell_value': 3},
+    {'name': const.Items.FROZEN_WAFFLE,         'hp': 10, 'cost':  9, 'sell_value': 3},
     {'name': const.Items.KRILL,                 'hp': 10, 'cost': 10, 'sell_value': 4},
     {'name': const.Items.STALE_GREENS,          'hp': 10, 'cost': 12, 'sell_value': 5},
 
@@ -273,7 +271,7 @@ Items = [
 
     # --- Tier 4 (30–35 HP) ---
     {'name': const.Items.OCEAN_MAN_LUNCH_BOX,   'hp': 30, 'cost': 30, 'sell_value': 12},
-    {'name': const.Items.GATOR_TESTICLES,       'hp': 32, 'cost': 34, 'sell_value': 14},
+    {'name': const.Items.GATOR_TESTICLES,       'hp': 32, 'cost': 33, 'sell_value': 13},
     {'name': const.Items.MOONSHINE,             'hp': 35, 'cost': 36, 'sell_value': 15},
     {'name': const.Items.CHICKEN_OF_THE_CAVE,   'hp': 35, 'cost': 38, 'sell_value': 16},
 
@@ -288,92 +286,91 @@ Items = [
 
 Weapons = [
     # --- Default ---
-    {'name': const.Weapons.BARE_HANDS,    'damage': 10, 'uses': -1, 'accuracy': 0.90, 'spread': 3, const.Events.CRIT: 0.10,
-     'cost': 0,  'sell_value': 0, 'type': 'melee'},
+    {'name': const.Weapons.BARE_HANDS,    'damage': 10, 'uses': -1, 'accuracy': 0.90, 'spread': 3,
+     const.Events.CRIT: 0.10, 'cost': 0,  'sell_value': 0, 'type': 'melee'},
 
     # --- Blinding / Debuff ---
     {'name': const.Weapons.PEPPER_SPRAY, 'damage': 6, 'uses': 3, 'accuracy': 0.85, 'spread': 2,
-    const.Events.CRIT: 0.05, 'cost': 25, 'sell_value': 12, 'type': 'blind'},
+     const.Events.CRIT: 0.05, 'cost': 25, 'sell_value': 12, 'type': 'blind'},
 
-    {'name': const.Weapons.BEAR_SPRAY, 'damage': 0, 'uses': 1, 'accuracy': 0.85, 'spread': 0, const.Events.CRIT: 0.00,
-    'cost': 60, 'sell_value': 30, 'type': 'blind'},
+    {'name': const.Weapons.BEAR_SPRAY, 'damage': 0, 'uses': 1, 'accuracy': 0.85, 'spread': 0,
+     const.Events.CRIT: 0.00, 'cost': 60, 'sell_value': 30, 'type': 'blind'},
 
     {'name': const.Weapons.CHILI_POWDER, 'damage': 4, 'uses': 1, 'accuracy': 0.90, 'spread': 1,
-    const.Events.CRIT: 0.02, 'cost': 30, 'sell_value': 15, 'type': 'blind'},
+     const.Events.CRIT: 0.05, 'cost': 30, 'sell_value': 15, 'type': 'blind'},
 
-    {'name': const.Weapons.POCKET_SAND, 'damage': 0, 'uses': 1, 'accuracy': 0.90, 'spread': 0, const.Events.CRIT: 0.00,
-    'cost': 20, 'sell_value': 8, 'type': 'blind'},
+    {'name': const.Weapons.POCKET_SAND, 'damage': 0, 'uses': 1, 'accuracy': 0.90, 'spread': 0,
+     const.Events.CRIT: 0.00, 'cost': 20, 'sell_value': 8, 'type': 'blind'},
 
     # --- Tier 1 ---
-    {'name': const.Weapons.KNIFE,          'damage': 16, 'uses': 8, 'accuracy': 0.88, 'spread': 4, const.Events.CRIT: 0.13,
-     'cost': 25,  'sell_value': 12, 'type': 'melee'},
+    {'name': const.Weapons.KNIFE,          'damage': 16, 'uses': 8, 'accuracy': 0.88, 'spread': 4,
+     const.Events.CRIT: 0.13, 'cost': 25,  'sell_value': 12, 'type': 'melee'},
 
-    {'name': const.Weapons.BROKEN_BOTTLE,  'damage': 14, 'uses': 6, 'accuracy': 0.82, 'spread': 5, const.Events.CRIT: 0.15,
-     'cost': 20,  'sell_value': 8, 'type': 'melee'},
+    {'name': const.Weapons.BROKEN_BOTTLE,  'damage': 14, 'uses': 6, 'accuracy': 0.82, 'spread': 5,
+     const.Events.CRIT: 0.15, 'cost': 20,  'sell_value': 8, 'type': 'melee'},
 
-    {'name': const.Weapons.HATCHET,        'damage': 18, 'uses': 8, 'accuracy': 0.82, 'spread': 5, const.Events.CRIT: 0.13,
-     'cost': 30,  'sell_value': 15, 'type': 'melee'},
+    {'name': const.Weapons.HATCHET,        'damage': 18, 'uses': 8, 'accuracy': 0.82, 'spread': 5,
+     const.Events.CRIT: 0.13, 'cost': 30,  'sell_value': 15, 'type': 'melee'},
 
     # --- Tier 2 ---
-    {'name': const.Weapons.BAT,            'damage': 20, 'uses': 9, 'accuracy': 0.80, 'spread': 6, const.Events.CRIT: 0.13,
-     'cost': 40,  'sell_value': 20, 'type': 'melee'},
+    {'name': const.Weapons.BAT,            'damage': 20, 'uses': 9, 'accuracy': 0.80, 'spread': 6,
+     const.Events.CRIT: 0.13, 'cost': 40,  'sell_value': 20, 'type': 'melee'},
 
-    {'name': const.Weapons.CROWBAR,        'damage': 22, 'uses': 8, 'accuracy': 0.80, 'spread': 5, const.Events.CRIT: 0.12,
-     'cost': 45,  'sell_value': 22, 'type': 'melee'},
+    {'name': const.Weapons.CROWBAR,        'damage': 22, 'uses': 8, 'accuracy': 0.80, 'spread': 5,
+     const.Events.CRIT: 0.12, 'cost': 45,  'sell_value': 22, 'type': 'melee'},
 
-    {'name': const.Weapons.BRASS_KNUCKLES, 'damage': 22, 'uses': 9, 'accuracy': 0.90, 'spread': 4, const.Events.CRIT: 0.12,
-     'cost': 50,  'sell_value': 25, 'type': 'melee'},
+    {'name': const.Weapons.BRASS_KNUCKLES, 'damage': 22, 'uses': 9, 'accuracy': 0.90, 'spread': 4,
+     const.Events.CRIT: 0.12, 'cost': 50,  'sell_value': 25, 'type': 'melee'},
 
-    {'name': const.Weapons.SHOVEL,         'damage': 20, 'uses': 7, 'accuracy': 0.78, 'spread': 6, const.Events.CRIT: 0.14,
-     'cost': 38,  'sell_value': 19, 'type': 'melee'},
+    {'name': const.Weapons.SHOVEL,         'damage': 20, 'uses': 7, 'accuracy': 0.78, 'spread': 6,
+     const.Events.CRIT: 0.14, 'cost': 38,  'sell_value': 19, 'type': 'melee'},
 
     # --- Tier 3 ---
-    {'name': const.Weapons.PICKAXE,        'damage': 24, 'uses': 7, 'accuracy': 0.78, 'spread': 7, const.Events.CRIT: 0.12,
-     'cost': 55,  'sell_value': 28, 'type': 'melee'},
+    {'name': const.Weapons.PICKAXE,        'damage': 24, 'uses': 7, 'accuracy': 0.78, 'spread': 7,
+     const.Events.CRIT: 0.12, 'cost': 55,  'sell_value': 28, 'type': 'melee'},
 
-    {'name': const.Weapons.MACHETE,        'damage': 26, 'uses': 7, 'accuracy': 0.80, 'spread': 6, const.Events.CRIT: 0.13,
-     'cost': 60,  'sell_value': 30, 'type': 'melee'},
+    {'name': const.Weapons.MACHETE,        'damage': 26, 'uses': 7, 'accuracy': 0.80, 'spread': 6,
+     const.Events.CRIT: 0.13, 'cost': 60,  'sell_value': 30, 'type': 'melee'},
 
-    {'name': const.Weapons.AXE,            'damage': 30, 'uses': 6, 'accuracy': 0.76, 'spread': 8, const.Events.CRIT: 0.13,
-     'cost': 65,  'sell_value': 32, 'type': 'melee'},
+    {'name': const.Weapons.AXE,            'damage': 30, 'uses': 6, 'accuracy': 0.76, 'spread': 8,
+     const.Events.CRIT: 0.14, 'cost': 65,  'sell_value': 32, 'type': 'melee'},
 
-    {'name': const.Weapons.FIRE_AXE,       'damage': 32, 'uses': 6, 'accuracy': 0.75, 'spread': 8, const.Events.CRIT: 0.13,
-     'cost': 70,  'sell_value': 35, 'type': 'melee'},
+    {'name': const.Weapons.FIRE_AXE,       'damage': 32, 'uses': 6, 'accuracy': 0.75, 'spread': 8,
+     const.Events.CRIT: 0.14, 'cost': 70,  'sell_value': 35, 'type': 'melee'},
 
-    {'name': const.Weapons.CROSSBOW,       'damage': 34, 'uses': 5, 'accuracy': 0.90, 'spread': 3, const.Events.CRIT: 0.14,
-     'cost': 80,  'sell_value': 40, 'type': 'projectile'},
+    {'name': const.Weapons.CROSSBOW,       'damage': 34, 'uses': 5, 'accuracy': 0.90, 'spread': 3,
+     const.Events.CRIT: 0.14, 'cost': 85,  'sell_value': 42, 'type': 'projectile'},
 
-    {'name': const.Weapons.HARPOON,        'damage': 34, 'uses': 6, 'accuracy': 0.78, 'spread': 6, const.Events.CRIT: 0.10,
-     'cost': 85,  'sell_value': 42, 'type': 'projectile'},
+    {'name': const.Weapons.HARPOON,        'damage': 34, 'uses': 6, 'accuracy': 0.78, 'spread': 6,
+     const.Events.CRIT: 0.10, 'cost': 80,  'sell_value': 40, 'type': 'projectile'},
 
     # --- Tier 4 Guns ---
-    {'name': const.Weapons.PISTOL,         'damage': 30, 'uses': 6, 'accuracy': 0.82, 'spread': 4, const.Events.CRIT: 0.11,
-     'cost': 70,  'sell_value': 34, 'type': 'projectile'},
+    {'name': const.Weapons.PISTOL,         'damage': 30, 'uses': 6, 'accuracy': 0.82, 'spread': 4,
+     const.Events.CRIT: 0.11, 'cost': 70,  'sell_value': 34, 'type': 'projectile'},
 
-    {'name': const.Weapons.REVOLVER,       'damage': 36, 'uses': 5, 'accuracy': 0.68, 'spread': 6, const.Events.CRIT: 0.11,
-     'cost': 78,  'sell_value': 39, 'type': 'projectile'},
+    {'name': const.Weapons.REVOLVER,       'damage': 33, 'uses': 5, 'accuracy': 0.68, 'spread': 6,
+     const.Events.CRIT: 0.11, 'cost': 78,  'sell_value': 39, 'type': 'projectile'},
 
-    {'name': const.Weapons.RIFLE,          'damage': 38, 'uses': 6, 'accuracy': 0.90, 'spread': 4, const.Events.CRIT: 0.09,
-     'cost': 82,  'sell_value': 41, 'type': 'projectile'},
+    {'name': const.Weapons.RIFLE,          'damage': 35, 'uses': 6, 'accuracy': 0.90, 'spread': 4,
+     const.Events.CRIT: 0.09, 'cost': 82,  'sell_value': 41, 'type': 'projectile'},
 
-    {'name': const.Weapons.SHOTGUN,        'damage': 40, 'uses': 4, 'accuracy': 0.74, 'spread': 6, const.Events.CRIT: 0.08,
-     'cost': 90,  'sell_value': 45, 'type': 'projectile'},
+    {'name': const.Weapons.SHOTGUN,        'damage': 34, 'uses': 4, 'accuracy': 0.74, 'spread': 6,
+     const.Events.CRIT: 0.08, 'cost': 90,  'sell_value': 45, 'type': 'projectile'},
 
     # --- Tier 5 Heavy ---
-    {'name': const.Weapons.CHAINSAW,       'damage': 38, 'uses': 6, 'accuracy': 0.70, 'spread': 8, const.Events.CRIT: 0.09,
-     'cost': 95,  'sell_value': 47, 'type': 'melee'},
+    {'name': const.Weapons.CHAINSAW,       'damage': 34, 'uses': 6, 'accuracy': 0.70, 'spread': 8,
+     const.Events.CRIT: 0.12, 'cost': 95,  'sell_value': 47, 'type': 'melee'},
 
-    {'name': const.Weapons.SLEDGEHAMMER,   'damage': 40, 'uses': 10, 'accuracy': 0.68, 'spread': 8, const.Events.CRIT: 0.08,
-     'cost': 100,  'sell_value': 50, 'type': 'melee'},
+    {'name': const.Weapons.SLEDGEHAMMER,   'damage': 35, 'uses': 10, 'accuracy': 0.68, 'spread': 8,
+     const.Events.CRIT: 0.13, 'cost': 100, 'sell_value': 50, 'type': 'melee'},
 
     # --- Enemy / Monster ---
-    {'name': const.Weapons.CLAWS,          'damage': 22, 'uses': -1, 'accuracy': 0.86, 'spread': 4, const.Events.CRIT: 0.12,
-     'cost': 0,  'sell_value': 0, 'type': 'special'},
+    {'name': const.Weapons.CLAWS,          'damage': 22, 'uses': -1, 'accuracy': 0.86, 'spread': 4,
+     const.Events.CRIT: 0.12, 'cost': 0,  'sell_value': 0, 'type': 'special'},
 
-    {'name': const.Weapons.VOODOO_STAFF,   'damage': 28, 'uses': -1, 'accuracy': 0.76, 'spread': 7, const.Events.CRIT: 0.14,
-     'cost': 0,  'sell_value': 0, 'type': 'special'},
+    {'name': const.Weapons.VOODOO_STAFF,   'damage': 28, 'uses': -1, 'accuracy': 0.76, 'spread': 7,
+     const.Events.CRIT: 0.14, 'cost': 0,  'sell_value': 0, 'type': 'special'},
 ]
-
 
 # COUNTERS: Initialize at zero
 
