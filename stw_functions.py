@@ -311,7 +311,7 @@ def log_event(event: str):
 # --------------------------------------------------------------------------------------------------
 
 def get_choice_from_dict(prompt: str, options: dict) -> str:    # prompt is a str and options are a dict, return a str
-    print("\n" + prompt)                              # print a new line and the prompt (MAIN MENU, etc.)
+    print("" + prompt)                              # print a new line and the prompt (MAIN MENU, etc.)
     for key, label in options.items():                # for the key/label for each dict pair in options
         print(f"[{key.upper()}] {label}")             # print the key in caps and the label as is
     while True:
@@ -336,7 +336,7 @@ def get_choice_from_list(prompt: str, options: list) -> str:
 
 def main_menu():
     while True:
-        choice = get_choice_from_dict("MAIN MENU", {"n": "New Game", "l": "Load Game", "q": "Quit"})
+        choice = get_choice_from_dict("\nMAIN MENU", {"n": "New Game", "l": "Load Game", "q": "Quit"})
         
         if choice == "n":
             run_game()
@@ -531,16 +531,16 @@ def do_casino(player):
     
     print(f"{b}Welcome to Riverbroat Crasino.{rst}\n")
     t.sleep(3)
-    print(f"{b}You can choose from the following games:{rst}\n")
+    print(f"{b}What would you like to play?{rst}\n")
     while True:
         choice = input("[1] Krill or Cray\n"
                        "[2] Above or Below\n"
                        "[3] Wet or Dry (WIP)\n"
                        "[4] Fish Bones (WIP)\n"
                        "[5] Mystery Box (WIP)\n"
-                       "[q] Leave\n"
-                       f"{b}> \n")
-        if choice == "q":
+                       "[r] Return\n"
+                       f"{b}> ")
+        if choice == "r":
             return
         elif choice == "1":
             krill_or_cray(player)
@@ -708,7 +708,7 @@ def above_or_below(player):
                     print(f"{b}Lucky guess!\n"
                           f"Payout increased to {int(payout)} coins.\n")
                 else:
-                    print("Your guess was dry.\n")
+                    print(f"{b}Your guess was dry.\n")
                     break
 
                 turn += 1
@@ -866,8 +866,8 @@ def do_equip_weapon(player):
             )
 
         choice = input(f"\n[#] Equip weapon\n"
-                       f"[q] Exit:\n{b}>{rst} ").strip().lower()
-        if choice == 'q':
+                       f"[r] Return\n{b}>{rst} ").strip().lower()
+        if choice == 'r':
             return
         
         if choice.isdigit():
@@ -897,9 +897,9 @@ def do_shop(player, shop, gs):
 
         choice = input(f"\n[#] Purchase listing\n"
                        f"[s] Sell from inventory\n"
-                       f"[q] Exit:\n{b}>{rst} ").strip().lower()
+                       f"[r] Return\n{b}>{rst} ").strip().lower()
 
-        if choice == "q":
+        if choice == "r":
             print(f"{b}Until next time!{rst}")
             t.sleep(2)
             get_current_music()
@@ -993,8 +993,8 @@ def do_shop(player, shop, gs):
 
             # --- CHOICE ---
             choice = input(f"\n[#] Sell item\n"
-                           f"[q] Exit:\n{b}>{rst} ").strip().lower()
-            if choice == "q":
+                           f"[r] Return\n{b}>{rst} ").strip().lower()
+            if choice == "r":
                 continue
             if not choice.isdigit():
                 print(f"{y}Invalid choice. Try again.")
@@ -1098,9 +1098,9 @@ def do_travel(gs, player):
         print(f"[{idx}] {b}{area}")
                 
     choice = input(f"\n[#] Travel to area\n"
-                   f"[q] Exit:\n{b}>{rst} ").strip().lower()
+                   f"[r] Return\n{b}>{rst} ").strip().lower()
 
-    if choice == 'q':
+    if choice == 'r':
         return
     
     if choice.isdigit():
