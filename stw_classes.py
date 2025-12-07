@@ -368,7 +368,7 @@ There are parts of another man or men scattered around you.{rst}""")
                 print(f"[{idx}] {c}{data['name']:<20}{rst} {d}|{rst} {g}+{data['hp']} HP")
 
             choice = input(f"\n[#] Use item\n"
-                           f"[q] Exit:\n{b}>{rst} ").strip().lower()
+                           f"[q] Exit\n{b}>{rst} ").strip().lower()
 
             if choice == "q":
                 return
@@ -527,7 +527,10 @@ There are parts of another man or men scattered around you.{rst}""")
                 while banking:
                     print(f"\nPlayer: {g}{self.coins} {rst}{d}|{rst} Bank: {g}{self.bank}{rst}")
                     
-                    choice = input(f"\nWhat would you like to do? (d: deposit, w: withdraw: q: exit):\n{b}>{rst} ").strip().lower()
+                    choice = input(f"\nWhat would you like to do?\n"
+                                   f"[d] Deposit\n"
+                                   f"[w] Withdraw\n"
+                                   f"[q] Leave\n{b}>{rst} ").strip().lower()
                     if choice == 'd':
                         selection = input(f"\nHow much would you like to deposit?\n{b}>{rst} ")
                         
@@ -661,7 +664,7 @@ There are parts of another man or men scattered around you.{rst}""")
             )
 
         choice = input(f"\n[#] Equip weapon\n"
-                       f"[q] Exit:\n{b}>{rst} ").strip().lower()
+                       f"[q] Exit\n{b}>{rst} ").strip().lower()
 
         if choice == 'q':
             return

@@ -531,14 +531,15 @@ def do_casino(player):
     
     print(f"{b}Welcome to Riverbroat Crasino.{rst}\n")
     t.sleep(3)
-    print(f"{b}What's it gonna be, bozo?{rst}\n")
+    print(f"{b}You can choose from the following games:{rst}\n")
     while True:
         choice = input("[1] Krill or Cray\n"
                        "[2] Above or Below\n"
                        "[3] Wet or Dry (WIP)\n"
                        "[4] Fish Bones (WIP)\n"
                        "[5] Mystery Box (WIP)\n"
-                       "[q] Leave\n")
+                       "[q] Leave\n"
+                       f"{b}> \n")
         if choice == "q":
             return
         elif choice == "1":
@@ -643,18 +644,18 @@ def above_or_below(player):
     else:
         print(f"{b}Welcome to Above or Below!\n\n"
               f"The rules are simple:\n"
-              f"1. Roll a die.\n"
-              f"2. Guess if the next roll will be above or below the previous roll.\n"
+              f"1. Place a wager and roll a die.\n"
+              f"2. Guess if the next roll will be above or below the previous roll and roll once more.\n"
               f"3. Your payout increases by a higher percentage with each correct guess.\n"
               f"4. If you're incorrect, you lose the payout.\n"
-              f"5. Play up to 4 rounds and cash out anytime you like.{rst}\n")
+              f"5. Play up to 4 rounds and cash out before you run dry.{rst}\n")
 
     while True:
         if casino_check(player):
             return
         print(f"Coins: {g}{player.coins}{rst} {d}|{rst} Plays: {c}{player.plays}{rst}\n")
         choice = input(f"[#] Enter wager\n"
-                       f"[q] Leave:\n{b}>{rst} ").strip().lower()
+                       f"[q] Leave\n{b}>{rst} ").strip().lower()
         if choice == "q":
             print(f"{b}Later bozo.{rst}")
             return
@@ -675,9 +676,9 @@ def above_or_below(player):
             while True:
                 mult = ladder[turn-1]
                 if const.Perks.GRAMBLING_ADDICT in player.perks:
-                    print(f"Round: {c}{turn}{rst} | Wager: {g}{wager}{rst} | Mult: {p}{mult}{rst} | Payout: {g}{int(payout*1.05)}{rst}")
+                    print(f"Round: {c}{turn}{rst} {d}|{rst} Wager: {g}{wager}{rst} {d}|{rst} Mult: {p}{mult}{rst} {d}|{rst} Payout: {g}{int(payout*1.05)}{rst}")
                 else:
-                    print(f"Round: {c}{turn}{rst} | Wager: {g}{wager}{rst} | Mult: {p}{mult}{rst} | Payout: {g}{int(payout)}{rst}")
+                    print(f"Round: {c}{turn}{rst} {d}|{rst} Wager: {g}{wager}{rst} {d}|{rst} Mult: {p}{mult}{rst} {d}|{rst} Payout: {g}{int(payout)}{rst}")
                 input(f"[ ] Roll the die\n{b}> ")
                 roll1 = random.randint(1, 6)
                 print(f"{b}You rolled a {roll1}.")
@@ -697,19 +698,17 @@ def above_or_below(player):
 
                 if call == 'a' and roll2 > roll1:
                     payout = wager * ladder[turn-1]
-                    print(f"{b}Good guess!\n"
+                    print(f"{b}Lucky guess!\n"
                           f"Payout increased to {int(payout)} coins.\n")
                 elif call == 'a' and roll2 <= roll1:
                     print(f"{b}Your guess was dry.\n")
-                    print(f"Coins: {g}{player.coins}{rst} {d}|{rst} Plays: {c}{player.plays}{rst}\n")
                     break
                 elif call == 'b' and roll2 < roll1:
                     payout = wager * ladder[turn-1]
-                    print(f"{b}Good guess!\n"
+                    print(f"{b}Lucky guess!\n"
                           f"Payout increased to {int(payout)} coins.\n")
                 else:
                     print("Your guess was dry.\n")
-                    print(f"Coins: {g}{player.coins}{rst} {d}|{rst} Plays: {c}{player.plays}{rst}\n")
                     break
 
                 turn += 1
