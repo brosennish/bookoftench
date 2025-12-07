@@ -71,7 +71,7 @@ class Player:
     max_hp: int = 100
     xp: int = 0
 
-    coins: int = 0
+    coins: int = 100
     bank: int = 0
     bank_interest_rate: float = 0.10
     interest: int = 0
@@ -1313,6 +1313,7 @@ class Shop:
         
         t.sleep(1)
         return True
+
 
 @dataclass
 class SaveGameState:

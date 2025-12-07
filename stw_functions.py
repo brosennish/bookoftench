@@ -15,7 +15,7 @@ from stw_audio import play_sound, play_music, get_current_music, stop_music
 # FUNCTIONS: Record Kill, Win Game
 
 def record_kill(gs, player):     # accesses GameState/player and returns T/F
-    '''Decrement area enemy count and increase kills per area count'''
+    # Decrement area enemy count and increase kills per area count
     area = player.current_area    # define area to be where player is when enemy killed
 
     # updating area kill counts
@@ -47,9 +47,9 @@ def play_again():
             print("Invalid choice.")
 
 
-# --------------------------------------------------------------------------------------------------
+# ==================================================================================================
 # HELPER FUNCTIONS
-# --------------------------------------------------------------------------------------------------
+# ==================================================================================================
 
 # --- MUSIC ---
 def play_area_theme(player):
@@ -381,7 +381,7 @@ def run_game(gs=GameState(), player=Player(), shop=Shop(), name=True, tutorial=T
             continue
 
     while tutorial:
-        choice = input(f"\nDo you need a tutorial? (y or n):\n{b}>{rst} ").strip().lower()
+        choice = input(f"\nDo you need a tutorial? (y/n):\n{b}>{rst} ").strip().lower()
         if choice == 'n':
             tutorial = False
         elif choice == 'y':
@@ -395,11 +395,7 @@ def run_game(gs=GameState(), player=Player(), shop=Shop(), name=True, tutorial=T
 8. Travel between areas to search for the wench's hidden location
 9. Perks offer special rewards and permanent bonuses
 10. Clear the enemies in the wench's area and defeat the final boss to save the wench and win the game""")
-            exit = input('')
-            if exit == '':
-                tutorial = False
-            else:
-                tutorial = False
+            input(f'{b}> ')
         else:
             print('Invalid choice.')
             continue
@@ -517,6 +513,9 @@ def actions_menu(gs, player, shop):
         else:
             continue
 
+# ==================
+#      CASINO
+# ==================
 
 def do_casino(player):
     play_music('casino_theme')
@@ -532,11 +531,60 @@ def do_casino(player):
     
     print(f"{b}Welcome to Riverbroat Crasino.{rst}\n")
     t.sleep(3)
-    print(f"{b}One-to-one bets.\nClassic riverbroat grambling.{rst}\n")
+    print(f"{b}What's it gonna be, bozo?{rst}\n")
+    while True:
+        choice = input("[1] Krill or Cray\n"
+                       "[2] Above or Below\n"
+                       "[3] Wet or Dry (WIP)\n"
+                       "[4] Fish Bones (WIP)\n"
+                       "[5] Mystery Box (WIP)\n"
+                       "[q] Leave\n")
+        if choice == "q":
+            return
+        elif choice == "1":
+            krill_or_cray(player)
+        elif choice == "2":
+            above_or_below(player)
+        elif choice == "3":
+            print("Work in progress!")
+            continue
+        elif choice == "4":
+            print("Work in progress!")
+            continue
+        elif choice == "5":
+            print("Work in progress!")
+            continue
+        else:
+            print("Invalid choice.")
+            continue
 
-    while player.coins > 0 and player.plays > 0:    
+def casino_check(player):
+    if player.plays == 0:
+        print(f"{b}You're out of plays. Buy a perk or level up, bozo.{rst}\n")
+        t.sleep(2)
+        get_current_music()
+        play_area_theme(player)
+        return True
+    elif player.coins == 0:
+        print(f"{b}You're out of coins. Get lost, bozo.{rst}\n")
+        t.sleep(2)
+        get_current_music()
+        play_area_theme(player)
+        return True
+    else:
+        return None
+
+
+def krill_or_cray(player):
+    if casino_check(player):
+        return
+    else:
+        print(f"{b}One to one bets. Classic Riverbroat Grambling.\n")
+
+    while True:
         print(f"Coins: {g}{player.coins}{rst} {d}|{rst} Plays: {c}{player.plays}{rst}\n")
-        choice = input(f"What's your wager? (q to exit):\n{b}>{rst} ").strip().lower()
+        choice = input(f"[#] Enter wager\n"
+                       f"[q] Leave:\n{b}>{rst} ").strip().lower()
 
         if choice == "q":
             print(f"{b}Later bozo.{rst}")
@@ -571,33 +619,138 @@ def do_casino(player):
                         player.coins += wager
                         player.casino_won += wager
                     player.plays -= 1
-                    t.sleep(2)
-                    continue
+                    if casino_check(player):
+                        return
+                    else:
+                        continue
                 else: 
                     print(f"{b}Bozo's blunder. Classic. Could've seen that coming from six or eight miles away.{rst}\n")
                     player.coins -= wager
                     player.casino_lost += wager
                     player.plays -= 1
-                    t.sleep(2)
-                    continue
-                        
+                    if casino_check(player):
+                        return
+                    else:
+                        continue
         else:
             print(f"{y}Invalid choice.{rst}")
             continue
-    
-    if player.plays == 0:
-        print(f"{b}You're out of plays. Buy a perk or level up, bozo.{rst}")
-        t.sleep(2)
-        get_current_music()
-        play_area_theme(player)
-        return    
-    elif player.coins == 0:
-        print(f"{b}You're out of coins. Get lost, bozo.{rst}")
-        t.sleep(2)
-        get_current_music()
-        play_area_theme(player)
-        return  
 
+
+def above_or_below(player):
+    if casino_check(player):
+        return
+    else:
+        print(f"{b}Welcome to Above or Below!\n\n"
+              f"The rules are simple:\n"
+              f"1. Roll a die.\n"
+              f"2. Guess if the next roll will be above or below the previous roll.\n"
+              f"3. Your payout increases by a higher percentage with each correct guess.\n"
+              f"4. If you're incorrect, you lose the payout.\n"
+              f"5. Play up to 4 rounds and cash out anytime you like.{rst}\n")
+
+    while True:
+        if casino_check(player):
+            return
+        print(f"Coins: {g}{player.coins}{rst} {d}|{rst} Plays: {c}{player.plays}{rst}\n")
+        choice = input(f"[#] Enter wager\n"
+                       f"[q] Leave:\n{b}>{rst} ").strip().lower()
+        if choice == "q":
+            print(f"{b}Later bozo.{rst}")
+            return
+        elif not choice.isdigit():
+            print(f"{b}Invalid choice.")
+            continue
+        elif int(choice) > player.coins:
+            print(f"{b}You don't have enough coins to cover this wager.")
+            continue
+        else:
+            wager = int(choice)
+            player.coins -= wager
+            player.plays -= 1
+            turn = 1
+            payout = wager
+            ladder = [1.5, 2.0, 2.8, 4.0]
+
+            while True:
+                mult = ladder[turn-1]
+                if const.Perks.GRAMBLING_ADDICT in player.perks:
+                    print(f"Round: {c}{turn}{rst} | Wager: {g}{wager}{rst} | Mult: {p}{mult}{rst} | Payout: {g}{int(payout*1.05)}{rst}")
+                else:
+                    print(f"Round: {c}{turn}{rst} | Wager: {g}{wager}{rst} | Mult: {p}{mult}{rst} | Payout: {g}{int(payout)}{rst}")
+                input(f"[ ] Roll the die\n{b}> ")
+                roll1 = random.randint(1, 6)
+                print(f"{b}You rolled a {roll1}.")
+
+                while True:
+                    call = input(f"[A] Above\n"
+                                 "[B] Below\n").strip().lower()
+                    if call not in ('a', 'b'):
+                        print(f"{b}Invalid choice.")
+                        continue
+                    else:
+                        break
+
+                input(f"[ ] Roll the die.\n{b}> ")
+                roll2 = random.randint(1, 6)
+                print(f"{b}You rolled a {roll2}.")
+
+                if call == 'a' and roll2 > roll1:
+                    payout = wager * ladder[turn-1]
+                    print(f"{b}Good guess!\n"
+                          f"Payout increased to {int(payout)} coins.\n")
+                elif call == 'a' and roll2 <= roll1:
+                    print(f"{b}Your guess was dry.\n")
+                    print(f"Coins: {g}{player.coins}{rst} {d}|{rst} Plays: {c}{player.plays}{rst}\n")
+                    break
+                elif call == 'b' and roll2 < roll1:
+                    payout = wager * ladder[turn-1]
+                    print(f"{b}Good guess!\n"
+                          f"Payout increased to {int(payout)} coins.\n")
+                else:
+                    print("Your guess was dry.\n")
+                    print(f"Coins: {g}{player.coins}{rst} {d}|{rst} Plays: {c}{player.plays}{rst}\n")
+                    break
+
+                turn += 1
+                if turn == 2:
+                    mult = 2.0
+                elif turn == 3:
+                    mult = 2.8
+                elif turn == 4:
+                    mult = 4.0
+                elif turn == 5:
+                    if const.Perks.GRAMBLING_ADDICT in player.perks:
+                        final_payout = int(payout * 1.05)
+                    else:
+                        final_payout = int(payout)
+
+                    player.coins += final_payout
+                    print(f"{b}You've completed the final round.\n"
+                          f"You cashed out {final_payout} coins!\n")
+                    return
+
+                while True:
+                    choice = input(f"[c] Continue\n"
+                                   f"[q] Cash Out\n"
+                                   f"{b}> ")
+                    if choice == 'c':
+                        break
+                    elif choice == 'q':
+                        if const.Perks.GRAMBLING_ADDICT in player.perks:
+                            final_payout = int(payout * 1.05)
+                        else:
+                            final_payout = int(payout)
+
+                        player.coins += final_payout
+                        print(f"{b}You cashed out {final_payout} coins.")
+                        return
+                    else:
+                        continue
+
+# ==================
+#    CASINO END
+# ==================
 
 def overview(gs, player):
     from stw_data import Results
