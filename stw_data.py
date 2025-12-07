@@ -19,7 +19,7 @@ Perks = [
     {
         'name': const.Perks.BROWN_FRIDAY,
         'cost': 120,
-        'description': "Shop inventories contain +1 listing",
+        'description': "Shop inventories contain +1 additional item",
         'type': 'perk',
     },
     {
@@ -43,13 +43,13 @@ Perks = [
     {
         'name': const.Perks.VAGABONDAGE,
         'cost': 100,
-        'description': "Carry +1 weapon and item",
+        'description': "Carry +1 additional weapon and +1 additional item (stacks with Nomad's Land)",
         'type': 'perk',
     },
     {
         'name': const.Perks.NOMADS_LAND,
         'cost': 100,
-        'description': "Carry +1 weapon and item",
+        'description': "Carry +1 additional weapon and +1 additional item (stacks with Vagabondage)",
         'type': 'perk',
     },
     {
@@ -73,7 +73,7 @@ Perks = [
     {
         'name': const.Perks.LEATHER_SKIN,
         'cost': 160,
-        'description': "Take 10% less damage from attacks",
+        'description': "Take 10% less damage from all attacks",
         'type': 'perk',
     },
     {
@@ -115,31 +115,31 @@ Perks = [
     {
         'name': const.Perks.GRAMBLIN_MAN,
         'cost': 100,
-        'description': 'Enjoy +5 plays at the casino',
+        'description': 'Gain +5 plays at the casino',
         'type': 'perk',
     },
     {
         'name': const.Perks.GRAMBLING_ADDICT,
         'cost': 160,
-        'description': 'Enjoy +5 plays and +5% payout at the casino',
+        'description': 'Gain +5 plays and +5% payout at the casino',
         'type': 'perk',
     },
     {
         'name': const.Perks.VAMPIRIC_SPERM,
         'cost': 200,
-        'description': 'Heal 3 HP each time you land a melee attack',
+        'description': 'Heal 3 HP every time you land a melee attack',
         'type': 'perk',
     },
     {
         'name': const.Perks.METAL_DETECTIVE,
         'cost': 110,
-        'description': "Find up to 20 extra coins when exploring",
+        'description': "Find up to 25 extra coins when exploring",
         'type': 'perk',
     },
     {
         'name': const.Perks.TENCH_THE_BOUNTY_HUNTER,
         'cost': 120,
-        'description': "Earn +25 coins from each bounty enemy",
+        'description': "Earn +25 coins from each bounty enemy you defeat",
         'type': 'perk',
     },
     {
