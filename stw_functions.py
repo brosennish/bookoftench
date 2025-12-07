@@ -480,7 +480,7 @@ def actions_menu(gs, player, shop):
         
         # action functions
         if choice == "e":
-            do_explore(gs, player, Enemy, shop)
+            do_explore(gs, player, shop)
         elif choice == "i": 
             player.use_item()
         elif choice == "w":
@@ -641,13 +641,13 @@ def overview(gs, player):
 
 
 
-def do_explore(gs, player, Enemy, shop):
+def do_explore(gs, player, shop):
     # 40% chance of enemy (10% for elite), 15% for item, 15% weapon, 20% coins, 10% dry
 
     if player.lives > 0:
         player.alive = True
     roll = random.random()
-    if roll < 0.4:
+    if roll < 0.38:
         enemy = Enemy.spawn_enemy_for_area(player.current_area)
         while enemy.type in ('boss', 'boss_final'):
             enemy = Enemy.spawn_enemy_for_area(player.current_area)
@@ -661,7 +661,7 @@ def do_explore(gs, player, Enemy, shop):
             print(f"{y}An enemy appears!{rst}")
         t.sleep(1)
         battle(player, enemy, gs, shop)
-    elif 0.4 <= roll < 0.55:
+    elif 0.38 <= roll < 0.53:
         if len(player.items) < player.max_items:
             item_dict = random.choice(Items)
             item = item_dict['name']
@@ -673,7 +673,7 @@ def do_explore(gs, player, Enemy, shop):
             print('Your item sack is full!')
             t.sleep(1)
             return
-    elif 0.55 <= roll < 0.7:
+    elif 0.53 <= roll < 0.68:
         if len(player.weapons) < player.max_weapons:
             added = find_weapon(player)
             if added:
@@ -686,11 +686,11 @@ def do_explore(gs, player, Enemy, shop):
             print(f"{y}Your weapon sack is full.")
             t.sleep(1)
             return
-    elif 0.7 <= roll < 0.9:
+    elif 0.68 <= roll < 0.83:
         if const.Perks.METAL_DETECTIVE in player.perks:
-            coins = random.randint(25, 75)
-        else:
             coins = random.randint(25, 50)
+        else:
+            coins = random.randint(10, 25)
         print(f'{g}You found {coins} coins!')
         t.sleep(1)
         player.coins += coins
@@ -730,7 +730,7 @@ def do_equip_weapon(player):
                 return
     
             else:
-                print("\nInvalid choice.")
+                print("Invalid choice.")
                 t.sleep(1)
 
 # ===================
@@ -1085,13 +1085,13 @@ def battle(player, enemy, gs, shop):
                     t.sleep(2)
                     continue
                 elif fled:
-                    print(f'\n{c}You ran away from {enemy.name}!')
+                    print(f'{c}You ran away from {enemy.name}!')
                     t.sleep(1)
                     stop_music()
                     play_area_theme(player)
                     return
                 else:
-                    print(f"\n{y}Couldn't escape!")
+                    print(f"{y}Couldn't escape!")
                     t.sleep(1)
                     player_turn = False
             

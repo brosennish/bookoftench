@@ -133,7 +133,7 @@ Perks = [
     {
         'name': const.Perks.METAL_DETECTIVE,
         'cost': 110,
-        'description': "Find up to 25 extra coins when exploring",
+        'description': "Find up to 25 more coins when exploring",
         'type': 'perk',
     },
     {
