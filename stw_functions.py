@@ -1081,6 +1081,7 @@ def battle(player, enemy, gs, shop):
                     t.sleep(1)
                 else:
                     refresh_wanted(gs)
+                    shop.reset_inventory(player)
                     stop_music()
                     play_area_theme(player)
                     return False # battle over, player dead
