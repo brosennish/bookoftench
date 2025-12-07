@@ -531,7 +531,7 @@ def do_casino(player):
         return
     
     print(f"{b}Welcome to Riverbroat Crasino.{rst}\n")
-    t.sleep(3)
+    t.sleep(2)
     print(f"{b}One-to-one bets.\nClassic riverbroat grambling.{rst}\n")
     t.sleep(2)
 
@@ -562,7 +562,7 @@ def do_casino(player):
                     t.sleep(1)
                     continue
                 elif pick == winner:
-                    print(f"\n{g}Lucky guess, bozo! You won {wager} coins.{rst}\n")
+                    print(f"{g}Lucky guess, bozo! You won {wager} coins.{rst}\n")
                     play_sound('golf_clap')
                     if const.Perks.GRAMBLING_ADDICT in player.perks:
                         print(f"{p}Payout increased 5% with Grambling Addict!{rst}\n")
@@ -575,7 +575,7 @@ def do_casino(player):
                     t.sleep(2)
                     continue
                 else: 
-                    print(f"\n{b}Bozo's blunder. Classic. Could've seen that coming from six or eight miles away.{rst}\n")
+                    print(f"{b}Bozo's blunder. Classic. Could've seen that coming from six or eight miles away.{rst}\n")
                     player.coins -= wager
                     player.casino_lost += wager
                     player.plays -= 1
@@ -733,6 +733,9 @@ def do_equip_weapon(player):
                 print("\nInvalid choice.")
                 t.sleep(1)
 
+# ===================
+#       SHOP
+# ===================
 
 def do_shop(player, shop, gs):
     play_music('shop_theme')
@@ -740,7 +743,9 @@ def do_shop(player, shop, gs):
         print(f'\n{b}Welcome! You have {rst}{g}{player.coins} {rst}{b}coins.\n')
         shop.view_shop_inventory(player)
 
-        choice = input(f"\nEnter the number you wish to buy or s to sell (q to exit):\n{b}>{rst} ").strip().lower()
+        choice = input(f"\n[#] Purchase listing\n"
+                       f"[s] Sell from inventory\n"
+                       f"[q] Exit:\n{b}>{rst} ").strip().lower()
 
         if choice == "q":
             print(f"{b}Until next time!{rst}")
@@ -824,7 +829,7 @@ def do_shop(player, shop, gs):
                 else:
                     data, uses_display = p_uses_weapons(player, name)
                     current_uses = player.weapon_uses.get(name, data['uses'])
-                    sell_value = shop.calculate_sell_price(name, current_uses)
+                    sell_value = calculate_sell_price(name, current_uses)
                 
                     print(
                         f"[{i}] {c}{name:<24}{rst} {d}|{rst} "
@@ -854,15 +859,78 @@ def do_shop(player, shop, gs):
 
             # --- SELL LOGIC ---
             if kind == "item":
-                shop.sell_item(name, player)
+                sell_item(name, player)
             else:
-                shop.sell_weapon(name, player)
+                sell_weapon(name, player)
             choice = 's'
 
         else:
             print(f"{y}Invalid choice.")
-            t.sleep(1)  
+            t.sleep(1)
 
+# =================================
+#   SELL PRICE, SELL ITEM/WEAPON
+# =================================
+
+def calculate_sell_price(weapon_name, current_uses):
+    data = get_weapon_data(weapon_name)
+    base = data['sell_value']
+    max_uses = data['uses']
+
+    # Infinite-use weapons: always sell for base value
+    if max_uses == -1:
+        return base
+
+    proportion = current_uses / max_uses
+    price = base * proportion
+    return max(int(price), 1)
+
+def sell_item(item_name, player):  # player sells item
+    item_data = get_item_data(item_name)
+    if not item_data or item_name not in player.items:
+        print(f'\n{y}{d}Item not found.')
+        t.sleep(2)
+        return
+
+    sell_value = item_data['sell_value']
+
+    player.coins += sell_value
+    player.items.remove(item_name)
+    print(f'{g}You sold {item_name} for {sell_value} coins.')
+    play_sound('purchase')
+    t.sleep(1)
+    log_event(const.Events.SELL_ITEM)
+
+def sell_weapon(weapon_name, player):  # player sells weapon
+    # Must own the weapon
+    if weapon_name not in player.weapons:
+        print(f"\n{y}Can't sell what you don't have!")
+        t.sleep(1)
+        return
+
+    weapon_data = get_weapon_data(weapon_name)
+    if not weapon_data:
+        print(f"\n{y}{d}Weapon not found.")
+        t.sleep(1)
+        return
+
+    # Get current uses from player.weapon_uses
+    current_uses = player.weapon_uses.get(weapon_name, weapon_data['uses'])
+
+    sell_value = calculate_sell_price(weapon_name, current_uses)
+
+    player.coins += sell_value
+
+    # Remove from inventory
+    player.weapons.remove(weapon_name)
+    player.weapon_uses.pop(weapon_name, None)
+
+    print(f"{g}You sold {weapon_name} ({current_uses} uses left) for {sell_value} coins.")
+    play_sound('purchase')
+    t.sleep(1)
+    log_event(const.Events.SELL_WEAPON)
+
+# ================================================
 
 def do_travel(gs, player):
     areas = [a['name'] for a in Areas]

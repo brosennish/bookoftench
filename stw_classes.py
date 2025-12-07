@@ -1078,21 +1078,21 @@ class Inventory:
 @dataclass
 class Shop:
     item_inventory: List[Dict[str, Union [str, int]]] = field(
-        default_factory=lambda: random.sample(Items, k=min(4, len(Items))
+        default_factory=lambda: random.sample(Items, k=min(3, len(Items))
     )
 )
     
     weapon_inventory: List[Dict] = field(
     default_factory=lambda: random.sample(
         [w for w in Weapons if w['name'] not in (const.Weapons.BARE_HANDS, const.Weapons.CLAWS, const.Weapons.VOODOO_STAFF)],
-        k=4
+        k=3
     )
 )
     
     perk_inventory: List[Dict] = field(
     default_factory=lambda: random.sample(
         [p for p in Perks],
-        k=4
+        k=3
     )
 )
 
@@ -1131,7 +1131,7 @@ class Shop:
             print(f"{p}Prices down 10% with Barter Sauce!{rst}")
             discount = 0.9
     
-       # ITEMS
+        # ITEMS
         print(f"Items {d}({len(player.items)}/{player.max_items}){rst}\n")
         filtered_items = [i for i in self.item_inventory if i['name'] not in player.items]
 
@@ -1183,13 +1183,16 @@ class Shop:
         else:
             print(f"{d}No perks available at the moment.")
 
+# ===============================
+# BUY ITEM, BUY WEAPON, BUY PERK
+# ===============================
 
     def buy_item(self, item_name, player): # player buys item
         from stw_functions import get_item_data, log_event
         
         item_data = get_item_data(item_name)
         if not item_data:
-            print(f'\n{y}Item not found.')
+            print(f'{y}Item not found.')
             t.sleep(1)
             return
 
@@ -1201,24 +1204,32 @@ class Shop:
             return
         
         if cost > player.coins:
-            print(f"\n{y}Need more coins")
+            print(f"{y}Need more coins")
             t.sleep(1)
             return
 
+        # purchase, add, remove from shop
         player.coins -= cost
         player.add_item(item_name)
         self.item_inventory.remove(item_data)
+
+        # replace item in shop
+        new_item = next((i for i in Items if i['name'] not in player.items), None)
+        self.item_inventory.append(new_item)
+
+        # confirmation and log event
         print(f'{rst}{g}You purchased {item_name} for {cost} coins.')
         play_sound('purchase')
         t.sleep(1)
         log_event(const.Events.BUY_ITEM)
+
 
     def buy_weapon(self, weapon_name: str, player): # player buys weapon
         from stw_functions import get_weapon_data, log_event
         
         weapon_data = get_weapon_data(weapon_name)
         if not weapon_data or weapon_data not in self.weapon_inventory:
-            print(f'\n{y}{d}Weapon not found.')
+            print(f'{y}{d}Weapon not found.')
             t.sleep(1)
             return
         
@@ -1230,15 +1241,23 @@ class Shop:
             return
 
         if cost > player.coins:
-            print(f'\n{y}Need more coins')
+            print(f"{y}Need more coins")
             t.sleep(1)
             return
-        
+
+        # purchase weapon, add, remove from shop
         player.coins -= cost
-        print(f'{g}You purchased {weapon_name} for {cost} coins.')
-        play_sound('purchase')
         player.add_weapon(weapon_name)
         self.weapon_inventory.remove(weapon_data)
+
+        # replace weapon
+        new_weapon = next((w for w in Weapons if w['name'] not in player.weapons), None)
+        self.weapon_inventory.append(new_weapon)
+
+        # confirmation and log event
+        print(f'{g}You purchased {weapon_name} for {cost} coins.')
+        play_sound('purchase')
+        t.sleep(1)
         log_event(const.Events.BUY_WEAPON)
 
     def buy_perk(self, perk_name: str, player): # player buys perk
@@ -1263,13 +1282,20 @@ class Shop:
         cost = perk_data['cost']
 
         if cost > player.coins:
-            print(f'\n{y}Need more coins')
+            print(f'{y}Need more coins')
             t.sleep(1)
             return
 
+        # purchase, add, remove from shop
         player.coins -= cost
         player.add_perk(perk_data['name'])
         self.perk_inventory.remove(perk_data)
+
+        # replace perk
+        new_perk = next((p for p in Perks if p['name'] not in player.perks), None)
+        self.perk_inventory.append(new_perk)
+
+        # confirmation and log event
         print(f"{g}You purchased {perk_data['name']} for {cost} coins.")
         play_sound('purchase')
         log_event(const.Events.BUY_PERK)
@@ -1286,76 +1312,8 @@ class Shop:
         t.sleep(1)
         return True
 
-    def sell_item(self, item_name, player): # player sells item
-        from stw_functions import get_item_data, log_event
-        
-        item_data = get_item_data(item_name)
-        if not item_data or item_name not in player.items:
-            print(f'\n{y}{d}Item not found.')
-            t.sleep(2)
-            return
-        
-        sell_value = item_data['sell_value']
-
-        player.coins += sell_value
-        player.items.remove(item_name)
-        print(f'{g}You sold {item_name} for {sell_value} coins.')
-        play_sound('purchase')
-        t.sleep(1)
-        log_event(const.Events.SELL_ITEM)
-
-
-    def calculate_sell_price(self, weapon_name, current_uses):
-        from stw_functions import get_weapon_data
-
-        data = get_weapon_data(weapon_name)
-        base = data['sell_value']
-        max_uses = data['uses']
-
-        # Infinite-use weapons: always sell for base value
-        if max_uses == -1:
-            return base
-
-        proportion = current_uses / max_uses
-        price = base * proportion
-        return max(int(price), 1)
-
-
-    def sell_weapon(self, weapon_name, player):  # player sells weapon
-        from stw_functions import get_weapon_data, log_event
-
-        # Must own the weapon
-        if weapon_name not in player.weapons:
-            print(f"\n{y}Can't sell what you don't have!")
-            t.sleep(1)
-            return
-
-        weapon_data = get_weapon_data(weapon_name)
-        if not weapon_data:
-            print(f"\n{y}{d}Weapon not found.")
-            t.sleep(1)
-            return
-
-        # Get current uses from player.weapon_uses
-        current_uses = player.weapon_uses.get(weapon_name, weapon_data['uses'])
-
-        sell_value = self.calculate_sell_price(weapon_name, current_uses)
-
-        player.coins += sell_value
-
-        # Remove from inventory
-        player.weapons.remove(weapon_name)
-        player.weapon_uses.pop(weapon_name, None)
-
-        print(f"\n{g}You sold {weapon_name} ({current_uses} uses left) for {sell_value} coins.")
-        play_sound('purchase')
-        t.sleep(1)
-        log_event(const.Events.SELL_WEAPON)
-
-
 @dataclass
 class SaveGameState:
     game_state: GameState
     player: Player
     shop: Shop
-
