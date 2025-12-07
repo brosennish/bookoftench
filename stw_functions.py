@@ -373,7 +373,7 @@ def run_game(gs=GameState(), player=Player(), shop=Shop(), name=True, tutorial=T
 
     play_music('intro_theme')
     while name:
-        choice = input(f"What is your name?:\n{b}>{rst} ")
+        choice = input(f"\nWhat is your name?:\n{b}>{rst} ")
         if choice != '':
             player.name = choice
             name = False
@@ -531,9 +531,8 @@ def do_casino(player):
         return
     
     print(f"{b}Welcome to Riverbroat Crasino.{rst}\n")
-    t.sleep(2)
+    t.sleep(3)
     print(f"{b}One-to-one bets.\nClassic riverbroat grambling.{rst}\n")
-    t.sleep(2)
 
     while player.coins > 0 and player.plays > 0:    
         print(f"Coins: {g}{player.coins}{rst} {d}|{rst} Plays: {c}{player.plays}{rst}\n")
@@ -615,8 +614,8 @@ def overview(gs, player):
     print(f"{'Withdrawals':<{width}} {d}|{rst} {o}{Results[const.Events.WITHDRAW]}{rst}")
     print(f"{'Interest Earned':<{width}} {d}|{rst} {g}{player.interest}{rst}")
 
-    print(f"{'Casino Won':<{width}} {d}|{rst} {g}+{player.casino_won}{rst}")
-    print(f"{'Casino Lost':<{width}} {d}|{rst} {r}-{player.casino_lost}{rst}")
+    print(f"{'Casino Won':<{width}} {d}|{rst} {g}{player.casino_won}{rst}")
+    print(f"{'Casino Lost':<{width}} {d}|{rst} {r}{player.casino_lost}{rst}")
 
     print(f"{'Hits':<{width}} {d}|{rst} {c}{Results[const.Events.HIT]}{rst}")
     print(f"{'Misses':<{width}} {d}|{rst} {c}{Results[const.Events.MISS]}{rst}")
@@ -714,7 +713,8 @@ def do_equip_weapon(player):
                 f"Uses:{rst} {p_uses_left}"
             )
 
-        choice = input(f"\nWhich weapon would you like to equip? (q to exit): \n{b}>{rst} ").strip().lower()
+        choice = input(f"\n[#] Equip weapon\n"
+                       f"[q] Exit:\n{b}>{rst} ").strip().lower()
         if choice == 'q':
             return
         
@@ -840,7 +840,8 @@ def do_shop(player, shop, gs):
                     )
 
             # --- CHOICE ---
-            choice = input(f"\nEnter the number to sell (q to exit):\n{b}>{rst} ").strip().lower()
+            choice = input(f"\n[#] Sell item\n"
+                           f"[q] Exit:\n{b}>{rst} ").strip().lower()
             if choice == "q":
                 continue
             if not choice.isdigit():
@@ -944,7 +945,8 @@ def do_travel(gs, player):
     for idx, area in enumerate(areas, 1):
         print(f"[{idx}] {b}{area}")
                 
-    choice = input(f"\nEnter the number of where you'd like to go (q to exit):\n{b}>{rst} ").strip().lower()
+    choice = input(f"\n[#] Travel to area\n"
+                   f"[q] Exit:\n{b}>{rst} ").strip().lower()
 
     if choice == 'q':
         return

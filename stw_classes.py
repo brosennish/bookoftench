@@ -367,7 +367,8 @@ There are parts of another man or men scattered around you.{rst}""")
                     continue
                 print(f"[{idx}] {c}{data['name']:<20}{rst} {d}|{rst} {g}+{data['hp']} HP")
 
-            choice = input(f"\nWhich item would you like to use? (q to exit):\n{b}>{rst} ").strip().lower()
+            choice = input(f"\n[#] Use item\n"
+                           f"[q] Exit:\n{b}>{rst} ").strip().lower()
 
             if choice == "q":
                 return
@@ -659,7 +660,8 @@ There are parts of another man or men scattered around you.{rst}""")
                 f"Uses: {uses_display}"
             )
 
-        choice = input(f"\nWhich weapon would you like to equip? (q to exit): \n{b}>{rst} ").strip().lower()
+        choice = input(f"\n[#] Equip weapon\n"
+                       f"[q] Exit:\n{b}>{rst} ").strip().lower()
 
         if choice == 'q':
             return
@@ -753,7 +755,7 @@ class Enemy:
             current_weapon = random.choice(enemy_data['weapon']), # assigns random weapon from their list
             items = [],
             type = enemy_data['type'],
-            coins = random.randint(50, 75),
+            coins = random.randint(25, 50),
             current_area = area_name
         )
     
@@ -1138,7 +1140,7 @@ class Shop:
         if filtered_items:
             for idx, item in enumerate(filtered_items, 1):
                 print(
-                    f"[{idx:<2}] "
+                    f"[{idx:>2}] "
                     f"{c}{item['name']:<24}{rst} {d}|{rst} "
                     f"Cost: {o}{item['cost']:<3}{rst} {d}|{rst} "
                     f"HP: {g}+{item['hp']:<3}"
@@ -1158,7 +1160,7 @@ class Shop:
                 actual = base_index + idx
 
                 print(
-                    f"[{actual:<2}] "
+                    f"[{actual:>2}] "
                     f"{c}{weapon['name']:<24}{rst} {d}|{rst} "
                     f"Cost: {o}{weapon['cost']:<3}{rst} {d}|{rst} "
                     f"DMG: {r}{weapon['damage']:<3}{rst} {d}|{rst} "

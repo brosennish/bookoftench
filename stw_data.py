@@ -192,35 +192,35 @@ Enemies = [
     # ========================
 #        CITY ENEMIES
 # ========================
-{'name': const.Enemies.BANDIT,        'hp': 80,  'weapon': [const.Weapons.KNIFE, const.Weapons.BAT],                              'bounty': 90,  'type': 'normal'},
-{'name': const.Enemies.GOON,          'hp': 100, 'weapon': [const.Weapons.CHILI_POWDER, const.Weapons.BAT, const.Weapons.PISTOL],'bounty': 100, 'type': 'normal'},
-{'name': const.Enemies.PIMP,          'hp': 120, 'weapon': [const.Weapons.PEPPER_SPRAY, const.Weapons.BRASS_KNUCKLES, const.Weapons.REVOLVER],'bounty': 110, 'type': 'normal'},
-{'name': const.Enemies.HOBO,          'hp': 80,  'weapon': [const.Weapons.BROKEN_BOTTLE, const.Weapons.KNIFE, const.Weapons.POCKET_SAND],     'bounty': 75,  'type': 'normal'},
-{'name': const.Enemies.SERIAL_KILLER, 'hp': 120, 'weapon': [const.Weapons.KNIFE, const.Weapons.MACHETE],                          'bounty': 120, 'type': 'normal'},
+{'name': const.Enemies.BANDIT,        'hp': 80,  'weapon': [const.Weapons.KNIFE, const.Weapons.BAT],                              'bounty': 60,  'type': 'normal'},
+{'name': const.Enemies.GOON,          'hp': 100, 'weapon': [const.Weapons.CHILI_POWDER, const.Weapons.BAT, const.Weapons.PISTOL],'bounty': 75,  'type': 'normal'},
+{'name': const.Enemies.PIMP,          'hp': 120, 'weapon': [const.Weapons.PEPPER_SPRAY, const.Weapons.BRASS_KNUCKLES, const.Weapons.REVOLVER],'bounty': 85,  'type': 'normal'},
+{'name': const.Enemies.HOBO,          'hp': 80,  'weapon': [const.Weapons.BROKEN_BOTTLE, const.Weapons.KNIFE, const.Weapons.POCKET_SAND],     'bounty': 50,  'type': 'normal'},
+{'name': const.Enemies.SERIAL_KILLER, 'hp': 120, 'weapon': [const.Weapons.KNIFE, const.Weapons.MACHETE],                          'bounty': 100, 'type': 'normal'},
 
 # ========================
 #       FOREST ENEMIES
 # ========================
-{'name': const.Enemies.HIKER,            'hp': 80,  'weapon': [const.Weapons.HATCHET, const.Weapons.KNIFE, const.Weapons.BEAR_SPRAY],       'bounty': 80,  'type': 'normal'},
-{'name': const.Enemies.HUNTER,           'hp': 100, 'weapon': [const.Weapons.KNIFE, const.Weapons.RIFLE, const.Weapons.BEAR_SPRAY],         'bounty': 95,  'type': 'normal'},
-{'name': const.Enemies.POACHER,          'hp': 120, 'weapon': [const.Weapons.CROSSBOW, const.Weapons.MACHETE, const.Weapons.BEAR_SPRAY],    'bounty': 110, 'type': 'normal'},
-{'name': const.Enemies.DISGRACED_EXILE,  'hp': 100, 'weapon': [const.Weapons.HATCHET, const.Weapons.SHOVEL],                    'bounty': 90,  'type': 'normal'},
+{'name': const.Enemies.HIKER,            'hp': 80,  'weapon': [const.Weapons.HATCHET, const.Weapons.KNIFE, const.Weapons.BEAR_SPRAY],       'bounty': 60,  'type': 'normal'},
+{'name': const.Enemies.HUNTER,           'hp': 100, 'weapon': [const.Weapons.KNIFE, const.Weapons.RIFLE, const.Weapons.BEAR_SPRAY],         'bounty': 75,  'type': 'normal'},
+{'name': const.Enemies.POACHER,          'hp': 120, 'weapon': [const.Weapons.CROSSBOW, const.Weapons.MACHETE, const.Weapons.BEAR_SPRAY],    'bounty': 85,  'type': 'normal'},
+{'name': const.Enemies.DISGRACED_EXILE,  'hp': 100, 'weapon': [const.Weapons.HATCHET, const.Weapons.SHOVEL],                    'bounty': 70,  'type': 'normal'},
 
 # ========================
 #        CAVE ENEMIES
 # ========================
-{'name': const.Enemies.MINER,                 'hp': 80,  'weapon': [const.Weapons.PICKAXE, const.Weapons.KNIFE],                'bounty': 85,  'type': 'normal'},
-{'name': const.Enemies.SPELUNKER,             'hp': 100, 'weapon': [const.Weapons.PICKAXE, const.Weapons.KNIFE],                'bounty': 90,  'type': 'normal'},
-{'name': const.Enemies.MOLE_PERSON,           'hp': 120, 'weapon': [const.Weapons.CLAWS, const.Weapons.PICKAXE],                'bounty': 105, 'type': 'normal'},
-{'name': const.Enemies.HUMANOID_CAVE_CREATURE,'hp': 120, 'weapon': [const.Weapons.CLAWS, const.Weapons.SLEDGEHAMMER],           'bounty': 120, 'type': 'normal'},
+{'name': const.Enemies.MINER,                 'hp': 80,  'weapon': [const.Weapons.PICKAXE, const.Weapons.KNIFE],                'bounty': 65,  'type': 'normal'},
+{'name': const.Enemies.SPELUNKER,             'hp': 100, 'weapon': [const.Weapons.PICKAXE, const.Weapons.KNIFE],                'bounty': 70,  'type': 'normal'},
+{'name': const.Enemies.MOLE_PERSON,           'hp': 120, 'weapon': [const.Weapons.CLAWS, const.Weapons.PICKAXE],                'bounty': 80,  'type': 'normal'},
+{'name': const.Enemies.HUMANOID_CAVE_CREATURE,'hp': 120, 'weapon': [const.Weapons.CLAWS, const.Weapons.SLEDGEHAMMER],           'bounty': 95,  'type': 'normal'},
 
 # ========================
 #        SWAMP ENEMIES
 # ========================
-{'name': const.Enemies.HAND_FISHERMAN,  'hp': 80,  'weapon': [const.Weapons.HATCHET, const.Weapons.KNIFE],                      'bounty': 85,  'type': 'normal'},
-{'name': const.Enemies.BAYOU_MAN,       'hp': 100, 'weapon': [const.Weapons.MACHETE, const.Weapons.SHOTGUN],                    'bounty': 95,  'type': 'normal'},
-{'name': const.Enemies.VOODOO_PRIESTESS,'hp': 120, 'weapon': [const.Weapons.VOODOO_STAFF, const.Weapons.KNIFE, const.Weapons.CHILI_POWDER], 'bounty': 115, 'type': 'normal'},
-{'name': const.Enemies.SKIN_COLLECTOR,  'hp': 110, 'weapon': [const.Weapons.MACHETE, const.Weapons.CHAINSAW],                   'bounty': 125, 'type': 'normal'},
+{'name': const.Enemies.HAND_FISHERMAN,  'hp': 80,  'weapon': [const.Weapons.HATCHET, const.Weapons.KNIFE],                      'bounty': 65,  'type': 'normal'},
+{'name': const.Enemies.BAYOU_MAN,       'hp': 100, 'weapon': [const.Weapons.MACHETE, const.Weapons.SHOTGUN],                    'bounty': 75,  'type': 'normal'},
+{'name': const.Enemies.VOODOO_PRIESTESS,'hp': 120, 'weapon': [const.Weapons.VOODOO_STAFF, const.Weapons.KNIFE, const.Weapons.CHILI_POWDER], 'bounty': 90,  'type': 'normal'},
+{'name': const.Enemies.SKIN_COLLECTOR,  'hp': 110, 'weapon': [const.Weapons.MACHETE, const.Weapons.CHAINSAW],                   'bounty': 100, 'type': 'normal'},
 
 # ========================
 #        AREA BOSSES
