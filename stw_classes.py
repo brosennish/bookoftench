@@ -66,11 +66,11 @@ class GameState:
 class Player:
     name: str = ''
     lvl: int = 1
-    hp: int = 1000
+    hp: int = 100
     max_hp: int = 100
     xp: int = 0
 
-    coins: int = 1000
+    coins: int = 0
     bank: int = 0
     bank_interest_rate: float = 0.10
     interest: int = 0
@@ -726,7 +726,7 @@ There are parts of another man or men scattered around you.{rst}""")
 
         else:
             print(f"{y}You already have {perk}!")
-            t.sleep(2)
+            t.sleep(1)
 
 # === ENEMY CLASS ===
 
