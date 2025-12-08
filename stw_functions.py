@@ -38,7 +38,7 @@ def win_game(gs):
 
 def play_again():
     while True:
-        choice = input(f"\nWould you like to play again? (y or n):{b}\n> ").strip().lower()
+        choice = input(f"\nWould you like to play again? (y/n):{b}\n> ").strip().lower()
         if choice == 'y':
             return True
         elif choice == 'n':
@@ -66,18 +66,18 @@ def play_area_theme(player):
 # --- GET DATA ---
 
 def get_weapon_data(name: str) -> dict:     # enter name, return dict
-    '''enter the weapon name to return the full weapon dict'''
+    # enter the weapon name to return the full weapon dict
     return next((w for w in Weapons if w['name'] == name), None)
 
 
 def get_item_data(name: str) -> dict:
-    '''enter the item name to return the full item dict'''
+    # enter the item name to return the full item dict
     return next((i for i in Items if i['name'] == name), None)
 
 
 def get_perk_data(name: str) -> dict:
-    '''enter the perk name to return the full perk dict'''
-    return next((p for p in Perks if p['name'] == name), None)
+    # enter the perk name to return the full perk dict
+    return next((i for i in Perks if i['name'] == name), None)
 
 
 # --- BATTLE ---
@@ -198,8 +198,6 @@ def p_uses(player):
 
 
 def p_uses_weapons(player, weapon: str):
-    from stw_functions import get_weapon_data
-
     data = get_weapon_data(weapon)
     uses_left = player.weapon_uses.get(weapon, data['uses'])
 
@@ -244,7 +242,6 @@ def refresh_wanted(gs):
     gs.wanted_data = random.choice(valid).copy()
     gs.wanted = gs.wanted_data['name']
     gs.bounty = gs.wanted_data['bounty']
-
 
 
 # --- BANK ---
@@ -483,7 +480,7 @@ def actions_menu(gs, player, shop):
         elif choice == "s":
             do_shop(player, shop, gs)
         elif choice == "t":
-            do_travel(gs, player)
+            do_travel(player)
         elif choice == "m":
             page_two = True
             while page_two:
@@ -620,6 +617,7 @@ def krill_or_cray(player):
                         player.casino_won += payout
                     print(f"{g}Lucky guess, bozo! You won {payout} coins.{rst}\n")
                     play_sound('golf_clap')
+                    player.xp += 1
                     player.plays -= 1
                     if casino_check(player):
                         return
@@ -716,13 +714,7 @@ def above_or_below(player):
                     break
 
                 turn += 1
-                if turn == 2:
-                    mult = 2.0
-                elif turn == 3:
-                    mult = 2.8
-                elif turn == 4:
-                    mult = 4.0
-                elif turn == 5:
+                if turn == 5:
                     if const.Perks.GRAMBLING_ADDICT in player.perks:
                         final_payout = int(payout * 1.05)
                     else:
@@ -731,6 +723,7 @@ def above_or_below(player):
                     player.coins += final_payout
                     print(f"{b}You've completed the final round.{rst}\n"
                           f"{g}You cashed out {final_payout} coins!\n")
+                    player.xp += 3
                     player.casino_won += final_payout
                     return
 
@@ -1020,7 +1013,6 @@ def do_shop(player, shop, gs):
                 sell_item(name, player)
             else:
                 sell_weapon(name, player)
-            choice = 's'
 
         else:
             print(f"{y}Invalid choice.")
@@ -1090,7 +1082,7 @@ def sell_weapon(weapon_name, player):  # player sells weapon
 
 # ================================================
 
-def do_travel(gs, player):
+def do_travel(player):
     areas = [a['name'] for a in Areas]
 
     if not areas:
@@ -1208,7 +1200,7 @@ def battle(player, enemy, gs, shop):
         if enemy.name == const.Enemies.CAPTAIN_HOLE and const.Items.TENCH_FILET in player.items:
             print("Captain Hole has offered to shoot himself in the jines in exchange for your Tench Filet.")
             t.sleep(4)
-            filet = input(f"Do you accept? (y or n):\n{b}> ").strip().lower()
+            filet = input(f"Do you accept? (y/n):\n{b}> ").strip().lower()
             if filet == 'y':
                 stop_music()
                 player.items.remove(const.Items.TENCH_FILET)
@@ -1248,6 +1240,7 @@ def battle(player, enemy, gs, shop):
                     continue
                 elif fled:
                     print(f'{c}You ran away from {enemy.name}!')
+                    player.xp += 1
                     t.sleep(1)
                     stop_music()
                     play_area_theme(player)

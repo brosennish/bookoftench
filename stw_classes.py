@@ -516,7 +516,7 @@ There are parts of another man or men scattered around you.{rst}""")
         
         visiting = True
         while visiting:
-            choice = input(f"\nWould you like to visit the bank? (y or n):\n{b}>{rst} ").strip().lower()
+            choice = input(f"\nWould you like to visit the bank? (y/n):\n{b}>{rst} ").strip().lower()
             
             if choice == 'y':
                 print('You may visit the bank each time you level up.\nDuring each visit, you may deposit or withdraw coins.'

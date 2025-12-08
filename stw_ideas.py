@@ -9,3 +9,5 @@
 # 8. City of Shebokken municipal tax on held coins each level up
 # 9. Option to swap weapon or item for found one if sack is full
 # 10. Perks that scale with each activation
+# 11. Additional ways to earn small amounts of XP like winning a game at the casino
+# 12. ACHIEVEMENTS with rewards for unlocking them each run
