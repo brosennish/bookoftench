@@ -415,7 +415,6 @@ def run_game(gs=GameState(), player=Player(), shop=Shop(), name=True, tutorial=T
         run_game()
 
 
-
 def actions_menu(gs, player, shop):
     get_current_music()
     play_area_theme(player)
@@ -584,7 +583,7 @@ def krill_or_cray(player):
 
     while True:
         print(f"Coins: {g}{player.coins}{rst} {d}|{rst} Plays: {c}{player.plays}{rst}\n")
-        choice = input(f"[#] Enter wager\n"
+        choice = input(f"[#] Wager\n"
                        f"[q] Leave:\n{b}>{rst} ").strip().lower()
 
         if choice == "q":
@@ -610,15 +609,17 @@ def krill_or_cray(player):
                     t.sleep(1)
                     continue
                 elif pick == winner:
-                    print(f"{g}Lucky guess, bozo! You won {wager} coins.{rst}\n")
-                    play_sound('golf_clap')
                     if const.Perks.GRAMBLING_ADDICT in player.perks:
                         print(f"{p}Payout increased 5% with Grambling Addict!{rst}\n")
-                        player.coins += int(wager * 1.05)
-                        player.casino_won += int(wager * 1.05)
+                        payout = int((wager * 1.05) * 0.9)
+                        player.coins += payout
+                        player.casino_won += payout
                     else:
-                        player.coins += wager
-                        player.casino_won += wager
+                        payout = int(wager * 0.9)
+                        player.coins += payout
+                        player.casino_won += payout
+                    print(f"{g}Lucky guess, bozo! You won {payout} coins.{rst}\n")
+                    play_sound('golf_clap')
                     player.plays -= 1
                     if casino_check(player):
                         return
@@ -643,31 +644,30 @@ def above_or_below(player):
         return
     else:
         print(f"{b}Welcome to Above or Below!\n\n"
-              f"The rules are simple:\n"
+              f"Rules:\n"
               f"1. Place a wager and roll a die.\n"
               f"2. Guess if the next roll will be above or below the previous roll and roll once more.\n"
               f"3. Your payout increases by a higher percentage with each correct guess.\n"
-              f"4. If you're incorrect, you lose the payout.\n"
+              f"4. If you're incorrect, you lose your wager and forfeit the payout.\n"
               f"5. Play up to 4 rounds and cash out before you run dry.{rst}\n")
 
     while True:
         if casino_check(player):
             return
         print(f"Coins: {g}{player.coins}{rst} {d}|{rst} Plays: {c}{player.plays}{rst}\n")
-        choice = input(f"[#] Enter wager\n"
+        choice = input(f"[#] Wager\n"
                        f"[q] Leave\n{b}>{rst} ").strip().lower()
         if choice == "q":
-            print(f"{b}Later bozo.{rst}")
+            print(f"{b}Later bozo.{rst}\n")
             return
         elif not choice.isdigit():
-            print(f"{b}Invalid choice.")
+            print(f"{b}Invalid choice.\n")
             continue
         elif int(choice) > player.coins:
-            print(f"{b}You don't have enough coins to cover this wager.")
+            print(f"{b}You don't have enough coins to cover this wager.\n")
             continue
         else:
             wager = int(choice)
-            player.coins -= wager
             player.plays -= 1
             turn = 1
             payout = wager
@@ -681,11 +681,11 @@ def above_or_below(player):
                     print(f"Round: {c}{turn}{rst} {d}|{rst} Wager: {g}{wager}{rst} {d}|{rst} Mult: {p}{mult}{rst} {d}|{rst} Payout: {g}{int(payout)}{rst}")
                 input(f"[ ] Roll the die\n{b}> ")
                 roll1 = random.randint(1, 6)
-                print(f"{b}You rolled a {roll1}.")
+                print(f"{b}You rolled a {roll1}.\n")
 
                 while True:
                     call = input(f"[A] Above\n"
-                                 "[B] Below\n").strip().lower()
+                                 f"[B] Below\n{b}>{rst} ").strip().lower()
                     if call not in ('a', 'b'):
                         print(f"{b}Invalid choice.")
                         continue
@@ -694,7 +694,7 @@ def above_or_below(player):
 
                 input(f"[ ] Roll the die.\n{b}> ")
                 roll2 = random.randint(1, 6)
-                print(f"{b}You rolled a {roll2}.")
+                print(f"{b}You rolled a {roll2}.\n")
 
                 if call == 'a' and roll2 > roll1:
                     payout = wager * ladder[turn-1]
@@ -702,6 +702,8 @@ def above_or_below(player):
                           f"Payout increased to {int(payout)} coins.\n")
                 elif call == 'a' and roll2 <= roll1:
                     print(f"{b}Your guess was dry.\n")
+                    player.coins -= wager
+                    player.casino_lost += wager
                     break
                 elif call == 'b' and roll2 < roll1:
                     payout = wager * ladder[turn-1]
@@ -709,6 +711,8 @@ def above_or_below(player):
                           f"Payout increased to {int(payout)} coins.\n")
                 else:
                     print(f"{b}Your guess was dry.\n")
+                    player.coins -= wager
+                    player.casino_lost += wager
                     break
 
                 turn += 1
@@ -725,8 +729,9 @@ def above_or_below(player):
                         final_payout = int(payout)
 
                     player.coins += final_payout
-                    print(f"{b}You've completed the final round.\n"
-                          f"You cashed out {final_payout} coins!\n")
+                    print(f"{b}You've completed the final round.{rst}\n"
+                          f"{g}You cashed out {final_payout} coins!\n")
+                    player.casino_won += final_payout
                     return
 
                 while True:
@@ -738,11 +743,13 @@ def above_or_below(player):
                     elif choice == 'q':
                         if const.Perks.GRAMBLING_ADDICT in player.perks:
                             final_payout = int(payout * 1.05)
+                            print(f"{p}Payout increase 5% with Grambling Addict!\n")
                         else:
                             final_payout = int(payout)
 
                         player.coins += final_payout
-                        print(f"{b}You cashed out {final_payout} coins.")
+                        print(f"{g}You cashed out {final_payout} coins!\n")
+                        player.casino_won += final_payout
                         return
                     else:
                         continue
@@ -791,7 +798,6 @@ def overview(gs, player):
     input(f"{b}>{rst} ")
 
 
-
 def do_explore(gs, player, shop):
     # 40% chance of enemy (10% for elite), 15% for item, 15% weapon, 20% coins, 10% dry
 
@@ -817,7 +823,6 @@ def do_explore(gs, player, shop):
             item_dict = random.choice(Items)
             item = item_dict['name']
             player.add_item(item)
-            print(f"{c}{item} added to sack!{rst}")
             t.sleep(1)
             return
         else:
@@ -877,7 +882,7 @@ def do_equip_weapon(player):
             if 1 <= num <= len(player.weapons):
                 weapon = player.weapons[num - 1] # python zero index correction
                 player.current_weapon = weapon 
-                print(f"\n{c}{weapon} successfully equipped.")
+                print(f"{c}{weapon} successfully equipped.")
                 t.sleep(1)
                 return
     
@@ -895,8 +900,8 @@ def do_shop(player, shop, gs):
         print(f'\n{b}Welcome! You have {rst}{g}{player.coins} {rst}{b}coins.\n')
         shop.view_shop_inventory(player)
 
-        choice = input(f"\n[#] Purchase listing\n"
-                       f"[s] Sell from inventory\n"
+        choice = input(f"\n[#] Purchase\n"
+                       f"[s] Sell\n"
                        f"[r] Return\n{b}>{rst} ").strip().lower()
 
         if choice == "r":
@@ -1097,7 +1102,7 @@ def do_travel(gs, player):
     for idx, area in enumerate(areas, 1):
         print(f"[{idx}] {b}{area}")
                 
-    choice = input(f"\n[#] Travel to area\n"
+    choice = input(f"\n[#] Travel\n"
                    f"[r] Return\n{b}>{rst} ").strip().lower()
 
     if choice == 'r':
@@ -1124,6 +1129,9 @@ def do_travel(gs, player):
         print(f"\n{y}Invalid choice.")
         t.sleep(1)
 
+# =====================================
+#             BATTLE
+# =====================================
 
 def do_final_boss_battle(gs, player, shop):
     """Spawn and fight Denny Biltmore as the final boss."""
@@ -1194,7 +1202,7 @@ def battle(player, enemy, gs, shop):
         get_current_music()
         play_music('battle_theme')
 
-    while player.hp > 0 and enemy.hp > 0:
+    while True:
 
         # Captain Hole event
         if enemy.name == const.Enemies.CAPTAIN_HOLE and const.Items.TENCH_FILET in player.items:
@@ -1243,7 +1251,7 @@ def battle(player, enemy, gs, shop):
                     t.sleep(1)
                     stop_music()
                     play_area_theme(player)
-                    return
+                    return None
                 else:
                     print(f"{y}Couldn't escape!")
                     t.sleep(1)
@@ -1307,9 +1315,12 @@ def battle(player, enemy, gs, shop):
                     stop_music()
                     play_area_theme(player)
                     return False # battle over, player dead
-                        
-# ----- SAVE/LOAD GAME LOGIC -----
 
+# =====================================
+#           BATTLE END
+# =====================================
+
+# ----- SAVE/LOAD GAME LOGIC -----
 
 def load_game():
     save_dir = "saves"
