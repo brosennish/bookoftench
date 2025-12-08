@@ -508,7 +508,7 @@ There are parts of another man or men scattered around you.{rst}""")
     def gain_coins(self, amount: int):
 
         self.coins += amount
-        print(f"{g}You gained {amount} coins. {rst}You now have {self.coins} coins.\n")
+        print(f"{g}You gained {amount} coins!")
         t.sleep(1)
 
     def lose_coins(self, amount: int):
@@ -712,6 +712,18 @@ There are parts of another man or men scattered around you.{rst}""")
         if perk not in self.perks:
             self.perks.append(perk)
             print(f"{p}{perk} added to perks.")
+
+            if perk == const.Perks.VAGABONDAGE:
+                self.max_weapons += 1
+                self.max_items += 1
+            if perk == const.Perks.NOMADS_LAND:
+                self.max_weapons += 1
+                self.max_items += 1
+            if perk == const.Perks.SLEDGE_FUND:
+                self.bank_interest_rate += 0.05
+            if perk == const.Perks.DEATH_CAN_WAIT:
+                self.cheat_death_ready = True
+
         else:
             print(f"{y}You already have {perk}!")
             t.sleep(2)
@@ -850,7 +862,7 @@ class Enemy:
         self.hp = max(0, self.hp - amount)
         
         if self.hp == 0:
-            print(f"\n{r}{self.name} is now in Hell.{rst}")
+            print(f"\n{r}{self.name} is now in Hell.{rst}\n")
             play_sound('devil_thunder')
             if self.name in (const.Enemies.THE_MAYOR,const.Enemies.DENNY_BILTMORE):
                 play_sound('welcome_to_hell')

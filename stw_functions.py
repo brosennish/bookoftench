@@ -72,22 +72,12 @@ def unlock_achievement(player, ach_id):
         filtered = [i for i in Perks if i['name'] not in player.perks and i['name'] != const.Perks.WENCH_LOCATION]
         if filtered:
             reward = random.choice(filtered)
-            player.perks.append(reward['name'])
-            perk_name = reward['name']
+            player.add_perk(reward['name'])
         else:
             return
 
-        if perk_name == const.Perks.VAGABONDAGE:
-            player.max_weapons += 1; player.max_items += 1
-        if perk_name == const.Perks.NOMADS_LAND:
-            player.max_weapons += 1; player.max_items += 1
-        if perk_name == const.Perks.SLEDGE_FUND:
-            player.bank_interest_rate += 0.05
-        if perk_name == const.Perks.DEATH_CAN_WAIT:
-            player.cheat_death_ready = True
-
         print(f"{o}ACHIEVEMENT UNLOCKED: {ach['name']}. "
-              f"Reward: {reward['name']} | {reward['description']}.{rst}\n")
+              f"Reward: {reward['name']} | {reward['description']}.{rst}")
         return
 
     # award XP
@@ -99,7 +89,7 @@ def unlock_achievement(player, ach_id):
         player.coins += ach['reward_value']
 
     print(f"{o}ACHIEVEMENT UNLOCKED: {ach['name']}. "
-          f"Reward: +{ach['reward_value']} {ach['reward_type'].upper()}.{rst}\n")
+          f"Reward: +{ach['reward_value']} {ach['reward_type'].upper()}.{rst}")
 
 
 # --- MUSIC ---
@@ -339,16 +329,16 @@ def do_view_perks(player, gs):
         print(f"{y}Your perks are dry.")
         t.sleep(1)
     else:
-        print(f"Your Perks:\n")
+        print(f"Your Perks:")
         if const.Perks.WENCH_LOCATION in player.perks:
-            print(f'Wench Location: {b}{gs.wench_area}{rst}')
+            print(f'\nWench Location: {b}{gs.wench_area}{rst}')
 
-        for perk in player.perks:
+        for perk in sorted(player.perks):
             perk_data = get_perk_data(perk)
             if not perk_data:
                 print(f"\n{y}Perk: {perk}\nDescription: [Missing data!]")
                 continue
-            print(f"\nPerk: {p}{perk_data['name']}{rst}\nDescription: {perk_data['description']}")
+            print(f"\n{p}{perk_data['name']} | {perk_data['description']}")
         input(f'\n{b}>{rst} ')
 
 
@@ -359,13 +349,16 @@ def do_view_achievements(player):
         print(f"{y}Your achievements are dry.")
         t.sleep(1)
     else:
-        print(f"Your Achievements:\n")
-        for ach in player.achievements:
+        print(f"Your Achievements:")
+        for ach in sorted(player.achievements):
             ach_data = get_ach_data(ach)
+
             if not ach_data:
                 print(f"\n{o}{ach}\n[Missing data!]")
                 continue
-            print(f"\n{o}{ach_data['name']}{rst}\n{ach_data['description']}")
+
+            print(f"\n{o}{ach_data['name']} | {ach_data['description']}")
+
         input(f'\n{b}>{rst} ')
 
 
@@ -432,8 +425,8 @@ def actions_main_menu(gs, player, shop):
         elif choice == "r":
             return
         elif choice == "q":
-            print("You'll be back.\nOh... yes.\nYou'll be back.")
-            t.sleep(2)
+            print(f"{r}You'll be back.\nOh... yes.\nYou'll be back.")
+            t.sleep(1)
             sys.exit()
         else: 
             continue
@@ -874,12 +867,12 @@ def overview(gs, player):
 
 
 def do_explore(gs, player, shop):
-    # 40% chance of enemy (10% for elite), 15% for item, 15% weapon, 20% coins, 10% dry
+    # 50% chance of enemy (10% for elite), 10% for item, 8% weapon, 20% coins, 1% perk, 11% dry
 
     if player.lives > 0:
         player.alive = True
     roll = random.random()
-    if roll < 0.38:
+    if roll < 0.50:
         enemy = Enemy.spawn_enemy_for_area(player.current_area)
         while enemy.type in ('boss', 'boss_final'):
             enemy = Enemy.spawn_enemy_for_area(player.current_area)
@@ -893,7 +886,7 @@ def do_explore(gs, player, shop):
             print(f"{y}An enemy appears!{rst}")
         t.sleep(1)
         battle(player, enemy, gs, shop)
-    elif 0.38 <= roll < 0.53:
+    elif 0.50 <= roll < 0.60:
         if len(player.items) < player.max_items:
             item_dict = random.choice(Items)
             item = item_dict['name']
@@ -904,7 +897,7 @@ def do_explore(gs, player, shop):
             print('Your item sack is full!')
             t.sleep(1)
             return
-    elif 0.53 <= roll < 0.68:
+    elif 0.60 <= roll < 0.68:
         if len(player.weapons) < player.max_weapons:
             added = find_weapon(player)
             if added:
@@ -917,7 +910,7 @@ def do_explore(gs, player, shop):
             print(f"{y}Your weapon sack is full.")
             t.sleep(1)
             return
-    elif 0.68 <= roll < 0.83:
+    elif 0.68 <= roll < 0.88:
         if const.Perks.METAL_DETECTIVE in player.perks:
             coins = random.randint(25, 50)
         else:
@@ -925,6 +918,16 @@ def do_explore(gs, player, shop):
         print(f'{g}You found {coins} coins!')
         t.sleep(1)
         player.coins += coins
+    elif 0.88 <= roll < 0.89:
+        filtered = [i for i in Perks if i['name'] not in player.perks and i['name'] != const.Perks.WENCH_LOCATION]
+        if filtered:
+            reward = random.choice(filtered)
+            player.add_perk(reward['name'])
+            print(f"{p}You found the {reward['name']} perk!"
+                  f"{p}{reward['description']}")
+            t.sleep(1)
+        else:
+            return
     else:
         print(f'{d}You came up dry.')
         t.sleep(1)

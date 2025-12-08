@@ -7,7 +7,7 @@ Achievements = [
     {
         'id': const.Achievements.KRILL_OR_BE_KRILLED,
         'name': "Krill or be Krilled",
-        'description': "Defeat your first enemy.",
+        'description': "Defeat your first enemy",
         'reward_type': 'xp',
         'reward_value': 10,
         'type': 'achievement',
@@ -15,7 +15,7 @@ Achievements = [
     {
         'id': const.Achievements.TENCH_KILLS,
         'name': "Tench Kills",
-        'description': "Defeat 10 enemies.",
+        'description': "Defeat 10 enemies",
         'reward_type': 'perk',
         'reward_value': None,
         'type': 'achievement',
