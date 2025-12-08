@@ -5,7 +5,7 @@ import time as t
 import sys
 
 import stw_constants as const
-from stw_data import Weapons, Items, Enemies, Areas, Perks, Results
+from stw_data import Weapons, Items, Enemies, Areas, Perks, Results, Achievements
 from stw_classes import GameState, Player, Enemy, Shop, SaveGameState
 from stw_colors import red as r, green as g, blue as b, purple as p, yellow as y, cyan as c, orange as o
 from stw_colors import dim as d, reset as rst
@@ -23,6 +23,13 @@ def record_kill(gs, player):     # accesses GameState/player and returns T/F
 
     # decrement & clamp
     gs.area_enemies[area] = max(0, gs.area_enemies[area] - 1)
+
+    # first kill check
+    if Results[const.Events.KILL] == 1:
+        unlock_achievement(player, const.Achievements.KRILL_OR_BE_KRILLED)
+
+    if Results[const.Events.KILL] == 10:
+        unlock_achievement(player, const.Achievements.TENCH_KILLS)
 
 
 def win_game(gs): 
@@ -51,6 +58,50 @@ def play_again():
 # HELPER FUNCTIONS
 # ==================================================================================================
 
+# --- UNLOCK ACHIEVEMENT ---
+
+def unlock_achievement(player, ach_id):
+    if ach_id in player.achievements:
+        return
+
+    player.achievements.add(ach_id)
+    ach = next(a for a in Achievements if a['id'] == ach_id)
+
+    # award perk
+    if ach['reward_type'] == 'perk':
+        filtered = [i for i in Perks if i['name'] not in player.perks and i['name'] != const.Perks.WENCH_LOCATION]
+        if filtered:
+            reward = random.choice(filtered)
+            player.perks.append(reward['name'])
+            perk_name = reward['name']
+        else:
+            return
+
+        if perk_name == const.Perks.VAGABONDAGE:
+            player.max_weapons += 1; player.max_items += 1
+        if perk_name == const.Perks.NOMADS_LAND:
+            player.max_weapons += 1; player.max_items += 1
+        if perk_name == const.Perks.SLEDGE_FUND:
+            player.bank_interest_rate += 0.05
+        if perk_name == const.Perks.DEATH_CAN_WAIT:
+            player.cheat_death_ready = True
+
+        print(f"{o}ACHIEVEMENT UNLOCKED: {ach['name']}. "
+              f"Reward: {reward['name']} | {reward['description']}.{rst}\n")
+        return
+
+    # award XP
+    elif ach['reward_type'] == 'xp':
+        player.xp += ach['reward_value']
+
+    # award coins
+    elif ach['reward_type'] == 'coins':
+        player.coins += ach['reward_value']
+
+    print(f"{o}ACHIEVEMENT UNLOCKED: {ach['name']}. "
+          f"Reward: +{ach['reward_value']} {ach['reward_type'].upper()}.{rst}\n")
+
+
 # --- MUSIC ---
 def play_area_theme(player):
     area = player.current_area
@@ -78,6 +129,11 @@ def get_item_data(name: str) -> dict:
 def get_perk_data(name: str) -> dict:
     # enter the perk name to return the full perk dict
     return next((i for i in Perks if i['name'] == name), None)
+
+
+def get_ach_data(ach: str) -> dict:
+    # enter the achievement id to return the full ach dict
+    return next((a for a in Achievements if a['id'] == ach), None)
 
 
 # --- BATTLE ---
@@ -296,6 +352,23 @@ def do_view_perks(player, gs):
         input(f'\n{b}>{rst} ')
 
 
+# --- ACHIEVEMENTS ---
+def do_view_achievements(player):
+
+    if not player.achievements:
+        print(f"{y}Your achievements are dry.")
+        t.sleep(1)
+    else:
+        print(f"Your Achievements:\n")
+        for ach in player.achievements:
+            ach_data = get_ach_data(ach)
+            if not ach_data:
+                print(f"\n{o}{ach}\n[Missing data!]")
+                continue
+            print(f"\n{o}{ach_data['name']}{rst}\n{ach_data['description']}")
+        input(f'\n{b}>{rst} ')
+
+
 # --- COUNTER ---
 def log_event(event: str):
     if event not in Results:
@@ -485,19 +558,22 @@ def actions_menu(gs, player, shop):
             page_two = True
             while page_two:
                 choice = get_choice_from_dict("", {
-                "c": "Casino",
-                "p": "View Perks",
+                "a": "Achievements",
                 "b": "Bank Balance",
+                "c": "Casino",
+                "p": "Perks",
                 "o": "Overview",
                 "r": "Return"
             })
-                if choice == "c":
+                if choice == "a":
+                    do_view_achievements(player)
+                elif choice == "b":
+                    do_bank_balance(player)
+                elif choice == "c":
                     do_casino(player)
                     play_area_theme(player)
                 elif choice == "p":
                     do_view_perks(player, gs)
-                elif choice == "b":
-                    do_bank_balance(player)
                 elif choice == "o":
                     overview(gs, player)
                 elif choice == "r":
@@ -893,6 +969,26 @@ def do_equip_weapon(player):
 #       SHOP
 # ===================
 
+def get_shop_discount(player):
+    perks = set(player.perks)
+    discount = 1.0
+
+    if const.Perks.BARTER_SAUCE in perks and const.Perks.TRADE_SHIP in perks:
+        print(f"{p}Prices down 30% with Barter Sauce and Trade Ship!{rst}")
+        discount = 0.7
+    elif const.Perks.TRADE_SHIP in perks:
+        print(f"{p}Prices down 20% with Trade Ship!{rst}")
+        discount = 0.8
+    elif const.Perks.BARTER_SAUCE in perks:
+        print(f"{p}Prices down 10% with Barter Sauce!{rst}")
+        discount = 0.9
+    else:
+        discount = 1
+
+    return discount
+
+# --- DO SHOP ---
+
 def do_shop(player, shop, gs):
     play_music('shop_theme')
     while True:
@@ -1081,7 +1177,7 @@ def sell_weapon(weapon_name, player):  # player sells weapon
     player.weapons.remove(weapon_name)
     player.weapon_uses.pop(weapon_name, None)
 
-    print(f"{g}You sold {weapon_name} ({current_uses} uses left) for {sell_value} coins.")
+    print(f"{g}You sold {weapon_name} for {sell_value} coins.")
     play_sound('purchase')
     t.sleep(1)
     log_event(const.Events.SELL_WEAPON)

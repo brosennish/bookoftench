@@ -66,11 +66,11 @@ class GameState:
 class Player:
     name: str = ''
     lvl: int = 1
-    hp: int = 100
+    hp: int = 1000
     max_hp: int = 100
     xp: int = 0
 
-    coins: int = 0
+    coins: int = 1000
     bank: int = 0
     bank_interest_rate: float = 0.10
     interest: int = 0
@@ -84,10 +84,11 @@ class Player:
     blind_turns: int = 0
 
     current_weapon: str = const.Weapons.BARE_HANDS
+    achievements: set[str] = field(default_factory=set)
     perks: List[str] = field(default_factory=list)
     cheat_death_ready: bool = False
-    max_weapons: int = 5
-    max_items: int = 5
+    max_weapons: int = 4
+    max_items: int = 4
     weapons: List[str] = field(default_factory=lambda: [const.Weapons.BARE_HANDS,const.Weapons.KNIFE])
     # no helper function used here, direct lookup from Weapons table:
     weapon_uses: Dict[str, int] = field(    # creates new list of dicts for player
@@ -484,13 +485,13 @@ There are parts of another man or men scattered around you.{rst}""")
         base = enemy.max_hp / 3
         if const.Perks.AP_TENCH_STUDIES in self.perks:
             amount = int(base * 1.30)
-            print(f"\n{g}You gained {amount} XP with Tench Studies!\n")
+            print(f"{g}You gained {amount} XP with Tench Studies!")
         elif const.Perks.INTRO_TO_TENCH in self.perks:
             amount = int(base * 1.15)
-            print(f"\n{g}You gained {amount} XP with Intro to Tench!\n")
+            print(f"{g}You gained {amount} XP with Intro to Tench!")
         else:
             amount = int(base)
-            print(f"\n{g}You gained {amount} XP!\n")
+            print(f"{g}You gained {amount} XP!")
         self.xp += amount
         t.sleep(1)
 
@@ -1130,19 +1131,9 @@ class Shop:
 
 
     def view_shop_inventory(self, player):
+        from stw_functions import get_shop_discount
         # figure out discount once
-        perks = set(player.perks)
-        discount = 1.0
-
-        if const.Perks.BARTER_SAUCE in perks and const.Perks.TRADE_SHIP in perks:
-            print(f"{p}Prices down 30% with Barter Sauce and Trade Ship!{rst}")
-            discount = 0.7
-        elif const.Perks.TRADE_SHIP in perks:
-            print(f"{p}Prices down 20% with Trade Ship!{rst}")
-            discount = 0.8
-        elif const.Perks.BARTER_SAUCE in perks:
-            print(f"{p}Prices down 10% with Barter Sauce!{rst}")
-            discount = 0.9
+        discount = get_shop_discount(player)
     
         # ITEMS
         print(f"Items {d}({len(player.items)}/{player.max_items}){rst}")
@@ -1150,10 +1141,12 @@ class Shop:
 
         if filtered_items:
             for idx, item in enumerate(filtered_items, 1):
+                item_cost = int(item['cost'] * discount)
+
                 print(
                     f"[{idx:>2}] "
                     f"{c}{item['name']:<24}{rst} {d}|{rst} "
-                    f"Cost: {o}{item['cost']:<3}{rst} {d}|{rst} "
+                    f"Cost: {o}{item_cost:<3}{rst} {d}|{rst} "
                     f"HP: {g}+{item['hp']:<3}"
                 )
         else:
@@ -1166,6 +1159,7 @@ class Shop:
         base_index = len(filtered_items)
         if filtered_weapons:
             for idx, weapon in enumerate(filtered_weapons, 1):
+                weapon_cost = int(weapon['cost'] * discount)
                 acc = weapon['accuracy']
                 uses = weapon['uses']
                 actual = base_index + idx
@@ -1173,7 +1167,7 @@ class Shop:
                 print(
                     f"[{actual:>2}] "
                     f"{c}{weapon['name']:<24}{rst} {d}|{rst} "
-                    f"Cost: {o}{weapon['cost']:<3}{rst} {d}|{rst} "
+                    f"Cost: {o}{weapon_cost:<3}{rst} {d}|{rst} "
                     f"DMG: {r}{weapon['damage']:<3}{rst} {d}|{rst} "
                     f"ACC: {y}{acc:<4}{rst} {d}|{rst} "
                     f"Uses: {uses} "
@@ -1201,7 +1195,9 @@ class Shop:
 # ===============================
 
     def buy_item(self, item_name, player): # player buys item
-        from stw_functions import get_item_data, log_event
+        from stw_functions import get_item_data, log_event, get_shop_discount
+
+        discount = get_shop_discount(player)
         
         item_data = get_item_data(item_name)
         if not item_data:
@@ -1209,9 +1205,9 @@ class Shop:
             t.sleep(1)
             return
 
-        cost = item_data['cost']  
+        cost = int(item_data['cost'] * discount)
 
-        if len(self.item_inventory) >= player.max_items:
+        if len(player.items) >= player.max_items:
             print(f"{y}Your item sack is full.")
             t.sleep(1)
             return
@@ -1242,7 +1238,9 @@ class Shop:
 
 
     def buy_weapon(self, weapon_name: str, player): # player buys weapon
-        from stw_functions import get_weapon_data, log_event
+        from stw_functions import get_weapon_data, log_event, get_shop_discount
+
+        discount = get_shop_discount(player)
         
         weapon_data = get_weapon_data(weapon_name)
         if not weapon_data or weapon_data not in self.weapon_inventory:
@@ -1250,7 +1248,7 @@ class Shop:
             t.sleep(1)
             return
         
-        cost = weapon_data['cost']
+        cost = int(weapon_data['cost'] * discount)
 
         if len(player.weapons) >= player.max_weapons:
             print(f"{y}Your weapon sack is full.")
@@ -1277,13 +1275,15 @@ class Shop:
         filtered = [w for w in Weapons if w['name'] not in player.weapons]
         if filtered:
             new_weapon = random.choice(filtered)
-            self.item_inventory.append(new_weapon)
+            self.weapon_inventory.append(new_weapon)
         else:
             return
 
 
     def buy_perk(self, perk_name: str, player): # player buys perk
-        from stw_functions import get_perk_data, log_event
+        from stw_functions import get_perk_data, log_event, get_shop_discount
+
+        discount = get_shop_discount(player)
         
         perk_data = get_perk_data(perk_name)
         if not perk_data:
@@ -1301,7 +1301,7 @@ class Shop:
             t.sleep(1)
             return None
         
-        cost = perk_data['cost']
+        cost = int(perk_data['cost'] * discount)
 
         if cost > player.coins:
             print(f'{y}Need more coins')
@@ -1318,11 +1318,11 @@ class Shop:
         player.add_perk(perk_data['name'])
         self.perk_inventory.remove(perk_data)
 
-        # replace perk
+        # replace perk in shop
         filtered = [i for i in Perks if i['name'] not in player.perks]
         if filtered:
             new_perk = random.choice(filtered)
-            self.item_inventory.append(new_perk)
+            self.perk_inventory.append(new_perk)
         else:
             return None
         

@@ -3,6 +3,26 @@ from collections import Counter
 import stw_constants as const
 
 
+Achievements = [
+    {
+        'id': const.Achievements.KRILL_OR_BE_KRILLED,
+        'name': "Krill or be Krilled",
+        'description': "Defeat your first enemy.",
+        'reward_type': 'xp',
+        'reward_value': 10,
+        'type': 'achievement',
+    },
+    {
+        'id': const.Achievements.TENCH_KILLS,
+        'name': "Tench Kills",
+        'description': "Defeat 10 enemies.",
+        'reward_type': 'perk',
+        'reward_value': None,
+        'type': 'achievement',
+    },
+]
+
+
 Perks = [
     {
         'name': const.Perks.KARATE_LESSONS,

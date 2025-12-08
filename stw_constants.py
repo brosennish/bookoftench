@@ -74,6 +74,11 @@ class Items:
     UNIDENTIFIED_MUSHROOMS = "Unidentified Mushrooms"
 
 
+class Achievements:
+    KRILL_OR_BE_KRILLED = "Krill Or Be Krilled"
+    TENCH_KILLS = "Tench Kills"
+
+
 class Perks:
     AP_TENCH_STUDIES = "AP Tench Studies"
     AMBROSE_BLADE = "Ambrose Blade"
