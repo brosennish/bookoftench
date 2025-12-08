@@ -481,9 +481,17 @@ There are parts of another man or men scattered around you.{rst}""")
         t.sleep(2)
 
     def gain_xp(self, enemy) -> bool:
-        amount = enemy.max_hp // 3
+        base = enemy.max_hp / 3
+        if const.Perks.AP_TENCH_STUDIES in self.perks:
+            amount = int(base * 1.30)
+            print(f"\n{g}You gained {amount} XP with Tench Studies!\n")
+        elif const.Perks.INTRO_TO_TENCH in self.perks:
+            amount = int(base * 1.15)
+            print(f"\n{g}You gained {amount} XP with Intro to Tench!\n")
+        else:
+            amount = int(base)
+            print(f"\n{g}You gained {amount} XP!\n")
         self.xp += amount
-        print(f"\n{g}You gained {amount} XP!")
         t.sleep(1)
 
         leveled_up = False

@@ -617,7 +617,10 @@ def krill_or_cray(player):
                         player.casino_won += payout
                     print(f"{g}Lucky guess, bozo! You won {payout} coins.{rst}\n")
                     play_sound('golf_clap')
-                    player.xp += 1
+                    if const.Perks.AP_TENCH_STUDIES in player.perks:
+                        player.xp += 2
+                    else:
+                        player.xp += 1
                     player.plays -= 1
                     if casino_check(player):
                         return
@@ -723,7 +726,10 @@ def above_or_below(player):
                     player.coins += final_payout
                     print(f"{b}You've completed the final round.{rst}\n"
                           f"{g}You cashed out {final_payout} coins!\n")
-                    player.xp += 3
+                    if const.Perks.AP_TENCH_STUDIES in player.perks:
+                        player.xp += 4
+                    else:
+                        player.xp += 3
                     player.casino_won += final_payout
                     return
 
@@ -1240,7 +1246,10 @@ def battle(player, enemy, gs, shop):
                     continue
                 elif fled:
                     print(f'{c}You ran away from {enemy.name}!')
-                    player.xp += 1
+                    if const.Perks.AP_TENCH_STUDIES in player.perks:
+                        player.xp += 2
+                    else:
+                        player.xp += 1
                     t.sleep(1)
                     stop_music()
                     play_area_theme(player)

@@ -167,6 +167,19 @@ Perks = [
         'type': 'perk',
     },
     {
+        'name': const.Perks.INTRO_TO_TENCH,
+        'cost': 140,
+        'description': "+15% XP gained from winning battles",
+        'type': 'perk',
+    },
+
+    {
+        'name': const.Perks.AP_TENCH_STUDIES,
+        'cost': 260,
+        'description': "+30% XP from battles and +1 XP from all other sources",
+        'type': 'perk',
+    },
+    {
         'name': const.Perks.CROWS_NEST,
         'cost': 180,  # 200 → 180
         'description': "View enemies remaining in each area",
