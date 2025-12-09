@@ -482,7 +482,7 @@ There are parts of another man or men scattered around you.{rst}""")
         t.sleep(2)
 
     def gain_xp(self, enemy) -> bool:
-        base = enemy.max_hp / 2.5
+        base = enemy.max_hp / 2.8
         if const.Perks.AP_TENCH_STUDIES in self.perks:
             amount = int(base * 1.30)
             print(f"{g}You gained {amount} XP with Tench Studies!")
@@ -1059,20 +1059,20 @@ class Enemy:
         weapon_data = get_weapon_data(self.current_weapon)
         uses = self.weapon_uses.get(self.current_weapon, weapon_data['uses'])
 
+        if self.current_weapon not in (const.Weapons.CLAWS, const.Weapons.VOODOO_STAFF, const.Weapons.BARE_HANDS):
+            if self.current_weapon in player.weapons:
+                pass
+            elif len(player.weapons) >= player.max_weapons:        
+                pass
+            else:
+                player.add_weapon(self.current_weapon, remaining_uses=uses)
+
         player.gain_coins(self.coins)
 
         if const.Perks.RICKETY_PICKPOCKET in player.perks:
-            bonus = random.randint(20,30)
+            bonus = random.randint(20, 30)
             player.coins += bonus
             print(f"{p}You scrounged {bonus} extra coins with Rickety Pickpocket!{rst}\n")
-
-        if self.current_weapon not in (const.Weapons.CLAWS, const.Weapons.VOODOO_STAFF, const.Weapons.BARE_HANDS):
-            if self.current_weapon in player.weapons:
-                return
-            elif len(player.weapons) >= player.max_weapons:        
-                return
-            else:
-                player.add_weapon(self.current_weapon, remaining_uses=uses)
 
 
 # --- INVENTORY CLASS ---
