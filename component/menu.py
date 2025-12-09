@@ -1,0 +1,117 @@
+from api import Component, LinearComponent, BinarySelectionComponent, \
+    TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, NoOpComponent
+from data.colors import red as r, reset as rst
+from model.game_state import GameState
+from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, BankBalance, DisplayPerks, Overview
+from .casino import Casino
+from .util import get_player_status_view
+
+
+class NewGame(LinearComponent):
+    def __init__(self, _: GameState):
+        super().__init__(GameState(), TutorialDecision)
+
+    def execute_current(self) -> GameState:
+        player = self.game_state.player
+        while not player.name:
+            player.name = input("Name: ")
+        return self.game_state
+
+
+class LoadGame(Component):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state)
+
+    def run(self) -> GameState:
+        pass
+
+
+class QuitGame(Component):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state)
+
+    def run(self) -> GameState:
+        pass
+
+
+class TutorialDecision(BinarySelectionComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state,
+                         query="Do tutorial?",
+                         yes_component=Tutorial,
+                         no_component=Intro)
+
+
+class Tutorial(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state,
+                         next_component=Intro,
+                         display_callback=lambda _: print("""
+1. Explore areas to find enemies, items, weapons, and coins
+2. Fight enemies in turn-based combat
+3. Use items to restore HP
+4. Weapons have limited uses and can break
+5. Defeat enemies to earn XP, coins, and a chance to recover their weapons
+6. Leveling up restores HP, boosts stats, and refreshes the shop
+7. Visit the shop to buy weapons, items, and perks
+8. Travel between areas to search for the wench's hidden location
+9. Perks offer special rewards and permanent bonuses
+10. Clear the enemies in the wench's area and defeat the final boss to save the wench and win the game
+"""))
+
+
+class Intro(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state,
+                         next_component=ActionMenu,
+                         display_callback=lambda _: print(f"""
+{r}You wash up on a beach outside of Shebokken.
+The champion feels it in his jines that his wench is in danger.
+Find her before her life runs dry...{rst}
+"""))
+
+
+class ShopComponent(NoOpComponent): pass
+
+
+class ActionMenu(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, bindings=[
+            SelectionBinding('E', "Explore", Explore),
+            SelectionBinding('I', "Use Item", UseItem),
+            SelectionBinding('W', "Equip Weapon", EquipWeapon),
+            SelectionBinding('S', "Shop", ShopComponent),
+            SelectionBinding('T', "Travel", Travel),
+            SelectionBinding('M', "More Options", ExtendedActionMenu),
+            SelectionBinding('Q', "Main Menu", InGameMenu)],
+                         top_level_prompt_callback=lambda gs: print(get_player_status_view(gs)))
+
+    def can_exit(self):
+        return False
+
+
+class ExtendedActionMenu(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, bindings=[
+            SelectionBinding('A', "Achievements", Achievements),
+            SelectionBinding('B', "Bank Balance", BankBalance),
+            SelectionBinding('C', "Casino", Casino),
+            SelectionBinding('P', "Perks", DisplayPerks),
+            SelectionBinding('O', "Overview", Overview),
+            SelectionBinding('R', "Return", NoOpComponent)
+        ])
+
+
+class SaveGame(NoOpComponent): pass
+
+
+class InGameMenu(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, bindings=[
+            SelectionBinding('N', "New Game", NewGame),
+            # TODO signal to go all the way back through the call stack to start new game
+            SelectionBinding('S', "Save Game", SaveGame),
+            SelectionBinding('L', "Load Game", LoadGame),
+            SelectionBinding('R', "Return", NoOpComponent),
+            SelectionBinding('Q', "Quit", QuitGame)
+        ])
