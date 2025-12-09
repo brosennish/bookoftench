@@ -78,6 +78,7 @@ def unlock_achievement(player, ach_id):
 
         print(f"{o}ACHIEVEMENT UNLOCKED: {ach['name']}. "
               f"Reward: {reward['name']} | {reward['description']}.{rst}")
+        t.sleep(3)
         return
 
     # award XP
@@ -90,6 +91,7 @@ def unlock_achievement(player, ach_id):
 
     print(f"{o}ACHIEVEMENT UNLOCKED: {ach['name']}. "
           f"Reward: +{ach['reward_value']} {ach['reward_type'].upper()}.{rst}")
+    t.sleep(3)
 
 
 # --- MUSIC ---
