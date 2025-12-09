@@ -689,9 +689,9 @@ def krill_or_cray(player):
                     print(f"{g}Lucky guess, bozo! You won {payout} coins.{rst}\n")
                     play_sound('golf_clap')
                     if const.Perks.AP_TENCH_STUDIES in player.perks:
-                        player.xp += 2
+                        player.gain_xp(2)
                     else:
-                        player.xp += 1
+                        player.gain_xp(1)
                     player.plays -= 1
                     if casino_check(player):
                         return
@@ -748,9 +748,9 @@ def above_or_below(player):
             while True:
                 mult = ladder[turn-1]
                 if const.Perks.GRAMBLING_ADDICT in player.perks:
-                    print(f"Round: {c}{turn}{rst} {d}|{rst} Wager: {g}{wager}{rst} {d}|{rst} Mult: {p}{mult}{rst} {d}|{rst} Payout: {g}{int(payout*1.05)}{rst}")
+                    print(f"Round: {c}{turn}{rst} {d}|{rst} Wager: {g}{wager}{rst} {d}|{rst} Mult: {p}{mult}{rst} {d}|{rst} Payout: {g}{int(payout*1.05)}{rst}\n")
                 else:
-                    print(f"Round: {c}{turn}{rst} {d}|{rst} Wager: {g}{wager}{rst} {d}|{rst} Mult: {p}{mult}{rst} {d}|{rst} Payout: {g}{int(payout)}{rst}")
+                    print(f"Round: {c}{turn}{rst} {d}|{rst} Wager: {g}{wager}{rst} {d}|{rst} Mult: {p}{mult}{rst} {d}|{rst} Payout: {g}{int(payout)}{rst}\n")
                 input(f"[ ] Roll the die\n{b}> ")
                 roll1 = random.randint(1, 6)
                 print(f"{b}You rolled a {roll1}.\n")
@@ -798,9 +798,9 @@ def above_or_below(player):
                     print(f"{b}You've completed the final round.{rst}\n"
                           f"{g}You cashed out {final_payout} coins!\n")
                     if const.Perks.AP_TENCH_STUDIES in player.perks:
-                        player.xp += 4
+                        player.gain_xp(4)
                     else:
-                        player.xp += 3
+                        player.gain_xp(3)
                     player.casino_won += final_payout
                     return
 
@@ -1352,9 +1352,9 @@ def battle(player, enemy, gs, shop):
                 elif fled:
                     print(f'{c}You ran away from {enemy.name}!')
                     if const.Perks.AP_TENCH_STUDIES in player.perks:
-                        player.xp += 2
+                        player.gain_xp(2)
                     else:
-                        player.xp += 1
+                        player.gain_xp(1)
                     t.sleep(1)
                     stop_music()
                     play_area_theme(player)
