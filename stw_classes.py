@@ -482,7 +482,7 @@ There are parts of another man or men scattered around you.{rst}""")
         t.sleep(2)
 
     def gain_xp(self, enemy) -> bool:
-        base = enemy.max_hp / 3
+        base = enemy.max_hp / 2.5
         if const.Perks.AP_TENCH_STUDIES in self.perks:
             amount = int(base * 1.30)
             print(f"{g}You gained {amount} XP with Tench Studies!")
