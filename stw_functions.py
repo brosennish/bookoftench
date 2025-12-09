@@ -925,7 +925,11 @@ def do_explore(gs, player, shop):
         if filtered:
             reward = random.choice(filtered)
             player.add_perk(reward['name'])
-            print(f"{p}You found the {reward['name']} perk!"
+            print(f"{p}You sense a noble presence...")
+            t.sleep(1)
+            print(f"{p}It's a mensch!")
+            t.sleep(1)
+            print(f"{p}He's gifted you the {reward['name']} perk!\n"
                   f"{p}{reward['description']}")
             t.sleep(1)
         else:
