@@ -1,27 +1,10 @@
 import random
-
-import data.weapons as weapons
-
 from dataclasses import dataclass, field
-from typing import List, Dict
-from data.enemies import Enemies
-from model.weapon import Weapon
+from typing import List
 
-"""
-name = enemy_data['name'],
-            hp = random.randint(enemy_data['hp'] - hp_spread, enemy_data['hp'] + hp_spread),
-            max_hp = enemy_data['hp'],
-            weapons = list(enemy_data['weapon']),        # copy names
-            weapon_uses = {
-                w: random.randint(1, max(get_weapon_data(w)['uses'], 1))
-                for w in enemy_data['weapon']
-            },                                        
-            current_weapon = random.choice(enemy_data['weapon']), # assigns random weapon from their list
-            items = [],
-            type = enemy_data['type'],
-            coins = random.randint(5, 50),
-            current_area = area_name
-"""
+from data.enemies import Enemies
+from model.weapon import Weapon, load_weapon
+
 
 @dataclass
 class Enemy:
@@ -32,12 +15,7 @@ class Enemy:
     type: str
     items: List[str] = field(default_factory=list)
     coins: int = random.randint(5, 50)
-    current_area: str = ""
     alive: bool = True
-    weapon_uses: Dict[str, int] = field(
-        default_factory=lambda: {
-            weapons.BARE_HANDS: 0  # TODO
-        })
 
     blind: bool = False
     blinded_by: str = ''
@@ -46,6 +24,10 @@ class Enemy:
 
     current_weapon: Weapon = field(init=False)
     max_hp: int = field(init=False)
+
+    def __post_init__(self):
+        self.current_weapon = load_weapon(random.choice(self.weapons))
+        self.max_hp = self.hp
 
 
 def load_enemy(name: str) -> Enemy:

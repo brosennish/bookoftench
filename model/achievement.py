@@ -19,7 +19,7 @@ class Achievement(Listener[E]):
     def get_listen_type(self) -> E:
         pass
 
-    def register(self, event: E):
+    def handle_event(self, event: E):
         pass
 
 def load_achievements() -> List[Achievement]:

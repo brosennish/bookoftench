@@ -1,8 +1,9 @@
+import random
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List, Callable
 
-from data.colors import blue as b, reset as rst
+from data.colors import blue as b, dim as d, reset as rst
 from model.game_state import GameState
 
 
@@ -81,16 +82,20 @@ class LabeledSelectionComponent(SelectionComponent):
 
 
 class LinearComponent(Component):
-    def __init__(self, game_state: GameState, next_component: type[Component]):
+    def __init__(self, game_state: GameState, next_component: type[Component], should_proceed: bool = True):
         super().__init__(game_state)
         self.next_component = next_component
+        self.should_proceed = should_proceed
 
     @abstractmethod
     def execute_current(self) -> GameState:
         pass
 
     def run(self) -> GameState:
-        return self.next_component(self.execute_current()).run()
+        self.game_state = self.execute_current()
+        if self.should_proceed:
+            return self.next_component(self.game_state).run()
+        return self.game_state
 
 
 class BinarySelectionComponent(LabeledSelectionComponent):
@@ -105,9 +110,9 @@ class BinarySelectionComponent(LabeledSelectionComponent):
 
 
 class TextDisplayingComponent(LinearComponent):
-    def __init__(self, game_state: GameState, next_component: type[Component],
-                 display_callback: Callable[[GameState], None]):
-        super().__init__(game_state, next_component)
+    def __init__(self, game_state: GameState, display_callback: Callable[[GameState], None],
+                 next_component: type[Component] = NoOpComponent, should_proceed: bool = True):
+        super().__init__(game_state, next_component, should_proceed)
         self.display_callback = display_callback
 
     def execute_current(self) -> GameState:
@@ -122,8 +127,7 @@ class FunctionExecutingComponent(Component):
         self.function = function
 
     def run(self) -> GameState:
-        res = self.function(self.game_state)
-        return res
+        return self.function(self.game_state)
 
 
 @dataclass
@@ -132,7 +136,6 @@ class FunctionalSelectionBinding(SelectionBinding):
     function: Callable[[GameState], GameState]
 
 
-# TODO somehow this always selects the last option
 class FunctionalSelectionComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState, bindings: List[FunctionalSelectionBinding]):
         super().__init__(game_state, bindings)
@@ -141,3 +144,26 @@ class FunctionalSelectionComponent(LabeledSelectionComponent):
         return binding.component(self.game_state, binding.function).run()
 
 
+@dataclass
+class ThresholdBinding:
+    upper_threshold: float
+    component: type[Component]
+
+    def __post_init__(self):
+        if not (0 <= self.upper_threshold <= 1):
+            raise ValueError("upper_threshold must be between 0 and 1")
+
+
+class RandomThresholdComponent(Component):
+    def __init__(self, game_state: GameState, bindings: List[ThresholdBinding], failed_message: str = f"{d}You came up dry."):
+        super().__init__(game_state)
+        self.ordered_thresholds = sorted(bindings, key=lambda t: t.upper_threshold)
+        self.failed_message = failed_message
+
+    def run(self) -> GameState:
+        roll = random.random()
+        for binding in self.ordered_thresholds:
+            if roll < binding.upper_threshold:
+                return binding.component(self.game_state).run()
+        print(self.failed_message)
+        return self.game_state

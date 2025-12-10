@@ -1,17 +1,17 @@
+from event_logger import log_event
 from dataclasses import dataclass, field
 from typing import Dict, List
 
 from data.items import TENCH_FILET
 from data.perks import DOCTOR_FISH, HEALTH_NUT
-from data.weapons import BARE_HANDS, KNIFE, AXE
-from events import EventLogger, ItemUsedEvent
+from data.weapons import BARE_HANDS, KNIFE
+from events import ItemUsedEvent
 from model.item import Item, load_items
 from model.weapon import load_weapons, Weapon
 
 
 @dataclass
 class Player:
-    event_logger: EventLogger
 
     name: str = ''
     lives: int = 3
@@ -32,7 +32,8 @@ class Player:
     max_weapons: int = 5
     # TODO maybe add starting items/weapons to config file
     items: Dict[str, Item] = field(default_factory=lambda: dict((it.name, it) for it in load_items([TENCH_FILET])))
-    weapons: Dict[str, Weapon] = field(default_factory=lambda: dict((it.name, it) for it in load_weapons([BARE_HANDS, KNIFE])))
+    weapons: Dict[str, Weapon] = field(
+        default_factory=lambda: dict((it.name, it) for it in load_weapons([BARE_HANDS, KNIFE])))
     perks: List[str] = field(default_factory=list)
     achievements: List[str] = field(default_factory=list)
     current_weapon: Weapon = None
@@ -79,7 +80,7 @@ class Player:
 
         # Remove from actual inventory
         del self.items[item.name]
-        self.event_logger.log_event(ItemUsedEvent(item, len(self.items), self.hp, self.max_hp, gain, active_perks))
+        log_event(ItemUsedEvent(item, len(self.items), self.hp, self.max_hp, gain, active_perks))
 
     def gain_hp(self, amount: int):
         self.hp = min(self.max_hp, self.hp + amount)  # clamp on max_hp

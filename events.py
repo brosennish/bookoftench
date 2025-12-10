@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
-from collections import Counter, defaultdict
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Dict, TypeVar, Set
+from typing import List, TypeVar
 
 from model.item import Item
 from model.perk import Perk
@@ -28,44 +27,22 @@ class EventType(Enum):
     WEAPON_BROKE = "weapon_broke"
     WITHDRAW = "withdraw"
 
+    _CLASS_INTERACTION = "_class_interaction"
+
+    @classmethod
+    def get_class_interaction_type(cls):
+        return cls._CLASS_INTERACTION
+
 
 @dataclass
 class Event:
     type: EventType
 
 
-E = TypeVar("E", bound=Event)
-
-
-class Listener[E](ABC):
+class Listener(ABC):
     @abstractmethod
-    def get_listen_type(self) -> E:
+    def handle_event(self, event: Event) -> None:
         pass
-
-    @abstractmethod
-    def register(self, event: E):
-        pass
-
-
-class EventLogger:
-    def __init__(self):
-        super().__init__()
-        self.counter = Counter()
-        self.listeners: Dict[type[Event], Set[Listener]] = defaultdict(set)
-
-    def log_event(self, event: Event):
-        self.counter[event.type.value] += 1
-        self._notify(event)
-
-    def add_subscriber(self, listener: Listener):
-        self.listeners[listener.get_listen_type()].add(listener)
-
-    def get_count(self, event_type: EventType) -> int:
-        return self.counter[event_type]
-
-    def _notify(self, event: Event):
-        for listener in self.listeners[type(event)]:
-            listener.register(event)
 
 
 class ItemUsedEvent(Event):

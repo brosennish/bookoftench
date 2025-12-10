@@ -1,6 +1,7 @@
 from api import LabeledSelectionComponent, SelectionBinding
-from component.menu import NewGame, LoadGame, QuitGame
-from listeners import subscribe_listeners
+from audio import stop_all_sounds
+from component.actions import Travel
+from component.menu import NewGame, LoadGame, QuitGame, ActionMenu
 from model.game_state import GameState
 
 
@@ -11,7 +12,13 @@ class StartMenu(LabeledSelectionComponent):
                                    SelectionBinding(key='L', name="Load Game", component=LoadGame),
                                    SelectionBinding(key='Q', name="Quit", component=QuitGame)])
 
+
 if __name__ == '__main__':
-    gs = GameState()
-    subscribe_listeners(gs)
-    StartMenu(gs).run()
+    try:
+        gs = GameState()
+        ActionMenu(gs).run()
+    except Exception as e:
+        print(e)
+        raise e
+    finally:
+        stop_all_sounds()
