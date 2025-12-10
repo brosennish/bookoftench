@@ -452,6 +452,8 @@ There are parts of another man or men scattered around you.{rst}""")
             self.plays = 15
         elif const.Perks.GRAMBLING_ADDICT in self.perks:
             self.plays = 15
+        else:
+            self.plays = 10
         
         # reset xp
         self.xp = 0
@@ -481,6 +483,7 @@ There are parts of another man or men scattered around you.{rst}""")
         print(f"\n{g}You were awarded {cash_reward} coins.{rst}")
         t.sleep(2)
 
+
     def gain_xp(self, enemy) -> bool:
         base = enemy.max_hp / 2.8
         if const.Perks.AP_TENCH_STUDIES in self.perks:
@@ -503,6 +506,21 @@ There are parts of another man or men scattered around you.{rst}""")
             leveled_up = True
 
         return leveled_up
+
+    def gain_xp_other(self, amount) -> bool:
+        self.xp += amount
+        print(f"{g}You gained {amount} XP!")
+        t.sleep(1)
+
+        leveled_up = False
+
+        # handles cases where a big XP chunk might give multiple levels
+        while self.xp >= self.xp_needed:
+            self.level_up()
+            leveled_up = True
+
+        return leveled_up
+
 
      # ---------- Money ----------
     def gain_coins(self, amount: int):
