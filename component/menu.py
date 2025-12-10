@@ -4,7 +4,6 @@ from api import Component, LinearComponent, BinarySelectionComponent, \
 from audio import play_music
 from data.audio import INTRO_THEME
 from data.colors import red as r, reset as rst
-from listeners import subscribe_listeners
 from model.game_state import GameState
 from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, BankBalance, DisplayPerks, Overview
 from .casino import Casino
@@ -17,7 +16,6 @@ class NewGame(LinearComponent):
 
     def execute_current(self) -> GameState:
         event_logger.reset()
-        subscribe_listeners()
         player = self.game_state.player
         while not player.name:
             player.name = input("Name: ")
@@ -98,10 +96,6 @@ class ActionMenu(LabeledSelectionComponent):
 
     def can_exit(self):
         return False
-
-    def run(self) -> GameState:
-        play_music(self.game_state.current_area.theme)
-        return super().run()
 
 
 class ExtendedActionMenu(LabeledSelectionComponent):

@@ -2,8 +2,8 @@ from functools import partial
 
 from api import FunctionExecutingComponent, \
     FunctionalSelectionBinding, FunctionalSelectionComponent, RandomThresholdComponent, ThresholdBinding, \
-    TextDisplayingComponent
-from api import NoOpComponent, LinearComponent, LabeledSelectionComponent, SelectionBinding
+    TextDisplayingComponent, NoOpComponent
+from api import LinearComponent, LabeledSelectionComponent, SelectionBinding
 from model.game_state import GameState
 from .util import get_battle_status_view, display_bank_balance, display_player_perks
 

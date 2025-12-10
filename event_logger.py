@@ -1,10 +1,10 @@
 from collections import Counter, defaultdict
-from typing import Dict, Set, Callable, Any, List
+from typing import Dict, Set
 
 from events import Listener, EventType, Event
 
 _COUNTER = Counter()
-_LISTENERS: Dict[EventType, Set[Listener]] = defaultdict(set)
+_LISTENERS: Dict[type[Event], Set[type[Listener]]] = defaultdict(set)
 
 
 def log_event(event: Event):
@@ -12,16 +12,17 @@ def log_event(event: Event):
     _notify(event)
 
 
-def add_subscriber(listener: Listener, event_types: List[EventType]):
+def add_subscriber(listener: Listener, *event_types: type[Event]):
     global _LISTENERS
-    for eventType in event_types:
-        _LISTENERS[eventType].add(listener)
+    for event_type in event_types:
+        _LISTENERS[event_type].add(type[listener])
+
 
 def remove_subscriber(listener: Listener):
     global _LISTENERS
-    for listeners in _LISTENERS.values():
-        if listener in listeners:
-            listeners.remove(listener)
+    for event_type, listener_classes in _LISTENERS.items():
+        if type(listener) in listener_classes:
+            listener_classes.remove(type(listener))
 
 
 def get_count(event_type: EventType) -> int:
@@ -29,8 +30,8 @@ def get_count(event_type: EventType) -> int:
 
 
 def _notify(event: Event):
-    for listener in _LISTENERS[event.type]:
-        listener.handle_event(event)
+    for listener_class in _LISTENERS[type(event)]:
+        listener_class.handle_event(event=event)
 
 
 def reset():
@@ -39,11 +40,11 @@ def reset():
     _LISTENERS.clear()
 
 
-def subscribe_listener(func: Callable[[Any, Any], Listener], event_types: List[EventType]):
-    def wrapper(*args, **kwargs):
-        if func:
-            result = func(*args, **kwargs)
-            add_subscriber(result, event_types)
-            return result
-        return func
-    return wrapper
+# class-annotating decorator that will subscribe a class to the listed event types
+def subscribe_listener(*event_types: type[Event]):
+    def decorator(cls: type[Listener]):
+        global _LISTENERS
+        for event_type in event_types:
+            _LISTENERS[event_type].add(cls)
+
+    return decorator

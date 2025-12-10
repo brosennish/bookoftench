@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, TypeVar
+from typing import List
 
 from model.item import Item
 from model.perk import Perk
@@ -27,22 +27,24 @@ class EventType(Enum):
     WEAPON_BROKE = "weapon_broke"
     WITHDRAW = "withdraw"
 
-    _CLASS_INTERACTION = "_class_interaction"
-
-    @classmethod
-    def get_class_interaction_type(cls):
-        return cls._CLASS_INTERACTION
-
 
 @dataclass
 class Event:
     type: EventType
 
+    def __hash__(self):
+        return hash(self.type)
+
 
 class Listener(ABC):
+    @staticmethod
     @abstractmethod
-    def handle_event(self, event: Event) -> None:
+    def handle_event(event: Event) -> None:
         pass
+
+
+class NoOpListener(Listener):
+    def handle_event(self, event: Event) -> None: pass
 
 
 class ItemUsedEvent(Event):
@@ -61,6 +63,7 @@ class TravelEvent(Event):
     def __init__(self, area_name: str):
         super().__init__(EventType.TRAVEL)
         self.area_name = area_name
+
 
 class KillEvent(Event):
     def __init__(self):
