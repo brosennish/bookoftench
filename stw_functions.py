@@ -599,7 +599,7 @@ def do_casino(player):
     
     print(f"{b}Welcome to Riverbroat Crasino.{rst}\n")
     t.sleep(3)
-    print(f"{b}What would you like to play?{rst}\n")
+    print("What would you like to play?\n")
     while True:
         choice = input("[1] Krill or Cray\n"
                        "[2] Above or Below\n"
