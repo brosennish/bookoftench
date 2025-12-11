@@ -818,7 +818,7 @@ class Enemy:
             current_weapon = random.choice(enemy_data['weapon']), # assigns random weapon from their list
             items = [],
             type = enemy_data['type'],
-            coins = random.randint(25, 50),
+            coins = random.randint(40, 60),
             current_area = area_name
         )
     
