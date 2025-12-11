@@ -790,7 +790,7 @@ class Enemy:
             max_hp = enemy_data['hp'],
             weapons = list(enemy_data['weapon']),        # copy names
             weapon_uses = {
-                w: random.randint(1, max(get_weapon_data(w)['uses'], 1))
+                w: random.randint(2, max(get_weapon_data(w)['uses'], 2))
                 for w in enemy_data['weapon']
             },                                        
             current_weapon = random.choice(enemy_data['weapon']), # assigns random weapon from their list
