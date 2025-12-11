@@ -1357,6 +1357,7 @@ def battle(player, enemy, gs, shop):
                     continue
                 elif fled:
                     print(f'{c}You ran away from {enemy.name}!')
+                    log_event(const.Events.FLEE)
                     if const.Perks.AP_TENCH_STUDIES in player.perks:
                         leveled_up = player.gain_xp_other(2)
                     else:
