@@ -5,9 +5,9 @@ from typing import List
 import time as t
 
 
-from data.colors import purple as p, yellow as y, reset as rst
-from data.areas import Areas
-from model.enemy import load_enemy
+from savethewench.data.colors import purple as p, yellow as y, reset as rst
+from savethewench.data import Areas
+from .enemy import load_enemy
 
 
 @dataclass

@@ -2,8 +2,8 @@ import random
 from dataclasses import dataclass, field
 from typing import List
 
-from data.enemies import Enemies
-from model.weapon import Weapon, load_weapon
+from savethewench.data import Enemies
+from .weapon import Weapon, load_weapon
 
 
 @dataclass

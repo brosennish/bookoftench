@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import List
-from data.items import Items
+from savethewench.data import Items
 
 @dataclass
 class Item:

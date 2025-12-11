@@ -1,12 +1,12 @@
 import time as t
 
-from data.colors import blue as b, cyan as c, green as g, orange as o, purple as p, red as r, yellow as y, dim as d, \
+from savethewench.data.colors import blue as b, cyan as c, green as g, orange as o, purple as p, red as r, yellow as y, dim as d, \
     reset as rst
-from data.perks import WENCH_LOCATION
-from model.enemy import Enemy
-from model.game_state import GameState
-from model.perk import load_perks
-from model.player import Player
+from savethewench.data.perks import WENCH_LOCATION
+from savethewench.model import Enemy
+from savethewench.model import GameState
+from savethewench.model.perk import load_perks
+from savethewench.model import Player
 
 
 # --- HP COLOR CODING ---

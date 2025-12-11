@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from data.perks import Perks
+from savethewench.data import Perks
 
 
 @dataclass

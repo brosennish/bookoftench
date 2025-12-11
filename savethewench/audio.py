@@ -1,11 +1,9 @@
-import os
 import subprocess
 
-from data.audio import get_audio_path
+from .data.audio import get_audio_path
 
 ENABLE_SOUNDS = True  # or False to mute everything
 
-SOUND_DIR = "stw_sounds"  # whatever you're using
 
 # --- Tracking state ---
 _current_music_process = None

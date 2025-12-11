@@ -1,4 +1,4 @@
-from data import audio, enemies
+from . import audio, enemies
 
 # Constants
 CAVE = "Cave"

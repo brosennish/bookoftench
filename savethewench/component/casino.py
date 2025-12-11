@@ -1,5 +1,5 @@
-from api import LabeledSelectionComponent, SelectionBinding, NoOpComponent
-from model.game_state import GameState
+from savethewench.component.base import LabeledSelectionComponent, SelectionBinding, NoOpComponent
+from savethewench.model.game_state import GameState
 
 
 class Casino(LabeledSelectionComponent):

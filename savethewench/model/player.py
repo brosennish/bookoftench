@@ -1,13 +1,13 @@
-from event_logger import log_event
+from savethewench import event_logger
 from dataclasses import dataclass, field
 from typing import Dict, List
 
-from data.items import TENCH_FILET
-from data.perks import DOCTOR_FISH, HEALTH_NUT
-from data.weapons import BARE_HANDS, KNIFE
-from events import ItemUsedEvent
-from model.item import Item, load_items
-from model.weapon import load_weapons, Weapon
+from savethewench.data.items import TENCH_FILET
+from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT
+from savethewench.data.weapons import BARE_HANDS, KNIFE
+from .events import ItemUsedEvent
+from .item import Item, load_items
+from .weapon import load_weapons, Weapon
 
 
 @dataclass
@@ -80,7 +80,7 @@ class Player:
 
         # Remove from actual inventory
         del self.items[item.name]
-        log_event(ItemUsedEvent(item, len(self.items), self.hp, self.max_hp, gain, active_perks))
+        event_logger.log_event(ItemUsedEvent(item, len(self.items), self.hp, self.max_hp, gain, active_perks))
 
     def gain_hp(self, amount: int):
         self.hp = min(self.max_hp, self.hp + amount)  # clamp on max_hp

@@ -1,10 +1,10 @@
 from functools import partial
 
-from api import FunctionExecutingComponent, \
+from savethewench.component.base import FunctionExecutingComponent, \
     FunctionalSelectionBinding, FunctionalSelectionComponent, RandomThresholdComponent, ThresholdBinding, \
     TextDisplayingComponent, NoOpComponent
-from api import LinearComponent, LabeledSelectionComponent, SelectionBinding
-from model.game_state import GameState
+from .base import LinearComponent, LabeledSelectionComponent, SelectionBinding
+from savethewench.model import GameState
 from .util import get_battle_status_view, display_bank_balance, display_player_perks
 
 

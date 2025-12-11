@@ -3,8 +3,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List, Callable
 
-from data.colors import blue as b, dim as d, reset as rst
-from model.game_state import GameState
+from savethewench.data.colors import blue as b, dim as d, reset as rst
+from savethewench.model import GameState
 
 
 class Component(ABC):

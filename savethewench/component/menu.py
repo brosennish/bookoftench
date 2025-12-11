@@ -1,14 +1,24 @@
-import event_logger
-from api import Component, LinearComponent, BinarySelectionComponent, \
+from savethewench import event_logger
+from savethewench.component.base import Component, LinearComponent, BinarySelectionComponent, \
     TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, NoOpComponent
-from audio import play_music
-from data.audio import INTRO_THEME
-from data.colors import red as r, reset as rst
-from model.game_state import GameState
+from ..audio import play_music
+from savethewench.data.audio import INTRO_THEME
+from savethewench.data.colors import red as r, reset as rst
+from savethewench.model import GameState
 from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, BankBalance, DisplayPerks, Overview
 from .casino import Casino
 from .util import get_player_status_view
 
+
+class StartMenu(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state,
+                         bindings=[SelectionBinding(key='N', name="New Game", component=NewGame),
+                                   SelectionBinding(key='L', name="Load Game", component=LoadGame),
+                                   SelectionBinding(key='Q', name="Quit", component=QuitGame)])
+
+    def can_exit(self):
+        return False
 
 class NewGame(LinearComponent):
     def __init__(self, _: GameState):

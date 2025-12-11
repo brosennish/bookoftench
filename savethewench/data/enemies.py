@@ -1,4 +1,4 @@
-import data.weapons as weapons
+from . import weapons
 
 # Constants
 BANDIT = "Bandit"

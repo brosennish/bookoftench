@@ -1,11 +1,11 @@
 import random
 
 from dataclasses import dataclass, field
-from typing import List, Dict, Union
+from typing import List, Dict
 
-from model.item import Item, load_items
-from model.perk import Perk, load_perks
-from model.weapon import load_weapons
+from .item import Item, load_items
+from .perk import Perk, load_perks
+from .weapon import load_weapons
 
 # TODO maybe read these from config
 _MAX_ITEMS: int = 4

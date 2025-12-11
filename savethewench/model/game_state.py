@@ -2,11 +2,10 @@ import random
 from dataclasses import dataclass, field
 from typing import List
 
-import event_logger
-from events import TravelEvent
-from stw_classes import GameState
+from savethewench import event_logger
 from .area import Area, load_areas
 from .enemy import Enemy, load_enemies
+from .events import TravelEvent
 from .player import Player
 from .shop import Shop
 
@@ -31,7 +30,7 @@ class GameState:
         self.wanted = enemy_choice.name
         self.bounty = enemy_choice.bounty
 
-    def update_current_area(self, area_name: str) -> GameState:
+    def update_current_area(self, area_name: str) -> "GameState":
         for area in self.areas:
             if area.name == area_name:
                 self.current_area = area

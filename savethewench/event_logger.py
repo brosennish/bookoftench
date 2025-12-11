@@ -1,7 +1,7 @@
 from collections import Counter, defaultdict
 from typing import Dict, Set
 
-from events import Listener, EventType, Event
+from savethewench.event_base import Listener, EventType, Event
 
 _COUNTER = Counter()
 _LISTENERS: Dict[type[Event], Set[type[Listener]]] = defaultdict(set)

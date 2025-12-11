@@ -1,8 +1,9 @@
 import time as t
 
-from data.colors import yellow as y, reset as rst
-from events import Listener, ItemUsedEvent, Event
+from savethewench.data.colors import yellow as y, reset as rst
+from savethewench.event_base import Listener
 from event_logger import subscribe_listener
+from savethewench.model.events import ItemUsedEvent
 
 
 @subscribe_listener(ItemUsedEvent)

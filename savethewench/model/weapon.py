@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from data.weapons import Weapons
+from savethewench.data import Weapons
 
 
 @dataclass
