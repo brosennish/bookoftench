@@ -1393,6 +1393,8 @@ def battle(player, enemy, gs, shop):
                 print(f"{g}You killed {enemy.name} and collected a bounty of {bounty} coins!{rst}")
                 log_event(const.Events.BOUNTY_COLLECTED)
                 refresh_wanted(gs) # ONLY refresh wanted if the wanted enemy is killed
+                if player.hp < 10:
+                    player.hp = 10 # if HP below 10 set it to 10
                 t.sleep(1)
             
             is_boss(gs, player, enemy)
