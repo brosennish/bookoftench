@@ -876,12 +876,12 @@ def overview(gs, player):
 
 
 def do_explore(gs, player, shop):
-    # 45% chance of enemy (10% for elite), 10% for item, 8% weapon, 20% coins, 1% perk, 16% dry
+    # 40% chance of enemy (10% for elite), 10% for item, 10% weapon, 25% coins, 1% perk, 14% dry
 
     if player.lives > 0:
         player.alive = True
     roll = random.random()
-    if roll < 0.45:
+    if roll < 0.40:
         enemy = Enemy.spawn_enemy_for_area(player.current_area)
         while enemy.type in ('boss', 'boss_final'):
             enemy = Enemy.spawn_enemy_for_area(player.current_area)
@@ -895,7 +895,7 @@ def do_explore(gs, player, shop):
             print(f"{y}An enemy appears!{rst}")
         t.sleep(1)
         battle(player, enemy, gs, shop)
-    elif roll < 0.55:
+    elif roll < 0.50:
         if len(player.items) < player.max_items:
             item_dict = random.choice(Items)
             item = item_dict['name']
@@ -903,10 +903,10 @@ def do_explore(gs, player, shop):
             t.sleep(1)
             return
         else:
-            print('Your item sack is full!')
+            print(f"{y}Your item sack is full.")
             t.sleep(1)
             return
-    elif roll < 0.63:
+    elif roll < 0.60:
         if len(player.weapons) < player.max_weapons:
             added = find_weapon(player)
             if added:
@@ -919,7 +919,7 @@ def do_explore(gs, player, shop):
             print(f"{y}Your weapon sack is full.")
             t.sleep(1)
             return
-    elif roll < 0.83:
+    elif roll < 0.85:
         if const.Perks.METAL_DETECTIVE in player.perks:
             coins = random.randint(25, 50)
         else:
@@ -927,18 +927,18 @@ def do_explore(gs, player, shop):
         print(f'{g}You found {coins} coins!')
         t.sleep(1)
         player.coins += coins
-    elif roll < 0.84:
+    elif roll < 0.86:
         filtered = [i for i in Perks if i['name'] not in player.perks and i['name'] != const.Perks.WENCH_LOCATION]
         if filtered:
             reward = random.choice(filtered)
-            print(f"{p}You sense a noble presence...")
-            t.sleep(1)
-            print(f"{p}It's a mensch!")
-            t.sleep(1)
+            print(f"{p}You sense a noble presence...\n")
+            t.sleep(2)
+            print(f"{p}It's a mensch!\n")
+            t.sleep(2)
             print(f"{p}He's gifted you the {reward['name']} perk!\n"
                   f"{p}{reward['description']}")
             player.add_perk(reward['name'])
-            t.sleep(1)
+            t.sleep(3)
         else:
             return
     else:
