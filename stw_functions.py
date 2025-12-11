@@ -720,7 +720,7 @@ def above_or_below(player):
         return
     else:
         print(f"{b}Welcome to Above or Below!\n\n"
-              f"Rules:\n"
+              f"{rst}Rules:\n"
               f"1. Place a wager and roll a die.\n"
               f"2. Guess if the next roll will be above or below the previous roll and roll once more.\n"
               f"3. Your payout increases by a higher percentage with each correct guess.\n"
@@ -737,10 +737,10 @@ def above_or_below(player):
             print(f"{b}Later bozo.{rst}\n")
             return
         elif not choice.isdigit():
-            print(f"{b}Invalid choice.\n")
+            print(f"{y}Invalid choice.\n")
             continue
         elif int(choice) > player.coins:
-            print(f"{b}You don't have enough coins to cover this wager.\n")
+            print(f"{b}You don't have enough coins, bozo.\n")
             continue
         else:
             wager = int(choice)
@@ -755,7 +755,7 @@ def above_or_below(player):
                     print(f"Round: {c}{turn}{rst} {d}|{rst} Wager: {g}{wager}{rst} {d}|{rst} Mult: {p}{mult}{rst} {d}|{rst} Payout: {g}{int(payout*1.05)}{rst}\n")
                 else:
                     print(f"Round: {c}{turn}{rst} {d}|{rst} Wager: {g}{wager}{rst} {d}|{rst} Mult: {p}{mult}{rst} {d}|{rst} Payout: {g}{int(payout)}{rst}\n")
-                input(f"[ ] Roll the die\n{b}> ")
+                input(f"Roll the die\n{b}> ")
                 roll1 = random.randint(1, 6)
                 print(f"{b}You rolled a {roll1}.\n")
 
@@ -763,30 +763,30 @@ def above_or_below(player):
                     call = input(f"[A] Above\n"
                                  f"[B] Below\n{b}>{rst} ").strip().lower()
                     if call not in ('a', 'b'):
-                        print(f"{b}Invalid choice.")
+                        print(f"{y}Invalid choice.")
                         continue
                     else:
                         break
 
-                input(f"[ ] Roll the die.\n{b}> ")
+                input(f"\nRoll the die.\n{b}> ")
                 roll2 = random.randint(1, 6)
                 print(f"{b}You rolled a {roll2}.\n")
 
                 if call == 'a' and roll2 > roll1:
                     payout = wager * ladder[turn-1]
-                    print(f"{b}Lucky guess!\n"
+                    print(f"{g}Lucky guess!\n"
                           f"Payout increased to {int(payout)} coins.\n")
                 elif call == 'a' and roll2 <= roll1:
-                    print(f"{b}Your guess was dry.\n")
+                    print(f"{y}Your guess was dry.\n")
                     player.coins -= wager
                     player.casino_lost += wager
                     break
                 elif call == 'b' and roll2 < roll1:
                     payout = wager * ladder[turn-1]
-                    print(f"{b}Lucky guess!\n"
+                    print(f"{g}Lucky guess!\n"
                           f"Payout increased to {int(payout)} coins.\n")
                 else:
-                    print(f"{b}Your guess was dry.\n")
+                    print(f"{y}Your guess was dry.\n")
                     player.coins -= wager
                     player.casino_lost += wager
                     break
@@ -799,7 +799,7 @@ def above_or_below(player):
                         final_payout = int(payout)
 
                     player.coins += final_payout
-                    print(f"{b}You've completed the final round.{rst}\n"
+                    print(f"{b}You completed the final round.{rst}\n"
                           f"{g}You cashed out {final_payout} coins!\n")
                     if const.Perks.AP_TENCH_STUDIES in player.perks:
                         leveled_up = player.gain_xp_other(4)
