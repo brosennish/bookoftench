@@ -877,12 +877,12 @@ def overview(gs, player):
 
 
 def do_explore(gs, player, shop):
-    # 50% chance of enemy (10% for elite), 10% for item, 8% weapon, 20% coins, 1% perk, 11% dry
+    # 45% chance of enemy (10% for elite), 10% for item, 8% weapon, 20% coins, 1% perk, 16% dry
 
     if player.lives > 0:
         player.alive = True
     roll = random.random()
-    if roll < 0.50:
+    if roll < 0.45:
         enemy = Enemy.spawn_enemy_for_area(player.current_area)
         while enemy.type in ('boss', 'boss_final'):
             enemy = Enemy.spawn_enemy_for_area(player.current_area)
@@ -896,7 +896,7 @@ def do_explore(gs, player, shop):
             print(f"{y}An enemy appears!{rst}")
         t.sleep(1)
         battle(player, enemy, gs, shop)
-    elif 0.50 <= roll < 0.60:
+    elif roll < 0.55:
         if len(player.items) < player.max_items:
             item_dict = random.choice(Items)
             item = item_dict['name']
@@ -907,7 +907,7 @@ def do_explore(gs, player, shop):
             print('Your item sack is full!')
             t.sleep(1)
             return
-    elif 0.60 <= roll < 0.68:
+    elif roll < 0.63:
         if len(player.weapons) < player.max_weapons:
             added = find_weapon(player)
             if added:
@@ -920,7 +920,7 @@ def do_explore(gs, player, shop):
             print(f"{y}Your weapon sack is full.")
             t.sleep(1)
             return
-    elif 0.68 <= roll < 0.88:
+    elif roll < 0.83:
         if const.Perks.METAL_DETECTIVE in player.perks:
             coins = random.randint(25, 50)
         else:
@@ -928,7 +928,7 @@ def do_explore(gs, player, shop):
         print(f'{g}You found {coins} coins!')
         t.sleep(1)
         player.coins += coins
-    elif 0.88 <= roll < 0.89:
+    elif roll < 0.84:
         filtered = [i for i in Perks if i['name'] not in player.perks and i['name'] != const.Perks.WENCH_LOCATION]
         if filtered:
             reward = random.choice(filtered)
