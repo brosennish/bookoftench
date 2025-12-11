@@ -366,73 +366,73 @@ Weapons = [
      const.Events.CRIT: 0.00, 'cost': 20, 'sell_value': 8, 'type': 'blind'},
 
     # --- Tier 1 ---
-    {'name': const.Weapons.KNIFE,          'damage': 16, 'uses': 8, 'accuracy': 0.88, 'spread': 4,
-     const.Events.CRIT: 0.13, 'cost': 25,  'sell_value': 12, 'type': 'melee'},
+    {'name': const.Weapons.KNIFE, 'damage': 16, 'uses': 8, 'accuracy': 0.88, 'spread': 4,
+     const.Events.CRIT: 0.13, 'cost': 25, 'sell_value': 12, 'type': 'melee'},
 
-    {'name': const.Weapons.BROKEN_BOTTLE,  'damage': 14, 'uses': 6, 'accuracy': 0.82, 'spread': 5,
-     const.Events.CRIT: 0.15, 'cost': 20,  'sell_value': 8, 'type': 'melee'},
+    {'name': const.Weapons.BROKEN_BOTTLE, 'damage': 14, 'uses': 6, 'accuracy': 0.82, 'spread': 5,
+     const.Events.CRIT: 0.15, 'cost': 20, 'sell_value': 8, 'type': 'melee'},
 
-    {'name': const.Weapons.HATCHET,        'damage': 18, 'uses': 8, 'accuracy': 0.82, 'spread': 5,
-     const.Events.CRIT: 0.13, 'cost': 30,  'sell_value': 15, 'type': 'melee'},
+    {'name': const.Weapons.HATCHET, 'damage': 18, 'uses': 8, 'accuracy': 0.82, 'spread': 5,
+     const.Events.CRIT: 0.13, 'cost': 30, 'sell_value': 15, 'type': 'melee'},
 
     # --- Tier 2 ---
-    {'name': const.Weapons.BAT,            'damage': 20, 'uses': 9, 'accuracy': 0.80, 'spread': 6,
-     const.Events.CRIT: 0.13, 'cost': 40,  'sell_value': 20, 'type': 'melee'},
+    {'name': const.Weapons.BAT, 'damage': 20, 'uses': 9, 'accuracy': 0.80, 'spread': 5,
+     const.Events.CRIT: 0.13, 'cost': 40, 'sell_value': 20, 'type': 'melee'},
 
-    {'name': const.Weapons.CROWBAR,        'damage': 22, 'uses': 8, 'accuracy': 0.80, 'spread': 5,
-     const.Events.CRIT: 0.12, 'cost': 45,  'sell_value': 22, 'type': 'melee'},
+    {'name': const.Weapons.CROWBAR, 'damage': 22, 'uses': 8, 'accuracy': 0.80, 'spread': 5,
+     const.Events.CRIT: 0.12, 'cost': 45, 'sell_value': 22, 'type': 'melee'},
 
     {'name': const.Weapons.BRASS_KNUCKLES, 'damage': 22, 'uses': 9, 'accuracy': 0.90, 'spread': 4,
-     const.Events.CRIT: 0.12, 'cost': 50,  'sell_value': 25, 'type': 'melee'},
+     const.Events.CRIT: 0.12, 'cost': 50, 'sell_value': 25, 'type': 'melee'},
 
-    {'name': const.Weapons.SHOVEL,         'damage': 20, 'uses': 7, 'accuracy': 0.78, 'spread': 6,
-     const.Events.CRIT: 0.14, 'cost': 38,  'sell_value': 19, 'type': 'melee'},
+    {'name': const.Weapons.SHOVEL, 'damage': 20, 'uses': 7, 'accuracy': 0.78, 'spread': 5,
+     const.Events.CRIT: 0.14, 'cost': 38, 'sell_value': 19, 'type': 'melee'},
 
     # --- Tier 3 ---
-    {'name': const.Weapons.PICKAXE,        'damage': 24, 'uses': 7, 'accuracy': 0.78, 'spread': 7,
-     const.Events.CRIT: 0.12, 'cost': 55,  'sell_value': 28, 'type': 'melee'},
+    {'name': const.Weapons.PICKAXE, 'damage': 24, 'uses': 7, 'accuracy': 0.78, 'spread': 5,
+     const.Events.CRIT: 0.12, 'cost': 55, 'sell_value': 28, 'type': 'melee'},
 
-    {'name': const.Weapons.MACHETE,        'damage': 26, 'uses': 7, 'accuracy': 0.80, 'spread': 6,
-     const.Events.CRIT: 0.13, 'cost': 60,  'sell_value': 30, 'type': 'melee'},
+    {'name': const.Weapons.MACHETE, 'damage': 26, 'uses': 7, 'accuracy': 0.80, 'spread': 5,
+     const.Events.CRIT: 0.13, 'cost': 60, 'sell_value': 30, 'type': 'melee'},
 
-    {'name': const.Weapons.AXE,            'damage': 30, 'uses': 6, 'accuracy': 0.76, 'spread': 8,
-     const.Events.CRIT: 0.14, 'cost': 65,  'sell_value': 32, 'type': 'melee'},
+    {'name': const.Weapons.AXE, 'damage': 30, 'uses': 6, 'accuracy': 0.76, 'spread': 5,
+     const.Events.CRIT: 0.14, 'cost': 65, 'sell_value': 32, 'type': 'melee'},
 
-    {'name': const.Weapons.FIRE_AXE,       'damage': 32, 'uses': 6, 'accuracy': 0.75, 'spread': 8,
-     const.Events.CRIT: 0.14, 'cost': 70,  'sell_value': 35, 'type': 'melee'},
+    {'name': const.Weapons.FIRE_AXE, 'damage': 32, 'uses': 6, 'accuracy': 0.75, 'spread': 5,
+     const.Events.CRIT: 0.14, 'cost': 70, 'sell_value': 35, 'type': 'melee'},
 
-    {'name': const.Weapons.CROSSBOW,       'damage': 34, 'uses': 5, 'accuracy': 0.90, 'spread': 3,
-     const.Events.CRIT: 0.14, 'cost': 85,  'sell_value': 42, 'type': 'projectile'},
+    {'name': const.Weapons.CROSSBOW, 'damage': 34, 'uses': 5, 'accuracy': 0.90, 'spread': 3,
+     const.Events.CRIT: 0.14, 'cost': 85, 'sell_value': 42, 'type': 'projectile'},
 
-    {'name': const.Weapons.HARPOON,        'damage': 34, 'uses': 6, 'accuracy': 0.78, 'spread': 6,
-     const.Events.CRIT: 0.10, 'cost': 80,  'sell_value': 40, 'type': 'projectile'},
+    {'name': const.Weapons.HARPOON, 'damage': 34, 'uses': 6, 'accuracy': 0.78, 'spread': 5,
+     const.Events.CRIT: 0.10, 'cost': 80, 'sell_value': 40, 'type': 'projectile'},
 
     # --- Tier 4 Guns ---
-    {'name': const.Weapons.PISTOL,         'damage': 30, 'uses': 6, 'accuracy': 0.82, 'spread': 4,
-     const.Events.CRIT: 0.11, 'cost': 70,  'sell_value': 34, 'type': 'projectile'},
+    {'name': const.Weapons.PISTOL, 'damage': 30, 'uses': 6, 'accuracy': 0.82, 'spread': 4,
+     const.Events.CRIT: 0.11, 'cost': 70, 'sell_value': 34, 'type': 'projectile'},
 
-    {'name': const.Weapons.REVOLVER,       'damage': 33, 'uses': 5, 'accuracy': 0.68, 'spread': 6,
-     const.Events.CRIT: 0.11, 'cost': 78,  'sell_value': 39, 'type': 'projectile'},
+    {'name': const.Weapons.REVOLVER, 'damage': 33, 'uses': 5, 'accuracy': 0.68, 'spread': 5,
+     const.Events.CRIT: 0.11, 'cost': 78, 'sell_value': 39, 'type': 'projectile'},
 
-    {'name': const.Weapons.RIFLE,          'damage': 35, 'uses': 6, 'accuracy': 0.90, 'spread': 4,
-     const.Events.CRIT: 0.09, 'cost': 82,  'sell_value': 41, 'type': 'projectile'},
+    {'name': const.Weapons.RIFLE, 'damage': 35, 'uses': 6, 'accuracy': 0.90, 'spread': 4,
+     const.Events.CRIT: 0.09, 'cost': 82, 'sell_value': 41, 'type': 'projectile'},
 
-    {'name': const.Weapons.SHOTGUN,        'damage': 34, 'uses': 4, 'accuracy': 0.74, 'spread': 6,
-     const.Events.CRIT: 0.08, 'cost': 90,  'sell_value': 45, 'type': 'projectile'},
+    {'name': const.Weapons.SHOTGUN, 'damage': 34, 'uses': 4, 'accuracy': 0.74, 'spread': 5,
+     const.Events.CRIT: 0.08, 'cost': 90, 'sell_value': 45, 'type': 'projectile'},
 
     # --- Tier 5 Heavy ---
-    {'name': const.Weapons.CHAINSAW,       'damage': 34, 'uses': 6, 'accuracy': 0.70, 'spread': 8,
-     const.Events.CRIT: 0.12, 'cost': 95,  'sell_value': 47, 'type': 'melee'},
+    {'name': const.Weapons.CHAINSAW, 'damage': 34, 'uses': 6, 'accuracy': 0.70, 'spread': 5,
+     const.Events.CRIT: 0.12, 'cost': 95, 'sell_value': 47, 'type': 'melee'},
 
-    {'name': const.Weapons.SLEDGEHAMMER,   'damage': 35, 'uses': 10, 'accuracy': 0.68, 'spread': 8,
+    {'name': const.Weapons.SLEDGEHAMMER, 'damage': 35, 'uses': 10, 'accuracy': 0.68, 'spread': 5,
      const.Events.CRIT: 0.13, 'cost': 100, 'sell_value': 50, 'type': 'melee'},
 
     # --- Enemy / Monster ---
-    {'name': const.Weapons.CLAWS,          'damage': 22, 'uses': -1, 'accuracy': 0.86, 'spread': 4,
-     const.Events.CRIT: 0.12, 'cost': 0,  'sell_value': 0, 'type': 'special'},
+    {'name': const.Weapons.CLAWS, 'damage': 22, 'uses': -1, 'accuracy': 0.86, 'spread': 4,
+     const.Events.CRIT: 0.12, 'cost': 0, 'sell_value': 0, 'type': 'special'},
 
-    {'name': const.Weapons.VOODOO_STAFF,   'damage': 28, 'uses': -1, 'accuracy': 0.76, 'spread': 7,
-     const.Events.CRIT: 0.14, 'cost': 0,  'sell_value': 0, 'type': 'special'},
+    {'name': const.Weapons.VOODOO_STAFF, 'damage': 28, 'uses': -1, 'accuracy': 0.76, 'spread': 5,
+     const.Events.CRIT: 0.14, 'cost': 0, 'sell_value': 0, 'type': 'special'},
 ]
 
 # COUNTERS: Initialize at zero
