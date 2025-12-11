@@ -1,12 +1,11 @@
 import random
+import time as t
 from dataclasses import dataclass
 from functools import cache
 from typing import List
-import time as t
 
-
-from savethewench.data.colors import purple as p, yellow as y, reset as rst
 from savethewench.data import Areas
+from savethewench.ui import purple, yellow
 from .enemy import load_enemy
 
 
@@ -31,9 +30,9 @@ class Area:
             enemy.hp = int(enemy.hp * 1.5)
             enemy.max_hp = int(enemy.max_hp * 1.5)
             enemy.coins = int(enemy.coins * 1.5)
-            print(f"{y}An enemy appears!{rst} {p}(Elite enemy!)")
+            print(f"{yellow("An enemy appears!")} {purple("(Elite enemy!)")}")
         else:
-            print(f"{y}An enemy appears!{rst}")
+            print(yellow("An enemy appears!"))
         self.current_enemy = enemy
         t.sleep(1)
 

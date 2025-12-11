@@ -31,6 +31,7 @@ TRAVEL_THEME = "travel_theme.wav"
 WEAPON_BROKE = "weapon_broke.wav"
 WELCOME_TO_HELL = "welcome_to_hell.wav"
 
+
 # TODO make sure this works regardless of cwd
 def get_audio_path(filename):
     return os.path.abspath(os.path.join('savethewench/data/audio', filename))

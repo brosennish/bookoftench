@@ -23,5 +23,6 @@ def load_weapon(name: str) -> Weapon:
         raise ValueError(f"Could not find weapon data for {name}")
     return matches[0]
 
+
 def load_weapons(restriction: List[str] = None):
     return [Weapon(**d) for d in Weapons if restriction is None or d['name'] in restriction]

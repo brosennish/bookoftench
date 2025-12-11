@@ -1,9 +1,9 @@
 import time as t
 
-from savethewench.data.colors import yellow as y, reset as rst
 from savethewench.event_base import Listener
-from event_logger import subscribe_listener
 from savethewench.model.events import ItemUsedEvent
+from savethewench.ui import yellow
+from .event_logger import subscribe_listener
 
 
 @subscribe_listener(ItemUsedEvent)
@@ -14,6 +14,5 @@ class ItemUsedListener(Listener):
         print(f"\nYou used {event.item.name}: Your current HP is {event.player_hp}/{event.player_max_hp}\n")
         t.sleep(1)
         if event.items_remaining == 0:
-            print(f"{y}Your inventory is dry.{rst}\n")
+            print(yellow(f"Your inventory is dry.\n"))
         t.sleep(1)
-

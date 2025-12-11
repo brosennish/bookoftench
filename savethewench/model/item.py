@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import List
+
 from savethewench.data import Items
+
 
 @dataclass
 class Item:

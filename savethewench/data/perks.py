@@ -1,4 +1,5 @@
 # Constants
+AP_TENCH_STUDIES = "AP Tench Studies"
 AMBROSE_BLADE = "Ambrose Blade"
 BARTER_SAUCE = "Barter Sauce"
 BEER_GOGGLES = "Beer Goggles"

@@ -5,7 +5,7 @@ from .items import Items
 from .perks import Perks
 from .weapons import Weapons
 
-__all__=[
+__all__ = [
     "Achievements",
     "Areas",
     "Enemies",

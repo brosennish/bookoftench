@@ -4,10 +4,9 @@ from .data.audio import get_audio_path
 
 ENABLE_SOUNDS = True  # or False to mute everything
 
-
 # --- Tracking state ---
 _current_music_process = None
-_current_music = None   # <--- add this
+_current_music = None  # <--- add this
 ACTIVE_SOUNDS = []
 
 
@@ -33,6 +32,7 @@ def play_sound(file_name: str, v: float = 1.0) -> None:
 def get_current_music() -> str | None:
     return _current_music
 
+
 def play_music(file_name: str) -> None:
     """Stop current music (if any) and start a new looping track."""
     global _current_music_process, _current_music
@@ -57,7 +57,6 @@ def play_music(file_name: str) -> None:
     except Exception:
         _current_music_process = None
         _current_music = None
-
 
 
 def stop_music() -> None:

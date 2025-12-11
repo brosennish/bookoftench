@@ -3,8 +3,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List, Callable
 
-from savethewench.data.colors import blue as b, dim as d, reset as rst
 from savethewench.model import GameState
+from savethewench.ui import blue, dim
 
 
 class Component(ABC):
@@ -99,14 +99,15 @@ class LinearComponent(Component):
 
 
 class BinarySelectionComponent(LabeledSelectionComponent):
-    def __init__(self, game_state: GameState, query: str, yes_component: type[Component], no_component: type[Component]):
+    def __init__(self, game_state: GameState, query: str, yes_component: type[Component],
+                 no_component: type[Component]):
         super().__init__(game_state,
                          bindings=[SelectionBinding('y', '', yes_component),
                                    SelectionBinding('n', '', no_component)])
         self.query = query
 
     def display_options(self):
-        print(f"{self.query.strip()} (y/n)?\n{b}>{rst} ")
+        print(f"{self.query.strip()} (y/n)?\n{blue("> ")}")
 
 
 class TextDisplayingComponent(LinearComponent):
@@ -155,7 +156,8 @@ class ThresholdBinding:
 
 
 class RandomThresholdComponent(Component):
-    def __init__(self, game_state: GameState, bindings: List[ThresholdBinding], failed_message: str = f"{d}You came up dry."):
+    def __init__(self, game_state: GameState, bindings: List[ThresholdBinding],
+                 failed_message: str = dim("You came up dry.")):
         super().__init__(game_state)
         self.ordered_thresholds = sorted(bindings, key=lambda t: t.upper_threshold)
         self.failed_message = failed_message
@@ -167,3 +169,27 @@ class RandomThresholdComponent(Component):
                 return binding.component(self.game_state).run()
         print(self.failed_message)
         return self.game_state
+
+
+class GatekeepingComponent(Component):
+    def __init__(self, game_state: GameState, decision_function: Callable[[], bool],
+                 accept_component: type[Component], deny_component: type[Component]):
+        super().__init__(game_state)
+        self.decision_function = decision_function
+        self.accept_component = accept_component
+        self.deny_component = deny_component
+
+    def run(self) -> GameState:
+        if self.decision_function():
+            return self.accept_component(self.game_state).run()
+        else:
+            return self.deny_component(self.game_state).run()
+
+
+def anonymous_component(func: Callable[[], None]) -> type[Component]:
+    class AnonymousComponent(Component):
+        def run(self) -> GameState:
+            func()
+            return self.game_state
+
+    return AnonymousComponent

@@ -1,5 +1,4 @@
 import random
-
 from dataclasses import dataclass, field
 from typing import List, Dict
 
@@ -12,9 +11,9 @@ _MAX_ITEMS: int = 4
 _MAX_WEAPONS: int = 4
 _MAX_PERKS: int = 4
 
+
 @dataclass
 class Shop:
-
     _all_items: List[Item] = field(init=False)
     _all_weapons: List[Item] = field(init=False)
     _all_perks: List[Perk] = field(init=False)

@@ -1,5 +1,6 @@
+from abc import ABCMeta
 from collections import Counter, defaultdict
-from typing import Dict, Set
+from typing import Dict, Set, Callable
 
 from savethewench.event_base import Listener, EventType, Event
 
@@ -40,11 +41,35 @@ def reset():
     _LISTENERS.clear()
 
 
-# class-annotating decorator that will subscribe a class to the listed event types
+# annotate a class to subscribe to provided event types
+# class must implement event_base.Listener
 def subscribe_listener(*event_types: type[Event]):
     def decorator(cls: type[Listener]):
         global _LISTENERS
         for event_type in event_types:
             _LISTENERS[event_type].add(cls)
+
+    return decorator
+
+
+# annotate a function to subscribe to provided event types
+# function must have signature (Event) -> None
+def subscribe_function(*event_types: type[Event]):
+    def decorator(func: Callable[[Event], None]):
+        class FunctionNamingMC(ABCMeta, type):
+            def __new__(cls, name, bases, attrs):
+                func_name, func_module = func.__name__, func.__module__
+                attrs['__qualname__'] = func_name
+                attrs['__module__'] = func_module
+                return super().__new__(cls, func_name, bases, attrs)
+
+        class AnonymousListener(Listener, metaclass=FunctionNamingMC):
+            @staticmethod
+            def handle_event(event: Event):
+                func(event)
+
+        global _LISTENERS
+        for event_type in event_types:
+            _LISTENERS[event_type].add(AnonymousListener)
 
     return decorator

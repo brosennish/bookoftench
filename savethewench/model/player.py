@@ -1,7 +1,7 @@
-from savethewench import event_logger
 from dataclasses import dataclass, field
 from typing import Dict, List
 
+from savethewench import event_logger
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT
 from savethewench.data.weapons import BARE_HANDS, KNIFE
@@ -12,7 +12,6 @@ from .weapon import load_weapons, Weapon
 
 @dataclass
 class Player:
-
     name: str = ''
     lives: int = 3
     lvl: int = 1

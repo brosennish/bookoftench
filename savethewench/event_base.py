@@ -37,4 +37,3 @@ class Listener(ABC):
     @abstractmethod
     def handle_event(event: Event) -> None:
         pass
-

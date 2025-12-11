@@ -29,7 +29,6 @@ NORMAL = "normal"
 BOSS = "boss"
 FINAL_BOSS = "boss_final"
 
-
 Enemies = [
     # ========================
     #        CITY ENEMIES

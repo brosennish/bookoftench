@@ -18,11 +18,10 @@ class GameState:
     areas: List[Area] = field(default_factory=load_areas)
     current_area: Area = field(init=False)
 
-    wench_area: str = 'Hell' #TODO
+    wench_area: str = 'Hell'  # TODO
 
     wanted: str = field(init=False)
     bounty: int = field(init=False)
-
 
     def __post_init__(self):
         self.current_area = self.areas[0]

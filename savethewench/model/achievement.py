@@ -12,5 +12,6 @@ class Achievement:
     reward_type: str
     reward_value: Optional[int]
 
+
 def load_achievements() -> List[Achievement]:
     return [Achievement(**d) for d in Achievements]

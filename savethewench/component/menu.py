@@ -1,13 +1,13 @@
 from savethewench import event_logger
 from savethewench.component.base import Component, LinearComponent, BinarySelectionComponent, \
     TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, NoOpComponent
-from ..audio import play_music
 from savethewench.data.audio import INTRO_THEME
-from savethewench.data.colors import red as r, reset as rst
 from savethewench.model import GameState
+from savethewench.ui import red
 from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, BankBalance, DisplayPerks, Overview
-from .casino import Casino
+from .casino import CasinoBouncer
 from .util import get_player_status_view
+from ..audio import play_music
 
 
 class StartMenu(LabeledSelectionComponent):
@@ -19,6 +19,7 @@ class StartMenu(LabeledSelectionComponent):
 
     def can_exit(self):
         return False
+
 
 class NewGame(LinearComponent):
     def __init__(self, _: GameState):
@@ -39,7 +40,6 @@ class LoadGame(Component):
     def run(self) -> GameState:
         # don't forget to
         # event_logger.reset()
-        # subscribe_listeners()
         pass
 
 
@@ -82,11 +82,11 @@ class Intro(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
                          next_component=ActionMenu,
-                         display_callback=lambda _: print(f"""
-{r}You wash up on a beach outside of Shebokken.
+                         display_callback=lambda _: print(red("""
+You wash up on a beach outside of Shebokken.
 The champion feels it in his jines that his wench is in danger.
-Find her before her life runs dry...{rst}
-"""))
+Find her before her life runs dry...
+""")))
 
 
 class ShopComponent(NoOpComponent): pass
@@ -113,7 +113,7 @@ class ExtendedActionMenu(LabeledSelectionComponent):
         super().__init__(game_state, bindings=[
             SelectionBinding('A', "Achievements", Achievements),
             SelectionBinding('B', "Bank Balance", BankBalance),
-            SelectionBinding('C', "Casino", Casino),
+            SelectionBinding('C', "Casino", CasinoBouncer),
             SelectionBinding('P', "Perks", DisplayPerks),
             SelectionBinding('O', "Overview", Overview),
             SelectionBinding('R', "Return", NoOpComponent)

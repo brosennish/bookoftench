@@ -3,8 +3,8 @@ from functools import partial
 from savethewench.component.base import FunctionExecutingComponent, \
     FunctionalSelectionBinding, FunctionalSelectionComponent, RandomThresholdComponent, ThresholdBinding, \
     TextDisplayingComponent, NoOpComponent
-from .base import LinearComponent, LabeledSelectionComponent, SelectionBinding
 from savethewench.model import GameState
+from .base import LinearComponent, LabeledSelectionComponent, SelectionBinding
 from .util import get_battle_status_view, display_bank_balance, display_player_perks
 
 
