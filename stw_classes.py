@@ -348,7 +348,7 @@ There are parts of another man or men scattered around you.{rst}""")
 
 
     def use_item(self):
-        from stw_functions import get_item_data, p_color
+        from stw_functions import get_item_data, p_color, log_event
 
         if not self.items:
             print(f"{y}Your inventory is dry...")
@@ -416,6 +416,7 @@ There are parts of another man or men scattered around you.{rst}""")
             pc = p_color(self)
 
             print(f"You used {item_data['name']}:{rst} Your current HP is {pc}{self.hp}/{self.max_hp}{rst}")
+            log_event(const.Events.USE_ITEM)
 
             # Loop again to allow another use before taking a hit
             if not self.items:
@@ -485,6 +486,7 @@ There are parts of another man or men scattered around you.{rst}""")
         print(f"\n{g}You were awarded {cash_reward} coins.{rst}")
         t.sleep(2)
         self.visit_bank()
+        return
 
 
     def gain_xp(self, enemy) -> bool:

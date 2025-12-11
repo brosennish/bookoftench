@@ -76,8 +76,8 @@ def unlock_achievement(player, ach_id):
         else:
             return
 
-        print(f"{o}ACHIEVEMENT UNLOCKED: {ach['name']}. "
-              f"Reward: {reward['name']} | {reward['description']}.{rst}")
+        print(f"{o}ACHIEVEMENT UNLOCKED: {ach['name']}."
+              f"\nReward: {reward['name']} | {reward['description']}.{rst}")
         t.sleep(3)
         return
 
@@ -89,8 +89,8 @@ def unlock_achievement(player, ach_id):
     elif ach['reward_type'] == 'coins':
         player.coins += ach['reward_value']
 
-    print(f"{o}ACHIEVEMENT UNLOCKED: {ach['name']}. "
-          f"Reward: +{ach['reward_value']} {ach['reward_type'].upper()}.{rst}")
+    print(f"{o}ACHIEVEMENT UNLOCKED: {ach['name']}."
+          f"\nReward: +{ach['reward_value']} {ach['reward_type'].upper()}.{rst}")
     t.sleep(3)
 
 
@@ -607,7 +607,7 @@ def do_casino(player):
                        "[4] Fish Bones (WIP)\n"
                        "[5] Mystery Box (WIP)\n"
                        "[r] Return\n"
-                       f"{b}> ")
+                       f"{b}>{rst} ")
         if choice == "r":
             return
         elif choice == "1":
