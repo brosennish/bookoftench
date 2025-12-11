@@ -543,14 +543,19 @@ There are parts of another man or men scattered around you.{rst}""")
         from stw_functions import log_event
         
         play_music('bank_theme')
+
+        if const.Perks.SLEDGE_FUND in self.perks:
+            interest = '15'
+        else:
+            interest = '10'
         
         visiting = True
         while visiting:
             choice = input(f"\nWould you like to visit the bank? (y/n):\n{b}>{rst} ").strip().lower()
             
             if choice == 'y':
-                print('You may visit the bank each time you level up.\nDuring each visit, you may deposit or withdraw coins.'
-                '\nEach time you level up, your bank value will increase by 10% + your current level.')
+                print(f'You may visit the bank each time you level up.\nDuring each visit, you may deposit or withdraw coins.'
+                f'\nEach time you level up, your bank value will increase by {interest}% + your current level.')
 
                 while True:
                     print(f"\nPlayer: {g}{self.coins} {rst}{d}|{rst} Bank: {g}{self.bank}{rst}")
