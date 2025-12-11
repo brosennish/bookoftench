@@ -401,7 +401,7 @@ def get_choice_from_list(prompt: str, options: list) -> str:
 
 def main_menu():
     while True:
-        choice = get_choice_from_dict("\nMAIN MENU", {"n": "New Game", "l": "Load Game", "q": "Quit"})
+        choice = get_choice_from_dict(f"\n{rst}MAIN MENU", {"n": "New Game", "l": "Load Game", "q": "Quit"})
         
         if choice == "n":
             run_game()
@@ -415,7 +415,7 @@ def main_menu():
 
 def actions_main_menu(gs, player, shop):
     while True:
-        choice = get_choice_from_dict("MAIN MENU",
+        choice = get_choice_from_dict(f"{rst}MAIN MENU",
                                       {"n": "New Game", "s": "Save Game", "l": "Load Game", "r": "Return", "q": "Quit"})
         
         if choice == "n":
