@@ -1,7 +1,8 @@
+from functools import wraps
 import random
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import List, Callable
+from typing import List, Callable, Any
 
 from savethewench.model import GameState
 from savethewench.ui import blue, dim
@@ -186,10 +187,14 @@ class GatekeepingComponent(Component):
             return self.deny_component(self.game_state).run()
 
 
-def anonymous_component(func: Callable[[], None]) -> type[Component]:
-    class AnonymousComponent(Component):
-        def run(self) -> GameState:
-            func()
-            return self.game_state
-
-    return AnonymousComponent
+def anonymous_component(state_dependent=False) -> Callable[[Callable], type[Component]]:
+    def decorator(func: Callable):
+        class AnonymousComponent(Component):
+            def run(self) -> GameState:
+                if state_dependent:
+                    func(self.game_state)
+                else:
+                    func()
+                return self.game_state
+        return AnonymousComponent
+    return decorator

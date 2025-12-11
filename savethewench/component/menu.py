@@ -7,7 +7,7 @@ from savethewench.ui import red
 from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, BankBalance, DisplayPerks, Overview
 from .casino import CasinoBouncer
 from .util import get_player_status_view
-from ..audio import play_music
+from savethewench.audio import play_music
 
 
 class StartMenu(LabeledSelectionComponent):

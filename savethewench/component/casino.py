@@ -18,7 +18,7 @@ class CasinoBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, decision_function=lambda: game_state.player.coins > 0,
                          accept_component=CasinoCheck,
-                         deny_component=anonymous_component(lambda: print_and_sleep(
+                         deny_component=anonymous_component()(lambda: print_and_sleep(
                              blue("Your paper's no good here.\nCome back with some coins.\n"), 1.5)))
 
 
@@ -26,7 +26,7 @@ def can_gamble(game_state: GameState) -> bool:
     player = game_state.player
     return player.plays > 0 and player.coins > 0
 
-
+@anonymous_component(state_dependent=True)
 def display_crapped_out_message(game_state: GameState):
     player = game_state.player
     message = "You're out of plays. Buy a perk or level up, bozo.\n" if player.plays == 0 else \
@@ -39,7 +39,7 @@ class CasinoCheck(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
                          decision_function=partial(can_gamble, game_state), accept_component=Casino,
-                         deny_component=anonymous_component(partial(display_crapped_out_message, game_state)))
+                         deny_component=display_crapped_out_message)
 
 
 class Casino(LabeledSelectionComponent):
@@ -50,7 +50,7 @@ class Casino(LabeledSelectionComponent):
             SelectionBinding('3', "Wet or Dry (WIP)", WetOrDry),
             SelectionBinding('4', "Fish Bones (WIP)", FishBones),
             SelectionBinding('5', "Mystery Box (WIP)", MysteryBox),
-            SelectionBinding('r', "Return", anonymous_component(lambda: self._return())),
+            SelectionBinding('r', "Return", anonymous_component()(lambda: self._return())),
         ])
         self.leave_casino = False
 

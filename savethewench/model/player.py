@@ -9,6 +9,8 @@ from . import Achievement
 from .events import ItemUsedEvent
 from .item import Item, load_items
 from .weapon import load_weapons, Weapon
+from savethewench.ui import yellow, cyan, dim
+from savethewench.util import print_and_sleep
 
 
 @dataclass
@@ -53,6 +55,15 @@ class Player:
     def get_items(self) -> List[Item]:
         return list(self.items.values())
 
+    def add_item(self, item: Item):
+        if item.name in self.items:
+            print_and_sleep(yellow(f"You already have {item.name}!"), 1)
+        elif len(self.items) >= self.max_items:
+            print_and_sleep(yellow("Your item sack is full."), 1)
+        else:
+            self.items[item.name] = item
+            print_and_sleep(cyan(f"{item.name} added to sack."), 1)
+
     def use_item(self, name: str):
         item = self.items[name]
         self.gain_hp(item.hp)
@@ -88,5 +99,20 @@ class Player:
     def get_weapons(self) -> List[Weapon]:
         return list(self.weapons.values())
 
+    def add_weapon(self, weapon: Weapon):
+        print_and_sleep(cyan(f"You found a {weapon.name}!"), 1)
+        if weapon.name in self.weapons:
+            print_and_sleep(yellow(dim("You already have this weapon.")), 1)
+        elif len(self.weapons) >= self.max_weapons:
+            print_and_sleep(yellow("Your weapon sack is full."), 1)
+        else:
+            self.weapons[weapon.name] = weapon
+            print_and_sleep(cyan(f"{weapon.name} added to sack."), 1)
+
     def equip_weapon(self, name: str):
         self.current_weapon = self.weapons[name]
+
+    def add_perk(self, perk: str):
+        self.perks.append(perk)
+
+

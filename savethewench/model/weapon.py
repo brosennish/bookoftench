@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import List
 
 from savethewench.data import Weapons
+from savethewench.data.weapons import SPECIAL, BARE_HANDS
 
 
 @dataclass
@@ -26,3 +27,7 @@ def load_weapon(name: str) -> Weapon:
 
 def load_weapons(restriction: List[str] = None):
     return [Weapon(**d) for d in Weapons if restriction is None or d['name'] in restriction]
+
+
+def load_discoverable_weapons():
+    return [w for w in load_weapons() if w.uses > 0]
