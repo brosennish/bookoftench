@@ -163,6 +163,17 @@ class Player:
         # Remaining lives check
         if self.lives > 0:
             self.hp = self.max_hp
+
+            # casino
+            if const.Perks.GRAMBLIN_MAN in self.perks and const.Perks.GRAMBLING_ADDICT in self.perks:
+                self.plays = 20
+            elif const.Perks.GRAMBLIN_MAN in self.perks:
+                self.plays = 15
+            elif const.Perks.GRAMBLING_ADDICT in self.perks:
+                self.plays = 15
+            else:
+                self.plays = 10
+
             print(f"""\n{r}You wake up in a dumpster behind Showgirls 3.
 You're buried beneath a pile of detritus and covered in slime...
 There are parts of another man or men scattered around you.{rst}""")

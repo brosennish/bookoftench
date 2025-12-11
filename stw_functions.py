@@ -1392,7 +1392,7 @@ def battle(player, enemy, gs, shop):
                 player.coins += bounty
                 print(f"{g}You killed {enemy.name} and collected a bounty of {bounty} coins!{rst}")
                 log_event(const.Events.BOUNTY_COLLECTED)
-                refresh_wanted(gs)
+                refresh_wanted(gs) # ONLY refresh wanted if the wanted enemy is killed
                 t.sleep(1)
             
             is_boss(gs, player, enemy)
@@ -1425,7 +1425,6 @@ def battle(player, enemy, gs, shop):
                     player.cheat_death_ready = False
                     t.sleep(1)
                 else:
-                    refresh_wanted(gs)
                     shop.reset_inventory(player)
                     stop_music()
                     play_area_theme(player)
