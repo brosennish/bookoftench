@@ -694,7 +694,6 @@ def krill_or_cray(player):
                         leveled_up = player.gain_xp_other(1)
                     if leveled_up:
                         player.level_up()
-                        player.visit_bank()
                     player.plays -= 1
                     print()
                     if casino_check(player):
@@ -807,7 +806,6 @@ def above_or_below(player):
                         leveled_up = player.gain_xp_other(3)
                     if leveled_up:
                         player.level_up()
-                        player.visit_bank()
                     player.casino_won += final_payout
                     print()
                     return
@@ -1365,7 +1363,6 @@ def battle(player, enemy, gs, shop):
                         leveled_up = player.gain_xp_other(1)
                     if leveled_up:
                         player.level_up()
-                        shop.reset_inventory(player)
                     t.sleep(1)
                     stop_music()
                     play_area_theme(player)
@@ -1394,6 +1391,7 @@ def battle(player, enemy, gs, shop):
                 player.coins += bounty
                 print(f"{g}You killed {enemy.name} and collected a bounty of {bounty} coins!{rst}")
                 log_event(const.Events.BOUNTY_COLLECTED)
+                refresh_wanted(gs)
                 t.sleep(1)
             
             is_boss(gs, player, enemy)
@@ -1403,9 +1401,7 @@ def battle(player, enemy, gs, shop):
                 enemy.drop_loot(player)
                 leveled_up = player.gain_xp(enemy) # runs it and returns boolean for level_up
                 if leveled_up:
-                    shop.reset_inventory(player)
-                    player.visit_bank()
-                refresh_wanted(gs)
+                    player.level_up()
 
             if enemy.type == 'boss' and player.current_area == gs.wench_area:
                 player.hp = player.max_hp

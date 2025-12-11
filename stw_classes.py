@@ -69,6 +69,7 @@ class Player:
     hp: int = 100
     max_hp: int = 100
     xp: int = 0
+    shop_refresh_pending: bool = False
 
     coins: int = 0
     bank: int = 0
@@ -167,8 +168,8 @@ You're buried beneath a pile of detritus and covered in slime...
 There are parts of another man or men scattered around you.{rst}""")
             t.sleep(3)
             if self.bank > 0:
-                
                 self.visit_bank()
+
         else:
             print(f"\n{r}Game Over.")
             play_sound('devil_thunder')
@@ -444,6 +445,7 @@ There are parts of another man or men scattered around you.{rst}""")
         self.lvl += 1
         cash_reward = random.randint(100, 200)
         self.coins += cash_reward
+        self.shop_refresh_pending = True
         
         # casino
         if const.Perks.GRAMBLIN_MAN in self.perks and const.Perks.GRAMBLING_ADDICT in self.perks:
@@ -482,6 +484,7 @@ There are parts of another man or men scattered around you.{rst}""")
             print(f"\n{c}Reward: {reward['name']}{rst}")
         print(f"\n{g}You were awarded {cash_reward} coins.{rst}")
         t.sleep(2)
+        self.visit_bank()
 
 
     def gain_xp(self, enemy) -> bool:
@@ -1162,6 +1165,12 @@ class Shop:
 
     def view_shop_inventory(self, player):
         from stw_functions import get_shop_discount
+
+        # refresh shop if level up
+        if player.shop_refresh_pending:
+            self.reset_inventory(player)
+            player.shop_refresh_pending = False
+
         # figure out discount once
         discount = get_shop_discount(player)
     
