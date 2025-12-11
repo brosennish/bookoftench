@@ -875,26 +875,32 @@ def overview(gs, player):
 
 
 def do_explore(gs, player, shop):
-    # 40% chance of enemy (10% for elite), 10% for item, 10% weapon, 25% coins, 1% perk, 14% dry
+    # 45% chance of enemy (10% for elite), 10% for item, 10% weapon, 20% coins, 1% perk, 14% dry
 
     if player.lives > 0:
         player.alive = True
     roll = random.random()
-    if roll < 0.40:
+    if roll < 0.45:
         enemy = Enemy.spawn_enemy_for_area(player.current_area)
         while enemy.type in ('boss', 'boss_final'):
             enemy = Enemy.spawn_enemy_for_area(player.current_area)
+
+        # enemy hp scaling
+        level_bonus = max(0, player.lvl - 1)
+        enemy.max_hp += level_bonus
+        enemy.hp = enemy.max_hp
+
         if random.random() < 0.10:  
             enemy.name = f"Elite {enemy.name}"
-            enemy.hp = int(enemy.hp * 1.5)
             enemy.max_hp = int(enemy.max_hp * 1.5)
+            enemy.hp = enemy.max_hp
             enemy.coins = int(enemy.coins * 1.5)
             print(f"{y}An enemy appears!{rst} {p}(Elite enemy!)")
         else:
             print(f"{y}An enemy appears!{rst}")
         t.sleep(1)
         battle(player, enemy, gs, shop)
-    elif roll < 0.50:
+    elif roll < 0.55:
         if len(player.items) < player.max_items:
             item_dict = random.choice(Items)
             item = item_dict['name']
@@ -905,7 +911,7 @@ def do_explore(gs, player, shop):
             print(f"{y}Your item sack is full.")
             t.sleep(1)
             return
-    elif roll < 0.60:
+    elif roll < 0.65:
         if len(player.weapons) < player.max_weapons:
             added = find_weapon(player)
             if added:
