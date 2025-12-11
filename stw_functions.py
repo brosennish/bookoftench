@@ -693,7 +693,7 @@ def krill_or_cray(player):
                     else:
                         leveled_up = player.gain_xp_other(1)
                     if leveled_up:
-                        player.level_up()
+                        player.visit_bank()
                     player.plays -= 1
                     print()
                     if casino_check(player):
@@ -805,7 +805,7 @@ def above_or_below(player):
                     else:
                         leveled_up = player.gain_xp_other(3)
                     if leveled_up:
-                        player.level_up()
+                        player.visit_bank()
                     player.casino_won += final_payout
                     print()
                     return
@@ -1363,7 +1363,7 @@ def battle(player, enemy, gs, shop):
                     else:
                         leveled_up = player.gain_xp_other(1)
                     if leveled_up:
-                        player.level_up()
+                        player.visit_bank()
                     t.sleep(1)
                     stop_music()
                     play_area_theme(player)
@@ -1402,7 +1402,7 @@ def battle(player, enemy, gs, shop):
                 enemy.drop_loot(player)
                 leveled_up = player.gain_xp(enemy) # runs it and returns boolean for level_up
                 if leveled_up:
-                    player.level_up()
+                    player.visit_bank()
                 else:
                     if player.hp < 10:
                         player.hp = 10  # if HP below 10 set it to 10

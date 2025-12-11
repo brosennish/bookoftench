@@ -496,8 +496,6 @@ There are parts of another man or men scattered around you.{rst}""")
             print(f"\n{c}Reward: {reward['name']}{rst}")
         print(f"\n{g}You were awarded {cash_reward} coins.{rst}")
         t.sleep(2)
-        self.visit_bank()
-        return
 
 
     def gain_xp(self, enemy) -> bool:
@@ -568,7 +566,7 @@ There are parts of another man or men scattered around you.{rst}""")
             
             if choice == 'y':
                 print(f'You may visit the bank each time you level up.\nDuring each visit, you may deposit or withdraw coins.'
-                f'\nEach time you level up, your bank value will increase by {interest}% + your current level.')
+                f'\nEach time you level up, your bank value will increase by {interest}%.')
 
                 while True:
                     print(f"\nPlayer: {g}{self.coins} {rst}{d}|{rst} Bank: {g}{self.bank}{rst}")
