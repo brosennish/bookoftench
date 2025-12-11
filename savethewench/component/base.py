@@ -118,7 +118,7 @@ class TextDisplayingComponent(LinearComponent):
 
     def execute_current(self) -> GameState:
         self.display_callback(self.game_state)
-        input("Press Enter to continue...")
+        input(blue("\n> "))
         return self.game_state
 
 

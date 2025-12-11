@@ -5,6 +5,7 @@ from savethewench import event_logger
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT
 from savethewench.data.weapons import BARE_HANDS, KNIFE
+from . import Achievement
 from .events import ItemUsedEvent
 from .item import Item, load_items
 from .weapon import load_weapons, Weapon
@@ -34,7 +35,7 @@ class Player:
     weapons: Dict[str, Weapon] = field(
         default_factory=lambda: dict((it.name, it) for it in load_weapons([BARE_HANDS, KNIFE])))
     perks: List[str] = field(default_factory=list)
-    achievements: List[str] = field(default_factory=list)
+    achievements: List[Achievement] = field(default_factory=list)
     current_weapon: Weapon = None
 
     blind: bool = False

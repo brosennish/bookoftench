@@ -5,7 +5,8 @@ from savethewench.component.base import FunctionExecutingComponent, \
     TextDisplayingComponent, NoOpComponent
 from savethewench.model import GameState
 from .base import LinearComponent, LabeledSelectionComponent, SelectionBinding
-from .util import get_battle_status_view, display_bank_balance, display_player_perks
+from .util import get_battle_status_view, display_bank_balance, display_player_perks, display_player_achievements, \
+    display_game_overview
 
 
 class Explore(RandomThresholdComponent):
@@ -110,7 +111,9 @@ class DiscoverCoin(NoOpComponent): pass
 class DiscoverPerk(NoOpComponent): pass
 
 
-class Achievements(NoOpComponent): pass
+class Achievements(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_player_achievements, should_proceed=False)
 
 
 class BankBalance(TextDisplayingComponent):
@@ -123,4 +126,6 @@ class DisplayPerks(TextDisplayingComponent):
         super().__init__(game_state, display_callback=display_player_perks, should_proceed=False)
 
 
-class Overview(NoOpComponent): pass
+class Overview(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_game_overview, should_proceed=False)
