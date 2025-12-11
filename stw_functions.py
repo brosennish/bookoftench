@@ -298,41 +298,16 @@ def visit_bank_manual(player):
 
     print(f"Welcome to the Off-Shore Bank of Shebokken.\n"
           f"Since you're visiting between level-ups,\n"
-          f"Deposits incur a 5% fee, and withdrawals incur a 10% fee.")
+          f"Deposits are forbidden, and withdrawals incur a 10% fee.")
 
     while True:
         print(f"\nPlayer: {g}{player.coins} {rst}{d}|{rst} Bank: {g}{player.bank}{rst}")
 
         choice = input(f"\nWhat would you like to do?\n"
-                       f"[d] Deposit\n"
                        f"[w] Withdraw\n"
                        f"[q] Leave\n{b}>{rst} ").strip().lower()
-        if choice == 'd':
-            selection = input(f"\nHow much would you like to deposit?\n{b}>{rst} ")
 
-            if selection.isdigit():
-                num = int(selection)
-            else:
-                print(f"{y}Invalid amount.")
-                t.sleep(1)
-                continue
-
-            if num <= player.coins:
-                amount = int(num * 0.95)
-                player.bank += amount
-                player.coins -= num
-                print(f'You successfully deposited {g}{amount}{rst} coins into the bank.')
-                log_event(const.Events.DEPOSIT)
-                t.sleep(1)
-                continue
-            elif num > player.coins:
-                print(f"{y}You don't have that many coins")
-                t.sleep(1)
-                continue
-            else:
-                print(f"{y}Invalid choice.")
-                continue
-        elif choice == 'w':
+        if choice == 'w':
             selection = input(f"\nHow much would you like to withdraw?\n{b}>{rst} ").strip().lower()
 
             if selection.isdigit():
