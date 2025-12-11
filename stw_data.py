@@ -38,13 +38,13 @@ Perks = [
     },
     {
         'name': const.Perks.BROWN_FRIDAY,
-        'cost': 150,  # 120 → 150
+        'cost': 150,
         'description': "Shop inventories contain +1 additional item",
         'type': 'perk',
     },
     {
         'name': const.Perks.SLEDGE_FUND,
-        'cost': 180,  # 160 → 180
+        'cost': 180,
         'description': "Bank interest rate +5%",
         'type': 'perk',
     },
@@ -56,7 +56,7 @@ Perks = [
     },
     {
         'name': const.Perks.DOCTOR_FISH,
-        'cost': 120,  # 110 → 120
+        'cost': 120,
         'description': "Healing items restore +2 additional HP",
         'type': 'perk',
     },
@@ -74,13 +74,13 @@ Perks = [
     },
     {
         'name': const.Perks.RICKETY_PICKPOCKET,
-        'cost': 160,  # 130 → 160
+        'cost': 160,
         'description': "Steal an extra 20–30 coins from every enemy you defeat",
         'type': 'perk',
     },
     {
         'name': const.Perks.MARTIAL_ARTS_TRAINING,
-        'cost': 120,  # 100 → 120
+        'cost': 120,
         'description': "Bare Hands +3 damage",
         'type': 'perk',
     },
@@ -92,25 +92,25 @@ Perks = [
     },
     {
         'name': const.Perks.LEATHER_SKIN,
-        'cost': 180,  # 160 → 180
+        'cost': 180,
         'description': "Take 10% less damage from all attacks",
         'type': 'perk',
     },
     {
         'name': const.Perks.HEALTH_NUT,
-        'cost': 170,  # 150 → 170
+        'cost': 170,
         'description': "Gain +25% health from items",
         'type': 'perk',
     },
     {
         'name': const.Perks.ROSETTI_THE_GYM_RAT,
-        'cost': 160,  # 140 → 160
+        'cost': 160,
         'description': "Melee weapons do +10% damage",
         'type': 'perk',
     },
     {
         'name': const.Perks.AMBROSE_BLADE,
-        'cost': 140,  # 130 → 140
+        'cost': 140,
         'description': "Melee weapons do +3 damage",
         'type': 'perk',
     },
@@ -122,7 +122,7 @@ Perks = [
     },
     {
         'name': const.Perks.BULLETPROOF,
-        'cost': 140,  # 130 → 140
+        'cost': 140,
         'description': "Take 10% less damage from guns",
         'type': 'perk',
     },
@@ -146,37 +146,37 @@ Perks = [
     },
     {
         'name': const.Perks.VAMPIRIC_SPERM,
-        'cost': 250,  # 200 → 250
+        'cost': 250,
         'description': 'Heal 3 HP every time you land a melee attack',
         'type': 'perk',
     },
     {
         'name': const.Perks.METAL_DETECTIVE,
-        'cost': 120,  # 110 → 120
+        'cost': 120,
         'description': "Find up to 25 more coins when exploring",
         'type': 'perk',
     },
     {
         'name': const.Perks.TENCH_THE_BOUNTY_HUNTER,
-        'cost': 110,  # 120 → 110 (bounties are rare)
+        'cost': 110,
         'description': "Earn +25 coins from each bounty enemy you defeat",
         'type': 'perk',
     },
     {
         'name': const.Perks.TENCH_EYES,
-        'cost': 120,  # 130 → 120
+        'cost': 120,
         'description': "Projectile weapon accuracy +5%",
         'type': 'perk',
     },
     {
         'name': const.Perks.DEATH_CAN_WAIT,
-        'cost': 200,  # 150 → 200
+        'cost': 200,
         'description': "Once per battle, a fatal blow leaves you at 1 HP",
         'type': 'perk',
     },
     {
         'name': const.Perks.BARTER_SAUCE,
-        'cost': 180,  # 140 → 180
+        'cost': 180,
         'description': "Shop prices are 10% lower",
         'type': 'perk',
     },
@@ -201,13 +201,13 @@ Perks = [
     },
     {
         'name': const.Perks.CROWS_NEST,
-        'cost': 180,  # 200 → 180
+        'cost': 180,
         'description': "View enemies remaining in each area",
         'type': 'perk',
     },
     {
         'name': const.Perks.SOLOMON_TRAIN,
-        'cost': 350,  # 300 → 350
+        'cost': 350,
         'description': "10% chance to negate a fatal blow and instantly kill the enemy instead",
         'type': 'perk',
     },

@@ -461,6 +461,7 @@ def run_game(gs=GameState(), player=Player(), shop=Shop(), name=True, tutorial=T
 9. Perks offer special rewards and permanent bonuses
 10. Clear the enemies in the wench's area and defeat the final boss to save the wench and win the game""")
             input(f'{b}> ')
+            tutorial = False
         else:
             print('Invalid choice.')
             continue
