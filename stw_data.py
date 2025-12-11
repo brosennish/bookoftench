@@ -129,7 +129,7 @@ Perks = [
     {
         'name': const.Perks.WALLET_CHAIN,
         'cost': 90,
-        'description': 'Save 25% of your coins upon death',
+        'description': 'Save 50% of your coins upon death',
         'type': 'perk',
     },
     {

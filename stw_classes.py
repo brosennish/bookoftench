@@ -149,7 +149,7 @@ class Player:
 
         # Death penalties 
         if const.Perks.WALLET_CHAIN in self.perks:
-            self.coins = int(self.coins * 0.25)
+            self.coins = int(self.coins * 0.50)
         else:
             self.coins = 0
         self.items = [const.Items.TENCH_FILET]
@@ -751,6 +751,7 @@ There are parts of another man or men scattered around you.{rst}""")
         if perk not in self.perks:
             self.perks.append(perk)
             print(f"{p}{perk} added to perks.")
+            t.sleep(1)
 
             if perk == const.Perks.VAGABONDAGE:
                 self.max_weapons += 1
