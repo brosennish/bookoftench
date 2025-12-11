@@ -990,13 +990,13 @@ def get_shop_discount(player):
     discount = 1.0
 
     if const.Perks.BARTER_SAUCE in perks and const.Perks.TRADE_SHIP in perks:
-        print(f"{p}Prices down 30% with Barter Sauce and Trade Ship!{rst}")
+        print(f"{p}Prices down 30% with Barter Sauce and Trade Ship!{rst}\n")
         discount = 0.7
     elif const.Perks.TRADE_SHIP in perks:
-        print(f"{p}Prices down 20% with Trade Ship!{rst}")
+        print(f"{p}Prices down 20% with Trade Ship!{rst}\n")
         discount = 0.8
     elif const.Perks.BARTER_SAUCE in perks:
-        print(f"{p}Prices down 10% with Barter Sauce!{rst}")
+        print(f"{p}Prices down 10% with Barter Sauce!{rst}\n")
         discount = 0.9
     else:
         discount = 1
