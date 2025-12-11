@@ -293,17 +293,76 @@ def refresh_wanted(gs):
 
 
 # --- BANK ---
-def do_bank_balance(player):
+def visit_bank_manual(player):
+    play_music('bank_theme')
 
-    if not player.bank:
-        print(f"{y}Your bank account is dry.")
-        t.sleep(1)
-        return
-    else:
-        print(f"\nPlayer coins: {g}{player.coins}{rst} coins\n\nBank coins: {g}{player.bank}{rst} coins")
+    print(f'Welcome to the Off-Shore Bank of Shebokken.\nDeposits are free.'
+          f'\nWithdrawals incur a 10% extraction fee.')
 
-    input(f'\n{b}>{rst} ')
-    return
+    while True:
+        print(f"\nPlayer: {g}{player.coins} {rst}{d}|{rst} Bank: {g}{player.bank}{rst}")
+
+        choice = input(f"\nWhat would you like to do?\n"
+                       f"[d] Deposit\n"
+                       f"[w] Withdraw\n"
+                       f"[q] Leave\n{b}>{rst} ").strip().lower()
+        if choice == 'd':
+            selection = input(f"\nHow much would you like to deposit?\n{b}>{rst} ")
+
+            if selection.isdigit():
+                num = int(selection)
+            else:
+                print(f"{y}Invalid amount.")
+                t.sleep(1)
+                continue
+
+            if num <= player.coins:
+                player.bank += num
+                player.coins -= num
+                print(f'You successfully deposited {g}{num}{rst} coins into the bank.')
+                log_event(const.Events.DEPOSIT)
+                t.sleep(1)
+                continue
+            elif num > player.coins:
+                print(f"{y}You don't have that many coins")
+                t.sleep(1)
+                continue
+            else:
+                print(f"{y}Invalid choice.")
+                continue
+        elif choice == 'w':
+            selection = input(f"\nHow much would you like to withdraw?\n{b}>{rst} ").strip().lower()
+
+            if selection.isdigit():
+                num = int(selection)
+            else:
+                print(f"{y}Invalid choice.")
+                continue
+
+            if num <= player.bank:
+                player.bank -= num
+                amount = int(num * 0.9)
+                player.coins += amount
+                print(f'You successfully withdrew {g}{amount}{rst} coins from the bank.')
+                log_event(const.Events.WITHDRAW)
+                t.sleep(1)
+                continue
+            elif num > player.bank:
+                print(f"{y}Insufficient funds for withdrawal.")
+                t.sleep(1)
+                continue
+            else:
+                print(f"{y}Invalid choice.")
+                continue
+
+        elif choice == 'q':
+            print(f"{b}Very well...")
+            t.sleep(1)
+            return
+
+        else:
+            print(f"{y}Invalid choice.")
+            continue
 
 
 # --- WEAPONS ---
@@ -555,7 +614,7 @@ def actions_menu(gs, player, shop):
             while page_two:
                 choice = get_choice_from_dict("", {
                 "a": "Achievements",
-                "b": "Bank Balance",
+                "b": "Bank",
                 "c": "Casino",
                 "p": "Perks",
                 "o": "Overview",
@@ -564,7 +623,7 @@ def actions_menu(gs, player, shop):
                 if choice == "a":
                     do_view_achievements(player)
                 elif choice == "b":
-                    do_bank_balance(player)
+                    visit_bank_manual(player)
                 elif choice == "c":
                     do_casino(player)
                     play_area_theme(player)

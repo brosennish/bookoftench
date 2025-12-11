@@ -565,8 +565,9 @@ There are parts of another man or men scattered around you.{rst}""")
             choice = input(f"\nWould you like to visit the bank? (y/n):\n{b}>{rst} ").strip().lower()
             
             if choice == 'y':
-                print(f'You may visit the bank each time you level up.\nDuring each visit, you may deposit or withdraw coins.'
-                f'\nEach time you level up, your bank value will increase by {interest}%.')
+                print(f'Welcome to the Off-Shore Bank of Shebokken.\n'
+                    f'While banking with us, you may deposit or withdraw coins.\n'
+                    f'Each time you level up, your account value will increase by {interest}%.')
 
                 while True:
                     print(f"\nPlayer: {g}{self.coins} {rst}{d}|{rst} Bank: {g}{self.bank}{rst}")
