@@ -296,8 +296,9 @@ def refresh_wanted(gs):
 def visit_bank_manual(player):
     play_music('bank_theme')
 
-    print(f'Welcome to the Off-Shore Bank of Shebokken.\nDeposits are free.'
-          f'\nWithdrawals incur a 10% extraction fee.')
+    print(f"Welcome to the Off-Shore Bank of Shebokken.\n"
+          f"Since you're visiting between level-ups,\n"
+          f"Deposits incur a 5% fee, and withdrawals incur a 10% fee.")
 
     while True:
         print(f"\nPlayer: {g}{player.coins} {rst}{d}|{rst} Bank: {g}{player.bank}{rst}")
@@ -317,9 +318,10 @@ def visit_bank_manual(player):
                 continue
 
             if num <= player.coins:
-                player.bank += num
+                amount = int(num * 0.95)
+                player.bank += amount
                 player.coins -= num
-                print(f'You successfully deposited {g}{num}{rst} coins into the bank.')
+                print(f'You successfully deposited {g}{amount}{rst} coins into the bank.')
                 log_event(const.Events.DEPOSIT)
                 t.sleep(1)
                 continue
