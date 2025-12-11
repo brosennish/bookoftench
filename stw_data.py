@@ -229,13 +229,13 @@ Enemies = [
 {'name': const.Enemies.GOON,          'hp': 90,  'weapon': [const.Weapons.CHILI_POWDER, const.Weapons.BAT, const.Weapons.PISTOL],
  'bounty': 70,  'type': 'normal'},
 
-{'name': const.Enemies.PIMP,          'hp': 100, 'weapon': [const.Weapons.PEPPER_SPRAY, const.Weapons.BRASS_KNUCKLES, const.Weapons.REVOLVER],
+{'name': const.Enemies.PIMP,          'hp': 110, 'weapon': [const.Weapons.PEPPER_SPRAY, const.Weapons.BRASS_KNUCKLES, const.Weapons.REVOLVER],
  'bounty': 75,  'type': 'normal'},
 
 {'name': const.Enemies.HOBO,          'hp': 80,  'weapon': [const.Weapons.BROKEN_BOTTLE, const.Weapons.KNIFE, const.Weapons.POCKET_SAND],
  'bounty': 50,  'type': 'normal'},
 
-{'name': const.Enemies.SERIAL_KILLER, 'hp': 100, 'weapon': [const.Weapons.KNIFE, const.Weapons.MACHETE],
+{'name': const.Enemies.SERIAL_KILLER, 'hp': 110, 'weapon': [const.Weapons.KNIFE, const.Weapons.MACHETE],
  'bounty': 75,  'type': 'normal'},
 
 # ========================
@@ -247,10 +247,10 @@ Enemies = [
 {'name': const.Enemies.HUNTER,           'hp': 90,  'weapon': [const.Weapons.KNIFE, const.Weapons.RIFLE, const.Weapons.BEAR_SPRAY],
  'bounty': 70,  'type': 'normal'},
 
-{'name': const.Enemies.POACHER,          'hp': 100, 'weapon': [const.Weapons.CROSSBOW, const.Weapons.MACHETE, const.Weapons.BEAR_SPRAY],
+{'name': const.Enemies.POACHER,          'hp': 110, 'weapon': [const.Weapons.CROSSBOW, const.Weapons.MACHETE, const.Weapons.BEAR_SPRAY],
  'bounty': 75,  'type': 'normal'},
 
-{'name': const.Enemies.DISGRACED_EXILE,  'hp': 90,  'weapon': [const.Weapons.HATCHET, const.Weapons.SHOVEL],
+{'name': const.Enemies.DISGRACED_EXILE,  'hp': 95,  'weapon': [const.Weapons.HATCHET, const.Weapons.SHOVEL],
  'bounty': 65,  'type': 'normal'},
 
 # ========================
@@ -262,10 +262,10 @@ Enemies = [
 {'name': const.Enemies.SPELUNKER,              'hp': 90,  'weapon': [const.Weapons.PICKAXE, const.Weapons.KNIFE],
  'bounty': 65,  'type': 'normal'},
 
-{'name': const.Enemies.MOLE_PERSON,            'hp': 100, 'weapon': [const.Weapons.CLAWS, const.Weapons.PICKAXE],
+{'name': const.Enemies.MOLE_PERSON,            'hp': 110, 'weapon': [const.Weapons.CLAWS, const.Weapons.PICKAXE],
  'bounty': 70,  'type': 'normal'},
 
-{'name': const.Enemies.HUMANOID_CAVE_CREATURE, 'hp': 100, 'weapon': [const.Weapons.CLAWS, const.Weapons.SLEDGEHAMMER],
+{'name': const.Enemies.HUMANOID_CAVE_CREATURE, 'hp': 110, 'weapon': [const.Weapons.CLAWS, const.Weapons.SLEDGEHAMMER],
  'bounty': 75,  'type': 'normal'},
 
 # ========================
@@ -277,16 +277,16 @@ Enemies = [
 {'name': const.Enemies.BAYOU_MAN,        'hp': 90,  'weapon': [const.Weapons.MACHETE, const.Weapons.SHOTGUN],
  'bounty': 70,  'type': 'normal'},
 
-{'name': const.Enemies.VOODOO_PRIESTESS, 'hp': 100, 'weapon': [const.Weapons.VOODOO_STAFF, const.Weapons.KNIFE, const.Weapons.CHILI_POWDER],
+{'name': const.Enemies.VOODOO_PRIESTESS, 'hp': 110, 'weapon': [const.Weapons.VOODOO_STAFF, const.Weapons.KNIFE, const.Weapons.CHILI_POWDER],
  'bounty': 75,  'type': 'normal'},
 
-{'name': const.Enemies.SKIN_COLLECTOR,   'hp': 95,  'weapon': [const.Weapons.MACHETE, const.Weapons.CHAINSAW],
+{'name': const.Enemies.SKIN_COLLECTOR,   'hp': 100, 'weapon': [const.Weapons.MACHETE, const.Weapons.CHAINSAW],
  'bounty': 75,  'type': 'normal'},
 
 # ========================
 #        AREA BOSSES
 # ========================
-{'name': const.Enemies.SLEDGE_HAMMOND, 'hp': 220, 'weapon': [const.Weapons.SLEDGEHAMMER, const.Weapons.AXE, const.Weapons.CHAINSAW, const.Weapons.BRASS_KNUCKLES],
+{'name': const.Enemies.SLEDGE_HAMMOND, 'hp': 240, 'weapon': [const.Weapons.SLEDGEHAMMER, const.Weapons.AXE, const.Weapons.CHAINSAW, const.Weapons.BRASS_KNUCKLES],
  'bounty': 0, 'type': 'boss', 'area': const.Areas.FOREST},
 
 {'name': const.Enemies.THE_MAYOR,      'hp': 200, 'weapon': [const.Weapons.PISTOL, const.Weapons.SHOTGUN, const.Weapons.REVOLVER, const.Weapons.BRASS_KNUCKLES],
@@ -295,7 +295,7 @@ Enemies = [
 {'name': const.Enemies.BAYOU_BILL,     'hp': 200, 'weapon': [const.Weapons.MACHETE, const.Weapons.SLEDGEHAMMER, const.Weapons.SHOTGUN, const.Weapons.CHAINSAW],
  'bounty': 0, 'type': 'boss', 'area': const.Areas.SWAMP},
 
-{'name': const.Enemies.CAPTAIN_HOLE,   'hp': 200, 'weapon': [const.Weapons.RIFLE, const.Weapons.HARPOON, const.Weapons.KNIFE, const.Weapons.PISTOL],
+{'name': const.Enemies.CAPTAIN_HOLE,   'hp': 220, 'weapon': [const.Weapons.RIFLE, const.Weapons.HARPOON, const.Weapons.KNIFE, const.Weapons.PISTOL],
  'bounty': 0, 'type': 'boss', 'area': const.Areas.CAVE},
 
 # ========================
