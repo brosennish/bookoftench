@@ -88,7 +88,7 @@ class Player:
     achievements: set[str] = field(default_factory=set)
     perks: List[str] = field(default_factory=list)
     cheat_death_ready: bool = False
-    max_weapons: int = 4
+    max_weapons: int = 5
     max_items: int = 4
     weapons: List[str] = field(default_factory=lambda: [const.Weapons.BARE_HANDS,const.Weapons.KNIFE])
     # no helper function used here, direct lookup from Weapons table:
