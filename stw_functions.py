@@ -686,13 +686,17 @@ def krill_or_cray(player):
                         payout = int(wager * 0.9)
                         player.coins += payout
                         player.casino_won += payout
-                    print(f"{g}Lucky guess, bozo! You won {payout} coins.{rst}\n")
+                    print(f"{g}Lucky guess, bozo! You won {payout} coins.{rst}")
                     play_sound('golf_clap')
                     if const.Perks.AP_TENCH_STUDIES in player.perks:
-                        player.gain_xp(2)
+                        leveled_up = player.gain_xp_other(2)
                     else:
-                        player.gain_xp(1)
+                        leveled_up = player.gain_xp_other(1)
+                    if leveled_up:
+                        player.level_up()
+                        player.visit_bank()
                     player.plays -= 1
+                    print()
                     if casino_check(player):
                         return
                     else:
@@ -798,10 +802,14 @@ def above_or_below(player):
                     print(f"{b}You've completed the final round.{rst}\n"
                           f"{g}You cashed out {final_payout} coins!\n")
                     if const.Perks.AP_TENCH_STUDIES in player.perks:
-                        player.gain_xp(4)
+                        leveled_up = player.gain_xp_other(4)
                     else:
-                        player.gain_xp(3)
+                        leveled_up = player.gain_xp_other(3)
+                    if leveled_up:
+                        player.level_up()
+                        player.visit_bank()
                     player.casino_won += final_payout
+                    print()
                     return
 
                 while True:
@@ -924,13 +932,13 @@ def do_explore(gs, player, shop):
         filtered = [i for i in Perks if i['name'] not in player.perks and i['name'] != const.Perks.WENCH_LOCATION]
         if filtered:
             reward = random.choice(filtered)
-            player.add_perk(reward['name'])
             print(f"{p}You sense a noble presence...")
             t.sleep(1)
             print(f"{p}It's a mensch!")
             t.sleep(1)
             print(f"{p}He's gifted you the {reward['name']} perk!\n"
                   f"{p}{reward['description']}")
+            player.add_perk(reward['name'])
             t.sleep(1)
         else:
             return
@@ -1352,9 +1360,12 @@ def battle(player, enemy, gs, shop):
                 elif fled:
                     print(f'{c}You ran away from {enemy.name}!')
                     if const.Perks.AP_TENCH_STUDIES in player.perks:
-                        player.gain_xp(2)
+                        leveled_up = player.gain_xp_other(2)
                     else:
-                        player.gain_xp(1)
+                        leveled_up = player.gain_xp_other(1)
+                    if leveled_up:
+                        player.level_up()
+                        shop.reset_inventory(player)
                     t.sleep(1)
                     stop_music()
                     play_area_theme(player)
@@ -1456,7 +1467,7 @@ def save_game(save_state: SaveGameState):
     with open(f"{save_dir}/{save_file}", "wb") as f:
         pickle.dump(save_state, f)
 
-    print(f"\n{c}Game saved successfully.")
+    print(f"\n{c}Game saved successfully.\n")
 
 
 # ----- MAIN: START GAME LOGIC -----
