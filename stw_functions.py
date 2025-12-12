@@ -72,12 +72,12 @@ def unlock_achievement(player, ach_id):
         filtered = [i for i in Perks if i['name'] not in player.perks and i['name'] != const.Perks.WENCH_LOCATION]
         if filtered:
             reward = random.choice(filtered)
+            print(f"{o}ACHIEVEMENT UNLOCKED: {ach['name']}"
+                  f"\nReward: {reward['name']} | {reward['description']}{rst}")
             player.add_perk(reward['name'])
         else:
             return
 
-        print(f"{o}ACHIEVEMENT UNLOCKED: {ach['name']}"
-              f"\nReward: {reward['name']} | {reward['description']}{rst}")
         t.sleep(3)
         return
 
