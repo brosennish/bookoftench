@@ -6,6 +6,7 @@ from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT
 from savethewench.data.weapons import BARE_HANDS, KNIFE
 from . import Achievement
+from .base import Combatant
 from .events import ItemUsedEvent
 from .item import Item, load_items
 from .weapon import load_weapons, Weapon
@@ -14,7 +15,8 @@ from savethewench.util import print_and_sleep
 
 
 @dataclass
-class Player:
+class Player(Combatant):
+
     name: str = ''
     lives: int = 3
     lvl: int = 1
@@ -34,7 +36,7 @@ class Player:
     max_weapons: int = 5
     # TODO maybe add starting items/weapons to config file
     items: Dict[str, Item] = field(default_factory=lambda: dict((it.name, it) for it in load_items([TENCH_FILET])))
-    weapons: Dict[str, Weapon] = field(
+    weapon_dict: Dict[str, Weapon] = field(
         default_factory=lambda: dict((it.name, it) for it in load_weapons([BARE_HANDS, KNIFE])))
     perks: List[str] = field(default_factory=list)
     achievements: List[Achievement] = field(default_factory=list)
@@ -46,7 +48,7 @@ class Player:
     blind_turns: int = 0
 
     def __post_init__(self):
-        self.current_weapon = self.weapons[BARE_HANDS]
+        self.current_weapon = self.weapon_dict[BARE_HANDS]
 
     @property  # specifically made for returning a calculated value: print(player.xp_needed)
     def xp_needed(self):
@@ -97,20 +99,20 @@ class Player:
         self.hp = min(self.max_hp, self.hp + amount)  # clamp on max_hp
 
     def get_weapons(self) -> List[Weapon]:
-        return list(self.weapons.values())
+        return list(self.weapon_dict.values())
 
     def add_weapon(self, weapon: Weapon):
         print_and_sleep(cyan(f"You found a {weapon.name}!"), 1)
-        if weapon.name in self.weapons:
+        if weapon.name in self.weapon_dict:
             print_and_sleep(yellow(dim("You already have this weapon.")), 1)
-        elif len(self.weapons) >= self.max_weapons:
+        elif len(self.weapon_dict) >= self.max_weapons:
             print_and_sleep(yellow("Your weapon sack is full."), 1)
         else:
-            self.weapons[weapon.name] = weapon
+            self.weapon_dict[weapon.name] = weapon
             print_and_sleep(cyan(f"{weapon.name} added to sack."), 1)
 
     def equip_weapon(self, name: str):
-        self.current_weapon = self.weapons[name]
+        self.current_weapon = self.weapon_dict[name]
 
     def add_perk(self, perk: str):
         self.perks.append(perk)

@@ -3,6 +3,8 @@ from dataclasses import dataclass
 from enum import Enum
 
 
+# TODO more tightly couple EventType and Event - not good that there could be multiple events with the same type (can lead to innacurate counts if not careful)
+
 class EventType(Enum):
     BOUNTY_COLLECTED = "bounty_collected"
     BUY_ITEM = "buy_item"

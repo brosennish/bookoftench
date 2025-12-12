@@ -22,7 +22,18 @@ class TravelEvent(Event):
         super().__init__(EventType.TRAVEL)
         self.area_name = area_name
 
+class CritEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.CRIT)
+
+class HitEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.HIT)
 
 class KillEvent(Event):
     def __init__(self):
         super().__init__(EventType.KILL)
+
+class MissEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.MISS)

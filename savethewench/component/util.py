@@ -2,7 +2,7 @@ import time as t
 from typing import Callable, Any
 
 from savethewench import event_logger
-from savethewench.data.perks import WENCH_LOCATION
+from savethewench.data.perks import WENCH_LOCATION, USED_SNEAKERS, NEW_SNEAKERS
 from savethewench.event_base import EventType
 from savethewench.model import Enemy
 from savethewench.model import GameState
@@ -59,8 +59,8 @@ def get_battle_status_view(game_state: GameState) -> str:
         return (f"\n{name_color(name)} {dim('-')} {combatant_color(f"{hp} HP")}"
                 f"\n{cyan(weapon.name)}"
                 f"\n{dim(' | ').join([
-                    f"{dim("Damage:")} {red(f"{weapon.damage}")}"
-                    f"Accuracy: {yellow(f"{weapon.accuracy}")}"
+                    f"{dim("Damage:")} {red(f"{weapon.damage}")}",
+                    f"Accuracy: {yellow(f"{weapon.accuracy}")}",
                     f"Uses: {uses_left}"
                 ])}\n")
 
@@ -139,3 +139,16 @@ def display_player_perks(game_state: GameState) -> None:
 
         for perk in load_perks(sorted(player.perks)):
             print(purple(f"\n{perk.name} | {perk.description}"))
+
+
+def calculate_flee(player):
+    if USED_SNEAKERS in player.perks:
+        flee = 0.55
+    elif NEW_SNEAKERS in player.perks:
+        flee = 0.60
+    elif USED_SNEAKERS and NEW_SNEAKERS in player.perks:
+        flee = 0.65
+    else:
+        flee = 0.5
+
+    return int(flee * 100)

@@ -2,11 +2,11 @@ from dataclasses import dataclass
 from typing import List
 
 from savethewench.data import Weapons
-from savethewench.data.weapons import SPECIAL, BARE_HANDS
+from savethewench.model.base import WeaponBase
 
 
 @dataclass
-class Weapon:
+class Weapon(WeaponBase):
     name: str
     damage: int
     uses: int

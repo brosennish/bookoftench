@@ -42,7 +42,7 @@ class SelectionComponent(Component):
         pass
 
     @abstractmethod
-    def can_exit(self):
+    def can_exit(self) -> bool:
         pass
 
     def run(self) -> GameState:

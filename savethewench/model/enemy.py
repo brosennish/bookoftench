@@ -3,11 +3,12 @@ from dataclasses import dataclass, field
 from typing import List
 
 from savethewench.data import Enemies
+from .base import Combatant
 from .weapon import Weapon, load_weapon
 
 
 @dataclass
-class Enemy:
+class Enemy(Combatant):
     name: str
     hp: int
     weapons: List[str]

@@ -1,12 +1,12 @@
 import random
-import time as t
 from dataclasses import dataclass
 from functools import cache
 from typing import List
 
 from savethewench.data import Areas
 from savethewench.ui import purple, yellow
-from .enemy import load_enemy
+from savethewench.util import print_and_sleep
+from .enemy import load_enemy, Enemy
 
 
 @dataclass
@@ -23,18 +23,18 @@ class Area:
     def __hash__(self) -> int:
         return hash((self.name, self.enemy_count, self.enemies_killed, self.boss_defeated, self.current_enemy))
 
-    def spawn_enemy(self):
+    def spawn_enemy(self) -> Enemy:
         enemy = load_enemy(random.choice(self.enemies))
         if random.random() < 0.10:
             enemy.name = f"Elite {enemy.name}"
             enemy.hp = int(enemy.hp * 1.5)
             enemy.max_hp = int(enemy.max_hp * 1.5)
             enemy.coins = int(enemy.coins * 1.5)
-            print(f"{yellow("An enemy appears!")} {purple("(Elite enemy!)")}")
+            print_and_sleep(f"{yellow("An enemy appears!")} {purple("(Elite enemy!)")}", 1)
         else:
-            print(yellow("An enemy appears!"))
+            print_and_sleep(yellow("An enemy appears!"), 1)
         self.current_enemy = enemy
-        t.sleep(1)
+        return self.current_enemy
 
     def reset_current_enemy(self):
         self.current_enemy = None
