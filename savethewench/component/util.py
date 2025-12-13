@@ -4,10 +4,10 @@ from typing import Callable, Any
 from savethewench import event_logger
 from savethewench.data.perks import WENCH_LOCATION, USED_SNEAKERS, NEW_SNEAKERS
 from savethewench.event_base import EventType
-from savethewench.model import Enemy
 from savethewench.model import GameState
-from savethewench.model import Player
-from savethewench.model.perk import load_perks
+from savethewench.model.enemy import Enemy
+from savethewench.model.perk import load_perks, attach_perk
+from savethewench.model.player import Player
 from savethewench.ui import blue, cyan, green, orange, purple, red, yellow, dim
 from savethewench.util import print_and_sleep
 
@@ -128,27 +128,19 @@ def display_player_achievements(game_state: GameState):
             print(orange(f"\n{ach.name} | {ach.description}"))
 
 
-def display_player_perks(game_state: GameState) -> None:
-    player: Player = game_state.player
-    if not player.perks:
+def display_active_perks(game_state: GameState) -> None:
+    active_perks = [p for p in load_perks() if p.is_active()]
+    if len(active_perks) == 0:
         print_and_sleep(yellow("Your perks are dry."), 1)
     else:
         print(f"\nYour Perks:")
-        if WENCH_LOCATION in player.perks:
+        if WENCH_LOCATION in active_perks:
             print(f'\nWench Location: {blue(game_state.wench_area)}')
 
-        for perk in load_perks(sorted(player.perks)):
+        for perk in sorted(active_perks, key=lambda a: a.name):
             print(purple(f"\n{perk.name} | {perk.description}"))
 
 
-def calculate_flee(player):
-    if USED_SNEAKERS in player.perks:
-        flee = 0.55
-    elif NEW_SNEAKERS in player.perks:
-        flee = 0.60
-    elif USED_SNEAKERS and NEW_SNEAKERS in player.perks:
-        flee = 0.65
-    else:
-        flee = 0.5
-
-    return int(flee * 100)
+@attach_perk(USED_SNEAKERS, NEW_SNEAKERS, silent=True)
+def calculate_flee() -> float:
+    return 0.5

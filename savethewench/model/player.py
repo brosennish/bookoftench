@@ -3,20 +3,21 @@ from typing import Dict, List
 
 from savethewench import event_logger
 from savethewench.data.items import TENCH_FILET
-from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT
+from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
+    VAGABONDAGE, NOMADS_LAND
 from savethewench.data.weapons import BARE_HANDS, KNIFE
-from . import Achievement
+from savethewench.ui import yellow, cyan, dim
+from savethewench.util import print_and_sleep
+from .achievement import Achievement
 from .base import Combatant
 from .events import ItemUsedEvent
 from .item import Item, load_items
+from .perk import attach_perk
 from .weapon import load_weapons, Weapon
-from savethewench.ui import yellow, cyan, dim
-from savethewench.util import print_and_sleep
 
 
 @dataclass
 class Player(Combatant):
-
     name: str = ''
     lives: int = 3
     lvl: int = 1
@@ -30,25 +31,34 @@ class Player(Combatant):
     interest: int = 0
     casino_won: int = 0
     casino_lost: int = 0
-    plays: int = 10
+    _plays: int = 10
 
-    max_items: int = 5
-    max_weapons: int = 5
+    _max_items: int = 5
+    _max_weapons: int = 5
     # TODO maybe add starting items/weapons to config file
     items: Dict[str, Item] = field(default_factory=lambda: dict((it.name, it) for it in load_items([TENCH_FILET])))
     weapon_dict: Dict[str, Weapon] = field(
         default_factory=lambda: dict((it.name, it) for it in load_weapons([BARE_HANDS, KNIFE])))
-    perks: List[str] = field(default_factory=list)
     achievements: List[Achievement] = field(default_factory=list)
     current_weapon: Weapon = None
 
-    blind: bool = False
-    blinded_by: str = ''
-    blind_effect: float = 0.0
-    blind_turns: int = 0
-
     def __post_init__(self):
         self.current_weapon = self.weapon_dict[BARE_HANDS]
+
+    @property
+    @attach_perk(GRAMBLIN_MAN, GRAMBLING_ADDICT, silent=True)
+    def plays(self):
+        return self._plays
+
+    @property
+    @attach_perk(NOMADS_LAND, VAGABONDAGE, silent=True)
+    def max_items(self):
+        return self._max_items
+
+    @property
+    @attach_perk(NOMADS_LAND, VAGABONDAGE, silent=True)
+    def max_weapons(self):
+        return self._max_weapons
 
     @property  # specifically made for returning a calculated value: print(player.xp_needed)
     def xp_needed(self):
@@ -114,7 +124,6 @@ class Player(Combatant):
     def equip_weapon(self, name: str):
         self.current_weapon = self.weapon_dict[name]
 
-    def add_perk(self, perk: str):
-        self.perks.append(perk)
-
-
+    @attach_perk(LUCKY_TENCHS_FIN, value_description="crit")
+    def get_crit_chance(self) -> float:
+        return super().get_crit_chance()

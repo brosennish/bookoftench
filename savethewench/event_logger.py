@@ -8,6 +8,15 @@ _COUNTER = Counter()
 _LISTENERS: Dict[type[Event], Set[type[Listener]]] = defaultdict(set)
 
 
+# log events to a counter from a different class -
+# to GameState in particular, so that counts can be
+# serialized more easily when game is saved and
+# set when game is loaded
+def set_counter(counter: Counter):
+    global _COUNTER
+    _COUNTER = counter
+
+
 def log_event(event: Event):
     _COUNTER[event.type] += 1
     _notify(event)

@@ -3,21 +3,21 @@ from dataclasses import dataclass
 from functools import partial
 from typing import List
 
+from savethewench import event_logger
 from savethewench.component.base import FunctionExecutingComponent, \
     FunctionalSelectionBinding, FunctionalSelectionComponent, RandomThresholdComponent, ThresholdBinding, \
     TextDisplayingComponent, NoOpComponent, anonymous_component, Component
+from savethewench.component.util import get_battle_status_view, display_bank_balance, display_player_achievements, \
+    display_game_overview, calculate_flee, display_active_perks
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION
-from savethewench.model import GameState, Player
+from savethewench.model.events import CritEvent, MissEvent, HitEvent
+from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
+from savethewench.model.perk import load_perks, Perk, attach_perk
 from savethewench.model.weapon import load_discoverable_weapons
 from savethewench.ui import green, purple, yellow, dim, red
 from savethewench.util import print_and_sleep
 from .base import LinearComponent, LabeledSelectionComponent, SelectionBinding
-from .util import get_battle_status_view, display_bank_balance, display_player_perks, display_player_achievements, \
-    display_game_overview, calculate_flee
-from savethewench.model.perk import load_perks, Perk
-from .. import event_logger
-from ..model.events import CritEvent, KillEvent, MissEvent, HitEvent
 
 
 class Explore(RandomThresholdComponent):
@@ -44,18 +44,20 @@ class Explore(RandomThresholdComponent):
     @staticmethod
     @anonymous_component(state_dependent=True)
     def _discover_coin(game_state: GameState):
-        coins = random.randint(25, 50) if METAL_DETECTIVE in game_state.player.perks \
-            else random.randint(10, 25)
-        print_and_sleep(green(f"You found {coins} coins!"))
+        @attach_perk(METAL_DETECTIVE, value_description="coin")
+        def find(): return random.randint(10, 25)
+
+        coins = find()
+        print_and_sleep(green(f"You found {coins} of coin!"), 1)
         game_state.player.coins += coins
 
     @staticmethod
-    @anonymous_component(state_dependent=True)
-    def _discover_perk(game_state: GameState):
-        filtered: List[Perk] = [p for p in load_perks() if p.name not in [*game_state.player.perks, WENCH_LOCATION]]
+    @anonymous_component()
+    def _discover_perk():
+        filtered: List[Perk] = load_perks(lambda p: not (p.is_active() or p.name == WENCH_LOCATION))
         if len(filtered) > 0:
             reward = random.choice(filtered)
-            game_state.player.add_perk(reward.name)
+            reward.activate()
             print_and_sleep(purple(f"You found the {reward.name} perk!\n{reward.description}"), 1)
         else:
             print_and_sleep(yellow(dim("You came up dry.")), 1)
@@ -125,7 +127,8 @@ class Attack(Component):
         player, enemy = self.game_state.player, self.game_state.current_area.current_enemy
         p_attack_result = player.attack(enemy)
         if p_attack_result.success:
-            print(f"You attacked {enemy.name} with your {player.current_weapon.name} for {red(p_attack_result.damage)} damage!")
+            print(f"You attacked {enemy.name} with your {player.current_weapon.name} for "
+                  f"{red(p_attack_result.damage)} damage!")
             event_logger.log_event(HitEvent())
             if p_attack_result.critical:
                 print_and_sleep(red("*** Critical hit ***"), 1)
@@ -136,27 +139,28 @@ class Attack(Component):
         if not enemy.is_alive():
             print(red(f"{enemy.name} is now in Hell."))
             self.game_state.current_area.kill_current_enemy()
-            #player.gain_enemy_weapon(enemy)
+            # player.gain_enemy_weapon(enemy)
             return self.game_state
         e_attack_result = enemy.attack(player)
         if e_attack_result.success:
-            print(
-                f"{enemy.name} attacked you with their {enemy.current_weapon.name} for {red(e_attack_result.damage)} damage!")
+            print(f"{enemy.name} attacked you with their {enemy.current_weapon.name} for "
+                  f"{red(e_attack_result.damage)} damage!")
         else:
             print(yellow(f"{enemy.name} missed!"))
         if not player.is_alive():
             # TODO handle player death
-            print("You ded")
+            print(red("You ded"))
         return self.game_state
+
 
 class Flee(NoOpComponent): pass
 
+
 @dataclass
 class FleeSelectionBinding(SelectionBinding):
-    player: Player
-
     def format(self):
-        return f"Flee ({calculate_flee(self.player)}%)"
+        return f"Flee ({int(calculate_flee() * 100)}%)"
+
 
 # TODO - a lot, but especially bounty stuff and handling player death
 class Battle(LabeledSelectionComponent):
@@ -166,9 +170,7 @@ class Battle(LabeledSelectionComponent):
                              SelectionBinding('A', "Attack", Attack),
                              SelectionBinding('I', "Use Item", UseItem),
                              SelectionBinding('S', "Switch Weapon", EquipWeapon),
-                             FleeSelectionBinding('F', "Flee (50%)",
-                                                  anonymous_component()(self._try_flee),
-                                                  game_state.player),
+                             FleeSelectionBinding('F', "Flee (50%)", anonymous_component()(self._try_flee)),
                              SelectionBinding('P', "Perks", DisplayPerks)
                          ])
         self.player = self.game_state.player
@@ -179,8 +181,8 @@ class Battle(LabeledSelectionComponent):
         return self.fled or not (self.player.is_alive() and self.enemy.is_alive())
 
     def _try_flee(self):
-        flee_chance = calculate_flee(self.game_state.player)
-        if (random.random() * 100) < flee_chance:
+        flee_chance = calculate_flee()
+        if random.random() < flee_chance:
             print(dim(f"You ran away from {self.enemy.name}!"))
             self.fled = True
             self.game_state.current_area.reset_current_enemy()
@@ -200,7 +202,7 @@ class BankBalance(TextDisplayingComponent):
 
 class DisplayPerks(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, display_callback=display_player_perks, should_proceed=False)
+        super().__init__(game_state, display_callback=display_active_perks, should_proceed=False)
 
 
 class Overview(TextDisplayingComponent):

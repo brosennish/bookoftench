@@ -1,4 +1,5 @@
 from savethewench import event_logger
+from savethewench.audio import play_music
 from savethewench.component.base import Component, LinearComponent, BinarySelectionComponent, \
     TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, NoOpComponent
 from savethewench.data.audio import INTRO_THEME
@@ -7,7 +8,6 @@ from savethewench.ui import red
 from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, BankBalance, DisplayPerks, Overview
 from .casino import CasinoBouncer
 from .util import get_player_status_view
-from savethewench.audio import play_music
 
 
 class StartMenu(LabeledSelectionComponent):

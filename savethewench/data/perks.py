@@ -1,3 +1,10 @@
+import random
+from functools import partial
+from typing import Callable
+
+from savethewench.ui import purple
+from savethewench.util import print_and_sleep
+
 # Constants
 AP_TENCH_STUDIES = "AP Tench Studies"
 AMBROSE_BLADE = "Ambrose Blade"
@@ -31,8 +38,31 @@ VAMPIRIC_SPERM = "Vampiric Sperm"
 WALLET_CHAIN = "Wallet Chain"
 WENCH_LOCATION = "Wench Location"
 
-# Types
 
+def _numeric_change(original: int | float, value_description: str, silent: bool, change: int | float, name: str,
+                    change_func: Callable[[int | float, int | float], int | float]) -> int | float:
+    if not silent:
+        if len(value_description) == 0:
+            print_and_sleep(f"Applied perk: {name}", 1)
+        else:
+            inc_or_dec = "increased" if change >= 0 else "decreased"
+            print_and_sleep(purple(f"{name} {inc_or_dec} {value_description} by {abs(change)}%"), 1)
+    return change_func(original, change)
+
+
+def _bounded_random_change(original: int, value_description: str, silent: bool, lower: int, upper: int,
+                           name: str) -> int:
+    val = random.randint(lower, upper)
+    if not silent:
+        if len(value_description) == 0:
+            print_and_sleep(f"Applied perk: {name}", 1)
+        else:
+            print_and_sleep(purple(f"{name} increased {original} {value_description} to {original + val}"), 1)
+    return original + val
+
+
+_int_change: Callable[[int, int], int] = lambda orig, i: orig + i
+_percent_change: Callable[[float, int], float] = lambda orig, pct: orig + (float(pct) / 100.0)
 
 Perks = [
     {
@@ -54,11 +84,13 @@ Perks = [
         'name': SLEDGE_FUND,
         'cost': 160,
         'description': "Bank interest rate +5%",
+        'wrapper': partial(_numeric_change, change=5, name=SLEDGE_FUND, change_func=_percent_change),
     },
     {
         'name': LUCKY_TENCHS_FIN,
         'cost': 80,
         'description': "Crit chance +5%",
+        'wrapper': partial(_numeric_change, change=5, name=LUCKY_TENCHS_FIN, change_func=_percent_change),
     },
     {
         'name': DOCTOR_FISH,
@@ -69,11 +101,13 @@ Perks = [
         'name': VAGABONDAGE,
         'cost': 100,
         'description': "Carry +1 weapon and item",
+        'wrapper': partial(_numeric_change, change=1, name=VAGABONDAGE, change_func=_int_change)
     },
     {
         'name': NOMADS_LAND,
         'cost': 100,
         'description': "Carry +1 weapon and item",
+        'wrapper': partial(_numeric_change, change=1, name=NOMADS_LAND, change_func=_int_change)
     },
     {
         'name': RICKETY_PICKPOCKET,
@@ -89,11 +123,13 @@ Perks = [
         'name': USED_SNEAKERS,
         'cost': 40,
         'description': "Flee chance +5%",
+        'wrapper': partial(_numeric_change, change=5, name=USED_SNEAKERS, change_func=_percent_change),
     },
     {
         'name': LEATHER_SKIN,
         'cost': 160,
         'description': "Take 10% less damage from attacks",
+        'wrapper': partial(_numeric_change, change=-10, name=LEATHER_SKIN, change_func=_percent_change),
     },
     {
         'name': HEALTH_NUT,
@@ -114,6 +150,7 @@ Perks = [
         'name': NEW_SNEAKERS,
         'cost': 90,
         'description': "Flee chance +10%",
+        'wrapper': partial(_numeric_change, change=10, name=NEW_SNEAKERS, change_func=_percent_change),
     },
     {
         'name': BULLETPROOF,
@@ -129,11 +166,14 @@ Perks = [
         'name': GRAMBLIN_MAN,
         'cost': 100,
         'description': 'Enjoy +5 plays at the casino',
+        'wrapper': partial(_numeric_change, change=5, name=GRAMBLIN_MAN, change_func=_int_change),
     },
     {
         'name': GRAMBLING_ADDICT,
         'cost': 160,
         'description': 'Enjoy +5 plays and +5% payout at the casino',
+        # note - this only works for plays
+        'wrapper': partial(_numeric_change, change=5, name=GRAMBLIN_MAN, change_func=_int_change),
     },
     {
         'name': VAMPIRIC_SPERM,
@@ -144,6 +184,7 @@ Perks = [
         'name': METAL_DETECTIVE,
         'cost': 110,
         'description': "Find up to 20 extra coins when exploring",
+        'wrapper': partial(_bounded_random_change, lower=0, upper=20, name=METAL_DETECTIVE),
     },
     {
         'name': TENCH_THE_BOUNTY_HUNTER,
@@ -164,11 +205,13 @@ Perks = [
         'name': BARTER_SAUCE,
         'cost': 140,
         'description': "Shop prices are 10% lower",
+        'wrapper': partial(_numeric_change, change=-10, name=BARTER_SAUCE, change_func=_percent_change)
     },
     {
         'name': TRADE_SHIP,
         'cost': 300,
         'description': "Shop prices are 20% lower",
+        'wrapper': partial(_numeric_change, change=-20, name=TRADE_SHIP, change_func=_percent_change),
     },
     {
         'name': CROWS_NEST,

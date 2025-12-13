@@ -1,4 +1,5 @@
 import random
+from collections import Counter
 from dataclasses import dataclass, field
 from typing import List
 
@@ -23,11 +24,14 @@ class GameState:
     wanted: str = field(init=False)
     bounty: int = field(init=False)
 
+    event_counter: Counter = field(default_factory=Counter)
+
     def __post_init__(self):
         self.current_area = self.areas[0]
         enemy_choice: Enemy = random.choice(load_enemies())
         self.wanted = enemy_choice.name
         self.bounty = enemy_choice.bounty
+        event_logger.set_counter(self.event_counter)
 
     def update_current_area(self, area_name: str) -> "GameState":
         for area in self.areas:

@@ -1,8 +1,7 @@
-from functools import wraps
 import random
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import List, Callable, Any
+from typing import List, Callable
 
 from savethewench.model import GameState
 from savethewench.ui import blue, dim
@@ -196,5 +195,7 @@ def anonymous_component(state_dependent=False) -> Callable[[Callable], type[Comp
                 else:
                     func()
                 return self.game_state
+
         return AnonymousComponent
+
     return decorator

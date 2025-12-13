@@ -3,31 +3,27 @@ from dataclasses import dataclass, field
 from typing import List
 
 from savethewench.data import Enemies
+from savethewench.data.weapons import PEPPER_SPRAY
 from .base import Combatant
 from .weapon import Weapon, load_weapon
 
 
 @dataclass
 class Enemy(Combatant):
-    name: str
-    hp: int
-    weapons: List[str]
-    bounty: int
-    type: str
+    name: str = ''
+    hp: int = 0
+    weapons: List[str] = field(default_factory=list)
+    bounty: int = 0
+    type: str = ''
     items: List[str] = field(default_factory=list)
     coins: int = random.randint(5, 50)
     alive: bool = True
-
-    blind: bool = False
-    blinded_by: str = ''
-    blind_effect: float = 0.0
-    blind_turns: int = 0
 
     current_weapon: Weapon = field(init=False)
     max_hp: int = field(init=False)
 
     def __post_init__(self):
-        self.current_weapon = load_weapon(random.choice(self.weapons))
+        self.current_weapon = load_weapon(PEPPER_SPRAY)  # load_weapon(random.choice(self.weapons))
         self.max_hp = self.hp
 
 

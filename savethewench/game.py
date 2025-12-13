@@ -1,7 +1,11 @@
+import random
+
 from savethewench.audio import stop_all_sounds
 from savethewench.component import StartMenu
 from savethewench.component.base import Component
 from savethewench.model import GameState
+from savethewench.model.perk import load_perks
+from savethewench.model.weapon import load_discoverable_weapons
 
 
 class SaveTheWenchGame:
@@ -19,7 +23,16 @@ class SaveTheWenchGame:
     @staticmethod
     def debug_from(component_type: type[Component]):
         try:
-            component_type(GameState()).run()
+            game_state = GameState()
+            player = game_state.player
+            random.seed(666)
+            player.name = "debug"
+            player.coins = 1000
+            for weapon in load_discoverable_weapons():
+                player.weapon_dict[weapon.name] = weapon
+            for perk in load_perks():
+                perk.activate()
+            component_type(game_state).run()
         except Exception as e:
             print(e)
             raise e

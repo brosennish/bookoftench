@@ -26,6 +26,7 @@ def can_gamble(game_state: GameState) -> bool:
     player = game_state.player
     return player.plays > 0 and player.coins > 0
 
+
 @anonymous_component(state_dependent=True)
 def display_crapped_out_message(game_state: GameState):
     player = game_state.player
