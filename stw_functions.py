@@ -297,8 +297,8 @@ def visit_bank_manual(player):
     play_music('bank_theme')
 
     print(f"Welcome to the Off-Shore Bank of Shebokken.\n"
-          f"Because you did not level up -\n"
-          f"Deposits are forbidden, and withdrawals incur a 10% fee.")
+          f"We do not accept deposits between level-ups.\n"
+          f"Withdrawals will incur a 10% fee.")
 
     while True:
         print(f"\nPlayer: {g}{player.coins} {rst}{d}|{rst} Bank: {g}{player.bank}{rst}")
