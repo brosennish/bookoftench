@@ -308,6 +308,7 @@ There are parts of another man or men scattered around you.{rst}""")
                 t.sleep(1)
 
             print(f'You attacked {enemy.name} with your {self.current_weapon} for {r}{dmg} {rst}damage!')
+            log_event(const.Events.HIT)
             if crit:
                 print(f"{r}***Critical Hit***{rst}")
                 self.play_weapon_sfx()
@@ -343,6 +344,7 @@ There are parts of another man or men scattered around you.{rst}""")
     
         else:
             print(f'{y}You missed.')
+            log_event(const.Events.MISS)
             self.blind_reset()
             t.sleep(1)
 
