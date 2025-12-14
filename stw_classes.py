@@ -279,16 +279,16 @@ There are parts of another man or men scattered around you.{rst}""")
                 enemy.blinded_by = const.Weapons.PEPPER_SPRAY
                 enemy.blind_effect = 0.50
                 reduction = enemy.blind_effect * 100
-                enemy.blind_turns = 3
-                print(f'{p}{enemy.name} has been pepper sprayed! Accuracy down {int(reduction)}% for one turn.{rst}')
+                enemy.blind_turns = random.randint(2, 4)
+                print(f'{p}{enemy.name} has been pepper sprayed! Accuracy down {int(reduction)}% for {enemy.blind_turns} turns.{rst}')
                 t.sleep(1)
             if weapon_data['name'] == const.Weapons.BEAR_SPRAY:
                 enemy.blind = True
                 enemy.blinded_by = const.Weapons.BEAR_SPRAY
                 enemy.blind_effect = 0.75
                 reduction = enemy.blind_effect * 100
-                enemy.blind_turns = 3
-                print(f'{p}{enemy.name} has been bear sprayed! Accuracy down {int(reduction)}% for one turn.{rst}')
+                enemy.blind_turns = random.randint(2, 4)
+                print(f'{p}{enemy.name} has been bear sprayed! Accuracy down {int(reduction)}% for {enemy.blind_turns} turns.{rst}')
                 t.sleep(1)
             if weapon_data['name'] == const.Weapons.CHILI_POWDER:
                 enemy.blind = True
@@ -976,16 +976,16 @@ class Enemy:
                     player.blinded_by = 'Pepper Spray'
                     player.blind_effect = 0.50
                     reduction = player.blind_effect * 100
-                    player.blind_turns = 3
-                    print(f'{p}You have been pepper sprayed! Accuracy down {int(reduction)}% for one turn.{rst}')
+                    player.blind_turns = random.randint(2, 4)
+                    print(f'{p}You have been pepper sprayed! Accuracy down {int(reduction)}% for {player.blind_turns} turns.{rst}')
                     t.sleep(1)
                 if weapon_data['name'] == 'Bear Spray':
                     player.blind = True
                     player.blinded_by = 'Bear Spray'
                     player.blind_effect = 0.75
                     reduction = player.blind_effect * 100
-                    player.blind_turns = 3
-                    print(f'{p}You have been bear sprayed! Accuracy down {int(reduction)}% for one turn.{rst}')
+                    player.blind_turns = random.randint(2, 4)
+                    print(f'{p}You have been bear sprayed! Accuracy down {int(reduction)}% for {player.blind_turns} turns.{rst}')
                     t.sleep(1)
                 if weapon_data['name'] == 'Chili Powder':
                     player.blind = True
