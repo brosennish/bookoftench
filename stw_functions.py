@@ -297,8 +297,8 @@ def visit_bank_manual(player):
     play_music('bank_theme')
 
     print(f"Welcome to the Off-Shore Bank of Shebokken.\n"
-          f"Because you did not level up -\n"
-          f"Deposits are forbidden, and withdrawals incur a 10% fee.")
+          f"We do not accept deposits between level-ups.\n"
+          f"Withdrawals will incur a 10% fee.")
 
     while True:
         print(f"\nPlayer: {g}{player.coins} {rst}{d}|{rst} Bank: {g}{player.bank}{rst}")
@@ -320,7 +320,7 @@ def visit_bank_manual(player):
                 player.bank -= num
                 amount = int(num * 0.9)
                 player.coins += amount
-                print(f'You successfully withdrew {g}{amount}{rst} coins from the bank.')
+                print(f'You withdrew {g}{amount}{rst} coins from the bank.')
                 log_event(const.Events.WITHDRAW)
                 t.sleep(1)
                 continue
@@ -415,7 +415,7 @@ def log_event(event: str):
 def get_choice_from_dict(prompt: str, options: dict) -> str:    # prompt is a str and options are a dict, return a str
     print("" + prompt)                              # print a new line and the prompt (MAIN MENU, etc.)
     for key, label in options.items():                # for the key/label for each dict pair in options
-        print(f"[{key.upper()}] {label}")             # print the key in caps and the label as is
+        print(f"[{key}] {label}")                   # print the key in caps and the label as is
     while True:
         choice = input(f"{b}>{rst} ").strip().lower()          # take the input, strip end spaces, and make lowercase
         if choice in options:
@@ -692,7 +692,7 @@ def krill_or_cray(player):
     while True:
         print(f"Coins: {g}{player.coins}{rst} {d}|{rst} Plays: {c}{player.plays}{rst}\n")
         choice = input(f"[#] Wager\n"
-                       f"[q] Leave:\n{b}>{rst} ").strip().lower()
+                       f"[q] Leave\n{b}>{rst} ").strip().lower()
 
         if choice == "q":
             print(f"{b}Later bozo.{rst}")
@@ -813,8 +813,9 @@ def above_or_below(player):
 
                 if call == 'a' and roll2 > roll1:
                     payout = wager * ladder[turn-1]
-                    print(f"{g}Lucky guess!\n"
-                          f"Payout increased to {int(payout)} coins.\n")
+                    if turn < 4:
+                        print(f"{g}Lucky guess!\n"
+                              f"Payout increased to {int(payout)} coins.\n")
                 elif call == 'a' and roll2 <= roll1:
                     print(f"{y}Your guess was dry.\n")
                     player.coins -= wager
@@ -822,8 +823,9 @@ def above_or_below(player):
                     break
                 elif call == 'b' and roll2 < roll1:
                     payout = wager * ladder[turn-1]
-                    print(f"{g}Lucky guess!\n"
-                          f"Payout increased to {int(payout)} coins.\n")
+                    if turn < 4:
+                        print(f"{g}Lucky guess!\n"
+                              f"Payout increased to {int(payout)} coins.\n")
                 else:
                     print(f"{y}Your guess was dry.\n")
                     player.coins -= wager
@@ -838,7 +840,7 @@ def above_or_below(player):
                         final_payout = int(payout)
 
                     player.coins += final_payout
-                    print(f"{b}You completed the final round.{rst}\n"
+                    print(f"{b}You completed the final round!{rst}\n"
                           f"{g}You cashed out {final_payout} coins!\n")
                     if const.Perks.AP_TENCH_STUDIES in player.perks:
                         leveled_up = player.gain_xp_other(4)
@@ -1018,7 +1020,7 @@ def do_equip_weapon(player):
             if 1 <= num <= len(player.weapons):
                 weapon = player.weapons[num - 1] # python zero index correction
                 player.current_weapon = weapon 
-                print(f"{c}{weapon} successfully equipped.")
+                print(f"{c}{weapon} equipped.")
                 t.sleep(1)
                 return
     
@@ -1511,7 +1513,7 @@ def save_game(save_state: SaveGameState):
     with open(f"{save_dir}/{save_file}", "wb") as f:
         pickle.dump(save_state, f)
 
-    print(f"\n{c}Game saved successfully.\n")
+    print(f"\n{c}Game saved.\n")
 
 
 # ----- MAIN: START GAME LOGIC -----
