@@ -45,7 +45,7 @@ def win_game(gs):
 
 def play_again():
     while True:
-        choice = input(f"\nWould you like to play again? (y/n):{b}\n> ").strip().lower()
+        choice = input(f"\nWould you like to play again? (y/n):{b}\n>{rst} ").strip().lower()
         if choice == 'y':
             return True
         elif choice == 'n':
@@ -297,7 +297,7 @@ def visit_bank_manual(player):
     play_music('bank_theme')
 
     print(f"Welcome to the Off-Shore Bank of Shebokken.\n"
-          f"Since you're visiting between level-ups,\n"
+          f"Because you did not level up -\n"
           f"Deposits are forbidden, and withdrawals incur a 10% fee.")
 
     while True:
@@ -335,6 +335,7 @@ def visit_bank_manual(player):
         elif choice == 'q':
             print(f"{b}Very well...")
             t.sleep(1)
+            stop_music()
             return
 
         else:
@@ -496,7 +497,7 @@ def run_game(gs=GameState(), player=Player(), shop=Shop(), name=True, tutorial=T
 8. Travel between areas to search for the wench's hidden location
 9. Perks offer special rewards and permanent bonuses
 10. Clear the enemies in the wench's area and defeat the final boss to save the wench and win the game""")
-            input(f'{b}> ')
+            input(f'{b}>{rst} ')
             tutorial = False
         else:
             print('Invalid choice.')
@@ -790,7 +791,7 @@ def above_or_below(player):
                     print(f"Round: {c}{turn}{rst} {d}|{rst} Wager: {g}{wager}{rst} {d}|{rst} Mult: {p}{mult}{rst} {d}|{rst} Payout: {g}{int(payout*1.05)}{rst}\n")
                 else:
                     print(f"Round: {c}{turn}{rst} {d}|{rst} Wager: {g}{wager}{rst} {d}|{rst} Mult: {p}{mult}{rst} {d}|{rst} Payout: {g}{int(payout)}{rst}\n")
-                input(f"Roll the die\n{b}> ")
+                input(f"Roll the die\n{b}>{rst} ")
                 roll1 = random.randint(1, 6)
                 print(f"{b}You rolled a {roll1}.\n")
 
@@ -803,7 +804,7 @@ def above_or_below(player):
                     else:
                         break
 
-                input(f"\nRoll the die.\n{b}> ")
+                input(f"\nRoll the die.\n{b}>{rst} ")
                 roll2 = random.randint(1, 6)
                 print(f"{b}You rolled a {roll2}.\n")
 
@@ -849,7 +850,7 @@ def above_or_below(player):
                 while True:
                     choice = input(f"[c] Continue\n"
                                    f"[q] Cash Out\n"
-                                   f"{b}> ")
+                                   f"{b}>{rst} ")
                     if choice == 'c':
                         break
                     elif choice == 'q':
@@ -1235,6 +1236,8 @@ def sell_weapon(weapon_name, player):  # player sells weapon
     player.weapon_uses.pop(weapon_name, None)
 
     print(f"{g}You sold {weapon_name} for {sell_value} coins.")
+    if weapon_name == player.current_weapon:
+        player.current_weapon = const.Weapons.BARE_HANDS
     play_sound('purchase')
     t.sleep(1)
     log_event(const.Events.SELL_WEAPON)
@@ -1359,7 +1362,7 @@ def battle(player, enemy, gs, shop):
         if enemy.name == const.Enemies.CAPTAIN_HOLE and const.Items.TENCH_FILET in player.items:
             print("Captain Hole has offered to shoot himself in the jines in exchange for your Tench Filet.")
             t.sleep(4)
-            filet = input(f"Do you accept? (y/n):\n{b}> ").strip().lower()
+            filet = input(f"Do you accept? (y/n):\n{b}>{rst} ").strip().lower()
             if filet == 'y':
                 stop_music()
                 player.items.remove(const.Items.TENCH_FILET)

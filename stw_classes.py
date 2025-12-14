@@ -7,7 +7,7 @@ import stw_constants as const
 from stw_data import Weapons, Items, Enemies, Areas, Perks
 from stw_colors import red as r, green as g, blue as b, purple as p, yellow as y, cyan as c, orange as o
 from stw_colors import dim as d, reset as rst
-from stw_audio import play_sound, play_music
+from stw_audio import play_sound, play_music, stop_music
 
 
 # --- GS CLASS ---
@@ -634,6 +634,7 @@ There are parts of another man or men scattered around you.{rst}""")
             elif choice == 'n':
                 print(f"{b}Very well...")
                 t.sleep(1)
+                stop_music()
                 return
             else:
                 print(f"{y}Invalid choice.")
