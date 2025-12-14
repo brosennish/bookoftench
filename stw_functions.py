@@ -139,9 +139,9 @@ def battle_header(player, enemy):
     ec = e_color(enemy)
 
     # Player battle header
-    print(f"\n{o}{player.name}{rst} {d}-{rst} {pc}{player.hp} HP {rst}\n{c}{p_weapon_data['name']}{rst}\n{d}Damage: {rst}{r}{p_weapon_data['damage']}{rst} {d}| Accuracy: {rst}{y}{p_weapon_data['accuracy']}{rst} {d}| Uses: {rst}{p_uses_left}")
+    print(f"\n{o}{player.name}{rst} {d}-{rst} {pc}{int(player.hp)} HP {rst}\n{c}{p_weapon_data['name']}{rst}\n{d}Damage: {rst}{r}{p_weapon_data['damage']}{rst} {d}| Accuracy: {rst}{y}{p_weapon_data['accuracy']}{rst} {d}| Uses: {rst}{p_uses_left}")
     # Enemy battle header
-    print(f"\n{p}{enemy.name}{rst} {d}-{rst} {ec}{enemy.hp} HP{rst}\n{c}{e_weapon_data['name']}{rst}\n{d}Damage: {rst}{r}{e_weapon_data['damage']}{rst} {d}| Accuracy: {rst}{y}{e_weapon_data['accuracy']}{rst} {d}| Uses: {rst}{e_uses_left}")
+    print(f"\n{p}{enemy.name}{rst} {d}-{rst} {ec}{int(enemy.hp)} HP{rst}\n{c}{e_weapon_data['name']}{rst}\n{d}Damage: {rst}{r}{e_weapon_data['damage']}{rst} {d}| Accuracy: {rst}{y}{e_weapon_data['accuracy']}{rst} {d}| Uses: {rst}{e_uses_left}")
 
 
 def bayou_bill_intro():
@@ -542,7 +542,7 @@ def actions_menu(gs, player, shop):
             print(f"\nArea: {b}{c_area} {rst}{d}|{rst} Killed: {r}{killed}{rst} {d}|{rst} Remaining: {y}{remaining} {rst}{d}|{rst} Wanted: {p}{gs.wanted} {rst}{d}|{rst} Bounty: {p}{bounty} {rst}coins")
         else:
             print(f"\nArea: {b}{c_area} {rst}{d}|{rst} Killed: {r}{killed} {rst}{d}|{rst} Wanted: {p}{gs.wanted} {rst}{d}|{rst} Bounty: {p}{gs.bounty} {rst}coins")
-        print(f"\n{o}{player.name}{rst} {d}-{rst} Level: {c}{player.lvl} {rst}{d}|{rst} XP: {c}{player.xp}/{player.xp_needed} {rst}{d}|{rst} HP: {rst}{pc}{player.hp}/{player.max_hp} {rst}{d}|{rst} Coins: {g}{player.coins} {rst}{d}|{rst} Lives: {y}{player.lives}")
+        print(f"\n{o}{player.name}{rst} {d}-{rst} Level: {c}{player.lvl} {rst}{d}|{rst} XP: {c}{player.xp}/{player.xp_needed} {rst}{d}|{rst} HP: {rst}{pc}{player.hp}/{player.max_hp} {rst}{d}|{rst} Coins: {g}{int(player.coins)} {rst}{d}|{rst} Lives: {y}{player.lives}")
         
         # List choices
         if remaining > 0:

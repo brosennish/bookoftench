@@ -279,16 +279,16 @@ There are parts of another man or men scattered around you.{rst}""")
                 enemy.blinded_by = const.Weapons.PEPPER_SPRAY
                 enemy.blind_effect = 0.50
                 reduction = enemy.blind_effect * 100
-                enemy.blind_turns = 3
-                print(f'{p}{enemy.name} has been pepper sprayed! Accuracy down {int(reduction)}% for one turn.{rst}')
+                enemy.blind_turns = random.randint(2, 4)
+                print(f'{p}{enemy.name} has been pepper sprayed! Accuracy down {int(reduction)}% for {enemy.blind_turns} turns.{rst}')
                 t.sleep(1)
             if weapon_data['name'] == const.Weapons.BEAR_SPRAY:
                 enemy.blind = True
                 enemy.blinded_by = const.Weapons.BEAR_SPRAY
                 enemy.blind_effect = 0.75
                 reduction = enemy.blind_effect * 100
-                enemy.blind_turns = 3
-                print(f'{p}{enemy.name} has been bear sprayed! Accuracy down {int(reduction)}% for one turn.{rst}')
+                enemy.blind_turns = random.randint(2, 4)
+                print(f'{p}{enemy.name} has been bear sprayed! Accuracy down {int(reduction)}% for {enemy.blind_turns} turns.{rst}')
                 t.sleep(1)
             if weapon_data['name'] == const.Weapons.CHILI_POWDER:
                 enemy.blind = True
@@ -645,32 +645,35 @@ There are parts of another man or men scattered around you.{rst}""")
     def add_weapon(self, weapon_name: str, remaining_uses: int = None):
         from stw_functions import get_weapon_data
 
+        # add to list if new, has uses, and room in sack
         if weapon_name in self.weapons: # enforce max 1 per item type
             print(f"{y}You already have this weapon.")
             t.sleep(1)
-            return 
+            return
         elif len(self.weapons) >= self.max_weapons: # inventory space check
             print(f"{y}Your weapon sack is full.")
             t.sleep(1)
             return
-        # add to list if new and room in sack
-        elif weapon_name not in self.weapons and weapon_name not in (const.Weapons.BARE_HANDS, const.Weapons.CLAWS, const.Weapons.VOODOO_STAFF):
-            self.weapons.append(weapon_name)
-            if remaining_uses is not None:
-                self.weapon_uses[weapon_name] = remaining_uses
-                print(f'{c}{weapon_name} added to weapons. Uses: {remaining_uses}{rst}')
-                t.sleep(1)
-            elif weapon_name not in self.weapon_uses:
+        elif weapon_name not in (const.Weapons.BARE_HANDS, const.Weapons.CLAWS, const.Weapons.VOODOO_STAFF):
+            if remaining_uses is None:
                 data = get_weapon_data(weapon_name)
-                if data:
-                    uses = data['uses']
+                if data is None:
+                    return
                 else:
-                    data = get_weapon_data(const.Weapons.BARE_HANDS)
                     uses = data['uses']
-                self.weapon_uses[weapon_name] = uses
-                print(f"{c}{data['name']} added to weapons. Uses: {uses}{rst}")
-                t.sleep(1)
-    
+                    self.weapon_uses[weapon_name] = uses
+                    self.weapons.append(weapon_name)
+                    print(f'{c}{weapon_name} added to weapons. Uses: {uses}{rst}')
+                    t.sleep(1)
+            else:
+                if remaining_uses <= 0:
+                    return
+                else:
+                    self.weapon_uses[weapon_name] = remaining_uses
+                    self.weapons.append(weapon_name)
+                    print(f'{c}{weapon_name} added to weapons. Uses: {remaining_uses}{rst}')
+                    t.sleep(1)
+
 
     def p_uses_weapons(self, weapon: str):
         from stw_functions import get_weapon_data
@@ -976,16 +979,16 @@ class Enemy:
                     player.blinded_by = 'Pepper Spray'
                     player.blind_effect = 0.50
                     reduction = player.blind_effect * 100
-                    player.blind_turns = 3
-                    print(f'{p}You have been pepper sprayed! Accuracy down {int(reduction)}% for one turn.{rst}')
+                    player.blind_turns = random.randint(2, 4)
+                    print(f'{p}You have been pepper sprayed! Accuracy down {int(reduction)}% for {player.blind_turns} turns.{rst}')
                     t.sleep(1)
                 if weapon_data['name'] == 'Bear Spray':
                     player.blind = True
                     player.blinded_by = 'Bear Spray'
                     player.blind_effect = 0.75
                     reduction = player.blind_effect * 100
-                    player.blind_turns = 3
-                    print(f'{p}You have been bear sprayed! Accuracy down {int(reduction)}% for one turn.{rst}')
+                    player.blind_turns = random.randint(2, 4)
+                    print(f'{p}You have been bear sprayed! Accuracy down {int(reduction)}% for {player.blind_turns} turns.{rst}')
                     t.sleep(1)
                 if weapon_data['name'] == 'Chili Powder':
                     player.blind = True
