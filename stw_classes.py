@@ -591,7 +591,7 @@ There are parts of another man or men scattered around you.{rst}""")
                         if num <= self.coins:
                             self.bank += num
                             self.coins -= num
-                            print(f'You successfully deposited {g}{num}{rst} coins into the bank.')
+                            print(f'You deposited {g}{num}{rst} coins into the bank.')
                             log_event(const.Events.DEPOSIT)
                             t.sleep(1)
                             continue
@@ -614,7 +614,7 @@ There are parts of another man or men scattered around you.{rst}""")
                         if num <= self.bank:
                             self.bank -= num
                             self.coins += num
-                            print(f'You successfully withdrew {g}{num}{rst} coins from the bank.')
+                            print(f'You withdrew {g}{num}{rst} coins from the bank.')
                             log_event(const.Events.WITHDRAW)
                             t.sleep(1)
                             continue
@@ -725,7 +725,7 @@ There are parts of another man or men scattered around you.{rst}""")
             if 1 <= num <= len(self.weapons):
                 weapon = self.weapons[num - 1]
                 self.current_weapon = weapon
-                print(f"{c}{weapon} successfully equipped.{rst}")
+                print(f"{c}{weapon} equipped.{rst}")
                 return
         
         else:

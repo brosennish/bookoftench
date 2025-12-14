@@ -320,7 +320,7 @@ def visit_bank_manual(player):
                 player.bank -= num
                 amount = int(num * 0.9)
                 player.coins += amount
-                print(f'You successfully withdrew {g}{amount}{rst} coins from the bank.')
+                print(f'You withdrew {g}{amount}{rst} coins from the bank.')
                 log_event(const.Events.WITHDRAW)
                 t.sleep(1)
                 continue
@@ -1018,7 +1018,7 @@ def do_equip_weapon(player):
             if 1 <= num <= len(player.weapons):
                 weapon = player.weapons[num - 1] # python zero index correction
                 player.current_weapon = weapon 
-                print(f"{c}{weapon} successfully equipped.")
+                print(f"{c}{weapon} equipped.")
                 t.sleep(1)
                 return
     
@@ -1511,7 +1511,7 @@ def save_game(save_state: SaveGameState):
     with open(f"{save_dir}/{save_file}", "wb") as f:
         pickle.dump(save_state, f)
 
-    print(f"\n{c}Game saved successfully.\n")
+    print(f"\n{c}Game saved.\n")
 
 
 # ----- MAIN: START GAME LOGIC -----
