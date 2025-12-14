@@ -7,7 +7,7 @@ import stw_constants as const
 from stw_data import Weapons, Items, Enemies, Areas, Perks
 from stw_colors import red as r, green as g, blue as b, purple as p, yellow as y, cyan as c, orange as o
 from stw_colors import dim as d, reset as rst
-from stw_audio import play_sound, play_music
+from stw_audio import play_sound, play_music, stop_music
 
 
 # --- GS CLASS ---
@@ -69,6 +69,7 @@ class Player:
     hp: int = 100
     max_hp: int = 100
     xp: int = 0
+    shop_refresh_pending: bool = False
 
     coins: int = 0
     bank: int = 0
@@ -87,7 +88,7 @@ class Player:
     achievements: set[str] = field(default_factory=set)
     perks: List[str] = field(default_factory=list)
     cheat_death_ready: bool = False
-    max_weapons: int = 4
+    max_weapons: int = 5
     max_items: int = 4
     weapons: List[str] = field(default_factory=lambda: [const.Weapons.BARE_HANDS,const.Weapons.KNIFE])
     # no helper function used here, direct lookup from Weapons table:
@@ -148,7 +149,7 @@ class Player:
 
         # Death penalties 
         if const.Perks.WALLET_CHAIN in self.perks:
-            self.coins = int(self.coins * 0.25)
+            self.coins = int(self.coins * 0.50)
         else:
             self.coins = 0
         self.items = [const.Items.TENCH_FILET]
@@ -162,13 +163,24 @@ class Player:
         # Remaining lives check
         if self.lives > 0:
             self.hp = self.max_hp
+
+            # casino
+            if const.Perks.GRAMBLIN_MAN in self.perks and const.Perks.GRAMBLING_ADDICT in self.perks:
+                self.plays = 20
+            elif const.Perks.GRAMBLIN_MAN in self.perks:
+                self.plays = 15
+            elif const.Perks.GRAMBLING_ADDICT in self.perks:
+                self.plays = 15
+            else:
+                self.plays = 10
+
             print(f"""\n{r}You wake up in a dumpster behind Showgirls 3.
 You're buried beneath a pile of detritus and covered in slime...
 There are parts of another man or men scattered around you.{rst}""")
             t.sleep(3)
             if self.bank > 0:
-                
                 self.visit_bank()
+
         else:
             print(f"\n{r}Game Over.")
             play_sound('devil_thunder')
@@ -347,7 +359,7 @@ There are parts of another man or men scattered around you.{rst}""")
 
 
     def use_item(self):
-        from stw_functions import get_item_data, p_color
+        from stw_functions import get_item_data, p_color, log_event
 
         if not self.items:
             print(f"{y}Your inventory is dry...")
@@ -415,6 +427,7 @@ There are parts of another man or men scattered around you.{rst}""")
             pc = p_color(self)
 
             print(f"You used {item_data['name']}:{rst} Your current HP is {pc}{self.hp}/{self.max_hp}{rst}")
+            log_event(const.Events.USE_ITEM)
 
             # Loop again to allow another use before taking a hit
             if not self.items:
@@ -444,6 +457,7 @@ There are parts of another man or men scattered around you.{rst}""")
         self.lvl += 1
         cash_reward = random.randint(100, 200)
         self.coins += cash_reward
+        self.shop_refresh_pending = True
         
         # casino
         if const.Perks.GRAMBLIN_MAN in self.perks and const.Perks.GRAMBLING_ADDICT in self.perks:
@@ -540,14 +554,20 @@ There are parts of another man or men scattered around you.{rst}""")
         from stw_functions import log_event
         
         play_music('bank_theme')
+
+        if const.Perks.SLEDGE_FUND in self.perks:
+            interest = '15'
+        else:
+            interest = '10'
         
         visiting = True
         while visiting:
             choice = input(f"\nWould you like to visit the bank? (y/n):\n{b}>{rst} ").strip().lower()
             
             if choice == 'y':
-                print('You may visit the bank each time you level up.\nDuring each visit, you may deposit or withdraw coins.'
-                '\nEach time you level up, your bank value will increase by 10% + your current level.')
+                print(f'Welcome to the Off-Shore Bank of Shebokken.\n'
+                    f'While banking with us, you may deposit or withdraw coins.\n'
+                    f'Each time you level up, your account value will increase by {interest}%.')
 
                 while True:
                     print(f"\nPlayer: {g}{self.coins} {rst}{d}|{rst} Bank: {g}{self.bank}{rst}")
@@ -614,6 +634,7 @@ There are parts of another man or men scattered around you.{rst}""")
             elif choice == 'n':
                 print(f"{b}Very well...")
                 t.sleep(1)
+                stop_music()
                 return
             else:
                 print(f"{y}Invalid choice.")
@@ -730,6 +751,7 @@ There are parts of another man or men scattered around you.{rst}""")
         if perk not in self.perks:
             self.perks.append(perk)
             print(f"{p}{perk} added to perks.")
+            t.sleep(1)
 
             if perk == const.Perks.VAGABONDAGE:
                 self.max_weapons += 1
@@ -790,13 +812,13 @@ class Enemy:
             max_hp = enemy_data['hp'],
             weapons = list(enemy_data['weapon']),        # copy names
             weapon_uses = {
-                w: random.randint(1, max(get_weapon_data(w)['uses'], 1))
+                w: random.randint(2, max(get_weapon_data(w)['uses'], 2))
                 for w in enemy_data['weapon']
             },                                        
             current_weapon = random.choice(enemy_data['weapon']), # assigns random weapon from their list
             items = [],
             type = enemy_data['type'],
-            coins = random.randint(25, 50),
+            coins = random.randint(40, 60),
             current_area = area_name
         )
     
@@ -1162,6 +1184,12 @@ class Shop:
 
     def view_shop_inventory(self, player):
         from stw_functions import get_shop_discount
+
+        # refresh shop if level up
+        if player.shop_refresh_pending:
+            self.reset_inventory(player)
+            player.shop_refresh_pending = False
+
         # figure out discount once
         discount = get_shop_discount(player)
     

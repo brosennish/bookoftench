@@ -45,7 +45,7 @@ def win_game(gs):
 
 def play_again():
     while True:
-        choice = input(f"\nWould you like to play again? (y/n):{b}\n> ").strip().lower()
+        choice = input(f"\nWould you like to play again? (y/n):{b}\n>{rst} ").strip().lower()
         if choice == 'y':
             return True
         elif choice == 'n':
@@ -72,12 +72,12 @@ def unlock_achievement(player, ach_id):
         filtered = [i for i in Perks if i['name'] not in player.perks and i['name'] != const.Perks.WENCH_LOCATION]
         if filtered:
             reward = random.choice(filtered)
+            print(f"{o}ACHIEVEMENT UNLOCKED: {ach['name']}"
+                  f"\nReward: {reward['name']} | {reward['description']}{rst}")
             player.add_perk(reward['name'])
         else:
             return
 
-        print(f"{o}ACHIEVEMENT UNLOCKED: {ach['name']}. "
-              f"Reward: {reward['name']} | {reward['description']}.{rst}")
         t.sleep(3)
         return
 
@@ -89,8 +89,8 @@ def unlock_achievement(player, ach_id):
     elif ach['reward_type'] == 'coins':
         player.coins += ach['reward_value']
 
-    print(f"{o}ACHIEVEMENT UNLOCKED: {ach['name']}. "
-          f"Reward: +{ach['reward_value']} {ach['reward_type'].upper()}.{rst}")
+    print(f"{o}ACHIEVEMENT UNLOCKED: {ach['name']}"
+          f"\nReward: +{ach['reward_value']} {ach['reward_type'].upper()}{rst}")
     t.sleep(3)
 
 
@@ -293,17 +293,54 @@ def refresh_wanted(gs):
 
 
 # --- BANK ---
-def do_bank_balance(player):
+def visit_bank_manual(player):
+    play_music('bank_theme')
 
-    if not player.bank:
-        print(f"{y}Your bank account is dry.")
-        t.sleep(1)
-        return
-    else:
-        print(f"\nPlayer coins: {g}{player.coins}{rst} coins\n\nBank coins: {g}{player.bank}{rst} coins")
+    print(f"Welcome to the Off-Shore Bank of Shebokken.\n"
+          f"Because you did not level up -\n"
+          f"Deposits are forbidden, and withdrawals incur a 10% fee.")
 
-    input(f'\n{b}>{rst} ')
-    return
+    while True:
+        print(f"\nPlayer: {g}{player.coins} {rst}{d}|{rst} Bank: {g}{player.bank}{rst}")
+
+        choice = input(f"\nWhat would you like to do?\n"
+                       f"[w] Withdraw\n"
+                       f"[q] Leave\n{b}>{rst} ").strip().lower()
+
+        if choice == 'w':
+            selection = input(f"\nHow much would you like to withdraw?\n{b}>{rst} ").strip().lower()
+
+            if selection.isdigit():
+                num = int(selection)
+            else:
+                print(f"{y}Invalid choice.")
+                continue
+
+            if num <= player.bank:
+                player.bank -= num
+                amount = int(num * 0.9)
+                player.coins += amount
+                print(f'You successfully withdrew {g}{amount}{rst} coins from the bank.')
+                log_event(const.Events.WITHDRAW)
+                t.sleep(1)
+                continue
+            elif num > player.bank:
+                print(f"{y}Insufficient funds for withdrawal.")
+                t.sleep(1)
+                continue
+            else:
+                print(f"{y}Invalid choice.")
+                continue
+
+        elif choice == 'q':
+            print(f"{b}Very well...")
+            t.sleep(1)
+            stop_music()
+            return
+
+        else:
+            print(f"{y}Invalid choice.")
+            continue
 
 
 # --- WEAPONS ---
@@ -401,7 +438,7 @@ def get_choice_from_list(prompt: str, options: list) -> str:
 
 def main_menu():
     while True:
-        choice = get_choice_from_dict("\nMAIN MENU", {"n": "New Game", "l": "Load Game", "q": "Quit"})
+        choice = get_choice_from_dict(f"\n{rst}MAIN MENU", {"n": "New Game", "l": "Load Game", "q": "Quit"})
         
         if choice == "n":
             run_game()
@@ -415,7 +452,7 @@ def main_menu():
 
 def actions_main_menu(gs, player, shop):
     while True:
-        choice = get_choice_from_dict("MAIN MENU",
+        choice = get_choice_from_dict(f"{rst}MAIN MENU",
                                       {"n": "New Game", "s": "Save Game", "l": "Load Game", "r": "Return", "q": "Quit"})
         
         if choice == "n":
@@ -460,7 +497,8 @@ def run_game(gs=GameState(), player=Player(), shop=Shop(), name=True, tutorial=T
 8. Travel between areas to search for the wench's hidden location
 9. Perks offer special rewards and permanent bonuses
 10. Clear the enemies in the wench's area and defeat the final boss to save the wench and win the game""")
-            input(f'{b}> ')
+            input(f'{b}>{rst} ')
+            tutorial = False
         else:
             print('Invalid choice.')
             continue
@@ -554,7 +592,7 @@ def actions_menu(gs, player, shop):
             while page_two:
                 choice = get_choice_from_dict("", {
                 "a": "Achievements",
-                "b": "Bank Balance",
+                "b": "Bank",
                 "c": "Casino",
                 "p": "Perks",
                 "o": "Overview",
@@ -563,7 +601,7 @@ def actions_menu(gs, player, shop):
                 if choice == "a":
                     do_view_achievements(player)
                 elif choice == "b":
-                    do_bank_balance(player)
+                    visit_bank_manual(player)
                 elif choice == "c":
                     do_casino(player)
                     play_area_theme(player)
@@ -598,7 +636,6 @@ def do_casino(player):
     
     print(f"{b}Welcome to Riverbroat Crasino.{rst}\n")
     t.sleep(3)
-    print(f"{b}What would you like to play?{rst}\n")
     while True:
         choice = input("[1] Krill or Cray\n"
                        "[2] Above or Below\n"
@@ -606,7 +643,7 @@ def do_casino(player):
                        "[4] Fish Bones (WIP)\n"
                        "[5] Mystery Box (WIP)\n"
                        "[r] Return\n"
-                       f"{b}> ")
+                       f"{b}>{rst} ")
         if choice == "r":
             return
         elif choice == "1":
@@ -686,13 +723,16 @@ def krill_or_cray(player):
                         payout = int(wager * 0.9)
                         player.coins += payout
                         player.casino_won += payout
-                    print(f"{g}Lucky guess, bozo! You won {payout} coins.{rst}\n")
+                    print(f"{g}Lucky guess, bozo! You won {payout} coins.{rst}")
                     play_sound('golf_clap')
                     if const.Perks.AP_TENCH_STUDIES in player.perks:
-                        player.gain_xp(2)
+                        leveled_up = player.gain_xp_other(2)
                     else:
-                        player.gain_xp(1)
+                        leveled_up = player.gain_xp_other(1)
+                    if leveled_up:
+                        player.visit_bank()
                     player.plays -= 1
+                    print()
                     if casino_check(player):
                         return
                     else:
@@ -716,7 +756,7 @@ def above_or_below(player):
         return
     else:
         print(f"{b}Welcome to Above or Below!\n\n"
-              f"Rules:\n"
+              f"{rst}Rules:\n"
               f"1. Place a wager and roll a die.\n"
               f"2. Guess if the next roll will be above or below the previous roll and roll once more.\n"
               f"3. Your payout increases by a higher percentage with each correct guess.\n"
@@ -733,10 +773,10 @@ def above_or_below(player):
             print(f"{b}Later bozo.{rst}\n")
             return
         elif not choice.isdigit():
-            print(f"{b}Invalid choice.\n")
+            print(f"{y}Invalid choice.\n")
             continue
         elif int(choice) > player.coins:
-            print(f"{b}You don't have enough coins to cover this wager.\n")
+            print(f"{b}You don't have enough coins, bozo.\n")
             continue
         else:
             wager = int(choice)
@@ -751,7 +791,7 @@ def above_or_below(player):
                     print(f"Round: {c}{turn}{rst} {d}|{rst} Wager: {g}{wager}{rst} {d}|{rst} Mult: {p}{mult}{rst} {d}|{rst} Payout: {g}{int(payout*1.05)}{rst}\n")
                 else:
                     print(f"Round: {c}{turn}{rst} {d}|{rst} Wager: {g}{wager}{rst} {d}|{rst} Mult: {p}{mult}{rst} {d}|{rst} Payout: {g}{int(payout)}{rst}\n")
-                input(f"[ ] Roll the die\n{b}> ")
+                input(f"Roll the die\n{b}>{rst} ")
                 roll1 = random.randint(1, 6)
                 print(f"{b}You rolled a {roll1}.\n")
 
@@ -759,30 +799,30 @@ def above_or_below(player):
                     call = input(f"[A] Above\n"
                                  f"[B] Below\n{b}>{rst} ").strip().lower()
                     if call not in ('a', 'b'):
-                        print(f"{b}Invalid choice.")
+                        print(f"{y}Invalid choice.")
                         continue
                     else:
                         break
 
-                input(f"[ ] Roll the die.\n{b}> ")
+                input(f"\nRoll the die.\n{b}>{rst} ")
                 roll2 = random.randint(1, 6)
                 print(f"{b}You rolled a {roll2}.\n")
 
                 if call == 'a' and roll2 > roll1:
                     payout = wager * ladder[turn-1]
-                    print(f"{b}Lucky guess!\n"
+                    print(f"{g}Lucky guess!\n"
                           f"Payout increased to {int(payout)} coins.\n")
                 elif call == 'a' and roll2 <= roll1:
-                    print(f"{b}Your guess was dry.\n")
+                    print(f"{y}Your guess was dry.\n")
                     player.coins -= wager
                     player.casino_lost += wager
                     break
                 elif call == 'b' and roll2 < roll1:
                     payout = wager * ladder[turn-1]
-                    print(f"{b}Lucky guess!\n"
+                    print(f"{g}Lucky guess!\n"
                           f"Payout increased to {int(payout)} coins.\n")
                 else:
-                    print(f"{b}Your guess was dry.\n")
+                    print(f"{y}Your guess was dry.\n")
                     player.coins -= wager
                     player.casino_lost += wager
                     break
@@ -795,19 +835,22 @@ def above_or_below(player):
                         final_payout = int(payout)
 
                     player.coins += final_payout
-                    print(f"{b}You've completed the final round.{rst}\n"
+                    print(f"{b}You completed the final round.{rst}\n"
                           f"{g}You cashed out {final_payout} coins!\n")
                     if const.Perks.AP_TENCH_STUDIES in player.perks:
-                        player.gain_xp(4)
+                        leveled_up = player.gain_xp_other(4)
                     else:
-                        player.gain_xp(3)
+                        leveled_up = player.gain_xp_other(3)
+                    if leveled_up:
+                        player.visit_bank()
                     player.casino_won += final_payout
+                    print()
                     return
 
                 while True:
                     choice = input(f"[c] Continue\n"
                                    f"[q] Cash Out\n"
-                                   f"{b}> ")
+                                   f"{b}>{rst} ")
                     if choice == 'c':
                         break
                     elif choice == 'q':
@@ -869,26 +912,32 @@ def overview(gs, player):
 
 
 def do_explore(gs, player, shop):
-    # 50% chance of enemy (10% for elite), 10% for item, 8% weapon, 20% coins, 1% perk, 11% dry
+    # 45% chance of enemy (10% for elite), 10% for item, 10% weapon, 20% coins, 1% perk, 14% dry
 
     if player.lives > 0:
         player.alive = True
     roll = random.random()
-    if roll < 0.50:
+    if roll < 0.45:
         enemy = Enemy.spawn_enemy_for_area(player.current_area)
         while enemy.type in ('boss', 'boss_final'):
             enemy = Enemy.spawn_enemy_for_area(player.current_area)
+
+        # enemy hp scaling
+        level_bonus = max(0, player.lvl - 1)
+        enemy.max_hp += level_bonus
+        enemy.hp = enemy.max_hp
+
         if random.random() < 0.10:  
             enemy.name = f"Elite {enemy.name}"
-            enemy.hp = int(enemy.hp * 1.5)
             enemy.max_hp = int(enemy.max_hp * 1.5)
+            enemy.hp = enemy.max_hp
             enemy.coins = int(enemy.coins * 1.5)
             print(f"{y}An enemy appears!{rst} {p}(Elite enemy!)")
         else:
             print(f"{y}An enemy appears!{rst}")
         t.sleep(1)
         battle(player, enemy, gs, shop)
-    elif 0.50 <= roll < 0.60:
+    elif roll < 0.55:
         if len(player.items) < player.max_items:
             item_dict = random.choice(Items)
             item = item_dict['name']
@@ -896,10 +945,10 @@ def do_explore(gs, player, shop):
             t.sleep(1)
             return
         else:
-            print('Your item sack is full!')
+            print(f"{y}Your item sack is full.")
             t.sleep(1)
             return
-    elif 0.60 <= roll < 0.68:
+    elif roll < 0.65:
         if len(player.weapons) < player.max_weapons:
             added = find_weapon(player)
             if added:
@@ -912,7 +961,7 @@ def do_explore(gs, player, shop):
             print(f"{y}Your weapon sack is full.")
             t.sleep(1)
             return
-    elif 0.68 <= roll < 0.88:
+    elif roll < 0.85:
         if const.Perks.METAL_DETECTIVE in player.perks:
             coins = random.randint(25, 50)
         else:
@@ -920,18 +969,18 @@ def do_explore(gs, player, shop):
         print(f'{g}You found {coins} coins!')
         t.sleep(1)
         player.coins += coins
-    elif 0.88 <= roll < 0.89:
+    elif roll < 0.86:
         filtered = [i for i in Perks if i['name'] not in player.perks and i['name'] != const.Perks.WENCH_LOCATION]
         if filtered:
             reward = random.choice(filtered)
-            player.add_perk(reward['name'])
-            print(f"{p}You sense a noble presence...")
-            t.sleep(1)
-            print(f"{p}It's a mensch!")
-            t.sleep(1)
+            print(f"{p}You sense a noble presence...\n")
+            t.sleep(2)
+            print(f"{p}It's a mensch!\n")
+            t.sleep(2)
             print(f"{p}He's gifted you the {reward['name']} perk!\n"
                   f"{p}{reward['description']}")
-            t.sleep(1)
+            player.add_perk(reward['name'])
+            t.sleep(3)
         else:
             return
     else:
@@ -983,13 +1032,13 @@ def get_shop_discount(player):
     discount = 1.0
 
     if const.Perks.BARTER_SAUCE in perks and const.Perks.TRADE_SHIP in perks:
-        print(f"{p}Prices down 30% with Barter Sauce and Trade Ship!{rst}")
+        print(f"{p}Prices down 30% with Barter Sauce and Trade Ship!{rst}\n")
         discount = 0.7
     elif const.Perks.TRADE_SHIP in perks:
-        print(f"{p}Prices down 20% with Trade Ship!{rst}")
+        print(f"{p}Prices down 20% with Trade Ship!{rst}\n")
         discount = 0.8
     elif const.Perks.BARTER_SAUCE in perks:
-        print(f"{p}Prices down 10% with Barter Sauce!{rst}")
+        print(f"{p}Prices down 10% with Barter Sauce!{rst}\n")
         discount = 0.9
     else:
         discount = 1
@@ -1187,6 +1236,8 @@ def sell_weapon(weapon_name, player):  # player sells weapon
     player.weapon_uses.pop(weapon_name, None)
 
     print(f"{g}You sold {weapon_name} for {sell_value} coins.")
+    if weapon_name == player.current_weapon:
+        player.current_weapon = const.Weapons.BARE_HANDS
     play_sound('purchase')
     t.sleep(1)
     log_event(const.Events.SELL_WEAPON)
@@ -1311,7 +1362,7 @@ def battle(player, enemy, gs, shop):
         if enemy.name == const.Enemies.CAPTAIN_HOLE and const.Items.TENCH_FILET in player.items:
             print("Captain Hole has offered to shoot himself in the jines in exchange for your Tench Filet.")
             t.sleep(4)
-            filet = input(f"Do you accept? (y/n):\n{b}> ").strip().lower()
+            filet = input(f"Do you accept? (y/n):\n{b}>{rst} ").strip().lower()
             if filet == 'y':
                 stop_music()
                 player.items.remove(const.Items.TENCH_FILET)
@@ -1351,10 +1402,13 @@ def battle(player, enemy, gs, shop):
                     continue
                 elif fled:
                     print(f'{c}You ran away from {enemy.name}!')
+                    log_event(const.Events.FLEE)
                     if const.Perks.AP_TENCH_STUDIES in player.perks:
-                        player.gain_xp(2)
+                        leveled_up = player.gain_xp_other(2)
                     else:
-                        player.gain_xp(1)
+                        leveled_up = player.gain_xp_other(1)
+                    if leveled_up:
+                        player.visit_bank()
                     t.sleep(1)
                     stop_music()
                     play_area_theme(player)
@@ -1383,6 +1437,7 @@ def battle(player, enemy, gs, shop):
                 player.coins += bounty
                 print(f"{g}You killed {enemy.name} and collected a bounty of {bounty} coins!{rst}")
                 log_event(const.Events.BOUNTY_COLLECTED)
+                refresh_wanted(gs) # ONLY refresh wanted if the wanted enemy is killed
                 t.sleep(1)
             
             is_boss(gs, player, enemy)
@@ -1392,9 +1447,10 @@ def battle(player, enemy, gs, shop):
                 enemy.drop_loot(player)
                 leveled_up = player.gain_xp(enemy) # runs it and returns boolean for level_up
                 if leveled_up:
-                    shop.reset_inventory(player)
                     player.visit_bank()
-                refresh_wanted(gs)
+                else:
+                    if player.hp < 10:
+                        player.hp = 10  # if HP below 10 set it to 10
 
             if enemy.type == 'boss' and player.current_area == gs.wench_area:
                 player.hp = player.max_hp
@@ -1417,7 +1473,6 @@ def battle(player, enemy, gs, shop):
                     player.cheat_death_ready = False
                     t.sleep(1)
                 else:
-                    refresh_wanted(gs)
                     shop.reset_inventory(player)
                     stop_music()
                     play_area_theme(player)
@@ -1456,7 +1511,7 @@ def save_game(save_state: SaveGameState):
     with open(f"{save_dir}/{save_file}", "wb") as f:
         pickle.dump(save_state, f)
 
-    print(f"\n{c}Game saved successfully.")
+    print(f"\n{c}Game saved successfully.\n")
 
 
 # ----- MAIN: START GAME LOGIC -----
