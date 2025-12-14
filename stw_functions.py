@@ -813,8 +813,9 @@ def above_or_below(player):
 
                 if call == 'a' and roll2 > roll1:
                     payout = wager * ladder[turn-1]
-                    print(f"{g}Lucky guess!\n"
-                          f"Payout increased to {int(payout)} coins.\n")
+                    if turn < 4:
+                        print(f"{g}Lucky guess!\n"
+                              f"Payout increased to {int(payout)} coins.\n")
                 elif call == 'a' and roll2 <= roll1:
                     print(f"{y}Your guess was dry.\n")
                     player.coins -= wager
@@ -822,8 +823,9 @@ def above_or_below(player):
                     break
                 elif call == 'b' and roll2 < roll1:
                     payout = wager * ladder[turn-1]
-                    print(f"{g}Lucky guess!\n"
-                          f"Payout increased to {int(payout)} coins.\n")
+                    if turn < 4:
+                        print(f"{g}Lucky guess!\n"
+                              f"Payout increased to {int(payout)} coins.\n")
                 else:
                     print(f"{y}Your guess was dry.\n")
                     player.coins -= wager
@@ -838,7 +840,7 @@ def above_or_below(player):
                         final_payout = int(payout)
 
                     player.coins += final_payout
-                    print(f"{b}You completed the final round.{rst}\n"
+                    print(f"{b}You completed the final round!{rst}\n"
                           f"{g}You cashed out {final_payout} coins!\n")
                     if const.Perks.AP_TENCH_STUDIES in player.perks:
                         leveled_up = player.gain_xp_other(4)
