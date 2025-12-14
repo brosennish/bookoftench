@@ -375,9 +375,9 @@ def do_view_perks(player, gs):
         for perk in sorted(player.perks):
             perk_data = get_perk_data(perk)
             if not perk_data:
-                print(f"\n{y}Perk: {perk}\nDescription: [Missing data!]")
+                print(f"\n{y}Perk: {perk:<22}\nDescription: [Missing data!]")
                 continue
-            print(f"\n{p}{perk_data['name']} | {perk_data['description']}")
+            print(f"\n{p}{perk_data['name']:<22} | {perk_data['description']}")
         input(f'\n{b}>{rst} ')
 
 
@@ -393,10 +393,10 @@ def do_view_achievements(player):
             ach_data = get_ach_data(ach)
 
             if not ach_data:
-                print(f"\n{o}{ach}\n[Missing data!]")
+                print(f"\n{o}{ach:<22}\n[Missing data!]")
                 continue
 
-            print(f"\n{o}{ach_data['name']} | {ach_data['description']}")
+            print(f"\n{o}{ach_data['name']:<22} | {ach_data['description']}")
 
         input(f'\n{b}>{rst} ')
 
@@ -487,16 +487,19 @@ def run_game(gs=GameState(), player=Player(), shop=Shop(), name=True, tutorial=T
         if choice == 'n':
             tutorial = False
         elif choice == 'y':
-            print("""\n1. Explore areas to find enemies, items, weapons, and coins
-2. Fight enemies in turn-based combat
-3. Use items to restore HP
-4. Weapons have limited uses and can break
-5. Defeat enemies to earn XP, coins, and a chance to recover their weapons
-6. Leveling up restores HP, boosts stats, and refreshes the shop
-7. Visit the shop to buy weapons, items, and perks
-8. Travel between areas to search for the wench's hidden location
-9. Perks offer special rewards and permanent bonuses
-10. Clear the enemies in the wench's area and defeat the final boss to save the wench and win the game""")
+            print("""\nSAVE THE WENCH - HOW TO PLAY
+
+            1. Explore areas to find enemies, loot, perks, and events
+            2. Fight enemies in turn-based combat to earn XP and coins
+            3. Buy and sell items and weapons in the shop
+            4. Use items freely during your turn or between battles
+            5. Gain perks that permanently affect combat, coins, or luck
+            6. Play casino games to risk coins for big rewards
+            7. Store coins in the bank to earn interest upon level-up
+            8. Each area has a boss and a hidden number of enemies
+            9. Clear the wench’s area to unlock the final showdown
+            10. Defeat the final boss to save the wench and win the game
+            """)
             input(f'{b}>{rst} ')
             tutorial = False
         else:
@@ -1448,9 +1451,6 @@ def battle(player, enemy, gs, shop):
                 leveled_up = player.gain_xp(enemy) # runs it and returns boolean for level_up
                 if leveled_up:
                     player.visit_bank()
-                else:
-                    if player.hp < 10:
-                        player.hp = 10  # if HP below 10 set it to 10
 
             if enemy.type == 'boss' and player.current_area == gs.wench_area:
                 player.hp = player.max_hp
