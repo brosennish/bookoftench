@@ -908,7 +908,7 @@ def overview(gs, player):
     print(f"{'Items Purchased':<{width}} {d}|{rst} {c}{Results[const.Events.BUY_ITEM]}{rst}")
     print(f"{'Items Used':<{width}} {d}|{rst} {c}{Results[const.Events.USE_ITEM]}{rst}")
     print(f"{'Weapons Purchased':<{width}} {d}|{rst} {c}{Results[const.Events.BUY_WEAPON]}{rst}")
-    print(f"{'Perks Owned':<{width}} {d}|{rst} {c}{Results[const.Events.BUY_PERK]}{rst}")
+    print(f"{'Perks Owned':<{width}} {d}|{rst} {c}{len(player.perks)}{rst}")
 
     print(f"{'Times Traveled':<{width}} {d}|{rst} {b}{Results[const.Events.TRAVEL]}{rst}")
     input(f"{b}>{rst} ")
