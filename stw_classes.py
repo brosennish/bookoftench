@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Union
 import random
 import time as t
+import sys
 
 import stw_constants as const
 from stw_data import Weapons, Items, Enemies, Areas, Perks
@@ -143,6 +144,8 @@ class Player:
     
 
     def handle_death(self):
+        from stw_functions import play_again, run_game
+
         self.lives -= 1
         print(f"\n{r}You died.{rst} Lives remaining: {y}{self.lives}")
         t.sleep(2)
@@ -186,7 +189,11 @@ There are parts of another man or men scattered around you.{rst}""")
             play_sound('devil_thunder')
             t.sleep(3)
             print(f"\n{r}You are now in Hell.")
-            t.sleep(10)
+            t.sleep(3)
+            if play_again():
+                run_game()
+            else:
+                sys.exit()
 
 
     # ---------- Combat ----------
