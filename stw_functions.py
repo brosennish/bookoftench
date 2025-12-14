@@ -375,9 +375,9 @@ def do_view_perks(player, gs):
         for perk in sorted(player.perks):
             perk_data = get_perk_data(perk)
             if not perk_data:
-                print(f"\n{y}Perk: {perk}\nDescription: [Missing data!]")
+                print(f"\n{y}Perk: {perk:<22}\nDescription: [Missing data!]")
                 continue
-            print(f"\n{p}{perk_data['name']} | {perk_data['description']}")
+            print(f"\n{p}{perk_data['name']:<22} | {perk_data['description']}")
         input(f'\n{b}>{rst} ')
 
 
@@ -393,10 +393,10 @@ def do_view_achievements(player):
             ach_data = get_ach_data(ach)
 
             if not ach_data:
-                print(f"\n{o}{ach}\n[Missing data!]")
+                print(f"\n{o}{ach:<22}\n[Missing data!]")
                 continue
 
-            print(f"\n{o}{ach_data['name']} | {ach_data['description']}")
+            print(f"\n{o}{ach_data['name']:<22} | {ach_data['description']}")
 
         input(f'\n{b}>{rst} ')
 
