@@ -1448,9 +1448,6 @@ def battle(player, enemy, gs, shop):
                 leveled_up = player.gain_xp(enemy) # runs it and returns boolean for level_up
                 if leveled_up:
                     player.visit_bank()
-                else:
-                    if player.hp < 10:
-                        player.hp = 10  # if HP below 10 set it to 10
 
             if enemy.type == 'boss' and player.current_area == gs.wench_area:
                 player.hp = player.max_hp
