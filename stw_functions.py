@@ -415,7 +415,7 @@ def log_event(event: str):
 def get_choice_from_dict(prompt: str, options: dict) -> str:    # prompt is a str and options are a dict, return a str
     print("" + prompt)                              # print a new line and the prompt (MAIN MENU, etc.)
     for key, label in options.items():                # for the key/label for each dict pair in options
-        print(f"[{key.upper()}] {label}")             # print the key in caps and the label as is
+        print(f"[{key}] {label}")                   # print the key in caps and the label as is
     while True:
         choice = input(f"{b}>{rst} ").strip().lower()          # take the input, strip end spaces, and make lowercase
         if choice in options:
@@ -692,7 +692,7 @@ def krill_or_cray(player):
     while True:
         print(f"Coins: {g}{player.coins}{rst} {d}|{rst} Plays: {c}{player.plays}{rst}\n")
         choice = input(f"[#] Wager\n"
-                       f"[q] Leave:\n{b}>{rst} ").strip().lower()
+                       f"[q] Leave\n{b}>{rst} ").strip().lower()
 
         if choice == "q":
             print(f"{b}Later bozo.{rst}")
