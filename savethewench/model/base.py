@@ -9,6 +9,10 @@ from savethewench.util import print_and_sleep
 
 
 @dataclass
+class Buyable:
+    cost: int
+
+@dataclass
 class WeaponBase:
     name: str
     damage: int

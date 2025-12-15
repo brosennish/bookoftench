@@ -138,10 +138,7 @@ class KrillOrKray(CasinoGame):
             player.casino_won += payout
             print(green(f"Lucky guess, bozo! You won {payout} coins.\n"))
             play_sound(GOLF_CLAP)
-            if AP_TENCH_STUDIES in player.perks:
-                player.xp += 2
-            else:
-                player.xp += 1
+            player.xp += 2 if perk_is_active(AP_TENCH_STUDIES) else 1
         else:
             print(
                 blue("Bozo's blunder. Classic. Could've seen that coming from six or eight miles away.\n"))
@@ -228,7 +225,7 @@ Rules:
                 player.coins += payout
                 if self.turn == len(self.ladder):
                     print(f"{blue("You've completed the final round.")}\n")
-                    player.xp += 4 if AP_TENCH_STUDIES in player.perks else 3
+                    player.xp += 4 if perk_is_active(AP_TENCH_STUDIES) else 3
                 print(f"{green(f"You cashed out {payout} coins!")}\n")
                 player.casino_won += payout
                 self.player_quit = True

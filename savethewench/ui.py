@@ -2,9 +2,7 @@ from colorama import Fore, Style
 
 
 def _format(ansi_code, text) -> str:
-    if not isinstance(text, str):
-        return _format(ansi_code, str(text))
-    return f"{ansi_code}{text}{Style.RESET_ALL}"
+    return f"{ansi_code}{str(text)}{Style.RESET_ALL}"
 
 
 # --- Colors ---

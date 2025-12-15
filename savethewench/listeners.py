@@ -8,10 +8,8 @@ from .event_logger import subscribe_listener
 
 @subscribe_listener(ItemUsedEvent)
 class ItemUsedListener(Listener):
-
-    @staticmethod
-    def handle_event(event: ItemUsedEvent):
-        print(f"\nYou used {event.item.name}: Your current HP is {event.player_hp}/{event.player_max_hp}\n")
+    def handle_event(self, event: ItemUsedEvent):
+        print(f"\nYou used {event.item_name}: Your current HP is {event.player_hp}/{event.player_max_hp}\n")
         t.sleep(1)
         if event.items_remaining == 0:
             print(yellow(f"Your inventory is dry.\n"))

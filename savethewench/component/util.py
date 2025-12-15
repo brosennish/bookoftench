@@ -129,7 +129,7 @@ def display_player_achievements(game_state: GameState):
 
 
 def display_active_perks(game_state: GameState) -> None:
-    active_perks = [p for p in load_perks() if p.is_active()]
+    active_perks = [p for p in load_perks() if p.active]
     if len(active_perks) == 0:
         print_and_sleep(yellow("Your perks are dry."), 1)
     else:
@@ -139,6 +139,10 @@ def display_active_perks(game_state: GameState) -> None:
 
         for perk in sorted(active_perks, key=lambda a: a.name):
             print(purple(f"\n{perk.name} | {perk.description}"))
+
+
+def display_active_perk_count():
+    print(f"Perks {dim(f"({len(load_perks(lambda p: p.active))})")}")
 
 
 @attach_perk(USED_SNEAKERS, NEW_SNEAKERS, silent=True)

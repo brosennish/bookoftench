@@ -84,6 +84,7 @@ Perks = [
         'name': BROWN_FRIDAY,
         'cost': 120,
         'description': "Shop inventories contain +1 listing",
+        'wrapper': partial(_numeric_change, change=1, name=BROWN_FRIDAY, change_func=_int_change)
     },
     {
         'name': SLEDGE_FUND,

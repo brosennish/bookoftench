@@ -4,13 +4,15 @@ from typing import List, Callable, Dict
 from typing import TypeVar
 
 from savethewench.data import Perks
-from savethewench.ui import purple
+from savethewench.model.base import Buyable
+from savethewench.ui import purple, dim, cyan, orange
+from savethewench.util import print_and_sleep
 
 T = TypeVar('T')
 
 
 @dataclass
-class Perk[T]:
+class Perk[T](Buyable):
     name: str
     cost: int
     description: str
@@ -24,12 +26,16 @@ class Perk[T]:
     def active(self):
         return self._active
 
-    def is_active(self) -> bool:
-        return self.active
-
     def activate(self):
-        print(purple(f"{self.name} added to perks."))
+        print_and_sleep(purple(f"{self.name} added to perks.\n"), 1)
         self._active = True
+
+    def __repr__(self):
+        return dim(' | ').join([
+            cyan(f"{self.name:<24}"),
+            f"Cost: {orange(self.cost):<18}",
+            f"{self.description}"
+        ])
 
 
 _PERKS: Dict[str, Perk] = {}
@@ -64,20 +70,17 @@ def activate_perk(perk_name: str):
 
 
 def perk_is_active(perk_name: str) -> bool:
-    return load_perk(perk_name).is_active()
+    return load_perk(perk_name).active
 
 
 def attach_perk(*perks: str, value_description: str = "", silent: bool = False):
     perk_impls = load_perks(lambda p: p.name in set(perks))
-
     def decorator(func):
         def wrapper(*args, **kwargs):
             value = func(*args, **kwargs)
             for perk in perk_impls:
-                if perk.is_active():
+                if perk.active:
                     value = perk.wrapper(value, value_description, silent)
             return value
-
         return wrapper
-
     return decorator

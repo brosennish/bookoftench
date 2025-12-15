@@ -7,6 +7,7 @@ from savethewench.model import GameState
 from savethewench.ui import red
 from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, BankBalance, DisplayPerks, Overview
 from .casino import CasinoBouncer
+from .shop import ShopComponent
 from .util import get_player_status_view
 
 
@@ -87,9 +88,6 @@ You wash up on a beach outside of Shebokken.
 The champion feels it in his jines that his wench is in danger.
 Find her before her life runs dry...
 """)))
-
-
-class ShopComponent(NoOpComponent): pass
 
 
 class ActionMenu(LabeledSelectionComponent):

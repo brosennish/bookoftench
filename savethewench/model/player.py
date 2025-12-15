@@ -9,10 +9,10 @@ from savethewench.data.weapons import BARE_HANDS, KNIFE
 from savethewench.ui import yellow, cyan, dim
 from savethewench.util import print_and_sleep
 from .achievement import Achievement
-from .base import Combatant
-from .events import ItemUsedEvent
+from .base import Combatant, Buyable
+from .events import ItemUsedEvent, ItemSoldEvent
 from .item import Item, load_items
-from .perk import attach_perk, perk_is_active
+from .perk import attach_perk, perk_is_active, Perk, activate_perk
 from .weapon import load_weapons, Weapon
 
 
@@ -73,14 +73,20 @@ class Player(Combatant):
     def get_items(self) -> List[Item]:
         return list(self.items.values())
 
-    def add_item(self, item: Item):
+    def display_item_count(self):
+        print(f"Items {dim(f"({len(self.items)}/{self.max_items})")}")
+
+    def add_item(self, item: Item) -> bool:
         if item.name in self.items:
             print_and_sleep(yellow(f"You already have {item.name}!"), 1)
+            return False
         elif len(self.items) >= self.max_items:
             print_and_sleep(yellow("Your item sack is full."), 1)
+            return False
         else:
             self.items[item.name] = item
             print_and_sleep(cyan(f"{item.name} added to sack."), 1)
+            return True
 
     def use_item(self, name: str):
         item = self.items[name]
@@ -91,16 +97,12 @@ class Player(Combatant):
         has_fish = perk_is_active(DOCTOR_FISH)
 
         bonus = 0
-        active_perks = []
         if has_nut and has_fish:
             bonus = int(base * 0.25) + 2
-            active_perks = [DOCTOR_FISH, HEALTH_NUT]
         elif has_nut:
             bonus = int(base * 0.25)
-            active_perks = [HEALTH_NUT]
         elif has_fish:
             bonus = 2
-            active_perks = [DOCTOR_FISH]
 
         gain = 0
         if bonus > 0:
@@ -109,23 +111,51 @@ class Player(Combatant):
 
         # Remove from actual inventory
         del self.items[item.name]
-        event_logger.log_event(ItemUsedEvent(item, len(self.items), self.hp, self.max_hp, gain, active_perks))
+        event_logger.log_event(ItemUsedEvent(item.name, len(self.items), self.hp, self.max_hp, gain))
+
+    def make_purchase(self, buyable: Buyable) -> bool:
+        if self.coins <= buyable.cost:
+            print_and_sleep(yellow(f"Need more coin"), 1)
+            return False
+        if ((isinstance(buyable, Item) and self.add_item(buyable)) or
+                     (isinstance(buyable, Weapon) and self.add_weapon(buyable)) or
+                     (isinstance(buyable, Perk) and self.add_perk(buyable))):
+            self.coins -= buyable.cost
+            return True
+        return False
+
+    def sell_item(self, name: str):
+        item = self.items[name]
+        self.coins += item.sell_value
+        del self.items[name]
+        event_logger.log_event(ItemSoldEvent(item.name, item.sell_value))
 
     def gain_hp(self, amount: int):
         self.hp = min(self.max_hp, self.hp + amount)  # clamp on max_hp
 
+    def display_weapon_count(self):
+        print(f"Weapons {dim(f"({len(self.weapon_dict)}/{self.max_weapons})")}")
+
     def get_weapons(self) -> List[Weapon]:
         return list(self.weapon_dict.values())
 
-    def add_weapon(self, weapon: Weapon):
-        print_and_sleep(cyan(f"You found a {weapon.name}!"), 1)
+    def add_weapon(self, weapon: Weapon) -> bool:
         if weapon.name in self.weapon_dict:
             print_and_sleep(yellow(dim("You already have this weapon.")), 1)
+            return False
         elif len(self.weapon_dict) >= self.max_weapons:
             print_and_sleep(yellow("Your weapon sack is full."), 1)
+            return False
         else:
             self.weapon_dict[weapon.name] = weapon
             print_and_sleep(cyan(f"{weapon.name} added to sack."), 1)
+            return True
+
+    def sell_weapon(self, name: str):
+        weapon = self.weapon_dict[name]
+        self.coins += weapon.sell_value
+        del self.weapon_dict[name]
+        event_logger.log_event(ItemSoldEvent(weapon.name, weapon.sell_value))
 
     def equip_weapon(self, name: str):
         self.current_weapon = self.weapon_dict[name]
@@ -133,3 +163,11 @@ class Player(Combatant):
     @attach_perk(LUCKY_TENCHS_FIN, value_description="crit chance")
     def get_crit_chance(self) -> float:
         return super().get_crit_chance()
+
+    @staticmethod
+    def add_perk(perk: Perk) -> bool:
+        if perk_is_active(perk.name):
+            print_and_sleep(yellow(f"You already have this perk."), 1)
+            return False
+        activate_perk(perk.name)
+        return True

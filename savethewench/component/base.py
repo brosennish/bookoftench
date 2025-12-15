@@ -1,10 +1,11 @@
 import random
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import List, Callable
+from typing import List, Callable, Any
 
 from savethewench.model import GameState
-from savethewench.ui import blue, dim
+from savethewench.ui import blue, dim, yellow
+from savethewench.util import print_and_sleep
 
 
 class Component(ABC):
@@ -29,6 +30,14 @@ class SelectionBinding:
 
     def format(self):
         return self.name
+
+
+@dataclass
+class ReprBinding(SelectionBinding):
+    repr_object: Any
+
+    def format(self):
+        return self.repr_object
 
 
 class SelectionComponent(Component):
@@ -64,7 +73,7 @@ class LabeledSelectionComponent(SelectionComponent):
     def display_options(self):
         self.top_level_prompt_callback(self.game_state)
         for _, v in self.binding_map.items():
-            print(f"{v.key}: {v.format()}")
+            print(f"{f"[{v.key}]":<4}: {v.format()}")
         print()
 
     def run_selected_component(self, binding: SelectionBinding) -> GameState:
@@ -76,7 +85,7 @@ class LabeledSelectionComponent(SelectionComponent):
             if self.quittable and selection == 'q':
                 self.success = True
             else:
-                print("Invalid selection")
+                print_and_sleep(yellow("Invalid selection"), 0.5)
             return self.game_state
         else:
             self.success = True

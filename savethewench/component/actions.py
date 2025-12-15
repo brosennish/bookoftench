@@ -2,21 +2,21 @@ import random
 from functools import partial
 from typing import List
 
+from savethewench import event_logger
 from savethewench.component.base import FunctionExecutingComponent, \
     FunctionalSelectionBinding, FunctionalSelectionComponent, RandomThresholdComponent, ThresholdBinding, \
     TextDisplayingComponent, anonymous_component, Component
 from savethewench.component.util import get_battle_status_view, display_bank_balance, display_player_achievements, \
     display_game_overview, calculate_flee, display_active_perks
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION
+from savethewench.model.events import KillEvent
 from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
 from savethewench.model.perk import load_perks, Perk, attach_perk
 from savethewench.model.weapon import load_discoverable_weapons
-from savethewench.ui import green, purple, yellow, dim, red
+from savethewench.ui import green, purple, yellow, dim, red, cyan
 from savethewench.util import print_and_sleep
 from .base import LabeledSelectionComponent, SelectionBinding
-from .. import event_logger
-from ..model.events import KillEvent
 
 
 class Explore(RandomThresholdComponent):
@@ -38,7 +38,9 @@ class Explore(RandomThresholdComponent):
     @staticmethod
     @anonymous_component(state_dependent=True)
     def _discover_weapon(game_state: GameState):
-        game_state.player.add_weapon(random.choice(load_discoverable_weapons()))
+        weapon = random.choice(load_discoverable_weapons())
+        print_and_sleep(cyan(f"You found a {weapon.name}!"), 1)
+        game_state.player.add_weapon(weapon)
 
     @staticmethod
     @anonymous_component(state_dependent=True)
@@ -53,7 +55,7 @@ class Explore(RandomThresholdComponent):
     @staticmethod
     @anonymous_component()
     def _discover_perk():
-        filtered: List[Perk] = load_perks(lambda p: not (p.is_active() or p.name == WENCH_LOCATION))
+        filtered: List[Perk] = load_perks(lambda p: not (p.active or p.name == WENCH_LOCATION))
         if len(filtered) > 0:
             reward = random.choice(filtered)
             reward.activate()
@@ -87,8 +89,7 @@ class UseItem(FunctionalSelectionComponent):
                                                               component=FunctionExecutingComponent,
                                                               function=partial(self._use_item, item.name))
                                    for (i, item) in enumerate(game_state.player.get_items(), 1)],
-                         top_level_prompt_callback=lambda gs:
-                         print(f"Items {dim(f"({len(gs.player.items)}/{gs.player.max_items})")}"))
+                         top_level_prompt_callback=lambda gs: gs.player.display_item_count())
 
     @staticmethod
     def _use_item(name: str, gs: GameState) -> GameState:

@@ -2,11 +2,12 @@ from dataclasses import dataclass
 from typing import List
 
 from savethewench.data import Weapons
-from savethewench.model.base import WeaponBase
+from savethewench.model.base import WeaponBase, Buyable
+from savethewench.ui import dim, cyan, orange, red, yellow
 
 
 @dataclass
-class Weapon(WeaponBase):
+class Weapon(WeaponBase, Buyable):
     name: str
     damage: int
     uses: int
@@ -17,6 +18,28 @@ class Weapon(WeaponBase):
     sell_value: int
     type: str
 
+    def to_sellable_weapon(self):
+        return SellableWeapon(**vars(self))
+
+    def __repr__(self):
+        return dim(' | ').join([
+            cyan(f"{self.name:<24}"),
+            f"{f"Cost: {orange(self.cost)}":<24}",
+            f"{f"DMG: {red(self.damage)}":<16}",
+            f"{f"ACC: {yellow(self.accuracy)}":<18}",
+            f"Uses: {self.uses}"
+        ])
+
+@dataclass
+class SellableWeapon(Weapon):
+    def __repr__(self):
+        return dim(' | ').join([
+            cyan(f"{self.name:<24}"),
+            f"{f"Value: {orange(self.sell_value)}":<24}",
+            f"{f"DMG: {red(self.damage)}":<16}",
+            f"{f"ACC: {yellow(self.accuracy)}":<18}",
+            f"Uses: {self.uses}"
+        ])
 
 def load_weapon(name: str) -> Weapon:
     matches = load_weapons([name])

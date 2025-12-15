@@ -15,7 +15,6 @@ from .shop import Shop
 class GameState:
     player: Player = field(default_factory=Player)
     shop: Shop = field(default_factory=Shop)
-    rescued: bool = False
     areas: List[Area] = field(default_factory=load_areas)
     current_area: Area = field(init=False)
 
