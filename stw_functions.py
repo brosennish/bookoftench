@@ -780,8 +780,19 @@ def above_or_below(player):
         elif not choice.isdigit():
             print(f"{y}Invalid choice.\n")
             continue
+
+        max_bet = int(max(player.coins * 0.25, 3))
+
+        if int(choice) < 3:
+            print(f"{b}Minimum bet is 3 coins, bozo.{rst}")
+            t.sleep(1)
+            continue
         elif int(choice) > player.coins:
             print(f"{b}You don't have enough coins, bozo.\n")
+            continue
+        elif int(choice) > max_bet:
+            print(f"{b}Maximum bet is 25% of your coins ({max_bet}). 3 coin minimum. House rules, bozo.{rst}")
+            t.sleep(1)
             continue
         else:
             wager = int(choice)
