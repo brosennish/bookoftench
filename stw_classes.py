@@ -1121,7 +1121,11 @@ class Enemy:
             else:
                 player.add_weapon(self.current_weapon, remaining_uses=uses)
 
-        player.gain_coins(self.coins)
+        if self.type == 'boss':
+            amount = random.randint(100,200)
+            player.gain_coins(amount)
+        else:
+            player.gain_coins(self.coins)
 
         if const.Perks.RICKETY_PICKPOCKET in player.perks:
             bonus = random.randint(20, 30)

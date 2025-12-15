@@ -639,9 +639,9 @@ def do_casino(player):
     while True:
         choice = input("[1] Krill or Cray\n"
                        "[2] Above or Below\n"
-                       "[3] Wet or Dry (WIP)\n"
-                       "[4] Fish Bones (WIP)\n"
-                       "[5] Mystery Box (WIP)\n"
+                       "[3] TBD\n"
+                       "[4] TBD\n"
+                       "[5] TBD\n"
                        "[r] Return\n"
                        f"{b}>{rst} ")
         if choice == "r":
@@ -651,13 +651,13 @@ def do_casino(player):
         elif choice == "2":
             above_or_below(player)
         elif choice == "3":
-            print("Work in progress!")
+            print("TBD!")
             continue
         elif choice == "4":
-            print("Work in progress!")
+            print("TBD!")
             continue
         elif choice == "5":
-            print("Work in progress!")
+            print("TBD!")
             continue
         else:
             print("Invalid choice.")
@@ -698,12 +698,17 @@ def krill_or_cray(player):
         
         elif choice.isdigit():
             wager = int(choice)
-            if wager > player.coins:
-                print(f"{b}If you ain't got it, don't bet it, bozo.{rst}")
+            max_bet = int(max(player.coins * 0.25, 3))
+            if wager < 3:
+                print(f"{b}Minimum bet is 3 coins, bozo.{rst}")
                 t.sleep(1)
                 continue
-            elif wager <= 0:
-                print(f"{b}Gotta bet something, bozo.{rst}")
+            elif wager > player.coins:
+                print(f"{b}Can't bet what you don't have, bozo.{rst}")
+                t.sleep(1)
+                continue
+            elif wager > max_bet:
+                print(f"{b}Maximum bet is 25% of your coins ({max_bet}). 3 coin minimum. House rules, bozo.{rst}")
                 t.sleep(1)
                 continue
             else: 
@@ -775,8 +780,19 @@ def above_or_below(player):
         elif not choice.isdigit():
             print(f"{y}Invalid choice.\n")
             continue
+
+        max_bet = int(max(player.coins * 0.25, 3))
+
+        if int(choice) < 3:
+            print(f"{b}Minimum bet is 3 coins, bozo.{rst}")
+            t.sleep(1)
+            continue
         elif int(choice) > player.coins:
             print(f"{b}You don't have enough coins, bozo.\n")
+            continue
+        elif int(choice) > max_bet:
+            print(f"{b}Maximum bet is 25% of your coins ({max_bet}). 3 coin minimum. House rules, bozo.{rst}")
+            t.sleep(1)
             continue
         else:
             wager = int(choice)
@@ -1433,7 +1449,7 @@ def battle(player, enemy, gs, shop):
             log_event(const.Events.KILL)
             if enemy.name == const.Enemies.THE_MAYOR:
                 play_sound('kids_cheer')
-            if enemy.name == gs.wanted:
+            if enemy.name == gs.wanted or enemy.name.startswith(f'Elite {str(gs.wanted)}'):
                 bounty = bounty_update(gs, player)
                 if 'Elite' in enemy.name:
                     bounty *= 1.5
