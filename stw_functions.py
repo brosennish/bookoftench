@@ -1433,7 +1433,7 @@ def battle(player, enemy, gs, shop):
             log_event(const.Events.KILL)
             if enemy.name == const.Enemies.THE_MAYOR:
                 play_sound('kids_cheer')
-            if enemy.name == gs.wanted:
+            if enemy.name == gs.wanted or enemy.name.startswith(f'Elite {str(gs.wanted)}'):
                 bounty = bounty_update(gs, player)
                 if 'Elite' in enemy.name:
                     bounty *= 1.5
