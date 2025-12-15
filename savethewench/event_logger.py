@@ -19,6 +19,7 @@ def set_counter(counter: Counter):
 
 def log_event(event: Event):
     _COUNTER[event.type] += 1
+    event.callback()
     _notify(event)
 
 

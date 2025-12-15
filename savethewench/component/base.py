@@ -53,10 +53,12 @@ class SelectionComponent(Component):
 
 class LabeledSelectionComponent(SelectionComponent):
     def __init__(self, game_state: GameState, bindings: List[SelectionBinding],
-                 top_level_prompt_callback: Callable[[GameState], None] = lambda _: None):
+                 top_level_prompt_callback: Callable[[GameState], None] = lambda _: None,
+                 quittable: bool = False):
         super().__init__(game_state)
         self.binding_map = dict((bnd.key.lower(), bnd) for bnd in bindings)
         self.top_level_prompt_callback = top_level_prompt_callback
+        self.quittable = quittable
         self.success = False
 
     def display_options(self):
@@ -69,9 +71,12 @@ class LabeledSelectionComponent(SelectionComponent):
         return binding.component(self.game_state).run()
 
     def handle_selection(self) -> GameState:
-        selection = input("Please enter a selection: ").strip().lower()
+        selection = input(f"Please enter a selection{' (q to exit)' if self.quittable else ''}: ").strip().lower()
         if selection not in self.binding_map:
-            print("Invalid selection")
+            if self.quittable and selection == 'q':
+                self.success = True
+            else:
+                print("Invalid selection")
             return self.game_state
         else:
             self.success = True
@@ -138,8 +143,9 @@ class FunctionalSelectionBinding(SelectionBinding):
 
 
 class FunctionalSelectionComponent(LabeledSelectionComponent):
-    def __init__(self, game_state: GameState, bindings: List[FunctionalSelectionBinding]):
-        super().__init__(game_state, bindings)
+    def __init__(self, game_state: GameState, bindings: List[FunctionalSelectionBinding],
+                 top_level_prompt_callback: Callable[[GameState], None] = lambda _: None):
+        super().__init__(game_state, bindings, top_level_prompt_callback, quittable=True)
 
     def run_selected_component(self, binding: FunctionalSelectionBinding) -> GameState:
         return binding.component(self.game_state, binding.function).run()

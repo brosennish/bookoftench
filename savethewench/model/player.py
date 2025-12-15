@@ -12,13 +12,14 @@ from .achievement import Achievement
 from .base import Combatant
 from .events import ItemUsedEvent
 from .item import Item, load_items
-from .perk import attach_perk
+from .perk import attach_perk, perk_is_active
 from .weapon import load_weapons, Weapon
 
 
 @dataclass
 class Player(Combatant):
     name: str = ''
+    is_npc: bool = False
     lives: int = 3
     lvl: int = 1
     hp: int = 100
@@ -31,8 +32,9 @@ class Player(Combatant):
     interest: int = 0
     casino_won: int = 0
     casino_lost: int = 0
-    _plays: int = 10
+    games_played: int = 0
 
+    _max_plays: int = 10
     _max_items: int = 5
     _max_weapons: int = 5
     # TODO maybe add starting items/weapons to config file
@@ -47,8 +49,8 @@ class Player(Combatant):
 
     @property
     @attach_perk(GRAMBLIN_MAN, GRAMBLING_ADDICT, silent=True)
-    def plays(self):
-        return self._plays
+    def max_plays(self):
+        return self._max_plays
 
     @property
     @attach_perk(NOMADS_LAND, VAGABONDAGE, silent=True)
@@ -63,6 +65,10 @@ class Player(Combatant):
     @property  # specifically made for returning a calculated value: print(player.xp_needed)
     def xp_needed(self):
         return 100 + (self.lvl - 1) * 10
+
+    @property
+    def remaining_plays(self):
+        return self.max_plays - self.games_played
 
     def get_items(self) -> List[Item]:
         return list(self.items.values())
@@ -81,8 +87,8 @@ class Player(Combatant):
         self.gain_hp(item.hp)
 
         base = item.hp
-        has_nut = HEALTH_NUT in self.perks
-        has_fish = DOCTOR_FISH in self.perks
+        has_nut = perk_is_active(HEALTH_NUT)
+        has_fish = perk_is_active(DOCTOR_FISH)
 
         bonus = 0
         active_perks = []
@@ -124,6 +130,6 @@ class Player(Combatant):
     def equip_weapon(self, name: str):
         self.current_weapon = self.weapon_dict[name]
 
-    @attach_perk(LUCKY_TENCHS_FIN, value_description="crit")
+    @attach_perk(LUCKY_TENCHS_FIN, value_description="crit chance")
     def get_crit_chance(self) -> float:
         return super().get_crit_chance()

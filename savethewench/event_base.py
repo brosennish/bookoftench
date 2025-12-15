@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
+from typing import Callable
 
 
 # TODO more tightly couple EventType and Event - not good that there could be multiple events with the same type (can lead to innacurate counts if not careful)
@@ -29,6 +30,11 @@ class EventType(Enum):
 @dataclass
 class Event:
     type: EventType
+    callback: Callable[[], None] = field(default_factory=lambda: None)
+
+    def __post_init__(self):
+        if not self.callback:
+            self.callback = lambda: None
 
     def __hash__(self):
         return hash(self.type)

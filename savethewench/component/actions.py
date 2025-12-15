@@ -1,30 +1,29 @@
 import random
-from dataclasses import dataclass
 from functools import partial
 from typing import List
 
-from savethewench import event_logger
 from savethewench.component.base import FunctionExecutingComponent, \
     FunctionalSelectionBinding, FunctionalSelectionComponent, RandomThresholdComponent, ThresholdBinding, \
-    TextDisplayingComponent, NoOpComponent, anonymous_component, Component
+    TextDisplayingComponent, anonymous_component, Component
 from savethewench.component.util import get_battle_status_view, display_bank_balance, display_player_achievements, \
     display_game_overview, calculate_flee, display_active_perks
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION
-from savethewench.model.events import CritEvent, MissEvent, HitEvent
 from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
 from savethewench.model.perk import load_perks, Perk, attach_perk
 from savethewench.model.weapon import load_discoverable_weapons
 from savethewench.ui import green, purple, yellow, dim, red
 from savethewench.util import print_and_sleep
-from .base import LinearComponent, LabeledSelectionComponent, SelectionBinding
+from .base import LabeledSelectionComponent, SelectionBinding
+from .. import event_logger
+from ..model.events import KillEvent
 
 
 class Explore(RandomThresholdComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
                          bindings=[
-                             ThresholdBinding(0.5, SpawnEnemy),
+                             ThresholdBinding(0.5, Battle),
                              ThresholdBinding(0.6, self._discover_item),
                              ThresholdBinding(0.68, self._discover_weapon),
                              ThresholdBinding(0.88, self._discover_coin),
@@ -87,7 +86,9 @@ class UseItem(FunctionalSelectionComponent):
                                                               name=item.name,
                                                               component=FunctionExecutingComponent,
                                                               function=partial(self._use_item, item.name))
-                                   for (i, item) in enumerate(game_state.player.get_items(), 1)])
+                                   for (i, item) in enumerate(game_state.player.get_items(), 1)],
+                         top_level_prompt_callback=lambda gs:
+                         print(f"Items {dim(f"({len(gs.player.items)}/{gs.player.max_items})")}"))
 
     @staticmethod
     def _use_item(name: str, gs: GameState) -> GameState:
@@ -110,53 +111,26 @@ class EquipWeapon(FunctionalSelectionComponent):
         return gs
 
 
-class SpawnEnemy(LinearComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state, next_component=Battle)
-
-    def execute_current(self) -> GameState:
-        self.game_state.current_area.spawn_enemy()
-        return self.game_state
-
-
 class Attack(Component):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
 
     def run(self) -> GameState:
         player, enemy = self.game_state.player, self.game_state.current_area.current_enemy
-        p_attack_result = player.attack(enemy)
-        if p_attack_result.success:
-            print(f"You attacked {enemy.name} with your {player.current_weapon.name} for "
-                  f"{red(p_attack_result.damage)} damage!")
-            event_logger.log_event(HitEvent())
-            if p_attack_result.critical:
-                print_and_sleep(red("*** Critical hit ***"), 1)
-                event_logger.log_event(CritEvent())
-        else:
-            print(yellow("You missed!"))
-            event_logger.log_event(MissEvent())
+        player.attack(enemy)
         if not enemy.is_alive():
             print(red(f"{enemy.name} is now in Hell."))
+            event_logger.log_event(KillEvent())
             self.game_state.current_area.kill_current_enemy()
             # player.gain_enemy_weapon(enemy)
             return self.game_state
-        e_attack_result = enemy.attack(player)
-        if e_attack_result.success:
-            print(f"{enemy.name} attacked you with their {enemy.current_weapon.name} for "
-                  f"{red(e_attack_result.damage)} damage!")
-        else:
-            print(yellow(f"{enemy.name} missed!"))
+        enemy.attack(player)
         if not player.is_alive():
             # TODO handle player death
             print(red("You ded"))
         return self.game_state
 
 
-class Flee(NoOpComponent): pass
-
-
-@dataclass
 class FleeSelectionBinding(SelectionBinding):
     def format(self):
         return f"Flee ({int(calculate_flee() * 100)}%)"
@@ -174,7 +148,7 @@ class Battle(LabeledSelectionComponent):
                              SelectionBinding('P', "Perks", DisplayPerks)
                          ])
         self.player = self.game_state.player
-        self.enemy = self.game_state.current_area.current_enemy
+        self.enemy = self.game_state.current_area.spawn_enemy()
         self.fled = False
 
     def can_exit(self):

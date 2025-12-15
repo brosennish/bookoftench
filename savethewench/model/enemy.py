@@ -3,13 +3,12 @@ from dataclasses import dataclass, field
 from typing import List
 
 from savethewench.data import Enemies
-from savethewench.data.weapons import PEPPER_SPRAY
-from .base import Combatant
+from .base import Combatant, NPC
 from .weapon import Weapon, load_weapon
 
 
 @dataclass
-class Enemy(Combatant):
+class Enemy(Combatant, NPC):
     name: str = ''
     hp: int = 0
     weapons: List[str] = field(default_factory=list)
@@ -23,7 +22,7 @@ class Enemy(Combatant):
     max_hp: int = field(init=False)
 
     def __post_init__(self):
-        self.current_weapon = load_weapon(PEPPER_SPRAY)  # load_weapon(random.choice(self.weapons))
+        self.current_weapon = load_weapon(random.choice(self.weapons))
         self.max_hp = self.hp
 
 

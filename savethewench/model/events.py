@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Callable
 
 from savethewench.event_base import Event, EventType
 from .item import Item
@@ -24,13 +24,13 @@ class TravelEvent(Event):
 
 
 class CritEvent(Event):
-    def __init__(self):
-        super().__init__(EventType.CRIT)
+    def __init__(self, callback: Callable[[], None]):
+        super().__init__(EventType.CRIT, callback)
 
 
 class HitEvent(Event):
-    def __init__(self):
-        super().__init__(EventType.HIT)
+    def __init__(self, callback: Callable[[], None]):
+        super().__init__(EventType.HIT, callback)
 
 
 class KillEvent(Event):
@@ -39,5 +39,5 @@ class KillEvent(Event):
 
 
 class MissEvent(Event):
-    def __init__(self):
-        super().__init__(EventType.MISS)
+    def __init__(self, callback: Callable[[], None]):
+        super().__init__(EventType.MISS, callback)

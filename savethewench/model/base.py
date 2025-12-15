@@ -1,13 +1,11 @@
 import random
-from abc import ABC
 from dataclasses import dataclass
 
-
-@dataclass
-class AttackResult:
-    success: bool
-    critical: bool
-    damage: int
+from savethewench import event_logger
+from savethewench.audio import play_sound
+from savethewench.model.events import HitEvent, CritEvent, MissEvent
+from savethewench.ui import red, yellow
+from savethewench.util import print_and_sleep
 
 
 @dataclass
@@ -18,10 +16,25 @@ class WeaponBase:
     accuracy: float
     spread: int
     crit: float
+    sound: str
+
+    def calculate_base_damage(self) -> int:
+        base = self.damage + random.randint(-self.spread, self.spread)  # Base damage +/- 10
+        return max(5, base)  # Damage >= 5
+
+    def play_sound(self):
+        if len(self.sound) > 0:
+            play_sound(self.sound)
 
 
 @dataclass
-class Combatant(ABC):
+class NPC:
+    name: str
+
+
+@dataclass
+class Combatant:
+    name: str
     hp: int
     current_weapon: WeaponBase
 
@@ -46,20 +59,32 @@ class Combatant(ABC):
     def calculate_accuracy(self) -> float:
         return self.current_weapon.accuracy
 
-    def calculate_base_damage(self) -> int:
-        weapon = self.current_weapon
-        base = weapon.damage + random.randint(-weapon.spread, weapon.spread)  # Base damage +/- 10
-        return max(5, base)  # Damage >= 5
-
     def get_crit_chance(self) -> float:
         return self.current_weapon.crit
 
-    def attack(self, other: "Combatant") -> AttackResult:
+    def display_miss(self):
+        print_and_sleep(yellow(f"{self.name if isinstance(self, NPC) else "You"} missed!"), 1)
+
+    def display_hit(self, other: "Combatant", damage_inflicted: int) -> None:
+        if isinstance(other, NPC):
+            print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
+                            f"{red(damage_inflicted)} damage!", 1)
+        else:
+            print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
+                            f"{red(damage_inflicted)} damage!", 1)
+
+    def display_crit(self):
+        self.current_weapon.play_sound()
+        print_and_sleep(red("*** Critical hit ***"), 1)
+
+    def attack(self, other: "Combatant") -> None:
         if random.random() > self.calculate_accuracy():
-            return AttackResult(False, False, 0)
-        # TODO Critical hit
-        base_damage = self.calculate_base_damage()
-        crit = random.random() < self.get_crit_chance()
-        dmg = base_damage * 2 if crit else base_damage  # 2x damage if crit, otherwise dmg after spread
-        damage_inflicted = other.take_damage(dmg)
-        return AttackResult(True, crit, damage_inflicted)
+            event_logger.log_event(MissEvent(self.display_miss))
+        else:
+            base_damage = self.current_weapon.calculate_base_damage()
+            crit = random.random() < self.get_crit_chance()
+            dmg = base_damage * 2 if crit else base_damage  # 2x damage if crit, otherwise dmg after spread
+            damage_inflicted = other.take_damage(dmg)
+            event_logger.log_event(HitEvent(lambda: self.display_hit(other, damage_inflicted)))
+            if crit:
+                event_logger.log_event(CritEvent(self.display_crit))

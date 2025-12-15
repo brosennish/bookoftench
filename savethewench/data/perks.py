@@ -66,6 +66,11 @@ _percent_change: Callable[[float, int], float] = lambda orig, pct: orig + (float
 
 Perks = [
     {
+        'name': AP_TENCH_STUDIES,
+        'cost': 260,
+        'description': "+30% XP from battles and +1 XP from all other sources",
+    },
+    {
         'name': KARATE_LESSONS,
         'cost': 50,
         'description': "Bare Hands +2 damage",

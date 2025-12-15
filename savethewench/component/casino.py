@@ -12,6 +12,7 @@ from savethewench.ui import blue, cyan, green, orange, purple, yellow, dim
 from savethewench.util import print_and_sleep
 from .base import LabeledSelectionComponent, SelectionBinding, NoOpComponent, \
     GatekeepingComponent, anonymous_component, Component
+from ..model.perk import perk_is_active
 
 
 class CasinoBouncer(GatekeepingComponent):
@@ -24,13 +25,13 @@ class CasinoBouncer(GatekeepingComponent):
 
 def can_gamble(game_state: GameState) -> bool:
     player = game_state.player
-    return player.plays > 0 and player.coins > 0
+    return player.remaining_plays > 0 and player.coins > 0
 
 
 @anonymous_component(state_dependent=True)
 def display_crapped_out_message(game_state: GameState):
     player = game_state.player
-    message = "You're out of plays. Buy a perk or level up, bozo.\n" if player.plays == 0 else \
+    message = "You're out of plays. Buy a perk or level up, bozo.\n" if player.remaining_plays == 0 else \
         "You're out of coins. Get lost, bozo.\n"
     print_and_sleep(blue(message), 2)
     play_music(game_state.current_area.theme)
@@ -74,7 +75,7 @@ class CasinoGame(Component):
 
     def get_wager_or_quit(self) -> int:
         player = self.game_state.player
-        print(f"Coins: {green(player.coins)} {dim('|')} Plays: {cyan(player.plays)}\n")
+        print(f"Coins: {green(player.coins)} {dim('|')} Plays: {cyan(player.remaining_plays)}\n")
         while True:
             raw_wager = input(f"[#] Wager\n"
                               f"[q] Leave:\n{blue('>')} ").strip().lower()
@@ -120,8 +121,9 @@ class KrillOrKray(CasinoGame):
             print(yellow("Invalid choice."))
             t.sleep(1)
 
-    def get_payout(self, wager: int) -> int:
-        if GRAMBLING_ADDICT in self.game_state.player.perks:
+    @staticmethod
+    def get_payout(wager: int) -> int:
+        if perk_is_active(GRAMBLING_ADDICT):
             print(purple("Payout increased 5% with Grambling Addict!\n"))
             return int((wager * 1.05) * 0.9)
         return int(wager * 0.9)
@@ -145,7 +147,7 @@ class KrillOrKray(CasinoGame):
                 blue("Bozo's blunder. Classic. Could've seen that coming from six or eight miles away.\n"))
             player.coins -= wager
             player.casino_lost += wager
-        player.plays -= 1
+        player.games_played += 1
         return self.game_state
 
 
@@ -173,7 +175,7 @@ Rules:
     # TODO print to console when GRAMBLING ADDICT is used here (feels like just adding it here would print it too often)
     def get_current_payout(self):
         payout = self.wager * self.ladder[self.turn - 1]
-        return int(payout * 0.05) if GRAMBLING_ADDICT in self.game_state.player.perks else int(payout)
+        return int(payout * 1.05) if perk_is_active(GRAMBLING_ADDICT) else int(payout)
 
     def display_status(self):
         print(dim(' | ').join([
@@ -211,7 +213,7 @@ Rules:
     def play_round(self, wager: int) -> GameState:
         print(f"Turn {self.turn} wager: {green(wager)}")
         player = self.game_state.player
-        player.plays -= 1
+        player.games_played += 1
         self.display_status()
         roll1 = roll_die()
         call_is_correct = self.get_eval_function()
@@ -220,13 +222,15 @@ Rules:
             payout = int(wager * self.ladder[self.turn])
             print(blue(f"Lucky guess!\nPayout increased to {payout} coins.\n"))
             if self.turn == len(self.ladder) - 1 or self.should_cash_out():
-                final_payout = int(payout * 1.05) if GRAMBLING_ADDICT in player.perks else int(payout)
-                player.coins += final_payout
+                if perk_is_active(GRAMBLING_ADDICT):
+                    print(purple("Payout increased 5% with Grambling Addict!\n"))
+                    payout *= 1.05
+                player.coins += payout
                 if self.turn == len(self.ladder):
                     print(f"{blue("You've completed the final round.")}\n")
                     player.xp += 4 if AP_TENCH_STUDIES in player.perks else 3
-                print(f"{green(f"You cashed out {final_payout} coins!")}\n")
-                player.casino_won += final_payout
+                print(f"{green(f"You cashed out {payout} coins!")}\n")
+                player.casino_won += payout
                 self.player_quit = True
                 return self.game_state
         else:
