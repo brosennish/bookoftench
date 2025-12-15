@@ -492,8 +492,10 @@ There are parts of another man or men scattered around you.{rst}""")
         self.hp = self.max_hp
 
         if len(self.items) < self.max_items:
-            reward = random.choice(Items)
-            self.items.append(reward['name'])
+            filtered = [i['name'] for i in Items if i['name'] not in self.items]
+            if filtered:
+                reward = random.choice(filtered)
+                self.items.append(reward)
         else:
             reward = None
 
@@ -502,7 +504,7 @@ There are parts of another man or men scattered around you.{rst}""")
         t.sleep(2)
         print(f"{g}MAX HP: {old_max} -> {self.max_hp}{rst}")
         if reward is not None:
-            print(f"\n{c}Reward: {reward['name']}{rst}")
+            print(f"\n{c}Reward: {reward}{rst}")
         print(f"\n{g}You were awarded {cash_reward} coins.{rst}")
         t.sleep(2)
 
