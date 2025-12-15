@@ -925,8 +925,9 @@ def do_explore(gs, player, shop):
             enemy = Enemy.spawn_enemy_for_area(player.current_area)
 
         # enemy hp scaling
-        level_bonus = max(0, player.lvl - 1)
-        enemy.max_hp += level_bonus
+        base = enemy.max_hp
+        enemy.max_hp = random.randint(base - 5, base + 5)
+        enemy.max_hp += player.lvl - 1
         enemy.hp = enemy.max_hp
 
         if random.random() < 0.10:  
