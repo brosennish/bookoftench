@@ -4,11 +4,11 @@ from typing import List
 
 from savethewench import event_logger
 from savethewench.component.base import RandomThresholdComponent, ThresholdBinding, \
-    TextDisplayingComponent, anonymous_component, Component, ColoredNameSelectionBinding
+    TextDisplayingComponent, anonymous_component, Component, ColoredNameSelectionBinding, BinarySelectionComponent
 from savethewench.component.util import get_battle_status_view, display_bank_balance, display_player_achievements, \
     display_game_overview, calculate_flee, display_active_perks
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION
-from savethewench.model.events import KillEvent
+from savethewench.model.events import KillEvent, BankWithdrawalEvent
 from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
 from savethewench.model.perk import load_perks, Perk, attach_perk
@@ -158,21 +158,44 @@ class FightBoss(Battle):
         print("TODO - Boss Fight")
         return self.game_state
 
+class VisitBank(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, bindings=[
+            SelectionBinding('W', 'Withdraw', self._make_withdrawal),
+            SelectionBinding('Q', 'Leave', anonymous_component()(self._return))
+        ], top_level_prompt_callback=display_bank_balance)
+        self.leave_bank = False
+
+    def _return(self): # TODO stop duplicating this pattern
+        print_and_sleep(blue("Very well..."), 1)
+        self.leave_bank = True
+
+    def can_exit(self):
+        return self.leave_bank
+
+    @staticmethod
+    @anonymous_component(state_dependent=True)
+    def _make_withdrawal(game_state: GameState):
+        raw_amount = input(f"\nHow much would you like to withdraw?\n{blue(f">")} ")
+        if raw_amount.isdigit():
+            amount = int(raw_amount)
+            if game_state.bank.make_withdrawal(amount):
+                game_state.player.coins += amount
+                event_logger.log_event(BankWithdrawalEvent(amount))
+        else:
+            print(yellow("Invalid choice."))
+
+
 class Achievements(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, display_callback=display_player_achievements, should_proceed=False)
-
-
-class BankBalance(TextDisplayingComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state, display_callback=display_bank_balance, should_proceed=False)
+        super().__init__(game_state, display_callback=display_player_achievements)
 
 
 class DisplayPerks(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, display_callback=display_active_perks, should_proceed=False)
+        super().__init__(game_state, display_callback=display_active_perks)
 
 
 class Overview(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, display_callback=display_game_overview, should_proceed=False)
+        super().__init__(game_state, display_callback=display_game_overview)

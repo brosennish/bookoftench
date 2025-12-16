@@ -5,12 +5,13 @@ from typing import List
 from savethewench import event_logger
 from savethewench.audio import play_music
 from savethewench.component.base import Component, LinearComponent, BinarySelectionComponent, \
-    TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, NoOpComponent
+    TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, NoOpComponent, anonymous_component
 from savethewench.data.audio import INTRO_THEME
 from savethewench.model import GameState
 from savethewench.ui import red
 from savethewench.util import print_and_sleep
-from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, BankBalance, DisplayPerks, Overview, FightBoss
+from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, DisplayPerks, Overview, \
+    FightBoss, VisitBank
 from .casino import CasinoBouncer
 from .shop import ShopComponent
 from .util import get_player_status_view
@@ -130,12 +131,19 @@ class ExtendedActionMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, bindings=[
             SelectionBinding('A', "Achievements", Achievements),
-            SelectionBinding('B', "Bank Balance", BankBalance),
+            SelectionBinding('B', "Bank", VisitBank),
             SelectionBinding('C', "Casino", CasinoBouncer),
             SelectionBinding('P', "Perks", DisplayPerks),
             SelectionBinding('O', "Overview", Overview),
-            SelectionBinding('R', "Return", NoOpComponent)
+            SelectionBinding('R', "Return", anonymous_component()(lambda: self._return()))
         ])
+        self.leave_menu = False
+
+    def _return(self):
+        self.leave_menu = True
+
+    def can_exit(self):
+        return self.leave_menu
 
 
 class SaveGame(NoOpComponent): pass
@@ -148,6 +156,13 @@ class InGameMenu(LabeledSelectionComponent):
             # TODO signal to go all the way back through the call stack to start new game
             SelectionBinding('S', "Save Game", SaveGame),
             SelectionBinding('L', "Load Game", LoadGame),
-            SelectionBinding('R', "Return", NoOpComponent),
+            SelectionBinding('R', "Return", anonymous_component()(lambda: self._return())), # TODO clean up duplicate code
             SelectionBinding('Q', "Quit", QuitGame)
         ])
+        self.leave_menu = False
+
+    def _return(self):
+        self.leave_menu = True
+
+    def can_exit(self):
+        return self.leave_menu

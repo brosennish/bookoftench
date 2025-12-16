@@ -6,6 +6,7 @@ from typing import List
 from savethewench import event_logger
 from savethewench.audio import play_music
 from .area import Area, load_areas
+from .bank import Bank
 from .enemy import Enemy, load_enemies
 from .events import TravelEvent
 from .player import Player
@@ -16,6 +17,7 @@ from .shop import Shop
 class GameState:
     player: Player = field(default_factory=Player)
     shop: Shop = field(default_factory=Shop)
+    bank: Bank = field(default_factory=Bank)
     areas: List[Area] = field(default_factory=load_areas)
     current_area: Area = field(init=False)
 

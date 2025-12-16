@@ -101,10 +101,9 @@ class LabeledSelectionComponent(SelectionComponent):
 
 
 class LinearComponent(Component):
-    def __init__(self, game_state: GameState, next_component: type[Component], should_proceed: bool = True):
+    def __init__(self, game_state: GameState, next_component: type[Component]):
         super().__init__(game_state)
         self.next_component = next_component
-        self.should_proceed = should_proceed
 
     @abstractmethod
     def execute_current(self) -> GameState:
@@ -112,9 +111,7 @@ class LinearComponent(Component):
 
     def run(self) -> GameState:
         self.game_state = self.execute_current()
-        if self.should_proceed:
-            return self.next_component(self.game_state).run()
-        return self.game_state
+        return self.next_component(self.game_state).run()
 
 
 class BinarySelectionComponent(LabeledSelectionComponent):
@@ -131,10 +128,9 @@ class BinarySelectionComponent(LabeledSelectionComponent):
 
 class TextDisplayingComponent(LinearComponent):
     def __init__(self, game_state: GameState, display_callback: Callable[[GameState], None],
-                 next_component: type[Component] = NoOpComponent, should_proceed: bool = True):
-        super().__init__(game_state, next_component, should_proceed)
+                 next_component: type[Component] = NoOpComponent):
+        super().__init__(game_state, next_component)
         self.display_callback = display_callback
-        self.audio_callback = lambda _: None
 
     def execute_current(self) -> GameState:
         self.display_callback(self.game_state)

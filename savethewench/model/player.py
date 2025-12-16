@@ -27,8 +27,6 @@ class Player(Combatant):
     xp: int = 0
 
     coins: int = 0
-    bank: int = 0
-    bank_interest_rate: float = 0.10
     interest: int = 0
     casino_won: int = 0
     casino_lost: int = 0

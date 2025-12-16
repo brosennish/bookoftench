@@ -72,12 +72,9 @@ def get_battle_status_view(game_state: GameState) -> str:
 
 
 def display_bank_balance(game_state: GameState) -> None:
-    player: Player = game_state.player
-    if not player.bank:
-        print(yellow("Your bank account is dry."))
-        t.sleep(1)
-    else:
-        print(f"\nPlayer coins: {green(f"{player.coins}")} coins\n\nBank coins: {green(f"{player.bank}")} coins")
+    print(f"{dim(' | ').join([
+        f"Player: {green(f"{game_state.player.coins}")}", 
+        f"Bank: {green(f"{game_state.bank.balance}")}"])}\n")
 
 
 def display_game_overview(game_state: GameState):
@@ -93,7 +90,7 @@ def display_game_overview(game_state: GameState):
     display_stat("Current HP", player.hp, player_color)
 
     display_stat("Coins", player.coins, green)
-    display_stat("Bank", player.bank, green)
+    display_stat("Bank", game_state.bank.balance, green)
     display_stat("Deposits", event_logger.get_count(EventType.DEPOSIT), orange)
     display_stat("Withdrawals", event_logger.get_count(EventType.WITHDRAW), orange)
     display_stat("Interest Earned", player.interest, green)

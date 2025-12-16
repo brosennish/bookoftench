@@ -85,3 +85,8 @@ class KillEvent(Event):
 class MissEvent(Event):
     def __init__(self, callback: Callable[[], None]):
         super().__init__(EventType.MISS, callback)
+
+class BankWithdrawalEvent(Event):
+    def __init__(self, amount: int):
+        super().__init__(EventType.WITHDRAW, lambda:
+        print_and_sleep(f"You withdrew {green(amount)} coins from the bank.\n", 1))
