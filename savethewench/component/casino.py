@@ -8,11 +8,11 @@ from savethewench.audio import play_music, play_sound
 from savethewench.data.audio import GOLF_CLAP, CASINO_THEME
 from savethewench.data.perks import AP_TENCH_STUDIES, GRAMBLING_ADDICT
 from savethewench.model.game_state import GameState
+from savethewench.model.perk import perk_is_active
 from savethewench.ui import blue, cyan, green, orange, purple, yellow, dim
 from savethewench.util import print_and_sleep
 from .base import LabeledSelectionComponent, SelectionBinding, NoOpComponent, \
     GatekeepingComponent, anonymous_component, Component
-from ..model.perk import perk_is_active
 
 
 class CasinoBouncer(GatekeepingComponent):

@@ -39,7 +39,6 @@ class ShopComponent(LabeledSelectionComponent):
 
     def display_options(self):
         print(f"\n{blue("Welcome! You have")} {green(self.game_state.player.coins)} {blue("coins.")}\n")
-        self.__init__(game_state=self.game_state) # re-init to update listings (should find a way to do this more efficiently)
         for component in self.selection_components:
             component.display_options()
 

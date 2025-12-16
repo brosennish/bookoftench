@@ -1,5 +1,6 @@
 import sys
 import time as t
+from typing import List
 
 from savethewench import event_logger
 from savethewench.audio import play_music
@@ -9,7 +10,7 @@ from savethewench.data.audio import INTRO_THEME
 from savethewench.model import GameState
 from savethewench.ui import red
 from savethewench.util import print_and_sleep
-from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, BankBalance, DisplayPerks, Overview
+from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, BankBalance, DisplayPerks, Overview, FightBoss
 from .casino import CasinoBouncer
 from .shop import ShopComponent
 from .util import get_player_status_view
@@ -100,15 +101,23 @@ Find her before her life runs dry...
 
 class ActionMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, bindings=[
-            SelectionBinding('E', "Explore", Explore),
-            SelectionBinding('I', "Use Item", UseItem),
-            SelectionBinding('W', "Equip Weapon", EquipWeapon),
-            SelectionBinding('S', "Shop", ShopComponent),
-            SelectionBinding('T', "Travel", Travel),
-            SelectionBinding('M', "More Options", ExtendedActionMenu),
-            SelectionBinding('Q', "Main Menu", InGameMenu)],
+        super().__init__(game_state, bindings=self._get_bindings(game_state),
                          top_level_prompt_callback=lambda gs: print(get_player_status_view(gs)))
+
+    @staticmethod
+    def _get_bindings(game_state: GameState) -> List[SelectionBinding]:
+        res = [SelectionBinding('I', "Use Item", UseItem),
+               SelectionBinding('W', "Equip Weapon", EquipWeapon),
+               SelectionBinding('S', "Shop", ShopComponent),
+               SelectionBinding('T', "Travel", Travel),
+               SelectionBinding('M', "More Options", ExtendedActionMenu),
+               SelectionBinding('Q', "Main Menu", InGameMenu)]
+        if game_state.current_area.enemies_remaining > 0:
+            return [SelectionBinding('E', "Explore", Explore), *res]
+        elif not game_state.current_area.boss_defeated:
+            return [SelectionBinding('B', 'Fight Boss', FightBoss), *res]
+        else:
+            return res
 
     def play_theme(self):
         self.game_state.play_current_area_theme()

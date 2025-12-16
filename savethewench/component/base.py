@@ -58,6 +58,7 @@ class SelectionComponent(Component):
 
     def run(self) -> GameState:
         while not self.can_exit():
+            self.__init__(game_state=self.game_state)  # re-init to update listings (should find a way to do this more efficiently)
             self.play_theme()
             self.display_options()
             self.game_state = self.handle_selection()
@@ -72,7 +73,7 @@ class LabeledSelectionComponent(SelectionComponent):
         self.binding_map = dict((bnd.key.lower(), bnd) for bnd in bindings)
         self.top_level_prompt_callback = top_level_prompt_callback
         self.quittable = quittable
-        self.success = False
+        self.made_selection = False
 
     def display_options(self):
         self.top_level_prompt_callback(self.game_state)
@@ -87,16 +88,16 @@ class LabeledSelectionComponent(SelectionComponent):
         selection = input(f"Please enter a selection{' (q to exit)' if self.quittable else ''}: ").strip().lower()
         if selection not in self.binding_map:
             if self.quittable and selection == 'q':
-                self.success = True
+                self.made_selection = True
             else:
                 print_and_sleep(yellow("Invalid selection"), 0.5)
             return self.game_state
         else:
-            self.success = True
+            self.made_selection = True
             return self.run_selected_component(self.binding_map[selection])
 
     def can_exit(self):
-        return self.success
+        return self.made_selection
 
 
 class LinearComponent(Component):
@@ -181,6 +182,13 @@ class GatekeepingComponent(Component):
         else:
             return self.deny_component(self.game_state).run()
 
+
+@dataclass
+class ColoredNameSelectionBinding(SelectionBinding):
+    color: Callable[[str], str]
+
+    def format(self):
+        return self.color(self.name)
 
 def anonymous_component(state_dependent=False) -> Callable[[Callable], type[Component]]:
     def decorator(func: Callable):

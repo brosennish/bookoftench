@@ -4,7 +4,7 @@ from typing import List
 
 from savethewench import event_logger
 from savethewench.component.base import RandomThresholdComponent, ThresholdBinding, \
-    TextDisplayingComponent, anonymous_component, Component
+    TextDisplayingComponent, anonymous_component, Component, ColoredNameSelectionBinding
 from savethewench.component.util import get_battle_status_view, display_bank_balance, display_player_achievements, \
     display_game_overview, calculate_flee, display_active_perks
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION
@@ -13,7 +13,7 @@ from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
 from savethewench.model.perk import load_perks, Perk, attach_perk
 from savethewench.model.weapon import load_discoverable_weapons
-from savethewench.ui import green, purple, yellow, dim, red, cyan
+from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
 from savethewench.util import print_and_sleep
 from .base import LabeledSelectionComponent, SelectionBinding
 
@@ -70,8 +70,7 @@ class Travel(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
                          bindings=[
-                             SelectionBinding(key=str(i),
-                                              name=area.name,
+                             ColoredNameSelectionBinding(key=str(i), name=area.name, color=blue,
                                               component=anonymous_component()(
                                                   partial(game_state.update_current_area, area.name)))
                              for i, area in enumerate(
@@ -153,6 +152,11 @@ class Battle(LabeledSelectionComponent):
         else:
             print(yellow("Couldn't escape!"))
 
+
+class FightBoss(Battle):
+    def run(self) -> GameState:
+        print("TODO - Boss Fight")
+        return self.game_state
 
 class Achievements(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
