@@ -72,7 +72,7 @@ def get_battle_status_view(game_state: GameState) -> str:
 
 
 def display_bank_balance(game_state: GameState) -> None:
-    print(f"{dim(' | ').join([
+    print_and_sleep(f"{dim(' | ').join([
         f"Player: {green(f"{game_state.player.coins}")}", 
         f"Bank: {green(f"{game_state.bank.balance}")}"])}\n")
 

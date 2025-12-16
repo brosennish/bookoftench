@@ -179,9 +179,9 @@ Rules:
         return int(payout * 1.05) if perk_is_active(GRAMBLING_ADDICT) else int(payout)
 
     def display_status(self):
-        print(dim(' | ').join([
+        print(f"\n{dim(' | ').join([
             f"Round: {cyan(self.turn)}", f"Wager: {green(self.wager)}",
-            f"Mult: {purple(self.ladder[self.turn])}", f"Payout: {green(self.get_current_payout())}"]))
+            f"Mult: {purple(self.ladder[self.turn])}", f"Payout: {green(self.get_current_payout())}"])}")
 
     @staticmethod
     def get_eval_function() -> Callable[[int, int], bool]:
@@ -198,20 +198,19 @@ Rules:
     @staticmethod
     def should_cash_out() -> bool:
         while True:
-            choice = safe_input("[c] Continue\n"
-                                "[q] Cash Out\n")
+            choice = safe_input("[C] Continue\n"
+                                "[Q] Cash Out\n")
             if choice not in ('q', 'c'):
                 print(yellow("Invalid choice."))
             else:
                 return choice == 'q'
 
     def get_wager_or_quit(self) -> int:
-        if self.wager <= 0:
+        if self.turn == 1:
             self.wager = super().get_wager_or_quit()
         return self.wager
 
     def play_round(self, wager: int) -> GameState:
-        print(f"Turn {self.turn} wager: {green(wager)}")
         player = self.game_state.player
         player.games_played += 1
         self.display_status()

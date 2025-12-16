@@ -81,10 +81,11 @@ class LabeledSelectionComponent(SelectionComponent):
         self.made_selection = False
 
     def display_options(self):
-        self.top_level_prompt_callback(self.game_state)
-        for _, v in self.binding_map.items():
-            print(f"{f"[{v.key}]":<4}: {v.format()}")
         print()
+        self.top_level_prompt_callback(self.game_state)
+        print(f"{'\n'.join(f"{f"[{v.key}]":<4}: {v.format()}" for _, v in self.binding_map.items())}")
+        # for _, v in self.binding_map.items():
+        #     print(f"{f"[{v.key}]":<4}: {v.format()}")
 
     def run_selected_component(self, binding: SelectionBinding) -> GameState:
         return binding.component(self.game_state).run()
@@ -129,7 +130,7 @@ class BinarySelectionComponent(LabeledSelectionComponent):
         self.query = query
 
     def display_options(self):
-        print(f"{self.query.strip()} (y/n)?")
+        print_and_sleep(f"{self.query.strip()} (y/n)?")
 
 
 class TextDisplayingComponent(LinearComponent):

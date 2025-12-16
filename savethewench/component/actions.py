@@ -186,7 +186,7 @@ class InGameBank(LabeledSelectionComponent):
     @staticmethod
     @anonymous_component(state_dependent=True)
     def _make_withdrawal(game_state: GameState):
-        raw_amount = safe_input("\nHow much would you like to withdraw?")
+        raw_amount = safe_input("How much would you like to withdraw?")
         if raw_amount.isdigit():
             amount = int(raw_amount)
             if game_state.bank.make_withdrawal(amount):
