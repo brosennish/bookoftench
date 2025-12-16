@@ -3,7 +3,7 @@ from typing import Callable, Optional
 from savethewench.audio import play_sound
 from savethewench.data.audio import PURCHASE, GREAT_JOB
 from savethewench.event_base import Event, EventType
-from savethewench.ui import green, cyan
+from savethewench.ui import green, cyan, red, yellow, dim
 from savethewench.util import print_and_sleep
 
 
@@ -68,13 +68,13 @@ class TravelEvent(Event):
 
 
 class CritEvent(Event):
-    def __init__(self, callback: Callable[[], None]):
-        super().__init__(EventType.CRIT, callback)
+    def __init__(self):
+        super().__init__(EventType.CRIT)
 
 
 class HitEvent(Event):
-    def __init__(self, callback: Callable[[], None]):
-        super().__init__(EventType.HIT, callback)
+    def __init__(self):
+        super().__init__(EventType.HIT)
 
 
 class KillEvent(Event):
@@ -110,5 +110,13 @@ class SwapWeaponEvent(Event):
         super().__init__(EventType.SWAP_WEAPON)
 
 class FleeEvent(Event):
-    def __init__(self):
-        super().__init__(EventType.FLEE)
+    def __init__(self, enemy_name: str):
+        super().__init__(EventType.FLEE,
+                         callback = lambda: print_and_sleep(
+                             dim(f"You ran away from {enemy_name}!"), 1))
+
+class PlayerDeathEvent(Event):
+    def __init__(self, lives_remaining: int):
+        super().__init__(EventType.PLAYER_DEATH,
+                         callback = lambda: print_and_sleep(
+                             f"{red("You died.")} Lives remaining: {yellow(lives_remaining)}", 2))

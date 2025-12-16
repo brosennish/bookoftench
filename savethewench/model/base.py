@@ -1,5 +1,5 @@
 import random
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from savethewench import event_logger
 from savethewench.audio import play_sound
@@ -78,9 +78,22 @@ class Combatant:
             print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
 
-    def display_crit(self):
+    def handle_crit(self, is_crit: bool) -> None:
+        if not is_crit:
+            return
         self.current_weapon.play_sound()
         print_and_sleep(red("*** Critical hit ***"), 1)
+        if not isinstance(self, NPC):
+            event_logger.log_event(CritEvent())
+
+    def handle_hit(self, other: "Combatant", damage_inflicted: int) -> None:
+        if isinstance(other, NPC):
+            print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
+                            f"{red(damage_inflicted)} damage!", 1)
+        else:
+            print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
+                            f"{red(damage_inflicted)} damage!", 1)
+            event_logger.log_event(HitEvent())
 
     def attack(self, other: "Combatant") -> None:
         if random.random() > self.calculate_accuracy():
@@ -89,7 +102,6 @@ class Combatant:
             base_damage = self.current_weapon.calculate_base_damage()
             crit = random.random() < self.get_crit_chance()
             dmg = base_damage * 2 if crit else base_damage  # 2x damage if crit, otherwise dmg after spread
-            damage_inflicted = other.take_damage(dmg)
-            event_logger.log_event(HitEvent(lambda: self.display_hit(other, damage_inflicted)))
-            if crit:
-                event_logger.log_event(CritEvent(self.display_crit))
+            self.handle_hit(other, other.take_damage(dmg))
+            self.handle_crit(crit)
+

@@ -25,7 +25,7 @@ class StartMenu(LabeledSelectionComponent):
                                    SelectionBinding(key='Q', name="Quit", component=QuitGame)])
 
     def can_exit(self):
-        return False
+        return not self.game_state.player.is_alive()
 
 
 class NewGame(LinearComponent):
@@ -33,7 +33,6 @@ class NewGame(LinearComponent):
         super().__init__(GameState(), TutorialDecision)
 
     def execute_current(self) -> GameState:
-        event_logger.reset()
         player = self.game_state.player
         while not player.name:
             player.name = input("Name: ")
@@ -45,8 +44,6 @@ class LoadGame(Component):
         super().__init__(game_state)
 
     def run(self) -> GameState:
-        # don't forget to
-        # event_logger.reset()
         pass
 
 
@@ -99,6 +96,9 @@ The champion feels it in his jines that his wench is in danger.
 Find her before her life runs dry...
 """)))
 
+    def play_theme(self):
+        play_music(INTRO_THEME)
+
 
 class ActionMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -124,7 +124,7 @@ class ActionMenu(LabeledSelectionComponent):
         self.game_state.play_current_area_theme()
 
     def can_exit(self):
-        return False
+        return not self.game_state.player.is_alive()
 
 
 class ExtendedActionMenu(LabeledSelectionComponent):

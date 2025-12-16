@@ -18,6 +18,7 @@ class EventType(Enum):
     KILL = "kill"
     LEVEL_UP = "level_up"
     MISS = "miss"
+    PLAYER_DEATH = "player_death"
     SELL_ITEM = "sell_item"
     SELL_WEAPON = "sell_weapon"
     SWAP_WEAPON = "swap_weapon"

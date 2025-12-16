@@ -1,3 +1,3 @@
-from .menu import StartMenu
+from .pregame import InitGame
 
-__all__ = ["StartMenu"]
+__all__ = ["InitGame"]

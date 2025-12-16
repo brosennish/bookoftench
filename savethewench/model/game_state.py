@@ -6,11 +6,10 @@ from typing import List
 from savethewench import event_logger
 from savethewench.audio import play_music
 from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
-from savethewench.event_logger import subscribe_function
 from .area import Area, load_areas
 from .bank import Bank
 from .enemy import Enemy, load_enemy
-from .events import TravelEvent, LevelUpEvent
+from .events import TravelEvent
 from .perk import attach_perk
 from .player import Player
 from .shop import Shop
@@ -23,12 +22,12 @@ class GameState:
     shop: Shop = field(default_factory=Shop)
     bank: Bank = field(default_factory=Bank)
     areas: List[Area] = field(default_factory=load_areas)
-    current_area: Area = field(init=False)
+    current_area: Area = None
 
-    wench_area: str = 'Hell'  # TODO
+    wench_area: Area = field(default_factory=lambda: random.choice(load_areas()))  # TODO
 
-    wanted: str = field(init=False)
-    _bounty: int = field(init=False)
+    wanted: str = ''
+    _bounty: int = 0
 
     event_counter: Counter = field(default_factory=Counter)
 

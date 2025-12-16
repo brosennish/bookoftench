@@ -1,10 +1,11 @@
 import random
 
 from savethewench.audio import stop_all_sounds
-from savethewench.component import StartMenu
+from savethewench.component import InitGame
 from savethewench.component.base import Component
 from savethewench.model import GameState
 from savethewench.model.perk import load_perks
+from savethewench.util import print_and_sleep
 
 
 class SaveTheWenchGame:
@@ -12,7 +13,9 @@ class SaveTheWenchGame:
     @staticmethod
     def run():
         try:
-            StartMenu(GameState()).run()
+            InitGame().run()
+        except KeyboardInterrupt:
+            print_and_sleep("\nExiting...", 1)
         except Exception as e:
             print(e)
             raise e
@@ -26,12 +29,16 @@ class SaveTheWenchGame:
                 perk._active = True
             game_state = GameState()
             player = game_state.player
+            player.lives = 1
+            player.hp = 1
             random.seed(666)
             player.name = "debug"
             player.coins = 1000
             # for weapon in load_discoverable_weapons():
             #     player.weapon_dict[weapon.name] = weapon
             component_type(game_state).run()
+        except KeyboardInterrupt:
+            print_and_sleep("\nExiting...", 1)
         except Exception as e:
             print(e)
             raise e

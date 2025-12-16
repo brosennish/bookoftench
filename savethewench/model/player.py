@@ -5,7 +5,7 @@ from typing import Dict, List
 from savethewench import event_logger
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
-    VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES
+    VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN
 from savethewench.data.weapons import BARE_HANDS, KNIFE
 from savethewench.ui import yellow, dim, green
 from savethewench.util import print_and_sleep
@@ -17,6 +17,12 @@ from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk
 from .weapon import load_weapons, Weapon
 
+
+def item_defaults() -> Dict[str, Item]:
+    return dict((it.name, it) for it in load_items([TENCH_FILET]))
+
+def weapon_defaults() -> Dict[str, Weapon]:
+    return dict((it.name, it) for it in load_weapons([BARE_HANDS, KNIFE]))
 
 @dataclass
 class Player(Combatant):
@@ -40,9 +46,8 @@ class Player(Combatant):
 
     _blind = False
     # TODO maybe add starting items/weapons to config file
-    items: Dict[str, Item] = field(default_factory=lambda: dict((it.name, it) for it in load_items([TENCH_FILET])))
-    weapon_dict: Dict[str, Weapon] = field(
-        default_factory=lambda: dict((it.name, it) for it in load_weapons([BARE_HANDS, KNIFE])))
+    items: Dict[str, Item] = field(default_factory=item_defaults)
+    weapon_dict: Dict[str, Weapon] = field(default_factory=weapon_defaults)
     achievements: List[Achievement] = field(default_factory=list)
     current_weapon: Weapon = None
 
@@ -233,3 +238,11 @@ class Player(Combatant):
                 item_reward = str(item_reward.to_sellable_item())
 
         event_logger.log_event(LevelUpEvent(self.lvl, old_max, self.max_hp, item_reward, cash_reward))
+
+    def apply_death_penalties(self):
+        self.coins = int(self.coins * 0.25) if perk_is_active(WALLET_CHAIN) else 0 #TODO use the framework for this
+        self.items = item_defaults()
+        self.weapon_dict = weapon_defaults()
+        self.current_weapon = self.weapon_dict[BARE_HANDS]
+        self.hp = self.max_hp
+        self.xp = 0

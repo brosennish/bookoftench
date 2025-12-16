@@ -12,6 +12,9 @@ class Component(ABC):
     def __init__(self, game_state: GameState):
         self.game_state = game_state
 
+    def play_theme(self):
+        pass
+
     @abstractmethod
     def run(self) -> GameState:
         pass
@@ -55,9 +58,6 @@ class SelectionComponent(Component):
 
     @abstractmethod
     def can_exit(self) -> bool:
-        pass
-
-    def play_theme(self):
         pass
 
     def run(self) -> GameState:
@@ -115,6 +115,7 @@ class LinearComponent(Component):
         pass
 
     def run(self) -> GameState:
+        self.play_theme()
         self.game_state = self.execute_current()
         return self.next_component(self.game_state).run()
 
@@ -140,7 +141,7 @@ class TextDisplayingComponent(LinearComponent):
     def execute_current(self) -> GameState:
         self.display_callback(self.game_state)
         input(blue("\n> "))
-        return self.game_state
+        return self.next_component(self.game_state).run()
 
 
 @dataclass
@@ -165,7 +166,7 @@ class RandomThresholdComponent(Component):
         for binding in self.ordered_thresholds:
             if roll < binding.upper_threshold:
                 return binding.component(self.game_state).run()
-        print(self.failed_message)
+        print_and_sleep(self.failed_message, 1)
         return self.game_state
 
 

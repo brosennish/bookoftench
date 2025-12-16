@@ -10,7 +10,7 @@ from savethewench.component.util import get_battle_status_view, display_bank_bal
     display_game_overview, calculate_flee, display_active_perks
 from savethewench.data.audio import BATTLE_THEME
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION
-from savethewench.model.events import KillEvent, BankWithdrawalEvent, FleeEvent
+from savethewench.model.events import KillEvent, BankWithdrawalEvent, FleeEvent, PlayerDeathEvent
 from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
 from savethewench.model.perk import load_perks, Perk, attach_perk
@@ -122,8 +122,8 @@ class Attack(Component):
             return self.game_state
         enemy.attack(player)
         if not player.is_alive():
-            # TODO handle player death
-            print(red("You ded"))
+            player.lives -= 1
+            event_logger.log_event(PlayerDeathEvent(player.lives))
         return self.game_state
 
 
@@ -132,7 +132,6 @@ class FleeSelectionBinding(SelectionBinding):
         return f"Flee ({int(calculate_flee() * 100)}%)"
 
 
-# TODO - a lot, but especially bounty stuff and handling player death
 class Battle(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, top_level_prompt_callback=lambda gs: print(get_battle_status_view(gs)),
@@ -156,8 +155,7 @@ class Battle(LabeledSelectionComponent):
     def _try_flee(self):
         flee_chance = calculate_flee()
         if random.random() < flee_chance:
-            print(dim(f"You ran away from {self.enemy.name}!"))
-            event_logger.log_event(FleeEvent())
+            event_logger.log_event(FleeEvent(self.enemy.name))
             self.fled = True
             self.game_state.current_area.reset_current_enemy()
         else:

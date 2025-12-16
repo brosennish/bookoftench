@@ -1,7 +1,7 @@
 from savethewench import SaveTheWenchGame
 from savethewench.component.menu import ActionMenu
 
-DEBUG = True
+DEBUG = False
 
 if __name__ == '__main__':
     if DEBUG:

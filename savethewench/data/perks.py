@@ -66,6 +66,7 @@ def _bounded_random_change(original: int, value_description: str, silent: bool, 
 
 _int_change: Callable[[int, int], int] = lambda orig, i: orig + i
 _percent_change: Callable[[float, int], float] = lambda orig, pct: orig + (float(pct) / 100.0)
+_int_change_by_percent: Callable[[int, int], int] = lambda orig, pct: int(orig * (1 + (float(pct) / 100.0)))
 
 Perks = [
     {
@@ -222,13 +223,13 @@ Perks = [
         'name': BARTER_SAUCE,
         'cost': 140,
         'description': "Shop prices are 10% lower",
-        'wrapper': partial(_numeric_change, change=-10, name=BARTER_SAUCE, change_func=_percent_change)
+        'wrapper': partial(_numeric_change, change=-10, name=BARTER_SAUCE, change_func=_int_change_by_percent)
     },
     {
         'name': TRADE_SHIP,
         'cost': 300,
         'description': "Shop prices are 20% lower",
-        'wrapper': partial(_numeric_change, change=-20, name=TRADE_SHIP, change_func=_percent_change),
+        'wrapper': partial(_numeric_change, change=-20, name=TRADE_SHIP, change_func=_int_change_by_percent),
     },
     {
         'name': CROWS_NEST,
