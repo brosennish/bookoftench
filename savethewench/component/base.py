@@ -84,8 +84,6 @@ class LabeledSelectionComponent(SelectionComponent):
         print()
         self.top_level_prompt_callback(self.game_state)
         print(f"{'\n'.join(f"{f"[{v.key}]":<4}: {v.format()}" for _, v in self.binding_map.items())}")
-        # for _, v in self.binding_map.items():
-        #     print(f"{f"[{v.key}]":<4}: {v.format()}")
 
     def run_selected_component(self, binding: SelectionBinding) -> GameState:
         return binding.component(self.game_state).run()

@@ -29,9 +29,6 @@ class SaveTheWenchGame:
                 perk._active = True
             game_state = GameState()
             player = game_state.player
-            player.lives = 1
-            player.hp = 1
-            random.seed(666)
             player.name = "debug"
             player.coins = 1000
             # for weapon in load_discoverable_weapons():

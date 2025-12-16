@@ -115,6 +115,11 @@ class FleeEvent(Event):
                          callback = lambda: print_and_sleep(
                              dim(f"You ran away from {enemy_name}!"), 1))
 
+class FailedFleeEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.FAILED_FLEE,
+                         callback = lambda: print_and_sleep(yellow("Couldn't escape!")))
+
 class PlayerDeathEvent(Event):
     def __init__(self, lives_remaining: int):
         super().__init__(EventType.PLAYER_DEATH,

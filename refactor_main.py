@@ -2,6 +2,7 @@ import argparse
 import importlib
 import inspect
 import pkgutil
+import random
 
 from savethewench import SaveTheWenchGame
 
@@ -26,10 +27,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Save The Wench Game")
     parser.add_argument("-d", "--debug", action="store_true")
     parser.add_argument("-c", "--component", default="ActionMenu")
+    parser.add_argument("-s", "--seed", type=int, default=666)
 
     args = parser.parse_args()
 
     if args.debug:
+        random.seed(args.seed)
         # noinspection PyTypeChecker
         SaveTheWenchGame.debug_from(load_component(args.component))
     else:

@@ -90,10 +90,10 @@ class Combatant:
         if isinstance(other, NPC):
             print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
+            event_logger.log_event(HitEvent())
         else:
             print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
-            event_logger.log_event(HitEvent())
 
     def attack(self, other: "Combatant") -> None:
         if random.random() > self.calculate_accuracy():

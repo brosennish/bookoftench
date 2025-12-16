@@ -24,4 +24,4 @@ class TravelListener(Listener):
     @staticmethod
     def handle_event(event: TravelEvent):
         play_music(TRAVEL_THEME)
-        print_and_sleep(cyan(f'\nTraveling by six by eight to the {event.area_name}...'), 5)
+        print_and_sleep(cyan(f'Traveling by six by eight to the {event.area_name}...'), 5)

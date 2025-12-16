@@ -1,4 +1,5 @@
 import random
+from dataclasses import dataclass
 from functools import partial
 from typing import List
 
@@ -18,6 +19,8 @@ from savethewench.model.weapon import load_discoverable_weapons
 from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
 from savethewench.util import print_and_sleep, safe_input
 from .base import LabeledSelectionComponent, SelectionBinding
+from ..event_logger import subscribe_function
+from ..model.base import Combatant
 
 
 class Explore(RandomThresholdComponent):
@@ -105,21 +108,23 @@ class EquipWeapon(LabeledSelectionComponent):
 class Attack(Component):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
+        self.failed_flee = False
 
     def run(self) -> GameState:
         player, enemy = self.game_state.player, self.game_state.current_area.current_enemy
-        player.attack(enemy)
-        if not enemy.is_alive():
-            print_and_sleep(red(f"{enemy.name} is now in Hell."), 1)
-            enemy_weapon = enemy.drop_weapon()
-            if enemy_weapon is not None:
-                if player.add_weapon(enemy_weapon):
-                    print_and_sleep(cyan(f"{enemy_weapon.name} added to sack."), 1)
-            player.gain_coins(enemy.drop_coins())
-            player.gain_xp(enemy)
-            event_logger.log_event(KillEvent())
-            self.game_state.current_area.kill_current_enemy()
-            return self.game_state
+        if not self.failed_flee:
+            player.attack(enemy)
+            if not enemy.is_alive():
+                print_and_sleep(red(f"{enemy.name} is now in Hell."), 1)
+                enemy_weapon = enemy.drop_weapon()
+                if enemy_weapon is not None:
+                    if player.add_weapon(enemy_weapon):
+                        print_and_sleep(cyan(f"{enemy_weapon.name} added to sack."), 1)
+                player.gain_coins(enemy.drop_coins())
+                player.gain_xp(enemy)
+                event_logger.log_event(KillEvent())
+                self.game_state.current_area.kill_current_enemy()
+                return self.game_state
         enemy.attack(player)
         if not player.is_alive():
             player.lives -= 1
@@ -127,9 +132,33 @@ class Attack(Component):
         return self.game_state
 
 
+class FailedFlee(Attack):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state)
+        self.failed_flee: bool = True
+
+    def run(self) -> GameState:
+        print_and_sleep(yellow("Couldn't escape!"), 0.5)
+        return super().run()
+
+
 class FleeSelectionBinding(SelectionBinding):
     def format(self):
         return f"Flee ({int(calculate_flee() * 100)}%)"
+
+
+class TryFlee(RandomThresholdComponent):
+    def __init__(self, game_state: GameState):
+        self.flee_chance = calculate_flee()
+        super().__init__(game_state, bindings=[
+            ThresholdBinding(self.flee_chance, self._flee_success),
+            ThresholdBinding(1.0, FailedFlee)
+        ])
+
+    @staticmethod
+    @anonymous_component(state_dependent=True)
+    def _flee_success(game_state: GameState):
+        event_logger.log_event(FleeEvent(game_state.current_area.current_enemy.name))
 
 
 class Battle(LabeledSelectionComponent):
@@ -139,12 +168,13 @@ class Battle(LabeledSelectionComponent):
                              SelectionBinding('A', "Attack", Attack),
                              SelectionBinding('I', "Use Item", UseItem),
                              SelectionBinding('S', "Switch Weapon", EquipWeapon),
-                             FleeSelectionBinding('F', "Flee (50%)", anonymous_component()(self._try_flee)),
+                             FleeSelectionBinding('F', "Flee (50%)", TryFlee),
                              SelectionBinding('P', "Perks", DisplayPerks)
                          ])
         self.player = self.game_state.player
         self.enemy = self.game_state.current_area.spawn_enemy()
         self.fled = False
+        self._subscribe_listeners()
 
     def play_theme(self):
         play_music(BATTLE_THEME)
@@ -152,14 +182,10 @@ class Battle(LabeledSelectionComponent):
     def can_exit(self):
         return self.fled or not (self.player.is_alive() and self.enemy.is_alive())
 
-    def _try_flee(self):
-        flee_chance = calculate_flee()
-        if random.random() < flee_chance:
-            event_logger.log_event(FleeEvent(self.enemy.name))
+    def _subscribe_listeners(self):
+        @subscribe_function(FleeEvent)
+        def handle_flee(_: FleeEvent):
             self.fled = True
-            self.game_state.current_area.reset_current_enemy()
-        else:
-            print(yellow("Couldn't escape!"))
 
 
 class FightBoss(Battle):

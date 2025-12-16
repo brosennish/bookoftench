@@ -13,6 +13,7 @@ class EventType(Enum):
     BUY_WEAPON = "buy_weapon"
     CRIT = "crit"
     DEPOSIT = "deposit"
+    FAILED_FLEE = "failed_flee"
     FLEE = "flee"
     HIT = "hit"
     KILL = "kill"

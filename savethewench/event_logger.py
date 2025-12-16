@@ -86,6 +86,10 @@ def subscribe_function(*event_types: type[Event], name_override: str = None):
 
         global _LISTENERS
         for event_type in event_types:
-            _LISTENERS[event_type].add(AnonymousListener)
+            s = _LISTENERS[event_type]
+            if AnonymousListener in s:
+                # important so that the most recent instance is always present, when listener is stateful
+                s.remove(AnonymousListener)
+            s.add(AnonymousListener)
 
     return decorator
