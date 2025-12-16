@@ -9,7 +9,7 @@ from savethewench.component.base import Component, LinearComponent, BinarySelect
 from savethewench.data.audio import INTRO_THEME
 from savethewench.model import GameState
 from savethewench.ui import red
-from savethewench.util import print_and_sleep
+from savethewench.util import print_and_sleep, safe_input
 from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, DisplayPerks, Overview, \
     FightBoss, InGameBank
 from .casino import CasinoBouncer
@@ -35,7 +35,7 @@ class NewGame(LinearComponent):
     def execute_current(self) -> GameState:
         player = self.game_state.player
         while not player.name:
-            player.name = input("Name: ")
+            player.name = safe_input("What is your name?")
         return self.game_state
 
 

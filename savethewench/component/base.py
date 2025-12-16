@@ -5,7 +5,7 @@ from typing import List, Callable, Any
 
 from savethewench.model import GameState
 from savethewench.ui import blue, dim, yellow
-from savethewench.util import print_and_sleep
+from savethewench.util import print_and_sleep, safe_input
 
 
 class Component(ABC):
@@ -90,7 +90,7 @@ class LabeledSelectionComponent(SelectionComponent):
         return binding.component(self.game_state).run()
 
     def handle_selection(self) -> GameState:
-        selection = input(f"Please enter a selection{' (q to exit)' if self.quittable else ''}: ").strip().lower()
+        selection = safe_input(f"Please enter a selection{' (q to exit)' if self.quittable else ''}").strip().lower()
         if selection not in self.binding_map:
             if self.quittable and selection == 'q':
                 self.made_selection = True
@@ -129,7 +129,7 @@ class BinarySelectionComponent(LabeledSelectionComponent):
         self.query = query
 
     def display_options(self):
-        print(f"{self.query.strip()} (y/n)?\n{blue("> ")}")
+        print(f"{self.query.strip()} (y/n)?")
 
 
 class TextDisplayingComponent(LinearComponent):
@@ -140,7 +140,7 @@ class TextDisplayingComponent(LinearComponent):
 
     def execute_current(self) -> GameState:
         self.display_callback(self.game_state)
-        input(blue("\n> "))
+        safe_input()
         return self.next_component(self.game_state).run()
 
 

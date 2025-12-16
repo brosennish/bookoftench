@@ -10,7 +10,7 @@ from savethewench.data.perks import AP_TENCH_STUDIES, GRAMBLING_ADDICT
 from savethewench.model.game_state import GameState
 from savethewench.model.perk import perk_is_active
 from savethewench.ui import blue, cyan, green, orange, purple, yellow, dim
-from savethewench.util import print_and_sleep
+from savethewench.util import print_and_sleep, safe_input
 from .base import LabeledSelectionComponent, SelectionBinding, NoOpComponent, \
     GatekeepingComponent, anonymous_component, Component
 
@@ -81,8 +81,8 @@ class CasinoGame(Component):
         player = self.game_state.player
         print(f"Coins: {green(player.coins)} {dim('|')} Plays: {cyan(player.remaining_plays)}\n")
         while True:
-            raw_wager = input(f"[#] Wager\n"
-                              f"[q] Leave:\n{blue('>')} ").strip().lower()
+            raw_wager = safe_input("[#] Wager\n"
+                                   "[q] Leave").strip().lower()
             if raw_wager != 'q' and not raw_wager.isdigit():
                 print(yellow("Invalid choice."))
             elif raw_wager.isdigit():
@@ -118,8 +118,8 @@ class KrillOrKray(CasinoGame):
     @staticmethod
     def get_pick(wager: int) -> str:
         while True:
-            pick = input(f"You bet {green(wager)} coins.\n\nWhat's the call? "
-                         f"{orange("k for krill")} {dim('|')} {orange("c for cray")}\n{blue('>')} ").strip().lower()
+            pick = safe_input(f"You bet {green(wager)} coins.\n\nWhat's the call? "
+                         f"{orange("k for krill")} {dim('|')} {orange("c for cray")}").strip().lower()
             if pick in ('k', 'c'):
                 return pick
             print(yellow("Invalid choice."))
@@ -140,12 +140,12 @@ class KrillOrKray(CasinoGame):
             payout = self.get_payout(wager)
             player.coins += payout
             player.casino_won += payout
-            print(green(f"Lucky guess, bozo! You won {payout} coins.\n"))
+            print_and_sleep(green(f"Lucky guess, bozo! You won {payout} coins.\n"), 0.5)
             play_sound(GOLF_CLAP)
             player.xp += 2 if perk_is_active(AP_TENCH_STUDIES) else 1
         else:
-            print(
-                blue("Bozo's blunder. Classic. Could've seen that coming from six or eight miles away.\n"))
+            print_and_sleep(
+                blue("Bozo's blunder. Classic. Could've seen that coming from six or eight miles away.\n"), 0.5)
             player.coins -= wager
             player.casino_lost += wager
         player.games_played += 1
@@ -154,7 +154,7 @@ class KrillOrKray(CasinoGame):
 
 def roll_die() -> int:
     roll = random.randint(1, 6)
-    input(f"[ ] Roll the die\n{blue('>')} ")
+    safe_input("[ ] Roll the die")
     print(blue(f"You rolled a {roll}.\n"))
     return roll
 
@@ -186,8 +186,8 @@ Rules:
     @staticmethod
     def get_eval_function() -> Callable[[int, int], bool]:
         while True:
-            call = input(f"[A] Above\n"
-                         f"[B] Below\n{blue('>')} ").strip().lower()
+            call = safe_input("[A] Above\n"
+                              "[B] Below").strip().lower()
             if call not in ('a', 'b'):
                 print(blue("Invalid choice."))
             else:
@@ -198,9 +198,8 @@ Rules:
     @staticmethod
     def should_cash_out() -> bool:
         while True:
-            choice = input(f"[c] Continue\n"
-                           f"[q] Cash Out\n"
-                           f"{blue('>')} ")
+            choice = safe_input("[c] Continue\n"
+                                "[q] Cash Out\n")
             if choice not in ('q', 'c'):
                 print(yellow("Invalid choice."))
             else:

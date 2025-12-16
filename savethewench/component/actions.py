@@ -16,7 +16,7 @@ from savethewench.model.item import load_items
 from savethewench.model.perk import load_perks, Perk, attach_perk
 from savethewench.model.weapon import load_discoverable_weapons
 from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
-from savethewench.util import print_and_sleep
+from savethewench.util import print_and_sleep, safe_input
 from .base import LabeledSelectionComponent, SelectionBinding
 
 
@@ -186,7 +186,7 @@ class InGameBank(LabeledSelectionComponent):
     @staticmethod
     @anonymous_component(state_dependent=True)
     def _make_withdrawal(game_state: GameState):
-        raw_amount = input(f"\nHow much would you like to withdraw?\n{blue(f">")} ")
+        raw_amount = safe_input("\nHow much would you like to withdraw?")
         if raw_amount.isdigit():
             amount = int(raw_amount)
             if game_state.bank.make_withdrawal(amount):
