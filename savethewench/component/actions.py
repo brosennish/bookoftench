@@ -3,12 +3,14 @@ from functools import partial
 from typing import List
 
 from savethewench import event_logger
+from savethewench.audio import play_music
 from savethewench.component.base import RandomThresholdComponent, ThresholdBinding, \
-    TextDisplayingComponent, anonymous_component, Component, ColoredNameSelectionBinding, BinarySelectionComponent
+    TextDisplayingComponent, anonymous_component, Component, ColoredNameSelectionBinding
 from savethewench.component.util import get_battle_status_view, display_bank_balance, display_player_achievements, \
     display_game_overview, calculate_flee, display_active_perks
+from savethewench.data.audio import BATTLE_THEME
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION
-from savethewench.model.events import KillEvent, BankWithdrawalEvent
+from savethewench.model.events import KillEvent, BankWithdrawalEvent, FleeEvent
 from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
 from savethewench.model.perk import load_perks, Perk, attach_perk
@@ -71,8 +73,8 @@ class Travel(LabeledSelectionComponent):
         super().__init__(game_state,
                          bindings=[
                              ColoredNameSelectionBinding(key=str(i), name=area.name, color=blue,
-                                              component=anonymous_component()(
-                                                  partial(game_state.update_current_area, area.name)))
+                                                         component=anonymous_component()(
+                                                             partial(game_state.update_current_area, area.name)))
                              for i, area in enumerate(
                                  sorted([a for a in game_state.areas if a.name != game_state.current_area.name],
                                         key=lambda a: a.name), 1)], quittable=True)
@@ -108,10 +110,15 @@ class Attack(Component):
         player, enemy = self.game_state.player, self.game_state.current_area.current_enemy
         player.attack(enemy)
         if not enemy.is_alive():
-            print(red(f"{enemy.name} is now in Hell."))
+            print_and_sleep(red(f"{enemy.name} is now in Hell."), 1)
+            enemy_weapon = enemy.drop_weapon()
+            if enemy_weapon is not None:
+                if player.add_weapon(enemy_weapon):
+                    print_and_sleep(cyan(f"{enemy_weapon.name} added to sack."), 1)
+            player.gain_coins(enemy.drop_coins())
+            player.gain_xp(enemy)
             event_logger.log_event(KillEvent())
             self.game_state.current_area.kill_current_enemy()
-            # player.gain_enemy_weapon(enemy)
             return self.game_state
         enemy.attack(player)
         if not player.is_alive():
@@ -140,6 +147,9 @@ class Battle(LabeledSelectionComponent):
         self.enemy = self.game_state.current_area.spawn_enemy()
         self.fled = False
 
+    def play_theme(self):
+        play_music(BATTLE_THEME)
+
     def can_exit(self):
         return self.fled or not (self.player.is_alive() and self.enemy.is_alive())
 
@@ -147,6 +157,7 @@ class Battle(LabeledSelectionComponent):
         flee_chance = calculate_flee()
         if random.random() < flee_chance:
             print(dim(f"You ran away from {self.enemy.name}!"))
+            event_logger.log_event(FleeEvent())
             self.fled = True
             self.game_state.current_area.reset_current_enemy()
         else:
@@ -158,7 +169,8 @@ class FightBoss(Battle):
         print("TODO - Boss Fight")
         return self.game_state
 
-class VisitBank(LabeledSelectionComponent):
+
+class InGameBank(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, bindings=[
             SelectionBinding('W', 'Withdraw', self._make_withdrawal),
@@ -166,7 +178,7 @@ class VisitBank(LabeledSelectionComponent):
         ], top_level_prompt_callback=display_bank_balance)
         self.leave_bank = False
 
-    def _return(self): # TODO stop duplicating this pattern
+    def _return(self):  # TODO stop duplicating this pattern
         print_and_sleep(blue("Very well..."), 1)
         self.leave_bank = True
 

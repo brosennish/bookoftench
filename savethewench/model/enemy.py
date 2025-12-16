@@ -1,9 +1,11 @@
 import random
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Optional
 
 from savethewench.data import Enemies
+from savethewench.data.perks import RICKETY_PICKPOCKET
 from .base import Combatant, NPC
+from .perk import attach_perk
 from .weapon import Weapon, load_weapon
 
 
@@ -24,6 +26,15 @@ class Enemy(Combatant, NPC):
     def __post_init__(self):
         self.current_weapon = load_weapon(random.choice(self.weapons))
         self.max_hp = self.hp
+
+    def drop_weapon(self) -> Optional[Weapon]:
+        if self.current_weapon.sell_value > 0:
+            return self.current_weapon
+        return None
+
+    @attach_perk(RICKETY_PICKPOCKET, value_description="coins dropped")
+    def drop_coins(self) -> int:
+        return self.coins
 
 
 def load_enemy(name: str) -> Enemy:

@@ -18,6 +18,7 @@ DOCTOR_FISH = "Doctor Fish"
 GRAMBLIN_MAN = "Gramblin' Man"
 GRAMBLING_ADDICT = "Grambling Addict"
 HEALTH_NUT = "Health Nut"
+INTRO_TO_TENCH = "Intro to Tench"
 KARATE_LESSONS = "Karate Lessons"
 LEATHER_SKIN = "Leather Skin"
 LUCKY_TENCHS_FIN = "Lucky Tench's Fin"
@@ -122,6 +123,7 @@ Perks = [
         'name': RICKETY_PICKPOCKET,
         'cost': 130,
         'description': "Steal an extra 20–30 coins from every enemy you defeat",
+        'wrapper': partial(_bounded_random_change, lower=20, upper=30, name=RICKETY_PICKPOCKET)
     },
     {
         'name': MARTIAL_ARTS_TRAINING,
@@ -144,6 +146,11 @@ Perks = [
         'name': HEALTH_NUT,
         'cost': 150,
         'description': "Gain +25% health from items",
+    },
+    {
+        'name': INTRO_TO_TENCH,
+        'cost': 140,
+        'description': "+15% XP gained from winning battles",
     },
     {
         'name': ROSETTI_THE_GYM_RAT,
@@ -199,6 +206,7 @@ Perks = [
         'name': TENCH_THE_BOUNTY_HUNTER,
         'cost': 120,
         'description': "Earn +25 coins from each bounty enemy",
+        'wrapper': partial(_numeric_change, change=25, name=TENCH_THE_BOUNTY_HUNTER, change_func=_int_change)
     },
     {
         'name': TENCH_EYES,

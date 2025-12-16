@@ -41,6 +41,10 @@ class ReprBinding(SelectionBinding):
 
 
 class SelectionComponent(Component):
+    def __init__(self, game_state: GameState, refresh_menu: bool = False):
+        super().__init__(game_state)
+        self.refresh_menu = refresh_menu
+
     @abstractmethod
     def display_options(self):
         pass
@@ -58,7 +62,8 @@ class SelectionComponent(Component):
 
     def run(self) -> GameState:
         while not self.can_exit():
-            self.__init__(game_state=self.game_state)  # re-init to update listings (should find a way to do this more efficiently)
+            if self.refresh_menu:
+                self.__init__(game_state=self.game_state)  # re-init to update listings (should find a way to do this more efficiently)
             self.play_theme()
             self.display_options()
             self.game_state = self.handle_selection()
@@ -68,8 +73,8 @@ class SelectionComponent(Component):
 class LabeledSelectionComponent(SelectionComponent):
     def __init__(self, game_state: GameState, bindings: List[SelectionBinding],
                  top_level_prompt_callback: Callable[[GameState], None] = lambda _: None,
-                 quittable: bool = False):
-        super().__init__(game_state)
+                 quittable: bool = False, refresh_menu: bool = False):
+        super().__init__(game_state, refresh_menu)
         self.binding_map = dict((bnd.key.lower(), bnd) for bnd in bindings)
         self.top_level_prompt_callback = top_level_prompt_callback
         self.quittable = quittable

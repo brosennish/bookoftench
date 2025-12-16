@@ -4,9 +4,11 @@ from typing import List
 
 from savethewench.data.perks import BROWN_FRIDAY
 from .base import Buyable
+from .events import LevelUpEvent
 from .item import Item, load_items
 from .perk import Perk, load_perks, attach_perk
 from .weapon import load_weapons, Weapon
+from ..event_logger import subscribe_function
 
 # TODO maybe read these from config
 _MAX_ITEMS: int = 3
@@ -44,6 +46,7 @@ class Shop:
         self._all_weapons = load_weapons()
         self._all_perks = load_perks()
         self.reset_inventory()
+        self._subscribe_listeners()
 
     def remove_listing(self, buyable: Buyable):
         if isinstance(buyable, Item) and buyable in self.item_inventory:
@@ -58,3 +61,8 @@ class Shop:
         self.weapon_inventory = random.sample([w for w in self._all_weapons if w.sell_value > 0],
                                               k=min(self.max_weapons, len(self._all_weapons)))
         self.perk_inventory = random.sample(self._all_perks, k=min(self.max_perks, len(self._all_perks)))
+
+    def _subscribe_listeners(self):
+        @subscribe_function(LevelUpEvent)
+        def handle_level_up(_: LevelUpEvent):
+            self.reset_inventory()

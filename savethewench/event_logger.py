@@ -64,14 +64,20 @@ def subscribe_listener(*event_types: type[Event]):
 
 # annotate a function to subscribe to provided event types
 # function must have signature (Event) -> None
-def subscribe_function(*event_types: type[Event]):
+def subscribe_function(*event_types: type[Event], name_override: str = None):
     def decorator(func: Callable[[Event], None]):
         class FunctionNamingMC(ABCMeta, type):
             def __new__(cls, name, bases, attrs):
                 func_name, func_module = func.__name__, func.__module__
-                attrs['__qualname__'] = func_name
+                attrs['__qualname__'] = name_override if name_override else func_name
                 attrs['__module__'] = func_module
                 return super().__new__(cls, func_name, bases, attrs)
+
+            def __eq__(self, other):
+                return self.__module__ == other.__module__ and self.__qualname__ == other.__qualname__
+
+            def __hash__(self):
+                return hash((self.__module__, self.__qualname__))
 
         class AnonymousListener(Listener, metaclass=FunctionNamingMC):
             @staticmethod

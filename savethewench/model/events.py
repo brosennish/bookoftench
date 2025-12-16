@@ -1,7 +1,7 @@
-from typing import Callable
+from typing import Callable, Optional
 
 from savethewench.audio import play_sound
-from savethewench.data.audio import PURCHASE
+from savethewench.data.audio import PURCHASE, GREAT_JOB
 from savethewench.event_base import Event, EventType
 from savethewench.ui import green, cyan
 from savethewench.util import print_and_sleep
@@ -90,3 +90,25 @@ class BankWithdrawalEvent(Event):
     def __init__(self, amount: int):
         super().__init__(EventType.WITHDRAW, lambda:
         print_and_sleep(f"You withdrew {green(amount)} coins from the bank.\n", 1))
+
+class LevelUpEvent(Event):
+    def __init__(self, level: int, old_max_hp: int, new_max_hp: int, item_reward: Optional[str], cash_reward: int):
+        super().__init__(EventType.LEVEL_UP,
+                         lambda: self._display(level, old_max_hp, new_max_hp, item_reward, cash_reward))
+
+    @staticmethod
+    def _display(level, old_max_hp, new_max_hp, item_reward, cash_reward):
+        play_sound(GREAT_JOB)
+        print_and_sleep(green(f"You have reached level {level}!\n"), 2)
+        print(green(f"MAX HP: {old_max_hp} -> {new_max_hp}"))
+        if item_reward is not None:
+            print(cyan(f"\nReward: {item_reward}"))
+        print_and_sleep(green(f"\nYou were awarded {cash_reward} coins."), 2)
+
+class SwapWeaponEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.SWAP_WEAPON)
+
+class FleeEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.FLEE)

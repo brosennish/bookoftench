@@ -20,7 +20,7 @@ class ShopComponent(LabeledSelectionComponent):
                          enumerate(game_state.shop.perk_inventory, len(item_bindings) + len(weapon_bindings))]
         sell_binding = SelectionBinding('S', "Sell Item", SellItem)
         return_binding = SelectionBinding('R', "Return", anonymous_component()(lambda: self._return()))
-        super().__init__(game_state,
+        super().__init__(game_state, refresh_menu=True,
                          bindings=[*item_bindings, *weapon_bindings, *perk_bindings, sell_binding, return_binding])
         self.selection_components = [
             LabeledSelectionComponent(game_state, item_bindings, lambda gs: gs.player.display_item_count()),

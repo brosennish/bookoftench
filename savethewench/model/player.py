@@ -1,3 +1,4 @@
+import random
 from dataclasses import dataclass, field
 from typing import Dict, List
 
@@ -6,11 +7,12 @@ from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES
 from savethewench.data.weapons import BARE_HANDS, KNIFE
-from savethewench.ui import yellow, cyan, dim
+from savethewench.ui import yellow, dim, green
 from savethewench.util import print_and_sleep
 from .achievement import Achievement
 from .base import Combatant, Buyable
-from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent
+from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent, LevelUpEvent, \
+    SwapWeaponEvent
 from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk
 from .weapon import load_weapons, Weapon
@@ -79,7 +81,6 @@ class Player(Combatant):
     def blind(self, blind: bool) -> None:
         self._blind = blind
 
-
     def get_items(self) -> List[Item]:
         return list(self.items.values())
 
@@ -127,7 +128,7 @@ class Player(Combatant):
             print_and_sleep(yellow(f"Need more coin"), 1)
             return False
         if isinstance(buyable, Item) and self.add_item(buyable):
-           event_logger.log_event(BuyItemEvent(buyable.name, buyable.cost))
+            event_logger.log_event(BuyItemEvent(buyable.name, buyable.cost))
         elif isinstance(buyable, Weapon) and self.add_weapon(buyable):
             event_logger.log_event(BuyWeaponEvent(buyable.name, buyable.cost, buyable.uses))
         elif isinstance(buyable, Perk) and self.add_perk(buyable):
@@ -170,7 +171,9 @@ class Player(Combatant):
         event_logger.log_event(ItemSoldEvent(weapon.name, weapon.sell_value))
 
     def equip_weapon(self, name: str):
-        self.current_weapon = self.weapon_dict[name]
+        if name != self.current_weapon.name:
+            event_logger.log_event(SwapWeaponEvent())
+            self.current_weapon = self.weapon_dict[name]
 
     @attach_perk(LUCKY_TENCHS_FIN, value_description="crit chance")
     def get_crit_chance(self) -> float:
@@ -183,3 +186,50 @@ class Player(Combatant):
             return False
         activate_perk(perk.name)
         return True
+
+    def gain_coins(self, amount: int):
+        self.coins += amount
+        print_and_sleep(green(f"You gained {amount} coins!"), 1)
+
+    @staticmethod
+    # TODO perks
+    # @attach_perk(AP_TENCH_STUDIES, INTRO_TO_TENCH) # won't work as is, but there might be a way
+    def _calculate_xp_from_enemy(enemy: Combatant) -> int:
+        return int(enemy.max_hp / 2.8)
+
+    def gain_xp(self, enemy: Combatant) -> bool:
+        amount = self._calculate_xp_from_enemy(enemy)
+        self.xp += amount
+        print_and_sleep(green(f"You gained {amount} XP!"), 1)
+
+        leveled_up = False
+
+        # handles cases where a big XP chunk might give multiple levels
+        while self.xp >= self.xp_needed:
+            self.level_up()
+            leveled_up = True
+
+        return leveled_up
+
+    def level_up(self):
+        # ---- core level-up effects live here ----
+        self.xp -= self.xp_needed
+        self.lvl += 1
+        cash_reward = random.randint(100, 200)
+        self.coins += cash_reward
+        self.games_played = 0
+
+        old_max = self.max_hp
+        if self.max_hp < 150:
+            self.max_hp += 5
+        self.hp = self.max_hp
+
+        item_reward = None
+        if len(self.items) < self.max_items:
+            filtered: List[Item] = [item for item in load_items() if item.name not in self.items]
+            if filtered:
+                item_reward = random.choice(filtered)
+                self.items[item_reward.name] = item_reward
+                item_reward = str(item_reward.to_sellable_item())
+
+        event_logger.log_event(LevelUpEvent(self.lvl, old_max, self.max_hp, item_reward, cash_reward))
