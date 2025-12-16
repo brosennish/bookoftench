@@ -4,13 +4,13 @@ from typing import Dict, List
 from savethewench import event_logger
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
-    VAGABONDAGE, NOMADS_LAND
+    VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES
 from savethewench.data.weapons import BARE_HANDS, KNIFE
 from savethewench.ui import yellow, cyan, dim
 from savethewench.util import print_and_sleep
 from .achievement import Achievement
 from .base import Combatant, Buyable
-from .events import ItemUsedEvent, ItemSoldEvent
+from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent
 from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk
 from .weapon import load_weapons, Weapon
@@ -37,6 +37,8 @@ class Player(Combatant):
     _max_plays: int = 10
     _max_items: int = 5
     _max_weapons: int = 5
+
+    _blind = False
     # TODO maybe add starting items/weapons to config file
     items: Dict[str, Item] = field(default_factory=lambda: dict((it.name, it) for it in load_items([TENCH_FILET])))
     weapon_dict: Dict[str, Weapon] = field(
@@ -70,6 +72,16 @@ class Player(Combatant):
     def remaining_plays(self):
         return self.max_plays - self.games_played
 
+    @property
+    @attach_perk(BEER_GOGGLES)
+    def blind(self) -> bool:
+        return self._blind
+
+    @blind.setter
+    def blind(self, blind: bool) -> None:
+        self._blind = blind
+
+
     def get_items(self) -> List[Item]:
         return list(self.items.values())
 
@@ -85,7 +97,6 @@ class Player(Combatant):
             return False
         else:
             self.items[item.name] = item
-            print_and_sleep(cyan(f"{item.name} added to sack."), 1)
             return True
 
     def use_item(self, name: str):
@@ -117,12 +128,16 @@ class Player(Combatant):
         if self.coins <= buyable.cost:
             print_and_sleep(yellow(f"Need more coin"), 1)
             return False
-        if ((isinstance(buyable, Item) and self.add_item(buyable)) or
-                     (isinstance(buyable, Weapon) and self.add_weapon(buyable)) or
-                     (isinstance(buyable, Perk) and self.add_perk(buyable))):
-            self.coins -= buyable.cost
-            return True
-        return False
+        if isinstance(buyable, Item) and self.add_item(buyable):
+           event_logger.log_event(BuyItemEvent(buyable.name, buyable.cost))
+        elif isinstance(buyable, Weapon) and self.add_weapon(buyable):
+            event_logger.log_event(BuyWeaponEvent(buyable.name, buyable.cost, buyable.uses))
+        elif isinstance(buyable, Perk) and self.add_perk(buyable):
+            event_logger.log_event(BuyPerkEvent(buyable.name, buyable.cost))
+        else:
+            return False
+        self.coins -= buyable.cost
+        return True
 
     def sell_item(self, name: str):
         item = self.items[name]
@@ -148,7 +163,6 @@ class Player(Combatant):
             return False
         else:
             self.weapon_dict[weapon.name] = weapon
-            print_and_sleep(cyan(f"{weapon.name} added to sack."), 1)
             return True
 
     def sell_weapon(self, name: str):

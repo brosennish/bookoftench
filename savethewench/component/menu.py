@@ -1,3 +1,6 @@
+import sys
+import time as t
+
 from savethewench import event_logger
 from savethewench.audio import play_music
 from savethewench.component.base import Component, LinearComponent, BinarySelectionComponent, \
@@ -5,6 +8,7 @@ from savethewench.component.base import Component, LinearComponent, BinarySelect
 from savethewench.data.audio import INTRO_THEME
 from savethewench.model import GameState
 from savethewench.ui import red
+from savethewench.util import print_and_sleep
 from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, BankBalance, DisplayPerks, Overview
 from .casino import CasinoBouncer
 from .shop import ShopComponent
@@ -49,7 +53,9 @@ class QuitGame(Component):
         super().__init__(game_state)
 
     def run(self) -> GameState:
-        pass
+        print_and_sleep(red("You'll be back.\nOh... yes.\nYou'll be back."), 1)
+        t.sleep(1)
+        sys.exit()
 
 
 class TutorialDecision(BinarySelectionComponent):
@@ -58,6 +64,8 @@ class TutorialDecision(BinarySelectionComponent):
                          query="Do tutorial?",
                          yes_component=Tutorial,
                          no_component=Intro)
+
+    def play_theme(self):
         play_music(INTRO_THEME)
 
 
@@ -101,6 +109,9 @@ class ActionMenu(LabeledSelectionComponent):
             SelectionBinding('M', "More Options", ExtendedActionMenu),
             SelectionBinding('Q', "Main Menu", InGameMenu)],
                          top_level_prompt_callback=lambda gs: print(get_player_status_view(gs)))
+
+    def play_theme(self):
+        self.game_state.play_current_area_theme()
 
     def can_exit(self):
         return False

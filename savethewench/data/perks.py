@@ -38,6 +38,8 @@ VAMPIRIC_SPERM = "Vampiric Sperm"
 WALLET_CHAIN = "Wallet Chain"
 WENCH_LOCATION = "Wench Location"
 
+def _boolean_override(*args, override: bool) -> bool:
+    return override
 
 def _numeric_change(original: int | float, value_description: str, silent: bool, change: int | float, name: str,
                     change_func: Callable[[int | float, int | float], int | float]) -> int | float:
@@ -79,6 +81,7 @@ Perks = [
         'name': BEER_GOGGLES,
         'cost': 85,
         'description': "Prevents blindness",
+        'wrapper': partial(_boolean_override, override=False),
     },
     {
         'name': BROWN_FRIDAY,

@@ -5,7 +5,7 @@ from functools import partial
 from typing import Callable
 
 from savethewench.audio import play_music, play_sound
-from savethewench.data.audio import GOLF_CLAP
+from savethewench.data.audio import GOLF_CLAP, CASINO_THEME
 from savethewench.data.perks import AP_TENCH_STUDIES, GRAMBLING_ADDICT
 from savethewench.model.game_state import GameState
 from savethewench.ui import blue, cyan, green, orange, purple, yellow, dim
@@ -52,15 +52,19 @@ class Casino(LabeledSelectionComponent):
             SelectionBinding('3', "Wet or Dry (WIP)", WetOrDry),
             SelectionBinding('4', "Fish Bones (WIP)", FishBones),
             SelectionBinding('5', "Mystery Box (WIP)", MysteryBox),
-            SelectionBinding('r', "Return", anonymous_component()(lambda: self._return())),
+            SelectionBinding('R', "Return", anonymous_component()(lambda: self._return())),
         ])
         self.leave_casino = False
+        print_and_sleep(blue("Welcome to Riverbroat Crasino.\n"), 3)
 
     def _return(self):
         self.leave_casino = True
 
     def can_exit(self):
         return self.leave_casino
+
+    def play_theme(self):
+        play_music(CASINO_THEME)
 
 
 class CasinoGame(Component):

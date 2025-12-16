@@ -3,8 +3,7 @@ from functools import partial
 from typing import List
 
 from savethewench import event_logger
-from savethewench.component.base import FunctionExecutingComponent, \
-    FunctionalSelectionBinding, FunctionalSelectionComponent, RandomThresholdComponent, ThresholdBinding, \
+from savethewench.component.base import RandomThresholdComponent, ThresholdBinding, \
     TextDisplayingComponent, anonymous_component, Component
 from savethewench.component.util import get_battle_status_view, display_bank_balance, display_player_achievements, \
     display_game_overview, calculate_flee, display_active_perks
@@ -33,14 +32,17 @@ class Explore(RandomThresholdComponent):
     @staticmethod
     @anonymous_component(state_dependent=True)
     def _discover_item(game_state: GameState):
-        game_state.player.add_item(random.choice(load_items()))
+        item = random.choice(load_items())
+        if game_state.player.add_item(item):
+            print_and_sleep(cyan(f"{item.name} added to sack."), 1)
 
     @staticmethod
     @anonymous_component(state_dependent=True)
     def _discover_weapon(game_state: GameState):
         weapon = random.choice(load_discoverable_weapons())
         print_and_sleep(cyan(f"You found a {weapon.name}!"), 1)
-        game_state.player.add_weapon(weapon)
+        if game_state.player.add_weapon(weapon):
+            print_and_sleep(cyan(f"{weapon.name} added to sack."), 1)
 
     @staticmethod
     @anonymous_component(state_dependent=True)
@@ -64,52 +66,39 @@ class Explore(RandomThresholdComponent):
             print_and_sleep(yellow(dim("You came up dry.")), 1)
 
 
-class Travel(FunctionalSelectionComponent):
+class Travel(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
                          bindings=[
-                             FunctionalSelectionBinding(key=str(i),
-                                                        name=area.name,
-                                                        component=FunctionExecutingComponent,
-                                                        function=partial(self._update_current_area, area.name))
+                             SelectionBinding(key=str(i),
+                                              name=area.name,
+                                              component=anonymous_component()(
+                                                  partial(game_state.update_current_area, area.name)))
                              for i, area in enumerate(
-                                 reversed([a for a in game_state.areas if a.name != game_state.current_area.name]), 1)
-                         ])
-
-    @staticmethod
-    def _update_current_area(name: str, gs: GameState) -> GameState:
-        return gs.update_current_area(name)
+                                 sorted([a for a in game_state.areas if a.name != game_state.current_area.name],
+                                        key=lambda a: a.name), 1)], quittable=True)
 
 
-class UseItem(FunctionalSelectionComponent):
+class UseItem(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
-                         bindings=[FunctionalSelectionBinding(key=str(i),
-                                                              name=item.name,
-                                                              component=FunctionExecutingComponent,
-                                                              function=partial(self._use_item, item.name))
+                         bindings=[SelectionBinding(key=str(i),
+                                                    name=item.name,
+                                                    component=anonymous_component()(
+                                                        partial(game_state.player.use_item, item.name)))
                                    for (i, item) in enumerate(game_state.player.get_items(), 1)],
-                         top_level_prompt_callback=lambda gs: gs.player.display_item_count())
-
-    @staticmethod
-    def _use_item(name: str, gs: GameState) -> GameState:
-        gs.player.use_item(name)
-        return gs
+                         top_level_prompt_callback=lambda gs: gs.player.display_item_count(), quittable=True)
 
 
-class EquipWeapon(FunctionalSelectionComponent):
+class EquipWeapon(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
-                         bindings=[FunctionalSelectionBinding(key=str(i),
-                                                              name=weapon.name,
-                                                              component=FunctionExecutingComponent,
-                                                              function=partial(self._equip_weapon, weapon.name))
-                                   for (i, weapon) in enumerate(game_state.player.get_weapons(), 1)])
-
-    @staticmethod
-    def _equip_weapon(name: str, gs: GameState) -> GameState:
-        gs.player.equip_weapon(name)
-        return gs
+                         bindings=[SelectionBinding(key=str(i),
+                                                    name=weapon.name,
+                                                    component=anonymous_component()(
+                                                        partial(game_state.player.equip_weapon, weapon.name)))
+                                   for (i, weapon) in enumerate(game_state.player.get_weapons(), 1)],
+                         top_level_prompt_callback=lambda gs: gs.player.display_weapon_count(), quittable=True)
 
 
 class Attack(Component):

@@ -1,12 +1,10 @@
 from functools import partial
 
-from savethewench import event_logger
 from savethewench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
     anonymous_component
 from savethewench.component.util import display_active_perk_count
 from savethewench.model import GameState
 from savethewench.model.base import Buyable
-from savethewench.model.events import PurchaseEvent
 from savethewench.ui import green, blue
 from savethewench.util import print_and_sleep
 
@@ -27,7 +25,7 @@ class ShopComponent(LabeledSelectionComponent):
         self.selection_components = [
             LabeledSelectionComponent(game_state, item_bindings, lambda gs: gs.player.display_item_count()),
             LabeledSelectionComponent(game_state, weapon_bindings, lambda gs: gs.player.display_weapon_count()),
-            LabeledSelectionComponent(game_state, perk_bindings, lambda gs: display_active_perk_count()),
+            LabeledSelectionComponent(game_state, perk_bindings, lambda _: display_active_perk_count()),
             LabeledSelectionComponent(game_state, [sell_binding, return_binding]),
         ]
         self.exit_shop = False
@@ -51,7 +49,6 @@ class ShopComponent(LabeledSelectionComponent):
         def purchase_component(game_state: GameState):
             if game_state.player.make_purchase(buyable):
                 game_state.shop.remove_listing(buyable)
-                event_logger.log_event(PurchaseEvent())
         return purchase_component
 
 

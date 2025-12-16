@@ -53,8 +53,12 @@ class SelectionComponent(Component):
     def can_exit(self) -> bool:
         pass
 
+    def play_theme(self):
+        pass
+
     def run(self) -> GameState:
         while not self.can_exit():
+            self.play_theme()
             self.display_options()
             self.game_state = self.handle_selection()
         return self.game_state
@@ -129,35 +133,12 @@ class TextDisplayingComponent(LinearComponent):
                  next_component: type[Component] = NoOpComponent, should_proceed: bool = True):
         super().__init__(game_state, next_component, should_proceed)
         self.display_callback = display_callback
+        self.audio_callback = lambda _: None
 
     def execute_current(self) -> GameState:
         self.display_callback(self.game_state)
         input(blue("\n> "))
         return self.game_state
-
-
-class FunctionExecutingComponent(Component):
-    def __init__(self, game_state: GameState, function: Callable[[GameState], GameState]):
-        super().__init__(game_state)
-        self.function = function
-
-    def run(self) -> GameState:
-        return self.function(self.game_state)
-
-
-@dataclass
-class FunctionalSelectionBinding(SelectionBinding):
-    component: type[FunctionExecutingComponent]
-    function: Callable[[GameState], GameState]
-
-
-class FunctionalSelectionComponent(LabeledSelectionComponent):
-    def __init__(self, game_state: GameState, bindings: List[FunctionalSelectionBinding],
-                 top_level_prompt_callback: Callable[[GameState], None] = lambda _: None):
-        super().__init__(game_state, bindings, top_level_prompt_callback, quittable=True)
-
-    def run_selected_component(self, binding: FunctionalSelectionBinding) -> GameState:
-        return binding.component(self.game_state, binding.function).run()
 
 
 @dataclass

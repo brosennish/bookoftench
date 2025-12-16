@@ -2,11 +2,12 @@ import time as t
 from typing import Callable, Any
 
 from savethewench import event_logger
-from savethewench.data.perks import WENCH_LOCATION, USED_SNEAKERS, NEW_SNEAKERS
+from savethewench.data.perks import WENCH_LOCATION, USED_SNEAKERS, NEW_SNEAKERS, CROWS_NEST
 from savethewench.event_base import EventType
 from savethewench.model import GameState
+from savethewench.model.base import Combatant
 from savethewench.model.enemy import Enemy
-from savethewench.model.perk import load_perks, attach_perk
+from savethewench.model.perk import load_perks, attach_perk, perk_is_active
 from savethewench.model.player import Player
 from savethewench.ui import blue, cyan, green, orange, purple, red, yellow, dim
 from savethewench.util import print_and_sleep
@@ -27,9 +28,12 @@ def p_color(hp: int, max_hp: int) -> Callable[[str], str]:
 def get_player_status_view(game_state: GameState) -> str:
     player = game_state.player
     player_color = p_color(player.hp, player.max_hp)
+    killed_remaining = [f"Killed: {red(f"{game_state.current_area.enemies_killed}")}"]
+    if perk_is_active(CROWS_NEST):
+        killed_remaining.append(f"Remaining: {yellow(f"{game_state.current_area.enemies_remaining}")}")
     return (f"\n{dim(' | ').join([
         f"Area: {blue(game_state.current_area.name)}",
-        f"Killed: {red(f"{game_state.current_area.enemies_killed}")}",
+        *killed_remaining,
         f"Wanted: {purple(game_state.wanted)}",
         f"Bounty: {purple(f"{game_state.bounty} coins")}"])}"
             f"\n{dim(' | ').join([
@@ -55,19 +59,16 @@ def get_battle_status_view(game_state: GameState) -> str:
         else:
             return f"{weapon.uses}"
 
-    def format_combatant_data(name, name_color, combatant_color, hp, weapon, uses_left) -> str:
-        return (f"\n{name_color(name)} {dim('-')} {combatant_color(f"{hp} HP")}"
-                f"\n{cyan(weapon.name)}"
+    def format_combatant_data(cmbt: Combatant, name_color, ) -> str:
+        return (f"\n{name_color(cmbt.name)} {dim('-')} {p_color(cmbt.hp, cmbt.max_hp)(f"{cmbt.hp} HP")}"
+                f"\n{cyan(cmbt.current_weapon.name)}"
                 f"\n{dim(' | ').join([
-                    f"{dim("Damage:")} {red(f"{weapon.damage}")}",
-                    f"Accuracy: {yellow(f"{weapon.accuracy}")}",
-                    f"Uses: {uses_left}"
+                    f"{dim("Damage:")} {red(f"{cmbt.current_weapon.damage}")}",
+                    f"Accuracy: {yellow(f"{cmbt.current_weapon.accuracy}")}",
+                    f"Uses: {format_uses(cmbt.current_weapon)}"
                 ])}\n")
 
-    return (f"{format_combatant_data(player.name, orange, p_color(player.hp, player.max_hp),
-                                     player.hp, player.current_weapon, format_uses(player.current_weapon))}"
-            f"{format_combatant_data(enemy.name, purple, p_color(enemy.hp, enemy.max_hp),
-                                     enemy.hp, enemy.current_weapon, format_uses(enemy.current_weapon))}")
+    return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, purple)}"
 
 
 def display_bank_balance(game_state: GameState) -> None:

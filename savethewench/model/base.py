@@ -40,6 +40,7 @@ class NPC:
 class Combatant:
     name: str
     hp: int
+    max_hp: int
     current_weapon: WeaponBase
 
     blind: bool = False

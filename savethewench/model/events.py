@@ -1,7 +1,9 @@
 from typing import Callable
 
+from savethewench.audio import play_sound
+from savethewench.data.audio import PURCHASE
 from savethewench.event_base import Event, EventType
-from savethewench.ui import green
+from savethewench.ui import green, cyan
 from savethewench.util import print_and_sleep
 
 
@@ -17,9 +19,40 @@ class ItemUsedEvent(Event):
 
 
 class PurchaseEvent(Event):
-    def __init__(self):
-        super().__init__(EventType.BUY_ITEM)
+    def __init__(self, event_type: EventType, name: str, amount: int):
+        super().__init__(event_type)
+        self.callback = lambda: self._callback(name, amount)
 
+    def sub_callback(self):
+        pass
+
+    def _callback(self, name, amount):
+        play_sound(PURCHASE)
+        print_and_sleep(green(f"You purchased {name} for {amount} coins.\n"), 1)
+        self.sub_callback()
+
+
+class BuyItemEvent(PurchaseEvent):
+    def __init__(self, name: str, amount: int):
+        super().__init__(EventType.BUY_ITEM, name, amount)
+        self.sub_msg = f"{name} added to sack."
+
+    def sub_callback(self):
+        print_and_sleep(cyan(self.sub_msg), 1)
+
+
+class BuyWeaponEvent(PurchaseEvent):
+    def __init__(self, name: str, amount: int, uses: int):
+        super().__init__(EventType.BUY_WEAPON, name, amount)
+        self.sub_msg = f"{name} added to weapons. Uses: {uses}\n"
+
+    def sub_callback(self):
+        print_and_sleep(cyan(self.sub_msg), 1)
+
+
+class BuyPerkEvent(PurchaseEvent):
+    def __init__(self, name: str, amount: int):
+        super().__init__(EventType.BUY_PERK, name, amount)
 
 
 class ItemSoldEvent(Event):

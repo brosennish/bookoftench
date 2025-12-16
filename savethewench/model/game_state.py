@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from typing import List
 
 from savethewench import event_logger
+from savethewench.audio import play_music
 from .area import Area, load_areas
 from .enemy import Enemy, load_enemies
 from .events import TravelEvent
@@ -32,10 +33,13 @@ class GameState:
         self.bounty = enemy_choice.bounty
         event_logger.set_counter(self.event_counter)
 
-    def update_current_area(self, area_name: str) -> "GameState":
+    def update_current_area(self, area_name: str):
         for area in self.areas:
             if area.name == area_name:
                 self.current_area = area
                 event_logger.log_event(TravelEvent(area_name))
-                return self
+                return
         raise KeyError(f"Area '{area_name}' not found")
+
+    def play_current_area_theme(self):
+        play_music(self.current_area.theme)

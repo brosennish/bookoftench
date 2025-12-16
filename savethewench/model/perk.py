@@ -27,7 +27,7 @@ class Perk[T](Buyable):
         return self._active
 
     def activate(self):
-        print_and_sleep(purple(f"{self.name} added to perks.\n"), 1)
+        print_and_sleep(purple(f"{self.name} added to perks."), 1)
         self._active = True
 
     def __repr__(self):

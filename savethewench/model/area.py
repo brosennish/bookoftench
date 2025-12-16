@@ -20,8 +20,9 @@ class Area:
     boss_defeated: bool = False
     current_enemy = None
 
-    def __hash__(self) -> int:
-        return hash((self.name, self.enemy_count, self.enemies_killed, self.boss_defeated, self.current_enemy))
+    @property
+    def enemies_remaining(self) -> int:
+        return self.enemy_count - self.enemies_killed
 
     def spawn_enemy(self) -> Enemy:
         enemy = load_enemy(random.choice(self.enemies))
@@ -43,6 +44,9 @@ class Area:
         self.enemies_killed += 1
         self.enemy_count -= 1
         self.reset_current_enemy()
+
+    def __hash__(self) -> int:
+        return hash((self.name, self.enemy_count, self.enemies_killed, self.boss_defeated, self.current_enemy))
 
 
 @cache
