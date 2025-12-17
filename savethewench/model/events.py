@@ -83,8 +83,8 @@ class KillEvent(Event):
 
 
 class MissEvent(Event):
-    def __init__(self, callback: Callable[[], None]):
-        super().__init__(EventType.MISS, callback)
+    def __init__(self):
+        super().__init__(EventType.MISS)
 
 class BankWithdrawalEvent(Event):
     def __init__(self, amount: int):

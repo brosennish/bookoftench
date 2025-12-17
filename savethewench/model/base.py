@@ -67,16 +67,12 @@ class Combatant:
     def get_crit_chance(self) -> float:
         return self.current_weapon.crit
 
-    def display_miss(self):
-        print_and_sleep(yellow(f"{self.name if isinstance(self, NPC) else "You"} missed!"), 1)
-
-    def display_hit(self, other: "Combatant", damage_inflicted: int) -> None:
-        if isinstance(other, NPC):
-            print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
-                            f"{red(damage_inflicted)} damage!", 1)
+    def handle_miss(self):
+        if isinstance(self, NPC):
+            print_and_sleep(yellow(f"{self.name} missed!"), 1)
         else:
-            print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
-                            f"{red(damage_inflicted)} damage!", 1)
+            print_and_sleep(red(f"You missed!"), 1)
+            event_logger.log_event(MissEvent())
 
     def handle_crit(self, is_crit: bool) -> None:
         if not is_crit:
@@ -97,7 +93,7 @@ class Combatant:
 
     def attack(self, other: "Combatant") -> None:
         if random.random() > self.calculate_accuracy():
-            event_logger.log_event(MissEvent(self.display_miss))
+            self.handle_miss()
         else:
             base_damage = self.current_weapon.calculate_base_damage()
             crit = random.random() < self.get_crit_chance()
