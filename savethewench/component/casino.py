@@ -34,7 +34,6 @@ def display_crapped_out_message(game_state: GameState):
     message = "You're out of plays. Buy a perk or level up, bozo.\n" if player.remaining_plays == 0 else \
         "You're out of coins. Get lost, bozo.\n"
     print_and_sleep(blue(message), 2)
-    play_music(game_state.current_area.theme)
 
 
 class CasinoCheck(GatekeepingComponent):
@@ -107,7 +106,7 @@ class CasinoGame(Component):
         if self.player_quit:
             print_and_sleep(blue("Later bozo."), 1)
         else:
-            display_crapped_out_message(self.game_state)
+            self.game_state = display_crapped_out_message(self.game_state).run()
         return self.game_state
 
 

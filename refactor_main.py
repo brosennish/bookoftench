@@ -1,13 +1,12 @@
 import argparse
-import importlib
-import inspect
-import pkgutil
-import random
 
 from savethewench import SaveTheWenchGame
 
 
 def load_component(class_name):
+    import importlib
+    import inspect
+    import pkgutil
     package = importlib.import_module('savethewench.component')
 
     for _, module_name, _ in pkgutil.iter_modules(package.__path__):
@@ -32,6 +31,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.debug:
+        import random
+
         random.seed(args.seed)
         # noinspection PyTypeChecker
         SaveTheWenchGame.debug_from(load_component(args.component))
