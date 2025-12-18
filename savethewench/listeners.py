@@ -19,6 +19,7 @@ class ItemUsedListener(Listener):
             print(yellow(f"Your inventory is dry.\n"))
         t.sleep(1)
 
+
 @subscribe_listener(TravelEvent)
 class TravelListener(Listener):
     @staticmethod

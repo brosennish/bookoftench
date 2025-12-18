@@ -11,11 +11,11 @@ from savethewench.util import print_and_sleep
 
 class ShopComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        item_bindings = [ReprBinding(str(i+1), item.name, self._make_purchase_component(item), item) for
+        item_bindings = [ReprBinding(str(i + 1), item.name, self._make_purchase_component(item), item) for
                          i, item in enumerate(game_state.shop.item_inventory)]
-        weapon_bindings = [ReprBinding(str(i+1), weapon.name, self._make_purchase_component(weapon), weapon) for
+        weapon_bindings = [ReprBinding(str(i + 1), weapon.name, self._make_purchase_component(weapon), weapon) for
                            i, weapon in enumerate(game_state.shop.weapon_inventory, len(item_bindings))]
-        perk_bindings = [ReprBinding(str(i+1), perk.name, self._make_purchase_component(perk), perk) for
+        perk_bindings = [ReprBinding(str(i + 1), perk.name, self._make_purchase_component(perk), perk) for
                          i, perk in
                          enumerate(game_state.shop.perk_inventory, len(item_bindings) + len(weapon_bindings))]
         sell_binding = SelectionBinding('S', "Sell Item", SellItem)
@@ -48,6 +48,7 @@ class ShopComponent(LabeledSelectionComponent):
         def purchase_component(game_state: GameState):
             if game_state.player.make_purchase(buyable):
                 game_state.shop.remove_listing(buyable)
+
         return purchase_component
 
 

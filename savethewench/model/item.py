@@ -23,6 +23,7 @@ class Item(Buyable):
             f"HP: +{green(self.hp)}"
         ])
 
+
 @dataclass
 class SellableItem(Item):
     def __repr__(self):
@@ -31,6 +32,7 @@ class SellableItem(Item):
             f"Value: {orange(self.sell_value):<17}",
             f"HP: +{green(self.hp)}"
         ])
+
 
 def load_items(restriction: List[str] = None) -> List[Item]:
     return [Item(**d) for d in Items if restriction is None or d['name'] in restriction]

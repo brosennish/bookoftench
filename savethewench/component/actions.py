@@ -1,16 +1,16 @@
 import random
-from dataclasses import dataclass
 from functools import partial
 from typing import List
 
 from savethewench import event_logger
-from savethewench.audio import play_music
+from savethewench.audio import play_music, play_sound
 from savethewench.component.base import RandomThresholdComponent, ThresholdBinding, \
     TextDisplayingComponent, anonymous_component, Component, ColoredNameSelectionBinding
 from savethewench.component.util import get_battle_status_view, display_bank_balance, display_player_achievements, \
     display_game_overview, calculate_flee, display_active_perks
-from savethewench.data.audio import BATTLE_THEME
+from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION
+from savethewench.event_logger import subscribe_function
 from savethewench.model.events import KillEvent, BankWithdrawalEvent, FleeEvent, PlayerDeathEvent
 from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
@@ -19,8 +19,6 @@ from savethewench.model.weapon import load_discoverable_weapons
 from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
 from savethewench.util import print_and_sleep, safe_input
 from .base import LabeledSelectionComponent, SelectionBinding
-from ..event_logger import subscribe_function
-from ..model.base import Combatant
 
 
 class Explore(RandomThresholdComponent):
@@ -115,7 +113,9 @@ class Attack(Component):
         if not self.failed_flee:
             player.attack(enemy)
             if not enemy.is_alive():
+                # TODO maybe put the next two lines in an event callback
                 print_and_sleep(red(f"{enemy.name} is now in Hell."), 1)
+                play_sound(DEVIL_THUNDER)
                 enemy_weapon = enemy.drop_weapon()
                 if enemy_weapon is not None:
                     if player.add_weapon(enemy_weapon):

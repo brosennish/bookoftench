@@ -3,12 +3,12 @@ from dataclasses import dataclass, field
 from typing import List
 
 from savethewench.data.perks import BROWN_FRIDAY
+from savethewench.event_logger import subscribe_function
 from .base import Buyable
 from .events import LevelUpEvent
 from .item import Item, load_items
 from .perk import Perk, load_perks, attach_perk
 from .weapon import load_weapons, Weapon
-from ..event_logger import subscribe_function
 
 # TODO maybe read these from config
 _MAX_ITEMS: int = 3

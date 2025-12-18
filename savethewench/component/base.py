@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import List, Callable, Any
 
 from savethewench.model import GameState
-from savethewench.ui import blue, dim, yellow
+from savethewench.ui import dim, yellow
 from savethewench.util import print_and_sleep, safe_input
 
 
@@ -63,7 +63,8 @@ class SelectionComponent(Component):
     def run(self) -> GameState:
         while not self.can_exit():
             if self.refresh_menu:
-                self.__init__(game_state=self.game_state)  # re-init to update listings (should find a way to do this more efficiently)
+                self.__init__(
+                    game_state=self.game_state)  # re-init to update listings (should find a way to do this more efficiently)
             self.play_theme()
             self.display_options()
             self.game_state = self.handle_selection()
@@ -190,6 +191,7 @@ class ColoredNameSelectionBinding(SelectionBinding):
 
     def format(self):
         return self.color(self.name)
+
 
 def anonymous_component(state_dependent=False) -> Callable[[Callable], type[Component]]:
     def decorator(func: Callable):

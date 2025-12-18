@@ -118,7 +118,7 @@ class KrillOrKray(CasinoGame):
     def get_pick(wager: int) -> str:
         while True:
             pick = safe_input(f"You bet {green(wager)} coins.\n\nWhat's the call? "
-                         f"{orange("k for krill")} {dim('|')} {orange("c for cray")}").strip().lower()
+                              f"{orange("k for krill")} {dim('|')} {orange("c for cray")}").strip().lower()
             if pick in ('k', 'c'):
                 return pick
             print(yellow("Invalid choice."))

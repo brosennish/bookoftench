@@ -1,12 +1,13 @@
 import random
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 from savethewench.data import Enemies
 from savethewench.data.perks import RICKETY_PICKPOCKET
+from savethewench.data.weapons import BARE_HANDS
 from .base import Combatant, NPC
 from .perk import attach_perk
-from .weapon import Weapon, load_weapon
+from .weapon import Weapon, load_weapon, load_weapons
 
 
 @dataclass
@@ -21,10 +22,12 @@ class Enemy(Combatant, NPC):
     alive: bool = True
 
     current_weapon: Weapon = field(init=False)
+    weapon_dict: Dict[str, Weapon] = field(init=False)
     max_hp: int = field(init=False)
 
     def __post_init__(self):
-        self.current_weapon = load_weapon(random.choice(self.weapons))
+        self.weapon_dict = dict((w.name, w) for w in load_weapons(self.weapons))
+        self.current_weapon = random.choice(list(self.weapon_dict.values()))
         self.max_hp = self.hp
 
     def drop_weapon(self) -> Optional[Weapon]:
@@ -35,6 +38,12 @@ class Enemy(Combatant, NPC):
     @attach_perk(RICKETY_PICKPOCKET, value_description="coins dropped")
     def drop_coins(self) -> int:
         return self.coins
+
+    def handle_broken_weapon(self):
+        del self.weapon_dict[self.current_weapon.name]
+        if len(self.weapon_dict) == 0:
+            self.weapon_dict[BARE_HANDS] = load_weapon(BARE_HANDS)
+        self.current_weapon = random.choice(list(self.weapon_dict.values()))
 
 
 def load_enemy(name: str) -> Enemy:

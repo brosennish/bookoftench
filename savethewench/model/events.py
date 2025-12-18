@@ -1,4 +1,4 @@
-from typing import Callable, Optional
+from typing import Optional
 
 from savethewench.audio import play_sound
 from savethewench.data.audio import PURCHASE, GREAT_JOB
@@ -86,10 +86,12 @@ class MissEvent(Event):
     def __init__(self):
         super().__init__(EventType.MISS)
 
+
 class BankWithdrawalEvent(Event):
     def __init__(self, amount: int):
         super().__init__(EventType.WITHDRAW, lambda:
         print_and_sleep(f"You withdrew {green(amount)} coins from the bank.\n", 1))
+
 
 class LevelUpEvent(Event):
     def __init__(self, level: int, old_max_hp: int, new_max_hp: int, item_reward: Optional[str], cash_reward: int):
@@ -105,23 +107,32 @@ class LevelUpEvent(Event):
             print(cyan(f"\nReward: {item_reward}"))
         print_and_sleep(green(f"\nYou were awarded {cash_reward} coins."), 2)
 
+
 class SwapWeaponEvent(Event):
     def __init__(self):
         super().__init__(EventType.SWAP_WEAPON)
 
+
 class FleeEvent(Event):
     def __init__(self, enemy_name: str):
         super().__init__(EventType.FLEE,
-                         callback = lambda: print_and_sleep(
+                         callback=lambda: print_and_sleep(
                              dim(f"You ran away from {enemy_name}!"), 1))
+
 
 class FailedFleeEvent(Event):
     def __init__(self):
         super().__init__(EventType.FAILED_FLEE,
-                         callback = lambda: print_and_sleep(yellow("Couldn't escape!")))
+                         callback=lambda: print_and_sleep(yellow("Couldn't escape!")))
+
 
 class PlayerDeathEvent(Event):
     def __init__(self, lives_remaining: int):
         super().__init__(EventType.PLAYER_DEATH,
-                         callback = lambda: print_and_sleep(
+                         callback=lambda: print_and_sleep(
                              f"{red("You died.")} Lives remaining: {yellow(lives_remaining)}", 2))
+
+
+class WeaponBrokeEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.WEAPON_BROKE)

@@ -30,6 +30,7 @@ class Weapon(WeaponBase, Buyable):
             f"Uses: {self.uses}"
         ])
 
+
 @dataclass
 class SellableWeapon(Weapon):
     def __repr__(self):
@@ -40,6 +41,7 @@ class SellableWeapon(Weapon):
             f"{f"ACC: {yellow(self.accuracy)}":<18}",
             f"Uses: {self.uses}"
         ])
+
 
 def load_weapon(name: str) -> Weapon:
     matches = load_weapons([name])

@@ -12,7 +12,7 @@ from savethewench.util import print_and_sleep
 from .achievement import Achievement
 from .base import Combatant, Buyable
 from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent, LevelUpEvent, \
-    SwapWeaponEvent
+    SwapWeaponEvent, WeaponBrokeEvent
 from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk
 from .weapon import load_weapons, Weapon
@@ -21,13 +21,14 @@ from .weapon import load_weapons, Weapon
 def item_defaults() -> Dict[str, Item]:
     return dict((it.name, it) for it in load_items([TENCH_FILET]))
 
+
 def weapon_defaults() -> Dict[str, Weapon]:
     return dict((it.name, it) for it in load_weapons([BARE_HANDS, KNIFE]))
+
 
 @dataclass
 class Player(Combatant):
     name: str = ''
-    is_npc: bool = False
     lives: int = 3
     lvl: int = 1
     hp: int = 100
@@ -240,9 +241,14 @@ class Player(Combatant):
         event_logger.log_event(LevelUpEvent(self.lvl, old_max, self.max_hp, item_reward, cash_reward))
 
     def apply_death_penalties(self):
-        self.coins = int(self.coins * 0.25) if perk_is_active(WALLET_CHAIN) else 0 #TODO use the framework for this
+        self.coins = int(self.coins * 0.25) if perk_is_active(WALLET_CHAIN) else 0  # TODO use the framework for this
         self.items = item_defaults()
         self.weapon_dict = weapon_defaults()
         self.current_weapon = self.weapon_dict[BARE_HANDS]
         self.hp = self.max_hp
         self.xp = 0
+
+    def handle_broken_weapon(self):
+        event_logger.log_event(WeaponBrokeEvent())
+        del self.weapon_dict[self.current_weapon.name]
+        self.current_weapon = self.weapon_dict[BARE_HANDS]

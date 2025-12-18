@@ -15,7 +15,6 @@ from .player import Player
 from .shop import Shop
 
 
-
 @dataclass
 class GameState:
     player: Player = field(default_factory=Player)

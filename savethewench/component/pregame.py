@@ -15,7 +15,7 @@ class InitGame(GatekeepingComponent):
     def __init__(self, game_state: GameState = GameState()):
         self.handle_death = False
         super().__init__(game_state,
-                         decision_function=lambda: _decision_function(),
+                         decision_function=lambda: self._decision_function(),
                          accept_component=DeathHandler,
                          deny_component=StartMenu)
 
@@ -23,11 +23,11 @@ class InitGame(GatekeepingComponent):
         def handle_death_event(_: PlayerDeathEvent):
             self.handle_death = True
 
-        def _decision_function():
-            if self.handle_death:
-                self.handle_death = False
-                return True
-            return False
+    def _decision_function(self):
+        if self.handle_death:
+            self.handle_death = False
+            return True
+        return False
 
     def run(self) -> GameState:
         while True:

@@ -1,8 +1,6 @@
 import sys
-import time as t
 from typing import List
 
-from savethewench import event_logger
 from savethewench.audio import play_music
 from savethewench.component.base import Component, LinearComponent, BinarySelectionComponent, \
     TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, NoOpComponent, anonymous_component
@@ -39,21 +37,12 @@ class NewGame(LinearComponent):
         return self.game_state
 
 
-class LoadGame(Component):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state)
-
-    def run(self) -> GameState:
-        pass
-
-
 class QuitGame(Component):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
 
     def run(self) -> GameState:
         print_and_sleep(red("You'll be back.\nOh... yes.\nYou'll be back."), 1)
-        t.sleep(1)
         sys.exit()
 
 
@@ -135,7 +124,31 @@ class ExtendedActionMenu(LabeledSelectionComponent):
             SelectionBinding('C', "Casino", CasinoBouncer),
             SelectionBinding('P', "Perks", DisplayPerks),
             SelectionBinding('O', "Overview", Overview),
+            # TODO clean up duplicated code
             SelectionBinding('R', "Return", anonymous_component()(lambda: self._return()))
+        ])
+        self.leave_menu = False
+
+    def _return(self):
+        self.leave_menu = True
+
+    def can_exit(self):
+        return self.leave_menu
+
+    def play_theme(self):
+        self.game_state.play_current_area_theme()
+
+
+class InGameMenu(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, bindings=[
+            # TODO signal to go all the way back through the call stack to start new game
+            SelectionBinding('N', "New Game", NewGame),
+            SelectionBinding('S', "Save Game", SaveGame),
+            SelectionBinding('L', "Load Game", LoadGame),
+            # TODO clean up duplicated code
+            SelectionBinding('R', "Return", anonymous_component()(lambda: self._return())),
+            SelectionBinding('Q', "Quit", QuitGame)
         ])
         self.leave_menu = False
 
@@ -149,20 +162,4 @@ class ExtendedActionMenu(LabeledSelectionComponent):
 class SaveGame(NoOpComponent): pass
 
 
-class InGameMenu(LabeledSelectionComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state, bindings=[
-            SelectionBinding('N', "New Game", NewGame),
-            # TODO signal to go all the way back through the call stack to start new game
-            SelectionBinding('S', "Save Game", SaveGame),
-            SelectionBinding('L', "Load Game", LoadGame),
-            SelectionBinding('R', "Return", anonymous_component()(lambda: self._return())), # TODO clean up duplicate code
-            SelectionBinding('Q', "Quit", QuitGame)
-        ])
-        self.leave_menu = False
-
-    def _return(self):
-        self.leave_menu = True
-
-    def can_exit(self):
-        return self.leave_menu
+class LoadGame(NoOpComponent): pass
