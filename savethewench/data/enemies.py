@@ -1,4 +1,4 @@
-from savethewench.ui import red, Colors
+from savethewench.ui import Colors
 from . import audio, weapons
 
 # Constants
@@ -121,6 +121,28 @@ Bosses = [
 # ========================
 #        FINAL BOSS
 # ========================
-Final_Boss = {'name': DENNY_BILTMORE, 'hp': 275,
-              'weapons': [weapons.BRASS_KNUCKLES, weapons.PISTOL, weapons.REVOLVER, weapons.SHOTGUN],
-              'bounty': 0, 'type': FINAL_BOSS}
+
+
+_biltmore_preamble_lines = """You look through the corpse's phone...
+Its last location was the Biltmore Estate...
+You travel there and enter the grand corridor...
+Denny Biltmore stands before you...
+"I've waited a long, long time to put you down..."
+"I knew if I captured the champion's beloved Meg Craig, he would send you to her rescue..."
+"Well, let's have at it then.\""""
+Final_Boss = {
+    'name': DENNY_BILTMORE,
+    'hp': 275, 'weapons': [weapons.BRASS_KNUCKLES, weapons.PISTOL, weapons.REVOLVER, weapons.SHOTGUN],
+    'bounty': 0, 'type': FINAL_BOSS, 'preamble': [{'text': text, 'color': Colors.RED, 'sleep': 4}
+                                                            for text in _biltmore_preamble_lines.split('\n')],
+    'random_dialogue': [{
+        'upper_threshold': 0.08,
+        'dialogue': [
+            {'text': "Solomon.", 'color': Colors.RED, 'sleep': 2},
+            {'text': "Bring a plate of drinks for me and the boy...", 'color': Colors.RED, 'sleep': 2},
+        ]}, {
+        'upper_threshold': 0.16,
+        'dialogue': [
+            {'text': "Yes, yes...", 'color': Colors.RED, 'sleep': 2},
+            {'text': "Let me just place a quick phone call...", 'color': Colors.RED, 'sleep': 2},
+        ] }]}

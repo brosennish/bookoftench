@@ -6,6 +6,9 @@ from typing import List
 from savethewench import event_logger
 from savethewench.audio import play_music
 from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
+from savethewench.event_logger import subscribe_function
+from savethewench.ui import green
+from savethewench.util import print_and_sleep
 from .area import Area, load_areas
 from .bank import Bank
 from .enemy import Enemy, load_enemy
@@ -13,9 +16,6 @@ from .events import TravelEvent, BountyCollectedEvent
 from .perk import attach_perk
 from .player import Player
 from .shop import Shop
-from ..event_logger import subscribe_function
-from ..ui import green
-from ..util import print_and_sleep
 
 
 @dataclass
@@ -68,7 +68,6 @@ class GameState:
     def _subscribe_listeners(self):
         @subscribe_function(BountyCollectedEvent)
         def handle_bounty_collected_event(event: BountyCollectedEvent):
-           print_and_sleep(green(f"You killed {event.enemy_name} and collected a bounty of {self.bounty} coins!"), 1)
-           self.player.coins += self.bounty
-           self.refresh_bounty()
-
+            print_and_sleep(green(f"You killed {event.enemy_name} and collected a bounty of {self.bounty} coins!"), 1)
+            self.player.coins += self.bounty
+            self.refresh_bounty()

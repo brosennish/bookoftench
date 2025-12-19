@@ -5,7 +5,7 @@ from typing import List, Optional, Dict
 
 from savethewench.data import Enemies
 from savethewench.data.audio import AREA_BOSS_THEME
-from savethewench.data.enemies import Bosses
+from savethewench.data.enemies import Bosses, Final_Boss
 from savethewench.data.perks import RICKETY_PICKPOCKET
 from savethewench.data.weapons import BARE_HANDS
 from .base import Combatant, NPC, DisplayableText
@@ -83,3 +83,6 @@ def load_boss(name: str) -> Boss:
     if len(matches) == 0:
         raise ValueError(f"Could not find boss data for {name}")
     return matches[0]
+
+def load_final_boss() -> Boss:
+    return Boss.from_dict(Final_Boss)
