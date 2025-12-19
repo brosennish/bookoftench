@@ -3,12 +3,15 @@ from functools import partial
 from typing import List
 
 from savethewench import event_logger
-from savethewench.audio import play_music, play_sound
+from savethewench.audio import play_music, play_sound, stop_music
 from savethewench.component.base import RandomThresholdComponent, ThresholdBinding, \
-    TextDisplayingComponent, anonymous_component, Component, ColoredNameSelectionBinding
+    TextDisplayingComponent, anonymous_component, Component, ColoredNameSelectionBinding, BinarySelectionComponent, \
+    NoOpComponent
 from savethewench.component.util import get_battle_status_view, display_bank_balance, display_player_achievements, \
     display_game_overview, calculate_flee, display_active_perks
-from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER
+from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
+from savethewench.data.enemies import CAPTAIN_HOLE, BOSS
+from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION
 from savethewench.event_logger import subscribe_function
 from savethewench.model.events import KillEvent, BankWithdrawalEvent, FleeEvent, PlayerDeathEvent
@@ -113,15 +116,16 @@ class Attack(Component):
         if not self.failed_flee:
             player.attack(enemy)
             if not enemy.is_alive():
-                # TODO maybe put the next two lines in an event callback
-                print_and_sleep(red(f"{enemy.name} is now in Hell."), 1)
+                # TODO maybe put the next 3 lines in an event callback
+                stop_music()
                 play_sound(DEVIL_THUNDER)
+                print_and_sleep(red(f"{enemy.name} is now in Hell."), 2)
                 enemy_weapon = enemy.drop_weapon()
                 if enemy_weapon is not None:
                     if player.add_weapon(enemy_weapon):
                         print_and_sleep(cyan(f"{enemy_weapon.name} added to sack."), 1)
                 player.gain_coins(enemy.drop_coins())
-                player.gain_xp(enemy)
+                player.gain_xp_from_enemy(enemy)
                 event_logger.log_event(KillEvent())
                 self.game_state.current_area.kill_current_enemy()
                 return self.game_state
@@ -159,6 +163,8 @@ class TryFlee(RandomThresholdComponent):
     @anonymous_component(state_dependent=True)
     def _flee_success(game_state: GameState):
         event_logger.log_event(FleeEvent(game_state.current_area.current_enemy.name))
+        if game_state.current_area.current_enemy.type == BOSS:
+            game_state.player.gain_xp(1) # TODO perk
 
 
 class Battle(LabeledSelectionComponent):
@@ -189,9 +195,35 @@ class Battle(LabeledSelectionComponent):
 
 
 class FightBoss(Battle):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state)
+        self.enemy = self.game_state.current_area.summon_boss()
+
+    def play_theme(self):
+        play_music(self.enemy.theme)
+
+    @staticmethod
+    @anonymous_component(state_dependent=True)
+    # TODO generalize this and get it out of component
+    def captain_hole_action(game_state: GameState):
+        del game_state.player.items[TENCH_FILET]
+        injury = random.randint(25, 50)
+        game_state.current_area.boss.hp -= injury
+        print_and_sleep('You hand your filet over to Captain Hole.', seconds=2)
+        stop_music()
+        play_sound(PISTOL)
+        print_and_sleep(f'He shoots himself in the jines, losing {injury} HP as a result.', 3)
+
     def run(self) -> GameState:
-        print("TODO - Boss Fight")
-        return self.game_state
+        self.play_theme()
+        self.enemy.do_preamble()
+        # TODO generalize this and get it out of component
+        if self.enemy.name == CAPTAIN_HOLE and TENCH_FILET in self.player.items:
+            BinarySelectionComponent(self.game_state,
+                                     query="Do you accept?",
+                                     yes_component=self.captain_hole_action,
+                                     no_component=NoOpComponent).run()
+        return super().run()
 
 
 class InGameBank(LabeledSelectionComponent):

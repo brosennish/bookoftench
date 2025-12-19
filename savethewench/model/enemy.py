@@ -1,11 +1,14 @@
+import copy
 import random
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict
 
 from savethewench.data import Enemies
+from savethewench.data.audio import AREA_BOSS_THEME
+from savethewench.data.enemies import Bosses
 from savethewench.data.perks import RICKETY_PICKPOCKET
 from savethewench.data.weapons import BARE_HANDS
-from .base import Combatant, NPC
+from .base import Combatant, NPC, DisplayableText
 from .perk import attach_perk
 from .weapon import Weapon, load_weapon, load_weapons
 
@@ -55,3 +58,28 @@ def load_enemy(name: str) -> Enemy:
 
 def load_enemies(restriction: List[str] = None) -> List[Enemy]:
     return [Enemy(**d) for d in Enemies if restriction is None or d['name'] in restriction]
+
+
+
+@dataclass
+class Boss(Enemy):
+    theme: str = AREA_BOSS_THEME
+    preamble: List[DisplayableText] = field(default_factory=list)
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        data = copy.deepcopy(data)
+        if 'preamble' in data:
+            data['preamble'] = [DisplayableText(**d) for d in data['preamble']]
+        return super().from_dict(data)
+
+    def do_preamble(self):
+        for displayableText in self.preamble:
+            displayableText.display()
+
+
+def load_boss(name: str) -> Boss:
+    matches = [Boss.from_dict(d) for d in Bosses if d['name'] == name]
+    if len(matches) == 0:
+        raise ValueError(f"Could not find boss data for {name}")
+    return matches[0]

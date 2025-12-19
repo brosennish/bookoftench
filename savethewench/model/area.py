@@ -6,23 +6,27 @@ from typing import List
 from savethewench.data import Areas
 from savethewench.ui import purple, yellow
 from savethewench.util import print_and_sleep
-from .enemy import load_enemy, Enemy
+from .enemy import Enemy, load_enemy, Boss, load_boss
 
 
 @dataclass
 class Area:
     name: str
     enemies: list[str]
-    boss: str
+    boss_name: str
     theme: str
     enemy_count: int = random.randint(10, 15)
     enemies_killed: int = 0
     boss_defeated: bool = False
+    boss: Boss = None
     current_enemy = None
+
+    def __post_init__(self):
+        self.boss = load_boss(self.boss_name)
 
     @property
     def enemies_remaining(self) -> int:
-        return self.enemy_count - self.enemies_killed
+        return max(self.enemy_count - self.enemies_killed, 0)
 
     def spawn_enemy(self) -> Enemy:
         enemy = load_enemy(random.choice(self.enemies))
@@ -37,13 +41,17 @@ class Area:
         self.current_enemy = enemy
         return self.current_enemy
 
-    def reset_current_enemy(self):
-        self.current_enemy = None
+    def summon_boss(self) -> Boss:
+        self.current_enemy = self.boss
+        return self.current_enemy
 
     def kill_current_enemy(self):
         self.enemies_killed += 1
-        self.enemy_count -= 1
-        self.reset_current_enemy()
+        if self.current_enemy == self.boss:
+            self.boss_defeated = True
+        else:
+            self.enemy_count -= 1
+        self.current_enemy = None
 
     def __hash__(self) -> int:
         return hash((self.name, self.enemy_count, self.enemies_killed, self.boss_defeated, self.current_enemy))

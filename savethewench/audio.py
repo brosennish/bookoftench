@@ -61,7 +61,7 @@ def play_music(file_name: str) -> None:
 
 def stop_music() -> None:
     """Stop only the current music track."""
-    global _current_music_process
+    global _current_music_process, _current_music
 
     if _current_music_process:
         try:
@@ -70,6 +70,7 @@ def stop_music() -> None:
             pass
 
         _current_music_process = None
+        _current_music = None
 
 
 # --- Global cleanup ---

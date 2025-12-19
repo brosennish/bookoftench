@@ -25,7 +25,7 @@ class Bank:
     def apply_interest(self):
         self.interest += int(self.balance * self.interest_rate)
         self.balance += int(self.balance * self.interest_rate)
-        print("Applied interest")
+        print_and_sleep("Applied interest")
 
     def _subscribe_listeners(self):
         @subscribe_function(LevelUpEvent)

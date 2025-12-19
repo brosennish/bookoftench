@@ -1,13 +1,15 @@
+import copy
 import random
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import Dict
+from dataclasses import dataclass, field
+from typing import Dict, List
 
 from savethewench import event_logger
 from savethewench.audio import play_sound
 from savethewench.data.audio import WEAPON_BROKE
+from savethewench.data.enemies import SLEDGE_HAMMOND
 from savethewench.model.events import HitEvent, CritEvent, MissEvent
-from savethewench.ui import red, yellow
+from savethewench.ui import red, yellow, color_text, purple
 from savethewench.util import print_and_sleep
 
 
@@ -44,9 +46,51 @@ class WeaponBase:
 
 
 @dataclass
+class DisplayableText:
+    text: str
+    color: str = None
+    sleep: int = 0
+
+    def display(self):
+        print_and_sleep(color_text(self.color, self.text) if self.color is not None else self.text, seconds=self.sleep)
+
+@dataclass
+class RandomDisplayableText:
+    upper_threshold: float
+    dialogue: List[DisplayableText]
+
+    def display(self):
+        for dt in self.dialogue:
+            dt.display()
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        return cls(
+            upper_threshold=data['upper_threshold'],
+            dialogue=[DisplayableText(**d) for d in data['dialogue']],
+        )
+
+@dataclass
 class NPC:
     name: str
+    random_dialogue: List[RandomDisplayableText] = field(default_factory=list)
 
+    def __post_init__(self):
+        self.random_dialogue.sort(key=lambda x: x.upper_threshold)
+
+    def do_random_dialogue(self):
+        roll = random.random()
+        for rdt in self.random_dialogue:
+            if roll <= rdt.upper_threshold:
+                rdt.display()
+                break
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        data = copy.deepcopy(data)
+        if 'random_dialogue' in data:
+            data['random_dialogue'] = [RandomDisplayableText.from_dict(d) for d in data['random_dialogue']]
+        return cls(**data)
 
 @dataclass
 class Combatant(ABC):
@@ -72,6 +116,12 @@ class Combatant(ABC):
 
     def take_damage(self, damage: int) -> int:
         self.hp -= damage
+        if isinstance(self, NPC):
+            self.do_random_dialogue()
+        # TODO generalize, get specific logic out of components
+        if self.name == SLEDGE_HAMMOND:
+            self.hp += 3
+            print_and_sleep(purple("Sledge Hammond took steroids and restored 3 HP!"), 1)
         return damage
 
     def calculate_accuracy(self) -> float:

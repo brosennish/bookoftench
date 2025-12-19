@@ -91,7 +91,7 @@ Find her before her life runs dry...
 
 class ActionMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, bindings=self._get_bindings(game_state),
+        super().__init__(game_state, refresh_menu=True, bindings=self._get_bindings(game_state),
                          top_level_prompt_callback=lambda gs: print(get_player_status_view(gs)))
 
     @staticmethod

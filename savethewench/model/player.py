@@ -203,8 +203,11 @@ class Player(Combatant):
     def _calculate_xp_from_enemy(enemy: Combatant) -> int:
         return int(enemy.max_hp / 2.8)
 
-    def gain_xp(self, enemy: Combatant) -> bool:
+    def gain_xp_from_enemy(self, enemy: Combatant) -> bool:
         amount = self._calculate_xp_from_enemy(enemy)
+        return self.gain_xp(amount)
+
+    def gain_xp(self, amount: int) -> bool:
         self.xp += amount
         print_and_sleep(green(f"You gained {amount} XP!"), 1)
 
