@@ -9,10 +9,13 @@ from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
 from .area import Area, load_areas
 from .bank import Bank
 from .enemy import Enemy, load_enemy
-from .events import TravelEvent
+from .events import TravelEvent, BountyCollectedEvent
 from .perk import attach_perk
 from .player import Player
 from .shop import Shop
+from ..event_logger import subscribe_function
+from ..ui import green
+from ..util import print_and_sleep
 
 
 @dataclass
@@ -43,9 +46,11 @@ class GameState:
         self.current_area = self.areas[0]
         self.refresh_bounty()
         event_logger.set_counter(self.event_counter)
+        self._subscribe_listeners()
 
     def refresh_bounty(self):
-        enemy_choice: Enemy = load_enemy(random.choice(self.current_area.enemies))  # = random.choice(load_enemies())
+        bounty_area = random.choice(self.areas)
+        enemy_choice: Enemy = load_enemy(random.choice(bounty_area.enemies))  # = random.choice(load_enemies())
         self.wanted = enemy_choice.name
         self.bounty = enemy_choice.bounty
 
@@ -59,3 +64,11 @@ class GameState:
 
     def play_current_area_theme(self):
         play_music(self.current_area.theme)
+
+    def _subscribe_listeners(self):
+        @subscribe_function(BountyCollectedEvent)
+        def handle_bounty_collected_event(event: BountyCollectedEvent):
+           print_and_sleep(green(f"You killed {event.enemy_name} and collected a bounty of {self.bounty} coins!"), 1)
+           self.player.coins += self.bounty
+           self.refresh_bounty()
+

@@ -14,7 +14,7 @@ from savethewench.data.enemies import CAPTAIN_HOLE, BOSS
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION
 from savethewench.event_logger import subscribe_function
-from savethewench.model.events import KillEvent, BankWithdrawalEvent, FleeEvent, PlayerDeathEvent
+from savethewench.model.events import KillEvent, BankWithdrawalEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent
 from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
 from savethewench.model.perk import load_perks, Perk, attach_perk
@@ -120,6 +120,8 @@ class Attack(Component):
                 stop_music()
                 play_sound(DEVIL_THUNDER)
                 print_and_sleep(red(f"{enemy.name} is now in Hell."), 2)
+                if enemy.name in self.game_state.wanted:
+                    event_logger.log_event(BountyCollectedEvent(enemy.name))
                 enemy_weapon = enemy.drop_weapon()
                 if enemy_weapon is not None:
                     if player.add_weapon(enemy_weapon):
