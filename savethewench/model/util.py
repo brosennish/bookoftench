@@ -48,26 +48,11 @@ def get_battle_status_view(game_state: GameState) -> str:
     player: Player = game_state.player
     enemy: Enemy = game_state.current_area.current_enemy
 
-    def format_uses(weapon) -> str:
-        if weapon.uses == -1:
-            return cyan('∞')
-        elif weapon.uses == 1:
-            return red(f"{weapon.uses}")
-        elif weapon.uses in (2, 3):
-            return yellow(f"{weapon.uses}")
-        else:
-            return f"{weapon.uses}"
-
-    def format_combatant_data(cmbt: Combatant, name_color, ) -> str:
+    def format_combatant_data(cmbt: Combatant, name_color) -> str:
         return (f"\n{name_color(cmbt.name)} {dim('-')} {p_color(cmbt.hp, cmbt.max_hp)(f"{cmbt.hp} HP")}"
-                f"\n{cyan(cmbt.current_weapon.name)}"
-                f"\n{dim(' | ').join([
-                    f"{dim("Damage:")} {red(f"{cmbt.current_weapon.damage}")}",
-                    f"Accuracy: {yellow(f"{cmbt.current_weapon.accuracy}")}",
-                    f"Uses: {format_uses(cmbt.current_weapon)}"
-                ])}\n")
+                f"\n{cmbt.current_weapon.get_simple_format()}")
 
-    return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, purple)}"
+    return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, purple)}\n"
 
 
 def display_bank_balance(game_state: GameState) -> None:

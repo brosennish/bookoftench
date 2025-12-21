@@ -13,6 +13,12 @@ class Item(Buyable):
     cost: int
     sell_value: int
 
+    def get_simple_format(self) -> str:
+        return dim(' | ').join([
+            cyan(f"{self.name:<24}"),
+            f"HP: +{green(self.hp)}"
+        ])
+
     def to_sellable_item(self) -> "SellableItem":
         return SellableItem(**vars(self))
 

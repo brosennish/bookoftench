@@ -93,7 +93,7 @@ Bosses = [
          {'text': "Looks like anotha one a dem riverboat bad boys right heuh uh huh.",
           'color': Colors.RED, 'sleep': 2},
          {'text': "Bill's had a hankerin' for some a dat riverboat gumbo, mmhm.", 'color': Colors.RED, 'sleep': 2},
-         {'text': red("We gonna cook up some riverboat gumbo with some stuffin' with that mmhm riverboat boy."),
+         {'text': "We gonna cook up some riverboat gumbo with some stuffin' with that mmhm riverboat boy.",
           'color': Colors.RED, 'sleep': 2},
      ],
      'random_dialogue': [

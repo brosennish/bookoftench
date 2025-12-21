@@ -154,6 +154,7 @@ Perks = [
         'name': INTRO_TO_TENCH,
         'cost': 140,
         'description': "+15% XP gained from winning battles",
+        'wrapper': partial(_numeric_change, change=15, name=INTRO_TO_TENCH, change_func=_int_change_by_percent),
     },
     {
         'name': ROSETTI_THE_GYM_RAT,

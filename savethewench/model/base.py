@@ -9,7 +9,7 @@ from savethewench.audio import play_sound
 from savethewench.data.audio import WEAPON_BROKE
 from savethewench.data.enemies import SLEDGE_HAMMOND
 from savethewench.model.events import HitEvent, CritEvent, MissEvent
-from savethewench.ui import red, yellow, color_text, purple
+from savethewench.ui import red, yellow, color_text, purple, cyan, dim
 from savethewench.util import print_and_sleep
 
 
@@ -43,6 +43,23 @@ class WeaponBase:
 
     def is_broken(self):
         return self.uses == 0
+
+    def format_uses(self):
+        if self.uses == -1:
+            return cyan('∞')
+        elif self.uses == 1:
+            return red(f"{self.uses}")
+        elif self.uses in (2, 3):
+            return yellow(f"{self.uses}")
+        else:
+            return f"{self.uses}"
+
+    def get_simple_format(self):
+        return f"{cyan(self.name)}\n{dim(' | ').join([
+            f"{dim("Damage:")} {red(f"{self.damage}")}",
+            f"{dim("Accuracy:")} {yellow(f"{self.accuracy}")}",
+            f"{dim("Uses:")} {self.format_uses()}"
+        ])}"
 
 
 @dataclass

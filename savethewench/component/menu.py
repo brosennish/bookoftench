@@ -6,13 +6,13 @@ from savethewench.component.base import Component, LinearComponent, BinarySelect
     TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, NoOpComponent, anonymous_component
 from savethewench.data.audio import INTRO_THEME
 from savethewench.model import GameState
+from savethewench.model.util import get_player_status_view
 from savethewench.ui import red
 from savethewench.util import print_and_sleep, safe_input
 from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, DisplayPerks, Overview, \
     FightBoss, InGameBank
 from .casino import CasinoBouncer
 from .shop import ShopComponent
-from .util import get_player_status_view
 
 
 class StartMenu(LabeledSelectionComponent):

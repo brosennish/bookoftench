@@ -7,8 +7,6 @@ from savethewench.audio import play_music, play_sound, stop_music
 from savethewench.component.base import RandomThresholdComponent, ThresholdBinding, \
     TextDisplayingComponent, anonymous_component, Component, ColoredNameSelectionBinding, BinarySelectionComponent, \
     NoOpComponent
-from savethewench.component.util import get_battle_status_view, display_bank_balance, display_player_achievements, \
-    display_game_overview, calculate_flee, display_active_perks
 from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
 from savethewench.data.enemies import CAPTAIN_HOLE, BOSS
 from savethewench.data.items import TENCH_FILET
@@ -18,6 +16,8 @@ from savethewench.model.events import KillEvent, BankWithdrawalEvent, FleeEvent,
 from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
 from savethewench.model.perk import load_perks, Perk, attach_perk
+from savethewench.model.util import get_battle_status_view, display_bank_balance, display_player_achievements, \
+    display_game_overview, calculate_flee, display_active_perks
 from savethewench.model.weapon import load_discoverable_weapons
 from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
 from savethewench.util import print_and_sleep, safe_input
@@ -88,7 +88,7 @@ class UseItem(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
                          bindings=[SelectionBinding(key=str(i),
-                                                    name=item.name,
+                                                    name=item.get_simple_format(),
                                                     component=anonymous_component()(
                                                         partial(game_state.player.use_item, item.name)))
                                    for (i, item) in enumerate(game_state.player.get_items(), 1)],
@@ -98,11 +98,12 @@ class UseItem(LabeledSelectionComponent):
 class EquipWeapon(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
-                         bindings=[SelectionBinding(key=str(i),
-                                                    name=weapon.name,
-                                                    component=anonymous_component()(
-                                                        partial(game_state.player.equip_weapon, weapon.name)))
-                                   for (i, weapon) in enumerate(game_state.player.get_weapons(), 1)],
+                         bindings=[SelectionBinding(
+                             key=str(i),
+                             name=weapon.get_simple_format(),
+                             component=anonymous_component()(
+                                 partial(game_state.player.equip_weapon, weapon.name)))
+                             for (i, weapon) in enumerate(game_state.player.get_weapons(), 1)],
                          top_level_prompt_callback=lambda gs: gs.player.display_weapon_count(), quittable=True)
 
 
@@ -166,7 +167,7 @@ class TryFlee(RandomThresholdComponent):
     def _flee_success(game_state: GameState):
         event_logger.log_event(FleeEvent(game_state.current_area.current_enemy.name))
         if game_state.current_area.current_enemy.type == BOSS:
-            game_state.player.gain_xp(1) # TODO perk
+            game_state.player.gain_xp(1)  # TODO perk
 
 
 class Battle(LabeledSelectionComponent):

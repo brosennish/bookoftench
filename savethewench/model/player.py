@@ -5,7 +5,7 @@ from typing import Dict, List
 from savethewench import event_logger
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
-    VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN
+    VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH
 from savethewench.data.weapons import BARE_HANDS, KNIFE
 from savethewench.ui import yellow, dim, green
 from savethewench.util import print_and_sleep
@@ -198,8 +198,7 @@ class Player(Combatant):
         print_and_sleep(green(f"You gained {amount} coins!"), 1)
 
     @staticmethod
-    # TODO perks
-    # @attach_perk(AP_TENCH_STUDIES, INTRO_TO_TENCH) # won't work as is, but there might be a way
+    @attach_perk(INTRO_TO_TENCH) # AP_TENCH_STUDIES won't work as is, but there might be a way
     def _calculate_xp_from_enemy(enemy: Combatant) -> int:
         return int(enemy.max_hp / 2.8)
 

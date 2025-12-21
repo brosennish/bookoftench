@@ -2,9 +2,9 @@ from functools import partial
 
 from savethewench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
     anonymous_component
-from savethewench.component.util import display_active_perk_count
 from savethewench.model import GameState
 from savethewench.model.base import Buyable
+from savethewench.model.util import display_active_perk_count
 from savethewench.ui import green, blue
 from savethewench.util import print_and_sleep
 
