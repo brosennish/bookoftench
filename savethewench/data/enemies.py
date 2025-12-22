@@ -132,7 +132,7 @@ Denny Biltmore stands before you...
 "Well, let's have at it then.\""""
 Final_Boss = {
     'name': DENNY_BILTMORE,
-    'hp': 275, 'weapons': [weapons.BRASS_KNUCKLES, weapons.PISTOL, weapons.REVOLVER, weapons.SHOTGUN],
+    'hp': 2, 'weapons': [weapons.BRASS_KNUCKLES, weapons.PISTOL, weapons.REVOLVER, weapons.SHOTGUN],
     'bounty': 0, 'type': FINAL_BOSS, 'preamble': [{'text': text, 'color': Colors.RED, 'sleep': 4}
                                                             for text in _biltmore_preamble_lines.split('\n')],
     'random_dialogue': [{

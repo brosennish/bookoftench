@@ -3,37 +3,53 @@ from savethewench.component.base import GatekeepingComponent, TextDisplayingComp
     LinearComponent
 from savethewench.component.menu import ActionMenu
 from savethewench.component.menu import StartMenu, QuitGame, Intro
-from savethewench.data.audio import DEVIL_THUNDER
-from savethewench.event_logger import subscribe_function
+from savethewench.data.audio import DEVIL_THUNDER, GREAT_JOB
 from savethewench.model import GameState
-from savethewench.model.events import PlayerDeathEvent
-from savethewench.ui import red
+from savethewench.ui import red, green
 from savethewench.util import print_and_sleep
 
 
 class InitGame(GatekeepingComponent):
     def __init__(self, game_state: GameState = GameState()):
-        self.handle_death = False
         super().__init__(game_state,
-                         decision_function=lambda: self._decision_function(),
-                         accept_component=DeathHandler,
+                         decision_function=self._decision_function,
+                         accept_component=VictoryOrDeathHandler,
                          deny_component=StartMenu)
 
-        @subscribe_function(PlayerDeathEvent)
-        def handle_death_event(_: PlayerDeathEvent):
-            self.handle_death = True
-
     def _decision_function(self):
-        if self.handle_death:
-            self.handle_death = False
-            return True
-        return False
+        return self.game_state.victory or not self.game_state.player.is_alive()
 
     def run(self) -> GameState:
         while True:
-            if not self.handle_death:
-                stop_all_sounds()
             self.game_state = super().run()
+
+
+class VictoryOrDeathHandler(GatekeepingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state,
+                         decision_function=self._decision_function,
+                         accept_component=VictoryHandler,
+                         deny_component=DeathHandler)
+
+    def _decision_function(self):
+        if self.game_state.victory:
+            return True
+        if not self.game_state.player.is_alive():
+            return False
+        raise Exception(f"{VictoryOrDeathHandler} invoked but neither victory nor death occurred.")
+
+
+class VictoryHandler(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state,
+                         display_callback=self._display,
+                         next_component=PlayAgainDecision)
+
+    @staticmethod
+    def _display(_: GameState):
+        print_and_sleep(f"You defeated the evil Denny Biltmore and rescued the wench!\n", 1)
+        play_sound(GREAT_JOB)
+        print_and_sleep(green("You win!"), 3)
 
 
 class DeathHandler(GatekeepingComponent):

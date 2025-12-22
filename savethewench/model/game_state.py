@@ -11,7 +11,7 @@ from savethewench.ui import green
 from savethewench.util import print_and_sleep
 from .area import Area, load_areas
 from .bank import Bank
-from .enemy import Enemy, load_enemy, Boss, load_final_boss
+from .enemy import Enemy, load_enemy
 from .events import TravelEvent, BountyCollectedEvent
 from .perk import attach_perk
 from .player import Player
@@ -30,6 +30,8 @@ class GameState:
 
     wanted: str = ''
     _bounty: int = 0
+
+    victory = False
 
     event_counter: Counter = field(default_factory=Counter)
 
@@ -73,4 +75,4 @@ class GameState:
             self.refresh_bounty()
 
     def is_final_boss_available(self) -> bool:
-        return self.current_area.boss_defeated and (self.wench_area == self.current_area)
+        return self.current_area.boss_defeated and (self.wench_area == self.current_area) and not self.victory

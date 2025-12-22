@@ -120,6 +120,9 @@ class Attack(Component):
         if not self.failed_flee:
             player.attack(enemy)
             if not enemy.is_alive():
+                if enemy.type == FINAL_BOSS:
+                    self.game_state.victory = True
+                    return self.game_state
                 # TODO maybe put the next 3 lines in an event callback
                 stop_music()
                 play_sound(DEVIL_THUNDER)

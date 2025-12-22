@@ -1,7 +1,6 @@
 import copy
 import random
 from dataclasses import dataclass, field
-from functools import cache
 from typing import List, Optional, Dict
 
 from savethewench.data import Enemies
@@ -85,6 +84,5 @@ def load_boss(name: str) -> Boss:
         raise ValueError(f"Could not find boss data for {name}")
     return matches[0]
 
-@cache
 def load_final_boss() -> Boss:
     return Boss.from_dict(Final_Boss)

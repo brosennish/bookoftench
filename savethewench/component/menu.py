@@ -14,7 +14,6 @@ from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, Displa
 from .bank import WithdrawalOnlyBank
 from .casino import CasinoBouncer
 from .shop import ShopComponent
-from ..model.bank import Bank
 
 
 class StartMenu(LabeledSelectionComponent):
@@ -25,12 +24,12 @@ class StartMenu(LabeledSelectionComponent):
                                    SelectionBinding(key='Q', name="Quit", component=QuitGame)])
 
     def can_exit(self):
-        return not self.game_state.player.is_alive()
+        return self.game_state.victory or not self.game_state.player.is_alive()
 
 
 class NewGame(LinearComponent):
-    def __init__(self, _: GameState):
-        super().__init__(GameState(), TutorialDecision)
+    def __init__(self, gs: GameState):
+        super().__init__(gs, TutorialDecision)
 
     def execute_current(self) -> GameState:
         player = self.game_state.player
@@ -117,7 +116,7 @@ class ActionMenu(LabeledSelectionComponent):
         self.game_state.play_current_area_theme()
 
     def can_exit(self):
-        return not self.game_state.player.is_alive()
+        return self.game_state.victory or not self.game_state.player.is_alive()
 
 
 class ExtendedActionMenu(LabeledSelectionComponent):

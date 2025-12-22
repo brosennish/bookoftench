@@ -1,6 +1,5 @@
 import random
 from dataclasses import dataclass
-from functools import cache
 from typing import List
 
 from savethewench.data import Areas
@@ -62,6 +61,5 @@ class Area:
         return hash((self.name, self.enemy_count, self.enemies_killed, self.boss_defeated, self.current_enemy))
 
 
-@cache
 def load_areas() -> List[Area]:
     return [Area(**d) for d in Areas]
