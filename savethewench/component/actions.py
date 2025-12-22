@@ -6,9 +6,9 @@ from savethewench import event_logger
 from savethewench.audio import play_music, play_sound, stop_music
 from savethewench.component.base import RandomThresholdComponent, ThresholdBinding, \
     TextDisplayingComponent, functional_component, Component, ColoredNameSelectionBinding, BinarySelectionComponent, \
-    NoOpComponent
+    NoOpComponent, LinearComponent
 from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
-from savethewench.data.enemies import CAPTAIN_HOLE
+from savethewench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION
 from savethewench.event_logger import subscribe_function
@@ -29,7 +29,7 @@ class Explore(RandomThresholdComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
                          bindings=[
-                             ThresholdBinding(0.45, Battle),
+                             ThresholdBinding(0.45, SpawnEnemy),
                              ThresholdBinding(0.55, self._discover_item),
                              ThresholdBinding(0.65, self._discover_weapon),
                              ThresholdBinding(0.85, self._discover_coin),
@@ -173,6 +173,14 @@ class TryFlee(RandomThresholdComponent):
         if game_state.player.gain_xp_other(1):
             BankVisitDecision(game_state).run()  # TODO figure out a way to not call this in so many places
 
+class SpawnEnemy(LinearComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, next_component=Battle)
+
+    def execute_current(self) -> GameState:
+        self.game_state.current_area.spawn_enemy()
+        return self.game_state
+
 
 class Battle(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -185,7 +193,7 @@ class Battle(LabeledSelectionComponent):
                              SelectionBinding('P', "Perks", DisplayPerks)
                          ])
         self.player = self.game_state.player
-        self.enemy = self.game_state.current_area.spawn_enemy()
+        self.enemy = self.game_state.current_area.current_enemy
         self.fled = False
         self._subscribe_listeners()
 
@@ -230,8 +238,16 @@ class FightBoss(Battle):
                                      query="Do you accept?",
                                      yes_component=self.captain_hole_action,
                                      no_component=NoOpComponent).run()
-        return super().run()
+        self.game_state = super().run()
+        if self.game_state.current_area.current_enemy is None and self.game_state.is_final_boss_available():
+            return FightFinalBoss(self.game_state).run()
+        return self.game_state
 
+
+class FightFinalBoss(FightBoss):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state)
+        self.enemy = self.game_state.current_area.summon_final_boss()
 
 class Achievements(TextDisplayingComponent):
     def __init__(self, game_state: GameState):

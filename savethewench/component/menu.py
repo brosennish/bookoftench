@@ -7,13 +7,14 @@ from savethewench.component.base import Component, LinearComponent, BinarySelect
 from savethewench.data.audio import INTRO_THEME
 from savethewench.model import GameState
 from savethewench.model.util import get_player_status_view
-from savethewench.ui import red
+from savethewench.ui import red, purple
 from savethewench.util import print_and_sleep, safe_input
 from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, DisplayPerks, Overview, \
-    FightBoss
+    FightBoss, FightFinalBoss
 from .bank import WithdrawalOnlyBank
 from .casino import CasinoBouncer
 from .shop import ShopComponent
+from ..model.bank import Bank
 
 
 class StartMenu(LabeledSelectionComponent):
@@ -107,6 +108,8 @@ class ActionMenu(LabeledSelectionComponent):
             return [SelectionBinding('E', "Explore", Explore), *res]
         elif not game_state.current_area.boss_defeated:
             return [SelectionBinding('B', 'Fight Boss', FightBoss), *res]
+        elif game_state.is_final_boss_available():
+            return [SelectionBinding('B', purple("BATTLE DENNY BILTMORE"), FightFinalBoss), *res]
         else:
             return res
 

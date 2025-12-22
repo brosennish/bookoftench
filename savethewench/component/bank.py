@@ -1,7 +1,9 @@
 from typing import List
 
+from savethewench.audio import play_music
 from savethewench.component.base import LabeledSelectionComponent, SelectionBinding, functional_component, \
     BinarySelectionComponent
+from savethewench.data.audio import BANK_THEME
 from savethewench.model import GameState
 from savethewench.model.util import display_bank_balance
 from savethewench.ui import blue, yellow
@@ -19,6 +21,9 @@ class BankComponent(LabeledSelectionComponent):
         self.bank = self.game_state.bank
         self.leave_bank = False
         self._display_greeting()
+
+    def play_theme(self):
+        play_music(BANK_THEME)
 
     def _get_bindings(self) -> List[SelectionBinding]:
         res = [SelectionBinding('W', 'Withdraw', self._make_withdrawal),
