@@ -49,7 +49,8 @@ def get_battle_status_view(game_state: GameState) -> str:
     enemy: Enemy = game_state.current_area.current_enemy
 
     def format_combatant_data(cmbt: Combatant, name_color) -> str:
-        return (f"\n{name_color(cmbt.name)} {dim('-')} {p_color(cmbt.hp, cmbt.max_hp)(f"{cmbt.hp} HP")}"
+        return (f"\n{name_color(cmbt.name)} {red('(blinded)') if cmbt.blind else ''} {dim('-')} "
+                f"{p_color(cmbt.hp, cmbt.max_hp)(f"{cmbt.hp} HP")}"
                 f"\n{cmbt.current_weapon.get_simple_format()}")
 
     return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, purple)}\n"

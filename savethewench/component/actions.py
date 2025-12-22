@@ -176,7 +176,7 @@ class TryFlee(RandomThresholdComponent):
 
 class Battle(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, top_level_prompt_callback=lambda gs: print(get_battle_status_view(gs)),
+        super().__init__(game_state, top_level_prompt_callback=lambda gs: print_and_sleep(get_battle_status_view(gs)),
                          bindings=[
                              SelectionBinding('A', "Attack", Attack),
                              SelectionBinding('I', "Use Item", UseItem),

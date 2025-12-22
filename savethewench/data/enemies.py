@@ -77,7 +77,7 @@ Bosses = [
     # ========================
     #        AREA BOSSES
     # ========================
-    {'name': SLEDGE_HAMMOND, 'hp': 220,
+    {'name': SLEDGE_HAMMOND, 'hp': 250,
      'weapons': [weapons.SLEDGEHAMMER, weapons.AXE, weapons.CHAINSAW, weapons.BRASS_KNUCKLES],
      'bounty': 0, 'type': BOSS, 'preamble': {}},
 
@@ -110,7 +110,7 @@ Bosses = [
          ]},
      ]},
 
-    {'name': CAPTAIN_HOLE, 'hp': 50,
+    {'name': CAPTAIN_HOLE, 'hp': 220,
      'weapons': [weapons.RIFLE, weapons.HARPOON, weapons.KNIFE, weapons.PISTOL],
      'bounty': 0, 'type': BOSS, 'preamble': [
         {'text': "Captain Hole has offered to shoot himself in the jines in exchange for your Tench Filet",
