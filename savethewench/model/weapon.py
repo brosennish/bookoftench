@@ -3,7 +3,11 @@ from dataclasses import dataclass
 from typing import List
 
 from savethewench.data import Weapons
+from savethewench.data.perks import BULLETPROOF
+from savethewench.data.weapons import PISTOL, REVOLVER, RIFLE, SHOTGUN
 from savethewench.model.base import WeaponBase, Buyable
+from savethewench.model.perk import attach_perk_conditional
+
 from savethewench.ui import dim, cyan, orange, red, yellow
 
 
@@ -22,6 +26,18 @@ class Weapon(WeaponBase, Buyable):
     blind_effect: float = 0.0
     blind_turns_min: int = 0
     blind_turns_max: int = 0
+
+    def _is_gun(self):
+        return self.name in (PISTOL, REVOLVER, RIFLE, SHOTGUN)
+
+    def calculate_base_damage(self) -> int:
+        base_damage = super().calculate_base_damage()
+        @attach_perk_conditional(BULLETPROOF, value_description="enemy bullet damage",
+                                 condition=lambda: self._is_gun())
+        def apply_perks():
+            return base_damage
+        return int(apply_perks())
+
 
     def get_blind_effect(self) -> float:
         return self.blind_effect

@@ -32,6 +32,9 @@ class WeaponBase(ABC):
         base = self.damage + random.randint(-self.spread, self.spread)  # Base damage +/- 10
         return max(5, base)  # Damage >= 5
 
+    def get_accuracy(self) -> float:
+        return self.accuracy
+
     def play_sound(self):
         if len(self.sound) > 0:
             play_sound(self.sound)
@@ -136,7 +139,7 @@ class Combatant(ABC):
     def is_alive(self) -> bool:
         return self.hp > 0
 
-    def take_damage(self, damage: int) -> int:
+    def take_damage(self, damage: int, other: "Combatant") -> int:
         self.hp -= damage
         if isinstance(self, NPC):
             self.do_random_dialogue()
@@ -162,7 +165,7 @@ class Combatant(ABC):
                 print_and_sleep(yellow(f"{f"{self.name}'s" if isinstance(self, NPC) else "Your"} accuracy is down "
                                        f"{int(self.blind_effect * 100)}% from {self.blinded_by}!"), 1)
                 self.blind_turns -= 1
-        return self.current_weapon.accuracy * (1 - self.blind_effect)
+        return self.current_weapon.get_accuracy() * (1 - self.blind_effect)
 
     def get_crit_chance(self) -> float:
         return self.current_weapon.crit
@@ -205,10 +208,12 @@ class Combatant(ABC):
 
     def handle_hit(self, other: "Combatant", damage_inflicted: int) -> None:
         self.current_weapon.use()
+        if not self.is_alive(): # solomon train
+            return
         if isinstance(other, NPC):
             print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
-            event_logger.log_event(HitEvent())
+            event_logger.log_event(HitEvent(self.current_weapon.type))
         else:
             print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
@@ -225,5 +230,5 @@ class Combatant(ABC):
             base_damage = self.current_weapon.calculate_base_damage()
             crit = random.random() < self.get_crit_chance()
             dmg = base_damage * 2 if crit else base_damage  # 2x damage if crit, otherwise dmg after spread
-            self.handle_hit(other, other.take_damage(dmg))
+            self.handle_hit(other, other.take_damage(dmg, self))
             self.handle_crit(crit)

@@ -5,26 +5,53 @@ from typing import Dict, List
 from savethewench import event_logger
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
-    VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES
-from savethewench.data.weapons import BARE_HANDS, KNIFE
-from savethewench.ui import yellow, dim, green, cyan
+    VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
+    ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM
+from savethewench.data.weapons import BARE_HANDS, KNIFE, MELEE, PROJECTILE
+from savethewench.ui import yellow, dim, green, cyan, purple
 from savethewench.util import print_and_sleep
 from .achievement import Achievement
 from .base import Combatant, Buyable
 from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent, LevelUpEvent, \
-    SwapWeaponEvent, WeaponBrokeEvent
+    SwapWeaponEvent, WeaponBrokeEvent, HitEvent
 from .item import Item, load_items
-from .perk import attach_perk, perk_is_active, Perk, activate_perk
+from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perk_conditional
 from .weapon import load_weapons, Weapon
+from ..audio import play_sound
+from ..data.audio import RIFLE
+from ..event_logger import subscribe_function
 
+
+@dataclass
+class PlayerWeapon(Weapon):
+
+    def calculate_base_damage(self) -> int:
+        base_damage = super().calculate_base_damage()
+        @attach_perk_conditional(AMBROSE_BLADE, ROSETTI_THE_GYM_RAT, value_description="melee damage",
+                                 condition=lambda: self.type==MELEE)
+        @attach_perk_conditional(KARATE_LESSONS, MARTIAL_ARTS_TRAINING, value_description="bare hands damage",
+                                 condition=lambda: self.name==BARE_HANDS)
+        def apply_perks():
+            return base_damage
+        return int(apply_perks())
+
+    def get_accuracy(self) -> float:
+        @attach_perk_conditional(TENCH_EYES, value_description="projectile accuracy",
+                                 condition=lambda: self.type==PROJECTILE)
+        def apply_perks():
+            return self.accuracy
+        return apply_perks()
+
+    @classmethod
+    def from_weapon(cls, weapon: Weapon):
+        return cls(**weapon.__dict__)
 
 def item_defaults() -> Dict[str, Item]:
     return dict((it.name, it) for it in load_items([TENCH_FILET]))
 
 
-def weapon_defaults() -> Dict[str, Weapon]:
-    return dict((it.name, it) for it in load_weapons([BARE_HANDS, KNIFE]))
-
+def weapon_defaults() -> Dict[str, PlayerWeapon]:
+    return dict((it.name, PlayerWeapon.from_weapon(it)) for it in load_weapons([BARE_HANDS, KNIFE]))
 
 @dataclass
 class Player(Combatant):
@@ -48,12 +75,15 @@ class Player(Combatant):
     _blind = False
     # TODO maybe add starting items/weapons to config file
     items: Dict[str, Item] = field(default_factory=item_defaults)
-    weapon_dict: Dict[str, Weapon] = field(default_factory=weapon_defaults)
+    weapon_dict: Dict[str, PlayerWeapon] = field(default_factory=weapon_defaults)
     achievements: List[Achievement] = field(default_factory=list)
     current_weapon: Weapon = None
 
+    cheat_death_enabled: bool = False
+
     def __post_init__(self):
         self.current_weapon = self.weapon_dict[BARE_HANDS]
+        self._subscribe_listeners()
 
     @property
     @attach_perk(GRAMBLIN_MAN, GRAMBLING_ADDICT, silent=True)
@@ -104,26 +134,14 @@ class Player(Combatant):
             self.items[item.name] = item
             return True
 
+    @attach_perk(HEALTH_NUT, DOCTOR_FISH, value_description="hp gained")
+    def _apply_hp_bonus(self, base: int) -> int:
+        return base
+
     def use_item(self, name: str):
         item = self.items[name]
-        self.gain_hp(item.hp)
-
-        base = item.hp
-        has_nut = perk_is_active(HEALTH_NUT)
-        has_fish = perk_is_active(DOCTOR_FISH)
-
-        bonus = 0
-        if has_nut and has_fish:
-            bonus = int(base * 0.25) + 2
-        elif has_nut:
-            bonus = int(base * 0.25)
-        elif has_fish:
-            bonus = 2
-
-        gain = 0
-        if bonus > 0:
-            gain = min(self.max_hp - self.hp, bonus)
-            self.gain_hp(gain)
+        gain = int(min(self.max_hp - self.hp, self._apply_hp_bonus(item.hp)))
+        self.gain_hp(gain)
 
         # Remove from actual inventory
         del self.items[item.name]
@@ -167,7 +185,7 @@ class Player(Combatant):
             print_and_sleep(yellow("Your weapon sack is full."), 1)
             return False
         else:
-            self.weapon_dict[weapon.name] = weapon
+            self.weapon_dict[weapon.name] = PlayerWeapon.from_weapon(weapon)
             return True
 
     def sell_weapon(self, name: str):
@@ -199,7 +217,7 @@ class Player(Combatant):
         print_and_sleep(green(f"You gained {amount} coins!"), 1)
 
     @staticmethod
-    @attach_perk(INTRO_TO_TENCH) # AP_TENCH_STUDIES won't work as is, but there might be a way
+    @attach_perk(AP_TENCH_STUDIES, INTRO_TO_TENCH, value_description="xp gained")
     def _calculate_xp_from_enemy(enemy: Combatant) -> int:
         return int(enemy.max_hp / 2.8)
 
@@ -258,3 +276,24 @@ class Player(Combatant):
         event_logger.log_event(WeaponBrokeEvent())
         del self.weapon_dict[self.current_weapon.name]
         self.current_weapon = self.weapon_dict[BARE_HANDS]
+
+    def take_damage(self, damage: int, other: Combatant) -> int:
+        if damage >= self.hp:
+            if perk_is_active(SOLOMON_TRAIN) and random.random() < 0.10:
+                play_sound(RIFLE)
+                print_and_sleep(purple("You were saved by Solomon Train!"), 1)
+                return other.take_damage(other.hp, other)
+            elif self.cheat_death_enabled:
+                print_and_sleep(purple("You survived the attack with Death Can Wait!"), 1)
+                self.cheat_death_enabled = False
+                return super().take_damage(self.hp - 1, other)
+        return super().take_damage(damage, other)
+
+    def _subscribe_listeners(self):
+        @subscribe_function(HitEvent)
+        def handle_hit(event: HitEvent):
+            if event.weapon_type == MELEE and perk_is_active(VAMPIRIC_SPERM):
+                if self.hp < self.max_hp:
+                    gain = min(3, self.max_hp - self.hp)
+                    self.gain_hp(gain)
+                    print_and_sleep(purple(f"Restored {gain} HP with Vampiric Sperm!"), 1)

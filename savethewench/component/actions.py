@@ -10,12 +10,12 @@ from savethewench.component.base import RandomThresholdComponent, ThresholdBindi
 from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
 from savethewench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from savethewench.data.items import TENCH_FILET
-from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION
+from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION, DEATH_CAN_WAIT
 from savethewench.event_logger import subscribe_function
 from savethewench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent
 from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
-from savethewench.model.perk import load_perks, Perk, attach_perk
+from savethewench.model.perk import load_perks, Perk, attach_perk, perk_is_active
 from savethewench.model.util import get_battle_status_view, display_player_achievements, \
     display_game_overview, calculate_flee, display_active_perks
 from savethewench.model.weapon import load_discoverable_weapons
@@ -115,31 +115,34 @@ class Attack(Component):
         super().__init__(game_state)
         self.failed_flee = False
 
+    def handle_enemy_death(self, player, enemy):
+        if enemy.type == FINAL_BOSS:
+            self.game_state.victory = True
+            return
+        # TODO maybe put the next 3 lines in an event callback
+        stop_music()
+        play_sound(DEVIL_THUNDER)
+        print_and_sleep(red(f"{enemy.name} is now in Hell."), 2)
+        if enemy.name in self.game_state.wanted:
+            event_logger.log_event(BountyCollectedEvent(enemy.name))
+        enemy_weapon = enemy.drop_weapon()
+        if enemy_weapon is not None:
+            if player.add_weapon(enemy_weapon):
+                print_and_sleep(cyan(f"{enemy_weapon.name} added to sack."), 1)
+        player.gain_coins(enemy.drop_coins())
+        if player.gain_xp_from_enemy(enemy):
+            BankVisitDecision(self.game_state).run()  # TODO figure out a way to not call this in so many places
+        event_logger.log_event(KillEvent())
+        self.game_state.current_area.kill_current_enemy()
+
     def run(self) -> GameState:
         player, enemy = self.game_state.player, self.game_state.current_area.current_enemy
         if not self.failed_flee:
             player.attack(enemy)
-            if not enemy.is_alive():
-                if enemy.type == FINAL_BOSS:
-                    self.game_state.victory = True
-                    return self.game_state
-                # TODO maybe put the next 3 lines in an event callback
-                stop_music()
-                play_sound(DEVIL_THUNDER)
-                print_and_sleep(red(f"{enemy.name} is now in Hell."), 2)
-                if enemy.name in self.game_state.wanted:
-                    event_logger.log_event(BountyCollectedEvent(enemy.name))
-                enemy_weapon = enemy.drop_weapon()
-                if enemy_weapon is not None:
-                    if player.add_weapon(enemy_weapon):
-                        print_and_sleep(cyan(f"{enemy_weapon.name} added to sack."), 1)
-                player.gain_coins(enemy.drop_coins())
-                if player.gain_xp_from_enemy(enemy):
-                    BankVisitDecision(self.game_state).run()  # TODO figure out a way to not call this in so many places
-                event_logger.log_event(KillEvent())
-                self.game_state.current_area.kill_current_enemy()
-                return self.game_state
-        enemy.attack(player)
+        if enemy.is_alive():
+            enemy.attack(player)
+        if not enemy.is_alive():
+            self.handle_enemy_death(player, enemy)
         if not player.is_alive():
             player.lives -= 1
             event_logger.log_event(PlayerDeathEvent(player.lives))
@@ -196,6 +199,8 @@ class Battle(LabeledSelectionComponent):
                              SelectionBinding('P', "Perks", DisplayPerks)
                          ])
         self.player = self.game_state.player
+        if perk_is_active(DEATH_CAN_WAIT):
+            self.player.cheat_death_enabled = True
         self.enemy = self.game_state.current_area.current_enemy
         self.fled = False
         self._subscribe_listeners()

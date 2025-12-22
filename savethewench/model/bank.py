@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 
 from savethewench import event_logger
+from savethewench.data.perks import SLEDGE_FUND
 from savethewench.event_logger import subscribe_function
 from savethewench.model.events import LevelUpEvent, BankWithdrawalEvent, BankDepositEvent
+from savethewench.model.perk import attach_perk
 from savethewench.ui import yellow, green
 from savethewench.util import print_and_sleep
 
@@ -11,10 +13,15 @@ from savethewench.util import print_and_sleep
 class Bank:
     balance: int = 0
     interest: int = 0
-    interest_rate: float = 0.10
+    _interest_rate: float = 0.10
 
     def __post_init__(self):
         self._subscribe_listeners()
+
+    @property
+    @attach_perk(SLEDGE_FUND, silent=True)
+    def interest_rate(self) -> float:
+        return self._interest_rate
 
     def make_deposit(self, amount: int):
         self.balance += amount

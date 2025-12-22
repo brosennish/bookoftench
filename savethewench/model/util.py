@@ -90,7 +90,7 @@ def display_game_overview(game_state: GameState):
     display_stat("Enemies Killed", event_logger.get_count(EventType.KILL), red)
     display_stat("Bounties Claimed", event_logger.get_count(EventType.BOUNTY_COLLECTED), purple)
 
-    display_stat("Areas Cleared", sum(1 for a in game_state.areas if a.enemy_count == 0), blue)
+    display_stat("Areas Cleared", sum(1 for a in game_state.areas if a.enemies_remaining == 0), blue)
     display_stat("Bosses Defeated", sum(1 for a in game_state.areas if a.boss_defeated), red)
 
     display_stat("Items Purchased", event_logger.get_count(EventType.BUY_ITEM), cyan)

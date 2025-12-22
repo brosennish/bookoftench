@@ -1,8 +1,8 @@
 import random
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, TypeVar
 
-from savethewench.data.perks import BROWN_FRIDAY
+from savethewench.data.perks import BROWN_FRIDAY, BARTER_SAUCE, TRADE_SHIP
 from savethewench.event_logger import subscribe_function
 from .base import Buyable
 from .events import LevelUpEvent
@@ -48,6 +48,17 @@ class Shop:
         self.reset_inventory()
         self._subscribe_listeners()
 
+    @attach_perk(BARTER_SAUCE, TRADE_SHIP, silent=True)
+    def _discounted_cost(self, cost):
+        return cost
+
+    B = TypeVar("B", bound=Buyable)
+
+    def apply_discounts(self, buyables: List[B]) -> List[B]:
+        for buyable in buyables:
+            buyable.cost = self._discounted_cost(buyable.cost)
+        return buyables
+
     def remove_listing(self, buyable: Buyable):
         if isinstance(buyable, Item) and buyable in self.item_inventory:
             self.item_inventory.remove(buyable)
@@ -57,10 +68,13 @@ class Shop:
             self.perk_inventory.remove(buyable)
 
     def reset_inventory(self):
-        self.item_inventory = random.sample(self._all_items, k=min(self.max_items, len(self._all_items)))
-        self.weapon_inventory = random.sample([w for w in self._all_weapons if w.sell_value > 0],
-                                              k=min(self.max_weapons, len(self._all_weapons)))
-        self.perk_inventory = random.sample(self._all_perks, k=min(self.max_perks, len(self._all_perks)))
+        self.item_inventory = self.apply_discounts(
+            random.sample(self._all_items, k=min(self.max_items, len(self._all_items))))
+        self.weapon_inventory = self.apply_discounts(
+            random.sample([w for w in self._all_weapons if w.sell_value > 0],
+                                              k=min(self.max_weapons, len(self._all_weapons))))
+        self.perk_inventory = self.apply_discounts(
+            random.sample(self._all_perks, k=min(self.max_perks, len(self._all_perks))))
 
     def _subscribe_listeners(self):
         @subscribe_function(LevelUpEvent)

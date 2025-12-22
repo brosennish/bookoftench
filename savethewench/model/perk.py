@@ -73,17 +73,25 @@ def perk_is_active(perk_name: str) -> bool:
     return load_perk(perk_name).active
 
 
-def attach_perk(*perks: str, value_description: str = "", silent: bool = False):
+def attach_perk_conditional(*perks: str, value_description: str = "",
+                            silent: bool = False, condition: Callable[[], bool]):
     perk_impls = load_perks(lambda p: p.name in set(perks))
 
     def decorator(func):
         def wrapper(*args, **kwargs):
             value = func(*args, **kwargs)
             for perk in perk_impls:
-                if perk.active:
+                if perk.active and condition():
                     value = perk.wrapper(value, value_description, silent)
             return value
 
         return wrapper
 
     return decorator
+
+
+def attach_perk(*perks: str, value_description: str = "", silent: bool = False):
+    return attach_perk_conditional(*perks, value_description=value_description,
+                                   silent=silent, condition=lambda: True)
+
+

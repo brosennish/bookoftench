@@ -53,8 +53,6 @@ class Area:
         self.enemies_killed += 1
         if self.current_enemy == self.boss:
             self.boss_defeated = True
-        else:
-            self.enemy_count -= 1
         self.current_enemy = None
 
     def __hash__(self) -> int:

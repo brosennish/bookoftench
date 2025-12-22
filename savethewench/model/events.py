@@ -73,8 +73,9 @@ class CritEvent(Event):
 
 
 class HitEvent(Event):
-    def __init__(self):
+    def __init__(self, weapon_type: str):
         super().__init__(EventType.HIT)
+        self.weapon_type = weapon_type
 
 
 class KillEvent(Event):
@@ -111,7 +112,7 @@ class LevelUpEvent(Event):
         print(green(f"MAX HP: {old_max_hp} -> {new_max_hp}"))
         if item_reward is not None:
             print(cyan(f"\nReward: {item_reward}"))
-        print_and_sleep(green(f"You were awarded {cash_reward} coins."), 2)
+        print_and_sleep(green(f"You were awarded {cash_reward} of coin."), 2)
 
 
 class SwapWeaponEvent(Event):

@@ -28,8 +28,8 @@ class StartMenu(LabeledSelectionComponent):
 
 
 class NewGame(LinearComponent):
-    def __init__(self, gs: GameState):
-        super().__init__(gs, TutorialDecision)
+    def __init__(self, _: GameState):
+        super().__init__(GameState(), TutorialDecision)
 
     def execute_current(self) -> GameState:
         player = self.game_state.player
