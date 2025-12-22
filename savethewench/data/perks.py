@@ -70,6 +70,7 @@ def _bounded_random_change(original: int, value_description: str, silent: bool, 
 _int_change: Callable[[int, int], int] = lambda orig, i: orig + i
 _percent_change: Callable[[float, int], float] = lambda orig, pct: orig + (float(pct) / 100.0)
 _int_change_by_percent: Callable[[int, int], int] = lambda orig, pct: int(orig * (1 + (float(pct) / 100.0)))
+_float_change_by_percent: Callable[[float, int], float] = lambda orig, pct: orig * (1 + (float(pct) / 100.0))
 
 Perks = [
     {
@@ -226,7 +227,7 @@ Perks = [
         'name': TENCH_EYES,
         'cost': 130,
         'description': "Projectile weapon accuracy +5%",
-        'wrapper': partial(_numeric_change, change=5, name=TENCH_EYES, change_func=_int_change_by_percent)
+        'wrapper': partial(_numeric_change, change=5, name=TENCH_EYES, change_func=_float_change_by_percent)
     },
     {
         'name': DEATH_CAN_WAIT,
