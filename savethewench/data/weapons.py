@@ -45,16 +45,20 @@ Weapons = [
 
     # --- Blinding / Debuff ---
     {'name': PEPPER_SPRAY, 'damage': 6, 'uses': 3, 'accuracy': 0.85, 'spread': 2,
-     'crit': 0.05, 'cost': 25, 'sell_value': 12, 'type': BLIND, 'sound': ''},
+     'crit': 0.05, 'cost': 25, 'sell_value': 12, 'type': BLIND, 'sound': '',
+     'blind_effect': 0.50, 'blind_turns_min': 2, 'blind_turns_max': 4},
 
     {'name': BEAR_SPRAY, 'damage': 0, 'uses': 1, 'accuracy': 0.85, 'spread': 0, 'crit': 0.00,
-     'cost': 60, 'sell_value': 30, 'type': BLIND, 'sound': ''},
+     'cost': 60, 'sell_value': 30, 'type': BLIND, 'sound': '',
+     'blind_effect': 0.75, 'blind_turns_min': 2, 'blind_turns_max': 4},
 
     {'name': CHILI_POWDER, 'damage': 4, 'uses': 1, 'accuracy': 0.90, 'spread': 1,
-     'crit': 0.02, 'cost': 30, 'sell_value': 15, 'type': BLIND, 'sound': ''},
+     'crit': 0.02, 'cost': 30, 'sell_value': 15, 'type': BLIND, 'sound': '',
+     'blind_effect': 0.15, 'blind_turns_min': 3, 'blind_turns_max': 5},
 
     {'name': POCKET_SAND, 'damage': 0, 'uses': 1, 'accuracy': 0.90, 'spread': 0, 'crit': 0.00,
-     'cost': 20, 'sell_value': 8, 'type': BLIND, 'sound': ''},
+     'cost': 20, 'sell_value': 8, 'type': BLIND, 'sound': '',
+     'blind_effect': 0.10, 'blind_turns_min': 3, 'blind_turns_max': 5},
 
     # --- Tier 1 ---
     {'name': KNIFE, 'damage': 16, 'uses': 8, 'accuracy': 0.88, 'spread': 4, 'crit': 0.22,

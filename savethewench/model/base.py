@@ -19,7 +19,7 @@ class Buyable:
 
 
 @dataclass
-class WeaponBase:
+class WeaponBase(ABC):
     name: str
     damage: int
     uses: int
@@ -61,6 +61,14 @@ class WeaponBase:
             f"{dim("Uses:")} {self.format_uses()}"
         ])}"
 
+    @abstractmethod
+    def get_blind_effect(self) -> float:
+        pass
+
+    @abstractmethod
+    def get_blind_turns(self) -> int:
+        pass
+
 
 @dataclass
 class DisplayableText:
@@ -70,6 +78,7 @@ class DisplayableText:
 
     def display(self):
         print_and_sleep(color_text(self.color, self.text) if self.color is not None else self.text, seconds=self.sleep)
+
 
 @dataclass
 class RandomDisplayableText:
@@ -86,6 +95,7 @@ class RandomDisplayableText:
             upper_threshold=data['upper_threshold'],
             dialogue=[DisplayableText(**d) for d in data['dialogue']],
         )
+
 
 @dataclass
 class NPC:
@@ -109,6 +119,7 @@ class NPC:
             data['random_dialogue'] = [RandomDisplayableText.from_dict(d) for d in data['random_dialogue']]
         return cls(**data)
 
+
 @dataclass
 class Combatant(ABC):
     weapon_dict: Dict[str, WeaponBase]
@@ -121,12 +132,6 @@ class Combatant(ABC):
     blinded_by: str = ''
     blind_effect: float = 0.0
     blind_turns: int = 0
-
-    def __post_init__(self):
-        self.blind = False
-        self.blinded_by = ""
-        self.blind_effect = 0.0
-        self.blind_turns = 0
 
     def is_alive(self) -> bool:
         return self.hp > 0
@@ -141,8 +146,23 @@ class Combatant(ABC):
             print_and_sleep(purple("Sledge Hammond took steroids and restored 3 HP!"), 1)
         return damage
 
+    def reset_blindness(self):
+        self.blind: bool = False
+        self.blinded_by: str = ''
+        self.blind_effect: float = 0.0
+        self.blind_turns: int = 0
+
     def calculate_accuracy(self) -> float:
-        return self.current_weapon.accuracy
+        if self.blind:
+            if self.blind_turns == 0:
+                self.reset_blindness()
+                print_and_sleep(purple(f"{f"{self.name} is" if isinstance(self, NPC) else "You are"}"
+                                       f" no longer blind!"),1)
+            else:
+                print_and_sleep(yellow(f"{f"{self.name}'s" if isinstance(self, NPC) else "Your"} accuracy is down "
+                                       f"{int(self.blind_effect * 100)}% from {self.blinded_by}!"), 1)
+                self.blind_turns -= 1
+        return self.current_weapon.accuracy * (1 - self.blind_effect)
 
     def get_crit_chance(self) -> float:
         return self.current_weapon.crit
@@ -166,6 +186,22 @@ class Combatant(ABC):
     def handle_broken_weapon(self):
         pass
 
+    def set_blind_effect(self, blinded_by: str, blind_effect: float, blind_turns: int):
+        self.blind = True
+        self.blinded_by = blinded_by
+        self.blind_effect = blind_effect
+        self.blind_turns = blind_turns
+
+    def handle_blinding(self, other: "Combatant") -> None:
+        blind_effect = self.current_weapon.get_blind_effect()
+        if blind_effect > 0:
+            blind_turns = self.current_weapon.get_blind_turns()
+            other.set_blind_effect(self.current_weapon.name, blind_effect, blind_turns)
+            prefix = f"{other.name} has been" if isinstance(other, NPC) else "You have been"
+            print_and_sleep(
+                purple(f"{prefix} blinded by {self.current_weapon.name}. Accuracy down {int(blind_effect * 100)}% for "
+                       f"{blind_turns} turns"), 1)
+
     def handle_hit(self, other: "Combatant", damage_inflicted: int) -> None:
         self.current_weapon.use()
         if isinstance(other, NPC):
@@ -175,6 +211,7 @@ class Combatant(ABC):
         else:
             print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
+        self.handle_blinding(other)
         if self.current_weapon.is_broken():
             play_sound(WEAPON_BROKE)
             print_and_sleep(yellow(f"{self.current_weapon.name} broke!"), 1)

@@ -1,3 +1,4 @@
+import random
 from dataclasses import dataclass
 from typing import List
 
@@ -17,6 +18,16 @@ class Weapon(WeaponBase, Buyable):
     cost: int
     sell_value: int
     type: str
+
+    blind_effect: float = 0.0
+    blind_turns_min: int = 0
+    blind_turns_max: int = 0
+
+    def get_blind_effect(self) -> float:
+        return self.blind_effect
+
+    def get_blind_turns(self) -> int:
+        return random.randint(self.blind_turns_min, self.blind_turns_max)
 
     def to_sellable_weapon(self):
         return SellableWeapon(**vars(self))

@@ -7,7 +7,7 @@ from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH
 from savethewench.data.weapons import BARE_HANDS, KNIFE
-from savethewench.ui import yellow, dim, green
+from savethewench.ui import yellow, dim, green, cyan
 from savethewench.util import print_and_sleep
 from .achievement import Achievement
 from .base import Combatant, Buyable
@@ -180,6 +180,7 @@ class Player(Combatant):
         if name != self.current_weapon.name:
             event_logger.log_event(SwapWeaponEvent())
             self.current_weapon = self.weapon_dict[name]
+            print_and_sleep(cyan(f"{name} equipped."), 1)
 
     @attach_perk(LUCKY_TENCHS_FIN, value_description="crit chance")
     def get_crit_chance(self) -> float:
