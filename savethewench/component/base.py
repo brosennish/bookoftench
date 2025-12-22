@@ -193,9 +193,9 @@ class ColoredNameSelectionBinding(SelectionBinding):
         return self.color(self.name)
 
 
-def anonymous_component(state_dependent=False) -> Callable[[Callable], type[Component]]:
+def functional_component(state_dependent=False) -> Callable[[Callable], type[Component]]:
     def decorator(func: Callable):
-        class AnonymousComponent(Component):
+        class FunctionalComponent(Component):
             def run(self) -> GameState:
                 if state_dependent:
                     func(self.game_state)
@@ -203,6 +203,6 @@ def anonymous_component(state_dependent=False) -> Callable[[Callable], type[Comp
                     func()
                 return self.game_state
 
-        return AnonymousComponent
+        return FunctionalComponent
 
     return decorator

@@ -5,7 +5,7 @@ from typing import List
 from savethewench import event_logger
 from savethewench.audio import play_music, play_sound, stop_music
 from savethewench.component.base import RandomThresholdComponent, ThresholdBinding, \
-    TextDisplayingComponent, anonymous_component, Component, ColoredNameSelectionBinding, BinarySelectionComponent, \
+    TextDisplayingComponent, functional_component, Component, ColoredNameSelectionBinding, BinarySelectionComponent, \
     NoOpComponent
 from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
 from savethewench.data.enemies import CAPTAIN_HOLE, BOSS
@@ -36,14 +36,14 @@ class Explore(RandomThresholdComponent):
                          ])
 
     @staticmethod
-    @anonymous_component(state_dependent=True)
+    @functional_component(state_dependent=True)
     def _discover_item(game_state: GameState):
         item = random.choice(load_items())
         if game_state.player.add_item(item):
             print_and_sleep(cyan(f"{item.name} added to sack."), 1)
 
     @staticmethod
-    @anonymous_component(state_dependent=True)
+    @functional_component(state_dependent=True)
     def _discover_weapon(game_state: GameState):
         weapon = random.choice(load_discoverable_weapons())
         print_and_sleep(cyan(f"You found a {weapon.name}!"), 1)
@@ -51,7 +51,7 @@ class Explore(RandomThresholdComponent):
             print_and_sleep(cyan(f"{weapon.name} added to sack."), 1)
 
     @staticmethod
-    @anonymous_component(state_dependent=True)
+    @functional_component(state_dependent=True)
     def _discover_coin(game_state: GameState):
         @attach_perk(METAL_DETECTIVE, value_description="coin")
         def find(): return random.randint(10, 25)
@@ -61,7 +61,7 @@ class Explore(RandomThresholdComponent):
         game_state.player.coins += coins
 
     @staticmethod
-    @anonymous_component()
+    @functional_component()
     def _discover_perk():
         filtered: List[Perk] = load_perks(lambda p: not (p.active or p.name == WENCH_LOCATION))
         if len(filtered) > 0:
@@ -77,7 +77,7 @@ class Travel(LabeledSelectionComponent):
         super().__init__(game_state,
                          bindings=[
                              ColoredNameSelectionBinding(key=str(i), name=area.name, color=blue,
-                                                         component=anonymous_component()(
+                                                         component=functional_component()(
                                                              partial(game_state.update_current_area, area.name)))
                              for i, area in enumerate(
                                  sorted([a for a in game_state.areas if a.name != game_state.current_area.name],
@@ -89,7 +89,7 @@ class UseItem(LabeledSelectionComponent):
         super().__init__(game_state,
                          bindings=[SelectionBinding(key=str(i),
                                                     name=item.get_simple_format(),
-                                                    component=anonymous_component()(
+                                                    component=functional_component()(
                                                         partial(game_state.player.use_item, item.name)))
                                    for (i, item) in enumerate(game_state.player.get_items(), 1)],
                          top_level_prompt_callback=lambda gs: gs.player.display_item_count(), quittable=True)
@@ -101,7 +101,7 @@ class EquipWeapon(LabeledSelectionComponent):
                          bindings=[SelectionBinding(
                              key=str(i),
                              name=weapon.get_simple_format(),
-                             component=anonymous_component()(
+                             component=functional_component()(
                                  partial(game_state.player.equip_weapon, weapon.name)))
                              for (i, weapon) in enumerate(game_state.player.get_weapons(), 1)],
                          top_level_prompt_callback=lambda gs: gs.player.display_weapon_count(), quittable=True)
@@ -163,7 +163,7 @@ class TryFlee(RandomThresholdComponent):
         ])
 
     @staticmethod
-    @anonymous_component(state_dependent=True)
+    @functional_component(state_dependent=True)
     def _flee_success(game_state: GameState):
         event_logger.log_event(FleeEvent(game_state.current_area.current_enemy.name))
         if game_state.current_area.current_enemy.type == BOSS:
@@ -206,7 +206,7 @@ class FightBoss(Battle):
         play_music(self.enemy.theme)
 
     @staticmethod
-    @anonymous_component(state_dependent=True)
+    @functional_component(state_dependent=True)
     # TODO generalize this and get it out of component
     def captain_hole_action(game_state: GameState):
         del game_state.player.items[TENCH_FILET]
@@ -233,7 +233,7 @@ class InGameBank(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, bindings=[
             SelectionBinding('W', 'Withdraw', self._make_withdrawal),
-            SelectionBinding('Q', 'Leave', anonymous_component()(self._return))
+            SelectionBinding('Q', 'Leave', functional_component()(self._return))
         ], top_level_prompt_callback=display_bank_balance)
         self.leave_bank = False
 
@@ -245,7 +245,7 @@ class InGameBank(LabeledSelectionComponent):
         return self.leave_bank
 
     @staticmethod
-    @anonymous_component(state_dependent=True)
+    @functional_component(state_dependent=True)
     def _make_withdrawal(game_state: GameState):
         raw_amount = safe_input("How much would you like to withdraw?")
         if raw_amount.isdigit():

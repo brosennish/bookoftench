@@ -1,5 +1,4 @@
 import random
-import time as t
 from abc import abstractmethod
 from functools import partial
 from typing import Callable
@@ -12,14 +11,14 @@ from savethewench.model.perk import perk_is_active
 from savethewench.ui import blue, cyan, green, orange, purple, yellow, dim
 from savethewench.util import print_and_sleep, safe_input
 from .base import LabeledSelectionComponent, SelectionBinding, NoOpComponent, \
-    GatekeepingComponent, anonymous_component, Component
+    GatekeepingComponent, functional_component, Component
 
 
 class CasinoBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, decision_function=lambda: game_state.player.coins > 0,
                          accept_component=CasinoCheck,
-                         deny_component=anonymous_component()(lambda: print_and_sleep(
+                         deny_component=functional_component()(lambda: print_and_sleep(
                              blue("Your paper's no good here.\nCome back with some coins.\n"), 1.5)))
 
 
@@ -28,7 +27,7 @@ def can_gamble(game_state: GameState) -> bool:
     return player.remaining_plays > 0 and player.coins > 0
 
 
-@anonymous_component(state_dependent=True)
+@functional_component(state_dependent=True)
 def display_crapped_out_message(game_state: GameState):
     player = game_state.player
     message = "You're out of plays. Buy a perk or level up, bozo.\n" if player.remaining_plays == 0 else \
@@ -51,7 +50,7 @@ class Casino(LabeledSelectionComponent):
             SelectionBinding('3', "Wet or Dry (WIP)", WetOrDry),
             SelectionBinding('4', "Fish Bones (WIP)", FishBones),
             SelectionBinding('5', "Mystery Box (WIP)", MysteryBox),
-            SelectionBinding('R', "Return", anonymous_component()(lambda: self._return())),
+            SelectionBinding('R', "Return", functional_component()(lambda: self._return())),
         ])
         self.leave_casino = False
         print_and_sleep(blue("Welcome to Riverbroat Crasino.\n"), 3)

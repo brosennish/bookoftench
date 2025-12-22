@@ -3,7 +3,7 @@ from typing import List
 
 from savethewench.audio import play_music
 from savethewench.component.base import Component, LinearComponent, BinarySelectionComponent, \
-    TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, NoOpComponent, anonymous_component
+    TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, NoOpComponent, functional_component
 from savethewench.data.audio import INTRO_THEME
 from savethewench.model import GameState
 from savethewench.model.util import get_player_status_view
@@ -125,7 +125,7 @@ class ExtendedActionMenu(LabeledSelectionComponent):
             SelectionBinding('P', "Perks", DisplayPerks),
             SelectionBinding('O', "Overview", Overview),
             # TODO clean up duplicated code
-            SelectionBinding('R', "Return", anonymous_component()(lambda: self._return()))
+            SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
         ])
         self.leave_menu = False
 
@@ -147,7 +147,7 @@ class InGameMenu(LabeledSelectionComponent):
             SelectionBinding('S', "Save Game", SaveGame),
             SelectionBinding('L', "Load Game", LoadGame),
             # TODO clean up duplicated code
-            SelectionBinding('R', "Return", anonymous_component()(lambda: self._return())),
+            SelectionBinding('R', "Return", functional_component()(lambda: self._return())),
             SelectionBinding('Q', "Quit", QuitGame)
         ])
         self.leave_menu = False
