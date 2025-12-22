@@ -8,19 +8,20 @@ from savethewench.component.base import RandomThresholdComponent, ThresholdBindi
     TextDisplayingComponent, functional_component, Component, ColoredNameSelectionBinding, BinarySelectionComponent, \
     NoOpComponent
 from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
-from savethewench.data.enemies import CAPTAIN_HOLE, BOSS
+from savethewench.data.enemies import CAPTAIN_HOLE
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION
 from savethewench.event_logger import subscribe_function
-from savethewench.model.events import KillEvent, BankWithdrawalEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent
+from savethewench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent
 from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
 from savethewench.model.perk import load_perks, Perk, attach_perk
-from savethewench.model.util import get_battle_status_view, display_bank_balance, display_player_achievements, \
+from savethewench.model.util import get_battle_status_view, display_player_achievements, \
     display_game_overview, calculate_flee, display_active_perks
 from savethewench.model.weapon import load_discoverable_weapons
 from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
-from savethewench.util import print_and_sleep, safe_input
+from savethewench.util import print_and_sleep
+from .bank import BankVisitDecision
 from .base import LabeledSelectionComponent, SelectionBinding
 
 
@@ -130,7 +131,8 @@ class Attack(Component):
                     if player.add_weapon(enemy_weapon):
                         print_and_sleep(cyan(f"{enemy_weapon.name} added to sack."), 1)
                 player.gain_coins(enemy.drop_coins())
-                player.gain_xp_from_enemy(enemy)
+                if player.gain_xp_from_enemy(enemy):
+                    BankVisitDecision(self.game_state).run()  # TODO figure out a way to not call this in so many places
                 event_logger.log_event(KillEvent())
                 self.game_state.current_area.kill_current_enemy()
                 return self.game_state
@@ -168,7 +170,8 @@ class TryFlee(RandomThresholdComponent):
     @functional_component(state_dependent=True)
     def _flee_success(game_state: GameState):
         event_logger.log_event(FleeEvent(game_state.current_area.current_enemy.name))
-        game_state.player.gain_xp_other(1)  # TODO perk
+        if game_state.player.gain_xp_other(1):
+            BankVisitDecision(game_state).run()  # TODO figure out a way to not call this in so many places
 
 
 class Battle(LabeledSelectionComponent):
@@ -228,34 +231,6 @@ class FightBoss(Battle):
                                      yes_component=self.captain_hole_action,
                                      no_component=NoOpComponent).run()
         return super().run()
-
-
-class InGameBank(LabeledSelectionComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state, bindings=[
-            SelectionBinding('W', 'Withdraw', self._make_withdrawal),
-            SelectionBinding('Q', 'Leave', functional_component()(self._return))
-        ], top_level_prompt_callback=display_bank_balance)
-        self.leave_bank = False
-
-    def _return(self):  # TODO stop duplicating this pattern
-        print_and_sleep(blue("Very well..."), 1)
-        self.leave_bank = True
-
-    def can_exit(self):
-        return self.leave_bank
-
-    @staticmethod
-    @functional_component(state_dependent=True)
-    def _make_withdrawal(game_state: GameState):
-        raw_amount = safe_input("How much would you like to withdraw?")
-        if raw_amount.isdigit():
-            amount = int(raw_amount)
-            if game_state.bank.make_withdrawal(amount):
-                game_state.player.coins += amount
-                event_logger.log_event(BankWithdrawalEvent(amount))
-        else:
-            print(yellow("Invalid choice."))
 
 
 class Achievements(TextDisplayingComponent):

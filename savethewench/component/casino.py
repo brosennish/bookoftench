@@ -10,6 +10,7 @@ from savethewench.model.game_state import GameState
 from savethewench.model.perk import perk_is_active
 from savethewench.ui import blue, cyan, green, orange, purple, yellow, dim
 from savethewench.util import print_and_sleep, safe_input
+from .bank import BankVisitDecision
 from .base import LabeledSelectionComponent, SelectionBinding, NoOpComponent, \
     GatekeepingComponent, functional_component, Component
 
@@ -139,7 +140,8 @@ class KrillOrKray(CasinoGame):
             player.casino_won += payout
             print_and_sleep(green(f"Lucky guess, bozo! You won {payout} coins.\n"), 0.5)
             play_sound(GOLF_CLAP)
-            player.gain_xp_other(1)
+            if player.gain_xp_other(1):
+                BankVisitDecision(self.game_state).run() # TODO figure out a way to not call this in so many places
         else:
             print_and_sleep(
                 blue("Bozo's blunder. Classic. Could've seen that coming from six or eight miles away.\n"), 0.5)
@@ -224,7 +226,9 @@ Rules:
                 player.coins += payout
                 if self.turn == len(self.ladder):
                     print(f"{blue("You've completed the final round.")}\n")
-                    player.gain_xp_other(3)
+                    if player.gain_xp_other(3):
+                        BankVisitDecision(
+                            self.game_state).run()  # TODO figure out a way to not call this in so many places
                 print(f"{green(f"You cashed out {payout} coins!")}\n")
                 player.casino_won += payout
                 self.player_quit = True

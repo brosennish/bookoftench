@@ -10,7 +10,8 @@ from savethewench.model.util import get_player_status_view
 from savethewench.ui import red
 from savethewench.util import print_and_sleep, safe_input
 from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, DisplayPerks, Overview, \
-    FightBoss, InGameBank
+    FightBoss
+from .bank import WithdrawalOnlyBank
 from .casino import CasinoBouncer
 from .shop import ShopComponent
 
@@ -120,7 +121,7 @@ class ExtendedActionMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, bindings=[
             SelectionBinding('A', "Achievements", Achievements),
-            SelectionBinding('B', "Bank", InGameBank),
+            SelectionBinding('B', "Bank", WithdrawalOnlyBank),
             SelectionBinding('C', "Casino", CasinoBouncer),
             SelectionBinding('P', "Perks", DisplayPerks),
             SelectionBinding('O', "Overview", Overview),

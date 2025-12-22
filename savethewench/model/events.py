@@ -87,10 +87,16 @@ class MissEvent(Event):
         super().__init__(EventType.MISS)
 
 
+class BankDepositEvent(Event):
+    def __init__(self, amount: int):
+        super().__init__(EventType.DEPOSIT, lambda:
+        print_and_sleep(f"You deposited {green(amount)} of coin into the bank.", 1))
+
+
 class BankWithdrawalEvent(Event):
     def __init__(self, amount: int):
         super().__init__(EventType.WITHDRAW, lambda:
-        print_and_sleep(f"You withdrew {green(amount)} coins from the bank.\n", 1))
+        print_and_sleep(f"You withdrew {green(amount)} of coin from the bank.", 1))
 
 
 class LevelUpEvent(Event):
@@ -105,7 +111,7 @@ class LevelUpEvent(Event):
         print(green(f"MAX HP: {old_max_hp} -> {new_max_hp}"))
         if item_reward is not None:
             print(cyan(f"\nReward: {item_reward}"))
-        print_and_sleep(green(f"\nYou were awarded {cash_reward} coins."), 2)
+        print_and_sleep(green(f"You were awarded {cash_reward} coins."), 2)
 
 
 class SwapWeaponEvent(Event):
