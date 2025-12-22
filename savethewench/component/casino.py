@@ -53,7 +53,7 @@ class Casino(LabeledSelectionComponent):
             SelectionBinding('R', "Return", functional_component()(lambda: self._return())),
         ])
         self.leave_casino = False
-        print_and_sleep(blue("Welcome to Riverbroat Crasino.\n"), 3)
+        print_and_sleep(blue("Welcome to Riverbroat Crasino."), 3)
 
     def _return(self):
         self.leave_casino = True
@@ -77,7 +77,7 @@ class CasinoGame(Component):
 
     def get_wager_or_quit(self) -> int:
         player = self.game_state.player
-        print(f"Coins: {green(player.coins)} {dim('|')} Plays: {cyan(player.remaining_plays)}\n")
+        print_and_sleep(f"Coins: {green(player.coins)} {dim('|')} Plays: {cyan(player.remaining_plays)}\n")
         while True:
             raw_wager = safe_input("[#] Wager\n"
                                    "[q] Leave").strip().lower()
@@ -139,7 +139,7 @@ class KrillOrKray(CasinoGame):
             player.casino_won += payout
             print_and_sleep(green(f"Lucky guess, bozo! You won {payout} coins.\n"), 0.5)
             play_sound(GOLF_CLAP)
-            player.xp += 2 if perk_is_active(AP_TENCH_STUDIES) else 1
+            player.gain_xp_other(1)
         else:
             print_and_sleep(
                 blue("Bozo's blunder. Classic. Could've seen that coming from six or eight miles away.\n"), 0.5)
@@ -224,7 +224,7 @@ Rules:
                 player.coins += payout
                 if self.turn == len(self.ladder):
                     print(f"{blue("You've completed the final round.")}\n")
-                    player.xp += 4 if perk_is_active(AP_TENCH_STUDIES) else 3
+                    player.gain_xp_other(3)
                 print(f"{green(f"You cashed out {payout} coins!")}\n")
                 player.casino_won += payout
                 self.player_quit = True

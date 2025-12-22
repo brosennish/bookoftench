@@ -5,7 +5,7 @@ from typing import Dict, List
 from savethewench import event_logger
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
-    VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH
+    VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES
 from savethewench.data.weapons import BARE_HANDS, KNIFE
 from savethewench.ui import yellow, dim, green, cyan
 from savethewench.util import print_and_sleep
@@ -130,7 +130,7 @@ class Player(Combatant):
         event_logger.log_event(ItemUsedEvent(item.name, len(self.items), self.hp, self.max_hp, gain))
 
     def make_purchase(self, buyable: Buyable) -> bool:
-        if self.coins <= buyable.cost:
+        if self.coins < buyable.cost:
             print_and_sleep(yellow(f"Need more coin"), 1)
             return False
         if isinstance(buyable, Item) and self.add_item(buyable):
@@ -205,9 +205,12 @@ class Player(Combatant):
 
     def gain_xp_from_enemy(self, enemy: Combatant) -> bool:
         amount = self._calculate_xp_from_enemy(enemy)
-        return self.gain_xp(amount)
+        return self._gain_xp(amount)
 
-    def gain_xp(self, amount: int) -> bool:
+    def gain_xp_other(self, amount: int) -> bool:
+        return self._gain_xp(amount + 1) if perk_is_active(AP_TENCH_STUDIES) else self._gain_xp(amount)
+
+    def _gain_xp(self, amount: int) -> bool:
         self.xp += amount
         print_and_sleep(green(f"You gained {amount} XP!"), 1)
 

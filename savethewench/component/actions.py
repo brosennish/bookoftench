@@ -168,8 +168,7 @@ class TryFlee(RandomThresholdComponent):
     @functional_component(state_dependent=True)
     def _flee_success(game_state: GameState):
         event_logger.log_event(FleeEvent(game_state.current_area.current_enemy.name))
-        if game_state.current_area.current_enemy.type == BOSS:
-            game_state.player.gain_xp(1)  # TODO perk
+        game_state.player.gain_xp_other(1)  # TODO perk
 
 
 class Battle(LabeledSelectionComponent):
