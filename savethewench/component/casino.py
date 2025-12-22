@@ -121,8 +121,7 @@ class KrillOrKray(CasinoGame):
                               f"{orange("k for krill")} {dim('|')} {orange("c for cray")}").strip().lower()
             if pick in ('k', 'c'):
                 return pick
-            print(yellow("Invalid choice."))
-            t.sleep(1)
+            print_and_sleep(yellow("Invalid choice."), 1)
 
     @staticmethod
     def get_payout(wager: int) -> int:

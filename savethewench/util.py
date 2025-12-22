@@ -1,3 +1,4 @@
+import select
 import sys
 import termios
 import time as t
@@ -11,9 +12,19 @@ def flush_input():
         termios.tcflush(sys.stdin, termios.TCIFLUSH)
 
 
+def skippable_sleep(seconds):
+    end = t.time() + seconds
+    while t.time() < end:
+        r, _, _ = select.select([sys.stdin], [], [], 0)
+        if r:
+            sys.stdin.readline()
+            return
+        t.sleep(0.05)
+
+
 def print_and_sleep(text: str, seconds: float = 0, newline_prefix: bool = True):
     print(f"{'\n' if newline_prefix else ''}{text}")
-    t.sleep(seconds)
+    skippable_sleep(seconds)
 
 
 def safe_input(prompt=""):
