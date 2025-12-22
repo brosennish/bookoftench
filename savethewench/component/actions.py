@@ -28,11 +28,11 @@ class Explore(RandomThresholdComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
                          bindings=[
-                             ThresholdBinding(0.5, Battle),
-                             ThresholdBinding(0.6, self._discover_item),
-                             ThresholdBinding(0.68, self._discover_weapon),
-                             ThresholdBinding(0.88, self._discover_coin),
-                             ThresholdBinding(0.89, self._discover_perk)
+                             ThresholdBinding(0.45, Battle),
+                             ThresholdBinding(0.55, self._discover_item),
+                             ThresholdBinding(0.65, self._discover_weapon),
+                             ThresholdBinding(0.85, self._discover_coin),
+                             ThresholdBinding(0.86, self._discover_perk)
                          ])
 
     @staticmethod
@@ -66,8 +66,10 @@ class Explore(RandomThresholdComponent):
         filtered: List[Perk] = load_perks(lambda p: not (p.active or p.name == WENCH_LOCATION))
         if len(filtered) > 0:
             reward = random.choice(filtered)
+            print_and_sleep(purple("You sense a noble presence..."), 2)
+            print_and_sleep(purple("It's a mensch!"), 2)
+            print_and_sleep(purple(f"He's gifted you the {reward.name} perk!\n{reward.description}"), 2)
             reward.activate()
-            print_and_sleep(purple(f"You found the {reward.name} perk!\n{reward.description}"), 1)
         else:
             print_and_sleep(yellow(dim("You came up dry.")), 1)
 
