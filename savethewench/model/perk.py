@@ -166,7 +166,7 @@ def attach_perk_conditional(*perks: str, value_description: str = "",
         def wrapper(*args, **kwargs):
             value = func(*args, **kwargs)
             for perk in perk_impls:
-                if perk.active and condition():
+                if perk_is_active(perk.name) and condition():
                     value = perk.get_wrapper()(value, value_description, silent)
             return value
 
