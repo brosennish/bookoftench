@@ -28,7 +28,7 @@ class PurchaseEvent(Event):
 
     def _callback(self, name, amount):
         play_sound(PURCHASE)
-        print_and_sleep(green(f"You purchased {name} for {amount} coins."), 1)
+        print_and_sleep(green(f"You purchased {name} for {amount} of coin."), 1)
         self.sub_callback()
 
 
@@ -58,7 +58,7 @@ class BuyPerkEvent(PurchaseEvent):
 class ItemSoldEvent(Event):
     def __init__(self, name: str, value: int):
         super().__init__(EventType.SELL_ITEM,
-                         lambda: print_and_sleep(green(f"You sold {name} for {value} coins.\n"), 1))
+                         lambda: print_and_sleep(green(f"You sold {name} for {value} of coin.\n"), 1))
 
 
 class TravelEvent(Event):

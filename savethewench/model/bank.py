@@ -5,7 +5,7 @@ from savethewench.data.perks import SLEDGE_FUND
 from savethewench.event_logger import subscribe_function
 from savethewench.model.events import LevelUpEvent, BankWithdrawalEvent, BankDepositEvent
 from savethewench.model.perk import attach_perk
-from savethewench.ui import yellow, green
+from savethewench.ui import yellow
 from savethewench.util import print_and_sleep
 
 

@@ -51,6 +51,7 @@ class BankComponent(LabeledSelectionComponent):
             amount = int(raw_amount)
             if amount <= game_state.player.coins:
                 game_state.bank.make_deposit(amount)
+                game_state.player.coins -= amount
             else:
                 print_and_sleep(yellow("You don't have that many coins."), 1)
         else:

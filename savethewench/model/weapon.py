@@ -1,5 +1,5 @@
 import random
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 
 from savethewench.data import Weapons
@@ -27,11 +27,16 @@ class Weapon(WeaponBase, Buyable):
     blind_turns_min: int = 0
     blind_turns_max: int = 0
 
+
+
     def _is_gun(self):
         return self.name in (PISTOL, REVOLVER, RIFLE, SHOTGUN)
 
+    def calculate_base_damage_no_perk(self) -> int:
+        return super().calculate_base_damage()
+
     def calculate_base_damage(self) -> int:
-        base_damage = super().calculate_base_damage()
+        base_damage = self.calculate_base_damage_no_perk()
         @attach_perk_conditional(BULLETPROOF, value_description="enemy bullet damage",
                                  condition=lambda: self._is_gun())
         def apply_perks():
@@ -60,6 +65,26 @@ class Weapon(WeaponBase, Buyable):
 
 @dataclass
 class SellableWeapon(Weapon):
+
+    _sell_value: int = field(init=False)
+
+    def __post_init__(self):
+        self._sell_value = self.sell_value
+
+    @property
+    def sell_value(self):
+        max_uses = load_weapon(self.name).uses # TODO optimize out object construction overhead
+        if max_uses == -1:
+            return self._sell_value
+
+        proportion = self.uses / max_uses
+        price = self._sell_value * proportion
+        return max(int(price), 1)
+
+    @sell_value.setter
+    def sell_value(self, value):
+        self._sell_value = value
+
     def __repr__(self):
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),

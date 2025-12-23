@@ -25,7 +25,7 @@ from ..event_logger import subscribe_function
 class PlayerWeapon(Weapon):
 
     def calculate_base_damage(self) -> int:
-        base_damage = super().calculate_base_damage()
+        base_damage = self.calculate_base_damage_no_perk()
 
         @attach_perk_conditional(AMBROSE_BLADE, ROSETTI_THE_GYM_RAT, value_description="melee damage",
                                  condition=lambda: self.type == MELEE)
@@ -192,10 +192,10 @@ class Player(Combatant):
             return True
 
     def sell_weapon(self, name: str):
-        weapon = self.weapon_dict[name]
-        self.coins += weapon.sell_value
+        sellable_weapon = self.weapon_dict[name].to_sellable_weapon()
+        self.coins += sellable_weapon.sell_value
         del self.weapon_dict[name]
-        event_logger.log_event(ItemSoldEvent(weapon.name, weapon.sell_value))
+        event_logger.log_event(ItemSoldEvent(sellable_weapon.name, sellable_weapon.sell_value))
 
     def equip_weapon(self, name: str):
         if name != self.current_weapon.name:
@@ -274,6 +274,8 @@ class Player(Combatant):
         self.current_weapon = self.weapon_dict[BARE_HANDS]
         self.hp = self.max_hp
         self.xp = 0
+        self.blind = False
+        self.blind_turns = 0
 
     def handle_broken_weapon(self):
         event_logger.log_event(WeaponBrokeEvent())

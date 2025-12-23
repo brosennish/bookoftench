@@ -50,7 +50,8 @@ class GameState:
     def __post_init__(self):
         if self.current_area is None:
             self.current_area = self.areas[0]
-        self.refresh_bounty()
+        if len(self.wanted) == 0:
+            self.refresh_bounty()
         event_logger.set_counter(self.event_counter)
         set_achievement_cache(self.achievement_cache)
         set_perk_cache(self.perk_cache)

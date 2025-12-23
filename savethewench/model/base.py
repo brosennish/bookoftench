@@ -206,10 +206,14 @@ class Combatant(ABC):
                     purple(f"{prefix} blinded by {self.current_weapon.name}. Accuracy down {int(blind_effect * 100)}% for "
                            f"{blind_turns} turns"), 1)
 
-    def handle_hit(self, other: "Combatant", damage_inflicted: int) -> None:
+    def handle_hit(self, other: "Combatant") -> None:
         self.current_weapon.use()
         if not self.is_alive(): # solomon train
             return
+        base_damage = self.current_weapon.calculate_base_damage()
+        crit = random.random() < self.get_crit_chance()
+        damage_inflicted = base_damage * 2 if crit else base_damage  # 2x damage if crit, otherwise dmg after spread
+        other.take_damage(damage_inflicted, self)
         if isinstance(other, NPC):
             print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
@@ -217,6 +221,7 @@ class Combatant(ABC):
         else:
             print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
+        self.handle_crit(crit)
         self.handle_blinding(other)
         if self.current_weapon.is_broken():
             play_sound(WEAPON_BROKE)
@@ -227,8 +232,4 @@ class Combatant(ABC):
         if random.random() > self.calculate_accuracy():
             self.handle_miss()
         else:
-            base_damage = self.current_weapon.calculate_base_damage()
-            crit = random.random() < self.get_crit_chance()
-            dmg = base_damage * 2 if crit else base_damage  # 2x damage if crit, otherwise dmg after spread
-            self.handle_hit(other, other.take_damage(dmg, self))
-            self.handle_crit(crit)
+            self.handle_hit(other)
