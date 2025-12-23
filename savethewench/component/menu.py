@@ -199,7 +199,6 @@ class LoadGame(LinearComponent):
                 partial(self.set_save_file, f"{save_dir}/{fn}")))
             for (i, fn) in enumerate(sorted(os.listdir(save_dir)), 1)
         ]).run()
-
         if self.save_file is not None:
             with open(self.save_file, "rb") as f:
                 self.game_state = pickle.load(f)

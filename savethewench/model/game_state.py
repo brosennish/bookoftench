@@ -1,7 +1,7 @@
 import random
 from collections import Counter
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Dict
 
 from savethewench import event_logger
 from savethewench.audio import play_music
@@ -9,12 +9,12 @@ from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
 from savethewench.event_logger import subscribe_function
 from savethewench.ui import green
 from savethewench.util import print_and_sleep
-from .achievement import AchievementEvent, set_achievement_cache, load_achievements
+from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
 from .bank import Bank
 from .enemy import Enemy, load_enemy
 from .events import TravelEvent, BountyCollectedEvent
-from .perk import attach_perk
+from .perk import attach_perk, Perk, set_perk_cache
 from .player import Player
 from .shop import Shop
 
@@ -35,6 +35,8 @@ class GameState:
     victory = False
 
     event_counter: Counter = field(default_factory=Counter)
+    perk_cache: Dict[str, Perk] = field(default_factory=dict)
+    achievement_cache: Dict[str, Achievement] = field(default_factory=dict)
 
     @property
     @attach_perk(TENCH_THE_BOUNTY_HUNTER, silent=True)
@@ -49,7 +51,8 @@ class GameState:
         self.current_area = self.areas[0]
         self.refresh_bounty()
         event_logger.set_counter(self.event_counter)
-        set_achievement_cache({})
+        set_achievement_cache(self.achievement_cache)
+        set_perk_cache(self.perk_cache)
         load_achievements()
         self._subscribe_listeners()
 
@@ -83,3 +86,8 @@ class GameState:
 
     def is_final_boss_available(self) -> bool:
         return self.current_area.boss_defeated and (self.wench_area == self.current_area) and not self.victory
+
+    # for loading from save file
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        self.__post_init__()
