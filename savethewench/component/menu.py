@@ -179,17 +179,18 @@ class SaveGame(Component):
         return self.game_state
 
 
-class LoadGame(LinearComponent):
+class LoadGame(Component):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, next_component=ActionMenu)
+        super().__init__(game_state)
         self.save_file = None
 
     def set_save_file(self, save_file: str):
         self.save_file = save_file
 
-    def execute_current(self) -> GameState:
+    def run(self) -> GameState:
         save_dir = "saves"
-        saves = dict((str(i), n) for (i, n) in enumerate(set(fn.split(".")[0] for fn in os.listdir(save_dir))))
+        saves = dict((str(i), n) for (i, n) in enumerate(set(fn.split(".")[0] for fn in os.listdir(save_dir)))) \
+            if os.path.isdir(save_dir) else {}
         if len(saves) == 0:
             print_and_sleep(red("No saved games exist."))
             return self.game_state
@@ -198,8 +199,9 @@ class LoadGame(LinearComponent):
             SelectionBinding(str(i), fn.split(".")[0], functional_component()(
                 partial(self.set_save_file, f"{save_dir}/{fn}")))
             for (i, fn) in enumerate(sorted(os.listdir(save_dir)), 1)
-        ]).run()
+        ], quittable=True).run()
         if self.save_file is not None:
             with open(self.save_file, "rb") as f:
                 self.game_state = pickle.load(f)
+            return ActionMenu(self.game_state).run()
         return self.game_state
