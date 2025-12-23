@@ -81,3 +81,8 @@ class Shop:
         @subscribe_function(LevelUpEvent, PlayerDeathEvent)
         def handle_level_up(_: Event):
             self.reset_inventory()
+
+    # for loading from save file
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        self._subscribe_listeners()

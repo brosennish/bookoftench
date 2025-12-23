@@ -302,3 +302,8 @@ class Player(Combatant):
                     gain = min(3, self.max_hp - self.hp)
                     self.gain_hp(gain)
                     print_and_sleep(purple(f"Restored {gain} HP with Vampiric Sperm!"), 1)
+
+    # for loading from save file
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        self._subscribe_listeners()
