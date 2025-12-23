@@ -1,4 +1,4 @@
-from savethewench.audio import play_sound, stop_all_sounds
+from savethewench.audio import play_sound
 from savethewench.component.base import GatekeepingComponent, TextDisplayingComponent, BinarySelectionComponent, \
     LinearComponent
 from savethewench.component.menu import ActionMenu

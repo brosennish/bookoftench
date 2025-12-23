@@ -1,7 +1,7 @@
 import copy
 import random
 from dataclasses import dataclass, field
-from functools import cache, partial
+from functools import partial
 from typing import List, Callable, Dict
 from typing import TypeVar
 
@@ -144,7 +144,6 @@ def load_perks(perk_filter: Callable[[Perk], bool] = lambda _: True) -> List[Per
     return res
 
 
-@cache
 def load_perk(perk_name: str) -> Perk:
     if perk_name in _PERKS:
         return _PERKS[perk_name]

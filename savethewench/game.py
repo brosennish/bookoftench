@@ -1,7 +1,6 @@
 from savethewench.audio import stop_all_sounds
 from savethewench.component import InitGame
 from savethewench.component.base import Component
-from savethewench.event_base import EventType
 from savethewench.model import GameState
 from savethewench.model.perk import load_perks
 from savethewench.model.player import PlayerWeapon

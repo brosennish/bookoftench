@@ -124,7 +124,7 @@ class Attack(Component):
         stop_music()
         play_sound(DEVIL_THUNDER)
         print_and_sleep(red(f"{enemy.name} is now in Hell."), 2)
-        if enemy.name in self.game_state.wanted:
+        if self.game_state.is_wanted(enemy):
             event_logger.log_event(BountyCollectedEvent(enemy.name))
         enemy_weapon = enemy.drop_weapon()
         if enemy_weapon is not None:

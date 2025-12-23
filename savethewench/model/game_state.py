@@ -48,7 +48,8 @@ class GameState:
         self._bounty = value
 
     def __post_init__(self):
-        self.current_area = self.areas[0]
+        if self.current_area is None:
+            self.current_area = self.areas[0]
         self.refresh_bounty()
         event_logger.set_counter(self.event_counter)
         set_achievement_cache(self.achievement_cache)
@@ -86,6 +87,9 @@ class GameState:
 
     def is_final_boss_available(self) -> bool:
         return self.current_area.boss_defeated and (self.wench_area == self.current_area) and not self.victory
+
+    def is_wanted(self, combatant):
+        return self.wanted in combatant.name
 
     # for loading from save file
     def __setstate__(self, state):
