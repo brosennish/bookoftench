@@ -31,19 +31,27 @@ class Achievement:
     active: bool = False
 
     def activation_action(self, player: Player):
+        reward_str: str = ''
+        reward_callback = lambda: None # so we can print the achievement unlock before any reward messaging
         match self.reward_type:
             case RewardType.XP:
-                player.gain_xp_other(self.reward_value)
+                reward_callback = lambda: player.gain_xp_other(self.reward_value)
+                reward_str = f"{self.reward_value} XP"
             case RewardType.COIN:
-                player.gain_coins(self.reward_value)
+                reward_callback = lambda: player.gain_coins(self.reward_value)
+                reward_str = f"{self.reward_value} of coin"
             case RewardType.PERK:
                 # TODO - this is duplicated
                 filtered: List[Perk] = load_perks(lambda p: not (p.active or p.name == WENCH_LOCATION))
                 if len(filtered) > 0:
                     reward: Perk = random.choice(filtered)
-                    reward.activate()
+                    reward_callback = lambda: reward.activate()
+                    reward_str = f"{reward.name} | {reward.description}"
             case _:
                 raise NotImplementedError(f"No reward type: {self.reward_type}")
+        print_and_sleep(orange(f"ACHIEVEMENT UNLOCKED: {self.name} ({self.description})"
+                               f"{f"\nReward: {reward_str}" if len(reward_str) > 0 else ''}"), 2)
+        reward_callback()
 
 
 class AchievementEvent(Event):
@@ -53,8 +61,6 @@ class AchievementEvent(Event):
 
     def activate(self, player: Player):
         self.achievement.active = True
-        print_and_sleep(orange(f"ACHIEVEMENT UNLOCKED: {self.achievement.name}\n"
-                               f"Reward: {self.achievement.description}"), 3)
         self.achievement.activation_action(player)
 
 @dataclass
