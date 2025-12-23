@@ -47,7 +47,8 @@ class Explore(RandomThresholdComponent):
     @functional_component(state_dependent=True)
     def _discover_weapon(game_state: GameState):
         weapon = random.choice(load_discoverable_weapons())
-        print_and_sleep(cyan(f"You found a {weapon.name}!"), 1)
+        print_and_sleep(cyan(f"You found {'an' if weapon.name[0].lower() in "aeiou" else 'a'} {weapon.name}!"),
+                        1)
         if game_state.player.add_weapon(weapon):
             print_and_sleep(cyan(f"{weapon.name} added to sack."), 1)
 

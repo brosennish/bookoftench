@@ -9,6 +9,7 @@ from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
 from savethewench.event_logger import subscribe_function
 from savethewench.ui import green
 from savethewench.util import print_and_sleep
+from .achievement import AchievementEvent, set_achievement_cache, load_achievements
 from .area import Area, load_areas
 from .bank import Bank
 from .enemy import Enemy, load_enemy
@@ -48,6 +49,8 @@ class GameState:
         self.current_area = self.areas[0]
         self.refresh_bounty()
         event_logger.set_counter(self.event_counter)
+        set_achievement_cache({})
+        load_achievements()
         self._subscribe_listeners()
 
     def refresh_bounty(self):
@@ -73,6 +76,10 @@ class GameState:
             print_and_sleep(green(f"You killed {event.enemy_name} and collected a bounty of {self.bounty} coins!"), 1)
             self.player.coins += self.bounty
             self.refresh_bounty()
+
+        @subscribe_function(AchievementEvent)
+        def handle_achievement_event(event: AchievementEvent):
+            event.activate(self.player)
 
     def is_final_boss_available(self) -> bool:
         return self.current_area.boss_defeated and (self.wench_area == self.current_area) and not self.victory

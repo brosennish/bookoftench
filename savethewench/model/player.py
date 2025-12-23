@@ -10,7 +10,6 @@ from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, G
 from savethewench.data.weapons import BARE_HANDS, KNIFE, MELEE, PROJECTILE
 from savethewench.ui import yellow, dim, green, cyan, purple
 from savethewench.util import print_and_sleep
-from .achievement import Achievement
 from .base import Combatant, Buyable
 from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent, LevelUpEvent, \
     SwapWeaponEvent, WeaponBrokeEvent, HitEvent
@@ -27,24 +26,28 @@ class PlayerWeapon(Weapon):
 
     def calculate_base_damage(self) -> int:
         base_damage = super().calculate_base_damage()
+
         @attach_perk_conditional(AMBROSE_BLADE, ROSETTI_THE_GYM_RAT, value_description="melee damage",
-                                 condition=lambda: self.type==MELEE)
+                                 condition=lambda: self.type == MELEE)
         @attach_perk_conditional(KARATE_LESSONS, MARTIAL_ARTS_TRAINING, value_description="bare hands damage",
-                                 condition=lambda: self.name==BARE_HANDS)
+                                 condition=lambda: self.name == BARE_HANDS)
         def apply_perks():
             return base_damage
+
         return int(apply_perks())
 
     def get_accuracy(self) -> float:
         @attach_perk_conditional(TENCH_EYES, value_description="projectile accuracy",
-                                 condition=lambda: self.type==PROJECTILE)
+                                 condition=lambda: self.type == PROJECTILE)
         def apply_perks():
             return self.accuracy
+
         return apply_perks()
 
     @classmethod
     def from_weapon(cls, weapon: Weapon):
         return cls(**weapon.__dict__)
+
 
 def item_defaults() -> Dict[str, Item]:
     return dict((it.name, it) for it in load_items([TENCH_FILET]))
@@ -52,6 +55,7 @@ def item_defaults() -> Dict[str, Item]:
 
 def weapon_defaults() -> Dict[str, PlayerWeapon]:
     return dict((it.name, PlayerWeapon.from_weapon(it)) for it in load_weapons([BARE_HANDS, KNIFE]))
+
 
 @dataclass
 class Player(Combatant):
@@ -76,7 +80,6 @@ class Player(Combatant):
     # TODO maybe add starting items/weapons to config file
     items: Dict[str, Item] = field(default_factory=item_defaults)
     weapon_dict: Dict[str, PlayerWeapon] = field(default_factory=weapon_defaults)
-    achievements: List[Achievement] = field(default_factory=list)
     current_weapon: Weapon = None
 
     cheat_death_enabled: bool = False

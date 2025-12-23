@@ -4,6 +4,7 @@ from savethewench import event_logger
 from savethewench.data.perks import WENCH_LOCATION, USED_SNEAKERS, NEW_SNEAKERS, CROWS_NEST
 from savethewench.event_base import EventType
 from savethewench.model import GameState
+from savethewench.model.achievement import load_achievements
 from savethewench.model.base import Combatant
 from savethewench.model.enemy import Enemy
 from savethewench.model.perk import load_perks, attach_perk, perk_is_active
@@ -103,11 +104,12 @@ def display_game_overview(game_state: GameState):
 
 def display_player_achievements(game_state: GameState):
     player: Player = game_state.player
-    if not player.achievements:
+    achievements = [a for a in load_achievements() if a.active]
+    if len(achievements) == 0:
         print_and_sleep(yellow("Your achievements are dry."), 1)
     else:
         print(f"Your Achievements:")
-        for ach in sorted(player.achievements, key=lambda a: a.name):
+        for ach in sorted(achievements, key=lambda a: a.name):
             print(orange(f"\n{ach.name} | {ach.description}"))
 
 

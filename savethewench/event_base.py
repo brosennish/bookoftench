@@ -7,6 +7,7 @@ from typing import Callable
 # TODO more tightly couple EventType and Event - not good that there could be multiple events with the same type (can lead to innacurate counts if not careful)
 
 class EventType(Enum):
+    ACHIEVEMENT_UNLOCKED = "achievement_unlocked"
     BOUNTY_COLLECTED = "bounty_collected"
     BUY_ITEM = "buy_item"
     BUY_PERK = "buy_perk"
