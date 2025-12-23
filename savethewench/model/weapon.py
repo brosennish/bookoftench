@@ -49,12 +49,13 @@ class Weapon(WeaponBase, Buyable):
         return SellableWeapon(**vars(self))
 
     def __repr__(self):
-        return f"{cyan(f"{self.name:<24}")}\n{dim(' | ').join([
+        return dim(' | ').join([
+            cyan(f"{self.name:<24}"),
             f"{f"Cost: {orange(self.cost)}":<24}",
             f"{f"DMG: {red(self.damage)}":<16}",
             f"{f"ACC: {yellow(self.accuracy)}":<18}",
             f"Uses: {self.format_uses()}"
-        ])}"
+        ])
 
 
 @dataclass
