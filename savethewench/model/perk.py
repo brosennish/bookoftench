@@ -19,12 +19,14 @@ class WrapperConfig[T]:
     def to_wrapper(self, name: str, wrapper_type: WrapperType) -> Callable[[T, str, bool], T]:
         return lambda original, value_description, silent: original
 
+
 @dataclass
 class BooleanOverrideConfig(WrapperConfig):
     override: bool
 
-    def to_wrapper(self,  name: str, _: WrapperType) -> Callable[[bool, str, bool], bool]:
+    def to_wrapper(self, name: str, _: WrapperType) -> Callable[[bool, str, bool], bool]:
         return lambda original, value_description, silent: self.override
+
 
 @dataclass
 class BoundedRandomConfig(WrapperConfig):
@@ -43,14 +45,16 @@ class BoundedRandomConfig(WrapperConfig):
     def to_wrapper(self, name: str, _: WrapperType) -> Callable[[int, str, bool], int]:
         return partial(self._wrapper, name=name)
 
+
+_int_change: Callable[[int, int], int] = lambda orig, i: orig + i
+_percent_change: Callable[[float, int], float] = lambda orig, pct: orig + (float(pct) / 100.0)
+_int_change_by_percent: Callable[[int, int], int] = lambda orig, pct: int(orig * (1 + (float(pct) / 100.0)))
+_float_change_by_percent: Callable[[float, int], float] = lambda orig, pct: orig * (1 + (float(pct) / 100.0))
+
+
 @dataclass
 class NumericChangeConfig(WrapperConfig):
     change: int
-
-    _int_change: Callable[[int, int], int] = lambda orig, i: orig + i
-    _percent_change: Callable[[float, int], float] = lambda orig, pct: orig + (float(pct) / 100.0)
-    _int_change_by_percent: Callable[[int, int], int] = lambda orig, pct: int(orig * (1 + (float(pct) / 100.0)))
-    _float_change_by_percent: Callable[[float, int], float] = lambda orig, pct: orig * (1 + (float(pct) / 100.0))
 
     def _numeric_change(self, original: int | float, value_description: str, silent: bool, name: str,
                         change_func: Callable[[int | float, int | float], int | float], is_percent=True) -> int | float:
@@ -66,15 +70,16 @@ class NumericChangeConfig(WrapperConfig):
     def to_wrapper(self, name: str, wrapper_type: WrapperType) -> Callable[[T, str, bool], T]:
         match wrapper_type:
             case WrapperType.INT_CHANGE:
-                return partial(self._numeric_change, name=name, change_func=self._int_change, is_percent=False)
+                return partial(self._numeric_change, name=name, change_func=_int_change, is_percent=False)
             case WrapperType.PERCENT_CHANGE:
-                return partial(self._numeric_change, name=name, change_func=self._percent_change, is_percent=True)
+                return partial(self._numeric_change, name=name, change_func=_percent_change, is_percent=True)
             case WrapperType.INT_CHANGE_BY_PERCENT:
-                return partial(self._numeric_change, name=name, change_func=self._int_change_by_percent, is_percent=True)
+                return partial(self._numeric_change, name=name, change_func=_int_change_by_percent, is_percent=True)
             case WrapperType.FLOAT_CHANGE_BY_PERCENT:
-                return partial(self._numeric_change, name=name, change_func=self._float_change_by_percent, is_percent=True)
+                return partial(self._numeric_change, name=name, change_func=_float_change_by_percent, is_percent=True)
             case _:
                 raise NotImplementedError(f"{wrapper_type} not implemented")
+
 
 @dataclass
 class Perk[T](Buyable):
@@ -84,10 +89,6 @@ class Perk[T](Buyable):
     _active: bool = False  # value should not be changed from outside of class methods
     wrapper_type: WrapperType = WrapperType.NONE
     wrapper_config: WrapperConfig = field(default_factory=WrapperConfig)
-    wrapper: Callable[[T, str, bool], T] = field(init=False, repr=False)
-
-    def __post_init__(self):
-        self.wrapper = self.wrapper_config.to_wrapper(self.name, self.wrapper_type)
 
     @property
     def active(self):
@@ -96,6 +97,9 @@ class Perk[T](Buyable):
     def activate(self):
         print_and_sleep(purple(f"{self.name} added to perks."), 1)
         self._active = True
+
+    def get_wrapper(self) -> Callable[[T, str, bool], T]:
+        return self.wrapper_config.to_wrapper(self.name, self.wrapper_type)
 
     def __repr__(self):
         return dim(' | ').join([
@@ -114,7 +118,6 @@ def set_perk_cache(perk_cache: Dict[str, Perk]):
 
 
 def map_wrapper_config(data: dict) -> WrapperConfig:
-    print(data['name'])
     wrapper_type: WrapperType = data['wrapper_type'] if 'wrapper_type' in data else WrapperType.NONE
     match wrapper_type:
         case WrapperType.NONE:
@@ -125,6 +128,7 @@ def map_wrapper_config(data: dict) -> WrapperConfig:
             return BoundedRandomConfig(**data['wrapper_config'])
         case _:
             return NumericChangeConfig(**data['wrapper_config'])
+
 
 def load_perks(perk_filter: Callable[[Perk], bool] = lambda _: True) -> List[Perk]:
     res = []
@@ -164,7 +168,7 @@ def attach_perk_conditional(*perks: str, value_description: str = "",
             value = func(*args, **kwargs)
             for perk in perk_impls:
                 if perk.active and condition():
-                    value = perk.wrapper(value, value_description, silent)
+                    value = perk.get_wrapper()(value, value_description, silent)
             return value
 
         return wrapper
@@ -175,5 +179,3 @@ def attach_perk_conditional(*perks: str, value_description: str = "",
 def attach_perk(*perks: str, value_description: str = "", silent: bool = False):
     return attach_perk_conditional(*perks, value_description=value_description,
                                    silent=silent, condition=lambda: True)
-
-

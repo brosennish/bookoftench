@@ -1,13 +1,16 @@
+import os
+import pickle
 import sys
+from functools import partial
 from typing import List
 
 from savethewench.audio import play_music
 from savethewench.component.base import Component, LinearComponent, BinarySelectionComponent, \
-    TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, NoOpComponent, functional_component
+    TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, functional_component
 from savethewench.data.audio import INTRO_THEME
 from savethewench.model import GameState
 from savethewench.model.util import get_player_status_view
-from savethewench.ui import red, purple
+from savethewench.ui import red, purple, cyan
 from savethewench.util import print_and_sleep, safe_input
 from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, DisplayPerks, Overview, \
     FightBoss, FightFinalBoss
@@ -162,7 +165,42 @@ class InGameMenu(LabeledSelectionComponent):
         return self.leave_menu
 
 
-class SaveGame(NoOpComponent): pass
+class SaveGame(Component):
+    def run(self) -> GameState:
+        save_dir = "saves"  # TODO don't just save straight to a directory in the repo
+        save_file = f"{self.game_state.player.name}.tench"
+
+        if not os.path.isdir(save_dir):
+            os.mkdir(save_dir)
+        with open(f"{save_dir}/{save_file}", "wb") as f:  # noinspection PyTypeChecker
+            pickle.dump(self.game_state, f)
+
+        print_and_sleep(cyan("Game saved."), 1)
+        return self.game_state
 
 
-class LoadGame(NoOpComponent): pass
+class LoadGame(LinearComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, next_component=ActionMenu)
+        self.save_file = None
+
+    def set_save_file(self, save_file: str):
+        self.save_file = save_file
+
+    def execute_current(self) -> GameState:
+        save_dir = "saves"
+        saves = dict((str(i), n) for (i, n) in enumerate(set(fn.split(".")[0] for fn in os.listdir(save_dir))))
+        if len(saves) == 0:
+            print_and_sleep(red("No saved games exist."))
+            return self.game_state
+
+        self.game_state = LabeledSelectionComponent(self.game_state, bindings=[
+            SelectionBinding(str(i), fn.split(".")[0], functional_component()(
+                partial(self.set_save_file, f"{save_dir}/{fn}")))
+            for (i, fn) in enumerate(sorted(os.listdir(save_dir)), 1)
+        ]).run()
+
+        if self.save_file is not None:
+            with open(self.save_file, "rb") as f:
+                self.game_state = pickle.load(f)
+        return self.game_state
