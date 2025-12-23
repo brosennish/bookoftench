@@ -1,6 +1,5 @@
 import random
 from dataclasses import dataclass
-from enum import Enum
 from typing import Optional, List, Dict
 
 from savethewench import event_logger
@@ -9,12 +8,11 @@ from savethewench.data.achievements import RewardType
 from savethewench.data.perks import WENCH_LOCATION
 from savethewench.event_base import EventType, Event
 from savethewench.event_logger import subscribe_function
+from savethewench.model.events import KillEvent
 from savethewench.model.perk import Perk, load_perks
 from savethewench.model.player import Player
-from savethewench.model.events import KillEvent
 from savethewench.ui import orange
 from savethewench.util import print_and_sleep
-
 
 
 @dataclass
@@ -32,7 +30,7 @@ class Achievement:
 
     def activation_action(self, player: Player):
         reward_str: str = ''
-        reward_callback = lambda: None # so we can print the achievement unlock before any reward messaging
+        reward_callback = lambda: None  # so we can print the achievement unlock before any reward messaging
         match self.reward_type:
             case RewardType.XP:
                 reward_callback = lambda: player.gain_xp_other(self.reward_value)
@@ -63,6 +61,7 @@ class AchievementEvent(Event):
         self.achievement.active = True
         self.achievement.activation_action(player)
 
+
 @dataclass
 class KillAchievement(Achievement):
 
@@ -75,9 +74,11 @@ class KillAchievement(Achievement):
 
 _ACHIEVEMENTS: Dict[str, Achievement] = {}
 
+
 def set_achievement_cache(achievement_cache: Dict[str, Achievement]):
     global _ACHIEVEMENTS
     _ACHIEVEMENTS = achievement_cache
+
 
 def load_achievements() -> List[Achievement]:
     global _ACHIEVEMENTS
