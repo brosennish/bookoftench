@@ -5,10 +5,11 @@ from typing import List, TypeVar
 from savethewench.data.perks import BROWN_FRIDAY, BARTER_SAUCE, TRADE_SHIP
 from savethewench.event_logger import subscribe_function
 from .base import Buyable
-from .events import LevelUpEvent
+from .events import LevelUpEvent, PlayerDeathEvent
 from .item import Item, load_items
 from .perk import Perk, load_perks, attach_perk
 from .weapon import load_weapons, Weapon
+from ..event_base import Event
 
 # TODO maybe read these from config
 _MAX_ITEMS: int = 3
@@ -77,6 +78,6 @@ class Shop:
             random.sample(self._all_perks, k=min(self.max_perks, len(self._all_perks))))
 
     def _subscribe_listeners(self):
-        @subscribe_function(LevelUpEvent)
-        def handle_level_up(_: LevelUpEvent):
+        @subscribe_function(LevelUpEvent, PlayerDeathEvent)
+        def handle_level_up(_: Event):
             self.reset_inventory()
