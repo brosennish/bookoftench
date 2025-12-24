@@ -3,11 +3,14 @@ from dataclasses import dataclass, field
 from typing import Dict, List
 
 from savethewench import event_logger
+from savethewench.audio import play_sound
+from savethewench.data.audio import RIFLE
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM
 from savethewench.data.weapons import BARE_HANDS, KNIFE, MELEE, PROJECTILE
+from savethewench.event_logger import subscribe_function
 from savethewench.ui import yellow, dim, green, cyan, purple
 from savethewench.util import print_and_sleep
 from .base import Combatant, Buyable
@@ -16,9 +19,6 @@ from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, 
 from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perk_conditional
 from .weapon import load_weapons, Weapon
-from ..audio import play_sound
-from ..data.audio import RIFLE
-from ..event_logger import subscribe_function
 
 
 @dataclass
