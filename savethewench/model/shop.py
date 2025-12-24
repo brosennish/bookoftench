@@ -46,7 +46,7 @@ class Shop:
     def item_inventory(self) -> List[Item]:
         while len(self._item_inventory) < self.max_items:
             self._item_inventory.append(random.choice(self._all_items))
-        return self._item_inventory
+        return self.apply_discounts(self._item_inventory)
 
     @item_inventory.setter
     def item_inventory(self, items: List[Item]):
@@ -56,7 +56,7 @@ class Shop:
     def weapon_inventory(self) -> List[Weapon]:
         while len(self._weapon_inventory) < self.max_weapons:
             self._weapon_inventory.append(Weapon(**random.choice(self._all_weapons).__dict__))
-        return self._weapon_inventory
+        return self.apply_discounts(self._weapon_inventory)
 
     @weapon_inventory.setter
     def weapon_inventory(self, weapons: List[Weapon]):
@@ -66,7 +66,7 @@ class Shop:
     def perk_inventory(self) -> List[Perk]:
         while len(self._perk_inventory) < self.max_perks:
             self._perk_inventory.append(Perk(**random.choice(self._perk_inventory).__dict__))
-        return self._perk_inventory
+        return self.apply_discounts(self._perk_inventory)
 
     @perk_inventory.setter
     def perk_inventory(self, perks: List[Perk]):
@@ -99,13 +99,10 @@ class Shop:
             self.perk_inventory.remove(buyable)
 
     def reset_inventory(self):
-        self._item_inventory = self.apply_discounts(
-            random.sample(self._all_items, k=min(self.max_items, len(self._all_items))))
-        self._weapon_inventory = self.apply_discounts(
-            random.sample([w for w in self._all_weapons if w.sell_value > 0],
-                          k=min(self.max_weapons, len(self._all_weapons))))
-        self.perk_inventory = self.apply_discounts(
-            random.sample(self._all_perks, k=min(self.max_perks, len(self._all_perks))))
+        self._item_inventory = random.sample(self._all_items, k=min(self.max_items, len(self._all_items)))
+        self._weapon_inventory = random.sample([w for w in self._all_weapons if w.sell_value > 0],
+                          k=min(self.max_weapons, len(self._all_weapons)))
+        self.perk_inventory = random.sample(self._all_perks, k=min(self.max_perks, len(self._all_perks)))
 
     def _subscribe_listeners(self):
         @subscribe_function(LevelUpEvent, PlayerDeathEvent)
