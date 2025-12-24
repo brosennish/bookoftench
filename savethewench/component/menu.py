@@ -166,15 +166,15 @@ class InGameMenu(LabeledSelectionComponent):
     def can_exit(self):
         return self.leave_menu
 
+_SAVE_DIR = ".saves" # TODO don't just save straight to a directory in the repo
 
 class SaveGame(Component):
     def run(self) -> GameState:
-        save_dir = "saves"  # TODO don't just save straight to a directory in the repo
         save_file = f"{self.game_state.player.name}.tench"
 
-        if not os.path.isdir(save_dir):
-            os.mkdir(save_dir)
-        with open(f"{save_dir}/{save_file}", "wb") as f:  # noinspection PyTypeChecker
+        if not os.path.isdir(_SAVE_DIR):
+            os.mkdir(_SAVE_DIR)
+        with open(f"{_SAVE_DIR}/{save_file}", "wb") as f:  # noinspection PyTypeChecker
             pickle.dump(self.game_state, f)
 
         print_and_sleep(cyan("Game saved."), 1)
@@ -190,17 +190,16 @@ class LoadGame(Component):
         self.save_file = save_file
 
     def run(self) -> GameState:
-        save_dir = "saves"
-        saves = dict((str(i), n) for (i, n) in enumerate(set(fn.split(".")[0] for fn in os.listdir(save_dir)))) \
-            if os.path.isdir(save_dir) else {}
+        saves = dict((str(i), n) for (i, n) in enumerate(set(fn.split(".")[0] for fn in os.listdir(_SAVE_DIR)))) \
+            if os.path.isdir(_SAVE_DIR) else {}
         if len(saves) == 0:
             print_and_sleep(red("No saved games exist."))
             return self.game_state
 
         self.game_state = LabeledSelectionComponent(self.game_state, bindings=[
             SelectionBinding(str(i), fn.split(".")[0], functional_component()(
-                partial(self.set_save_file, f"{save_dir}/{fn}")))
-            for (i, fn) in enumerate(sorted(os.listdir(save_dir)), 1)
+                partial(self.set_save_file, f"{_SAVE_DIR}/{fn}")))
+            for (i, fn) in enumerate(sorted(os.listdir(_SAVE_DIR)), 1)
         ], quittable=True).run()
         if self.save_file is not None:
             with open(self.save_file, "rb") as f:
