@@ -162,7 +162,7 @@ Perks = [
     {
         'name': AMBROSE_BLADE,
         'cost': 130,
-        'description': "Melee weapons do +3 damage",
+        'description': "Bladed weapons do +3 damage",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 3}
     },

@@ -27,8 +27,6 @@ class Weapon(WeaponBase, Buyable):
     blind_turns_min: int = 0
     blind_turns_max: int = 0
 
-
-
     def _is_gun(self):
         return self.name in (PISTOL, REVOLVER, RIFLE, SHOTGUN)
 

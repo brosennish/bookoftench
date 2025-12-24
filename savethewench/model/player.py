@@ -9,7 +9,7 @@ from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM
-from savethewench.data.weapons import BARE_HANDS, KNIFE, MELEE, PROJECTILE
+from savethewench.data.weapons import BARE_HANDS, KNIFE, MELEE, PROJECTILE, MACHETE, FIRE_AXE, AXE
 from savethewench.event_logger import subscribe_function
 from savethewench.ui import yellow, dim, green, cyan, purple
 from savethewench.util import print_and_sleep
@@ -24,11 +24,16 @@ from .weapon import load_weapons, Weapon
 @dataclass
 class PlayerWeapon(Weapon):
 
+    def _is_bladed(self) -> bool:
+        return self.name in (KNIFE, MACHETE, AXE, FIRE_AXE)
+
     def calculate_base_damage(self) -> int:
         base_damage = self.calculate_base_damage_no_perk()
 
-        @attach_perk_conditional(AMBROSE_BLADE, ROSETTI_THE_GYM_RAT, value_description="melee damage",
+        @attach_perk_conditional(ROSETTI_THE_GYM_RAT, value_description="melee damage",
                                  condition=lambda: self.type == MELEE)
+        @attach_perk_conditional(AMBROSE_BLADE, value_description="blade damage",
+                                 condition=lambda: self._is_bladed())
         @attach_perk_conditional(KARATE_LESSONS, MARTIAL_ARTS_TRAINING, value_description="bare hands damage",
                                  condition=lambda: self.name == BARE_HANDS)
         def apply_perks():
