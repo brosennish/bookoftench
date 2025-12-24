@@ -119,12 +119,12 @@ def display_active_perks(game_state: GameState) -> None:
     if len(active_perks) == 0:
         print_and_sleep(yellow("Your perks are dry."), 1)
     else:
-        print(f"\nYour Perks:")
-        if WENCH_LOCATION in active_perks:
-            print(f'\nWench Location: {blue(game_state.wench_area)}')
+        print_and_sleep(f"Your Perks:")
+        if perk_is_active(WENCH_LOCATION):
+            print_and_sleep(f'Wench Location: {blue(game_state.wench_area.name)}')
 
         for perk in sorted(active_perks, key=lambda a: a.name):
-            print(purple(f"\n{perk.name} | {perk.description}"))
+            print_and_sleep(purple(f"{perk.name} | {perk.description}"))
 
 
 def display_active_perk_count():
