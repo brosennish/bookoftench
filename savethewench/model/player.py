@@ -111,13 +111,15 @@ class Player(Combatant):
         return self.max_plays - self.games_played
 
     @property
-    @attach_perk(BEER_GOGGLES)
     def blind(self) -> bool:
         return self._blind
 
     @blind.setter
     def blind(self, blind: bool) -> None:
-        self._blind = blind
+        if blind and perk_is_active(BEER_GOGGLES):
+            print_and_sleep(purple(f"{BEER_GOGGLES} prevented blindness."), 1)
+        else:
+            self._blind = blind
 
     def get_items(self) -> List[Item]:
         return list(self.items.values())
