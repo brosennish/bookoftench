@@ -157,14 +157,9 @@ class Combatant(ABC):
 
     def calculate_accuracy(self) -> float:
         if self.blind:
+            self.blind_turns -= 1
             if self.blind_turns == 0:
                 self.reset_blindness()
-                print_and_sleep(purple(f"{f"{self.name} is" if isinstance(self, NPC) else "You are"}"
-                                       f" no longer blind!"),1)
-            else:
-                print_and_sleep(yellow(f"{f"{self.name}'s" if isinstance(self, NPC) else "Your"} accuracy is down "
-                                       f"{int(self.blind_effect * 100)}% from {self.blinded_by}!"), 1)
-                self.blind_turns -= 1
             return self.current_weapon.get_accuracy() * (1 - self.blind_effect)
         return self.current_weapon.get_accuracy()
 
