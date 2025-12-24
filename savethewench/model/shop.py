@@ -3,13 +3,13 @@ from dataclasses import dataclass, field
 from typing import List, TypeVar
 
 from savethewench.data.perks import BROWN_FRIDAY, BARTER_SAUCE, TRADE_SHIP
+from savethewench.event_base import Event
 from savethewench.event_logger import subscribe_function
 from .base import Buyable
 from .events import LevelUpEvent, PlayerDeathEvent
 from .item import Item, load_items
 from .perk import Perk, load_perks, attach_perk
-from .weapon import load_weapons, Weapon
-from ..event_base import Event
+from .weapon import Weapon, load_discoverable_weapons
 
 # TODO maybe read these from config
 _MAX_ITEMS: int = 3
@@ -23,9 +23,9 @@ class Shop:
     _all_weapons: List[Weapon] = field(init=False)
     _all_perks: List[Perk] = field(init=False)
 
-    item_inventory: List[Item] = field(init=False)
-    weapon_inventory: List[Weapon] = field(init=False)
-    perk_inventory: List[Perk] = field(init=False)
+    _item_inventory: List[Item] = field(init=False)
+    _weapon_inventory: List[Weapon] = field(init=False)
+    _perk_inventory: List[Perk] = field(init=False)
 
     @property
     @attach_perk(BROWN_FRIDAY, silent=True)
@@ -42,9 +42,39 @@ class Shop:
     def max_perks(self):
         return _MAX_PERKS
 
+    @property
+    def item_inventory(self) -> List[Item]:
+        while len(self._item_inventory) < self.max_items:
+            self._item_inventory.append(random.choice(self._all_items))
+        return self._item_inventory
+
+    @item_inventory.setter
+    def item_inventory(self, items: List[Item]):
+        self._item_inventory = items
+
+    @property
+    def weapon_inventory(self) -> List[Weapon]:
+        while len(self._weapon_inventory) < self.max_weapons:
+            self._weapon_inventory.append(Weapon(**random.choice(self._all_weapons).__dict__))
+        return self._weapon_inventory
+
+    @weapon_inventory.setter
+    def weapon_inventory(self, weapons: List[Weapon]):
+        self._weapon_inventory = weapons
+
+    @property
+    def perk_inventory(self) -> List[Perk]:
+        while len(self._perk_inventory) < self.max_perks:
+            self._perk_inventory.append(Perk(**random.choice(self._perk_inventory).__dict__))
+        return self._perk_inventory
+
+    @perk_inventory.setter
+    def perk_inventory(self, perks: List[Perk]):
+        self._perk_inventory = perks
+
     def __post_init__(self):
         self._all_items = load_items()
-        self._all_weapons = load_weapons()
+        self._all_weapons = load_discoverable_weapons()
         self._all_perks = load_perks()
         self.reset_inventory()
         self._subscribe_listeners()
@@ -69,11 +99,11 @@ class Shop:
             self.perk_inventory.remove(buyable)
 
     def reset_inventory(self):
-        self.item_inventory = self.apply_discounts(
+        self._item_inventory = self.apply_discounts(
             random.sample(self._all_items, k=min(self.max_items, len(self._all_items))))
-        self.weapon_inventory = self.apply_discounts(
+        self._weapon_inventory = self.apply_discounts(
             random.sample([w for w in self._all_weapons if w.sell_value > 0],
-                                              k=min(self.max_weapons, len(self._all_weapons))))
+                          k=min(self.max_weapons, len(self._all_weapons))))
         self.perk_inventory = self.apply_discounts(
             random.sample(self._all_perks, k=min(self.max_perks, len(self._all_perks))))
 
