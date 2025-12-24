@@ -31,7 +31,7 @@ def get_player_status_view(game_state: GameState) -> str:
     killed_remaining = [f"Killed: {red(f"{game_state.current_area.enemies_killed}")}"]
     if perk_is_active(CROWS_NEST):
         killed_remaining.append(f"Remaining: {yellow(f"{game_state.current_area.enemies_remaining}")}")
-    return (f"\n{dim(' | ').join([
+    return (f"{dim(' | ').join([
         f"Area: {blue(game_state.current_area.name)}",
         *killed_remaining,
         f"Wanted: {purple(game_state.wanted)}",
