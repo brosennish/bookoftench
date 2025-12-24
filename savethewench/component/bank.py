@@ -1,3 +1,4 @@
+from functools import partial
 from typing import List
 
 from savethewench.audio import play_music
@@ -26,7 +27,7 @@ class BankComponent(LabeledSelectionComponent):
         play_music(BANK_THEME)
 
     def _get_bindings(self) -> List[SelectionBinding]:
-        res = [SelectionBinding('W', 'Withdraw', self._make_withdrawal),
+        res = [SelectionBinding('W', 'Withdraw', self._make_withdrawal(not self.allow_deposit)),
                SelectionBinding('Q', 'Leave', functional_component()(self._return))]
         if self.allow_deposit:
             return [SelectionBinding('D', 'Deposit', self._make_deposit), *res]
@@ -58,15 +59,20 @@ class BankComponent(LabeledSelectionComponent):
             print_and_sleep(yellow("Invalid choice."))
 
     @staticmethod
-    @functional_component(state_dependent=True)
-    def _make_withdrawal(game_state: GameState):
-        raw_amount = safe_input("How much would you like to withdraw?")
-        if raw_amount.isdigit():
-            amount = int(raw_amount)
-            if game_state.bank.make_withdrawal(amount):
-                game_state.player.coins += amount
-        else:
-            print_and_sleep(yellow("Invalid choice."))
+    def _make_withdrawal(incur_fee=False):
+        @functional_component(state_dependent=True)
+        def component(game_state: GameState):
+            raw_amount = safe_input("How much would you like to withdraw?")
+            if raw_amount.isdigit():
+                amount = int(raw_amount)
+                if incur_fee:
+                    amount = int(amount * 0.9)
+                    print_and_sleep(yellow("10% fee applied."), 1)
+                if game_state.bank.make_withdrawal(amount):
+                    game_state.player.coins += amount
+            else:
+                print_and_sleep(yellow("Invalid choice."))
+        return component
 
     def _return(self):  # TODO stop duplicating this pattern
         _very_well()

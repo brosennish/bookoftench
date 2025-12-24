@@ -67,7 +67,6 @@ class Player(Combatant):
     xp: int = 0
 
     coins: int = 0
-    interest: int = 0
     casino_won: int = 0
     casino_lost: int = 0
     games_played: int = 0

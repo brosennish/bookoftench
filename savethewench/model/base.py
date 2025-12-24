@@ -157,10 +157,11 @@ class Combatant(ABC):
 
     def calculate_accuracy(self) -> float:
         if self.blind:
-                self.blind_turns -= 1
-                if self.blind_turns == 0:
-                    self.reset_blindness()
-        return self.current_weapon.get_accuracy() * (1 - self.blind_effect)
+            self.blind_turns -= 1
+            if self.blind_turns == 0:
+                self.reset_blindness()
+            return self.current_weapon.get_accuracy() * (1 - self.blind_effect)
+        return self.current_weapon.get_accuracy()
 
     def get_crit_chance(self) -> float:
         return self.current_weapon.crit
