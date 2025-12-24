@@ -1,5 +1,5 @@
 import random
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 
 from savethewench.data import Areas
@@ -14,7 +14,7 @@ class Area:
     enemies: list[str]
     boss_name: str
     theme: str
-    enemy_count: int = random.randint(10, 15)
+    enemy_count: int = field(default_factory=lambda: random.randint(10, 15))
     enemies_killed: int = 0
     boss_defeated: bool = False
     boss: Boss = None

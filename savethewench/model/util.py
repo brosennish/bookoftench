@@ -80,7 +80,7 @@ def display_game_overview(game_state: GameState):
     display_stat("Bank", game_state.bank.balance, green)
     display_stat("Deposits", event_logger.get_count(EventType.DEPOSIT), orange)
     display_stat("Withdrawals", event_logger.get_count(EventType.WITHDRAW), orange)
-    display_stat("Interest Earned", player.interest, green)
+    display_stat("Interest Earned", game_state.bank.interest, green)
 
     display_stat("Casino Won", player.casino_won, green)
     display_stat("Casino Lost", player.casino_lost, red)
