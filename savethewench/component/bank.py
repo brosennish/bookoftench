@@ -12,7 +12,7 @@ from savethewench.util import print_and_sleep, safe_input
 
 
 def _very_well():
-    print_and_sleep(print_and_sleep(blue("Very well..."), 1))
+    print_and_sleep(blue("Very well..."), 1)
 
 
 class BankComponent(LabeledSelectionComponent):
