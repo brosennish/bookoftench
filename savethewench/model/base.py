@@ -165,7 +165,8 @@ class Combatant(ABC):
                 print_and_sleep(yellow(f"{f"{self.name}'s" if isinstance(self, NPC) else "Your"} accuracy is down "
                                        f"{int(self.blind_effect * 100)}% from {self.blinded_by}!"), 1)
                 self.blind_turns -= 1
-        return self.current_weapon.get_accuracy() * (1 - self.blind_effect)
+            return self.current_weapon.get_accuracy() * (1 - self.blind_effect)
+        return self.current_weapon.get_accuracy()
 
     def get_crit_chance(self) -> float:
         return self.current_weapon.crit
