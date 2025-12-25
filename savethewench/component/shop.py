@@ -1,7 +1,9 @@
 from functools import partial
 
+from savethewench.audio import play_music
 from savethewench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
     functional_component
+from savethewench.data.audio import SHOP_THEME
 from savethewench.model import GameState
 from savethewench.model.base import Buyable
 from savethewench.model.util import display_active_perk_count
@@ -29,6 +31,9 @@ class ShopComponent(LabeledSelectionComponent):
             LabeledSelectionComponent(game_state, [sell_binding, return_binding]),
         ]
         self.exit_shop = False
+
+    def play_theme(self):
+        play_music(SHOP_THEME)
 
     def _return(self):
         self.exit_shop = True
