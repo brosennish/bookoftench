@@ -78,6 +78,7 @@ class CasinoGame(Component):
 
     def get_wager_or_quit(self) -> int:
         player = self.game_state.player
+        max_wager = max(int(0.25 * self.game_state.player.coins), 5)
         print_and_sleep(f"Coins: {green(player.coins)} {dim('|')} Plays: {cyan(player.remaining_plays)}\n")
         while True:
             raw_wager = safe_input("[#] Wager\n"
@@ -85,11 +86,12 @@ class CasinoGame(Component):
             if raw_wager != 'q' and not raw_wager.isdigit():
                 print(yellow("Invalid choice."))
             elif raw_wager.isdigit():
-                if not 0 < int(raw_wager) <= self.game_state.player.coins:
+                if int(raw_wager) < 5:
                     print_and_sleep(
-                        blue("If you ain't got it, don't bet it, bozo.") if int(
-                            raw_wager) > self.game_state.player.coins
-                        else blue("Gotta bet something, bozo."), 1)
+                        blue("Minimum wager is 5, bozo."), 1)
+                elif int(raw_wager) > max_wager:
+                    print_and_sleep(
+                        blue(f"Maximum wager is currently {max_wager} coins."), 1)
                 else:
                     return int(raw_wager)
             else:
