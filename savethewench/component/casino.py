@@ -25,7 +25,7 @@ class CasinoBouncer(GatekeepingComponent):
 
 def can_gamble(game_state: GameState) -> bool:
     player = game_state.player
-    return player.remaining_plays > 0 and player.coins > 0
+    return player.remaining_plays > 0 and player.coins >= 5
 
 
 @functional_component(state_dependent=True)
