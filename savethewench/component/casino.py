@@ -32,7 +32,7 @@ def can_gamble(game_state: GameState) -> bool:
 def display_crapped_out_message(game_state: GameState):
     player = game_state.player
     message = "You're out of plays. Buy a perk or level up, bozo.\n" if player.remaining_plays == 0 else \
-        "You're out of coins. Get lost, bozo.\n"
+        "Your coins are dry. Get lost, bozo.\n"
     print_and_sleep(blue(message), 2)
 
 
@@ -78,7 +78,6 @@ class CasinoGame(Component):
 
     def get_wager_or_quit(self) -> int:
         player = self.game_state.player
-        max_wager = max(int(0.25 * self.game_state.player.coins), 5)
         print_and_sleep(f"Coins: {green(player.coins)} {dim('|')} Plays: {cyan(player.remaining_plays)}\n")
         while True:
             raw_wager = safe_input("[#] Wager\n"
@@ -88,10 +87,10 @@ class CasinoGame(Component):
             elif raw_wager.isdigit():
                 if int(raw_wager) < 5:
                     print_and_sleep(
-                        blue("Minimum wager is 5, bozo."), 1)
-                elif int(raw_wager) > max_wager:
+                        blue("Minimum wager is 5 coins, bozo."), 1)
+                elif int(raw_wager) > self.game_state.player.coins:
                     print_and_sleep(
-                        blue(f"Maximum wager is currently {max_wager} coins."), 1)
+                        blue(f"Can't bet what ya don't have, bozo."), 1)
                 else:
                     return int(raw_wager)
             else:
