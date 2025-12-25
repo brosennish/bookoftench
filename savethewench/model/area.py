@@ -29,6 +29,7 @@ class Area:
 
     def spawn_enemy(self) -> Enemy:
         enemy = load_enemy(random.choice(self.enemies))
+        enemy.hp += random.randint(-5, 5)
         if random.random() < 0.10:
             enemy.name = f"Elite {enemy.name}"
             enemy.hp = int(enemy.hp * 1.5)
