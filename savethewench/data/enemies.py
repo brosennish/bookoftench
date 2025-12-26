@@ -34,43 +34,43 @@ Enemies = [
     # ========================
     #        CITY ENEMIES
     # ========================
-    {'name': BANDIT, 'hp': 80, 'weapons': [weapons.KNIFE, weapons.BAT], 'bounty': 30, 'type': NORMAL},
+    {'name': BANDIT, 'hp': 90, 'weapons': [weapons.KNIFE, weapons.BAT], 'bounty': 75, 'type': NORMAL},
     {'name': GOON, 'hp': 100, 'weapons': [weapons.CHILI_POWDER, weapons.BAT, weapons.PISTOL],
-     'bounty': 40, 'type': NORMAL},
-    {'name': PIMP, 'hp': 120,
-     'weapons': [weapons.PEPPER_SPRAY, weapons.BRASS_KNUCKLES, weapons.REVOLVER], 'bounty': 60, 'type': NORMAL},
+     'bounty': 100, 'type': NORMAL},
+    {'name': PIMP, 'hp': 110,
+     'weapons': [weapons.PEPPER_SPRAY, weapons.BRASS_KNUCKLES, weapons.REVOLVER], 'bounty': 125, 'type': NORMAL},
     {'name': HOBO, 'hp': 80, 'weapons': [weapons.BROKEN_BOTTLE, weapons.KNIFE, weapons.POCKET_SAND],
-     'bounty': 25, 'type': NORMAL},
-    {'name': SERIAL_KILLER, 'hp': 120, 'weapons': [weapons.KNIFE, weapons.MACHETE], 'bounty': 65, 'type': NORMAL},
+     'bounty': 50, 'type': NORMAL},
+    {'name': SERIAL_KILLER, 'hp': 120, 'weapons': [weapons.KNIFE, weapons.MACHETE], 'bounty': 200, 'type': NORMAL},
 
     # ========================
     #       FOREST ENEMIES
     # ========================
     {'name': HIKER, 'hp': 80, 'weapons': [weapons.HATCHET, weapons.KNIFE, weapons.BEAR_SPRAY],
-     'bounty': 30, 'type': NORMAL},
-    {'name': HUNTER, 'hp': 100, 'weapons': [weapons.KNIFE, weapons.RIFLE, weapons.BEAR_SPRAY],
      'bounty': 50, 'type': NORMAL},
-    {'name': POACHER, 'hp': 120, 'weapons': [weapons.CROSSBOW, weapons.MACHETE, weapons.BEAR_SPRAY],
-     'bounty': 60, 'type': NORMAL},
-    {'name': DISGRACED_EXILE, 'hp': 100, 'weapons': [weapons.HATCHET, weapons.SHOVEL], 'bounty': 45, 'type': NORMAL},
+    {'name': DISGRACED_EXILE, 'hp': 90, 'weapons': [weapons.HATCHET, weapons.SHOVEL], 'bounty': 75, 'type': NORMAL},
+    {'name': HUNTER, 'hp': 100, 'weapons': [weapons.KNIFE, weapons.RIFLE, weapons.BEAR_SPRAY],
+     'bounty': 100, 'type': NORMAL},
+    {'name': POACHER, 'hp': 125, 'weapons': [weapons.CROSSBOW, weapons.MACHETE, weapons.BEAR_SPRAY],
+     'bounty': 125, 'type': NORMAL},
 
     # ========================
     #        CAVE ENEMIES
     # ========================
-    {'name': MINER, 'hp': 80, 'weapons': [weapons.PICKAXE, weapons.KNIFE], 'bounty': 35, 'type': NORMAL},
-    {'name': SPELUNKER, 'hp': 100, 'weapons': [weapons.PICKAXE, weapons.KNIFE], 'bounty': 40, 'type': NORMAL},
-    {'name': MOLE_PERSON, 'hp': 120, 'weapons': [weapons.CLAWS, weapons.PICKAXE], 'bounty': 55, 'type': NORMAL},
-    {'name': HUMANOID_CAVE_CREATURE, 'hp': 120, 'weapons': [weapons.CLAWS, weapons.SLEDGEHAMMER],
-     'bounty': 65, 'type': NORMAL},
+    {'name': MINER, 'hp': 80, 'weapons': [weapons.PICKAXE, weapons.KNIFE], 'bounty': 50, 'type': NORMAL},
+    {'name': SPELUNKER, 'hp': 90, 'weapons': [weapons.PICKAXE, weapons.KNIFE], 'bounty': 75, 'type': NORMAL},
+    {'name': MOLE_PERSON, 'hp': 100, 'weapons': [weapons.CLAWS, weapons.PICKAXE], 'bounty': 100, 'type': NORMAL},
+    {'name': HUMANOID_CAVE_CREATURE, 'hp': 110, 'weapons': [weapons.CLAWS, weapons.SLEDGEHAMMER],
+     'bounty': 125, 'type': NORMAL},
 
     # ========================
     #        SWAMP ENEMIES
     # ========================
-    {'name': HAND_FISHERMAN, 'hp': 80, 'weapons': [weapons.HATCHET, weapons.KNIFE], 'bounty': 30, 'type': NORMAL},
-    {'name': BAYOU_MAN, 'hp': 100, 'weapons': [weapons.MACHETE, weapons.SHOTGUN], 'bounty': 45, 'type': NORMAL},
-    {'name': VOODOO_PRIESTESS, 'hp': 120,
-     'weapons': [weapons.VOODOO_STAFF, weapons.KNIFE, weapons.CHILI_POWDER], 'bounty': 70, 'type': NORMAL},
-    {'name': SKIN_COLLECTOR, 'hp': 110, 'weapons': [weapons.MACHETE, weapons.CHAINSAW], 'bounty': 75, 'type': NORMAL},
+    {'name': HAND_FISHERMAN, 'hp': 80, 'weapons': [weapons.HATCHET, weapons.KNIFE], 'bounty': 50, 'type': NORMAL},
+    {'name': VOODOO_PRIESTESS, 'hp': 90,
+     'weapons': [weapons.VOODOO_STAFF, weapons.KNIFE, weapons.CHILI_POWDER], 'bounty': 75, 'type': NORMAL},
+    {'name': BAYOU_MAN, 'hp': 100, 'weapons': [weapons.MACHETE, weapons.SHOTGUN], 'bounty': 100, 'type': NORMAL},
+    {'name': SKIN_COLLECTOR, 'hp': 110, 'weapons': [weapons.MACHETE, weapons.CHAINSAW], 'bounty': 125, 'type': NORMAL},
 ]
 
 Bosses = [

@@ -25,14 +25,14 @@ class CasinoBouncer(GatekeepingComponent):
 
 def can_gamble(game_state: GameState) -> bool:
     player = game_state.player
-    return player.remaining_plays > 0 and player.coins > 0
+    return player.remaining_plays > 0 and player.coins >= 5
 
 
 @functional_component(state_dependent=True)
 def display_crapped_out_message(game_state: GameState):
     player = game_state.player
     message = "You're out of plays. Buy a perk or level up, bozo.\n" if player.remaining_plays == 0 else \
-        "You're out of coins. Get lost, bozo.\n"
+        "Your coins are dry. Get lost, bozo.\n"
     print_and_sleep(blue(message), 2)
 
 
@@ -85,11 +85,12 @@ class CasinoGame(Component):
             if raw_wager != 'q' and not raw_wager.isdigit():
                 print(yellow("Invalid choice."))
             elif raw_wager.isdigit():
-                if not 0 < int(raw_wager) <= self.game_state.player.coins:
+                if int(raw_wager) < 5:
                     print_and_sleep(
-                        blue("If you ain't got it, don't bet it, bozo.") if int(
-                            raw_wager) > self.game_state.player.coins
-                        else blue("Gotta bet something, bozo."), 1)
+                        blue("Minimum wager is 5 coins, bozo."), 1)
+                elif int(raw_wager) > self.game_state.player.coins:
+                    print_and_sleep(
+                        blue(f"Can't bet what ya don't have, bozo."), 1)
                 else:
                     return int(raw_wager)
             else:
