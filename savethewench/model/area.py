@@ -27,8 +27,9 @@ class Area:
     def enemies_remaining(self) -> int:
         return max(self.enemy_count - self.enemies_killed, 0)
 
-    def spawn_enemy(self) -> Enemy:
+    def spawn_enemy(self, player_level: int) -> Enemy:
         enemy = load_enemy(random.choice(self.enemies))
+        enemy.hp += player_level - 1
         enemy.hp += random.randint(-5, 5)
         if random.random() < 0.10:
             enemy.name = f"Elite {enemy.name}"
