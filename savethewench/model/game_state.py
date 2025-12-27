@@ -17,6 +17,7 @@ from .events import TravelEvent, BountyCollectedEvent
 from .perk import attach_perk, Perk, set_perk_cache
 from .player import Player
 from .shop import Shop
+from .weapon import Weapon
 
 
 @dataclass
@@ -28,6 +29,8 @@ class GameState:
     current_area: Area = None
 
     wench_area: Area = field(default_factory=lambda: random.choice(load_areas()))  # TODO
+
+    found_weapon: Weapon = None
 
     wanted: str = ''
     _bounty: int = 0
