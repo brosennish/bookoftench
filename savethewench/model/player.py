@@ -77,7 +77,7 @@ class Player(Combatant):
     games_played: int = 0
 
     _max_plays: int = 10
-    _max_items: int = 5
+    _max_items: int = 2
     _max_weapons: int = 2
 
     _blind = False
@@ -209,11 +209,17 @@ class Player(Combatant):
             self.current_weapon = self.weapon_dict[name]
             print_and_sleep(cyan(f"{name} equipped."), 1)
 
+    def swap_found_item(self, old_name: str, found_item: Item):
+        del self.items[old_name]
+        self.items[found_item.name] = found_item
+        print_and_sleep(cyan(f"{old_name} discarded. {found_item.name} added to sack."), 1)
+
     def swap_found_weapon(self, old_name: str, found_weapon: Weapon):
         del self.weapon_dict[old_name]
         self.weapon_dict[found_weapon.name] = PlayerWeapon.from_weapon(found_weapon)
         self.current_weapon = self.weapon_dict[found_weapon.name]
         print_and_sleep(cyan(f"{old_name} discarded. {found_weapon.name} equipped."), 1)
+
 
     @attach_perk(LUCKY_TENCHS_FIN, value_description="crit chance")
     def get_crit_chance(self) -> float:

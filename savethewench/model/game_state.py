@@ -14,6 +14,7 @@ from .area import Area, load_areas
 from .bank import Bank
 from .enemy import Enemy, load_enemy
 from .events import TravelEvent, BountyCollectedEvent
+from .item import Item
 from .perk import attach_perk, Perk, set_perk_cache
 from .player import Player
 from .shop import Shop
@@ -30,6 +31,7 @@ class GameState:
 
     wench_area: Area = field(default_factory=lambda: random.choice(load_areas()))  # TODO
 
+    found_item: Item = None
     found_weapon: Weapon = None
 
     wanted: str = ''

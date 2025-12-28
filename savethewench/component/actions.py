@@ -23,8 +23,6 @@ from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
 from savethewench.util import print_and_sleep
 from .bank import BankVisitDecision
 from .base import LabeledSelectionComponent, SelectionBinding
-from ..data.weapons import BARE_HANDS
-from ..model.player import Player
 
 
 class Explore(RandomThresholdComponent):
@@ -32,8 +30,8 @@ class Explore(RandomThresholdComponent):
         super().__init__(game_state,
                          bindings=[
                              ThresholdBinding(0, SpawnEnemy),
-                             ThresholdBinding(0, self._discover_item),
-                             ThresholdBinding(1, self._discover_weapon),
+                             ThresholdBinding(1, self._discover_item),
+                             ThresholdBinding(0, self._discover_weapon),
                              ThresholdBinding(0, self._discover_coin),
                              ThresholdBinding(0, self._discover_perk)
                          ])
@@ -41,9 +39,18 @@ class Explore(RandomThresholdComponent):
     @staticmethod
     @functional_component(state_dependent=True)
     def _discover_item(game_state: GameState):
-        item = random.choice(load_items())
+        available = [i for i in load_items()
+                     if i.name not in game_state.player.items]
+
+        item = random.choice(available)
+        game_state.found_item = item
+        print_and_sleep(cyan(f"You found {item.name}!"), 1)
+
         if game_state.player.add_item(item):
             print_and_sleep(cyan(f"{item.name} added to sack."), 1)
+            return game_state
+        else:
+            return SwapFoundItemYN(game_state).run()
 
 
 
@@ -126,6 +133,37 @@ class EquipWeapon(LabeledSelectionComponent):
                          top_level_prompt_callback=lambda gs: gs.player.display_weapon_count(), quittable=True)
 
 
+class SwapFoundItemYN(BinarySelectionComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state,
+                        query="Swap for one of your current items",
+                        yes_component=SwapFoundItemMenu,
+                        no_component=NoOpComponent)
+
+# TODO Clean Up
+class SwapFoundItemMenu(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState):
+        found = game_state.found_item
+        valid = list(i for i in game_state.player.items.values())
+
+        super().__init__(
+            game_state,
+            bindings=[
+                SelectionBinding(
+                    key=str(i),
+                    name=item.get_simple_format(),
+                    component=functional_component()(
+                        partial(game_state.player.swap_found_item, item.name, found)
+                    )
+                )
+                for i, item in enumerate(valid, 1)
+            ],
+            top_level_prompt_callback=lambda gs: (
+                print_and_sleep(dim(gs.found_item.get_found_format()), 0),
+            )[-1],
+            quittable=True
+        )
+
 class SwapFoundWeaponYN(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
@@ -158,7 +196,6 @@ class SwapFoundWeaponMenu(LabeledSelectionComponent):
             )[-1],
             quittable=True
         )
-
 
 
 class Attack(Component):
