@@ -10,7 +10,7 @@ from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, G
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM
 from savethewench.data.weapons import BARE_HANDS, KNIFE, MELEE, PROJECTILE, MACHETE, FIRE_AXE, AXE
-from savethewench.event_logger import subscribe_function
+from savethewench.event_logger import subscribe_function, log_event
 from savethewench.ui import yellow, dim, green, cyan, purple
 from savethewench.util import print_and_sleep
 from .base import Combatant, Buyable
@@ -78,7 +78,7 @@ class Player(Combatant):
 
     _max_plays: int = 10
     _max_items: int = 5
-    _max_weapons: int = 5
+    _max_weapons: int = 2
 
     _blind = False
     # TODO maybe add starting items/weapons to config file
@@ -208,6 +208,12 @@ class Player(Combatant):
             event_logger.log_event(SwapWeaponEvent())
             self.current_weapon = self.weapon_dict[name]
             print_and_sleep(cyan(f"{name} equipped."), 1)
+
+    def swap_found_weapon(self, old_name: str, found_weapon: Weapon):
+        del self.weapon_dict[old_name]
+        self.weapon_dict[found_weapon.name] = PlayerWeapon.from_weapon(found_weapon)
+        self.current_weapon = self.weapon_dict[found_weapon.name]
+        print_and_sleep(cyan(f"{old_name} discarded. {found_weapon.name} equipped."), 1)
 
     @attach_perk(LUCKY_TENCHS_FIN, value_description="crit chance")
     def get_crit_chance(self) -> float:
