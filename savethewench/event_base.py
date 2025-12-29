@@ -12,6 +12,7 @@ class EventType(Enum):
     BUY_ITEM = "buy_item"
     BUY_PERK = "buy_perk"
     BUY_WEAPON = "buy_weapon"
+    COFFEE_EVENT = "coffee_event"
     CRIT = "crit"
     DEPOSIT = "deposit"
     FAILED_FLEE = "failed_flee"

@@ -71,6 +71,9 @@ class Player(Combatant):
     max_hp: int = 100
     xp: int = 0
 
+    illness_death_lvl: int = None
+    illness_name: str = None
+
     coins: int = 0
     casino_won: int = 0
     casino_lost: int = 0

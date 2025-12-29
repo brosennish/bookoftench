@@ -4,9 +4,9 @@ from typing import List, TypeVar
 
 from savethewench.data.perks import BROWN_FRIDAY, BARTER_SAUCE, TRADE_SHIP
 from savethewench.event_base import Event
-from savethewench.event_logger import subscribe_function
+from savethewench.event_logger import subscribe_function, log_event
 from .base import Buyable
-from .events import LevelUpEvent, PlayerDeathEvent
+from .events import LevelUpEvent, PlayerDeathEvent, CoffeeEvent
 from .item import Item, load_items
 from .perk import Perk, load_perks, attach_perk
 from .weapon import Weapon, load_discoverable_weapons
@@ -93,6 +93,8 @@ class Shop:
     def remove_listing(self, buyable: Buyable):
         if isinstance(buyable, Item) and buyable in self.item_inventory:
             self.item_inventory.remove(buyable)
+            if buyable.name == "Coughy's Coffee":
+                log_event(CoffeeEvent())
         if isinstance(buyable, Weapon) and buyable in self.weapon_inventory:
             self.weapon_inventory.remove(buyable)
         if isinstance(buyable, Perk) and buyable in self.perk_inventory:

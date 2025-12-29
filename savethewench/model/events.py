@@ -149,3 +149,8 @@ class BountyCollectedEvent(Event):
     def __init__(self, enemy_name):
         super().__init__(EventType.BOUNTY_COLLECTED)
         self.enemy_name = enemy_name
+
+
+class CoffeeEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.COFFEE_EVENT)

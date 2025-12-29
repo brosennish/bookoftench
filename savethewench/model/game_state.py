@@ -6,19 +6,21 @@ from typing import List, Dict
 from savethewench import event_logger
 from savethewench.audio import play_music
 from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
-from savethewench.event_logger import subscribe_function
-from savethewench.ui import green
+from savethewench.event_logger import subscribe_function, log_event
+from savethewench.ui import green, red
 from savethewench.util import print_and_sleep
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
 from .bank import Bank
 from .enemy import Enemy, load_enemy
-from .events import TravelEvent, BountyCollectedEvent
+from .events import TravelEvent, BountyCollectedEvent, PlayerDeathEvent, CoffeeEvent
 from .item import Item
 from .perk import attach_perk, Perk, set_perk_cache
 from .player import Player
 from .shop import Shop
 from .weapon import Weapon
+from ..data.illnesses import LATE_ONSET_SIDS, Illnesses
+from ..data.items import COUGHYS_COFFEE
 
 
 @dataclass
@@ -80,6 +82,29 @@ class GameState:
     def play_current_area_theme(self):
         play_music(self.current_area.theme)
 
+    def coffee_effect(self):
+        item = next((i for i in self.player.get_items()
+                     if i.name == COUGHYS_COFFEE))
+        self.player.use_item(item.name)
+
+        if random.random() < 0.1:
+            player = self.player
+            illness = random.choice(Illnesses)
+
+            if illness['name'] != LATE_ONSET_SIDS:
+                player.illness = illness['name']
+                player.illness_death_lvl = player.lvl + illness['levels_until_death']
+                print_and_sleep(red(f"Coughy coughed on your coffee and now you're sicker than Hell."), 4)
+                print_and_sleep(red(f"Illness: {illness['name']}"), 3)
+                print_and_sleep(red(f"Description: {illness['description']}"), 4)
+                print_and_sleep(f"\nVisit the Free Range Children's Hospital for the cure "
+                                f"or die when you reach level {player.illness_death_lvl}.", 4)
+            else:
+                print_and_sleep(red(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."), 4)
+                print_and_sleep(red(f"Cause of Death: {illness['name']}"), 3)
+                print_and_sleep(red(f"Description: {illness['description']}"), 4)
+                #TODO - Queue death
+
     def _subscribe_listeners(self):
         @subscribe_function(BountyCollectedEvent)
         def handle_bounty_collected_event(event: BountyCollectedEvent):
@@ -90,6 +115,10 @@ class GameState:
         @subscribe_function(AchievementEvent)
         def handle_achievement_event(event: AchievementEvent):
             event.activate(self.player)
+
+        @subscribe_function(CoffeeEvent)
+        def handle_coffee_event(event: CoffeeEvent):
+            self.coffee_effect()
 
     def is_final_boss_available(self) -> bool:
         return self.current_area.boss_defeated and (self.wench_area == self.current_area) and not self.victory
