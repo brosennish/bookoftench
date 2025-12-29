@@ -77,8 +77,8 @@ class Player(Combatant):
     games_played: int = 0
 
     _max_plays: int = 10
-    _max_items: int = 2
-    _max_weapons: int = 2
+    _max_items: int = 5
+    _max_weapons: int = 5
 
     _blind = False
     # TODO maybe add starting items/weapons to config file

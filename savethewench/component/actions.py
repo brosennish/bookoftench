@@ -30,8 +30,8 @@ class Explore(RandomThresholdComponent):
         super().__init__(game_state,
                          bindings=[
                              ThresholdBinding(0, SpawnEnemy),
-                             ThresholdBinding(1, self._discover_item),
-                             ThresholdBinding(0, self._discover_weapon),
+                             ThresholdBinding(.5, self._discover_item),
+                             ThresholdBinding(1, self._discover_weapon),
                              ThresholdBinding(0, self._discover_coin),
                              ThresholdBinding(0, self._discover_perk)
                          ])
