@@ -130,7 +130,7 @@ class EquipWeapon(LabeledSelectionComponent):
                              component=functional_component()(
                                  partial(game_state.player.equip_weapon, weapon.name)))
                              for (i, weapon) in enumerate(game_state.player.get_weapons(), 1)],
-                         top_level_prompt_callback=lambda gs: gs.player.display_weapon_count(), quittable=True)
+                         top_level_prompt_callback=lambda gs: gs.player.display_equip_header(), quittable=True)
 
 
 class SwapFoundItemYN(BinarySelectionComponent):
