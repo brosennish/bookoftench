@@ -29,28 +29,50 @@ class Explore(RandomThresholdComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
                          bindings=[
-                             ThresholdBinding(0.45, SpawnEnemy),
-                             ThresholdBinding(0.55, self._discover_item),
-                             ThresholdBinding(0.65, self._discover_weapon),
-                             ThresholdBinding(0.85, self._discover_coin),
-                             ThresholdBinding(0.86, self._discover_perk)
+                             ThresholdBinding(.45, SpawnEnemy),
+                             ThresholdBinding(.55, self._discover_item),
+                             ThresholdBinding(.65, self._discover_weapon),
+                             ThresholdBinding(.85, self._discover_coin),
+                             ThresholdBinding(.86, self._discover_perk)
                          ])
 
     @staticmethod
     @functional_component(state_dependent=True)
     def _discover_item(game_state: GameState):
-        item = random.choice(load_items())
+        available = [i for i in load_items()
+                     if i.name not in game_state.player.items]
+
+        item = random.choice(available)
+        game_state.found_item = item
+        print_and_sleep(cyan(f"You found {item.name}!"), 1)
+
         if game_state.player.add_item(item):
             print_and_sleep(cyan(f"{item.name} added to sack."), 1)
+            return game_state
+        else:
+            return SwapFoundItemYN(game_state).run()
+
+
 
     @staticmethod
     @functional_component(state_dependent=True)
     def _discover_weapon(game_state: GameState):
-        weapon = random.choice(load_discoverable_weapons())
-        print_and_sleep(cyan(f"You found {'an' if weapon.name[0].lower() in "aeiou" else 'a'} {weapon.name}!"),
+        available = [w for w in load_discoverable_weapons()
+                     if w.name not in game_state.player.weapon_dict]
+
+        weapon = random.choice(available)
+        game_state.found_weapon = weapon
+        print_and_sleep(cyan(f"You found {'an' if weapon.name[0].lower() in 'aeiou' else 'a'} {weapon.name}!"),
                         1)
+
         if game_state.player.add_weapon(weapon):
             print_and_sleep(cyan(f"{weapon.name} added to sack."), 1)
+            return game_state
+        else:
+            return SwapFoundWeaponYN(game_state).run()
+
+
+
 
     @staticmethod
     @functional_component(state_dependent=True)
@@ -109,6 +131,71 @@ class EquipWeapon(LabeledSelectionComponent):
                                  partial(game_state.player.equip_weapon, weapon.name)))
                              for (i, weapon) in enumerate(game_state.player.get_weapons(), 1)],
                          top_level_prompt_callback=lambda gs: gs.player.display_weapon_count(), quittable=True)
+
+
+class SwapFoundItemYN(BinarySelectionComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state,
+                        query="Swap for one of your current items",
+                        yes_component=SwapFoundItemMenu,
+                        no_component=NoOpComponent)
+
+# TODO Clean Up
+class SwapFoundItemMenu(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState):
+        found = game_state.found_item
+        valid = list(i for i in game_state.player.items.values())
+
+        super().__init__(
+            game_state,
+            bindings=[
+                SelectionBinding(
+                    key=str(i),
+                    name=item.get_simple_format(),
+                    component=functional_component()(
+                        partial(game_state.player.swap_found_item, item.name, found)
+                    )
+                )
+                for i, item in enumerate(valid, 1)
+            ],
+            top_level_prompt_callback=lambda gs: (
+                print_and_sleep(dim(gs.found_item.get_found_format()), 0),
+            )[-1],
+            quittable=True
+        )
+
+class SwapFoundWeaponYN(BinarySelectionComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state,
+                        query="Swap for one of your current weapons",
+                        yes_component=SwapFoundWeaponMenu,
+                        no_component=NoOpComponent)
+
+class SwapFoundWeaponMenu(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState):
+        found = game_state.found_weapon
+        valid = [
+            w for w in game_state.player.get_weapons()
+            if w.name != "Bare Hands"
+        ]
+
+        super().__init__(
+            game_state,
+            bindings=[
+                SelectionBinding(
+                    key=str(i),
+                    name=weapon.get_simple_format(),
+                    component=functional_component()(
+                        partial(game_state.player.swap_found_weapon, weapon.name, found)
+                    )
+                )
+                for i, weapon in enumerate(valid, 1)
+            ],
+            top_level_prompt_callback=lambda gs: (
+                print_and_sleep(dim(gs.found_weapon.get_simple_format()), 0),
+            )[-1],
+            quittable=True
+        )
 
 
 class Attack(Component):

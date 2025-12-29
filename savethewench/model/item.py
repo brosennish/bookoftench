@@ -19,6 +19,12 @@ class Item(Buyable):
             f"HP: +{green(self.hp)}"
         ])
 
+    def get_found_format(self) -> str:
+        return dim(' | ').join([
+            cyan(f"{self.name:}"),
+            f"HP: +{green(self.hp)}"
+        ])
+
     def to_sellable_item(self) -> "SellableItem":
         return SellableItem(**vars(self))
 
