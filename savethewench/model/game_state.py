@@ -24,7 +24,7 @@ from .weapon import Weapon
 @dataclass
 class GameState:
     player: Player = field(default_factory=Player)
-    shop: Shop = field(default_factory=Shop)
+
     bank: Bank = field(default_factory=Bank)
     areas: List[Area] = field(default_factory=load_areas)
     current_area: Area = None
@@ -42,6 +42,10 @@ class GameState:
     event_counter: Counter = field(default_factory=Counter)
     perk_cache: Dict[str, Perk] = field(default_factory=dict)
     achievement_cache: Dict[str, Achievement] = field(default_factory=dict)
+
+    @property
+    def shop(self) -> Shop:
+        return self.current_area.shop
 
     @property
     @attach_perk(TENCH_THE_BOUNTY_HUNTER, silent=True)
