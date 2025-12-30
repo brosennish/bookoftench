@@ -215,8 +215,7 @@ class Attack(Component):
             event_logger.log_event(BountyCollectedEvent(enemy.name))
         enemy_weapon = enemy.drop_weapon()
         if enemy_weapon is not None:
-            if player.add_weapon(enemy_weapon):
-                print_and_sleep(cyan(f"{enemy_weapon.name} added to sack."), 1)
+            player.obtain_enemy_weapon()
         player.gain_coins(enemy.drop_coins())
         if player.gain_xp_from_enemy(enemy):
             BankVisitDecision(self.game_state).run()  # TODO figure out a way to not call this in so many places

@@ -227,6 +227,18 @@ class Player(Combatant):
         self.current_weapon = self.weapon_dict[found_weapon.name]
         print_and_sleep(cyan(f"{old_name} discarded. {found_weapon.name} equipped."), 1)
 
+    def obtain_enemy_weapon(self, enemy_weapon: Weapon):
+        match = next((w for w in self.weapon_dict.values()
+                      if w.name == enemy_weapon.name), None)
+        if match:
+            if match.uses < enemy_weapon.uses:
+                self.weapon_dict[enemy_weapon.name] = PlayerWeapon.from_weapon(enemy_weapon)
+                self.current_weapon = self.weapon_dict[enemy_weapon.name]
+                print_and_sleep(cyan(f"{enemy_weapon.name} added to sack."), 1)
+        else:
+            if self.add_weapon(enemy_weapon):
+                print_and_sleep(cyan(f"{enemy_weapon.name} added to sack."), 1)
+
 
     @attach_perk(LUCKY_TENCHS_FIN, value_description="crit chance")
     def get_crit_chance(self) -> float:
