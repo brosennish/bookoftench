@@ -183,6 +183,10 @@ class Player(Combatant):
     def display_weapon_count(self):
         print(f"Weapons {dim(f"({len(self.weapon_dict)}/{self.max_weapons})")}")
 
+    def display_equip_header(self):
+        self.display_weapon_count()
+        print(f"{cyan(self.current_weapon.name)} {dim('(Equipped)')}")
+
     def get_weapons(self) -> List[Weapon]:
         return list(self.weapon_dict.values())
 
@@ -201,6 +205,9 @@ class Player(Combatant):
         sellable_weapon = self.weapon_dict[name].to_sellable_weapon()
         self.coins += sellable_weapon.sell_value
         del self.weapon_dict[name]
+        if name == self.current_weapon.name:
+            selection = next((w for w in self.weapon_dict.values()))
+            self.current_weapon = PlayerWeapon.from_weapon(selection)
         event_logger.log_event(ItemSoldEvent(sellable_weapon.name, sellable_weapon.sell_value))
 
     def equip_weapon(self, name: str):
