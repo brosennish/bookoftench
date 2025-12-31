@@ -26,7 +26,7 @@ Items = [
 
     # --- Tier 1 (10 HP) ---
     {'name': FROZEN_WAFFLE, 'hp': 10, 'cost': 8, 'sell_value': 3, 'areas': [CITY]},
-    {'name': KRILL, 'hp': 10, 'cost': 10, 'sell_value': 4, 'areas': CITY},
+    {'name': KRILL, 'hp': 10, 'cost': 10, 'sell_value': 4, 'areas': [CITY]},
     {'name': STALE_GREENS, 'hp': 10, 'cost': 12, 'sell_value': 5, 'areas': [CITY, CAVE]},
 
     # --- Tier 2 (16–20 HP) ---
