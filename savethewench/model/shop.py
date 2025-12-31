@@ -95,8 +95,6 @@ class Shop:
     def remove_listing(self, buyable: Buyable):
         if isinstance(buyable, Item) and buyable in self.item_inventory:
             self.item_inventory.remove(buyable)
-            if buyable.name == "Coughy's Coffee":
-                log_event(CoffeeEvent())
         if isinstance(buyable, Weapon) and buyable in self.weapon_inventory:
             self.weapon_inventory.remove(buyable)
         if isinstance(buyable, Perk) and buyable in self.perk_inventory:

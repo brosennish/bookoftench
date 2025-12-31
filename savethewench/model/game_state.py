@@ -87,9 +87,8 @@ class GameState:
         play_music(self.current_area.theme)
 
     def coffee_effect(self):
-        item = next((i for i in self.player.get_items()
-                     if i.name == COUGHYS_COFFEE))
-        self.player.use_item(item.name)
+        # item =
+        # self.player.use_item(item.name)
 
         if random.random() < 0.1:
             player = self.player

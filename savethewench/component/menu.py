@@ -6,7 +6,7 @@ from typing import List
 
 from savethewench.audio import play_music
 from savethewench.component.base import Component, LinearComponent, BinarySelectionComponent, \
-    TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, functional_component
+    TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, functional_component, NoOpComponent
 from savethewench.data.audio import INTRO_THEME
 from savethewench.model import GameState
 from savethewench.model.util import get_player_status_view
@@ -126,15 +126,20 @@ class ActionMenu(LabeledSelectionComponent):
 
 class ExtendedActionMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, bindings=[
+        bindings=[
             SelectionBinding('A', "Achievements", Achievements),
             SelectionBinding('B', "Bank", WithdrawalOnlyBank),
             SelectionBinding('C', "Casino", CasinoBouncer),
             SelectionBinding('P', "Perks", DisplayPerks),
-            SelectionBinding('O', "Overview", Overview),
+            SelectionBinding('O', "Overview", Overview)
+            ]
+        if game_state.current_area.name == "City":
+            bindings.append(SelectionBinding('S', "Coffee Shop", NoOpComponent))
             # TODO clean up duplicated code
+        bindings.append(
             SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
-        ])
+        )
+        super().__init__(game_state, bindings=bindings)
         self.leave_menu = False
 
     def _return(self):

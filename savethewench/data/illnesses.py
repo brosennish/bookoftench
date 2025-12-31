@@ -26,8 +26,8 @@ Illnesses = [
 
     # --- Three Levels ---
     {'name': REVERSE_HAIR_GROWTH_DISORDER,
-     'description': "A surprisingly common condition in which one's hair grows inward instead of outward. "
-                    "Over time, the disorderly will fill with hair until there's no room left in there.",
+     'description': "A surprisingly common condition in which one's hair grows inward instead of outward."
+                    "\nOver time, the disorderly will fill with hair until there's no room left in there.",
     'levels_until_death': 3,
      'cost': 175},
 ]
