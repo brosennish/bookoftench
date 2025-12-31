@@ -19,6 +19,8 @@ _MAX_PERKS: int = 3
 
 @dataclass
 class Shop:
+    area_name: str
+
     _all_items: List[Item] = field(init=False)
     _all_weapons: List[Weapon] = field(init=False)
     _all_perks: List[Perk] = field(init=False)
@@ -73,7 +75,7 @@ class Shop:
         self._perk_inventory = perks
 
     def __post_init__(self):
-        self._all_items = load_items()
+        self._all_items = [i for i in load_items() if self.area_name in i.areas]
         self._all_weapons = load_discoverable_weapons()
         self._all_perks = load_perks()
         self.reset_inventory()

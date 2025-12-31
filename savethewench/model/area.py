@@ -1,3 +1,4 @@
+import copy
 import random
 from dataclasses import dataclass, field
 from typing import List
@@ -6,6 +7,7 @@ from savethewench.data import Areas
 from savethewench.ui import purple, yellow
 from savethewench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
+from .shop import Shop
 
 
 @dataclass
@@ -20,8 +22,11 @@ class Area:
     boss: Boss = None
     current_enemy = None
 
+    shop: Shop = field(default_factory=Shop)
+
     def __post_init__(self):
         self.boss = load_boss(self.boss_name)
+        self.shop = Shop(self.name)
 
     @property
     def enemies_remaining(self) -> int:
@@ -62,4 +67,9 @@ class Area:
 
 
 def load_areas() -> List[Area]:
-    return [Area(**d) for d in Areas]
+    res = []
+    for d in Areas:
+        data = copy.deepcopy(d)
+        data['shop'] = Shop(data['name'])
+        res.append(Area(**data))
+    return res

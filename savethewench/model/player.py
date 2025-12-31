@@ -186,6 +186,10 @@ class Player(Combatant):
     def display_weapon_count(self):
         print(f"Weapons {dim(f"({len(self.weapon_dict)}/{self.max_weapons})")}")
 
+    def display_equip_header(self):
+        self.display_weapon_count()
+        print(f"{cyan(self.current_weapon.name)} {dim('(Equipped)')}")
+
     def get_weapons(self) -> List[Weapon]:
         return list(self.weapon_dict.values())
 
@@ -204,6 +208,9 @@ class Player(Combatant):
         sellable_weapon = self.weapon_dict[name].to_sellable_weapon()
         self.coins += sellable_weapon.sell_value
         del self.weapon_dict[name]
+        if name == self.current_weapon.name:
+            selection = next((w for w in self.weapon_dict.values()))
+            self.current_weapon = PlayerWeapon.from_weapon(selection)
         event_logger.log_event(ItemSoldEvent(sellable_weapon.name, sellable_weapon.sell_value))
 
     def equip_weapon(self, name: str):
@@ -222,6 +229,18 @@ class Player(Combatant):
         self.weapon_dict[found_weapon.name] = PlayerWeapon.from_weapon(found_weapon)
         self.current_weapon = self.weapon_dict[found_weapon.name]
         print_and_sleep(cyan(f"{old_name} discarded. {found_weapon.name} equipped."), 1)
+
+    def obtain_enemy_weapon(self, enemy_weapon: Weapon):
+        match = next((w for w in self.weapon_dict.values()
+                      if w.name == enemy_weapon.name), None)
+        if match:
+            if match.uses < enemy_weapon.uses:
+                self.weapon_dict[enemy_weapon.name] = PlayerWeapon.from_weapon(enemy_weapon)
+                self.current_weapon = self.weapon_dict[enemy_weapon.name]
+                print_and_sleep(cyan(f"{enemy_weapon.name} added to sack."), 1)
+        else:
+            if self.add_weapon(enemy_weapon):
+                print_and_sleep(cyan(f"{enemy_weapon.name} added to sack."), 1)
 
 
     @attach_perk(LUCKY_TENCHS_FIN, value_description="crit chance")
