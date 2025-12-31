@@ -12,6 +12,7 @@ class Item(Buyable):
     hp: int
     cost: int
     sell_value: int
+    areas: List[str]
 
     def get_simple_format(self) -> str:
         return dim(' | ').join([
