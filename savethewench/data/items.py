@@ -60,13 +60,3 @@ Items = [
     {'name': SUSPICIOUS_GUMBO, 'hp': 40, 'cost': 45, 'sell_value': 18, 'areas': [SWAMP]},
     {'name': HOG_LOINS, 'hp': 40, 'cost': 45, 'sell_value': 18, 'areas': [FOREST, SWAMP]},
 ]
-
-# FLOW:
-# Menu option > Run component > Coughy intro static method >
-# Display Coughy_Items > Labeled Selection > log_event >
-# handle_event > coffee_effect
-
-# TODO - Component, intro, display, selection, complete effect
-
-# ADDED -> Coughy_Items; CoffeeEvent; handle_coffee_event(); coffee_effect(), Menu option,
-

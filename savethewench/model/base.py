@@ -213,7 +213,7 @@ class Combatant(ABC):
         if isinstance(other, NPC):
             print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
-            event_logger.log_event(HitEvent(self.current_weapon.type))
+            event_logger.log_event(HitEvent(self.current_weapon.name))
         else:
             print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)

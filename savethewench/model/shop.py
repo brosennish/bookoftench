@@ -4,9 +4,9 @@ from typing import List, TypeVar
 
 from savethewench.data.perks import BROWN_FRIDAY, BARTER_SAUCE, TRADE_SHIP
 from savethewench.event_base import Event
-from savethewench.event_logger import subscribe_function, log_event
+from savethewench.event_logger import subscribe_function
 from .base import Buyable
-from .events import LevelUpEvent, PlayerDeathEvent, CoffeeEvent
+from .events import LevelUpEvent, PlayerDeathEvent
 from .item import Item, load_items
 from .perk import Perk, load_perks, attach_perk
 from .weapon import Weapon, load_discoverable_weapons

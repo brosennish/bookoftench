@@ -1,9 +1,9 @@
 from savethewench.event_base import Listener
 from savethewench.model.events import ItemUsedEvent, TravelEvent, CoffeeEvent
-from savethewench.ui import yellow, cyan, red
+from savethewench.ui import yellow, cyan
 from .audio import play_music
 from .data.audio import TRAVEL_THEME
-from .event_logger import subscribe_listener
+from .event_logger import subscribe_listener, subscribe_function
 from .util import print_and_sleep
 
 

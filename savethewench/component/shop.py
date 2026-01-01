@@ -7,9 +7,8 @@ from savethewench.data.audio import SHOP_THEME
 from savethewench.model import GameState
 from savethewench.model.base import Buyable
 from savethewench.model.util import display_active_perk_count
-from savethewench.ui import green, blue
+from savethewench.ui import green, blue, yellow
 from savethewench.util import print_and_sleep
-
 
 class ShopComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
