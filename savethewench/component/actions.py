@@ -27,13 +27,14 @@ from .base import LabeledSelectionComponent, SelectionBinding
 
 class Explore(RandomChoiceComponent):
     def __init__(self, game_state: GameState):
+        ep = game_state.current_area.explore_probabilities
         super().__init__(game_state,
                          bindings=[
-                             ProbabilityBinding(45, SpawnEnemy),
-                             ProbabilityBinding(10, self._discover_item),
-                             ProbabilityBinding(10, self._discover_weapon),
-                             ProbabilityBinding(20, self._discover_coin),
-                             ProbabilityBinding(1, self._discover_perk)
+                             ProbabilityBinding(ep.enemy_chance, SpawnEnemy),
+                             ProbabilityBinding(ep.item_chance, self._discover_item),
+                             ProbabilityBinding(ep.weapon_chance, self._discover_weapon),
+                             ProbabilityBinding(ep.coin_chance, self._discover_coin),
+                             ProbabilityBinding(ep.perk_chance, self._discover_perk)
                          ])
 
     @staticmethod

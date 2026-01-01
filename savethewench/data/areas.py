@@ -6,6 +6,9 @@ CITY = "City"
 FOREST = "Forest"
 SWAMP = "Swamp"
 
+# TODO tweak 'explore_probabilities' for each area as desired
+# e.g. 'explore_probabilities': {'coin_chance': 20, 'enemy_chance': 30, 'item_chance': 30,
+#                                'weapon_chance': 10, 'perk_chance': 5}
 Areas = [
     {'name': CITY,
      'enemies': [enemies.BANDIT, enemies.GOON, enemies.PIMP, enemies.HOBO,

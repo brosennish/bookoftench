@@ -9,6 +9,14 @@ from savethewench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
 from .shop import Shop
 
+@dataclass
+class ExploreProbabilities:
+    coin_chance: int = 20
+    enemy_chance: int = 45
+    item_chance: int = 10
+    perk_chance: int = 1
+    weapon_chance: int = 10
+
 
 @dataclass
 class Area:
@@ -23,6 +31,7 @@ class Area:
     current_enemy = None
 
     shop: Shop = field(default_factory=Shop)
+    explore_probabilities: ExploreProbabilities = field(default_factory=ExploreProbabilities)
 
     def __post_init__(self):
         self.boss = load_boss(self.boss_name)
@@ -71,5 +80,7 @@ def load_areas() -> List[Area]:
     for d in Areas:
         data = copy.deepcopy(d)
         data['shop'] = Shop(data['name'])
+        if 'explore_probabilities' in data:
+            data['explore_probabilities'] = ExploreProbabilities(**data['explore_probabilities'])
         res.append(Area(**data))
     return res
