@@ -26,11 +26,7 @@ TENCH_FILET = "Tench Filet"
 UNIDENTIFIED_MUSHROOMS = "Unidentified Mushrooms"
 
 # TODO - Add more items and organize by area to support distinct shops and discoveries
-Coughy_Items = [
-    {'name': COUGHYS_COFFEE, 'hp': 10, 'cost': 4, 'risk': 0.07},
-    {'name': COUGHYS_COLD_BREW, 'hp': 15, 'cost': 5, 'risk': 0.085},
-    {'name': COUGHYS_CAPUCCINO, 'hp': 20, 'cost': 6, 'risk': 0.10},
-]
+
 
 Items = [
     # --- Tier 1 (10 HP) ---

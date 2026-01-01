@@ -20,7 +20,6 @@ from .player import Player
 from .shop import Shop
 from .weapon import Weapon
 from ..data.illnesses import LATE_ONSET_SIDS, Illnesses
-from ..data.items import COUGHYS_COFFEE
 
 
 @dataclass
@@ -86,17 +85,15 @@ class GameState:
     def play_current_area_theme(self):
         play_music(self.current_area.theme)
 
-    def coffee_effect(self):
-        # item =
-        # self.player.use_item(item.name)
-
-        if random.random() < 0.1:
+    def coffee_effect(self, item: Dict):
+        if random.random() < item['risk']:
             player = self.player
             illness = random.choice(Illnesses)
 
             if illness['name'] != LATE_ONSET_SIDS:
                 player.illness = illness['name']
                 player.illness_death_lvl = player.lvl + illness['levels_until_death']
+
                 print_and_sleep(red(f"Coughy coughed on your coffee and now you're sicker than Hell."), 4)
                 print_and_sleep(red(f"Illness: {illness['name']}"), 3)
                 print_and_sleep(red(f"Description: {illness['description']}"), 4)
