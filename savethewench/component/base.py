@@ -1,7 +1,7 @@
 import random
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import List, Callable, Any
+from typing import List, Callable, Any, Dict
 
 from savethewench.model import GameState
 from savethewench.ui import dim, yellow
@@ -145,27 +145,33 @@ class TextDisplayingComponent(LinearComponent):
 
 
 @dataclass
-class ThresholdBinding:
-    upper_threshold: float
+class ProbabilityBinding:
+    percent_chance: int
     component: type[Component]
 
     def __post_init__(self):
-        if not (0 <= self.upper_threshold <= 1):
-            raise ValueError("upper_threshold must be between 0 and 1")
+        if not (0 <= self.percent_chance <= 100):
+            raise ValueError(f"percent_chance must be between 0 and 100, got {self.percent_chance}.")
 
 
-class RandomThresholdComponent(Component):
-    def __init__(self, game_state: GameState, bindings: List[ThresholdBinding],
+class RandomChoiceComponent(Component):
+    def __init__(self, game_state: GameState, bindings: List[ProbabilityBinding],
                  failed_message: str = dim("You came up dry.")):
         super().__init__(game_state)
-        self.ordered_thresholds = sorted(bindings, key=lambda t: t.upper_threshold)
+        self.bindings = bindings
         self.failed_message = failed_message
+        if sum(b.percent_chance for b in self.bindings) > 100:
+            raise ValueError(f"Probability bindings must sum to between 0 and 100, "
+                             f"got {sum(b.percent_chance for b in self.bindings)}.")
 
     def run(self) -> GameState:
         roll = random.random()
-        for binding in self.ordered_thresholds:
-            if roll < binding.upper_threshold:
+        current = 0
+        for binding in self.bindings:
+            probability = binding.percent_chance / 100.0
+            if roll < current + probability:
                 return binding.component(self.game_state).run()
+            current += probability
         print_and_sleep(self.failed_message, 1)
         return self.game_state
 
@@ -183,6 +189,19 @@ class GatekeepingComponent(Component):
             return self.accept_component(self.game_state).run()
         else:
             return self.deny_component(self.game_state).run()
+
+
+class ComponentMappingComponent[T](Component):
+    def __init__(self, game_state: GameState, value_extractor: Callable[[GameState], T], component_map: Dict[T, type[Component]]):
+        super().__init__(game_state)
+        self.value_extractor = value_extractor
+        self.component_map = component_map
+
+    def run(self) -> GameState:
+        value = self.value_extractor(self.game_state)
+        if value in self.component_map:
+            return self.component_map[value](self.game_state).run()
+        raise NotImplementedError(f"Value {value} not implemented")
 
 
 @dataclass

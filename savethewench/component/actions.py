@@ -4,9 +4,9 @@ from typing import List
 
 from savethewench import event_logger
 from savethewench.audio import play_music, play_sound, stop_music
-from savethewench.component.base import RandomThresholdComponent, ThresholdBinding, \
-    TextDisplayingComponent, functional_component, Component, ColoredNameSelectionBinding, BinarySelectionComponent, \
-    NoOpComponent, LinearComponent
+from savethewench.component.base import TextDisplayingComponent, functional_component, Component, \
+    ColoredNameSelectionBinding, BinarySelectionComponent, \
+    NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding
 from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
 from savethewench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from savethewench.data.items import TENCH_FILET
@@ -25,15 +25,15 @@ from .bank import BankVisitDecision
 from .base import LabeledSelectionComponent, SelectionBinding
 
 
-class Explore(RandomThresholdComponent):
+class Explore(RandomChoiceComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
                          bindings=[
-                             ThresholdBinding(.45, SpawnEnemy),
-                             ThresholdBinding(.55, self._discover_item),
-                             ThresholdBinding(.65, self._discover_weapon),
-                             ThresholdBinding(.85, self._discover_coin),
-                             ThresholdBinding(.86, self._discover_perk)
+                             ProbabilityBinding(45, SpawnEnemy),
+                             ProbabilityBinding(10, self._discover_item),
+                             ProbabilityBinding(10, self._discover_weapon),
+                             ProbabilityBinding(20, self._discover_coin),
+                             ProbabilityBinding(1, self._discover_perk)
                          ])
 
     @staticmethod
@@ -52,8 +52,6 @@ class Explore(RandomThresholdComponent):
         else:
             return SwapFoundItemYN(game_state).run()
 
-
-
     @staticmethod
     @functional_component(state_dependent=True)
     def _discover_weapon(game_state: GameState):
@@ -70,9 +68,6 @@ class Explore(RandomThresholdComponent):
             return game_state
         else:
             return SwapFoundWeaponYN(game_state).run()
-
-
-
 
     @staticmethod
     @functional_component(state_dependent=True)
@@ -136,9 +131,10 @@ class EquipWeapon(LabeledSelectionComponent):
 class SwapFoundItemYN(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
-                        query="Swap for one of your current items",
-                        yes_component=SwapFoundItemMenu,
-                        no_component=NoOpComponent)
+                         query="Swap for one of your current items",
+                         yes_component=SwapFoundItemMenu,
+                         no_component=NoOpComponent)
+
 
 # TODO Clean Up
 class SwapFoundItemMenu(LabeledSelectionComponent):
@@ -164,12 +160,14 @@ class SwapFoundItemMenu(LabeledSelectionComponent):
             quittable=True
         )
 
+
 class SwapFoundWeaponYN(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
-                        query="Swap for one of your current weapons",
-                        yes_component=SwapFoundWeaponMenu,
-                        no_component=NoOpComponent)
+                         query="Swap for one of your current weapons",
+                         yes_component=SwapFoundWeaponMenu,
+                         no_component=NoOpComponent)
+
 
 class SwapFoundWeaponMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -251,12 +249,12 @@ class FleeSelectionBinding(SelectionBinding):
         return f"Flee ({int(calculate_flee() * 100)}%)"
 
 
-class TryFlee(RandomThresholdComponent):
+class TryFlee(RandomChoiceComponent):
     def __init__(self, game_state: GameState):
-        self.flee_chance = calculate_flee()
+        self.flee_chance = int(calculate_flee() * 100)
         super().__init__(game_state, bindings=[
-            ThresholdBinding(self.flee_chance, self._flee_success),
-            ThresholdBinding(1.0, FailedFlee)
+            ProbabilityBinding(self.flee_chance, self._flee_success),
+            ProbabilityBinding(100 - self.flee_chance, FailedFlee)
         ])
 
     @staticmethod
@@ -265,6 +263,7 @@ class TryFlee(RandomThresholdComponent):
         event_logger.log_event(FleeEvent(game_state.current_area.current_enemy.name))
         if game_state.player.gain_xp_other(1):
             BankVisitDecision(game_state).run()  # TODO figure out a way to not call this in so many places
+
 
 class SpawnEnemy(LinearComponent):
     def __init__(self, game_state: GameState):
@@ -343,6 +342,7 @@ class FightFinalBoss(FightBoss):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
         self.enemy = self.game_state.current_area.summon_final_boss()
+
 
 class Achievements(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
