@@ -32,6 +32,7 @@ class Area:
 
     shop: Shop = field(default_factory=Shop)
     explore_probabilities: ExploreProbabilities = field(default_factory=ExploreProbabilities)
+    unique_components: List[str] = field(default_factory=list)
 
     def __post_init__(self):
         self.boss = load_boss(self.boss_name)

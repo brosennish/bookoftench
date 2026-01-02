@@ -93,7 +93,6 @@ class Explore(RandomChoiceComponent):
         else:
             print_and_sleep(yellow(dim("You came up dry.")), 1)
 
-
 class Travel(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,

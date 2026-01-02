@@ -1,0 +1,1 @@
+COFFEE_SHOP = "Coffee Shop"

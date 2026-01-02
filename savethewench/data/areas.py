@@ -1,4 +1,5 @@
 from . import audio, enemies
+from .components import COFFEE_SHOP
 
 # Constants
 CAVE = "Cave"
@@ -13,7 +14,7 @@ Areas = [
     {'name': CITY,
      'enemies': [enemies.BANDIT, enemies.GOON, enemies.PIMP, enemies.HOBO,
                  enemies.SERIAL_KILLER],
-     'boss_name': enemies.THE_MAYOR, 'theme': audio.CITY_THEME},
+     'boss_name': enemies.THE_MAYOR, 'theme': audio.CITY_THEME, 'unique_components': [COFFEE_SHOP]},
     {'name': FOREST,
      'enemies': [enemies.HIKER, enemies.HUNTER, enemies.POACHER,
                  enemies.DISGRACED_EXILE, enemies.SERIAL_KILLER],

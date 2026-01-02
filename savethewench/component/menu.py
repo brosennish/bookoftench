@@ -16,6 +16,7 @@ from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, Displa
     FightBoss, FightFinalBoss
 from .bank import WithdrawalOnlyBank
 from .casino import CasinoBouncer
+from .registry import get_registered_component
 from .shop import ShopComponent
 
 
@@ -126,7 +127,9 @@ class ActionMenu(LabeledSelectionComponent):
 
 class ExtendedActionMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, bindings=[
+        area_actions = [SelectionBinding(name[:2], name, get_registered_component(name))
+                        for name in game_state.current_area.unique_components]
+        super().__init__(game_state, bindings=area_actions + [
             SelectionBinding('A', "Achievements", Achievements),
             SelectionBinding('B', "Bank", WithdrawalOnlyBank),
             SelectionBinding('C', "Casino", CasinoBouncer),
