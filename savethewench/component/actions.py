@@ -8,6 +8,8 @@ from savethewench.component.base import TextDisplayingComponent, functional_comp
     ColoredNameSelectionBinding, BinarySelectionComponent, \
     NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding
 from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
+from savethewench.data.components import EXPLORE, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, OVERVIEW, TRAVEL, \
+    AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT
 from savethewench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION, DEATH_CAN_WAIT
@@ -23,8 +25,10 @@ from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
 from savethewench.util import print_and_sleep
 from .bank import BankVisitDecision
 from .base import LabeledSelectionComponent, SelectionBinding
+from .registry import register_component
 
 
+@register_component(EXPLORE)
 class Explore(RandomChoiceComponent):
     def __init__(self, game_state: GameState):
         ep = game_state.current_area.explore_probabilities
@@ -93,6 +97,8 @@ class Explore(RandomChoiceComponent):
         else:
             print_and_sleep(yellow(dim("You came up dry.")), 1)
 
+
+@register_component(TRAVEL)
 class Travel(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
@@ -105,6 +111,7 @@ class Travel(LabeledSelectionComponent):
                                         key=lambda a: a.name), 1)], quittable=True)
 
 
+@register_component(USE_ITEM)
 class UseItem(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
@@ -116,6 +123,7 @@ class UseItem(LabeledSelectionComponent):
                          top_level_prompt_callback=lambda gs: gs.player.display_item_count(), quittable=True)
 
 
+@register_component(EQUIP_WEAPON)
 class EquipWeapon(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
@@ -213,7 +221,7 @@ class Attack(Component):
             event_logger.log_event(BountyCollectedEvent(enemy.name))
         enemy_weapon = enemy.drop_weapon()
         if enemy_weapon is not None:
-            player.obtain_enemy_weapon()
+            player.obtain_enemy_weapon(enemy_weapon)
         player.gain_coins(enemy.drop_coins())
         if player.gain_xp_from_enemy(enemy):
             BankVisitDecision(self.game_state).run()  # TODO figure out a way to not call this in so many places
@@ -303,6 +311,7 @@ class Battle(LabeledSelectionComponent):
             self.fled = True
 
 
+@register_component(AREA_BOSS_FIGHT)
 class FightBoss(Battle):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
@@ -338,22 +347,26 @@ class FightBoss(Battle):
         return self.game_state
 
 
+@register_component(FINAL_BOSS_FIGHT)
 class FightFinalBoss(FightBoss):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
         self.enemy = self.game_state.current_area.summon_final_boss()
 
 
+@register_component(ACHIEVEMENTS)
 class Achievements(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, display_callback=display_player_achievements)
 
 
+@register_component(PERKS)
 class DisplayPerks(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, display_callback=display_active_perks)
 
 
+@register_component(OVERVIEW)
 class Overview(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, display_callback=display_game_overview)

@@ -1,13 +1,17 @@
+from __future__ import annotations
+
 import copy
 import random
 from dataclasses import dataclass, field
 from typing import List
 
 from savethewench.data import Areas
+from savethewench.data.components import MenuDefaults
 from savethewench.ui import purple, yellow
 from savethewench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
 from .shop import Shop
+
 
 @dataclass
 class ExploreProbabilities:
@@ -16,6 +20,15 @@ class ExploreProbabilities:
     item_chance: int = 10
     perk_chance: int = 1
     weapon_chance: int = 10
+
+
+@dataclass
+class AreaActions:
+    pages: List[List[str]]
+
+    @classmethod
+    def defaults(cls) -> AreaActions:
+        return AreaActions(pages=[MenuDefaults.page_one, MenuDefaults.page_two])
 
 
 @dataclass
@@ -33,6 +46,7 @@ class Area:
     shop: Shop = field(default_factory=Shop)
     explore_probabilities: ExploreProbabilities = field(default_factory=ExploreProbabilities)
     unique_components: List[str] = field(default_factory=list)
+    actions_menu: AreaActions = field(default_factory=AreaActions.defaults)
 
     def __post_init__(self):
         self.boss = load_boss(self.boss_name)
@@ -83,5 +97,7 @@ def load_areas() -> List[Area]:
         data['shop'] = Shop(data['name'])
         if 'explore_probabilities' in data:
             data['explore_probabilities'] = ExploreProbabilities(**data['explore_probabilities'])
+        if 'actions_menu' in data:
+            data['actions_menu'] = AreaActions(**data['actions_menu'])
         res.append(Area(**data))
     return res

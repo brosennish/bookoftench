@@ -1,5 +1,5 @@
 from . import audio, enemies
-from .components import COFFEE_SHOP
+from .components import COFFEE_SHOP, MenuDefaults
 
 # Constants
 CAVE = "Cave"
@@ -14,7 +14,8 @@ Areas = [
     {'name': CITY,
      'enemies': [enemies.BANDIT, enemies.GOON, enemies.PIMP, enemies.HOBO,
                  enemies.SERIAL_KILLER],
-     'boss_name': enemies.THE_MAYOR, 'theme': audio.CITY_THEME, 'unique_components': [COFFEE_SHOP]},
+     'boss_name': enemies.THE_MAYOR, 'theme': audio.CITY_THEME, 'unique_components': [COFFEE_SHOP],
+     'actions_menu': {'pages': [MenuDefaults.page_one, sorted([*MenuDefaults.page_two, COFFEE_SHOP])]}},
     {'name': FOREST,
      'enemies': [enemies.HIKER, enemies.HUNTER, enemies.POACHER,
                  enemies.DISGRACED_EXILE, enemies.SERIAL_KILLER],
