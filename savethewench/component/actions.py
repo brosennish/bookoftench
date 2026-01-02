@@ -9,7 +9,7 @@ from savethewench.component.base import TextDisplayingComponent, functional_comp
     NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding
 from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
 from savethewench.data.components import EXPLORE, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, OVERVIEW, TRAVEL, \
-    AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT
+    AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_COIN, DISCOVER_PERK
 from savethewench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION, DEATH_CAN_WAIT
@@ -25,23 +25,18 @@ from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
 from savethewench.util import print_and_sleep
 from .bank import BankVisitDecision
 from .base import LabeledSelectionComponent, SelectionBinding
-from .registry import register_component
+from .registry import register_component, get_registered_component
 
 
 @register_component(EXPLORE)
 class Explore(RandomChoiceComponent):
     def __init__(self, game_state: GameState):
         ep = game_state.current_area.explore_probabilities
-        super().__init__(game_state,
-                         bindings=[
-                             ProbabilityBinding(ep.enemy_chance, SpawnEnemy),
-                             ProbabilityBinding(ep.item_chance, self._discover_item),
-                             ProbabilityBinding(ep.weapon_chance, self._discover_weapon),
-                             ProbabilityBinding(ep.coin_chance, self._discover_coin),
-                             ProbabilityBinding(ep.perk_chance, self._discover_perk)
-                         ])
+        super().__init__(game_state, bindings=[ProbabilityBinding(prob, get_registered_component(name))
+                                               for name, prob in ep.items()])
 
     @staticmethod
+    @register_component(DISCOVER_ITEM)
     @functional_component(state_dependent=True)
     def _discover_item(game_state: GameState):
         available = [i for i in load_items()
@@ -58,6 +53,7 @@ class Explore(RandomChoiceComponent):
             return SwapFoundItemYN(game_state).run()
 
     @staticmethod
+    @register_component(DISCOVER_WEAPON)
     @functional_component(state_dependent=True)
     def _discover_weapon(game_state: GameState):
         available = [w for w in load_discoverable_weapons()
@@ -75,6 +71,7 @@ class Explore(RandomChoiceComponent):
             return SwapFoundWeaponYN(game_state).run()
 
     @staticmethod
+    @register_component(DISCOVER_COIN)
     @functional_component(state_dependent=True)
     def _discover_coin(game_state: GameState):
         @attach_perk(METAL_DETECTIVE, value_description="coin")
@@ -85,6 +82,7 @@ class Explore(RandomChoiceComponent):
         game_state.player.coins += coins
 
     @staticmethod
+    @register_component(DISCOVER_PERK)
     @functional_component()
     def _discover_perk():
         filtered: List[Perk] = load_perks(lambda p: not (p.active or p.name == WENCH_LOCATION))
@@ -273,6 +271,7 @@ class TryFlee(RandomChoiceComponent):
             BankVisitDecision(game_state).run()  # TODO figure out a way to not call this in so many places
 
 
+@register_component(SPAWN_ENEMY)
 class SpawnEnemy(LinearComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, next_component=Battle)

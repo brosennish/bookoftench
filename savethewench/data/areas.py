@@ -8,8 +8,10 @@ FOREST = "Forest"
 SWAMP = "Swamp"
 
 # TODO tweak 'explore_probabilities' for each area as desired
-# e.g. 'explore_probabilities': {'coin_chance': 20, 'enemy_chance': 30, 'item_chance': 30,
-#                                'weapon_chance': 10, 'perk_chance': 5}
+# map names of registered components to (int percent) probabilities
+# can include *any* registered component - useful for future npc encounters, etc...
+# e.g. 'explore_probabilities': {DISCOVER_COIN: 20, SPAWN_ENEMY: 30, DISCOVER_ITEM: 30,
+#                                DISCOVER_WEAPON: 10, DISCOVER_PERK: 5}
 Areas = [
     {'name': CITY,
      'enemies': [enemies.BANDIT, enemies.GOON, enemies.PIMP, enemies.HOBO,
