@@ -6,8 +6,8 @@ from typing import List, Dict
 from savethewench import event_logger
 from savethewench.audio import play_music
 from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
-from savethewench.event_logger import subscribe_function, log_event
-from savethewench.ui import green, red
+from savethewench.event_logger import subscribe_function
+from savethewench.ui import green, red, yellow, orange, dim, cyan
 from savethewench.util import print_and_sleep
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
@@ -15,7 +15,7 @@ from .bank import Bank
 from .base import Buyable
 from .coffee_item import CoffeeItem
 from .enemy import Enemy, load_enemy
-from .events import TravelEvent, BountyCollectedEvent, PlayerDeathEvent, CoffeeEvent
+from .events import TravelEvent, BountyCollectedEvent, CoffeeEvent
 from .item import Item
 from .perk import attach_perk, Perk, set_perk_cache
 from .player import Player
@@ -88,6 +88,10 @@ class GameState:
         play_music(self.current_area.theme)
 
     def make_coffee_purchase(self, buyable: Buyable):
+        if self.player.coins < buyable.cost:
+            print_and_sleep(yellow(f"Need more coin"), 1)
+            return False
+
         if isinstance(buyable, CoffeeItem):
             self.coffee_effect(buyable)
             event_logger.log_event(CoffeeEvent(buyable))
@@ -97,23 +101,27 @@ class GameState:
         return True
 
     def coffee_effect(self, item: CoffeeItem):
+        self.player.gain_hp(item.hp)
+        print_and_sleep(f"You restored {green(item.hp)} hp!\n", 1)
+
         if random.random() < item.risk:
             player = self.player
             illness = random.choice(Illnesses)
+            name = illness['name']
 
-            if illness.name != LATE_ONSET_SIDS:
-                player.illness = illness.name
-                player.illness_death_lvl = player.lvl + illness.levels_until_death
+            if name != LATE_ONSET_SIDS:
+                player.illness = name
+                player.illness_death_lvl = player.lvl + illness['levels_until_death']
 
-                print_and_sleep(red(f"Coughy coughed on your coffee and now you're sicker than Hell."), 4)
-                print_and_sleep(red(f"Illness: {illness.name}"), 3)
-                print_and_sleep(red(f"Description: {illness['description']}"), 4)
-                print_and_sleep(f"\nVisit the Free Range Children's Hospital for the cure "
-                                f"or die when you reach level {player.illness_death_lvl}.", 4)
+                print_and_sleep(red(f"Coughy coughed on your coffee and now you're sicker than Hell."), 2)
+                print_and_sleep(red(f"Illness: {name}"), 2)
+                print_and_sleep(red(f"Description: {illness['description']}"), 3)
+                print_and_sleep(f"\nVisit the Free Range Children's Hospital for the cure\n"
+                                f"or die when you reach level {player.illness_death_lvl}.", 3)
             else:
-                print_and_sleep(red(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."), 4)
-                print_and_sleep(red(f"Cause of Death: {illness.name}"), 3)
-                print_and_sleep(red(f"Description: {illness.description}"), 4)
+                print_and_sleep(red(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."), 2)
+                print_and_sleep(red(f"Cause of Death: {name}"), 2)
+                print_and_sleep(red(f"Description: {illness['description']}"), 3)
                 #TODO - Queue death
 
     def _subscribe_listeners(self):

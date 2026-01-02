@@ -21,5 +21,5 @@ class CoffeeItem(Buyable):
             cyan(f"{self.name:<19}"),
             f"Cost: {orange(self.cost)}",
             f"HP: +{green(self.hp)}",
-            f"Risk: {red(int(self.risk * 100))}%"
+            f"Risk: {red(f'{int(self.risk * 100)}%')}"
         ])

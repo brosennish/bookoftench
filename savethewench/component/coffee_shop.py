@@ -4,22 +4,34 @@ from savethewench.audio import play_music
 from savethewench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
     functional_component
 from savethewench.data.audio import SHOP_THEME
-from savethewench.data.coffee_items import Coffee_Items
 from savethewench.model import GameState
 from savethewench.model.base import Buyable
+from savethewench.model.coffee_shop import CoffeeShop
+from savethewench.model.util import display_coffee_header
 from savethewench.ui import green, blue
 from savethewench.util import print_and_sleep
 
 class CoffeeShopComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        item_bindings = [ReprBinding(str(i + 1), item['name'], self._make_purchase_component(item), item) for
-                         i, item in enumerate(Coffee_Items)]
+        shop = CoffeeShop()
+        shop_options = shop.coffee_inventory
+
+        item_bindings = [ReprBinding(str(i + 1), item.name, self._make_purchase_component(item), item) for
+                         i, item in enumerate(shop_options)]
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
         super().__init__(game_state, refresh_menu=True,
-                         bindings=[*item_bindings, return_binding])
+                         bindings=[*item_bindings, return_binding],
+                         quittable=True)
         self.selection_components = [
-            LabeledSelectionComponent(game_state, item_bindings, lambda gs: gs.player.display_item_count()),
-            LabeledSelectionComponent(game_state, [return_binding]),
+            LabeledSelectionComponent(
+                game_state,
+                item_bindings,
+                top_level_prompt_callback=lambda gs: print(display_coffee_header(gs)),
+            ),
+            LabeledSelectionComponent(
+                game_state,
+                [return_binding]
+            ),
         ]
         self.exit_shop = False
 
@@ -34,7 +46,7 @@ class CoffeeShopComponent(LabeledSelectionComponent):
         return self.exit_shop
 
     def display_options(self):
-        print(f"\n{blue("Welcome! You have *cough cough*")} {green(self.game_state.player.coins)} {blue("coins.")}\n")
+        print(f"\n{blue("Welcome! You have *cough cough*")} {green(self.game_state.player.coins)} {blue("coins.")}")
         for component in self.selection_components:
             component.display_options()
 
