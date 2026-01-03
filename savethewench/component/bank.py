@@ -1,10 +1,11 @@
-from functools import partial
 from typing import List
 
 from savethewench.audio import play_music
 from savethewench.component.base import LabeledSelectionComponent, SelectionBinding, functional_component, \
     BinarySelectionComponent
+from savethewench.component.registry import register_component
 from savethewench.data.audio import BANK_THEME
+from savethewench.data.components import BANK
 from savethewench.model import GameState
 from savethewench.model.util import display_bank_balance
 from savethewench.ui import blue, yellow
@@ -15,6 +16,7 @@ def _very_well():
     print_and_sleep(blue("Very well..."), 1)
 
 
+@register_component(BANK)
 class BankComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState, allow_deposit=True):
         self.allow_deposit = allow_deposit

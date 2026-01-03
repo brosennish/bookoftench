@@ -105,8 +105,7 @@ def display_game_overview(game_state: GameState):
     display_stat("Times Traveled", event_logger.get_count(EventType.TRAVEL), blue)
 
 
-def display_player_achievements(game_state: GameState):
-    player: Player = game_state.player
+def display_player_achievements(_: GameState):
     achievements = [a for a in load_achievements() if a.active]
     if len(achievements) == 0:
         print_and_sleep(yellow("Your achievements are dry."), 1)
@@ -130,7 +129,7 @@ def display_active_perks(game_state: GameState) -> None:
 
 
 def display_active_perk_count():
-    print(f"Perks {dim(f"({len(load_perks(lambda p: p.active))})")}")
+    print_and_sleep(f"Perks {dim(f"({len(load_perks(lambda p: p.active))})")}")
 
 
 @attach_perk(USED_SNEAKERS, NEW_SNEAKERS, silent=True)

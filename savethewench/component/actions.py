@@ -4,10 +4,12 @@ from typing import List
 
 from savethewench import event_logger
 from savethewench.audio import play_music, play_sound, stop_music
-from savethewench.component.base import RandomThresholdComponent, ThresholdBinding, \
-    TextDisplayingComponent, functional_component, Component, ColoredNameSelectionBinding, BinarySelectionComponent, \
-    NoOpComponent, LinearComponent
+from savethewench.component.base import TextDisplayingComponent, functional_component, Component, \
+    ColoredNameSelectionBinding, BinarySelectionComponent, \
+    NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding
 from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
+from savethewench.data.components import EXPLORE, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, OVERVIEW, TRAVEL, \
+    AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_COIN, DISCOVER_PERK
 from savethewench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION, DEATH_CAN_WAIT
@@ -23,20 +25,18 @@ from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
 from savethewench.util import print_and_sleep
 from .bank import BankVisitDecision
 from .base import LabeledSelectionComponent, SelectionBinding
+from .registry import register_component, get_registered_component
 
 
-class Explore(RandomThresholdComponent):
+@register_component(EXPLORE)
+class Explore(RandomChoiceComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state,
-                         bindings=[
-                             ThresholdBinding(.45, SpawnEnemy),
-                             ThresholdBinding(.55, self._discover_item),
-                             ThresholdBinding(.65, self._discover_weapon),
-                             ThresholdBinding(.85, self._discover_coin),
-                             ThresholdBinding(.86, self._discover_perk)
-                         ])
+        ep = game_state.current_area.explore_probabilities
+        super().__init__(game_state, bindings=[ProbabilityBinding(prob, get_registered_component(name))
+                                               for name, prob in ep.items()])
 
     @staticmethod
+    @register_component(DISCOVER_ITEM)
     @functional_component(state_dependent=True)
     def _discover_item(game_state: GameState):
         available = [i for i in load_items()
@@ -52,9 +52,8 @@ class Explore(RandomThresholdComponent):
         else:
             return SwapFoundItemYN(game_state).run()
 
-
-
     @staticmethod
+    @register_component(DISCOVER_WEAPON)
     @functional_component(state_dependent=True)
     def _discover_weapon(game_state: GameState):
         available = [w for w in load_discoverable_weapons()
@@ -71,10 +70,8 @@ class Explore(RandomThresholdComponent):
         else:
             return SwapFoundWeaponYN(game_state).run()
 
-
-
-
     @staticmethod
+    @register_component(DISCOVER_COIN)
     @functional_component(state_dependent=True)
     def _discover_coin(game_state: GameState):
         @attach_perk(METAL_DETECTIVE, value_description="coin")
@@ -85,6 +82,7 @@ class Explore(RandomThresholdComponent):
         game_state.player.coins += coins
 
     @staticmethod
+    @register_component(DISCOVER_PERK)
     @functional_component()
     def _discover_perk():
         filtered: List[Perk] = load_perks(lambda p: not (p.active or p.name == WENCH_LOCATION))
@@ -98,6 +96,7 @@ class Explore(RandomThresholdComponent):
             print_and_sleep(yellow(dim("You came up dry.")), 1)
 
 
+@register_component(TRAVEL)
 class Travel(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
@@ -110,6 +109,7 @@ class Travel(LabeledSelectionComponent):
                                         key=lambda a: a.name), 1)], quittable=True)
 
 
+@register_component(USE_ITEM)
 class UseItem(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
@@ -121,6 +121,7 @@ class UseItem(LabeledSelectionComponent):
                          top_level_prompt_callback=lambda gs: gs.player.display_item_count(), quittable=True)
 
 
+@register_component(EQUIP_WEAPON)
 class EquipWeapon(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
@@ -136,9 +137,10 @@ class EquipWeapon(LabeledSelectionComponent):
 class SwapFoundItemYN(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
-                        query="Swap for one of your current items",
-                        yes_component=SwapFoundItemMenu,
-                        no_component=NoOpComponent)
+                         query="Swap for one of your current items",
+                         yes_component=SwapFoundItemMenu,
+                         no_component=NoOpComponent)
+
 
 # TODO Clean Up
 class SwapFoundItemMenu(LabeledSelectionComponent):
@@ -164,12 +166,14 @@ class SwapFoundItemMenu(LabeledSelectionComponent):
             quittable=True
         )
 
+
 class SwapFoundWeaponYN(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
-                        query="Swap for one of your current weapons",
-                        yes_component=SwapFoundWeaponMenu,
-                        no_component=NoOpComponent)
+                         query="Swap for one of your current weapons",
+                         yes_component=SwapFoundWeaponMenu,
+                         no_component=NoOpComponent)
+
 
 class SwapFoundWeaponMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -215,7 +219,7 @@ class Attack(Component):
             event_logger.log_event(BountyCollectedEvent(enemy.name))
         enemy_weapon = enemy.drop_weapon()
         if enemy_weapon is not None:
-            player.obtain_enemy_weapon()
+            player.obtain_enemy_weapon(enemy_weapon)
         player.gain_coins(enemy.drop_coins())
         if player.gain_xp_from_enemy(enemy):
             BankVisitDecision(self.game_state).run()  # TODO figure out a way to not call this in so many places
@@ -251,12 +255,12 @@ class FleeSelectionBinding(SelectionBinding):
         return f"Flee ({int(calculate_flee() * 100)}%)"
 
 
-class TryFlee(RandomThresholdComponent):
+class TryFlee(RandomChoiceComponent):
     def __init__(self, game_state: GameState):
-        self.flee_chance = calculate_flee()
+        self.flee_chance = int(calculate_flee() * 100)
         super().__init__(game_state, bindings=[
-            ThresholdBinding(self.flee_chance, self._flee_success),
-            ThresholdBinding(1.0, FailedFlee)
+            ProbabilityBinding(self.flee_chance, self._flee_success),
+            ProbabilityBinding(100 - self.flee_chance, FailedFlee)
         ])
 
     @staticmethod
@@ -266,6 +270,8 @@ class TryFlee(RandomThresholdComponent):
         if game_state.player.gain_xp_other(1):
             BankVisitDecision(game_state).run()  # TODO figure out a way to not call this in so many places
 
+
+@register_component(SPAWN_ENEMY)
 class SpawnEnemy(LinearComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, next_component=Battle)
@@ -304,6 +310,7 @@ class Battle(LabeledSelectionComponent):
             self.fled = True
 
 
+@register_component(AREA_BOSS_FIGHT)
 class FightBoss(Battle):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
@@ -339,21 +346,26 @@ class FightBoss(Battle):
         return self.game_state
 
 
+@register_component(FINAL_BOSS_FIGHT)
 class FightFinalBoss(FightBoss):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
         self.enemy = self.game_state.current_area.summon_final_boss()
 
+
+@register_component(ACHIEVEMENTS)
 class Achievements(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, display_callback=display_player_achievements)
 
 
+@register_component(PERKS)
 class DisplayPerks(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, display_callback=display_active_perks)
 
 
+@register_component(OVERVIEW)
 class Overview(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, display_callback=display_game_overview)

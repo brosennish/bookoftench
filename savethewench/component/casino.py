@@ -5,7 +5,8 @@ from typing import Callable
 
 from savethewench.audio import play_music, play_sound
 from savethewench.data.audio import GOLF_CLAP, CASINO_THEME
-from savethewench.data.perks import AP_TENCH_STUDIES, GRAMBLING_ADDICT
+from savethewench.data.components import CASINO
+from savethewench.data.perks import GRAMBLING_ADDICT
 from savethewench.model.game_state import GameState
 from savethewench.model.perk import perk_is_active
 from savethewench.ui import blue, cyan, green, orange, purple, yellow, dim
@@ -13,8 +14,10 @@ from savethewench.util import print_and_sleep, safe_input
 from .bank import BankVisitDecision
 from .base import LabeledSelectionComponent, SelectionBinding, NoOpComponent, \
     GatekeepingComponent, functional_component, Component
+from .registry import register_component
 
 
+@register_component(CASINO)
 class CasinoBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, decision_function=lambda: game_state.player.coins > 0,
@@ -142,7 +145,7 @@ class KrillOrKray(CasinoGame):
             print_and_sleep(green(f"Lucky guess, bozo! You won {payout} coins.\n"), 0.5)
             play_sound(GOLF_CLAP)
             if player.gain_xp_other(1):
-                BankVisitDecision(self.game_state).run() # TODO figure out a way to not call this in so many places
+                BankVisitDecision(self.game_state).run()  # TODO figure out a way to not call this in so many places
         else:
             print_and_sleep(
                 blue("Bozo's blunder. Classic. Could've seen that coming from six or eight miles away.\n"), 0.5)
