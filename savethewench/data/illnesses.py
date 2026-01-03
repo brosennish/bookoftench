@@ -22,10 +22,10 @@ Illnesses = [
                     "\nHowever, without medical intervention, this man will kill you after some time.",
     'levels_until_death': 2,
     'cost': 200,
-     'success_rate': 0.85},
+     'success_rate': 0.80},
     {'name': RESTLESS_BUTT_SYNDROME,
      'description': "Left untreated, you will, not unlike a whoopee cushion, deflate entirely.",
-    'levels_until_death': 2,
+    'levels_until_death': 3,
      'cost': 150,
      'success_rate': 0.95},
 
@@ -33,7 +33,7 @@ Illnesses = [
     {'name': REVERSE_HAIR_GROWTH_SYNDROME,
      'description': "A surprisingly common condition in which one's hair grows inward instead of outward."
                     "\nOver time, the disorderly will fill with hair until there's no room left in there.",
-    'levels_until_death': 3,
+    'levels_until_death': 4,
      'cost': 175,
      'success_rate': 0.85},
 ]

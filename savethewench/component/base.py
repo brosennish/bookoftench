@@ -196,7 +196,8 @@ class LinearComponent(Component):
 
 class BinarySelectionComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState, query: str, yes_component: type[Component],
-                 no_component: type[Component]):
+                 no_component: type[Component], optional_binding: SelectionBinding | None = None,
+    ):
         super().__init__(game_state,
                          bindings=[SelectionBinding('y', '', yes_component),
                                    SelectionBinding('n', '', no_component)])

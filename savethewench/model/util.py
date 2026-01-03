@@ -36,6 +36,17 @@ def display_coffee_header(game_state: GameState) -> str:
         "\nMenu:"
         ])}")
 
+def display_hospital_header(game_state: GameState) -> str:
+    player = game_state.player
+
+    return (f"Welcome to the Free Range Children's Hospital of Shebokken.\n"
+            f"{dim(' | ').join([
+        f"Illness: {yellow(f"{player.illness.name}")}"
+        f"Cost: {orange(f"{player.illness.cost}")}",
+        f"Coins: {green(f"{player.coins}")}",
+        f"Chance of Success: {cyan(f"{player.illness.success_rate * 100}%")}\n"
+        ])}")
+
 
 def get_player_status_view(game_state: GameState) -> str:
     player = game_state.player

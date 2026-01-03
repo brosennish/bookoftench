@@ -1,11 +1,14 @@
 from savethewench.audio import play_music
-from savethewench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
-    functional_component, GatekeepingComponent, BinarySelectionComponent, NoOpComponent
+from savethewench.component.registry import register_component
+from savethewench.component.base import functional_component, GatekeepingComponent, BinarySelectionComponent, NoOpComponent
 from savethewench.data.audio import SHOP_THEME
+from savethewench.data.components import HOSPITAL
 from savethewench.model import GameState
+from savethewench.model.util import display_hospital_header
 from savethewench.ui import blue
 from savethewench.util import print_and_sleep
 
+@register_component(HOSPITAL)
 class HospitalBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, decision_function=lambda: game_state.player.illness is not None,
@@ -19,9 +22,11 @@ class HospitalComponent(BinarySelectionComponent):
         super().__init__(game_state,
                          query="Pay for treatment",
                          yes_component=functional_component()(lambda: game_state.make_treatment_purchase()),
-                         no_component=NoOpComponent)
+                         no_component=NoOpComponent,
+                         )
 
     def display_options(self):
+        print(display_hospital_header(self.game_state))
         print_and_sleep(f"{self.query.strip()} (y/n)?")
 
     def play_theme(self):

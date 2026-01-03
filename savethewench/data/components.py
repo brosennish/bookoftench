@@ -14,6 +14,7 @@ DISCOVER_WEAPON = "Discover Weapon"
 EQUIP_WEAPON = "Equip Weapon"
 EXPLORE = "Explore"
 FINAL_BOSS_FIGHT = purple("BATTLE DENNY BILTMORE")
+HOSPITAL = "Hospital"
 OVERVIEW = "Overview"
 PERKS = "Perks"
 SHOP = "Shop"
