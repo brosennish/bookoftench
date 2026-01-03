@@ -7,18 +7,21 @@ from savethewench import event_logger
 from savethewench.audio import play_music
 from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
 from savethewench.event_logger import subscribe_function
-from savethewench.ui import green
+from savethewench.ui import green, red, yellow, orange, dim, cyan
 from savethewench.util import print_and_sleep
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
 from .bank import Bank
+from .base import Buyable
+from .coffee_item import CoffeeItem
 from .enemy import Enemy, load_enemy
-from .events import TravelEvent, BountyCollectedEvent
+from .events import TravelEvent, BountyCollectedEvent, CoffeeEvent, PlayerDeathEvent
 from .item import Item
 from .perk import attach_perk, Perk, set_perk_cache
 from .player import Player
 from .shop import Shop
 from .weapon import Weapon
+from ..data.illnesses import LATE_ONSET_SIDS, Illnesses
 
 
 @dataclass
@@ -83,6 +86,46 @@ class GameState:
 
     def play_current_area_theme(self):
         play_music(self.current_area.theme)
+
+    def make_coffee_purchase(self, buyable: Buyable):
+        if self.player.coins < buyable.cost:
+            print_and_sleep(yellow(f"Need more coin"), 1)
+            return False
+
+        if isinstance(buyable, CoffeeItem):
+            self.coffee_effect(buyable)
+            event_logger.log_event(CoffeeEvent(buyable))
+        else:
+            return False
+        self.player.coins -= buyable.cost
+        return True
+
+    def coffee_effect(self, item: CoffeeItem):
+        original_hp = self.player.hp
+        self.player.gain_hp(item.hp)
+        print_and_sleep(f"You restored {green(self.player.hp - original_hp)} hp!\n", 1)
+
+        if random.random() < item.risk:
+            player = self.player
+            illness = random.choice(Illnesses)
+            name = illness['name']
+
+            if name != LATE_ONSET_SIDS:
+                player.illness_name = name
+                player.illness_death_lvl = player.lvl + illness['levels_until_death']
+
+                print_and_sleep(red(f"Coughy coughed on your coffee and now you're sicker than Hell."), 2)
+                print_and_sleep(red(f"Illness: {name}"), 2)
+                print_and_sleep(red(f"Description: {illness['description']}"), 2)
+                print_and_sleep(f"\nVisit the Free Range Children's Hospital to be cured "
+                                f"or you will die at level {player.illness_death_lvl}.", 3)
+            else:
+                print_and_sleep(red(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."), 2)
+                print_and_sleep(red(f"Cause of Death: {name}"), 2)
+                print_and_sleep(red(f"Description:\n{illness['description']}"), 3)
+                player.hp = 0
+                player.lives -= 1
+                event_logger.log_event(PlayerDeathEvent(player.lives))
 
     def _subscribe_listeners(self):
         @subscribe_function(BountyCollectedEvent)

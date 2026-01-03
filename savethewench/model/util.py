@@ -3,7 +3,7 @@ from typing import Callable, Any
 from savethewench import event_logger
 from savethewench.data.perks import WENCH_LOCATION, USED_SNEAKERS, NEW_SNEAKERS, CROWS_NEST
 from savethewench.event_base import EventType
-from savethewench.model import GameState
+from .game_state import GameState
 from savethewench.model.achievement import load_achievements
 from savethewench.model.base import Combatant
 from savethewench.model.enemy import Enemy
@@ -23,6 +23,18 @@ def p_color(hp: int, max_hp: int) -> Callable[[str], str]:
         return yellow
     else:
         return red
+
+
+def display_coffee_header(game_state: GameState) -> str:
+    player = game_state.player
+    player_color = p_color(player.hp, player.max_hp)
+
+    return (f"{dim(' | ').join([
+        f"HP: {player_color(f"{player.hp}/{player.max_hp}")}",
+        f"Coins: {green(f"{player.coins}")}",
+        f"Lives: {yellow(f"{player.lives}")}\n"
+        "\nMenu:"
+        ])}")
 
 
 def get_player_status_view(game_state: GameState) -> str:

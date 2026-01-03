@@ -10,7 +10,7 @@ from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, G
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM
 from savethewench.data.weapons import BARE_HANDS, KNIFE, MELEE, PROJECTILE, MACHETE, FIRE_AXE, AXE
-from savethewench.event_logger import subscribe_function, log_event
+from savethewench.event_logger import subscribe_function
 from savethewench.ui import yellow, dim, green, cyan, purple
 from savethewench.util import print_and_sleep
 from .base import Combatant, Buyable
@@ -71,6 +71,9 @@ class Player(Combatant):
     max_hp: int = 100
     xp: int = 0
 
+    illness_death_lvl: int = None
+    illness_name: str = None
+
     coins: int = 0
     casino_won: int = 0
     casino_lost: int = 0
@@ -125,6 +128,9 @@ class Player(Combatant):
             print_and_sleep(purple(f"{BEER_GOGGLES} prevented blindness."), 1)
         else:
             self._blind = blind
+
+    def is_sick(self) -> bool:
+        return self.illness_name is not None
 
     def get_items(self) -> List[Item]:
         return list(self.items.values())
@@ -340,7 +346,7 @@ class Player(Combatant):
                     self.gain_hp(gain)
                     print_and_sleep(purple(f"Restored {gain} HP with Vampiric Sperm!"), 1)
 
-    # for loading from save file
+            # for loading from save file
     def __setstate__(self, state):
         self.__dict__.update(state)
         self._subscribe_listeners()

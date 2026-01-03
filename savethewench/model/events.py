@@ -1,5 +1,4 @@
 from typing import Optional
-
 from savethewench.audio import play_sound
 from savethewench.data.audio import PURCHASE, GREAT_JOB
 from savethewench.event_base import Event, EventType
@@ -137,7 +136,7 @@ class PlayerDeathEvent(Event):
     def __init__(self, lives_remaining: int):
         super().__init__(EventType.PLAYER_DEATH,
                          callback=lambda: print_and_sleep(
-                             f"{red("You died.")} Lives remaining: {yellow(lives_remaining)}", 2))
+                             f"{red('You died.')} Lives remaining: {yellow(lives_remaining)}", 2))
 
 
 class WeaponBrokeEvent(Event):
@@ -149,3 +148,9 @@ class BountyCollectedEvent(Event):
     def __init__(self, enemy_name):
         super().__init__(EventType.BOUNTY_COLLECTED)
         self.enemy_name = enemy_name
+
+
+class CoffeeEvent(Event):
+    def __init__(self, buyable):
+        super().__init__(EventType.COFFEE_EVENT)
+        self.buyable = buyable
