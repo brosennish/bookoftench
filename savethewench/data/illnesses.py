@@ -1,7 +1,7 @@
 LATE_ONSET_SIDS = "Late Onset Sudden Infant Death Syndrome"
 PHANTOM_HIM_SYNDROME = "Phantom Him Syndrome"
 RESTLESS_BUTT_SYNDROME = "Restless Butt Syndrome"
-REVERSE_HAIR_GROWTH_DISORDER = "Reverse Hair Growth Disorder"
+REVERSE_HAIR_GROWTH_SYNDROME = "Reverse Hair Growth Syndrome"
 
 
 # TODO - Add more illnesses
@@ -25,7 +25,7 @@ Illnesses = [
      'cost': 150},
 
     # --- Three Levels ---
-    {'name': REVERSE_HAIR_GROWTH_DISORDER,
+    {'name': REVERSE_HAIR_GROWTH_SYNDROME,
      'description': "A surprisingly common condition in which one's hair grows inward instead of outward."
                     "\nOver time, the disorderly will fill with hair until there's no room left in there.",
     'levels_until_death': 3,

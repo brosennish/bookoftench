@@ -16,7 +16,7 @@ from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, Displa
     FightBoss, FightFinalBoss
 from .bank import WithdrawalOnlyBank
 from .casino import CasinoBouncer
-from .coffee_shop import CoffeeShopComponent
+from .coffee_shop import CoffeeShopComponent, CoffeeBouncer
 from .shop import ShopComponent
 
 
@@ -134,8 +134,8 @@ class ExtendedActionMenu(LabeledSelectionComponent):
             SelectionBinding('P', "Perks", DisplayPerks),
             SelectionBinding('O', "Overview", Overview)
             ]
-        if game_state.current_area.name == "City":
-            bindings.append(SelectionBinding('S', "Coffee Shop", CoffeeShopComponent))
+        if game_state.current_area.name == "City" and not game_state.player.is_sick():
+            bindings.append(SelectionBinding('S', "Coffee Shop", CoffeeBouncer))
             # TODO clean up duplicated code
         bindings.append(
             SelectionBinding('R', "Return", functional_component()(lambda: self._return()))

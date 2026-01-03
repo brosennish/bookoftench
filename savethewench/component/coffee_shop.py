@@ -2,7 +2,7 @@ from typing import List
 
 from savethewench.audio import play_music
 from savethewench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
-    functional_component
+    functional_component, GatekeepingComponent
 from savethewench.data.audio import SHOP_THEME
 from savethewench.model import GameState
 from savethewench.model.base import Buyable
@@ -10,6 +10,14 @@ from savethewench.model.coffee_shop import CoffeeShop
 from savethewench.model.util import display_coffee_header
 from savethewench.ui import green, blue
 from savethewench.util import print_and_sleep
+
+class CoffeeBouncer(GatekeepingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, decision_function=lambda: game_state.player.illness_name is None,
+                         accept_component=CoffeeShopComponent,
+                         deny_component=functional_component()(lambda: print_and_sleep(
+                             blue("Get *cough cough* lost. No sickos allowed.\n"), 1.5)))
+
 
 class CoffeeShopComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -43,10 +51,12 @@ class CoffeeShopComponent(LabeledSelectionComponent):
         print_and_sleep(blue("Until *cough cough* next time!"), 1)
 
     def can_exit(self):
-        return self.exit_shop
+        return (self.exit_shop
+                or not self.game_state.player.is_alive()
+                or self.game_state.player.is_sick())
 
     def display_options(self):
-        print(f"\n{blue("Welcome! You have *cough cough*")} {green(self.game_state.player.coins)} {blue("coins.")}")
+        print(f"\n{blue("Welcome to Coughy's Coffee! You have *cough cough*")} {green(self.game_state.player.coins)} {blue("coins.")}")
         for component in self.selection_components:
             component.display_options()
 

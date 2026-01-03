@@ -129,6 +129,9 @@ class Player(Combatant):
         else:
             self._blind = blind
 
+    def is_sick(self) -> bool:
+        return self.illness_name is not None
+
     def get_items(self) -> List[Item]:
         return list(self.items.values())
 

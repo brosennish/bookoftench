@@ -33,7 +33,7 @@ def display_coffee_header(game_state: GameState) -> str:
         f"HP: {player_color(f"{player.hp}/{player.max_hp}")}",
         f"Coins: {green(f"{player.coins}")}",
         f"Lives: {yellow(f"{player.lives}")}\n"
-        "\nCoughy's Coffee Menu:"
+        "\nMenu:"
         ])}")
 
 

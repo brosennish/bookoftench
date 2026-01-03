@@ -15,7 +15,7 @@ from .bank import Bank
 from .base import Buyable
 from .coffee_item import CoffeeItem
 from .enemy import Enemy, load_enemy
-from .events import TravelEvent, BountyCollectedEvent, CoffeeEvent
+from .events import TravelEvent, BountyCollectedEvent, CoffeeEvent, PlayerDeathEvent
 from .item import Item
 from .perk import attach_perk, Perk, set_perk_cache
 from .player import Player
@@ -110,19 +110,21 @@ class GameState:
             name = illness['name']
 
             if name != LATE_ONSET_SIDS:
-                player.illness = name
+                player.illness_name = name
                 player.illness_death_lvl = player.lvl + illness['levels_until_death']
 
                 print_and_sleep(red(f"Coughy coughed on your coffee and now you're sicker than Hell."), 2)
                 print_and_sleep(red(f"Illness: {name}"), 2)
-                print_and_sleep(red(f"Description: {illness['description']}"), 3)
-                print_and_sleep(f"\nVisit the Free Range Children's Hospital for the cure\n"
-                                f"or die when you reach level {player.illness_death_lvl}.", 3)
+                print_and_sleep(red(f"Description: {illness['description']}"), 2)
+                print_and_sleep(f"\nVisit the Free Range Children's Hospital to be cured "
+                                f"or you will die at level {player.illness_death_lvl}.", 3)
             else:
                 print_and_sleep(red(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."), 2)
                 print_and_sleep(red(f"Cause of Death: {name}"), 2)
-                print_and_sleep(red(f"Description: {illness['description']}"), 3)
-                #TODO - Queue death
+                print_and_sleep(red(f"Description:\n{illness['description']}"), 3)
+                player.hp = 0
+                player.lives -= 1
+                event_logger.log_event(PlayerDeathEvent(player.lives))
 
     def _subscribe_listeners(self):
         @subscribe_function(BountyCollectedEvent)
