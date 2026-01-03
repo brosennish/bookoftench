@@ -7,7 +7,7 @@ from savethewench import event_logger
 from savethewench.audio import play_music
 from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
 from savethewench.event_logger import subscribe_function
-from savethewench.ui import green, red, yellow, orange, dim, cyan
+from savethewench.ui import green, red, yellow, cyan
 from savethewench.util import print_and_sleep
 from .Illness import Illness
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
@@ -16,7 +16,7 @@ from .bank import Bank
 from .base import Buyable
 from .coffee_item import CoffeeItem
 from .enemy import Enemy, load_enemy
-from .events import TravelEvent, BountyCollectedEvent, CoffeeEvent, PlayerDeathEvent
+from .events import TravelEvent, BountyCollectedEvent, CoffeeEvent, PlayerDeathEvent, TreatmentEvent
 from .item import Item
 from .perk import attach_perk, Perk, set_perk_cache
 from .player import Player
@@ -87,6 +87,34 @@ class GameState:
 
     def play_current_area_theme(self):
         play_music(self.current_area.theme)
+
+    def make_treatment_purchase(self):
+        illness = self.player.illness
+
+        if self.player.coins < illness.cost:
+            print_and_sleep(yellow(f"Need more coin"), 1)
+            return False
+
+        if isinstance(illness, Illness):
+            self.do_treatment()
+            event_logger.log_event(TreatmentEvent(illness))
+        else:
+            return False
+        self.player.coins -= illness.cost
+        return True
+
+    def do_treatment(self):
+        player = self.player
+        illness = player.illness
+
+        if random.random() < illness.success_rate:
+            print_and_sleep(cyan("(I did it! You're healed! Mum will be so proud.)"), 2)
+            player.illness = None
+            player.illness_death_lvl = None
+            return self
+        else:
+            print_and_sleep(cyan(f"(Shit didn't take. You owe me {illness.cost} of coin. I also accept copper or Tenchcoin.\n\nYou into crypto?)"), 2)
+            return self
 
     def make_coffee_purchase(self, buyable: Buyable):
         if self.player.coins < buyable.cost:
