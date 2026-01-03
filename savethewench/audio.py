@@ -39,7 +39,8 @@ def play_sound(file_name: str) -> None:
 
     path = get_audio_path(file_name)
 
-    proc = subprocess.Popen(["afplay", "-v", str(settings.get_sfx_volume()), path])
+    # TODO log/print some message if this fails and disable audio
+    proc = subprocess.Popen(["afplay", "-v", str(settings.get_sfx_volume()), path], stderr=subprocess.DEVNULL)
     ACTIVE_SOUNDS.append(AudioProcess(proc, file_name, settings.get_sfx_volume()))
 
 
@@ -66,8 +67,10 @@ def play_music(file_name: str) -> None:
 
     stop_music()
 
+    # TODO log/print some message if this fails and disable audio
     proc = subprocess.Popen(
-        ["afplay", "-v", str(settings.get_music_volume()), path]
+        ["afplay", "-v", str(settings.get_music_volume()), path],
+        stderr=subprocess.DEVNULL,
     )
     _current_music = AudioProcess(proc, file_name, settings.get_music_volume())
 
