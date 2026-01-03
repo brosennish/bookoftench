@@ -35,6 +35,11 @@ class SaveTheWenchGame:
             player.hp = player.max_hp
             for weapon in load_discoverable_weapons():
                 player.weapon_dict[weapon.name] = PlayerWeapon.from_weapon(weapon)
+            for area in game_state.areas:
+                area.enemy_count = 0
+                area.boss.hp = 1
+                if area.name == "Swamp":
+                    game_state.wench_area = area
             component_type(game_state).run()
         except KeyboardInterrupt:
             print_and_sleep("\nExiting...", 1)
