@@ -6,19 +6,15 @@ from typing import List
 
 from savethewench.audio import play_music
 from savethewench.component.base import Component, LinearComponent, BinarySelectionComponent, \
-    TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, functional_component, NoOpComponent
+    TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, functional_component, PaginatedMenuComponent
 from savethewench.data.audio import INTRO_THEME
+from savethewench.data.components import EXPLORE, AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT
 from savethewench.model import GameState
+from savethewench.model.area import AreaActions
 from savethewench.model.util import get_player_status_view
-from savethewench.ui import red, purple, cyan
+from savethewench.ui import red, cyan
 from savethewench.util import print_and_sleep, safe_input
-from .actions import UseItem, Travel, EquipWeapon, Explore, Achievements, DisplayPerks, Overview, \
-    FightBoss, FightFinalBoss
-from .bank import WithdrawalOnlyBank
-from .casino import CasinoBouncer
-from .coffee_shop import CoffeeShopComponent, CoffeeBouncer
-from .shop import ShopComponent
-
+from .registry import get_registered_component
 
 class StartMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -96,61 +92,32 @@ Find her before her life runs dry...
         play_music(INTRO_THEME)
 
 
-class ActionMenu(LabeledSelectionComponent):
+class ActionMenu(PaginatedMenuComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, refresh_menu=True, bindings=self._get_bindings(game_state),
-                         top_level_prompt_callback=lambda gs: print_and_sleep(get_player_status_view(gs)))
+        super().__init__(game_state, top_level_prompt_callback=lambda gs: print_and_sleep(get_player_status_view(gs)),
+                         main_menu_component=InGameMenu)
 
-    @staticmethod
-    def _get_bindings(game_state: GameState) -> List[SelectionBinding]:
-        res = [SelectionBinding('I', "Use Item", UseItem),
-               SelectionBinding('W', "Equip Weapon", EquipWeapon),
-               SelectionBinding('S', "Shop", ShopComponent),
-               SelectionBinding('T', "Travel", Travel),
-               SelectionBinding('M', "More Options", ExtendedActionMenu),
-               SelectionBinding('Q', "Main Menu", InGameMenu)]
-        if game_state.current_area.enemies_remaining > 0:
-            return [SelectionBinding('E', "Explore", Explore), *res]
-        elif not game_state.current_area.boss_defeated:
-            return [SelectionBinding('B', 'Fight Boss', FightBoss), *res]
-        elif game_state.is_final_boss_available():
-            return [SelectionBinding('B', purple("BATTLE DENNY BILTMORE"), FightFinalBoss), *res]
-        else:
-            return res
+    def construct_pages(self) -> List[List[SelectionBinding]]:
+        area_actions: AreaActions = self.game_state.current_area.actions_menu
+        pages = []
+        for page in area_actions.pages:
+            modified = [c for c in page]
+            if EXPLORE in modified:
+                if self.game_state.current_area.enemies_remaining == 0:
+                    modified.remove(EXPLORE)
+                    if not self.game_state.current_area.boss_defeated:
+                        modified = [AREA_BOSS_FIGHT, *modified]
+                    elif self.game_state.is_final_boss_available():
+                        modified = [FINAL_BOSS_FIGHT, *modified]
+            pages.append(modified)
+        return [[SelectionBinding(str(i), name, get_registered_component(name))
+                 for i, name in enumerate(spec, 1)] for spec in pages]
 
     def play_theme(self):
         self.game_state.play_current_area_theme()
 
     def can_exit(self):
         return self.game_state.victory or not self.game_state.player.is_alive()
-
-
-class ExtendedActionMenu(LabeledSelectionComponent):
-    def __init__(self, game_state: GameState):
-        bindings=[
-            SelectionBinding('A', "Achievements", Achievements),
-            SelectionBinding('B', "Bank", WithdrawalOnlyBank),
-            SelectionBinding('C', "Casino", CasinoBouncer),
-            SelectionBinding('P', "Perks", DisplayPerks),
-            SelectionBinding('O', "Overview", Overview)
-            ]
-        if game_state.current_area.name == "City" and not game_state.player.is_sick():
-            bindings.append(SelectionBinding('S', "Coffee Shop", CoffeeBouncer))
-            # TODO clean up duplicated code
-        bindings.append(
-            SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
-        )
-        super().__init__(game_state, bindings=bindings)
-        self.leave_menu = False
-
-    def _return(self):
-        self.leave_menu = True
-
-    def can_exit(self):
-        return self.leave_menu
-
-    def play_theme(self):
-        self.game_state.play_current_area_theme()
 
 
 class InGameMenu(LabeledSelectionComponent):

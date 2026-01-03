@@ -136,7 +136,7 @@ class Player(Combatant):
         return list(self.items.values())
 
     def display_item_count(self):
-        print(f"Items {dim(f"({len(self.items)}/{self.max_items})")}")
+        print_and_sleep(f"Items {dim(f"({len(self.items)}/{self.max_items})")}")
 
     def add_item(self, item: Item) -> bool:
         if item.name in self.items:
@@ -187,11 +187,11 @@ class Player(Combatant):
         self.hp = min(self.max_hp, self.hp + amount)  # clamp on max_hp
 
     def display_weapon_count(self):
-        print(f"Weapons {dim(f"({len(self.weapon_dict)}/{self.max_weapons})")}")
+        print_and_sleep(f"Weapons {dim(f"({len(self.weapon_dict)}/{self.max_weapons})")}")
 
     def display_equip_header(self):
         self.display_weapon_count()
-        print(f"{cyan(self.current_weapon.name)} {dim('(Equipped)')}")
+        print_and_sleep(f"{cyan(self.current_weapon.name)} {dim('(Equipped)')}", newline_prefix=False)
 
     def get_weapons(self) -> List[Weapon]:
         return list(self.weapon_dict.values())

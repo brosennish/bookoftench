@@ -3,13 +3,17 @@ from functools import partial
 from savethewench.audio import play_music
 from savethewench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
     functional_component
+from savethewench.component.registry import register_component
 from savethewench.data.audio import SHOP_THEME
+from savethewench.data.components import SHOP
 from savethewench.model import GameState
 from savethewench.model.base import Buyable
 from savethewench.model.util import display_active_perk_count
-from savethewench.ui import green, blue, yellow
+from savethewench.ui import green, blue
 from savethewench.util import print_and_sleep
 
+
+@register_component(SHOP)
 class ShopComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         item_bindings = [ReprBinding(str(i + 1), item.name, self._make_purchase_component(item), item) for

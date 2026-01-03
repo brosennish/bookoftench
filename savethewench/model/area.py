@@ -1,13 +1,35 @@
+from __future__ import annotations
+
 import copy
 import random
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Dict
 
 from savethewench.data import Areas
+from savethewench.data.components import MenuDefaults, DISCOVER_COIN, DISCOVER_ITEM, DISCOVER_PERK, DISCOVER_WEAPON, \
+    SPAWN_ENEMY
 from savethewench.ui import purple, yellow
 from savethewench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
 from .shop import Shop
+
+
+_explore_defaults = {
+    DISCOVER_COIN: 20,
+    DISCOVER_ITEM: 10,
+    DISCOVER_PERK: 1,
+    DISCOVER_WEAPON: 10,
+    SPAWN_ENEMY: 45
+}
+
+
+@dataclass
+class AreaActions:
+    pages: List[List[str]]
+
+    @classmethod
+    def defaults(cls) -> AreaActions:
+        return AreaActions(pages=[MenuDefaults.page_one, MenuDefaults.page_two])
 
 
 @dataclass
@@ -23,6 +45,8 @@ class Area:
     current_enemy = None
 
     shop: Shop = field(default_factory=Shop)
+    explore_probabilities: Dict[str, int] = field(default_factory=lambda: _explore_defaults)
+    actions_menu: AreaActions = field(default_factory=AreaActions.defaults)
 
     def __post_init__(self):
         self.boss = load_boss(self.boss_name)
@@ -71,5 +95,7 @@ def load_areas() -> List[Area]:
     for d in Areas:
         data = copy.deepcopy(d)
         data['shop'] = Shop(data['name'])
+        if 'actions_menu' in data:
+            data['actions_menu'] = AreaActions(**data['actions_menu'])
         res.append(Area(**data))
     return res
