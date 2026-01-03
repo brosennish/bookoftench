@@ -101,8 +101,9 @@ class GameState:
         return True
 
     def coffee_effect(self, item: CoffeeItem):
+        original_hp = self.player.hp
         self.player.gain_hp(item.hp)
-        print_and_sleep(f"You restored {green(item.hp)} hp!\n", 1)
+        print_and_sleep(f"You restored {green(self.player.hp - original_hp)} hp!\n", 1)
 
         if random.random() < item.risk:
             player = self.player
