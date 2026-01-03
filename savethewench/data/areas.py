@@ -1,4 +1,5 @@
 from . import audio, enemies
+from .components import COFFEE_SHOP, MenuDefaults
 
 # Constants
 CAVE = "Cave"
@@ -6,11 +7,17 @@ CITY = "City"
 FOREST = "Forest"
 SWAMP = "Swamp"
 
+# TODO tweak 'explore_probabilities' for each area as desired
+# map names of registered components to (int percent) probabilities
+# can include *any* registered component - useful for future npc encounters, etc...
+# e.g. 'explore_probabilities': {DISCOVER_COIN: 20, SPAWN_ENEMY: 30, DISCOVER_ITEM: 30,
+#                                DISCOVER_WEAPON: 10, DISCOVER_PERK: 5}
 Areas = [
     {'name': CITY,
      'enemies': [enemies.BANDIT, enemies.GOON, enemies.PIMP, enemies.HOBO,
                  enemies.SERIAL_KILLER],
-     'boss_name': enemies.THE_MAYOR, 'theme': audio.CITY_THEME},
+     'boss_name': enemies.THE_MAYOR, 'theme': audio.CITY_THEME,
+     'actions_menu': {'pages': [MenuDefaults.page_one, sorted([*MenuDefaults.page_two, COFFEE_SHOP])]}},
     {'name': FOREST,
      'enemies': [enemies.HIKER, enemies.HUNTER, enemies.POACHER,
                  enemies.DISGRACED_EXILE, enemies.SERIAL_KILLER],
