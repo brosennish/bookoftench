@@ -21,17 +21,20 @@ Illnesses = [
      'description': "A chilling condition in which one experiences a man who is not there."
                     "\nHowever, without medical intervention, this man will kill you after some time.",
     'levels_until_death': 2,
-    'cost': 200},
+    'cost': 200,
+     'success_rate': 0.85},
     {'name': RESTLESS_BUTT_SYNDROME,
      'description': "Left untreated, you will, not unlike a whoopee cushion, deflate entirely.",
     'levels_until_death': 2,
-     'cost': 150},
+     'cost': 150,
+     'success_rate': 0.95},
 
     # --- Three Levels ---
     {'name': REVERSE_HAIR_GROWTH_SYNDROME,
      'description': "A surprisingly common condition in which one's hair grows inward instead of outward."
                     "\nOver time, the disorderly will fill with hair until there's no room left in there.",
     'levels_until_death': 3,
-     'cost': 175},
+     'cost': 175,
+     'success_rate': 0.85},
 ]
 

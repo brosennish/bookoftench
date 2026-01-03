@@ -1,24 +1,25 @@
 from dataclasses import dataclass
-from savethewench.ui import dim, red, cyan, orange, green
+from savethewench.ui import dim, cyan, orange, yellow
 
 
 @dataclass
-class Illness():
+class Illness:
     name: str
-    hp: int
+    description: str
+    levels_until_death: int
     cost: int
-    risk: float
+    success_rate: float
 
     def get_simple_format(self) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:<19}"),
-            f"HP: +{green(self.hp)}",
+            f"Cost: +{orange(self.cost)}"
+            f"Success rate: +{yellow(self.success_rate * 100)}",
         ])
 
     def __repr__(self):
         return dim(' | ').join([
             cyan(f"{self.name:<19}"),
             f"Cost: {orange(self.cost)}",
-            f"HP: +{green(self.hp)}",
-            f"Risk: {red(f'{int(self.risk * 100)}%')}"
+            f"Success rate: {yellow(f'{int(self.success_rate * 100)}%')}"
         ])

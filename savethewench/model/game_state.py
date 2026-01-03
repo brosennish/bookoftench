@@ -9,6 +9,7 @@ from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
 from savethewench.event_logger import subscribe_function
 from savethewench.ui import green, red, yellow, orange, dim, cyan
 from savethewench.util import print_and_sleep
+from .Illness import Illness
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
 from .bank import Bank
@@ -106,22 +107,22 @@ class GameState:
 
         if random.random() < item.risk:
             player = self.player
-            illness = random.choice(Illnesses)
-            name = illness['name']
+            selection = random.choice(Illnesses)
 
-            if name != LATE_ONSET_SIDS:
-                player.illness_name = name
-                player.illness_death_lvl = player.lvl + illness['levels_until_death']
+            if selection['name'] != LATE_ONSET_SIDS:
+                player.illness = Illness(**selection)
+                illness = player.illness
+                player.illness_death_lvl = player.lvl + illness.levels_until_death
 
                 print_and_sleep(red(f"Coughy coughed on your coffee and now you're sicker than Hell."), 2)
-                print_and_sleep(red(f"Illness: {name}"), 2)
-                print_and_sleep(red(f"Description: {illness['description']}"), 2)
+                print_and_sleep(red(f"Illness: {illness.name}"), 2)
+                print_and_sleep(red(f"Description: {illness.description}"), 2)
                 print_and_sleep(f"\nVisit the Free Range Children's Hospital to be cured "
                                 f"or you will die at level {player.illness_death_lvl}.", 3)
             else:
                 print_and_sleep(red(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."), 2)
-                print_and_sleep(red(f"Cause of Death: {name}"), 2)
-                print_and_sleep(red(f"Description:\n{illness['description']}"), 3)
+                print_and_sleep(red(f"Cause of Death: {selection['name']}"), 2)
+                print_and_sleep(red(f"Description:\n{selection['description']}"), 3)
                 player.hp = 0
                 player.lives -= 1
                 event_logger.log_event(PlayerDeathEvent(player.lives))

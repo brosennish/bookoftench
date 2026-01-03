@@ -1,6 +1,6 @@
 import random
 from dataclasses import dataclass, field
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from savethewench import event_logger
 from savethewench.audio import play_sound
@@ -11,6 +11,7 @@ from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, G
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM
 from savethewench.data.weapons import BARE_HANDS, KNIFE, MELEE, PROJECTILE, MACHETE, FIRE_AXE, AXE
 from savethewench.event_logger import subscribe_function
+from savethewench.model.Illness import Illness
 from savethewench.ui import yellow, dim, green, cyan, purple
 from savethewench.util import print_and_sleep
 from .base import Combatant, Buyable
@@ -71,9 +72,8 @@ class Player(Combatant):
     max_hp: int = 100
     xp: int = 0
 
-    illness_death_lvl: int = None
-    illness_name: str = None
-    illness_cost:
+    illness: Optional[Illness] = None
+    illness_death_lvl: Optional[int] = None
 
     coins: int = 0
     casino_won: int = 0
@@ -320,6 +320,9 @@ class Player(Combatant):
         self.xp = 0
         self.blind = False
         self.blind_turns = 0
+        self.illness = None
+        self.illness_death_lvl = None
+
 
     def handle_broken_weapon(self):
         event_logger.log_event(WeaponBrokeEvent())
