@@ -15,6 +15,8 @@ from savethewench.model.util import get_player_status_view
 from savethewench.ui import red, cyan
 from savethewench.util import print_and_sleep, safe_input
 from .registry import get_registered_component
+from .settings import SettingsMenu
+
 
 class StartMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -127,6 +129,7 @@ class InGameMenu(LabeledSelectionComponent):
             SelectionBinding('N', "New Game", NewGame),
             SelectionBinding('S', "Save Game", SaveGame),
             SelectionBinding('L', "Load Game", LoadGame),
+            SelectionBinding('$', "Settings", SettingsMenu),
             # TODO clean up duplicated code
             SelectionBinding('R', "Return", functional_component()(lambda: self._return())),
             SelectionBinding('Q', "Quit", QuitGame)

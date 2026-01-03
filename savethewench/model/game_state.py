@@ -46,7 +46,7 @@ class GameState:
     event_counter: Counter = field(default_factory=Counter)
     perk_cache: Dict[str, Perk] = field(default_factory=dict)
     achievement_cache: Dict[str, Achievement] = field(default_factory=dict)
-    settings: Settings = field(default_factory=Settings)
+    settings: Settings = field(default_factory=Settings.defaults)
 
     @property
     def shop(self) -> Shop:
