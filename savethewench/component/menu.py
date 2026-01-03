@@ -16,7 +16,6 @@ from savethewench.ui import red, cyan
 from savethewench.util import print_and_sleep, safe_input
 from .registry import get_registered_component
 
-
 class StartMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
@@ -140,9 +139,7 @@ class InGameMenu(LabeledSelectionComponent):
     def can_exit(self):
         return self.leave_menu
 
-
-_SAVE_DIR = ".saves"  # TODO don't just save straight to a directory in the repo
-
+_SAVE_DIR = ".saves" # TODO don't just save straight to a directory in the repo
 
 class SaveGame(Component):
     def run(self) -> GameState:
