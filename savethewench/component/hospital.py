@@ -4,7 +4,7 @@ from savethewench.component.base import functional_component, GatekeepingCompone
 from savethewench.data.audio import SHOP_THEME
 from savethewench.data.components import HOSPITAL
 from savethewench.model import GameState
-from savethewench.model.util import display_hospital_header
+from savethewench.model.util import display_hospital_header, display_hospital_intro
 from savethewench.ui import blue
 from savethewench.util import print_and_sleep
 
@@ -24,8 +24,10 @@ class HospitalComponent(BinarySelectionComponent):
                          yes_component=functional_component()(lambda: game_state.make_treatment_purchase()),
                          no_component=NoOpComponent,
                          )
+        self.exit_hospital = False
 
     def display_options(self):
+        print(display_hospital_intro())
         print(display_hospital_header(self.game_state))
         print_and_sleep(f"{self.query.strip()} (y/n)?")
 

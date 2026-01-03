@@ -3,6 +3,7 @@ from .game import InitGame
 from .actions import *
 from .casino import *
 from .coffee_shop import *
+from .hospital import *
 from .shop import *
 #--
 

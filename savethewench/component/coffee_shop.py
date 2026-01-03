@@ -8,7 +8,7 @@ from savethewench.model import GameState
 from savethewench.model.base import Buyable
 from savethewench.model.coffee_shop import CoffeeShop
 from savethewench.model.util import display_coffee_header
-from savethewench.ui import green, blue, yellow
+from savethewench.ui import blue, yellow
 from savethewench.util import print_and_sleep
 
 
@@ -58,10 +58,9 @@ class CoffeeShopComponent(LabeledSelectionComponent):
 
     def display_options(self):
         print(
-            f"\n{blue('Welcome to Coughy\'s Coffee! You have')} "
-            f"{yellow('*cough cough*')} "
-            f"{green(self.game_state.player.coins)} "
-            f"{blue('coins.')}\n"
+            f"\n{blue('Welcome to ')} "
+            f"{yellow('*cough cough* ')} "
+            f"{blue('Coughy\'s Coffee!\n')} "
         )
         for component in self.selection_components:
             component.display_options()

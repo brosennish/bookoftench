@@ -113,7 +113,7 @@ class GameState:
             player.illness_death_lvl = None
             return self
         else:
-            print_and_sleep(cyan(f"(Shit didn't take. You owe me {illness.cost} of coin. I also accept copper or Tenchcoin.\n\nYou into crypto?)"), 2)
+            print_and_sleep(cyan(f"Shit didn't take. You owe me {illness.cost} of coin. I also accept copper and Tenchcoin.\n\nYou into crypto?"), 2)
             return self
 
     def make_coffee_purchase(self, buyable: Buyable):
@@ -146,8 +146,13 @@ class GameState:
                 print_and_sleep(red(f"Coughy coughed on your coffee and now you're sicker than Hell."), 2)
                 print_and_sleep(red(f"Illness: {illness.name}"), 2)
                 print_and_sleep(red(f"Description: {illness.description}"), 2)
-                print_and_sleep(f"\nVisit the Free Range Children's Hospital to be cured "
-                                f"or you will die at level {player.illness_death_lvl}.", 3)
+                print_and_sleep(
+                    yellow(
+                        f"\nVisit the Free Range Children's Hospital to be cured "
+                        f"or you will die at level {player.illness_death_lvl}.\n"
+                    ),
+                    3
+                )
             else:
                 print_and_sleep(red(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."), 2)
                 print_and_sleep(red(f"Cause of Death: {selection['name']}"), 2)
