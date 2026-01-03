@@ -9,7 +9,7 @@ from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
 from savethewench.event_logger import subscribe_function
 from savethewench.ui import green, red, yellow, cyan
 from savethewench.util import print_and_sleep
-from .Illness import Illness
+from .illness import Illness
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
 from .bank import Bank

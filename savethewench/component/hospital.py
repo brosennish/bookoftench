@@ -34,7 +34,7 @@ class HospitalComponent(BinarySelectionComponent):
     def can_exit(self):
         return (self.exit_hospital
                 or not self.game_state.player.is_alive()
-                or self.game_state.player.is_sick())
+                or not self.game_state.player.is_sick())
 
     @staticmethod
     def _make_purchase_component():
