@@ -73,6 +73,7 @@ class Player(Combatant):
 
     illness_death_lvl: int = None
     illness_name: str = None
+    illness_cost:
 
     coins: int = 0
     casino_won: int = 0

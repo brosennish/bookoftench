@@ -8,7 +8,10 @@ REVERSE_HAIR_GROWTH_SYNDROME = "Reverse Hair Growth Syndrome"
 Illnesses = [
     # --- Instant Death ---
     {'name': LATE_ONSET_SIDS,
-     'description': "Sudden infant death syndrome that does not take effect until after one's infancy."},
+     'description': "Sudden infant death syndrome that does not take effect until after one's infancy.",
+     'levels_until_death': 0,
+     'cost': 0,
+     'success_rate': 0},
 
     # --- One Level ---
 
