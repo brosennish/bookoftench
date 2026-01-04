@@ -49,7 +49,11 @@ class CoffeeShopComponent(LabeledSelectionComponent):
 
     def _return(self):
         self.exit_shop = True
-        print_and_sleep(blue("Until *cough cough* next time!"), 1)
+        print_and_sleep((
+            f"\n{blue('Until')} "
+            f"{yellow('*cough cough*')} "
+            f"{blue('next time!\n')} "
+        ), 1)
 
     def can_exit(self):
         return (self.exit_shop

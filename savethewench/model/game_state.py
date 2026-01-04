@@ -113,7 +113,7 @@ class GameState:
             player.illness_death_lvl = None
             return self
         else:
-            print_and_sleep(cyan(f"Shit didn't take. You owe me {illness.cost} of coin. I also accept copper and Tenchcoin.\n\nYou into crypto?"), 2)
+            print_and_sleep(cyan(f"Shit didn't take. You owe me {illness.cost} of coin. I also accept copper and Tenchcoin.\n\nYou into crypto?\n\n"), 2)
             return self
 
     def make_coffee_purchase(self, buyable: Buyable):

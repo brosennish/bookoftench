@@ -14,7 +14,7 @@ class Illness:
         return dim(' | ').join([
             cyan(f"{self.name:<19}"),
             f"Cost: +{orange(self.cost)}"
-            f"Success rate: +{yellow(self.success_rate * 100)}",
+            f"Success rate: +{yellow(int(self.success_rate * 100))}",
         ])
 
     def __repr__(self):
