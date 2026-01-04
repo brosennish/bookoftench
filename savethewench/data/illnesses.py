@@ -5,7 +5,7 @@ REVERSE_HAIR_GROWTH_SYNDROME = "Reverse Hair Growth Syndrome"
 
 
 # TODO - Add more illnesses
-Illnesses = [
+All_Illnesses = [
     # --- Instant Death ---
     {'name': LATE_ONSET_SIDS,
      'description': "Sudden infant death syndrome occurring after infancy.",
