@@ -16,7 +16,7 @@ from savethewench.ui import yellow, dim, green, cyan, purple
 from savethewench.util import print_and_sleep
 from .base import Combatant, Buyable
 from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent, LevelUpEvent, \
-    SwapWeaponEvent, WeaponBrokeEvent, HitEvent
+    SwapWeaponEvent, WeaponBrokeEvent, HitEvent, PlayerDeathEvent
 from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perk_conditional
 from .weapon import load_weapons, Weapon
@@ -310,6 +310,11 @@ class Player(Combatant):
                 item_reward = str(item_reward.to_sellable_item())
 
         event_logger.log_event(LevelUpEvent(self.lvl, old_max, self.max_hp, item_reward, cash_reward))
+
+        if self.lvl == self.illness_death_lvl:
+            self.hp = 0
+            self.lives -= 1
+            event_logger.log_event(PlayerDeathEvent(self.lives))
 
     def apply_death_penalties(self):
         self.coins = int(self.coins * 0.25) if perk_is_active(WALLET_CHAIN) else 0  # TODO use the framework for this
