@@ -47,7 +47,7 @@ def display_hospital_header(game_state: GameState) -> str:
         f"Illness: {yellow(f"{player.illness.name}")}",
         f"Cost: {orange(f"{player.illness.cost}")}",
         f"Coins: {green(f"{player.coins}")}",
-        f"Chance of Success: {cyan(f"{player.illness.success_rate * 100}%")}\n"
+        f"Chance of Success: {cyan(f"{int(player.illness.success_rate * 100)}%")}\n"
         ])}")
 
 

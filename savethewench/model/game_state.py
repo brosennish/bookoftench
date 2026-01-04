@@ -108,7 +108,7 @@ class GameState:
         illness = player.illness
 
         if random.random() < illness.success_rate:
-            print_and_sleep(f"{cyan('I did it! You\'re healed! Mum would be so proud.')}", 2)
+            print_and_sleep(f"{cyan('I did it! You\'re healed! Mum would be so proud.')}\n", 2)
             player.illness = None
             player.illness_death_lvl = None
             return self
