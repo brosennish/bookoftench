@@ -25,8 +25,8 @@ class AudioProcess:
                 self.terminate()
         if self.file_name is not None and self.volume is not None:
             self._process = subprocess.Popen(
-                ["afplay", "-v", str(get_sfx_volume()), get_audio_path(self.file_name)],
-                stderr=subprocess.DEVNULL)
+                ["afplay", "-v", str(self.volume), get_audio_path(self.file_name)],
+            stderr=subprocess.DEVNULL)
 
     def terminate(self) -> None:
         if self._process is not None:
@@ -83,8 +83,9 @@ def stop_music() -> None:
     _current_music.terminate()
 
 def restart_music() -> None:
-    _current_music.play()
-
+    _current_music.volume = get_music_volume()
+    if settings.is_audio_enabled():
+        _current_music.play()
 
 # --- Global cleanup ---
 

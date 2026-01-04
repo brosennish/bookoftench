@@ -1,29 +1,33 @@
-from typing import List, Callable
+import time
+from typing import List, Callable, Tuple
 
 from savethewench import settings
 from savethewench.audio import restart_music, stop_all_sounds
+from savethewench.data.components import SETTINGS
 from savethewench.model import GameState
 from savethewench.ui import yellow
 from savethewench.util import safe_input, print_and_sleep
 from .base import PaginatedMenuComponent, functional_component, Component, SelectionBinding, LabeledSelectionComponent
+from .registry import register_component
 
 
+@register_component(SETTINGS)
 class SettingsMenu(PaginatedMenuComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
         self.exit_settings = False
 
     def construct_pages(self) -> List[List[SelectionBinding]]:
-        page = []
+        page: List[Tuple[str, type[Component]]] = []
         if settings.is_audio_enabled():
-            page.append(SelectionBinding('1', "Disable Audio", self._disable_audio))
+            page.append(("Disable Audio", self._disable_audio))
         else:
-            page.append(SelectionBinding('1', "Enable Audio", self._enable_audio))
-        page.append(SelectionBinding('2', f'Adjust Music Volume ({settings.get_music_volume()}%)',
-                                     self.adjust_volume_setting(settings.set_music_volume)))
-        page.append(SelectionBinding('3', f'Adjust SFX Volume ({settings.get_sfx_volume()}%)',
-                                     self.adjust_volume_setting(settings.set_sfx_volume)))
-        return [page]
+            page.append(("Enable Audio", self._enable_audio))
+        page.append((f'Adjust Music Volume ({settings.get_music_volume()}%)',
+                     self.adjust_volume_setting(settings.set_music_volume, do_restart=True)))
+        page.append((f'Adjust SFX Volume ({settings.get_sfx_volume()}%)',
+                     self.adjust_volume_setting(settings.set_sfx_volume)))
+        return [[SelectionBinding(str(i), name, component) for i, (name, component) in enumerate(page, 1)]]
 
     def construct_control_component(self) -> LabeledSelectionComponent:
         return LabeledSelectionComponent(self.game_state, [
@@ -48,17 +52,19 @@ class SettingsMenu(PaginatedMenuComponent):
         stop_all_sounds()
 
     @staticmethod
-    def adjust_volume_setting(setter: Callable[[int], None]) -> type[Component]:
+    def adjust_volume_setting(setter: Callable[[int], None], do_restart=False) -> type[Component]:
         @functional_component()
         def _component():
             while True:
-                val = safe_input("(0-100)")
+                val = safe_input("Enter a setting [0-100]")
                 if val.isdigit() and 0 <= int(val) <= 100:
                     setter(int(val))
+                    if do_restart:
+                        restart_music()
                     break
                 if not val.isdigit():
                     print_and_sleep(yellow("invalid setting"))
                 else:
-                    print_and_sleep(yellow("must from between 0 and 100"))
+                    print_and_sleep(yellow("must be between 0 and 100"))
 
         return _component
