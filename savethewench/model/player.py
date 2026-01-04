@@ -315,6 +315,8 @@ class Player(Combatant):
             self.hp = 0
             self.lives -= 1
             event_logger.log_event(PlayerDeathEvent(self.lives))
+            self.illness = None
+            self.illness_death_lvl = None
 
     def apply_death_penalties(self):
         self.coins = int(self.coins * 0.25) if perk_is_active(WALLET_CHAIN) else 0  # TODO use the framework for this
