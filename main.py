@@ -25,7 +25,7 @@ def load_component(class_name):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Save The Wench Game")
     parser.add_argument("-d", "--debug", action="store_true")
-    parser.add_argument("-c", "--component", default="ActionMenu")
+    parser.add_argument("-c", "--component", default="DebugInit")
     parser.add_argument("-s", "--seed", type=int, default=666)
 
     args = parser.parse_args()
