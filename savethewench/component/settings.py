@@ -14,8 +14,7 @@ from .registry import register_component
 @register_component(SETTINGS)
 class SettingsMenu(PaginatedMenuComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state)
-        self.exit_settings = False
+        super().__init__(game_state, return_only=True)
 
     def construct_pages(self) -> List[List[SelectionBinding]]:
         page: List[Tuple[str, type[Component]]] = []
@@ -28,16 +27,6 @@ class SettingsMenu(PaginatedMenuComponent):
         page.append((f'Adjust SFX Volume ({settings.get_sfx_volume()}%)',
                      self.adjust_volume_setting(settings.set_sfx_volume)))
         return [[SelectionBinding(str(i), name, component) for i, (name, component) in enumerate(page, 1)]]
-
-    def construct_control_component(self) -> LabeledSelectionComponent:
-        return LabeledSelectionComponent(self.game_state, [
-            SelectionBinding('R', 'Return', functional_component()(self._return))])
-
-    def can_exit(self):
-        return self.exit_settings
-
-    def _return(self):
-        self.exit_settings = True
 
     @staticmethod
     @functional_component()

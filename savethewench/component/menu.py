@@ -126,22 +126,12 @@ class ActionMenu(PaginatedMenuComponent):
 
 class InGameMenu(PaginatedMenuComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state)
-        self.leave_menu = False
-
-    def _return(self):
-        self.leave_menu = True
-
-    def can_exit(self):
-        return self.leave_menu
+        super().__init__(game_state, return_only=True)
 
     def construct_pages(self) -> List[List[SelectionBinding]]:
         return [[SelectionBinding(str(i), name, get_registered_component(name))
                  for i, name in enumerate(InGameMenuDefaults.page_one, 1)]]
 
-    def construct_control_component(self) -> LabeledSelectionComponent:
-        return LabeledSelectionComponent(self.game_state, [
-            SelectionBinding('R', 'Return', functional_component()(self._return))])
 
 _SAVE_DIR = ".saves" # TODO don't just save straight to a directory in the repo
 
