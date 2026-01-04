@@ -8,13 +8,15 @@ from savethewench.audio import play_music
 from savethewench.component.base import Component, LinearComponent, BinarySelectionComponent, \
     TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, functional_component, PaginatedMenuComponent
 from savethewench.data.audio import INTRO_THEME
-from savethewench.data.components import EXPLORE, AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT
+from savethewench.data.components import EXPLORE, AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, NEW_GAME, SAVE_GAME, QUIT_GAME, \
+    LOAD_GAME, InGameMenuDefaults
 from savethewench.model import GameState
 from savethewench.model.area import AreaActions
 from savethewench.model.util import get_player_status_view
 from savethewench.ui import red, cyan
 from savethewench.util import print_and_sleep, safe_input
-from .registry import get_registered_component
+from .registry import get_registered_component, register_component
+
 
 class StartMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -27,6 +29,7 @@ class StartMenu(LabeledSelectionComponent):
         return self.game_state.victory or not self.game_state.player.is_alive()
 
 
+@register_component(NEW_GAME)
 class NewGame(LinearComponent):
     def __init__(self, _: GameState):
         super().__init__(GameState(), TutorialDecision)
@@ -38,6 +41,7 @@ class NewGame(LinearComponent):
         return self.game_state
 
 
+@register_component(QUIT_GAME)
 class QuitGame(Component):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
@@ -120,27 +124,18 @@ class ActionMenu(PaginatedMenuComponent):
         return self.game_state.victory or not self.game_state.player.is_alive()
 
 
-class InGameMenu(LabeledSelectionComponent):
+class InGameMenu(PaginatedMenuComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, bindings=[
-            # TODO signal to go all the way back through the call stack to start new game
-            SelectionBinding('N', "New Game", NewGame),
-            SelectionBinding('S', "Save Game", SaveGame),
-            SelectionBinding('L', "Load Game", LoadGame),
-            # TODO clean up duplicated code
-            SelectionBinding('R', "Return", functional_component()(lambda: self._return())),
-            SelectionBinding('Q', "Quit", QuitGame)
-        ])
-        self.leave_menu = False
+        super().__init__(game_state, return_only=True)
 
-    def _return(self):
-        self.leave_menu = True
+    def construct_pages(self) -> List[List[SelectionBinding]]:
+        return [[SelectionBinding(str(i), name, get_registered_component(name))
+                 for i, name in enumerate(InGameMenuDefaults.page_one, 1)]]
 
-    def can_exit(self):
-        return self.leave_menu
 
 _SAVE_DIR = ".saves" # TODO don't just save straight to a directory in the repo
 
+@register_component(SAVE_GAME)
 class SaveGame(Component):
     def run(self) -> GameState:
         save_file = f"{self.game_state.player.name}.tench"
@@ -154,6 +149,7 @@ class SaveGame(Component):
         return self.game_state
 
 
+@register_component(LOAD_GAME)
 class LoadGame(Component):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)

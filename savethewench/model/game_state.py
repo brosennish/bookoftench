@@ -22,6 +22,7 @@ from .player import Player
 from .shop import Shop
 from .weapon import Weapon
 from ..data.illnesses import LATE_ONSET_SIDS, Illnesses
+from ..settings import Settings, set_settings
 
 
 @dataclass
@@ -45,6 +46,7 @@ class GameState:
     event_counter: Counter = field(default_factory=Counter)
     perk_cache: Dict[str, Perk] = field(default_factory=dict)
     achievement_cache: Dict[str, Achievement] = field(default_factory=dict)
+    settings: Settings = field(default_factory=Settings.defaults)
 
     @property
     def shop(self) -> Shop:
@@ -67,6 +69,7 @@ class GameState:
         event_logger.set_counter(self.event_counter)
         set_achievement_cache(self.achievement_cache)
         set_perk_cache(self.perk_cache)
+        set_settings(self.settings)
         load_achievements()
         self._subscribe_listeners()
 
