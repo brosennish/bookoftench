@@ -148,8 +148,8 @@ class GameState:
                 print_and_sleep(red(f"Description: {illness.description}"), 2)
                 print_and_sleep(
                     yellow(
-                        f"\nVisit the Free Range Children's Hospital to be cured "
-                        f"or you will die at level {player.illness_death_lvl}.\n"
+                        f"\nVisit the Free Range Children's Hospital for treatment "
+                        f"or die at level {player.illness_death_lvl}.\n"
                     ),
                     3
                 )

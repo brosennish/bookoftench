@@ -57,18 +57,31 @@ def get_player_status_view(game_state: GameState) -> str:
     killed_remaining = [f"Killed: {red(f"{game_state.current_area.enemies_killed}")}"]
     if perk_is_active(CROWS_NEST):
         killed_remaining.append(f"Remaining: {yellow(f"{game_state.current_area.enemies_remaining}")}")
-    return (f"{dim(' | ').join([
-        f"Area: {blue(game_state.current_area.name)}",
-        *killed_remaining,
-        f"Wanted: {purple(game_state.wanted)}",
-        f"Bounty: {purple(f"{game_state.bounty} coins")}"])}"
-            f"\n{dim(' | ').join([
-                f"\n{orange(player.name)} {dim('-')} Level: {cyan(f"{player.lvl}")}",
-                f"XP: {cyan(f"{player.xp}/{player.xp_needed}")}",
-                f"HP: {player_color(f"{player.hp}/{player.max_hp}")}",
-                f"Coins: {green(f"{player.coins}")}",
-                f"Lives: {yellow(f"{player.lives}")}\n"
-            ])}")
+
+    player_status = (f"{dim(' | ').join([
+            f"Area: {blue(game_state.current_area.name)}",
+            *killed_remaining,
+            f"Wanted: {purple(game_state.wanted)}",
+            f"Bounty: {purple(f"{game_state.bounty} coins")}"])}"
+                f"\n{dim(' | ').join([
+                    f"\n{orange(player.name)} {dim('-')} Level: {cyan(f"{player.lvl}")}",
+                    f"XP: {cyan(f"{player.xp}/{player.xp_needed}")}",
+                    f"HP: {player_color(f"{player.hp}/{player.max_hp}")}",
+                    f"Coins: {green(f"{player.coins}")}",
+                    f"Lives: {yellow(f"{player.lives}")}"])}")
+
+    if game_state.player.illness:
+        illness_status = (f"{dim(' | ').join([
+            f"\nIllness: {red(f"{game_state.player.illness.name}")}",
+            f"Death Level: {red(f"{game_state.player.illness_death_lvl}")}",
+        ])}\n")
+
+        return "\n".join([
+            player_status,
+            illness_status,
+        ])
+    else:
+        return player_status
 
 
 def get_battle_status_view(game_state: GameState) -> str:
