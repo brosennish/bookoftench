@@ -1,77 +1,91 @@
 import subprocess
+from dataclasses import dataclass
+from subprocess import Popen
+from typing import Optional, List
 
+from savethewench import settings
 from .data.audio import get_audio_path
 
-ENABLE_SOUNDS = True  # or False to mute everything
 
 # --- Tracking state ---
-_current_music_process = None
-_current_music = None  # <--- add this
-ACTIVE_SOUNDS = []
+@dataclass
+class AudioProcess:
+    file_name: Optional[str] = None
+    volume: Optional[float] = None
+    _process: Optional[Popen] = None
 
+    def is_playing(self) -> bool:
+        if self._process is not None:
+            return self._process.poll() is None
+        return False
+
+    def play(self):
+        if self._process is not None:
+            if self.is_playing():
+                self.terminate()
+        if self.file_name is not None and self.volume is not None:
+            self._process = subprocess.Popen(
+                ["afplay", "-v", str(self.volume), get_audio_path(self.file_name)],
+            stderr=subprocess.DEVNULL)
+
+    def terminate(self) -> None:
+        if self._process is not None:
+            self._process.terminate()
+        self._process = None
+
+_current_music: AudioProcess = AudioProcess()
+ACTIVE_SOUNDS: List[AudioProcess] = []
+
+def get_music_volume() -> float:
+    return float(settings.get_music_volume())/100
+
+def get_sfx_volume() -> float:
+    return float(settings.get_sfx_volume())/100
 
 # --- SFX ---
 
-def play_sound(file_name: str, v: float = 1.0) -> None:
+def play_sound(file_name: str) -> None:
     """Fire-and-forget sound effect, tracked so we can stop it later."""
-    if not ENABLE_SOUNDS:
+    if not settings.is_audio_enabled():
         return
 
-    path = get_audio_path(file_name)
-
-    try:
-        proc = subprocess.Popen(["afplay", "-v", str(v), path])
-        ACTIVE_SOUNDS.append(proc)
-    except Exception:
-        # Don't crash the game if sound fails
-        pass
+    sound = AudioProcess(file_name, get_sfx_volume())
+    ACTIVE_SOUNDS.append(sound)
+    sound.play()
 
 
 # --- Music ---
 
-def get_current_music() -> str | None:
-    return _current_music
+def is_track_playing(file_name: str, volume: float) -> bool:
+    if _current_music.file_name != file_name or _current_music.volume != volume:
+        return False
+    return _current_music.is_playing()
 
 
 def play_music(file_name: str) -> None:
     """Stop current music (if any) and start a new looping track."""
-    global _current_music_process, _current_music
-
-    if not ENABLE_SOUNDS:
-        return
+    global _current_music
 
     # OPTIONAL: don't restart if same track is already playing
-    if _current_music == file_name:
+    if is_track_playing(file_name, get_music_volume()):
         return
 
-    path = get_audio_path(file_name)
+    _current_music.file_name = file_name
+    _current_music.volume = get_music_volume()
 
-    stop_music()
-
-    try:
-        v = 1.0  # or whatever volume logic you use
-        _current_music_process = subprocess.Popen(
-            ["afplay", "-v", str(v), path]
-        )
-        _current_music = file_name
-    except Exception:
-        _current_music_process = None
-        _current_music = None
-
+    # only play if audio is enabled, but track state in case it is re-enabled later
+    if settings.is_audio_enabled():
+        # TODO log/print some message if this fails and disable audio
+        _current_music.play()
 
 def stop_music() -> None:
     """Stop only the current music track."""
-    global _current_music_process, _current_music
+    _current_music.terminate()
 
-    if _current_music_process:
-        try:
-            _current_music_process.terminate()
-        except Exception:
-            pass
-
-        _current_music_process = None
-        _current_music = None
-
+def restart_music() -> None:
+    _current_music.volume = get_music_volume()
+    if settings.is_audio_enabled():
+        _current_music.play()
 
 # --- Global cleanup ---
 
@@ -82,9 +96,6 @@ def stop_all_sounds() -> None:
 
     # Stop SFX
     for p in ACTIVE_SOUNDS:
-        try:
-            p.terminate()
-        except Exception:
-            pass
+        p.terminate()
 
     ACTIVE_SOUNDS.clear()

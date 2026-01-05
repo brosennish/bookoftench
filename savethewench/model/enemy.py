@@ -3,11 +3,14 @@ import random
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict
 
+from savethewench.audio import play_sound
 from savethewench.data import Enemies
-from savethewench.data.audio import AREA_BOSS_THEME
-from savethewench.data.enemies import Bosses, Final_Boss
+from savethewench.data.audio import AREA_BOSS_THEME, GATOR
+from savethewench.data.enemies import Bosses, Final_Boss, BAYOU_BILL
 from savethewench.data.perks import RICKETY_PICKPOCKET
 from savethewench.data.weapons import BARE_HANDS
+from savethewench.ui import purple
+from savethewench.util import print_and_sleep
 from .base import Combatant, NPC, DisplayableText
 from .perk import attach_perk
 from .weapon import Weapon, load_weapon, load_weapons
@@ -60,7 +63,6 @@ def load_enemies(restriction: List[str] = None) -> List[Enemy]:
     return [Enemy(**d) for d in Enemies if restriction is None or d['name'] in restriction]
 
 
-
 @dataclass
 class Boss(Enemy):
     theme: str = AREA_BOSS_THEME
@@ -77,12 +79,23 @@ class Boss(Enemy):
         for displayableText in self.preamble:
             displayableText.display()
 
+    def handle_hit(self, other: "Combatant") -> None:
+        super().handle_hit(other)
+        if self.name == BAYOU_BILL:
+            gator = random.random() < 0.10
+            if gator:
+                bite = random.randint(3, 5)
+                play_sound(GATOR)
+                print_and_sleep(purple(f"Mama Gator attacked you for {bite} damage!"), 2)
+                other.take_damage(bite, self)
+
 
 def load_boss(name: str) -> Boss:
     matches = [Boss.from_dict(d) for d in Bosses if d['name'] == name]
     if len(matches) == 0:
         raise ValueError(f"Could not find boss data for {name}")
     return matches[0]
+
 
 def load_final_boss() -> Boss:
     return Boss.from_dict(Final_Boss)

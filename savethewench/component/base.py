@@ -98,7 +98,8 @@ class LabeledSelectionComponent(SelectionComponent):
 
     def display_options(self):
         self.top_level_prompt_callback(self.game_state)
-        print_and_sleep(f"{'\n'.join(f"{f"[{v.key}]":<4}: {v.format()}" for _, v in self.binding_map.items())}")
+        if len(self.binding_map) > 0:
+            print_and_sleep(f"{'\n'.join(f"{f"[{v.key}]":<4}: {v.format()}" for _, v in self.binding_map.items())}")
 
     def run_selected_component(self, binding: SelectionBinding) -> GameState:
         return binding.component(self.game_state).run()
@@ -121,12 +122,15 @@ class LabeledSelectionComponent(SelectionComponent):
 class PaginatedMenuComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState,
                  top_level_prompt_callback: Callable[[GameState], None] = lambda _: None,
-                 main_menu_component: Optional[type[Component]] = None):
+                 main_menu_component: Optional[type[Component]] = None,
+                 return_only: bool = False):
         super().__init__(game_state, bindings=[]) # dynamically set self.binding_map depending on page
         self.top_level_prompt_callback = top_level_prompt_callback
         self.main_menu_component = main_menu_component
         self.pages = self.construct_pages()
         self.current_page = 0
+        self.return_only = return_only
+        self.return_selected = False
 
     @abstractmethod
     def construct_pages(self) -> List[List[SelectionBinding]]:
@@ -148,6 +152,9 @@ class PaginatedMenuComponent(LabeledSelectionComponent):
                 raise RuntimeError("No previous page exists")
         return functional_component()(_component)
 
+    def _select_return(self):
+        self.return_selected = True
+
     def construct_control_component(self) -> LabeledSelectionComponent:
         previous_page_binding = SelectionBinding('P', 'Previous Page', self._previous_page())
         next_page_binding = SelectionBinding('N', 'Next Page', self._next_page())
@@ -158,6 +165,8 @@ class PaginatedMenuComponent(LabeledSelectionComponent):
             res.append(next_page_binding)
         if self.main_menu_component is not None:
             res.append(SelectionBinding('M', 'Main Menu', self.main_menu_component))
+        if self.return_only:
+            res.append(SelectionBinding('R', 'Return', functional_component()(self._select_return)))
         return LabeledSelectionComponent(self.game_state, res)
 
     def construct_components(self) -> List[LabeledSelectionComponent]:
@@ -177,6 +186,11 @@ class PaginatedMenuComponent(LabeledSelectionComponent):
         for component in self.construct_components():
             self.binding_map |= component.binding_map
         return super().handle_selection()
+    
+    def can_exit(self):
+        if self.return_only:
+            return self.return_selected
+        return super().can_exit()
 
 
 class LinearComponent(Component):

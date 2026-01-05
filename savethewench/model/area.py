@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from typing import List, Dict
 
 from savethewench.data import Areas
-from savethewench.data.components import MenuDefaults, DISCOVER_COIN, DISCOVER_ITEM, DISCOVER_PERK, DISCOVER_WEAPON, \
+from savethewench.data.components import ActionMenuDefaults, DISCOVER_COIN, DISCOVER_ITEM, DISCOVER_PERK, DISCOVER_WEAPON, \
     SPAWN_ENEMY
 from savethewench.ui import purple, yellow
 from savethewench.util import print_and_sleep
@@ -29,7 +29,7 @@ class AreaActions:
 
     @classmethod
     def defaults(cls) -> AreaActions:
-        return AreaActions(pages=[MenuDefaults.page_one, MenuDefaults.page_two])
+        return AreaActions(pages=[ActionMenuDefaults.page_one, ActionMenuDefaults.page_two])
 
 
 @dataclass

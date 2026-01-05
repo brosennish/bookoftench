@@ -8,9 +8,9 @@ from savethewench.audio import play_music
 from savethewench.data.illnesses import LATE_ONSET_SIDS
 from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
 from savethewench.event_logger import subscribe_function
+from savethewench.settings import Settings, set_settings
 from savethewench.ui import green, yellow, cyan, blue
 from savethewench.util import print_and_sleep
-from .illness import Illness
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
 from .bank import Bank
@@ -18,6 +18,7 @@ from .base import Buyable
 from .coffee_item import CoffeeItem
 from .enemy import Enemy, load_enemy
 from .events import TravelEvent, BountyCollectedEvent, CoffeeEvent, PlayerDeathEvent, TreatmentEvent
+from .illness import Illness
 from .illnesses import Illnesses
 from .item import Item
 from .perk import attach_perk, Perk, set_perk_cache
@@ -47,6 +48,7 @@ class GameState:
     event_counter: Counter = field(default_factory=Counter)
     perk_cache: Dict[str, Perk] = field(default_factory=dict)
     achievement_cache: Dict[str, Achievement] = field(default_factory=dict)
+    settings: Settings = field(default_factory=Settings.defaults)
 
     @property
     def shop(self) -> Shop:
@@ -69,6 +71,7 @@ class GameState:
         event_logger.set_counter(self.event_counter)
         set_achievement_cache(self.achievement_cache)
         set_perk_cache(self.perk_cache)
+        set_settings(self.settings)
         load_achievements()
         self._subscribe_listeners()
 
@@ -114,7 +117,9 @@ class GameState:
             player.illness_death_lvl = None
             return self
         else:
-            print_and_sleep(blue(f"Shit didn't take. You owe me {illness.cost} of coin. I also accept copper and Tenchcoin.\n\nYou into crypto?\n\n"), 2)
+            print_and_sleep(blue(
+                f"Shit didn't take. You owe me {illness.cost} of coin. I also accept copper and Tenchcoin.\n\nYou into crypto?\n\n"),
+                            2)
             return self
 
     def make_coffee_purchase(self, buyable: Buyable):
@@ -155,7 +160,8 @@ class GameState:
                     3
                 )
             else:
-                print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."), 2)
+                print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."),
+                                2)
                 print_and_sleep(yellow(f"Cause of Death: {illness.name}"), 2)
                 print_and_sleep(yellow(f"Description:\n{illness.description}"), 3)
                 player.hp = 0

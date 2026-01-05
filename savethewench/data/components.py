@@ -15,13 +15,21 @@ EQUIP_WEAPON = "Equip Weapon"
 EXPLORE = "Explore"
 FINAL_BOSS_FIGHT = purple("BATTLE DENNY BILTMORE")
 HOSPITAL = "Hospital"
+LOAD_GAME = "Load Game"
+NEW_GAME = "New Game"
 OVERVIEW = "Overview"
 PERKS = "Perks"
+QUIT_GAME = "Quit"
+SAVE_GAME = "Save Game"
+SETTINGS = "Settings"
 SHOP = "Shop"
 SPAWN_ENEMY = "Spawn Enemy"
 TRAVEL = "Travel"
 USE_ITEM = "Use Item"
 
-class MenuDefaults:
+class ActionMenuDefaults:
     page_one: List[str] = [EXPLORE, USE_ITEM, EQUIP_WEAPON, SHOP, TRAVEL]
     page_two: List[str] = [ACHIEVEMENTS, BANK, CASINO, PERKS, OVERVIEW]
+
+class InGameMenuDefaults:
+    page_one: List[str] = [NEW_GAME, SAVE_GAME, LOAD_GAME, SETTINGS, QUIT_GAME]

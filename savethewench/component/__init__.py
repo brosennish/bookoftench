@@ -4,6 +4,7 @@ from .actions import *
 from .casino import *
 from .coffee_shop import *
 from .hospital import *
+from .settings import *
 from .shop import *
 #--
 
