@@ -25,25 +25,22 @@ def p_color(hp: int, max_hp: int) -> Callable[[str], str]:
         return red
 
 
-def display_coffee_header(game_state: GameState) -> str:
+def display_coffee_header(game_state: GameState) -> None:
     player = game_state.player
     player_color = p_color(player.hp, player.max_hp)
 
-    return (f"{dim(' | ').join([
+    print_and_sleep(f"{dim(' | ').join([
         f"HP: {player_color(f"{player.hp}/{player.max_hp}")}",
         f"Coins: {green(f"{player.coins}")}",
         f"Lives: {yellow(f"{player.lives}")}\n"
         "\nMenu:"
         ])}")
 
-def display_hospital_intro() -> str:
 
-    return f"Welcome to the Free Range Children's Hospital of Shebokken.\n"
-
-def display_hospital_header(game_state: GameState) -> str:
+def display_hospital_header(game_state: GameState) -> None:
     player = game_state.player
-
-    return (f"{dim(' | ').join([
+    print_and_sleep("Welcome to the Free Range Children's Hospital of Shebokken.")
+    print_and_sleep(f"{dim(' | ').join([
         f"Illness: {yellow(f"{player.illness.name}")}",
         f"Cost: {orange(f"{player.illness.cost}")}",
         f"Coins: {green(f"{player.coins}")}",

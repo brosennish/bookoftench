@@ -35,7 +35,7 @@ class CoffeeShopComponent(LabeledSelectionComponent):
             LabeledSelectionComponent(
                 game_state,
                 item_bindings,
-                top_level_prompt_callback=lambda gs: print(display_coffee_header(gs)),
+                top_level_prompt_callback=display_coffee_header,
             ),
             LabeledSelectionComponent(
                 game_state,
@@ -61,10 +61,10 @@ class CoffeeShopComponent(LabeledSelectionComponent):
                 or self.game_state.player.is_sick())
 
     def display_options(self):
-        print(
-            f"\n{blue('Welcome to ')} "
+        print_and_sleep(
+            f"{blue('Welcome to ')} "
             f"{yellow('*cough cough* ')} "
-            f"{blue('Coughy\'s Coffee!\n')} "
+            f"{blue('Coughy\'s Coffee!')} "
         )
         for component in self.selection_components:
             component.display_options()
