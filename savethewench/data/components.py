@@ -25,4 +25,3 @@ USE_ITEM = "Use Item"
 class MenuDefaults:
     page_one: List[str] = [EXPLORE, USE_ITEM, EQUIP_WEAPON, SHOP, TRAVEL]
     page_two: List[str] = [ACHIEVEMENTS, BANK, CASINO, PERKS, OVERVIEW]
-    page_three: List[str] = [COFFEE_SHOP, HOSPITAL]

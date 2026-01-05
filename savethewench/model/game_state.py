@@ -5,9 +5,10 @@ from typing import List, Dict
 
 from savethewench import event_logger
 from savethewench.audio import play_music
+from savethewench.data.illnesses import LATE_ONSET_SIDS
 from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
 from savethewench.event_logger import subscribe_function
-from savethewench.ui import green, red, yellow, cyan, blue
+from savethewench.ui import green, yellow, cyan, blue
 from savethewench.util import print_and_sleep
 from .illness import Illness
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
@@ -23,7 +24,6 @@ from .perk import attach_perk, Perk, set_perk_cache
 from .player import Player
 from .shop import Shop
 from .weapon import Weapon
-from ..data.illnesses import LATE_ONSET_SIDS
 
 
 @dataclass

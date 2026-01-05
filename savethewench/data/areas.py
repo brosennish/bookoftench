@@ -17,7 +17,7 @@ Areas = [
      'enemies': [enemies.BANDIT, enemies.GOON, enemies.PIMP, enemies.HOBO,
                  enemies.SERIAL_KILLER],
      'boss_name': enemies.THE_MAYOR, 'theme': audio.CITY_THEME,
-     'actions_menu': {'pages': [MenuDefaults.page_one, sorted(MenuDefaults.page_two), sorted(MenuDefaults.page_three)]}},
+     'actions_menu': {'pages': [MenuDefaults.page_one, sorted(MenuDefaults.page_two), COFFEE_SHOP, HOSPITAL]}},
     {'name': FOREST,
      'enemies': [enemies.HIKER, enemies.HUNTER, enemies.POACHER,
                  enemies.DISGRACED_EXILE, enemies.SERIAL_KILLER],
