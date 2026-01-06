@@ -30,7 +30,7 @@ class SaveTheWenchGame:
                 perk._active = True
             player = game_state.player
             player.name = "debug"
-            player.coins = 1000
+            player.coins = 10000
             player.max_hp = 1000
             player.hp = player.max_hp
             for weapon in load_discoverable_weapons():

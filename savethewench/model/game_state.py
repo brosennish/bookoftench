@@ -5,15 +5,18 @@ from typing import List, Dict
 
 from savethewench import event_logger
 from savethewench.audio import play_music
+from savethewench.data.illnesses import LATE_ONSET_SIDS, Illnesses
 from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
 from savethewench.event_logger import subscribe_function
-from savethewench.ui import green, red, yellow, orange, dim, cyan
+from savethewench.settings import Settings, set_settings
+from savethewench.ui import green, red, yellow
 from savethewench.util import print_and_sleep
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
 from .bank import Bank
 from .base import Buyable
 from .coffee_item import CoffeeItem
+from .crypto import CryptoExchangeService
 from .enemy import Enemy, load_enemy
 from .events import TravelEvent, BountyCollectedEvent, CoffeeEvent, PlayerDeathEvent
 from .item import Item
@@ -21,8 +24,6 @@ from .perk import attach_perk, Perk, set_perk_cache
 from .player import Player
 from .shop import Shop
 from .weapon import Weapon
-from ..data.illnesses import LATE_ONSET_SIDS, Illnesses
-from ..settings import Settings, set_settings
 
 
 @dataclass
@@ -47,6 +48,7 @@ class GameState:
     perk_cache: Dict[str, Perk] = field(default_factory=dict)
     achievement_cache: Dict[str, Achievement] = field(default_factory=dict)
     settings: Settings = field(default_factory=Settings.defaults)
+    crypto_service: CryptoExchangeService = field(default_factory=CryptoExchangeService)
 
     @property
     def shop(self) -> Shop:
@@ -71,6 +73,7 @@ class GameState:
         set_perk_cache(self.perk_cache)
         set_settings(self.settings)
         load_achievements()
+        self.crypto_service.start()
         self._subscribe_listeners()
 
     def refresh_bounty(self):
