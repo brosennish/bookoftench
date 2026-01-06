@@ -4,9 +4,9 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 
-from savethewench.data.cryptocurrencies import Crypto_Currencies
+from savethewench.data.cryptocurrencies import Crypto_Currencies, Shit_Coin_Names
 
-_max_update_lag = 3 #seconds
+_max_update_latency = 3 #seconds
 _max_coins = 5
 
 @dataclass
@@ -49,7 +49,7 @@ class CryptoCurrency:
         self.frozen = False
 
     def _update_trigger(self):
-        self._trigger = random.uniform(0, _max_update_lag)
+        self._trigger = random.uniform(0, _max_update_latency)
 
     def _update_price(self):
         if self.price == 0:
@@ -79,10 +79,41 @@ class CryptoCurrency:
     def format_percent_change(self) -> str:
         return f"{self.historical_percent_change:.2f}%"
 
+@dataclass
+class ShitCoin(CryptoCurrency):
+    price: float = 0
+    lower_limit: int = 0
+    upper_limit: int = 0
+    volatility: float = 0
+
+    def __post_init__(self):
+        # TODO set bounds somewhere more configurable
+        self.price = random.randint(10, 1000)
+        self.upper_limit = random.randint(10**3, 10**6)
+        self.volatility = random.uniform(0.25, 0.75)
+        super().__post_init__()
+
+class ShitCoinGenerator:
+    def __init__(self):
+        self.gen_iteration = 1
+        self.coins = []
+
+    def _populate_coins(self):
+        if len(self.coins) == 0:
+            self.coins = [ShitCoin(
+                name=f"{sc} {self.gen_iteration}" if self.gen_iteration > 1 else sc
+            ) for sc in Shit_Coin_Names]
+            random.shuffle(self.coins)
+            self.gen_iteration += 1
+
+    def generate(self) -> ShitCoin:
+        self._populate_coins()
+        return self.coins.pop()
 
 class CryptoExchangeService:
     def __init__(self):
         self.coins = [CryptoCurrency(**d) for d in Crypto_Currencies]
+        self.shit_coin_generator = ShitCoinGenerator()
         self.interval = 0.1
         self._stop_event = threading.Event()
         self._thread = threading.Thread(target=self._run, daemon=True)
@@ -103,6 +134,8 @@ class CryptoExchangeService:
 
     def _run(self):
         while not self._stop_event.is_set():
+            while len(self.coins) < _max_coins:
+                self.coins.append(self.shit_coin_generator.generate())
             for coin in self.coins:
                 self._executor.submit(coin.poll_market)
             self._stop_event.wait(self.interval)
