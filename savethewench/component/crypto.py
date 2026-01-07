@@ -1,12 +1,15 @@
 import curses
 import time
+from abc import ABC, abstractmethod
 from typing import List
 
+from savethewench.component import register_component
 from savethewench.component.base import Component
+from savethewench.data.components import CRYPTO_EXCHANGE
 from savethewench.model import GameState
 from savethewench.model.crypto import CryptoCurrency
 
-
+@register_component(CRYPTO_EXCHANGE)
 class CryptoExchange(Component):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
@@ -29,6 +32,7 @@ class CryptoExchange(Component):
             color = 4
         stdscr.addstr(line, 25, coin.format_price(), curses.color_pair(color))
         stdscr.addstr(line, 35, coin.format_percent_change(), curses.color_pair(color))
+        stdscr.addstr(line, 45, str(coin.coins_owned), curses.color_pair(1))
 
     def _add_return_option(self, stdscr, selection: int, line: int):
         stdscr.addstr(line, 0, f"[R]",
@@ -58,8 +62,11 @@ class CryptoExchange(Component):
         if ch in (curses.KEY_ENTER, 10, 13):
             if self.selected <= len(self.coins):
                 self.coins[self.selected - 1].freeze()
-                QuantitySelector(self.game_state, self.selected).c_run(stdscr)
+                BuyOrSellSelector(self.game_state, self.selected).c_run(stdscr)
             else:
+                # Leaving exchange - all coins unfreeze since player had an opportunity to buy at initial price
+                for coin in self.coins:
+                    coin.unfreeze()
                 self.can_exit = True # TODO goodbye message, sleep, etc
         elif ch == curses.KEY_UP:
             self.selected -= 1
@@ -91,30 +98,80 @@ class CryptoExchange(Component):
         curses.wrapper(self.c_run)
         return self.game_state
 
-class QuantitySelector(CryptoExchange):
+class CryptoExchangeExtension(CryptoExchange):
+    def run(self):
+        raise RuntimeError("Quantity Selector not runnable from outside of preexisting curses context")
+
+
+class BuyOrSellSelector(CryptoExchangeExtension):
+    def __init__(self, game_state: GameState, selected: int):
+        super().__init__(game_state)
+        self.selected = selected
+        self.coin = self.coins[self.selected-1]
+        self.sub_selection = 0
+
+    def display_prompt(self, stdscr):
+        stdscr.addstr(self.prompt_start, 0, "[B]",
+                      curses.color_pair(7) if  self.sub_selection == 0 else curses.color_pair(1))
+        stdscr.addstr(self.prompt_start, 4, "Buy")
+        stdscr.addstr(self.prompt_start + 1, 0, "[S]",
+                      curses.color_pair(7) if self.sub_selection == 1 else curses.color_pair(1))
+        stdscr.addstr(self.prompt_start + 1, 4, "Sell")
+
+    def handle_selection(self, stdscr):
+        ch = stdscr.getch()
+        if ch in (curses.KEY_ENTER, 10, 13):
+            self.can_exit = True
+            if self.sub_selection == 0:
+                BuySelector(self.game_state, self.selected).c_run(stdscr)
+            else:
+                SellSelector(self.game_state, self.selected).c_run(stdscr)
+        elif ch == curses.KEY_UP:
+            self.sub_selection -= 1
+            if self.sub_selection < 0:
+                self.sub_selection = 1
+        elif ch == curses.KEY_DOWN:
+            self.sub_selection += 1
+            if self.sub_selection > 1:
+                self.sub_selection = 0
+
+    def c_run(self, stdscr):
+        if self.coin.coins_owned == 0:
+            self.can_exit = True
+            BuySelector(self.game_state, self.selected).c_run(stdscr)
+        super().c_run(stdscr)
+
+
+class QuantitySelector(CryptoExchangeExtension, ABC):
     def __init__(self, game_state: GameState, selected: int):
         super().__init__(game_state)
         self.selected = selected
         self.coin = self.coins[self.selected-1]
         self.curs_set = 1
-        self.max_purchase = int(self.game_state.player.coins / self.coin.price)
         self.user_input = ""
 
+    @abstractmethod
+    def get_max_quantity(self):
+        pass
+
+    @abstractmethod
     def display_prompt(self, stdscr):
-        stdscr.addstr(self.prompt_start, 0, f"How much {self.coin.name} do you want to buy? (max {self.max_purchase})")
-        stdscr.addstr(self.prompt_start + 1, 0, "> ", curses.color_pair(6))
-        stdscr.addstr(self.prompt_start + 1, 2, self.user_input)
+        pass
+
+    @abstractmethod
+    def handle_quantity(self, quantity: int):
+        pass
 
     def handle_selection(self, stdscr):
         ch = stdscr.getch()
         if ord('0') <= ch <= ord('9'):
-            if ch > ord('0') or len(self.user_input) != 0:
-                self.user_input += chr(ch)
+            if self.user_input == "0":
+                self.user_input = ""
+            self.user_input += chr(ch)
         elif ch in (curses.KEY_ENTER, 10, 13):
             quantity = int(self.user_input)
-            # TODO handle all this stuff properly
-            if quantity <= self.max_purchase:
-                self.game_state.player.coins -= int(self.coin.price * quantity)
+            if quantity <= self.get_max_quantity():
+                self.handle_quantity(quantity)
                 self.can_exit = True
                 self.coin.unfreeze()
             else:
@@ -123,8 +180,36 @@ class QuantitySelector(CryptoExchange):
         elif ch in (curses.KEY_BACKSPACE, 127, 8):
             self.user_input = self.user_input[:-1]
 
-    def run(self):
-        raise RuntimeError("Quantity Selector not runnable from outside of preexisting curses context")
+class BuySelector(QuantitySelector):
+
+    def get_max_quantity(self):
+        return int(self.game_state.player.coins/self.coin.price)
+
+    def display_prompt(self, stdscr):
+        stdscr.addstr(self.prompt_start, 0, f"How much {self.coin.name} do you want to buy? (max {self.get_max_quantity()})")
+        stdscr.addstr(self.prompt_start + 1, 0, "> ", curses.color_pair(6))
+        stdscr.addstr(self.prompt_start + 1, 2, self.user_input)
+
+    def handle_quantity(self, quantity: int):
+        total_cost = int(quantity * self.coin.price)
+        self.game_state.player.coins -= total_cost
+        self.coin.log_purchase(quantity, total_cost)
+
+
+class SellSelector(QuantitySelector):
+
+    def get_max_quantity(self):
+        return self.coin.coins_owned
+
+    def display_prompt(self, stdscr):
+        stdscr.addstr(self.prompt_start, 0, f"How much {self.coin.name} do you want to sell? (max {self.get_max_quantity()})")
+        stdscr.addstr(self.prompt_start + 1, 0, "> ", curses.color_pair(6))
+        stdscr.addstr(self.prompt_start + 1, 2, self.user_input)
+
+    def handle_quantity(self, quantity: int):
+        total_cost = int(quantity * self.coin.price)
+        self.game_state.player.coins += total_cost
+        self.coin.log_sale(quantity, total_cost)
 
 
 def init_colors():

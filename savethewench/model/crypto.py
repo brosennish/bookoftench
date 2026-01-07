@@ -2,12 +2,38 @@ import random
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import List
 
 from savethewench.data.cryptocurrencies import Crypto_Currencies, Shit_Coin_Names
 
 _max_update_latency = 3 #seconds
 _max_coins = 5
+
+class TransactionType(Enum):
+    BUY = "BUY"
+    SELL = "SELL"
+
+@dataclass
+class Transaction:
+    quantity: int
+    price: int
+    type: TransactionType
+
+class TransactionHistory:
+    def __init__(self):
+        self.owned: int = 0
+        self.cost_basis: float = 0
+        self.history: List[Transaction] = []
+
+    def log_buy(self, quantity: int, price: int):
+        self.history.append(Transaction(quantity=quantity, price=price, type=TransactionType.BUY))
+        self.owned += quantity
+
+    def log_sell(self, quantity: int, price: int):
+        self.history.append(Transaction(quantity=quantity, price=price, type=TransactionType.SELL))
+        self.owned -= quantity
 
 @dataclass
 class CryptoCurrency:
@@ -17,6 +43,8 @@ class CryptoCurrency:
     upper_limit: int
     volatility: float
     frozen: bool = True
+
+    history: TransactionHistory = field(default_factory=TransactionHistory)
 
     _trigger: float = 0
     _start_price: float = 0
@@ -41,6 +69,10 @@ class CryptoCurrency:
     @property
     def historical_percent_change(self) -> float:
         return round(((self.price - self._start_price) / self._start_price) * 100, 2)
+
+    @property
+    def coins_owned(self) -> int:
+        return self.history.owned
 
     def freeze(self):
         self.frozen = True
@@ -78,6 +110,12 @@ class CryptoCurrency:
 
     def format_percent_change(self) -> str:
         return f"{self.historical_percent_change:.2f}%"
+
+    def log_purchase(self, quantity: int, price: int):
+        self.history.log_buy(quantity, price)
+
+    def log_sale(self, quantity: int, price: int):
+        self.history.log_sell(quantity, price)
 
 @dataclass
 class ShitCoin(CryptoCurrency):
