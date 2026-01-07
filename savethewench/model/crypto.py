@@ -134,19 +134,19 @@ class ShitCoin(CryptoCurrency):
 class ShitCoinGenerator:
     def __init__(self):
         self.gen_iteration = 1
-        self.coins = []
+        self.coin_pool = []
 
-    def _populate_coins(self):
-        if len(self.coins) == 0:
-            self.coins = [ShitCoin(
-                name=f"{sc} {self.gen_iteration}" if self.gen_iteration > 1 else sc
-            ) for sc in Shit_Coin_Names]
-            random.shuffle(self.coins)
+    def _populate_coin_pool(self):
+        if len(self.coin_pool) == 0:
+            self.coin_pool = [ShitCoin(
+                name=f"{name} {self.gen_iteration}" if self.gen_iteration > 1 else name
+            ) for name in [f"{sc} Coin" for sc in Shit_Coin_Names]]
+            random.shuffle(self.coin_pool)
             self.gen_iteration += 1
 
     def generate(self) -> ShitCoin:
-        self._populate_coins()
-        return self.coins.pop()
+        self._populate_coin_pool()
+        return self.coin_pool.pop()
 
 class CryptoExchangeService:
     def __init__(self):
