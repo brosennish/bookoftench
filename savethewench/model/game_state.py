@@ -14,7 +14,6 @@ from savethewench.util import print_and_sleep
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
 from .bank import Bank
-from .base import Buyable
 from .coffee_item import CoffeeItem
 from .crypto import CryptoExchangeService
 from .enemy import Enemy, load_enemy
@@ -125,23 +124,25 @@ class GameState:
                             2)
             return self
 
-    def make_coffee_purchase(self, buyable: Buyable):
-        if self.player.coins < buyable.cost:
+    def make_coffee_purchase(self, coffee_item: CoffeeItem):
+        if self.player.coins < coffee_item.cost:
             print_and_sleep(yellow(f"Need more coin"), 1)
             return False
 
-        if isinstance(buyable, CoffeeItem):
-            self.coffee_effect(buyable)
-            event_logger.log_event(CoffeeEvent(buyable))
+        if isinstance(coffee_item, CoffeeItem):
+            self.coffee_effect(coffee_item)
+            event_logger.log_event(CoffeeEvent(coffee_item))
         else:
             return False
-        self.player.coins -= buyable.cost
+        self.player.coins -= coffee_item.cost
         return True
 
     def coffee_effect(self, item: CoffeeItem):
         player = self.player
+
         original_hp = player.hp
         player.gain_hp(item.hp)
+
         print_and_sleep(f"You restored {green(self.player.hp - original_hp)} hp!\n", 1)
 
         if random.random() < item.risk:

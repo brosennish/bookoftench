@@ -6,6 +6,7 @@ from savethewench.data.audio import SHOP_THEME
 from savethewench.data.components import COFFEE_SHOP
 from savethewench.model import GameState
 from savethewench.model.base import Buyable
+from savethewench.model.coffee_item import CoffeeItem
 from savethewench.model.coffee_shop import CoffeeShop
 from savethewench.model.util import display_coffee_header
 from savethewench.ui import blue, yellow
@@ -50,9 +51,9 @@ class CoffeeShopComponent(LabeledSelectionComponent):
     def _return(self):
         self.exit_shop = True
         print_and_sleep((
-            f"\n{blue('Until')} "
+            f"{blue('Until')} "
             f"{yellow('*cough cough*')} "
-            f"{blue('next time!\n')} "
+            f"{blue('next time!')}\n"
         ), 1)
 
     def can_exit(self):
@@ -70,9 +71,9 @@ class CoffeeShopComponent(LabeledSelectionComponent):
             component.display_options()
 
     @staticmethod
-    def _make_purchase_component(buyable: Buyable):
+    def _make_purchase_component(coffee_item: CoffeeItem):
         @functional_component(state_dependent=True)
         def purchase_component(game_state: GameState):
-            game_state.make_coffee_purchase(buyable)
+            game_state.make_coffee_purchase(coffee_item)
 
         return purchase_component

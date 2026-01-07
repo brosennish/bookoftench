@@ -151,9 +151,10 @@ class BountyCollectedEvent(Event):
 
 
 class CoffeeEvent(Event):
-    def __init__(self, buyable):
+    def __init__(self, coffee_item):
         super().__init__(EventType.COFFEE_EVENT)
-        self.buyable = buyable
+        self.coffee_item = coffee_item
+
 
 class TreatmentEvent(Event):
     def __init__(self, illness):

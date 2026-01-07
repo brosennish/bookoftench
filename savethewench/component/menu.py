@@ -87,9 +87,9 @@ class Intro(TextDisplayingComponent):
         super().__init__(game_state,
                          next_component=ActionMenu,
                          display_callback=lambda _: print_and_sleep(red("""
-You wash up on a beach outside of Shebokken.
-The champion feels it in his jines that his wench is in danger.
-Find her before her life runs dry...
+You swim up to a rocky beach with nothing but your knife and a tench.
+The champion informed you that a wench has been captured - he can feel it in his jines.
+Save her before her life runs dry...
 """)))
 
     def play_theme(self):

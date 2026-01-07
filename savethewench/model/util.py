@@ -39,7 +39,7 @@ def display_coffee_header(game_state: GameState) -> None:
 
 def display_hospital_header(game_state: GameState) -> None:
     player = game_state.player
-    print_and_sleep("Welcome to the Free Range Children's Hospital of Shebokken.")
+    print_and_sleep("Welcome to The Free Range Children's Hospital of Shebokken.")
     print_and_sleep(f"{dim(' | ').join([
         f"Illness: {yellow(f"{player.illness.name}")}",
         f"Cost: {orange(f"{player.illness.cost}")}",
