@@ -154,3 +154,8 @@ class CoffeeEvent(Event):
     def __init__(self, buyable):
         super().__init__(EventType.COFFEE_EVENT)
         self.buyable = buyable
+
+class TreatmentEvent(Event):
+    def __init__(self, illness):
+        super().__init__(EventType.TREATMENT_EVENT)
+        self.illness = illness

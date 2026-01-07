@@ -5,30 +5,34 @@ REVERSE_HAIR_GROWTH_SYNDROME = "Reverse Hair Growth Syndrome"
 
 
 # TODO - Add more illnesses
-Illnesses = [
+All_Illnesses = [
     # --- Instant Death ---
     {'name': LATE_ONSET_SIDS,
-     'description': "Sudden infant death syndrome that does not take effect until after one's infancy."},
+     'description': "Sudden infant death syndrome occurring after infancy.",
+     'levels_until_death': 0,
+     'cost': 0,
+     'success_rate': 0},
 
     # --- One Level ---
 
 
     # --- Two Levels ---
     {'name': PHANTOM_HIM_SYNDROME,
-     'description': "A chilling condition in which one experiences a man who is not there."
-                    "\nHowever, without medical intervention, this man will kill you after some time.",
+     'description': "You experience a man who is not there, but he will still kill you eventually.",
     'levels_until_death': 2,
-    'cost': 200},
+    'cost': 200,
+     'success_rate': 0.80},
     {'name': RESTLESS_BUTT_SYNDROME,
      'description': "Left untreated, you will, not unlike a whoopee cushion, deflate entirely.",
-    'levels_until_death': 2,
-     'cost': 150},
+    'levels_until_death': 3,
+     'cost': 150,
+     'success_rate': 0.95},
 
     # --- Three Levels ---
     {'name': REVERSE_HAIR_GROWTH_SYNDROME,
-     'description': "A surprisingly common condition in which one's hair grows inward instead of outward."
-                    "\nOver time, the disorderly will fill with hair until there's no room left in there.",
-    'levels_until_death': 3,
-     'cost': 175},
+     'description': "You fill with hair as it grows into your body rather than out from it.",
+    'levels_until_death': 4,
+     'cost': 175,
+     'success_rate': 0.85},
 ]
 

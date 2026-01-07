@@ -26,6 +26,7 @@ class EventType(Enum):
     SELL_WEAPON = "sell_weapon"
     SWAP_WEAPON = "swap_weapon"
     TRAVEL = "travel"
+    TREATMENT_EVENT = "treatment_event"
     USE_ITEM = "use_item"
     WEAPON_BROKE = "weapon_broke"
     WITHDRAW = "withdraw"
