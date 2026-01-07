@@ -8,7 +8,8 @@ from savethewench.data.achievements import RewardType
 from savethewench.data.perks import WENCH_LOCATION
 from savethewench.event_base import EventType, Event
 from savethewench.event_logger import subscribe_function
-from savethewench.model.events import KillEvent
+from savethewench.model.events import KillEvent, CoffeeEvent, LevelUpEvent, FleeEvent, BountyCollectedEvent, \
+    TreatmentEvent
 from savethewench.model.perk import Perk, load_perks
 from savethewench.model.player import Player
 from savethewench.ui import orange
@@ -61,12 +62,56 @@ class AchievementEvent(Event):
         self.achievement.active = True
         self.achievement.activation_action(player)
 
+@dataclass
+class BountyCollectedAchievement(Achievement):
+
+    def __post_init__(self):
+        @subscribe_function(BountyCollectedEvent, name_override=self.id)
+        def handle_event(_: Event):
+            if event_logger.get_count(self.event_type) == self.event_threshold:
+                event_logger.log_event(AchievementEvent(self))
+
+@dataclass
+class CoffeeAchievement(Achievement):
+
+    def __post_init__(self):
+        @subscribe_function(CoffeeEvent, name_override=self.id)
+        def handle_event(_: Event):
+            if event_logger.get_count(self.event_type) == self.event_threshold:
+                event_logger.log_event(AchievementEvent(self))
+
+@dataclass
+class FleeAchievement(Achievement):
+
+    def __post_init__(self):
+        @subscribe_function(FleeEvent, name_override=self.id)
+        def handle_event(_: Event):
+            if event_logger.get_count(self.event_type) == self.event_threshold:
+                event_logger.log_event(AchievementEvent(self))
 
 @dataclass
 class KillAchievement(Achievement):
 
     def __post_init__(self):
         @subscribe_function(KillEvent, name_override=self.id)
+        def handle_event(_: Event):
+            if event_logger.get_count(self.event_type) == self.event_threshold:
+                event_logger.log_event(AchievementEvent(self))
+
+@dataclass
+class LevelUpAchievement(Achievement):
+
+    def __post_init__(self):
+        @subscribe_function(LevelUpEvent, name_override=self.id)
+        def handle_event(_: Event):
+            if event_logger.get_count(self.event_type) == self.event_threshold:
+                event_logger.log_event(AchievementEvent(self))
+
+@dataclass
+class TreatmentEventAchievement(Achievement):
+
+    def __post_init__(self):
+        @subscribe_function(TreatmentEvent, name_override=self.id)
         def handle_event(_: Event):
             if event_logger.get_count(self.event_type) == self.event_threshold:
                 event_logger.log_event(AchievementEvent(self))
@@ -85,8 +130,33 @@ def load_achievements() -> List[Achievement]:
     res = []
     for d in Achievements:
         match d['event_type']:
+            case EventType.BOUNTY_COLLECTED:
+                achievement = BountyCollectedAchievement(**d)
+                if achievement.id not in _ACHIEVEMENTS:
+                    _ACHIEVEMENTS[achievement.id] = achievement
+                res.append(_ACHIEVEMENTS[achievement.id])
+            case EventType.COFFEE_EVENT:
+                achievement = CoffeeAchievement(**d)
+                if achievement.id not in _ACHIEVEMENTS:
+                    _ACHIEVEMENTS[achievement.id] = achievement
+                res.append(_ACHIEVEMENTS[achievement.id])
+            case EventType.FLEE:
+                achievement = FleeAchievement(**d)
+                if achievement.id not in _ACHIEVEMENTS:
+                    _ACHIEVEMENTS[achievement.id] = achievement
+                res.append(_ACHIEVEMENTS[achievement.id])
             case EventType.KILL:
                 achievement = KillAchievement(**d)
+                if achievement.id not in _ACHIEVEMENTS:
+                    _ACHIEVEMENTS[achievement.id] = achievement
+                res.append(_ACHIEVEMENTS[achievement.id])
+            case EventType.LEVEL_UP:
+                achievement = LevelUpAchievement(**d)
+                if achievement.id not in _ACHIEVEMENTS:
+                    _ACHIEVEMENTS[achievement.id] = achievement
+                res.append(_ACHIEVEMENTS[achievement.id])
+            case EventType.TREATMENT_EVENT:
+                achievement = TreatmentEventAchievement(**d)
                 if achievement.id not in _ACHIEVEMENTS:
                     _ACHIEVEMENTS[achievement.id] = achievement
                 res.append(_ACHIEVEMENTS[achievement.id])
