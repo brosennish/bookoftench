@@ -35,7 +35,7 @@ def can_gamble(game_state: GameState) -> bool:
 def display_crapped_out_message(game_state: GameState):
     player = game_state.player
     message = "You're out of plays. Buy a perk or level up, bozo.\n" if player.remaining_plays == 0 else \
-        "Your coins are dry. Get lost, bozo.\n"
+        "Your coins are dry.\nGet lost, bozo.\n"
     print_and_sleep(blue(message), 2)
 
 
@@ -51,13 +51,11 @@ class Casino(LabeledSelectionComponent):
         super().__init__(game_state, bindings=[
             SelectionBinding('1', "Krill or Cray", KrillOrKray),
             SelectionBinding('2', "Above or Below", AboveOrBelow),
-            SelectionBinding('3', "Wet or Dry (WIP)", WetOrDry),
-            SelectionBinding('4', "Fish Bones (WIP)", FishBones),
-            SelectionBinding('5', "Mystery Box (WIP)", MysteryBox),
+            SelectionBinding('3', "TBD", NoOpComponent),
             SelectionBinding('R', "Return", functional_component()(lambda: self._return())),
         ])
         self.leave_casino = False
-        print_and_sleep(blue("Welcome to Riverboat Casino."), 1)
+        print_and_sleep(blue("Welcome to Riverboat Casino."), 3)
 
     def _return(self):
         self.leave_casino = True

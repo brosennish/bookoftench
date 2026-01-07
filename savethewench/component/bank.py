@@ -37,12 +37,12 @@ class BankComponent(LabeledSelectionComponent):
 
     def _display_greeting(self):
         if self.allow_deposit:
-            print_and_sleep("Welcome to the Shebokken Transnational Offshore Bank.\n"
+            print_and_sleep("Welcome to Shebokken Transnational Offshore Bank.\n"
                             "While banking with us, you may deposit or withdraw coins.\n"
                             f"Each time you level up, your account value will increase by "
                             f"{int(self.bank.interest_rate * 100)}%.", 1)
         else:
-            print_and_sleep("Welcome to the Shebokken Transnational Offshore Bank.\n"
+            print_and_sleep("Welcome to Shebokken Transnational Offshore Bank.\n"
                             "We do not accept deposits between level-ups.\n"
                             "Withdrawals will incur a 10% fee.", 1)
 
