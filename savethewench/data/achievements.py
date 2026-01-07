@@ -4,10 +4,14 @@ from savethewench.event_base import EventType
 
 CHICKEN = "Chicken"
 DRY_FIVE = "Dry Five"
+FIRST_BUST = "First Bust"
 KRILL_OR_BE_KRILLED = "Krill Or Be Krilled"
 LEVEL_TENCH = "Level Tench"
+MASTER_OF_TENCH = "Master of Tench"
+PATIENT_68 = "Patient 68"
 RECKLESS = "Reckless"
 TENCH_KILLS = "Tench Kills"
+VIGILANTE = "Vigilante"
 
 class RewardType(Enum):
     XP = "xp"
@@ -46,18 +50,26 @@ Achievements = [
         'id': DRY_FIVE,
         'name': "Dry Five",
         'description': "Reach level 5",
-        'reward_type': RewardType.COIN,
+        'reward_type': RewardType.PERK,
         'reward_value': 55,
         'event_type': EventType.LEVEL_UP,
         'event_threshold': 5
     },
-{
+    {
         'id': LEVEL_TENCH,
         'name': "Level Tench",
         'description': "Reach level 10",
         'reward_type': RewardType.PERK,
         'event_type': EventType.LEVEL_UP,
         'event_threshold': 10
+    },
+    {
+        'id': MASTER_OF_TENCH,
+        'name': "Master of Tench",
+        'description': "Reach level 15",
+        'reward_type': RewardType.PERK,
+        'event_type': EventType.LEVEL_UP,
+        'event_threshold': 15
     },
     {
         'id': CHICKEN,
@@ -67,5 +79,32 @@ Achievements = [
         'reward_value': 10,
         'event_type': EventType.FLEE,
         'event_threshold': 10
+    },
+    {
+        'id': FIRST_BUST,
+        'name': "First Bust",
+        'description': "Collect 1 bounties",
+        'reward_type': RewardType.XP,
+        'reward_value': 5,
+        'event_type': EventType.BOUNTY_COLLECTED,
+        'event_threshold': 1
+    },
+    {
+        'id': VIGILANTE,
+        'name': "Vigilante",
+        'description': "Collect 5 bounties",
+        'reward_type': RewardType.XP,
+        'reward_value': 25,
+        'event_type': EventType.BOUNTY_COLLECTED,
+        'event_threshold': 5
+    },
+    {
+        'id': PATIENT_68,
+        'name': "Patient 68",
+        'description': "Visit the hospital for treatment",
+        'reward_type': RewardType.XP,
+        'reward_value': 10,
+        'event_type': EventType.TREATMENT_EVENT,
+        'event_threshold': 1
     },
 ]
