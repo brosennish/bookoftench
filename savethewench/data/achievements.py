@@ -2,14 +2,17 @@ from enum import Enum
 
 from savethewench.event_base import EventType
 
+ALWAYS_SOMETHING = "Always Something"
 CHICKEN = "Chicken"
 DRY_FIVE = "Dry Five"
 FIRST_BUST = "First Bust"
+GOLDEN_TENCH = "Golden Tench"
 KRILL_OR_BE_KRILLED = "Krill Or Be Krilled"
 LEVEL_TENCH = "Level Tench"
 MASTER_OF_TENCH = "Master of Tench"
 PATIENT_68 = "Patient 68"
 RECKLESS = "Reckless"
+TENCH_BUNDY = "Tench Bundy"
 TENCH_KILLS = "Tench Kills"
 VIGILANTE = "Vigilante"
 
@@ -36,6 +39,14 @@ Achievements = [
         'reward_type': RewardType.PERK,
         'event_type': EventType.KILL,
         'event_threshold': 10
+    },
+    {
+        'id': TENCH_BUNDY,
+        'name': "Tench Bundy",
+        'description': "Defeat 25 enemies",
+        'reward_type': RewardType.PERK,
+        'event_type': EventType.KILL,
+        'event_threshold': 25
     },
     {
         'id': RECKLESS,
@@ -72,6 +83,14 @@ Achievements = [
         'event_threshold': 15
     },
     {
+        'id': GOLDEN_TENCH,
+        'name': "Golden Tench",
+        'description': "Reach level 20",
+        'reward_type': RewardType.PERK,
+        'event_type': EventType.LEVEL_UP,
+        'event_threshold': 20
+    },
+    {
         'id': CHICKEN,
         'name': "Chicken",
         'description': "Flee 10 times",
@@ -94,7 +113,7 @@ Achievements = [
         'name': "Vigilante",
         'description': "Collect 5 bounties",
         'reward_type': RewardType.XP,
-        'reward_value': 25,
+        'reward_value': 10,
         'event_type': EventType.BOUNTY_COLLECTED,
         'event_threshold': 5
     },
@@ -106,5 +125,14 @@ Achievements = [
         'reward_value': 10,
         'event_type': EventType.TREATMENT_EVENT,
         'event_threshold': 1
+    },
+    {
+        'id': ALWAYS_SOMETHING,
+        'name': "Always Something",
+        'description': "Receive treatment 5 times",
+        'reward_type': RewardType.XP,
+        'reward_value': 20,
+        'event_type': EventType.TREATMENT_EVENT,
+        'event_threshold': 5
     },
 ]
