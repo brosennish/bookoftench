@@ -1,6 +1,8 @@
+import savethewench.data.areas
 from savethewench.audio import stop_all_sounds
 from savethewench.component import InitGame
 from savethewench.component.base import Component
+from savethewench.data.components import CRYPTO_EXCHANGE
 from savethewench.model import GameState
 from savethewench.model.perk import load_perks
 from savethewench.model.player import PlayerWeapon
@@ -35,6 +37,9 @@ class SaveTheWenchGame:
             player.hp = player.max_hp
             for weapon in load_discoverable_weapons():
                 player.weapon_dict[weapon.name] = PlayerWeapon.from_weapon(weapon)
+            for area in game_state.areas:
+                if area.name == "City":
+                    area.actions_menu.pages[-1].append(CRYPTO_EXCHANGE)
             component_type(game_state).run()
         except KeyboardInterrupt:
             print_and_sleep("\nExiting...", 1)
