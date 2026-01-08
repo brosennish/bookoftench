@@ -52,9 +52,11 @@ class CryptoExchange(Component):
             c_print(stdscr, 2, offset, text, color)
             offset += len(text)
 
-    def display_options(self, stdscr):
+    def display_coins(self, stdscr):
         for i in range(len(self.coins)):
             self._format_and_add_coin(stdscr, i + 1, self.options_start + i, self.coins[i])
+
+    def display_additional_options(self, stdscr):
         self._add_return_option(stdscr, len(self.coins) + 1, self.options_start + len(self.coins) + 1)
 
     def display_prompt(self, stdscr):
@@ -94,7 +96,8 @@ class CryptoExchange(Component):
             stdscr.nodelay(True)
             stdscr.clear()
             self.display_header(stdscr)
-            self.display_options(stdscr)
+            self.display_coins(stdscr)
+            self.display_additional_options(stdscr)
             self.display_prompt(stdscr)
             stdscr.refresh()
             try:
@@ -121,14 +124,18 @@ class BuyOrSellSelector(CryptoExchangeExtension):
         self.selected = selected
         self.coin = self.coins[self.selected - 1]
         self.sub_selection = 0
+        self.buy_sell_start = self.options_start + len(self.coins) + 1
 
-    def display_prompt(self, stdscr):
-        c_print(stdscr, self.prompt_start, 0, "[B]", curses.COLOR_MAGENTA,
+    def display_additional_options(self, stdscr):
+        c_print(stdscr, self.buy_sell_start, 0, "[B]", curses.COLOR_MAGENTA,
                 highlight=self.sub_selection == 0)
-        c_print(stdscr, self.prompt_start, 4, "Buy")
-        c_print(stdscr, self.prompt_start + 1, 0, "[S]", curses.COLOR_MAGENTA,
+        c_print(stdscr, self.buy_sell_start, 4, "Buy")
+        c_print(stdscr, self.buy_sell_start + 1, 0, "[S]", curses.COLOR_MAGENTA,
                 highlight=self.sub_selection == 1)
-        c_print(stdscr, self.prompt_start + 1, 4, "Sell")
+        c_print(stdscr, self.buy_sell_start + 1, 4, "Sell")
+        c_print(stdscr, self.buy_sell_start + 3, 0, '[R]', curses.COLOR_MAGENTA,
+                highlight=self.sub_selection == 2)
+        c_print(stdscr, self.buy_sell_start + 3, 5, "Return", curses.COLOR_CYAN)
 
     def handle_selection(self, stdscr):
         ch = stdscr.getch()
@@ -136,16 +143,22 @@ class BuyOrSellSelector(CryptoExchangeExtension):
             self.can_exit = True
             if self.sub_selection == 0:
                 BuySelector(self.game_state, self.selected).c_run(stdscr)
-            else:
+            elif self.sub_selection == 1:
                 SellSelector(self.game_state, self.selected).c_run(stdscr)
         elif ch == curses.KEY_UP:
             self.sub_selection -= 1
             if self.sub_selection < 0:
-                self.sub_selection = 1
+                self.sub_selection = 2
         elif ch == curses.KEY_DOWN:
             self.sub_selection += 1
-            if self.sub_selection > 1:
+            if self.sub_selection > 2:
                 self.sub_selection = 0
+        elif ch in (ord('b'), ord('B')):
+            self.sub_selection = 0
+        elif ch in (ord('s'), ord('S')):
+            self.sub_selection = 1
+        elif ch in (ord('r'), ord('R')):
+            self.sub_selection = 2
 
     def c_run(self, stdscr):
         if self.coin.coins_owned == 0:
