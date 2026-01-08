@@ -61,6 +61,7 @@ class CryptoExchange(Component):
         pass
 
     def handle_selection(self, stdscr):
+        # Note - logic will need to change if we ever want more than 10 numbered options
         ch = stdscr.getch()
         if ch in (curses.KEY_ENTER, 10, 13):
             if self.selected <= len(self.coins):
@@ -79,6 +80,11 @@ class CryptoExchange(Component):
             self.selected += 1
             if self.selected > len(self.coins) + 1:
                 self.selected = 1
+        # key selection for numbered options won't work if we have more than 9 options
+        elif ch in range(ord('1'), ord(str(len(self.coins)))+1):
+            self.selected = int(chr(ch))
+        elif ch in (ord('r'), ord('R')):
+            self.selected = len(self.coins) + 1
 
     def c_run(self, stdscr):
         init_colors()
