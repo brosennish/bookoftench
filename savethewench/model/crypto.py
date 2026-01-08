@@ -8,7 +8,7 @@ from typing import List
 
 from savethewench.data.cryptocurrencies import Crypto_Currencies, Shit_Coin_Names
 
-_max_update_latency = 3  # seconds
+_max_update_latency = 0.1  # seconds
 _max_coins = 5
 
 
@@ -47,6 +47,7 @@ class CryptoCurrency:
     upper_limit: int
     volatility: float
     frozen: bool = True
+    ipo: bool = True
 
     history: TransactionHistory = field(default_factory=TransactionHistory)
 
@@ -75,7 +76,7 @@ class CryptoCurrency:
         return round(((self.price - self._start_price) / self._start_price) * 100, 2)
 
     @property
-    def coins_owned(self) -> int:
+    def quantity_owned(self) -> int:
         return self.history.owned
 
     @property
@@ -87,6 +88,7 @@ class CryptoCurrency:
 
     def unfreeze(self):
         self.start_time = time.time()
+        self.ipo = False
         self.frozen = False
 
     def _update_trigger(self):

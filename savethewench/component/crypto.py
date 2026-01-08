@@ -1,6 +1,7 @@
 import curses
 import time
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from typing import List
 
 import savethewench.service.crypto_service as crypto_service
@@ -11,36 +12,21 @@ from savethewench.data.components import CRYPTO_EXCHANGE
 from savethewench.model import GameState
 from savethewench.model.crypto import CryptoCurrency
 
-
 @register_component(CRYPTO_EXCHANGE)
 class CryptoExchange(Component):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
         self.coins: List[CryptoCurrency] = crypto_service.get_active_coins()
+        self.coin_options: CoinOptions = CoinOptions()
         self.selected = 1
         self.curs_set = 0
         self.options_start = 4
-        self.prompt_start = self.options_start + len(self.coins) + 3
+        self.prompt_start = self.options_start + len(self.coins) + 4
         self.can_exit = False
-
-    def _format_and_add_coin(self, stdscr, selection: int, line: int, coin: CryptoCurrency):
-        c_print(stdscr, line, 0, f"[{selection}]", curses.COLOR_MAGENTA,
-                highlight=self.selected == selection)
-        c_print(stdscr, line, 5, coin.name, curses.COLOR_CYAN, dim=coin.delisted)
-
-        pct_change = coin.historical_percent_change
-        color = curses.COLOR_WHITE
-        if pct_change > 0.0:
-            color = curses.COLOR_GREEN
-        elif pct_change < 0.0:
-            color = curses.COLOR_RED
-        c_print(stdscr, line, 25, coin.format_price(), color)
-        c_print(stdscr, line, 35, coin.format_percent_change(), color)
-        c_print(stdscr, line, 45, str(coin.coins_owned), curses.COLOR_MAGENTA)
 
     def _add_return_option(self, stdscr, selection: int, line: int):
         c_print(stdscr, line, 0, '[R]', curses.COLOR_MAGENTA, highlight=self.selected == selection)
-        c_print(stdscr, line, 5, "Return", curses.COLOR_CYAN)
+        c_print(stdscr, line, 4, "Return", curses.COLOR_CYAN)
 
     def display_header(self, stdscr):
         c_print(stdscr, 0, 0, 'Crypto Market', curses.COLOR_MAGENTA, underline=True, bold=True)
@@ -52,12 +38,8 @@ class CryptoExchange(Component):
             c_print(stdscr, 2, offset, text, color)
             offset += len(text)
 
-    def display_coins(self, stdscr):
-        for i in range(len(self.coins)):
-            self._format_and_add_coin(stdscr, i + 1, self.options_start + i, self.coins[i])
-
     def display_additional_options(self, stdscr):
-        self._add_return_option(stdscr, len(self.coins) + 1, self.options_start + len(self.coins) + 1)
+        self._add_return_option(stdscr, len(self.coins) + 1, self.options_start + len(self.coins) + 2)
 
     def display_prompt(self, stdscr):
         pass
@@ -92,11 +74,12 @@ class CryptoExchange(Component):
         init_colors()
         while not self.can_exit:
             curses.curs_set(self.curs_set)
+            curses.mousemask(0)
             stdscr.keypad(True)
             stdscr.nodelay(True)
             stdscr.clear()
             self.display_header(stdscr)
-            self.display_coins(stdscr)
+            self.coin_options.display(stdscr, self.options_start, self.selected)
             self.display_additional_options(stdscr)
             self.display_prompt(stdscr)
             stdscr.refresh()
@@ -104,9 +87,10 @@ class CryptoExchange(Component):
                 self.handle_selection(stdscr)
             except curses.error:
                 pass  # no input
-            time.sleep(0.01)
+            time.sleep(0.05)
             # need to update on each iteration since `get_active_coins` returns a copy
             self.coins = crypto_service.get_active_coins()
+            self.coin_options.refresh()
 
     def run(self) -> GameState:
         curses.wrapper(self.c_run)
@@ -124,7 +108,7 @@ class BuyOrSellSelector(CryptoExchangeExtension):
         self.selected = selected
         self.coin = self.coins[self.selected - 1]
         self.sub_selection = 0
-        self.buy_sell_start = self.options_start + len(self.coins) + 1
+        self.buy_sell_start = self.options_start + len(self.coins) + 2
 
     def display_additional_options(self, stdscr):
         c_print(stdscr, self.buy_sell_start, 0, "[B]", curses.COLOR_MAGENTA,
@@ -161,7 +145,7 @@ class BuyOrSellSelector(CryptoExchangeExtension):
             self.sub_selection = 2
 
     def c_run(self, stdscr):
-        if self.coin.coins_owned == 0:
+        if self.coin.quantity_owned == 0:
             self.can_exit = True
             BuySelector(self.game_state, self.selected).c_run(stdscr)
         super().c_run(stdscr)
@@ -226,7 +210,7 @@ class BuySelector(QuantitySelector):
 class SellSelector(QuantitySelector):
 
     def get_max_quantity(self):
-        return self.coin.coins_owned
+        return self.coin.quantity_owned
 
     def display_prompt(self, stdscr):
         c_print(stdscr, self.prompt_start, 0,
@@ -236,3 +220,82 @@ class SellSelector(QuantitySelector):
         total_cost = int(quantity * self.coin.price)
         self.game_state.player.coins += total_cost
         self.coin.log_sale(quantity, total_cost)
+
+
+@dataclass
+class LinePart:
+    value: str
+    color: int = curses.COLOR_WHITE
+    highlighted: bool = False
+    dim: bool = False
+
+    def add_to_line(self, stdscr, line: int, offset: int):
+        c_print(stdscr, line, offset, self.value, self.color, highlight=self.highlighted, dim=self.dim)
+
+def header_part(value: str) -> LinePart:
+    return LinePart(value, color=curses.COLOR_BLUE)
+
+def name_part(coin: CryptoCurrency) -> LinePart:
+    return LinePart(coin.name, color=curses.COLOR_CYAN, dim=coin.delisted)
+
+def price_part(coin: CryptoCurrency) -> LinePart:
+    color = (curses.COLOR_RED if coin.historical_percent_change < 0 else
+             curses.COLOR_GREEN if coin.historical_percent_change > 0 else
+             curses.COLOR_WHITE)
+    return LinePart(coin.format_price(), color=color)
+
+def delta_part(coin: CryptoCurrency) -> LinePart:
+    color = (curses.COLOR_RED if coin.historical_percent_change < 0 else
+             curses.COLOR_GREEN if coin.historical_percent_change > 0 else
+             curses.COLOR_WHITE)
+    return LinePart(coin.format_percent_change(), color=color)
+
+def quantity_owned_part(coin: CryptoCurrency) -> LinePart:
+    return LinePart(str(coin.quantity_owned), color=curses.COLOR_MAGENTA)
+
+def owned_value_part(coin: CryptoCurrency) -> LinePart:
+    return LinePart(f"{round(float(coin.quantity_owned * coin.price), 2)}")
+
+class CoinOptions:
+    def __init__(self):
+        self.headers = ['Name', 'Price', 'Chg', 'Owned', 'Value']
+        self.coin_line_part_factories = [name_part, price_part, delta_part, quantity_owned_part, owned_value_part]
+        self.columns = len(self.headers)
+        self._ingest_coins()
+
+    def get_coin_line_parts(self, coin) -> List[LinePart]:
+        return [f(coin) for f in self.coin_line_part_factories]
+
+    def _ingest_coins(self):
+        self.coins = crypto_service.get_active_coins()
+        self.offsets = [0 for _ in range(self.columns)]
+        self.offsets[0] = len(str(len(self.coins))) + 3
+        lines: List[List[LinePart]] = [[header_part(h) for h in self.headers],
+                                            *[self.get_coin_line_parts(coin) for coin in self.coins]]
+        widths = [0] * self.columns
+        for parts in lines:
+            for i, part in enumerate(parts):
+                widths[i] = max(widths[i], len(part.value))
+
+        self.offsets = [0] * self.columns
+        self.offsets[0] = len(str(len(self.coins))) + 3
+        for i in range(1, self.columns):
+            self.offsets[i] = self.offsets[i - 1] + widths[i - 1] + 3
+
+    def display_header(self, stdscr, line: int):
+        for i in range(len(self.headers)):
+            stdscr.addstr(line, self.offsets[i], self.headers[i])
+
+    def display_coin(self, stdscr, line: int, coin: CryptoCurrency):
+        parts = self.get_coin_line_parts(coin)
+        for i in range(len(parts)):
+            parts[i].add_to_line(stdscr, line, self.offsets[i])
+
+    def display(self, stdscr, line: int, selected: int):
+        self.display_header(stdscr, line)
+        for i in range(1, len(self.coins)+1):
+            c_print(stdscr, line + i, 0, f"[{i}]", curses.COLOR_MAGENTA, highlight=selected == i)
+            self.display_coin(stdscr, line + i, self.coins[i-1])
+
+    def refresh(self):
+        self._ingest_coins()
