@@ -1,25 +1,28 @@
+from __future__ import annotations
+
 import random
-import threading
 import time
-from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import List
 
 from savethewench.data.cryptocurrencies import Crypto_Currencies, Shit_Coin_Names
 
-_max_update_latency = 3 #seconds
+_max_update_latency = 3  # seconds
 _max_coins = 5
+
 
 class TransactionType(Enum):
     BUY = "BUY"
     SELL = "SELL"
+
 
 @dataclass
 class Transaction:
     quantity: int
     price: int
     type: TransactionType
+
 
 class TransactionHistory:
     def __init__(self):
@@ -34,6 +37,7 @@ class TransactionHistory:
     def log_sell(self, quantity: int, price: int):
         self.history.append(Transaction(quantity=quantity, price=price, type=TransactionType.SELL))
         self.owned -= quantity
+
 
 @dataclass
 class CryptoCurrency:
@@ -74,24 +78,29 @@ class CryptoCurrency:
     def coins_owned(self) -> int:
         return self.history.owned
 
+    @property
+    def delisted(self) -> bool:
+        return self.price == 0
+
     def freeze(self):
         self.frozen = True
 
     def unfreeze(self):
+        self.start_time = time.time()
         self.frozen = False
 
     def _update_trigger(self):
         self._trigger = random.uniform(0, _max_update_latency)
 
     def _update_price(self):
-        if self.price == 0:
+        if self.delisted:
             return
         delta = random.gauss(self._mu, self._sigma)
         new_price = self.price + (self._start_price * delta)
         if new_price > self.upper_limit:
-            pass # TODO
+            pass  # TODO
         elif new_price < self.lower_limit:
-            pass # TODO
+            pass  # TODO
         self.price = max(new_price, 0)
 
     def poll_market(self):
@@ -117,6 +126,7 @@ class CryptoCurrency:
     def log_sale(self, quantity: int, price: int):
         self.history.log_sell(quantity, price)
 
+
 @dataclass
 class ShitCoin(CryptoCurrency):
     price: float = 0
@@ -127,9 +137,10 @@ class ShitCoin(CryptoCurrency):
     def __post_init__(self):
         # TODO set bounds somewhere more configurable
         self.price = random.randint(10, 1000)
-        self.upper_limit = random.randint(10**3, 10**6)
+        self.upper_limit = random.randint(10 ** 3, 10 ** 6)
         self.volatility = random.uniform(0.25, 0.75)
         super().__post_init__()
+
 
 class ShitCoinGenerator:
     def __init__(self):
@@ -148,32 +159,14 @@ class ShitCoinGenerator:
         self._populate_coin_pool()
         return self.coin_pool.pop()
 
-class CryptoExchangeService:
-    def __init__(self):
-        self.coins = [CryptoCurrency(**d) for d in Crypto_Currencies]
-        self.shit_coin_generator = ShitCoinGenerator()
-        self.interval = 0.1
-        self._stop_event = threading.Event()
-        self._thread = threading.Thread(target=self._run, daemon=True)
-        self._executor = ThreadPoolExecutor(max_workers=_max_coins)
 
-    def start(self):
-        if self._thread.is_alive():
-            return
-        service_start = time.time()
-        for coin in self.coins:
-            coin.start_time = service_start
-        self._thread.start()
+@dataclass
+class CryptoMarketState:
+    max_active_coins: int = 5
+    active_coins: List[CryptoCurrency] = field(default_factory=list)
+    delisted_coins: List[CryptoCurrency] = field(default_factory=list)
+    shit_coin_generator: ShitCoinGenerator = field(default_factory=ShitCoinGenerator)
 
-    def stop(self):
-        self._stop_event.set()
-        self._thread.join()
-        self._executor.shutdown(wait=True)
-
-    def _run(self):
-        while not self._stop_event.is_set():
-            while len(self.coins) < _max_coins:
-                self.coins.append(self.shit_coin_generator.generate())
-            for coin in self.coins:
-                self._executor.submit(coin.poll_market)
-            self._stop_event.wait(self.interval)
+    @classmethod
+    def defaults(cls) -> CryptoMarketState:
+        return CryptoMarketState(active_coins=[CryptoCurrency(**d) for d in Crypto_Currencies])

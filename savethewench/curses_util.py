@@ -10,13 +10,15 @@ def init_colors():
     curses.init_pair(curses.COLOR_BLUE, curses.COLOR_BLUE, curses.COLOR_BLACK)
     curses.init_pair(curses.COLOR_YELLOW, curses.COLOR_YELLOW, curses.COLOR_BLACK)
 
+def combine_attrs(*flags: tuple[bool, int]) -> int:
+    return sum(attr for flag, attr in flags if flag)
+
 def c_print(stdscr, line: int, offset: int, text: str, color: int = curses.COLOR_WHITE,
-            highlight: bool = False, underline: bool = False, bold: bool = False):
-    color_pair = curses.color_pair(color)
-    if highlight:
-        color_pair |= curses.A_REVERSE
-    if underline:
-        color_pair |= curses.A_UNDERLINE
-    if bold:
-        color_pair |= curses.A_BOLD
-    stdscr.addstr(line, offset, text, color_pair)
+            highlight: bool = False, underline: bool = False, bold: bool = False, dim: bool = False):
+    attrs = combine_attrs(
+        (highlight, curses.A_REVERSE),
+        (underline, curses.A_UNDERLINE),
+        (bold, curses.A_BOLD),
+        (dim, curses.A_DIM)
+    )
+    stdscr.addstr(line, offset, text, curses.color_pair(color) | attrs)

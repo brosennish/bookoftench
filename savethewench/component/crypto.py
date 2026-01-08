@@ -3,6 +3,7 @@ import time
 from abc import ABC, abstractmethod
 from typing import List
 
+import savethewench.service.crypto_service as crypto_service
 from savethewench.component.base import Component
 from savethewench.component.registry import register_component
 from savethewench.curses_util import init_colors, c_print
@@ -10,11 +11,12 @@ from savethewench.data.components import CRYPTO_EXCHANGE
 from savethewench.model import GameState
 from savethewench.model.crypto import CryptoCurrency
 
+
 @register_component(CRYPTO_EXCHANGE)
 class CryptoExchange(Component):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
-        self.coins: List[CryptoCurrency] = game_state.crypto_service.coins
+        self.coins: List[CryptoCurrency] = crypto_service.get_active_coins()
         self.selected = 1
         self.curs_set = 0
         self.options_start = 4
@@ -24,7 +26,7 @@ class CryptoExchange(Component):
     def _format_and_add_coin(self, stdscr, selection: int, line: int, coin: CryptoCurrency):
         c_print(stdscr, line, 0, f"[{selection}]", curses.COLOR_MAGENTA,
                 highlight=self.selected == selection)
-        c_print(stdscr, line, 5, coin.name, curses.COLOR_CYAN)
+        c_print(stdscr, line, 5, coin.name, curses.COLOR_CYAN, dim=coin.delisted)
 
         pct_change = coin.historical_percent_change
         color = curses.COLOR_WHITE
@@ -51,9 +53,8 @@ class CryptoExchange(Component):
             offset += len(text)
 
     def display_options(self, stdscr):
-        for i in range(len(self.game_state.crypto_service.coins)):
-            coin = self.game_state.crypto_service.coins[i]
-            self._format_and_add_coin(stdscr, i + 1, self.options_start + i, coin)
+        for i in range(len(self.coins)):
+            self._format_and_add_coin(stdscr, i + 1, self.options_start + i, self.coins[i])
         self._add_return_option(stdscr, len(self.coins) + 1, self.options_start + len(self.coins) + 1)
 
     def display_prompt(self, stdscr):
@@ -73,10 +74,10 @@ class CryptoExchange(Component):
         elif ch == curses.KEY_UP:
             self.selected -= 1
             if self.selected == 0:
-                self.selected = len(self.game_state.crypto_service.coins) + 1
+                self.selected = len(self.coins) + 1
         elif ch == curses.KEY_DOWN:
             self.selected += 1
-            if self.selected > len(self.game_state.crypto_service.coins) + 1:
+            if self.selected > len(self.coins) + 1:
                 self.selected = 1
 
     def c_run(self, stdscr):
@@ -95,6 +96,8 @@ class CryptoExchange(Component):
             except curses.error:
                 pass  # no input
             time.sleep(0.01)
+            # need to update on each iteration since `get_active_coins` returns a copy
+            self.coins = crypto_service.get_active_coins()
 
     def run(self) -> GameState:
         curses.wrapper(self.c_run)
@@ -173,7 +176,7 @@ class QuantitySelector(CryptoExchangeExtension, ABC):
             if self.user_input == "0":
                 self.user_input = ""
             self.user_input += chr(ch)
-        elif ch in (curses.KEY_ENTER, 10, 13):
+        elif ch in (curses.KEY_ENTER, 10, 13) and len(self.user_input) > 0:
             quantity = int(self.user_input)
             if quantity <= self.get_max_quantity():
                 self.handle_quantity(quantity)
