@@ -226,14 +226,16 @@ class SellSelector(QuantitySelector):
 class LinePart:
     value: str
     color: int = curses.COLOR_WHITE
+    underlined: bool = False
     highlighted: bool = False
     dim: bool = False
 
     def add_to_line(self, stdscr, line: int, offset: int):
-        c_print(stdscr, line, offset, self.value, self.color, highlight=self.highlighted, dim=self.dim)
+        c_print(stdscr, line, offset, self.value, self.color,
+                underline=self.underlined, highlight=self.highlighted, dim=self.dim)
 
 def header_part(value: str) -> LinePart:
-    return LinePart(value, color=curses.COLOR_BLUE)
+    return LinePart(value, underlined=True)
 
 def name_part(coin: CryptoCurrency) -> LinePart:
     return LinePart(coin.name, color=curses.COLOR_CYAN, dim=coin.delisted)
@@ -284,7 +286,7 @@ class CoinOptions:
 
     def display_header(self, stdscr, line: int):
         for i in range(len(self.headers)):
-            stdscr.addstr(line, self.offsets[i], self.headers[i])
+            header_part(self.headers[i]).add_to_line(stdscr, line, self.offsets[i])
 
     def display_coin(self, stdscr, line: int, coin: CryptoCurrency):
         parts = self.get_coin_line_parts(coin)

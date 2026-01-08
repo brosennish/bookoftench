@@ -8,7 +8,7 @@ from typing import List
 
 from savethewench.data.cryptocurrencies import Crypto_Currencies, Shit_Coin_Names
 
-_max_update_latency = 0.1  # seconds
+_max_update_latency = 3  # seconds
 _max_coins = 5
 
 
