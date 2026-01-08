@@ -3,8 +3,9 @@ import time
 from abc import ABC, abstractmethod
 from typing import List
 
-from savethewench.component import register_component
 from savethewench.component.base import Component
+from savethewench.component.registry import register_component
+from savethewench.curses_util import init_colors, c_print
 from savethewench.data.components import CRYPTO_EXCHANGE
 from savethewench.model import GameState
 from savethewench.model.crypto import CryptoCurrency
@@ -21,31 +22,32 @@ class CryptoExchange(Component):
         self.can_exit = False
 
     def _format_and_add_coin(self, stdscr, selection: int, line: int, coin: CryptoCurrency):
-        stdscr.addstr(line, 0, f"[{selection}]", curses.color_pair(7) if selection == self.selected else curses.color_pair(1))
-        stdscr.addstr(line, 5, coin.name, curses.color_pair(2))
+        c_print(stdscr, line, 0, f"[{selection}]", curses.COLOR_MAGENTA,
+                highlight=self.selected == selection)
+        c_print(stdscr, line, 5, coin.name, curses.COLOR_CYAN)
 
         pct_change = coin.historical_percent_change
-        color = 5
+        color = curses.COLOR_WHITE
         if pct_change > 0.0:
-            color = 3
+            color = curses.COLOR_GREEN
         elif pct_change < 0.0:
-            color = 4
-        stdscr.addstr(line, 25, coin.format_price(), curses.color_pair(color))
-        stdscr.addstr(line, 35, coin.format_percent_change(), curses.color_pair(color))
-        stdscr.addstr(line, 45, str(coin.coins_owned), curses.color_pair(1))
+            color = curses.COLOR_RED
+        c_print(stdscr, line, 25, coin.format_price(), color)
+        c_print(stdscr, line, 35, coin.format_percent_change(), color)
+        c_print(stdscr, line, 45, str(coin.coins_owned), curses.COLOR_MAGENTA)
 
     def _add_return_option(self, stdscr, selection: int, line: int):
-        stdscr.addstr(line, 0, f"[R]",
-                      curses.color_pair(7) if selection == self.selected else curses.color_pair(1))
-        stdscr.addstr(line, 5, "Return", curses.color_pair(2))
+        c_print(stdscr, line, 0, '[R]', curses.COLOR_MAGENTA, highlight=self.selected == selection)
+        c_print(stdscr, line, 5, "Return", curses.COLOR_CYAN)
 
     def display_header(self, stdscr):
-        stdscr.addstr(0, 0, f"Crypto Market", curses.color_pair(1) | curses.A_UNDERLINE | curses.A_BOLD)
-        greeting_parts = [(f"Welcome, {self.game_state.player.name}. You have ", 5),
-                          (f"{self.game_state.player.coins}", 3), (" of coin to spend.", 5)]
+        c_print(stdscr, 0, 0, 'Crypto Market', curses.COLOR_MAGENTA, underline=True, bold=True)
+        greeting_parts = [(f"Welcome, {self.game_state.player.name}. You have ", curses.COLOR_WHITE),
+                          (f"{self.game_state.player.coins}", curses.COLOR_GREEN),
+                          (" of coin to spend.", curses.COLOR_WHITE)]
         offset = 0
         for text, color in greeting_parts:
-            stdscr.addstr(2, offset, text, curses.color_pair(color))
+            c_print(stdscr, 2, offset, text, color)
             offset += len(text)
 
     def display_options(self, stdscr):
@@ -67,7 +69,7 @@ class CryptoExchange(Component):
                 # Leaving exchange - all coins unfreeze since player had an opportunity to buy at initial price
                 for coin in self.coins:
                     coin.unfreeze()
-                self.can_exit = True # TODO goodbye message, sleep, etc
+                self.can_exit = True  # TODO goodbye message, sleep, etc
         elif ch == curses.KEY_UP:
             self.selected -= 1
             if self.selected == 0:
@@ -98,6 +100,7 @@ class CryptoExchange(Component):
         curses.wrapper(self.c_run)
         return self.game_state
 
+
 class CryptoExchangeExtension(CryptoExchange):
     def run(self):
         raise RuntimeError("Quantity Selector not runnable from outside of preexisting curses context")
@@ -107,16 +110,16 @@ class BuyOrSellSelector(CryptoExchangeExtension):
     def __init__(self, game_state: GameState, selected: int):
         super().__init__(game_state)
         self.selected = selected
-        self.coin = self.coins[self.selected-1]
+        self.coin = self.coins[self.selected - 1]
         self.sub_selection = 0
 
     def display_prompt(self, stdscr):
-        stdscr.addstr(self.prompt_start, 0, "[B]",
-                      curses.color_pair(7) if  self.sub_selection == 0 else curses.color_pair(1))
-        stdscr.addstr(self.prompt_start, 4, "Buy")
-        stdscr.addstr(self.prompt_start + 1, 0, "[S]",
-                      curses.color_pair(7) if self.sub_selection == 1 else curses.color_pair(1))
-        stdscr.addstr(self.prompt_start + 1, 4, "Sell")
+        c_print(stdscr, self.prompt_start, 0, "[B]", curses.COLOR_MAGENTA,
+                highlight=self.sub_selection == 0)
+        c_print(stdscr, self.prompt_start, 4, "Buy")
+        c_print(stdscr, self.prompt_start + 1, 0, "[S]", curses.COLOR_MAGENTA,
+                highlight=self.sub_selection == 1)
+        c_print(stdscr, self.prompt_start + 1, 4, "Sell")
 
     def handle_selection(self, stdscr):
         ch = stdscr.getch()
@@ -146,7 +149,7 @@ class QuantitySelector(CryptoExchangeExtension, ABC):
     def __init__(self, game_state: GameState, selected: int):
         super().__init__(game_state)
         self.selected = selected
-        self.coin = self.coins[self.selected-1]
+        self.coin = self.coins[self.selected - 1]
         self.curs_set = 1
         self.user_input = ""
 
@@ -163,6 +166,8 @@ class QuantitySelector(CryptoExchangeExtension, ABC):
         pass
 
     def handle_selection(self, stdscr):
+        c_print(stdscr, self.prompt_start + 1, 0, "> ", curses.COLOR_BLUE)
+        c_print(stdscr, self.prompt_start + 1, 2, self.user_input)
         ch = stdscr.getch()
         if ord('0') <= ch <= ord('9'):
             if self.user_input == "0":
@@ -180,15 +185,15 @@ class QuantitySelector(CryptoExchangeExtension, ABC):
         elif ch in (curses.KEY_BACKSPACE, 127, 8):
             self.user_input = self.user_input[:-1]
 
+
 class BuySelector(QuantitySelector):
 
     def get_max_quantity(self):
-        return int(self.game_state.player.coins/self.coin.price)
+        return int(self.game_state.player.coins / self.coin.price)
 
     def display_prompt(self, stdscr):
-        stdscr.addstr(self.prompt_start, 0, f"How much {self.coin.name} do you want to buy? (max {self.get_max_quantity()})")
-        stdscr.addstr(self.prompt_start + 1, 0, "> ", curses.color_pair(6))
-        stdscr.addstr(self.prompt_start + 1, 2, self.user_input)
+        c_print(stdscr, self.prompt_start, 0,
+                f"How much {self.coin.name} do you want to buy? (max {self.get_max_quantity()})")
 
     def handle_quantity(self, quantity: int):
         total_cost = int(quantity * self.coin.price)
@@ -202,28 +207,10 @@ class SellSelector(QuantitySelector):
         return self.coin.coins_owned
 
     def display_prompt(self, stdscr):
-        stdscr.addstr(self.prompt_start, 0, f"How much {self.coin.name} do you want to sell? (max {self.get_max_quantity()})")
-        stdscr.addstr(self.prompt_start + 1, 0, "> ", curses.color_pair(6))
-        stdscr.addstr(self.prompt_start + 1, 2, self.user_input)
+        c_print(stdscr, self.prompt_start, 0,
+                f"How much {self.coin.name} do you want to sell? (max {self.get_max_quantity()})")
 
     def handle_quantity(self, quantity: int):
         total_cost = int(quantity * self.coin.price)
         self.game_state.player.coins += total_cost
         self.coin.log_sale(quantity, total_cost)
-
-
-def init_colors():
-    curses.start_color()
-    curses.init_pair(1, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
-    curses.init_pair(2, curses.COLOR_CYAN, curses.COLOR_BLACK)
-    curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
-    curses.init_pair(4, curses.COLOR_RED, curses.COLOR_BLACK)
-    curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_BLACK)
-    curses.init_pair(6, curses.COLOR_BLUE, curses.COLOR_BLACK)
-
-    curses.init_pair(7, curses.COLOR_MAGENTA, curses.COLOR_WHITE)
-    curses.init_pair(8, curses.COLOR_CYAN, curses.COLOR_WHITE)
-    curses.init_pair(9, curses.COLOR_GREEN, curses.COLOR_WHITE)
-    curses.init_pair(10, curses.COLOR_RED, curses.COLOR_WHITE)
-    curses.init_pair(11, curses.COLOR_WHITE, curses.COLOR_WHITE)
-    curses.init_pair(12, curses.COLOR_BLUE, curses.COLOR_WHITE)
