@@ -4,6 +4,7 @@ import heapq
 import random
 import time
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
 from typing import List, NamedTuple
 
@@ -23,7 +24,10 @@ class Transaction:
     quantity: int
     price: int
     type: TransactionType
+    timestamp: datetime = field(default_factory=datetime.now)
 
+    def format_timestamp(self) -> str:
+        return self.timestamp.strftime("%Y-%m-%d %H:%M:%S")
 
 class PricedQuantity(NamedTuple):
     price: int
@@ -57,7 +61,7 @@ class OwnedHeap:
 
 class TransactionHistory:
     def __init__(self):
-        self.history: List[Transaction] = []
+        self.transactions: List[Transaction] = []
         self._owned_heap: OwnedHeap = OwnedHeap()
 
     @property
@@ -72,11 +76,11 @@ class TransactionHistory:
         return self._owned_heap.total_quantity
 
     def log_buy(self, quantity: int, price: int):
-        self.history.append(Transaction(quantity=quantity, price=price, type=TransactionType.BUY))
+        self.transactions.append(Transaction(quantity=quantity, price=price, type=TransactionType.BUY))
         self._owned_heap.push_bought(quantity, price)
 
     def log_sell(self, quantity: int, price: int):
-        self.history.append(Transaction(quantity=quantity, price=price, type=TransactionType.SELL))
+        self.transactions.append(Transaction(quantity=quantity, price=price, type=TransactionType.SELL))
         self._owned_heap.pop_sold(quantity)
 
 

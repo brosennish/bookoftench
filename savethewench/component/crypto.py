@@ -10,7 +10,8 @@ from savethewench.component.registry import register_component
 from savethewench.curses_util import init_colors, c_print
 from savethewench.data.components import CRYPTO_EXCHANGE
 from savethewench.model import GameState
-from savethewench.model.crypto import CryptoCurrency
+from savethewench.model.crypto import CryptoCurrency, Transaction, TransactionType
+
 
 @register_component(CRYPTO_EXCHANGE)
 class CryptoExchange(Component):
@@ -50,7 +51,7 @@ class CryptoExchange(Component):
         if ch in (curses.KEY_ENTER, 10, 13):
             if self.selected <= len(self.coins):
                 self.coins[self.selected - 1].freeze()
-                BuyOrSellSelector(self.game_state, self.selected).c_run(stdscr)
+                CoinActionSelector(self.game_state, self.selected).c_run(stdscr)
             else:
                 # Leaving exchange - all coins unfreeze since player had an opportunity to buy at initial price
                 for coin in self.coins:
@@ -102,53 +103,64 @@ class CryptoExchangeExtension(CryptoExchange):
         raise RuntimeError("Quantity Selector not runnable from outside of preexisting curses context")
 
 
-class BuyOrSellSelector(CryptoExchangeExtension):
+class CoinActionSelector(CryptoExchangeExtension):
     def __init__(self, game_state: GameState, selected: int):
         super().__init__(game_state)
         self.selected = selected
         self.coin = self.coins[self.selected - 1]
         self.sub_selection = 0
-        self.buy_sell_start = self.options_start + len(self.coins) + 2
+        self.actions_start = self.options_start + len(self.coins) + 2
 
     def display_additional_options(self, stdscr):
-        c_print(stdscr, self.buy_sell_start, 0, "[B]", curses.COLOR_MAGENTA,
+        c_print(stdscr, self.actions_start, 0, "[B]", curses.COLOR_MAGENTA,
                 highlight=self.sub_selection == 0)
-        c_print(stdscr, self.buy_sell_start, 4, "Buy")
-        c_print(stdscr, self.buy_sell_start + 1, 0, "[S]", curses.COLOR_MAGENTA,
-                highlight=self.sub_selection == 1)
-        c_print(stdscr, self.buy_sell_start + 1, 4, "Sell")
-        c_print(stdscr, self.buy_sell_start + 3, 0, '[R]', curses.COLOR_MAGENTA,
-                highlight=self.sub_selection == 2)
-        c_print(stdscr, self.buy_sell_start + 3, 5, "Return", curses.COLOR_CYAN)
+        c_print(stdscr, self.actions_start, 4, "Buy", curses.COLOR_CYAN)
+        line = self.actions_start + 1
+        if self.coin.quantity_owned > 0:
+            c_print(stdscr, line, 0, "[S]", curses.COLOR_MAGENTA,
+                    highlight=self.sub_selection == 1)
+            c_print(stdscr, line, 4, "Sell", curses.COLOR_CYAN)
+            line += 1
+        c_print(stdscr, line, 0, '[H]', curses.COLOR_MAGENTA,
+                highlight=self.sub_selection == (2 if self.coin.quantity_owned > 0 else 1))
+        c_print(stdscr, line, 4, "History", curses.COLOR_CYAN)
+
+        c_print(stdscr, line + 2, 0, '[R]', curses.COLOR_MAGENTA,
+                highlight=self.sub_selection == (3 if self.coin.quantity_owned > 0 else 2))
+        c_print(stdscr, line + 2, 4, "Return", curses.COLOR_CYAN)
 
     def handle_selection(self, stdscr):
         ch = stdscr.getch()
+
         if ch in (curses.KEY_ENTER, 10, 13):
             self.can_exit = True
             if self.sub_selection == 0:
                 BuySelector(self.game_state, self.selected).c_run(stdscr)
             elif self.sub_selection == 1:
-                SellSelector(self.game_state, self.selected).c_run(stdscr)
+                if self.coin.quantity_owned > 0:
+                    SellSelector(self.game_state, self.selected).c_run(stdscr)
+                else:
+                    self.can_exit = False
+                    TransactionHistoryDisplay(self.game_state, self.coin).c_run(stdscr)
+            elif self.sub_selection == 2 and self.coin.quantity_owned > 0:
+                self.can_exit = False
+                TransactionHistoryDisplay(self.game_state, self.coin).c_run(stdscr)
         elif ch == curses.KEY_UP:
             self.sub_selection -= 1
             if self.sub_selection < 0:
-                self.sub_selection = 2
+                self.sub_selection = (3 if self.coin.quantity_owned > 0 else 2)
         elif ch == curses.KEY_DOWN:
             self.sub_selection += 1
-            if self.sub_selection > 2:
+            if self.sub_selection > (3 if self.coin.quantity_owned > 0 else 2):
                 self.sub_selection = 0
         elif ch in (ord('b'), ord('B')):
             self.sub_selection = 0
         elif ch in (ord('s'), ord('S')):
-            self.sub_selection = 1
+            self.sub_selection = 1 if self.coin.quantity_owned > 0 else self.sub_selection
+        elif ch in (ord('h'), ord('H')):
+            self.sub_selection = 1 if self.coin.quantity_owned == 0 else 2
         elif ch in (ord('r'), ord('R')):
-            self.sub_selection = 2
-
-    def c_run(self, stdscr):
-        if self.coin.quantity_owned == 0:
-            self.can_exit = True
-            BuySelector(self.game_state, self.selected).c_run(stdscr)
-        super().c_run(stdscr)
+            self.sub_selection = 2 if self.coin.quantity_owned == 0 else 3
 
 
 class QuantitySelector(CryptoExchangeExtension, ABC):
@@ -222,6 +234,59 @@ class SellSelector(QuantitySelector):
         total_cost = quantity * int(self.coin.price)
         self.game_state.player.coins += total_cost
         self.coin.log_sale(quantity, int_price)
+
+
+class TransactionHistoryDisplay(CryptoExchangeExtension):
+    def __init__(self, game_state: GameState, coin: CryptoCurrency):
+        super().__init__(game_state)
+        self.coin = coin
+        self.transactions_per_page = 10
+        self.page = 0
+
+    def display_header(self, stdscr):
+        prefix = "Transaction History:"
+        c_print(stdscr, 0, 0, self.coin.name, curses.COLOR_CYAN)
+        c_print(stdscr, 0, len(self.coin.name) + 1, prefix, curses.COLOR_MAGENTA)
+
+
+    def add_buy(self, stdscr, transaction: Transaction, line: int):
+        c_print(stdscr, line, 0, f"{transaction.format_timestamp()} | Buy {transaction.quantity} @ {transaction.price}")
+
+    def add_sell(self, stdscr, transaction: Transaction, line: int):
+        c_print(stdscr, line, 0, f"{transaction.format_timestamp()} | Sell {transaction.quantity} @ {transaction.price}")
+
+    def display_history(self, stdscr):
+        line = 2
+        for i in range(len(self.coin.history.transactions)):
+            transaction = self.coin.history.transactions[i]
+            if transaction.type == TransactionType.BUY:
+                self.add_buy(stdscr, transaction, line)
+            elif transaction.type == TransactionType.SELL:
+                self.add_sell(stdscr, transaction, line)
+            line += 1
+        c_print(stdscr, line + 1, 0,"Press <enter> to return.", color=curses.COLOR_CYAN)
+
+    def handle_selection(self, stdscr):
+        ch = stdscr.getch()
+        if ch in (curses.KEY_ENTER, 10, 13):
+            self.can_exit = True
+
+    def c_run(self, stdscr):
+        init_colors()
+        while not self.can_exit:
+            curses.curs_set(self.curs_set)
+            curses.mousemask(0)
+            stdscr.keypad(True)
+            stdscr.nodelay(True)
+            stdscr.clear()
+            self.display_header(stdscr)
+            self.display_history(stdscr)
+            stdscr.refresh()
+            try:
+                self.handle_selection(stdscr)
+            except curses.error:
+                pass  # no input
+            time.sleep(0.05)
 
 
 @dataclass
