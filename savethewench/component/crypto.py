@@ -129,6 +129,8 @@ class BuyOrSellSelector(CryptoExchangeExtension):
                 BuySelector(self.game_state, self.selected).c_run(stdscr)
             elif self.sub_selection == 1:
                 SellSelector(self.game_state, self.selected).c_run(stdscr)
+            else:
+                self.coin.unfreeze()
         elif ch == curses.KEY_UP:
             self.sub_selection -= 1
             if self.sub_selection < 0:
