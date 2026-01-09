@@ -129,8 +129,6 @@ class BuyOrSellSelector(CryptoExchangeExtension):
                 BuySelector(self.game_state, self.selected).c_run(stdscr)
             elif self.sub_selection == 1:
                 SellSelector(self.game_state, self.selected).c_run(stdscr)
-            else:
-                self.coin.unfreeze()
         elif ch == curses.KEY_UP:
             self.sub_selection -= 1
             if self.sub_selection < 0:
@@ -204,9 +202,10 @@ class BuySelector(QuantitySelector):
                 f"How much {self.coin.name} do you want to buy? (max {self.get_max_quantity()})")
 
     def handle_quantity(self, quantity: int):
-        total_cost = int(quantity * self.coin.price)
+        int_price = int(self.coin.price)
+        total_cost = quantity * int(self.coin.price)
         self.game_state.player.coins -= total_cost
-        self.coin.log_purchase(quantity, total_cost)
+        self.coin.log_purchase(quantity, int_price)
 
 
 class SellSelector(QuantitySelector):
@@ -219,9 +218,10 @@ class SellSelector(QuantitySelector):
                 f"How much {self.coin.name} do you want to sell? (max {self.get_max_quantity()})")
 
     def handle_quantity(self, quantity: int):
-        total_cost = int(quantity * self.coin.price)
+        int_price = int(self.coin.price)
+        total_cost = quantity * int(self.coin.price)
         self.game_state.player.coins += total_cost
-        self.coin.log_sale(quantity, total_cost)
+        self.coin.log_sale(quantity, int_price)
 
 
 @dataclass
@@ -246,13 +246,13 @@ def price_part(coin: CryptoCurrency) -> LinePart:
     color = (curses.COLOR_RED if coin.historical_percent_change < 0 else
              curses.COLOR_GREEN if coin.historical_percent_change > 0 else
              curses.COLOR_WHITE)
-    return LinePart(coin.format_price(), color=color)
+    return LinePart(f"{coin.price:.2f}", color=color)
 
 def delta_part(coin: CryptoCurrency) -> LinePart:
     color = (curses.COLOR_RED if coin.historical_percent_change < 0 else
              curses.COLOR_GREEN if coin.historical_percent_change > 0 else
              curses.COLOR_WHITE)
-    return LinePart(coin.format_percent_change(), color=color)
+    return LinePart(f"{coin.historical_percent_change:.1f}%", color=color)
 
 def quantity_owned_part(coin: CryptoCurrency) -> LinePart:
     return LinePart(str(coin.quantity_owned), color=curses.COLOR_MAGENTA)
@@ -260,10 +260,26 @@ def quantity_owned_part(coin: CryptoCurrency) -> LinePart:
 def owned_value_part(coin: CryptoCurrency) -> LinePart:
     return LinePart(f"{round(float(coin.quantity_owned * coin.price), 2)}")
 
+def cost_basis_part(coin: CryptoCurrency) -> LinePart:
+    return LinePart(f"{round(coin.history.cost_basis, 2)}")
+
+def gain_part(coin: CryptoCurrency) -> LinePart:
+    color = (curses.COLOR_RED if coin.open_pl < 0 else
+             curses.COLOR_GREEN if coin.open_pl > 0 else
+             curses.COLOR_WHITE)
+    return LinePart(f"{round(coin.open_pl, 2)}", color=color)
+
+def gain_pct_part(coin: CryptoCurrency) -> LinePart:
+    color = (curses.COLOR_RED if coin.open_pl < 0 else
+             curses.COLOR_GREEN if coin.open_pl > 0 else
+             curses.COLOR_WHITE)
+    return LinePart(f"{coin.open_pl_percent:.1f}%", color=color)
+
 class CoinOptions:
     def __init__(self):
-        self.headers = ['Name', 'Price', 'Chg', 'Owned', 'Value']
-        self.coin_line_part_factories = [name_part, price_part, delta_part, quantity_owned_part, owned_value_part]
+        self.headers = ['Name', 'Price', 'Chg', 'Owned', 'Value', 'Cost Basis', 'P/L', 'Chg']
+        self.coin_line_part_factories = [name_part, price_part, delta_part, quantity_owned_part, owned_value_part,
+                                         cost_basis_part, gain_part, gain_pct_part]
         self.columns = len(self.headers)
         self._ingest_coins()
 
