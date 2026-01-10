@@ -3,6 +3,7 @@ from collections import Counter
 from dataclasses import dataclass, field
 from typing import List, Dict
 
+import savethewench.service.crypto_service as crypto_service
 from savethewench import event_logger
 from savethewench.audio import play_music
 from savethewench.data.illnesses import LATE_ONSET_SIDS
@@ -15,6 +16,7 @@ from .achievement import AchievementEvent, set_achievement_cache, load_achieveme
 from .area import Area, load_areas
 from .bank import Bank
 from .coffee_item import CoffeeItem
+from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
 from .events import TravelEvent, BountyCollectedEvent, CoffeeEvent, PlayerDeathEvent, TreatmentEvent
 from .illness import Illness
@@ -48,6 +50,7 @@ class GameState:
     perk_cache: Dict[str, Perk] = field(default_factory=dict)
     achievement_cache: Dict[str, Achievement] = field(default_factory=dict)
     settings: Settings = field(default_factory=Settings.defaults)
+    crypto_market_state: CryptoMarketState = field(default_factory=CryptoMarketState.defaults)
 
     @property
     def shop(self) -> Shop:
@@ -72,6 +75,8 @@ class GameState:
         set_perk_cache(self.perk_cache)
         set_settings(self.settings)
         load_achievements()
+        crypto_service.init(self.crypto_market_state)
+        crypto_service.start()
         self._subscribe_listeners()
 
     def refresh_bounty(self):
@@ -118,7 +123,7 @@ class GameState:
         else:
             print_and_sleep(blue(
                 f"Shit didn't take. You owe me {illness.cost} of coin. I also accept copper and Tenchcoin.\n\nYou into crypto?\n\n"),
-                            2)
+                2)
             return self
 
     def make_coffee_purchase(self, coffee_item: CoffeeItem):
