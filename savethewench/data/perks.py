@@ -26,6 +26,7 @@ ROSETTI_THE_GYM_RAT = "Rosetti the Gym Rat"
 SLEDGE_FUND = "Sledge Fund"
 SOLOMON_TRAIN = "Solomon Train"
 TENCH_EYES = "Tench Eyes"
+TENCH_GENES = "Tench Genes"
 TENCH_THE_BOUNTY_HUNTER = "Tench the Bounty Hunter"
 TRADE_SHIP = "Trade Ship"
 USED_SNEAKERS = "Used Sneakers"
@@ -225,6 +226,13 @@ Perks = [
         'description': "Projectile weapon accuracy +5%",
         'wrapper_type': WrapperType.FLOAT_CHANGE_BY_PERCENT,
         'wrapper_config': {'change': 5}
+    },
+{
+        'name': TENCH_GENES,
+        'cost': 130,
+        'description': "Illness risk -1% and survival chance +2%",
+        'wrapper_type': WrapperType.FLOAT_CHANGE_BY_PERCENT,
+        'wrapper_config': {'change': -0.01}
     },
     {
         'name': DEATH_CAN_WAIT,

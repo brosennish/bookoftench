@@ -141,13 +141,11 @@ class GameState:
 
     def coffee_effect(self, item: CoffeeItem):
         player = self.player
-
         original_hp = player.hp
         player.gain_hp(item.hp)
-
         print_and_sleep(f"You restored {green(self.player.hp - original_hp)} hp!\n", 1)
 
-        if random.random() < item.risk:
+        if random.random() < item.risk - 0.01 if Player.has_tench_genes else item.risk:
             illnesses = Illnesses()
             illness = random.choice(illnesses.all_illnesses)
 

@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, TypeVar
 
-from savethewench.data.perks import BARTER_SAUCE, TRADE_SHIP
-from .base import Buyable
+from savethewench.data.perks import BARTER_SAUCE, TRADE_SHIP, TENCH_GENES
 from .coffee_item import CoffeeItem
 from .perk import attach_perk
 from ..data.coffee_items import Coffee_Items
@@ -26,9 +25,14 @@ class CoffeeShop: # class creation
     def _discounted_cost(self, cost):
         return cost
 
-    C = TypeVar("C", bound=Buyable)
+    @attach_perk(TENCH_GENES, silent=True)  # apply perks to cost if owned
+    def _discounted_risk(self, risk):
+        return risk
+
+    C = TypeVar("C", bound=CoffeeItem)
 
     def apply_discounts(self, buyables: List[C]) -> List[C]: # apply any discounts to get the updated costs
         for buyable in buyables:
-            buyable.cost = self._discounted_cost(buyable.cost)
+            buyable.cost = max(3, self._discounted_cost(buyable.cost))
+            buyable.risk = max(0.05, self._discounted_risk(buyable.risk))
         return buyables
