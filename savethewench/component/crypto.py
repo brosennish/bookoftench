@@ -38,9 +38,10 @@ class SimpleWindow:
 
     def flush(self):
         self.stdscr.clear()
-        while len(self.displayables) > 0:
-            self.displayables.pop().add_to_screen(self.stdscr)
+        for displayable in self.displayables:
+            displayable.add_to_screen(self.stdscr)
         self.stdscr.refresh()
+        self.displayables.clear()
 
 @register_component(CRYPTO_EXCHANGE)
 class CryptoExchange(Component):
