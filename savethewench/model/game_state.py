@@ -26,6 +26,7 @@ from .perk import attach_perk, Perk, set_perk_cache
 from .player import Player
 from .shop import Shop
 from .weapon import Weapon
+from ..event_base import EventType
 
 
 @dataclass
@@ -105,7 +106,6 @@ class GameState:
 
         if isinstance(illness, Illness):
             self.do_treatment()
-            event_logger.log_event(TreatmentEvent(illness))
         else:
             return False
         self.player.coins -= illness.cost
@@ -119,11 +119,13 @@ class GameState:
             print_and_sleep(f"{cyan('I did it! You\'re healed! Mum would be so proud.')}\n", 2)
             player.illness = None
             player.illness_death_lvl = None
+            event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_SUCCESS))
             return self
         else:
             print_and_sleep(blue(
                 f"Shit didn't take. You owe me {illness.cost} of coin. I also accept copper and Tenchcoin.\n\nYou into crypto?\n\n"),
                 2)
+            event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_FAIL))
             return self
 
     def make_coffee_purchase(self, coffee_item: CoffeeItem):
@@ -133,7 +135,6 @@ class GameState:
 
         if isinstance(coffee_item, CoffeeItem):
             self.coffee_effect(coffee_item)
-            event_logger.log_event(CoffeeEvent(coffee_item))
         else:
             return False
         self.player.coins -= coffee_item.cost
@@ -141,38 +142,35 @@ class GameState:
 
     def coffee_effect(self, item: CoffeeItem):
         player = self.player
-
         original_hp = player.hp
         player.gain_hp(item.hp)
-
         print_and_sleep(f"You restored {green(self.player.hp - original_hp)} hp!\n", 1)
 
-        if random.random() < item.risk:
-            illnesses = Illnesses()
-            illness = random.choice(illnesses.all_illnesses)
+        illnesses = Illnesses()
+        illness = random.choice(illnesses.all_illnesses)
 
-            if illness.name != LATE_ONSET_SIDS:
-                player.illness = illness
-                player.illness_death_lvl = player.lvl + illness.levels_until_death
+        if illness.name != LATE_ONSET_SIDS:
+            player.illness = illness
+            player.illness_death_lvl = player.lvl + illness.levels_until_death
 
-                print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're sicker than Hell."), 2)
-                print_and_sleep(yellow(f"Illness: {illness.name}"), 2)
-                print_and_sleep(yellow(f"Description: {illness.description}"), 2)
-                print_and_sleep(
-                    yellow(
-                        f"\nVisit the Free Range Children's Hospital for treatment "
-                        f"or die at level {player.illness_death_lvl}.\n"
-                    ),
-                    3
-                )
-            else:
-                print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."),
-                                2)
-                print_and_sleep(yellow(f"Cause of Death: {illness.name}"), 2)
-                print_and_sleep(yellow(f"Description:\n{illness.description}"), 3)
-                player.hp = 0
-                player.lives -= 1
-                event_logger.log_event(PlayerDeathEvent(player.lives))
+            print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're sicker than Hell."), 2)
+            print_and_sleep(yellow(f"Illness: {illness.name}"), 2)
+            print_and_sleep(yellow(f"Description: {illness.description}"), 2)
+            print_and_sleep(
+                yellow(
+                    f"\nVisit the Free Range Children's Hospital for treatment "
+                    f"or die at level {player.illness_death_lvl}.\n"
+                ),
+                3
+            )
+        else:
+            print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."),
+                            2)
+            print_and_sleep(yellow(f"Cause of Death: {illness.name}"), 2)
+            print_and_sleep(yellow(f"Description:\n{illness.description}"), 3)
+            player.hp = 0
+            player.lives -= 1
+            event_logger.log_event(PlayerDeathEvent(player.lives))
 
     def _subscribe_listeners(self):
         @subscribe_function(BountyCollectedEvent)

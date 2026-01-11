@@ -26,9 +26,14 @@ class CoffeeShop: # class creation
     def _discounted_cost(self, cost):
         return cost
 
-    C = TypeVar("C", bound=Buyable)
+    @attach_perk(TENCH_GENES, silent=True)  # apply perks to cost if owned
+    def _discounted_risk(self, risk):
+        return risk
+
+    C = TypeVar("C", bound=CoffeeItem)
 
     def apply_discounts(self, buyables: List[C]) -> List[C]: # apply any discounts to get the updated costs
         for buyable in buyables:
-            buyable.cost = self._discounted_cost(buyable.cost)
+            buyable.cost = max(3, self._discounted_cost(buyable.cost))
+            buyable.risk = max(0.05, self._discounted_risk(buyable.risk))
         return buyables

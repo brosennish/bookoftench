@@ -3,6 +3,7 @@ from savethewench.component.registry import register_component
 from savethewench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
     functional_component, GatekeepingComponent
 from savethewench.data.audio import SHOP_THEME
+from savethewench.data.coffee_items import Coffee_Items
 from savethewench.data.components import COFFEE_SHOP
 from savethewench.model import GameState
 from savethewench.model.coffee_item import CoffeeItem
@@ -24,7 +25,7 @@ class CoffeeBouncer(GatekeepingComponent):
 class CoffeeShopComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         shop = CoffeeShop()
-        shop_options = shop.coffee_inventory
+        shop_options = shop.apply_discounts(shop.coffee_inventory)
 
         item_bindings = [ReprBinding(str(i + 1), item.name, self._make_purchase_component(item), item) for
                          i, item in enumerate(shop_options)]
