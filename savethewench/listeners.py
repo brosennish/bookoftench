@@ -29,16 +29,3 @@ class TravelListener(Listener):
     def handle_event(event: TravelEvent):
         play_music(TRAVEL_THEME)
         print_and_sleep(cyan(f'Traveling by six-by-eight to the {event.area_name}...'), 5)
-
-
-@subscribe_listener(KillEvent)
-class OfficerListener(Listener):
-    @staticmethod
-    def handle_event(event: KillEvent):
-        if perk_is_active(BROWNMAIL):
-            return None
-        else:
-            if random.random() < 0.08:
-                return get_registered_component(OFFICER)
-            else:
-                return None
