@@ -160,3 +160,14 @@ class TreatmentEvent(Event):
     def __init__(self, illness, event_type: EventType):
         super().__init__(event_type)
         self.illness = illness
+
+
+class OfficerEvent(Event):
+    def __init__(self, event_type: EventType):
+        super().__init__(event_type, callback=self.paid if event_type == event_type.OFFICER_PAID else self.unpaid)
+
+    def paid(self) -> None:
+        print_and_sleep("") # TODO funny dialogue
+
+    def unpaid(self) -> None:
+        print_and_sleep("") # TODO funny dialogue

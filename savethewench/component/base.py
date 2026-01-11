@@ -280,6 +280,15 @@ class GatekeepingComponent(Component):
             return self.deny_component(self.game_state).run()
 
 
+class ConditionalComponent(GatekeepingComponent):
+    def __init__(self, game_state: GameState, decision_function: Callable[[], bool], component: type[Component]):
+        super().__init__(game_state,
+                         decision_function=decision_function,
+                         accept_component=component,
+                         deny_component=NoOpComponent)
+
+
+
 @dataclass
 class ColoredNameSelectionBinding(SelectionBinding):
     color: Callable[[str], str]

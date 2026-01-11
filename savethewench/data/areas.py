@@ -1,11 +1,16 @@
+from enum import Enum
+
 from . import audio, enemies
-from .components import ActionMenuDefaults, COFFEE_SHOP, HOSPITAL
+from .components import ActionMenuDefaults, COFFEE_SHOP, HOSPITAL, OFFICER
 
 # Constants
 CAVE = "Cave"
 CITY = "City"
 FOREST = "Forest"
 SWAMP = "Swamp"
+
+class EncounterType(Enum):
+    POST_KILL = 0
 
 # TODO tweak 'explore_probabilities' for each area as desired
 # map names of registered components to (int percent) probabilities
@@ -17,7 +22,8 @@ Areas = [
      'enemies': [enemies.BANDIT, enemies.GOON, enemies.PIMP, enemies.HOBO,
                  enemies.SERIAL_KILLER],
      'boss_name': enemies.THE_MAYOR, 'theme': audio.CITY_THEME,
-     'actions_menu': {'pages': [ActionMenuDefaults.page_one, ActionMenuDefaults.page_two, [COFFEE_SHOP, HOSPITAL]]}},
+     'actions_menu': {'pages': [ActionMenuDefaults.page_one, ActionMenuDefaults.page_two, [COFFEE_SHOP, HOSPITAL]]},
+     'encounters': [{'type': EncounterType.POST_KILL, 'component': OFFICER}]},
     {'name': FOREST,
      'enemies': [enemies.HIKER, enemies.HUNTER, enemies.POACHER,
                  enemies.DISGRACED_EXILE, enemies.SERIAL_KILLER],

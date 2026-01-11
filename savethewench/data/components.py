@@ -18,6 +18,7 @@ FINAL_BOSS_FIGHT = purple("BATTLE DENNY BILTMORE")
 HOSPITAL = "Hospital"
 LOAD_GAME = "Load Game"
 NEW_GAME = "New Game"
+OFFICER = "Officer"
 OVERVIEW = "Overview"
 PERKS = "Perks"
 QUIT_GAME = "Quit"

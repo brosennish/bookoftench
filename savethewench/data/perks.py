@@ -6,6 +6,7 @@ AMBROSE_BLADE = "Ambrose Blade"
 BARTER_SAUCE = "Barter Sauce"
 BEER_GOGGLES = "Beer Goggles"
 BROWN_FRIDAY = "Brown Friday"
+BROWNMAIL = "Brownmail"
 BULLETPROOF = "Bulletproof"
 CROWS_NEST = "Crow's Nest"
 DEATH_CAN_WAIT = "Death Can Wait"
@@ -166,6 +167,13 @@ Perks = [
         'description': "Bladed weapons do +3 damage",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 3}
+    },
+    {
+        'name': BROWNMAIL,
+        'cost': 120,
+        'description': "Gets Officer Hohkken off your back",
+        'wrapper_type': WrapperType.BOOLEAN_OVERRIDE,
+        'wrapper_config': {'override': False}
     },
     {
         'name': NEW_SNEAKERS,

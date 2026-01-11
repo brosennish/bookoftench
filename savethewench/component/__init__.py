@@ -5,6 +5,7 @@ from .casino import *
 from .coffee_shop import *
 from .crypto import *
 from .hospital import *
+from .officer import *
 from .settings import *
 from .shop import *
 #--
