@@ -102,11 +102,8 @@ class GameState:
         play_music(self.current_area.theme)
 
     def obey_officer(self):
-        if self.player.coins < self.bribe:
-            self.disobey_officer()
-        else:
-            self.player.coins -= self.bribe
-            event_logger.log_event(OfficerEvent(EventType.OFFICER_PAID))
+        self.player.coins -= self.bribe
+        event_logger.log_event(OfficerEvent(EventType.OFFICER_PAID))
 
     def disobey_officer(self):
         player = self.player

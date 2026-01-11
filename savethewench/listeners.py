@@ -3,11 +3,13 @@ import random
 from savethewench.event_base import Listener
 from savethewench.model.events import ItemUsedEvent, TravelEvent, KillEvent
 from savethewench.ui import yellow, cyan
+from savethewench.component.registry import get_registered_component
 from .audio import play_music
-from .component import get_registered_component
 from .data.audio import TRAVEL_THEME
 from .data.components import OFFICER
+from .data.perks import BROWNMAIL
 from .event_logger import subscribe_listener
+from .model.perk import perk_is_active
 from .util import print_and_sleep
 
 
@@ -33,7 +35,10 @@ class TravelListener(Listener):
 class OfficerListener(Listener):
     @staticmethod
     def handle_event(event: KillEvent):
-        if random.random() < 0.08:
-            return get_registered_component(OFFICER)
-        else:
+        if perk_is_active(BROWNMAIL):
             return None
+        else:
+            if random.random() < 0.08:
+                return get_registered_component(OFFICER)
+            else:
+                return None
