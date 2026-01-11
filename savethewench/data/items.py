@@ -49,11 +49,11 @@ Items = [
     {'name': CAMPBELLS_GOOP, 'hp': 20, 'cost': 20, 'sell_value': 8, 'areas': [CITY, CAVE, FOREST]},
 
     # --- Tier 3 (24–28 HP) ---
+    {'name': VERY_SPICY_NOODLES, 'hp': 24, 'cost': 20, 'sell_value': 10, 'areas': [CITY, FOREST, SWAMP]},
+    {'name': UNWANTED_PROTEIN, 'hp': 24, 'cost': 24, 'sell_value': 10, 'areas': [CAVE, FOREST]},
     {'name': MOREL, 'hp': 24, 'cost': 22, 'sell_value': 9, 'areas': [FOREST]},
     {'name': GIZZARDS_AND_LIVERS, 'hp': 26, 'cost': 24, 'sell_value': 9, 'areas': [CITY, FOREST, SWAMP]},
-    {'name': UNWANTED_PROTEIN, 'hp': 24, 'cost': 24, 'sell_value': 10, 'areas': [CAVE, FOREST]},
     {'name': CRABS_ON_RYE, 'hp': 28, 'cost': 28, 'sell_value': 11, 'areas': [CAVE, CITY]},
-    {'name': VERY_SPICY_NOODLES, 'hp': 24, 'cost': 20, 'sell_value': 10, 'areas': [CITY, FOREST, SWAMP]},
     {'name': ABANDONED_EYEBALLS, 'hp': 28, 'cost': 28, 'sell_value': 14, 'areas': [CAVE, CITY, FOREST, SWAMP]},
 
     # --- Tier 4 (30–35 HP) ---
@@ -65,10 +65,10 @@ Items = [
     {'name': UNIDENTIFIED_MUSHROOMS, 'hp': 35, 'cost': 35, 'sell_value': 18, 'areas': [CAVE, FOREST, SWAMP]},
 
     # --- Tier 5 (38–40 HP) ---
-    {'name': MYSTICAL_MUSHROOMS, 'hp': 40, 'cost': 42, 'sell_value': 17, 'areas': [CAVE, FOREST, SWAMP]},
-    {'name': CANNED_HORSE, 'hp': 40, 'cost': 42, 'sell_value': 17, 'areas': [CITY, CAVE]},
-    {'name': SUSPICIOUS_GUMBO, 'hp': 39, 'cost': 42, 'sell_value': 18, 'areas': [FOREST, SWAMP]},
+    {'name': CANNED_HORSE, 'hp': 38, 'cost': 40, 'sell_value': 16, 'areas': [CITY, CAVE]},
+    {'name': SUSPICIOUS_GUMBO, 'hp': 39, 'cost': 42, 'sell_value': 16, 'areas': [FOREST, SWAMP]},
+    {'name': MYSTICAL_MUSHROOMS, 'hp': 39, 'cost': 42, 'sell_value': 17, 'areas': [CAVE, FOREST, SWAMP]},
     {'name': ALIEN_REMAINS, 'hp': 40, 'cost': 45, 'sell_value': 20, 'areas': [FOREST]},
-    {'name': TENCH_FILET, 'hp': 40, 'cost': 43, 'sell_value': 16, 'areas': [CITY]},
+    {'name': TENCH_FILET, 'hp': 40, 'cost': 43, 'sell_value': 18, 'areas': [CITY]},
 
 ]
