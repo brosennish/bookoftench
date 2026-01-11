@@ -142,41 +142,35 @@ class GameState:
 
     def coffee_effect(self, item: CoffeeItem):
         player = self.player
-
         original_hp = player.hp
         player.gain_hp(item.hp)
-
         print_and_sleep(f"You restored {green(self.player.hp - original_hp)} hp!\n", 1)
 
-        if random.random() < item.risk:
-            illnesses = Illnesses()
-            illness = random.choice(illnesses.all_illnesses)
+        illnesses = Illnesses()
+        illness = random.choice(illnesses.all_illnesses)
 
-            if illness.name != LATE_ONSET_SIDS:
-                player.illness = illness
-                player.illness_death_lvl = player.lvl + illness.levels_until_death
+        if illness.name != LATE_ONSET_SIDS:
+            player.illness = illness
+            player.illness_death_lvl = player.lvl + illness.levels_until_death
 
-                print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're sicker than Hell."), 2)
-                print_and_sleep(yellow(f"Illness: {illness.name}"), 2)
-                print_and_sleep(yellow(f"Description: {illness.description}"), 2)
-                print_and_sleep(
-                    yellow(
-                        f"\nVisit the Free Range Children's Hospital for treatment "
-                        f"or die at level {player.illness_death_lvl}.\n"
-                    ),
-                    3
-                )
-            else:
-                print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."),
-                                2)
-                print_and_sleep(yellow(f"Cause of Death: {illness.name}"), 2)
-                print_and_sleep(yellow(f"Description:\n{illness.description}"), 3)
-                player.hp = 0
-                player.lives -= 1
-                event_logger.log_event(PlayerDeathEvent(player.lives))
-            event_logger.log_event(CoffeeEvent(item, EventType.COFFEE_SICK))
+            print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're sicker than Hell."), 2)
+            print_and_sleep(yellow(f"Illness: {illness.name}"), 2)
+            print_and_sleep(yellow(f"Description: {illness.description}"), 2)
+            print_and_sleep(
+                yellow(
+                    f"\nVisit the Free Range Children's Hospital for treatment "
+                    f"or die at level {player.illness_death_lvl}.\n"
+                ),
+                3
+            )
         else:
-            event_logger.log_event(CoffeeEvent(item, EventType.COFFEE_SAFE))
+            print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."),
+                            2)
+            print_and_sleep(yellow(f"Cause of Death: {illness.name}"), 2)
+            print_and_sleep(yellow(f"Description:\n{illness.description}"), 3)
+            player.hp = 0
+            player.lives -= 1
+            event_logger.log_event(PlayerDeathEvent(player.lives))
 
     def _subscribe_listeners(self):
         @subscribe_function(BountyCollectedEvent)
