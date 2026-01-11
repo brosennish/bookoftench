@@ -26,6 +26,7 @@ from .perk import attach_perk, Perk, set_perk_cache
 from .player import Player
 from .shop import Shop
 from .weapon import Weapon
+from ..event_base import EventType
 
 
 @dataclass
@@ -105,7 +106,6 @@ class GameState:
 
         if isinstance(illness, Illness):
             self.do_treatment()
-            event_logger.log_event(TreatmentEvent(illness))
         else:
             return False
         self.player.coins -= illness.cost
@@ -119,11 +119,13 @@ class GameState:
             print_and_sleep(f"{cyan('I did it! You\'re healed! Mum would be so proud.')}\n", 2)
             player.illness = None
             player.illness_death_lvl = None
+            event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_SUCCESS))
             return self
         else:
             print_and_sleep(blue(
                 f"Shit didn't take. You owe me {illness.cost} of coin. I also accept copper and Tenchcoin.\n\nYou into crypto?\n\n"),
                 2)
+            event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_FAIL))
             return self
 
     def make_coffee_purchase(self, coffee_item: CoffeeItem):
@@ -133,7 +135,6 @@ class GameState:
 
         if isinstance(coffee_item, CoffeeItem):
             self.coffee_effect(coffee_item)
-            event_logger.log_event(CoffeeEvent(coffee_item))
         else:
             return False
         self.player.coins -= coffee_item.cost
@@ -173,6 +174,9 @@ class GameState:
                 player.hp = 0
                 player.lives -= 1
                 event_logger.log_event(PlayerDeathEvent(player.lives))
+            event_logger.log_event(CoffeeEvent(item, EventType.COFFEE_SICK))
+        else:
+            event_logger.log_event(CoffeeEvent(item, EventType.COFFEE_SAFE))
 
     def _subscribe_listeners(self):
         @subscribe_function(BountyCollectedEvent)
