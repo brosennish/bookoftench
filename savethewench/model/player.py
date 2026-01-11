@@ -292,7 +292,7 @@ class Player(Combatant):
         # ---- core level-up effects live here ----
         self.xp -= self.xp_needed
         self.lvl += 1
-        cash_reward = random.randint(100, 200)
+        cash_reward = 100
         self.coins += cash_reward
         self.games_played = 0
 

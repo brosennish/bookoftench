@@ -190,7 +190,7 @@ Rules:
             call = safe_input("[A] Above\n"
                               "[B] Below").strip().lower()
             if call not in ('a', 'b'):
-                print(blue("Invalid choice."))
+                print(yellow("Invalid choice."))
             else:
                 break
         comp: Callable[[int, int], bool] = lambda r1, r2: r2 > r1 if call == 'a' else r2 < r1
@@ -231,7 +231,7 @@ Rules:
                     if player.gain_xp_other(3):
                         BankVisitDecision(
                             self.game_state).run()  # TODO figure out a way to not call this in so many places
-                print(f"{green(f"You cashed out {payout} coins!")}\n")
+                print(f"{green(f"\nYou cashed out {payout} coins!")}")
                 player.casino_won += payout
                 self.player_quit = True
                 return self.game_state
