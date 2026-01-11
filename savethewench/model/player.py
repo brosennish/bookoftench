@@ -318,7 +318,7 @@ class Player(Combatant):
 
         # check for illness death level match
         if self.lvl == self.illness_death_lvl:
-            if self.has_tench_genes and random.random() < 0.02:
+            if self.has_tench_genes and random.random() < 0.10:
                 self.illness_death_lvl += 1
                 print_and_sleep(purple("You survived death with Tench Genes!"), 1)
                 print_and_sleep(f"New Death Level: {red(f'{str(self.illness_death_lvl)}')}", 1)
