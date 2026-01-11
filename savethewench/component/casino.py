@@ -84,7 +84,7 @@ class CasinoGame(Component):
             raw_wager = safe_input("[#] Wager\n"
                                    "[q] Leave").strip().lower()
             if raw_wager != 'q' and not raw_wager.isdigit():
-                print(yellow("Invalid choice."))
+                print_and_sleep(yellow("Invalid choice."))
             elif raw_wager.isdigit():
                 if int(raw_wager) < 5:
                     print_and_sleep(
@@ -100,7 +100,7 @@ class CasinoGame(Component):
 
     def run(self) -> GameState:
         if can_gamble(self.game_state):
-            print(self.game_description)
+            print_and_sleep(self.game_description)
         while (not self.player_quit) and can_gamble(self.game_state):
             wager = self.get_wager_or_quit()
             if not self.player_quit:
@@ -128,7 +128,7 @@ class KrillOrKray(CasinoGame):
     @staticmethod
     def get_payout(wager: int) -> int:
         if perk_is_active(GRAMBLING_ADDICT):
-            print(purple("Payout increased 5% with Grambling Addict!\n"))
+            print_and_sleep(purple("Payout increased 5% with Grambling Addict!"))
             return int((wager * 1.05) * 0.9)
         return int(wager * 0.9)
 
@@ -156,7 +156,7 @@ class KrillOrKray(CasinoGame):
 def roll_die() -> int:
     roll = random.randint(1, 6)
     safe_input("[ ] Roll the die")
-    print(blue(f"You rolled a {roll}.\n"))
+    print_and_sleep(blue(f"You rolled a {roll}.\n"))
     return roll
 
 
@@ -180,7 +180,7 @@ Rules:
         return int(payout * 1.05) if perk_is_active(GRAMBLING_ADDICT) else int(payout)
 
     def display_status(self):
-        print(f"\n{dim(' | ').join([
+        print_and_sleep(f"{dim(' | ').join([
             f"Round: {cyan(self.turn)}", f"Wager: {green(self.wager)}",
             f"Mult: {purple(self.ladder[self.turn])}", f"Payout: {green(self.get_current_payout())}"])}")
 
@@ -190,7 +190,7 @@ Rules:
             call = safe_input("[A] Above\n"
                               "[B] Below").strip().lower()
             if call not in ('a', 'b'):
-                print(yellow("Invalid choice."))
+                print_and_sleep(yellow("Invalid choice."))
             else:
                 break
         comp: Callable[[int, int], bool] = lambda r1, r2: r2 > r1 if call == 'a' else r2 < r1
@@ -202,7 +202,7 @@ Rules:
             choice = safe_input("[C] Continue\n"
                                 "[Q] Cash Out\n")
             if choice not in ('q', 'c'):
-                print(yellow("Invalid choice."))
+                print_and_sleep(yellow("Invalid choice."))
             else:
                 return choice == 'q'
 
@@ -220,23 +220,23 @@ Rules:
         roll2 = roll_die()
         if call_is_correct(roll1, roll2):
             payout = int(wager * self.ladder[self.turn])
-            print(blue(f"Lucky guess!\nPayout increased to {payout} coins.\n"))
+            print_and_sleep(blue(f"Lucky guess!\nPayout increased to {payout} coins.\n"))
             if self.turn == len(self.ladder) - 1 or self.should_cash_out():
                 if perk_is_active(GRAMBLING_ADDICT):
-                    print(purple("Payout increased 5% with Grambling Addict!\n"))
+                    print_and_sleep(purple("Payout increased 5% with Grambling Addict!\n"))
                     payout *= 1.05
                 player.coins += payout
                 if self.turn == len(self.ladder):
-                    print(f"{blue("You've completed the final round.")}\n")
+                    print_and_sleep(f"{blue("You've completed the final round.")}\n")
                     if player.gain_xp_other(3):
                         BankVisitDecision(
                             self.game_state).run()  # TODO figure out a way to not call this in so many places
-                print(f"{green(f"\nYou cashed out {payout} coins!")}")
+                print_and_sleep(f"{green(f"\nYou cashed out {payout} coins!")}")
                 player.casino_won += payout
                 self.player_quit = True
                 return self.game_state
         else:
-            print(blue("Your guess was dry.\n"))
+            print_and_sleep(blue("Your guess was dry.\n"))
             player.coins -= wager
             player.casino_lost += wager
             self.turn = 0
