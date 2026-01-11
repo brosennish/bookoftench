@@ -3,17 +3,17 @@ from __future__ import annotations
 import copy
 import random
 from dataclasses import dataclass, field
-from enum import Enum
 from typing import List, Dict
 
 from savethewench.data import Areas
-from savethewench.data.components import ActionMenuDefaults, DISCOVER_COIN, DISCOVER_ITEM, DISCOVER_PERK, DISCOVER_WEAPON, \
+from savethewench.data.areas import EncounterType
+from savethewench.data.components import ActionMenuDefaults, DISCOVER_COIN, DISCOVER_ITEM, DISCOVER_PERK, \
+    DISCOVER_WEAPON, \
     SPAWN_ENEMY
 from savethewench.ui import purple, yellow
 from savethewench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
 from .shop import Shop
-from ..data.areas import EncounterType
 
 _explore_defaults = {
     DISCOVER_COIN: 20,
@@ -37,6 +37,7 @@ class AreaActions:
 class AreaEncounter:
     type: EncounterType
     component: str
+
 
 @dataclass
 class Area:
@@ -110,6 +111,6 @@ def load_areas() -> List[Area]:
         if 'actions_menu' in data:
             data['actions_menu'] = AreaActions(**data['actions_menu'])
         if 'encounters' in data:
-            data['encounters'] =[AreaEncounter(**d) for d in data['encounters']]
+            data['encounters'] = [AreaEncounter(**d) for d in data['encounters']]
         res.append(Area(**data))
     return res
