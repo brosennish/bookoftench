@@ -41,6 +41,8 @@ class GameState:
     found_item: Item = None
     found_weapon: Weapon = None
 
+    officer_active: bool = True
+
     wanted: str = ''
     _bounty: int = 0
 
