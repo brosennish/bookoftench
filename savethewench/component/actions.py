@@ -40,9 +40,15 @@ class Explore(RandomChoiceComponent):
     @functional_component(state_dependent=True)
     def _discover_item(game_state: GameState):
         available = [i for i in load_items()
-                     if i.name not in game_state.player.items]
+                     if i.name not in game_state.player.items
+                     and game_state.current_area in i.areas]
+        if available:
+            item = random.choice(available)
+        else:
+            all_unowned_items = [i for i in load_items()
+                                 if i.name not in game_state.player.items]
+            item = random.choice(all_unowned_items)
 
-        item = random.choice(available)
         game_state.found_item = item
         print_and_sleep(cyan(f"You found {item.name}!"), 1)
 
