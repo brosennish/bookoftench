@@ -18,7 +18,7 @@ from .bank import Bank
 from .coffee_item import CoffeeItem
 from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
-from .events import TravelEvent, BountyCollectedEvent, CoffeeEvent, PlayerDeathEvent, TreatmentEvent
+from .events import TravelEvent, BountyCollectedEvent, CoffeeEvent, PlayerDeathEvent, TreatmentEvent, OfficerEvent
 from .illness import Illness
 from .illnesses import Illnesses
 from .item import Item
@@ -26,6 +26,7 @@ from .perk import attach_perk, Perk, set_perk_cache
 from .player import Player
 from .shop import Shop
 from .weapon import Weapon
+from ..event_base import EventType
 
 
 @dataclass
@@ -105,6 +106,7 @@ class GameState:
             self.disobey_officer()
         else:
             self.player.coins -= self.bribe
+            event_logger.log_event(OfficerEvent(EventType.OFFICER_PAID))
 
     def disobey_officer(self):
         player = self.player
@@ -114,6 +116,7 @@ class GameState:
             player.hp = 0
             player.lives -= 1
             event_logger.log_event(PlayerDeathEvent(player.lives))
+        event_logger.log_event(OfficerEvent(EventType.OFFICER_UNPAID))
 
     def make_treatment_purchase(self):
         illness = self.player.illness

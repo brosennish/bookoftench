@@ -160,3 +160,8 @@ class TreatmentEvent(Event):
     def __init__(self, illness):
         super().__init__(EventType.TREATMENT_EVENT)
         self.illness = illness
+
+
+class OfficerEvent(Event):
+    def __init__(self, event_type: EventType):
+        super().__init__(event_type)
