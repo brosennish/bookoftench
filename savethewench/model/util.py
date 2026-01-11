@@ -24,6 +24,28 @@ def p_color(hp: int, max_hp: int) -> Callable[[str], str]:
     else:
         return red
 
+def display_officer_header(game_state: GameState) -> None:
+    player = game_state.player
+    player_color = p_color(player.hp, player.max_hp)
+
+    return dim(" | ").join([
+        f"Lives: {yellow(player.lives)}",
+        f"HP: {player_color(f'{player.hp}/{player.max_hp}')}",
+        f"Coins: {green(player.coins)}",
+        f"Bribe: {purple(game_state.bribe)}\n",
+    ])
+
+def display_officer_message() -> str:
+    return (
+        blue(
+            "Hey... uh...\n"
+            "gonna need you to cough up some coin"
+        )
+        + blue(
+            "\nor else I'll, uh...\n"
+            "have to rough you up a bit ther'.\n"
+        )
+    )
 
 def display_coffee_header(game_state: GameState) -> None:
     player = game_state.player

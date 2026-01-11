@@ -41,8 +41,6 @@ class GameState:
     found_item: Item = None
     found_weapon: Weapon = None
 
-    officer_active: bool = True
-
     wanted: str = ''
     _bounty: int = 0
 
@@ -62,6 +60,10 @@ class GameState:
     @attach_perk(TENCH_THE_BOUNTY_HUNTER, silent=True)
     def bounty(self):
         return self._bounty
+
+    @property
+    def bribe(self) -> int:
+        return min(self.player.lvl * 10, 50)
 
     @bounty.setter
     def bounty(self, value):
@@ -97,6 +99,21 @@ class GameState:
 
     def play_current_area_theme(self):
         play_music(self.current_area.theme)
+
+    def obey_officer(self):
+        if self.player.coins < self.bribe:
+            self.disobey_officer()
+        else:
+            self.player.coins -= self.bribe
+
+    def disobey_officer(self):
+        player = self.player
+        damage = random.randint(5, self.bribe)
+        player.hp -= damage
+        if player.hp <= 0:
+            player.hp = 0
+            player.lives -= 1
+            event_logger.log_event(PlayerDeathEvent(player.lives))
 
     def make_treatment_purchase(self):
         illness = self.player.illness

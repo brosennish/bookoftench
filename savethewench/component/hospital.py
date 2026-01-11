@@ -28,7 +28,7 @@ class HospitalComponent(BinarySelectionComponent):
 
     def display_options(self):
         display_hospital_header(self.game_state)
-        print_and_sleep(f"{self.query.strip()} (y/n)?")
+
 
     def play_theme(self):
         play_music(SHOP_THEME)
