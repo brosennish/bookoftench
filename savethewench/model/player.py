@@ -12,7 +12,7 @@ from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, G
 from savethewench.data.weapons import BARE_HANDS, KNIFE, MELEE, PROJECTILE, MACHETE, FIRE_AXE, AXE
 from savethewench.event_logger import subscribe_function
 from savethewench.model.illness import Illness
-from savethewench.ui import yellow, dim, green, cyan, purple
+from savethewench.ui import yellow, dim, green, cyan, purple, red
 from savethewench.util import print_and_sleep
 from .base import Combatant, Buyable
 from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent, LevelUpEvent, \
@@ -297,7 +297,7 @@ class Player(Combatant):
         # ---- core level-up effects live here ----
         self.xp -= self.xp_needed
         self.lvl += 1
-        cash_reward = random.randint(100, 200)
+        cash_reward = 100 + ((self.lvl - 1) * 10)
         self.coins += cash_reward
         self.games_played = 0
 
@@ -319,13 +319,15 @@ class Player(Combatant):
         # check for illness death level match
         if self.lvl == self.illness_death_lvl:
             if self.has_tench_genes and random.random() < 0.02:
-                return
+                self.illness_death_lvl += 1
+                print_and_sleep(purple("You survived death with Tench Genes!"), 1)
+                print_and_sleep(f"New Death Level: {red(f'{str(self.illness_death_lvl)}')}", 1)
             else:
                 self.hp = 0
                 self.lives -= 1
                 event_logger.log_event(PlayerDeathEvent(self.lives))
-            self.illness = None
-            self.illness_death_lvl = None
+                self.illness = None
+                self.illness_death_lvl = None
 
     def apply_death_penalties(self):
         self.coins = int(self.coins * 0.25) if perk_is_active(WALLET_CHAIN) else 0  # TODO use the framework for this

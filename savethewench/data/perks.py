@@ -227,12 +227,12 @@ Perks = [
         'wrapper_type': WrapperType.FLOAT_CHANGE_BY_PERCENT,
         'wrapper_config': {'change': 5}
     },
-{
+    {
         'name': TENCH_GENES,
         'cost': 130,
-        'description': "Illness risk -1% and survival chance +2%",
-        'wrapper_type': WrapperType.FLOAT_CHANGE_BY_PERCENT,
-        'wrapper_config': {'change': -0.01}
+        'description': "Illness risk -2% and survival chance +10%",
+        'wrapper_type': WrapperType.PERCENT_CHANGE,
+        'wrapper_config': {'change': -2}
     },
     {
         'name': DEATH_CAN_WAIT,
