@@ -38,11 +38,11 @@ def display_officer_header(game_state: GameState) -> None:
 def display_officer_message() -> str:
     return (
         blue(
-            "Hey... uh...\n"
-            "gonna need you to cough up some coin"
-        )
-        + blue(
-            "\nor else I'll, uh...\n"
+            "Hey ther'... uh...\n"
+            "This is Officer Hohkken.\n"
+            "I'm, uh...\n"
+            "gonna need you to cough up some coin\n"
+            "or else I'll, uh...\n"
             "have to rough you up a bit ther'.\n"
         )
     )
