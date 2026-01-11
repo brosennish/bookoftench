@@ -1,8 +1,12 @@
+import random
+
 from savethewench.event_base import Listener
-from savethewench.model.events import ItemUsedEvent, TravelEvent
+from savethewench.model.events import ItemUsedEvent, TravelEvent, KillEvent
 from savethewench.ui import yellow, cyan
 from .audio import play_music
+from .component import get_registered_component
 from .data.audio import TRAVEL_THEME
+from .data.components import OFFICER
 from .event_logger import subscribe_listener
 from .util import print_and_sleep
 
@@ -23,3 +27,13 @@ class TravelListener(Listener):
     def handle_event(event: TravelEvent):
         play_music(TRAVEL_THEME)
         print_and_sleep(cyan(f'Traveling by six-by-eight to the {event.area_name}...'), 5)
+
+
+@subscribe_listener(KillEvent)
+class OfficerListener(Listener):
+    @staticmethod
+    def handle_event(event: KillEvent):
+        if random.random() < 0.08:
+            return get_registered_component(OFFICER)
+        else:
+            return None
