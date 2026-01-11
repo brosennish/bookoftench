@@ -3,7 +3,6 @@ from typing import Callable, Any
 from savethewench import event_logger
 from savethewench.data.perks import WENCH_LOCATION, USED_SNEAKERS, NEW_SNEAKERS, CROWS_NEST
 from savethewench.event_base import EventType
-from .game_state import GameState
 from savethewench.model.achievement import load_achievements
 from savethewench.model.base import Combatant
 from savethewench.model.enemy import Enemy
@@ -11,6 +10,7 @@ from savethewench.model.perk import load_perks, attach_perk, perk_is_active
 from savethewench.model.player import Player
 from savethewench.ui import blue, cyan, green, orange, purple, red, yellow, dim
 from savethewench.util import print_and_sleep
+from .game_state import GameState
 
 
 # --- HP COLOR CODING ---
@@ -24,28 +24,6 @@ def p_color(hp: int, max_hp: int) -> Callable[[str], str]:
     else:
         return red
 
-def display_officer_header(game_state: GameState) -> None:
-    player = game_state.player
-    player_color = p_color(player.hp, player.max_hp)
-
-    return dim(" | ").join([
-        f"Lives: {yellow(player.lives)}",
-        f"HP: {player_color(f'{player.hp}/{player.max_hp}')}",
-        f"Coins: {green(player.coins)}",
-        f"Bribe: {purple(game_state.bribe)}\n",
-    ])
-
-def display_officer_message() -> str:
-    return (
-        blue(
-            "Hey ther'... uh...\n"
-            "This is Officer Hohkken.\n"
-            "I'm, uh...\n"
-            "gonna need you to cough up some coin\n"
-            "or else I'll, uh...\n"
-            "have to rough you up a bit ther'.\n"
-        )
-    )
 
 def display_coffee_header(game_state: GameState) -> None:
     player = game_state.player
@@ -56,7 +34,7 @@ def display_coffee_header(game_state: GameState) -> None:
         f"Coins: {green(f"{player.coins}")}",
         f"Lives: {yellow(f"{player.lives}")}\n"
         "\nMenu:"
-        ])}")
+    ])}")
 
 
 def display_hospital_header(game_state: GameState) -> None:
@@ -67,7 +45,7 @@ def display_hospital_header(game_state: GameState) -> None:
         f"Cost: {orange(f"{player.illness.cost}")}",
         f"Coins: {green(f"{player.coins}")}",
         f"Chance of Success: {cyan(f"{int(player.illness.success_rate * 100)}%")}\n"
-        ])}")
+    ])}")
 
 
 def get_player_status_view(game_state: GameState) -> str:
@@ -78,16 +56,16 @@ def get_player_status_view(game_state: GameState) -> str:
         killed_remaining.append(f"Remaining: {yellow(f"{game_state.current_area.enemies_remaining}")}")
 
     player_status = (f"{dim(' | ').join([
-            f"Area: {blue(game_state.current_area.name)}",
-            *killed_remaining,
-            f"Wanted: {purple(game_state.wanted)}",
-            f"Bounty: {purple(f"{game_state.bounty} coins")}"])}"
-                f"\n{dim(' | ').join([
-                    f"\n{orange(player.name)} {dim('-')} Level: {cyan(f"{player.lvl}")}",
-                    f"XP: {cyan(f"{player.xp}/{player.xp_needed}")}",
-                    f"HP: {player_color(f"{player.hp}/{player.max_hp}")}",
-                    f"Coins: {green(f"{player.coins}")}",
-                    f"Lives: {yellow(f"{player.lives}")}"])}")
+        f"Area: {blue(game_state.current_area.name)}",
+        *killed_remaining,
+        f"Wanted: {purple(game_state.wanted)}",
+        f"Bounty: {purple(f"{game_state.bounty} coins")}"])}"
+                     f"\n{dim(' | ').join([
+                         f"\n{orange(player.name)} {dim('-')} Level: {cyan(f"{player.lvl}")}",
+                         f"XP: {cyan(f"{player.xp}/{player.xp_needed}")}",
+                         f"HP: {player_color(f"{player.hp}/{player.max_hp}")}",
+                         f"Coins: {green(f"{player.coins}")}",
+                         f"Lives: {yellow(f"{player.lives}")}"])}")
 
     if game_state.player.illness:
         illness_status = (f"{dim(' | ').join([
@@ -110,7 +88,7 @@ def get_battle_status_view(game_state: GameState) -> str:
     def format_combatant_data(cmbt: Combatant, name_color) -> str:
         blind_turns = f"{cmbt.blind_turns} turn{'s' if cmbt.blind_turns > 1 else ''}"
         return (f"\n{name_color(cmbt.name)}"
-                f"{red(f' (blinded {int(cmbt.blind_effect*100)}% for {blind_turns})') if cmbt.blind else ''}"
+                f"{red(f' (blinded {int(cmbt.blind_effect * 100)}% for {blind_turns})') if cmbt.blind else ''}"
                 f"{orange(' (wanted)') if game_state.is_wanted(cmbt) else ''} {dim('-')} "
                 f"{p_color(cmbt.hp, cmbt.max_hp)(f"{cmbt.hp} HP")}"
                 f"\n{cmbt.current_weapon.get_simple_format()}")

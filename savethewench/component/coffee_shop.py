@@ -5,7 +5,6 @@ from savethewench.component.base import LabeledSelectionComponent, ReprBinding, 
 from savethewench.data.audio import SHOP_THEME
 from savethewench.data.components import COFFEE_SHOP
 from savethewench.model import GameState
-from savethewench.model.base import Buyable
 from savethewench.model.coffee_item import CoffeeItem
 from savethewench.model.coffee_shop import CoffeeShop
 from savethewench.model.util import display_coffee_header

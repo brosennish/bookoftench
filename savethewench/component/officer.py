@@ -1,36 +1,103 @@
-from __future__ import annotations
-from savethewench.component.registry import register_component
-from savethewench.component.base import functional_component, GatekeepingComponent, BinarySelectionComponent, NoOpComponent
-from savethewench.data.components import OFFICER
-from savethewench.model.util import display_officer_header, display_officer_message
-from savethewench.util import print_and_sleep
-from typing import TYPE_CHECKING
+import random
+from dataclasses import dataclass
 
-if TYPE_CHECKING:
-    from savethewench.game import GameState
+from savethewench import event_logger
+from savethewench.component.base import functional_component, BinarySelectionComponent, ConditionalComponent
+from savethewench.component.registry import register_component
+from savethewench.data.components import OFFICER
+from savethewench.data.perks import BROWNMAIL
+from savethewench.data.weapons import SPECIAL
+from savethewench.event_base import EventType
+from savethewench.model import GameState
+from savethewench.model.enemy import Enemy
+from savethewench.model.events import OfficerEvent
+from savethewench.model.perk import attach_perk
+from savethewench.model.util import p_color
+from savethewench.model.weapon import Weapon
+from savethewench.ui import dim, yellow, green, purple, blue
+from savethewench.util import print_and_sleep
+
 
 @register_component(OFFICER)
-class OfficerBouncer(GatekeepingComponent):
+class OfficerEncounterDecision(ConditionalComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: game_state.player.coins >= game_state.bribe,
-                         accept_component=OfficerComponent,
-                         deny_component=functional_component()(lambda: game_state.disobey_officer())
-                         )
+        super().__init__(game_state, decision_function=is_officer_lurking,
+                         component=OfficerEncounter)
 
 
-class OfficerComponent(BinarySelectionComponent):
+class OfficerEncounter(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
                          query="Bribe Officer Hohkken",
-                         yes_component=functional_component()(lambda: game_state.obey_officer()),
-                         no_component=functional_component()(lambda: game_state.disobey_officer()),
+                         yes_component=obey_officer,
+                         no_component=disobey_officer,
                          )
+        self._display_greeting()
+
+    @staticmethod
+    def _display_greeting() -> None:
+        lines = ["Hey ther'... uh...", "This is Officer Hohkken.", "I'm, uh...", "gonna need you to cough up some coin",
+                 "or else I'll, uh...", "have to rough you up a bit ther'.\n"]
+        for l in lines:
+            print_and_sleep(blue(l), random.choice([1, 1.5, 2]))
+
+    def _display_header(self) -> None:
+        player = self.game_state.player
+        player_color = p_color(player.hp, player.max_hp)
+
+        print_and_sleep(dim(" | ").join([
+            f"Lives: {yellow(player.lives)}",
+            f"HP: {player_color(f'{player.hp}/{player.max_hp}')}",
+            f"Coins: {green(player.coins)}",
+            f"Bribe: {purple(calculate_bribe(self.game_state))}",
+        ]))
 
     def display_options(self):
-        print(display_officer_header(self.game_state))
-        print(display_officer_message())
-        print_and_sleep(f"{self.query.strip()} (y/n)?")
+        self._display_header()
+        super().display_options()
 
 
-    def play_theme(self):
-        pass
+@attach_perk(BROWNMAIL)
+def is_officer_lurking() -> bool:
+    return random.random() < 0.08
+
+
+def calculate_bribe(game_state: GameState):
+    return min(game_state.player.lvl * 10, 50)
+
+
+@functional_component(state_dependent=True)
+def obey_officer(game_state: GameState):
+    if game_state.player.coins >= calculate_bribe(game_state):
+        game_state.player.coins -= calculate_bribe(game_state)
+        event_logger.log_event(OfficerEvent(EventType.OFFICER_PAID))
+    else:
+        disobey_officer(game_state).run()
+
+
+@functional_component(state_dependent=True)
+def disobey_officer(game_state: GameState):
+    player = game_state.player
+    OfficerHohkken(calculate_bribe(game_state)).handle_hit(player)
+    event_logger.log_event(OfficerEvent(EventType.OFFICER_UNPAID))
+
+@dataclass
+class PoliceBrutality(Weapon):
+    name: str = "Police Brutality"
+    damage: int = 0
+    uses: int = -1
+    accuracy: float = 1.0
+    spread: int = 0
+    crit: float = 0.0
+    cost: int = 0
+    sell_value: int = 0
+    type: str = SPECIAL
+    sound: str = ''
+
+class OfficerHohkken(Enemy):
+    def __init__(self, bribe: int):
+        self.name: str = 'Officer Hohkken'
+        self.hp: int = 100
+        self.current_weapon: Weapon = PoliceBrutality()
+        self.current_weapon.damage = random.randint(5, bribe)
+        self.random_dialogue = [] # TODO maybe add some here?
