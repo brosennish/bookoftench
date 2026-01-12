@@ -18,7 +18,7 @@ from .bank import Bank
 from .coffee_item import CoffeeItem
 from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
-from .events import TravelEvent, BountyCollectedEvent, CoffeeEvent, PlayerDeathEvent, TreatmentEvent
+from .events import TravelEvent, BountyCollectedEvent, PlayerDeathEvent, TreatmentEvent
 from .illness import Illness
 from .illnesses import Illnesses
 from .item import Item
@@ -116,14 +116,14 @@ class GameState:
         illness = player.illness
 
         if random.random() < illness.success_rate:
-            print_and_sleep(f"{cyan('I did it! You\'re healed! Mum would be so proud.')}\n", 2)
+            print_and_sleep(f"{cyan('I did it! You\'re healed! Mum will be so proud.')}\n", 2)
             player.illness = None
             player.illness_death_lvl = None
             event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_SUCCESS))
             return self
         else:
             print_and_sleep(blue(
-                f"Shit didn't take. You owe me {illness.cost} of coin. I also accept copper and Tenchcoin.\n\nYou into crypto?\n\n"),
+                f"Shit didn't take. You owe me {illness.cost} of coin. You into crypto?"),
                 2)
             event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_FAIL))
             return self
@@ -158,7 +158,7 @@ class GameState:
             print_and_sleep(yellow(f"Description: {illness.description}"), 2)
             print_and_sleep(
                 yellow(
-                    f"\nVisit the Free Range Children's Hospital for treatment "
+                    f"Visit the Free Range Children's Hospital for treatment "
                     f"or die at level {player.illness_death_lvl}.\n"
                 ),
                 3

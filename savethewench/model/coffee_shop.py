@@ -2,8 +2,7 @@ from dataclasses import dataclass, field
 from typing import List, TypeVar
 
 from savethewench.data.coffee_items import Coffee_Items
-from savethewench.data.perks import BARTER_SAUCE, TRADE_SHIP
-from .base import Buyable
+from savethewench.data.perks import BARTER_SAUCE, TRADE_SHIP, TENCH_GENES
 from .coffee_item import CoffeeItem
 from .perk import attach_perk
 
