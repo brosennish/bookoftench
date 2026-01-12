@@ -5,9 +5,11 @@ from dataclasses import dataclass
 from typing import List
 
 import savethewench.service.crypto_service as crypto_service
+from savethewench.audio import play_music
 from savethewench.component.base import Component
 from savethewench.component.registry import register_component
 from savethewench.curses_util import init_colors, c_print
+from savethewench.data.audio import CRYPTO_THEME
 from savethewench.data.components import CRYPTO_EXCHANGE
 from savethewench.model import GameState
 from savethewench.model.crypto import CryptoCurrency, Transaction, TransactionType
@@ -24,6 +26,9 @@ class CryptoExchange(Component):
         self.options_start = 4
         self.prompt_start = self.options_start + len(self.coins) + 4
         self.can_exit = False
+
+    def play_theme(self):
+        play_music(CRYPTO_THEME)
 
     def _add_return_option(self, stdscr, selection: int, line: int):
         c_print(stdscr, line, 0, '[R]', curses.COLOR_MAGENTA, highlight=self.selected == selection)
@@ -73,6 +78,7 @@ class CryptoExchange(Component):
 
     def c_run(self, stdscr):
         init_colors()
+        self.play_theme()
         while not self.can_exit:
             curses.curs_set(self.curs_set)
             curses.mousemask(0)
