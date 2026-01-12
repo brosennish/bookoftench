@@ -46,31 +46,15 @@ class WrapperType(Enum):
     FLOAT_CHANGE_BY_PERCENT = 5
     NONE = 6
 
-class WrapperIndices:
-    class ApTenchStudies:
-        BATTLE_XP: int = 0
-        OTHER_XP: int = 1
-
-    class GramblingAddict:
-        PLAYS: int = 0
-        PAYOUT: int = 1
-
-    class TenchGenes:
-        RISK: int = 0
-        SURVIVAL: int = 1
-
-
 
 Perks = [
     {
         'name': AP_TENCH_STUDIES,
         'cost': 260,
         'description': "+30% XP from battles and +1 XP from all other sources",
-        'wrappers': [
-            {'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT, 'wrapper_config': {'change': 30}},
-            {'wrapper_type': WrapperType.INT_CHANGE, 'wrapper_config': {'change': 1}}
-        ]
-
+        # note - this only works for battles
+        'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
+        'wrapper_config': {'change': 30}
     },
     {
         'name': KARATE_LESSONS,
@@ -221,11 +205,9 @@ Perks = [
         'name': GRAMBLING_ADDICT,
         'cost': 160,
         'description': 'Enjoy +5 plays and +5% payout at the casino',
-        'wrappers': [
-            {'wrapper_type': WrapperType.INT_CHANGE, 'wrapper_config': {'change': 5}},
-            {'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT, 'wrapper_config': {'change': 5}}
-        ]
-
+        # note - this only works for plays
+        'wrapper_type': WrapperType.INT_CHANGE,
+        'wrapper_config': {'change': 5}
     },
     {
         'name': VAMPIRIC_SPERM,
@@ -257,10 +239,8 @@ Perks = [
         'name': TENCH_GENES,
         'cost': 130,
         'description': "Illness risk -2% and survival chance +10%",
-        'wrappers': [
-            {'wrapper_type': WrapperType.PERCENT_CHANGE, 'wrapper_config': {'change': -2}},
-            {'wrapper_type': WrapperType.PERCENT_CHANGE, 'wrapper_config': {'change': 10}}
-        ]
+        'wrapper_type': WrapperType.PERCENT_CHANGE,
+        'wrapper_config': {'change': -2}
     },
     {
         'name': DEATH_CAN_WAIT,

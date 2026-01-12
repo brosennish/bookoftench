@@ -2,8 +2,10 @@ import random
 from dataclasses import dataclass
 
 from savethewench import event_logger
+from savethewench.audio import play_music
 from savethewench.component.base import functional_component, BinarySelectionComponent, ConditionalComponent
 from savethewench.component.registry import register_component
+from savethewench.data.audio import OFFICER_THEME
 from savethewench.data.components import OFFICER
 from savethewench.data.perks import BROWNMAIL
 from savethewench.data.weapons import SPECIAL
@@ -33,6 +35,9 @@ class OfficerEncounter(BinarySelectionComponent):
                          no_component=disobey_officer,
                          )
         self._display_greeting()
+
+    def play_theme(self):
+        play_music(OFFICER_THEME)
 
     @staticmethod
     def _display_greeting() -> None:

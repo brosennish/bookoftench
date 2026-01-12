@@ -6,7 +6,7 @@ from savethewench.event_base import EventType
 from savethewench.model.achievement import load_achievements
 from savethewench.model.base import Combatant
 from savethewench.model.enemy import Enemy
-from savethewench.model.perk import load_perks, perk_is_active, attach_perks
+from savethewench.model.perk import load_perks, attach_perk, perk_is_active
 from savethewench.model.player import Player
 from savethewench.ui import blue, cyan, green, orange, purple, red, yellow, dim
 from savethewench.util import print_and_sleep
@@ -39,13 +39,13 @@ def display_coffee_header(game_state: GameState) -> None:
 
 def display_hospital_header(game_state: GameState) -> None:
     player = game_state.player
-    print_and_sleep("Welcome to The Free Range Children's Hospital of Shebokken.")
+    print_and_sleep(f"{blue(f'Welcome to The Free Range Children\'s Hospital of Shebokken.')}", 2)
     print_and_sleep(f"{dim(' | ').join([
         f"Illness: {yellow(f"{player.illness.name}")}",
         f"Cost: {orange(f"{player.illness.cost}")}",
         f"Coins: {green(f"{player.coins}")}",
-        f"Chance of Success: {cyan(f"{int(player.illness.success_rate * 100)}%")}\n"
-    ])}")
+        ])}")
+    print_and_sleep(f"Chance of Success: {cyan(f'{int(player.illness.success_rate * 100)}%')}\n")
 
 
 def get_player_status_view(game_state: GameState) -> str:
@@ -69,7 +69,7 @@ def get_player_status_view(game_state: GameState) -> str:
 
     if game_state.player.illness:
         illness_status = (f"{dim(' | ').join([
-            f"\nIllness: {red(f"{game_state.player.illness.name}")}",
+            f"\nIllness: {yellow(f"{game_state.player.illness.name}")}",
             f"Death Level: {red(f"{game_state.player.illness_death_lvl}")}",
         ])}\n")
 
@@ -168,6 +168,6 @@ def display_active_perk_count():
     print_and_sleep(f"Perks {dim(f"({len(load_perks(lambda p: p.active))})")}")
 
 
-@attach_perks(USED_SNEAKERS, NEW_SNEAKERS, silent=True)
+@attach_perk(USED_SNEAKERS, NEW_SNEAKERS, silent=True)
 def calculate_flee() -> float:
     return 0.5
