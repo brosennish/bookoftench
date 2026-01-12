@@ -6,9 +6,9 @@ from typing import Callable
 from savethewench.audio import play_music, play_sound
 from savethewench.data.audio import GOLF_CLAP, CASINO_THEME
 from savethewench.data.components import CASINO
-from savethewench.data.perks import GRAMBLING_ADDICT
+from savethewench.data.perks import GRAMBLING_ADDICT, WrapperIndices
 from savethewench.model.game_state import GameState
-from savethewench.model.perk import perk_is_active
+from savethewench.model.perk import attach_perk
 from savethewench.ui import blue, cyan, green, orange, purple, yellow, dim
 from savethewench.util import print_and_sleep, safe_input
 from .bank import BankVisitDecision
@@ -126,15 +126,13 @@ class KrillOrKray(CasinoGame):
             print_and_sleep(yellow("Invalid choice."), 1)
 
     @staticmethod
+    @attach_perk(GRAMBLING_ADDICT, WrapperIndices.GramblingAddict.PAYOUT, value_description="payout")
     def get_payout(wager: int) -> int:
-        if perk_is_active(GRAMBLING_ADDICT):
-            print_and_sleep(purple("Payout increased 5% with Grambling Addict!"))
-            return int((wager * 1.05) * 0.9)
         return int(wager * 0.9)
 
     def play_round(self, wager) -> GameState:
         player = self.game_state.player
-        winner = random.choice(['k', 'c'])
+        winner = 'k'  # random.choice(['k', 'c'])
         pick = self.get_pick(wager)
         if pick == winner:
             payout = self.get_payout(wager)
@@ -170,19 +168,14 @@ Rules:
 3. Your payout increases by a higher percentage with each correct guess.
 4. If you're incorrect, you lose your wager and forfeit the payout.
 5. Play up to 4 rounds and cash out before you run dry.\n"""))
-        self.turn = 1
+        self.turn = 0
         self.ladder = [1.0, 1.5, 2.0, 2.8, 4.0]
         self.wager = 0
 
-    # TODO print to console when GRAMBLING ADDICT is used here (feels like just adding it here would print it too often)
-    def get_current_payout(self):
-        payout = self.wager * self.ladder[self.turn - 1]
-        return int(payout * 1.05) if perk_is_active(GRAMBLING_ADDICT) else int(payout)
-
-    def display_status(self):
+    def display_status(self) -> None:
         print_and_sleep(f"{dim(' | ').join([
-            f"Round: {cyan(self.turn)}", f"Wager: {green(self.wager)}",
-            f"Mult: {purple(self.ladder[self.turn])}", f"Payout: {green(self.get_current_payout())}"])}")
+            f"Round: {cyan(self.turn + 1)}", f"Wager: {green(self.wager)}",
+            f"Mult: {purple(self.ladder[self.turn])}", f"Payout: {green(self.get_payout())}"])}")
 
     @staticmethod
     def get_eval_function() -> Callable[[int, int], bool]:
@@ -207,9 +200,13 @@ Rules:
                 return choice == 'q'
 
     def get_wager_or_quit(self) -> int:
-        if self.turn == 1:
+        if self.turn == 0:
             self.wager = super().get_wager_or_quit()
         return self.wager
+
+    @attach_perk(GRAMBLING_ADDICT, WrapperIndices.GramblingAddict.PAYOUT, value_description='payout')
+    def get_payout(self) -> int:
+        return int(self.wager * self.ladder[self.turn])
 
     def play_round(self, wager: int) -> GameState:
         player = self.game_state.player
@@ -219,12 +216,10 @@ Rules:
         call_is_correct = self.get_eval_function()
         roll2 = roll_die()
         if call_is_correct(roll1, roll2):
-            payout = int(wager * self.ladder[self.turn])
+            self.turn += 1
+            payout = self.get_payout()
             print_and_sleep(blue(f"Lucky guess!\nPayout increased to {payout} coins.\n"))
             if self.turn == len(self.ladder) - 1 or self.should_cash_out():
-                if perk_is_active(GRAMBLING_ADDICT):
-                    print_and_sleep(purple("Payout increased 5% with Grambling Addict!\n"))
-                    payout *= 1.05
                 player.coins += payout
                 if self.turn == len(self.ladder):
                     print_and_sleep(f"{blue("You've completed the final round.")}\n")
@@ -240,7 +235,6 @@ Rules:
             player.coins -= wager
             player.casino_lost += wager
             self.turn = 0
-        self.turn += 1
         return self.game_state
 
 
