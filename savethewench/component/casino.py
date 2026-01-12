@@ -132,7 +132,7 @@ class KrillOrKray(CasinoGame):
 
     def play_round(self, wager) -> GameState:
         player = self.game_state.player
-        winner = 'k'  # random.choice(['k', 'c'])
+        winner = random.choice(['k', 'c'])
         pick = self.get_pick(wager)
         if pick == winner:
             payout = self.get_payout(wager)
