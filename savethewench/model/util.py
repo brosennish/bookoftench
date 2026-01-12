@@ -39,13 +39,13 @@ def display_coffee_header(game_state: GameState) -> None:
 
 def display_hospital_header(game_state: GameState) -> None:
     player = game_state.player
-    print_and_sleep("Welcome to The Free Range Children's Hospital of Shebokken.")
+    print_and_sleep(f"{blue(f'Welcome to The Free Range Children\'s Hospital of Shebokken.')}'")
     print_and_sleep(f"{dim(' | ').join([
         f"Illness: {yellow(f"{player.illness.name}")}",
         f"Cost: {orange(f"{player.illness.cost}")}",
         f"Coins: {green(f"{player.coins}")}",
-        f"Chance of Success: {cyan(f"{int(player.illness.success_rate * 100)}%")}\n"
-    ])}")
+        ])}")
+    print_and_sleep(f"Chance of Success: {cyan(f'{int(player.illness.success_rate * 100)}%')}\n")
 
 
 def get_player_status_view(game_state: GameState) -> str:

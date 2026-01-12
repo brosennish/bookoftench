@@ -10,7 +10,7 @@ from savethewench.data.illnesses import LATE_ONSET_SIDS
 from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
 from savethewench.event_logger import subscribe_function
 from savethewench.settings import Settings, set_settings
-from savethewench.ui import green, yellow, cyan, blue
+from savethewench.ui import green, yellow, cyan, blue, red
 from savethewench.util import print_and_sleep
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
@@ -116,14 +116,14 @@ class GameState:
         illness = player.illness
 
         if random.random() < illness.success_rate:
-            print_and_sleep(f"{cyan('I did it! You\'re healed! Mum will be so proud.')}\n", 2)
+            print_and_sleep(f"{cyan('Woah, I really didn\'t expect that to work.')}\n", 2)
             player.illness = None
             player.illness_death_lvl = None
             event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_SUCCESS))
             return self
         else:
             print_and_sleep(blue(
-                f"Shit didn't take. You owe me {illness.cost} of coin. You into crypto?"),
+                f"Shit didn't take. You owe me {illness.cost} of coin. Also - you into crypto?"),
                 2)
             event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_FAIL))
             return self
@@ -149,28 +149,27 @@ class GameState:
         illnesses = Illnesses()
         illness = random.choice(illnesses.all_illnesses)
 
-        if illness.name != LATE_ONSET_SIDS:
-            player.illness = illness
-            player.illness_death_lvl = player.lvl + illness.levels_until_death
+        if random.random() < item.risk:
+            if illness.name != LATE_ONSET_SIDS:
+                player.illness = illness
+                player.illness_death_lvl = player.lvl + illness.levels_until_death
 
-            print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're sicker than Hell."), 2)
-            print_and_sleep(yellow(f"Illness: {illness.name}"), 2)
-            print_and_sleep(yellow(f"Description: {illness.description}"), 2)
-            print_and_sleep(
-                yellow(
-                    f"Visit the Free Range Children's Hospital for treatment "
-                    f"or die at level {player.illness_death_lvl}.\n"
-                ),
-                3
-            )
-        else:
-            print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."),
-                            2)
-            print_and_sleep(yellow(f"Cause of Death: {illness.name}"), 2)
-            print_and_sleep(yellow(f"Description:\n{illness.description}"), 3)
-            player.hp = 0
-            player.lives -= 1
-            event_logger.log_event(PlayerDeathEvent(player.lives))
+                print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're sicker than Hell."), 2)
+                print_and_sleep(f"Illness: {yellow(f'{illness.name}')}", 2)
+                print_and_sleep(f"{yellow(f'{illness.description}')}", 2)
+                print_and_sleep(
+                        f"Visit the Free Range Children's Hospital for treatment "
+                        f"or die at level {red(f'{player.illness_death_lvl}')}\n",
+                    3
+                )
+            else:
+                print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."),
+                                2)
+                print_and_sleep(f"Cause of Death: {red(f'{illness.name}')}", 2)
+                print_and_sleep(f"{red(f'{illness.description}')}", 3)
+                player.hp = 0
+                player.lives -= 1
+                event_logger.log_event(PlayerDeathEvent(player.lives))
 
     def _subscribe_listeners(self):
         @subscribe_function(BountyCollectedEvent)
