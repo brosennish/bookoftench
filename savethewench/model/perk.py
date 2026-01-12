@@ -80,6 +80,10 @@ class NumericChangeConfig(WrapperConfig):
             case _:
                 raise NotImplementedError(f"{wrapper_type} not implemented")
 
+@dataclass
+class FunctionWrapper:
+    wrapper_type: WrapperType = WrapperType.NONE
+    wrapper_config: WrapperConfig = field(default_factory=WrapperConfig)
 
 @dataclass
 class Perk[T](Buyable):
@@ -87,8 +91,7 @@ class Perk[T](Buyable):
     cost: int
     description: str
     _active: bool = False  # value should not be changed from outside of class methods
-    wrapper_type: WrapperType = WrapperType.NONE
-    wrapper_config: WrapperConfig = field(default_factory=WrapperConfig)
+    wrappers: List[FunctionWrapper] = field(default_factory=list)
 
     @property
     def active(self):
@@ -98,8 +101,11 @@ class Perk[T](Buyable):
         print_and_sleep(purple(f"{self.name} added to perks."), 1)
         self._active = True
 
-    def get_wrapper(self) -> Callable[[T, str, bool], T]:
-        return self.wrapper_config.to_wrapper(self.name, self.wrapper_type)
+    def get_wrapper(self, index: int) -> Callable[[T, str, bool], T]:
+        if index >= len(self.wrappers):
+            raise IndexError(f"{self.name} has no wrapper with index {index}.")
+        wrapper = self.wrappers[index]
+        return wrapper.wrapper_config.to_wrapper(self.name, wrapper.wrapper_type)
 
     def __repr__(self):
         return dim(' | ').join([
@@ -136,7 +142,16 @@ def load_perks(perk_filter: Callable[[Perk], bool] = lambda _: True) -> List[Per
         data = copy.deepcopy(d)
         name = data['name']
         if name not in _PERKS:
-            data['wrapper_config'] = map_wrapper_config(data)
+            if 'wrapper_type' in data and 'wrapper_config' in data:
+                data['wrappers'] = [{'wrapper_type': data['wrapper_type'], 'wrapper_config': data['wrapper_config']}]
+                del data['wrapper_type']
+                del data['wrapper_config']
+            if 'wrappers' in data:
+                wrappers = []
+                for wrapper_data in data['wrappers']:
+                    wrapper_data['wrapper_config'] = map_wrapper_config(wrapper_data)
+                    wrappers.append(FunctionWrapper(**wrapper_data))
+                data['wrappers'] = wrappers
             _PERKS[name] = Perk(**data)
         perk = _PERKS[name]
         if perk_filter(perk):
@@ -158,23 +173,24 @@ def perk_is_active(perk_name: str) -> bool:
     return load_perk(perk_name).active
 
 
-def attach_perk_conditional(*perks: str, value_description: str = "",
-                            silent: bool = False, condition: Callable[[], bool]):
-    perk_impls = load_perks(lambda p: p.name in set(perks))
+def attach_perk(perk: str, wrapper_idx: int = 0, value_description: str = "", silent: bool = False,
+                condition: Callable[[], bool] = lambda: True) -> Callable[[T], T]:
+    perk_impl = load_perk(perk)
 
     def decorator(func):
         def wrapper(*args, **kwargs):
             value = func(*args, **kwargs)
-            for perk in perk_impls:
-                if perk_is_active(perk.name) and condition():
-                    value = perk.get_wrapper()(value, value_description, silent)
+            if perk_is_active(perk_impl.name) and condition():
+                value = perk_impl.get_wrapper(wrapper_idx)(value, value_description, silent)
             return value
 
         return wrapper
 
     return decorator
 
-
-def attach_perk(*perks: str, value_description: str = "", silent: bool = False):
-    return attach_perk_conditional(*perks, value_description=value_description,
-                                   silent=silent, condition=lambda: True)
+def attach_perks(*perks: str, value_description: str = "", silent: bool = False,
+                 condition: Callable[[], bool] = lambda: True) -> Callable[[T], T]:
+    fn = lambda x: x
+    for perk_name in perks:
+        fn = attach_perk(perk_name, value_description=value_description, silent=silent, condition=condition)(fn)
+    return fn

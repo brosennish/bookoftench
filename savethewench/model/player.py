@@ -8,7 +8,8 @@ from savethewench.data.audio import RIFLE
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
-    ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM, TENCH_GENES
+    ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM, TENCH_GENES, \
+    WrapperIndices
 from savethewench.data.weapons import BARE_HANDS, KNIFE, MELEE, PROJECTILE, MACHETE, FIRE_AXE, AXE
 from savethewench.event_logger import subscribe_function
 from savethewench.model.illness import Illness
@@ -18,7 +19,7 @@ from .base import Combatant, Buyable
 from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent, LevelUpEvent, \
     SwapWeaponEvent, WeaponBrokeEvent, HitEvent, PlayerDeathEvent
 from .item import Item, load_items
-from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perk_conditional, load_perks
+from .perk import attach_perk, perk_is_active, Perk, activate_perk, load_perks, attach_perks
 from .weapon import load_weapons, Weapon
 
 
@@ -31,11 +32,11 @@ class PlayerWeapon(Weapon):
     def calculate_base_damage(self) -> int:
         base_damage = self.calculate_base_damage_no_perk()
 
-        @attach_perk_conditional(ROSETTI_THE_GYM_RAT, value_description="melee damage",
+        @attach_perk(ROSETTI_THE_GYM_RAT, value_description="melee damage",
                                  condition=lambda: self.type == MELEE)
-        @attach_perk_conditional(AMBROSE_BLADE, value_description="blade damage",
+        @attach_perk(AMBROSE_BLADE, value_description="blade damage",
                                  condition=lambda: self._is_bladed())
-        @attach_perk_conditional(KARATE_LESSONS, MARTIAL_ARTS_TRAINING, value_description="bare hands damage",
+        @attach_perks(KARATE_LESSONS, MARTIAL_ARTS_TRAINING, value_description="bare hands damage",
                                  condition=lambda: self.name == BARE_HANDS)
         def apply_perks():
             return base_damage
@@ -43,7 +44,7 @@ class PlayerWeapon(Weapon):
         return int(apply_perks())
 
     def get_accuracy(self) -> float:
-        @attach_perk_conditional(TENCH_EYES, value_description="projectile accuracy",
+        @attach_perk(TENCH_EYES, value_description="projectile accuracy",
                                  condition=lambda: self.type == PROJECTILE)
         def apply_perks():
             return self.accuracy
@@ -97,17 +98,18 @@ class Player(Combatant):
         self._subscribe_listeners()
 
     @property
-    @attach_perk(GRAMBLIN_MAN, GRAMBLING_ADDICT, silent=True)
+    @attach_perk(GRAMBLIN_MAN, silent=True)
+    @attach_perk(GRAMBLING_ADDICT, WrapperIndices.GramblingAddict.PLAYS, silent=True)
     def max_plays(self):
         return self._max_plays
 
     @property
-    @attach_perk(NOMADS_LAND, VAGABONDAGE, silent=True)
+    @attach_perks(NOMADS_LAND, VAGABONDAGE, silent=True)
     def max_items(self):
         return self._max_items
 
     @property
-    @attach_perk(NOMADS_LAND, VAGABONDAGE, silent=True)
+    @attach_perks(NOMADS_LAND, VAGABONDAGE, silent=True)
     def max_weapons(self):
         return self._max_weapons
 
@@ -150,7 +152,7 @@ class Player(Combatant):
             self.items[item.name] = item
             return True
 
-    @attach_perk(HEALTH_NUT, DOCTOR_FISH, value_description="hp gained")
+    @attach_perks(HEALTH_NUT, DOCTOR_FISH, value_description="hp gained")
     def _apply_hp_bonus(self, base: int) -> int:
         return base
 
@@ -264,7 +266,8 @@ class Player(Combatant):
         print_and_sleep(green(f"You gained {amount} coins!"), 1)
 
     @staticmethod
-    @attach_perk(AP_TENCH_STUDIES, INTRO_TO_TENCH, value_description="xp gained")
+    @attach_perk(INTRO_TO_TENCH, value_description="xp gained")
+    @attach_perk(AP_TENCH_STUDIES, WrapperIndices.ApTenchStudies.BATTLE_XP, value_description="xp gained")
     def _calculate_xp_from_enemy(enemy: Combatant) -> int:
         return int(enemy.max_hp / 2.8)
 
@@ -272,8 +275,13 @@ class Player(Combatant):
         amount = self._calculate_xp_from_enemy(enemy)
         return self._gain_xp(amount)
 
+    @attach_perk(AP_TENCH_STUDIES, WrapperIndices.ApTenchStudies.OTHER_XP, value_description="xp gained")
+    def _calculate_xp_other(self, amount: int) -> int:
+        return amount
+
     def gain_xp_other(self, amount: int) -> bool:
-        return self._gain_xp(amount + 1) if perk_is_active(AP_TENCH_STUDIES) else self._gain_xp(amount)
+        amount = self._calculate_xp_other(amount)
+        return self._gain_xp(amount)
 
     def _gain_xp(self, amount: int) -> bool:
         self.xp += amount
@@ -288,10 +296,9 @@ class Player(Combatant):
 
         return leveled_up
 
-    @property
-    def has_tench_genes(self) -> bool:
-        has_tench_genes = any(p.name for p in load_perks() if p.active and p.name == TENCH_GENES)
-        return has_tench_genes
+    @attach_perk(TENCH_GENES, WrapperIndices.TenchGenes.SURVIVAL, value_description="illness survival chance")
+    def get_illness_survival_probability(self) -> float:
+        return 0.0
 
     def level_up(self):
         # ---- core level-up effects live here ----
@@ -318,7 +325,7 @@ class Player(Combatant):
 
         # check for illness death level match
         if self.lvl == self.illness_death_lvl:
-            if self.has_tench_genes and random.random() < 0.10:
+            if random.random() < self.get_illness_survival_probability():
                 self.illness_death_lvl += 1
                 print_and_sleep(purple("You survived death with Tench Genes!"), 1)
                 print_and_sleep(f"New Death Level: {red(f'{str(self.illness_death_lvl)}')}", 1)

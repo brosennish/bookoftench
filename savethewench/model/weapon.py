@@ -6,7 +6,7 @@ from savethewench.data import Weapons
 from savethewench.data.perks import BULLETPROOF
 from savethewench.data.weapons import PISTOL, REVOLVER, RIFLE, SHOTGUN
 from savethewench.model.base import WeaponBase, Buyable
-from savethewench.model.perk import attach_perk_conditional
+from savethewench.model.perk import attach_perk
 
 from savethewench.ui import dim, cyan, orange, red, yellow
 
@@ -35,7 +35,7 @@ class Weapon(WeaponBase, Buyable):
 
     def calculate_base_damage(self) -> int:
         base_damage = self.calculate_base_damage_no_perk()
-        @attach_perk_conditional(BULLETPROOF, value_description="enemy bullet damage",
+        @attach_perk(BULLETPROOF, value_description="enemy bullet damage",
                                  condition=lambda: self._is_gun())
         def apply_perks():
             return base_damage
