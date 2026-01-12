@@ -5,11 +5,11 @@ from dataclasses import dataclass
 from typing import List
 
 import savethewench.service.crypto_service as crypto_service
-from savethewench.audio import play_music
+from savethewench.audio import play_music, play_sound
 from savethewench.component.base import Component
 from savethewench.component.registry import register_component
 from savethewench.curses_util import init_colors, c_print
-from savethewench.data.audio import CRYPTO_THEME
+from savethewench.data.audio import CRYPTO_THEME, PURCHASE
 from savethewench.data.components import CRYPTO_EXCHANGE
 from savethewench.model import GameState
 from savethewench.model.crypto import CryptoCurrency, Transaction, TransactionType
@@ -200,6 +200,7 @@ class QuantitySelector(CryptoExchangeExtension, ABC):
         elif ch in (curses.KEY_ENTER, 10, 13) and len(self.user_input) > 0:
             quantity = int(self.user_input)
             if quantity <= self.get_max_quantity():
+                play_sound(PURCHASE)
                 self.handle_quantity(quantity)
                 self.can_exit = True
                 self.coin.unfreeze()
