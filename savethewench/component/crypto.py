@@ -181,6 +181,9 @@ class CoinActionSelector(CryptoExchangeExtension):
             elif self.sub_selection == 2 and self.coin.quantity_owned > 0:
                 self.can_exit = False
                 TransactionHistoryDisplay(self.game_state, self.coin).c_run(stdscr)
+            else: # player selected Return
+                if not self.coin.ipo:
+                    self.coin.unfreeze()
         elif ch == curses.KEY_UP:
             self.sub_selection -= 1
             if self.sub_selection < 0:
