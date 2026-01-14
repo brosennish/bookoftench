@@ -1,8 +1,8 @@
 import curses
 import time
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from typing import List
+from dataclasses import dataclass
+from typing import List, Optional, TypeAlias
 
 import savethewench.service.crypto_service as crypto_service
 from savethewench.component.base import Component
@@ -12,20 +12,6 @@ from savethewench.data.components import CRYPTO_EXCHANGE
 from savethewench.model import GameState
 from savethewench.model.crypto import CryptoCurrency, TransactionType
 
-@dataclass
-class Displayable:
-    line: int
-    offset: int
-    text: str
-    color: int
-    underline: bool
-    bold: bool
-    highlight: bool
-    dim: bool
-
-    def add_to_screen(self, stdscr):
-        c_print(stdscr, self.line, self.offset, self.text, color=self.color, highlight=self.highlight,
-                underline=self.underline, bold=self.bold, dim=self.dim)
 
 @dataclass
 class LinePart:
@@ -41,21 +27,20 @@ class LinePart:
         c_print(stdscr, line, offset, self.text, self.color,
                 underline=self.underline, highlight=self.highlight, bold=self.bold, dim=self.dim)
 
-    def to_displayable(self, line_number: int) -> Displayable:
-        return Displayable(line_number, self.offset, self.text, self.color, self.underline, self.bold, self.highlight, self.dim)
-
 @dataclass
 class Line:
     parts: List[LinePart]
     line_number: int = 0
 
-    def to_displayables(self):
-        return [Displayable(self.line_number, p.offset, p.text, p.color, p.underline, p.bold, p.highlight, p.dim) for p in self.parts]
+    def add_to_screen(self, stdscr):
+        for part in self.parts:
+            c_print(stdscr, self.line_number, offset=part.offset, text=part.text, color=part.color,
+                    highlight=part.highlight, underline=part.underline, bold=part.bold, dim=part.dim)
+
 
 class SimpleWindow:
     def __init__(self, stdscr):
         self.stdscr = stdscr
-        self.displayables: List[Displayable] = []
         self._current_line = 0
         self._lines = []
 
@@ -70,11 +55,8 @@ class SimpleWindow:
     def flush(self):
         self.stdscr.clear()
         for line in self._lines:
-            self.displayables.extend(line.to_displayables())
-        for displayable in self.displayables:
-            displayable.add_to_screen(self.stdscr)
+            line.add_to_screen(self.stdscr)
         self.stdscr.refresh()
-        self.displayables.clear()
         self._lines.clear()
         self._current_line = 0
 
