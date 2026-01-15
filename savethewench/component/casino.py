@@ -6,9 +6,9 @@ from typing import Callable
 from savethewench.audio import play_music, play_sound
 from savethewench.data.audio import GOLF_CLAP, CASINO_THEME
 from savethewench.data.components import CASINO
-from savethewench.data.perks import GRAMBLING_ADDICT
+from savethewench.data.perks import GRAMBLING_ADDICT, WrapperIndices
 from savethewench.model.game_state import GameState
-from savethewench.model.perk import perk_is_active
+from savethewench.model.perk import attach_perk
 from savethewench.ui import blue, cyan, green, orange, purple, yellow, dim, red
 from savethewench.util import print_and_sleep, safe_input
 from .bank import BankVisitDecision
@@ -24,6 +24,7 @@ class CasinoBouncer(GatekeepingComponent):
                          accept_component=CasinoCheck,
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("Your paper's no good here.\nCome back with some coins.\n"), 1.5)))
+
 
 # --- Casino entry / gatekeeping ---
 
@@ -46,6 +47,7 @@ class CasinoCheck(GatekeepingComponent):
                          decision_function=partial(can_gamble, game_state), accept_component=Casino,
                          deny_component=display_crapped_out_message)
 
+
 # --- Casino menu ---
 
 class Casino(LabeledSelectionComponent):
@@ -67,6 +69,7 @@ class Casino(LabeledSelectionComponent):
 
     def play_theme(self):
         play_music(CASINO_THEME)
+
 
 # --- Base game class ---
 
@@ -114,6 +117,7 @@ class CasinoGame(Component):
             self.game_state = display_crapped_out_message(self.game_state).run()
         return self.game_state
 
+
 # --- Krill or Cray ---
 
 class KrillOrCray(CasinoGame):
@@ -130,10 +134,8 @@ class KrillOrCray(CasinoGame):
             print_and_sleep(yellow("Invalid choice."), 1)
 
     @staticmethod
+    @attach_perk(GRAMBLING_ADDICT, WrapperIndices.GramblingAddict.PAYOUT, value_description="payout")
     def get_payout(wager: int) -> int:
-        if perk_is_active(GRAMBLING_ADDICT):
-            print_and_sleep(purple("Payout increased 5% with Grambling Addict!"))
-            return int((wager * 1.05) * 0.9)
         return int(wager * 0.9)
 
     def play_round(self, wager) -> GameState:
@@ -156,11 +158,13 @@ class KrillOrCray(CasinoGame):
         player.games_played += 1
         return self.game_state
 
+
 def roll_die() -> int:
     roll = random.randint(1, 6)
     safe_input("[ ] Roll the die")
     print_and_sleep(cyan(f"You rolled a {roll}."))
     return roll
+
 
 # --- Above or Below rules ---
 
@@ -174,6 +178,7 @@ class AboveOrBelowRules(TextDisplayingComponent):
 4. A wrong guess ends the game and forfeits your wager.
 5. You may play up to four rounds or cash out at any time.\n"""))
 
+
 class AboveOrBelowRulesDecision(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
@@ -181,24 +186,20 @@ class AboveOrBelowRulesDecision(BinarySelectionComponent):
                          yes_component=AboveOrBelowRules,
                          no_component=AboveOrBelow)
 
+
 # --- Above or Below ---
 
 class AboveOrBelow(CasinoGame):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, game_description=blue("Welcome to Above or Below!"))
-        self.turn = 1
+        self.turn = 0
         self.ladder = [1.0, 1.5, 2.0, 2.8, 4.0]
         self.wager = 0
 
-    # TODO print to console when GRAMBLING ADDICT is used here (feels like just adding it here would print it too often)
-    def get_current_payout(self):
-        payout = int(self.wager * self.ladder[self.turn - 1])
-        return int(payout * 1.05) if perk_is_active(GRAMBLING_ADDICT) else int(payout)
-
-    def display_status(self):
+    def display_status(self) -> None:
         print_and_sleep(f"{dim(' | ').join([
-            f"Round: {cyan(self.turn)}", f"Wager: {green(self.wager)}",
-            f"Mult: {purple(self.ladder[self.turn - 1])}", f"Payout: {green(self.get_current_payout())}"])}")
+            f"Round: {cyan(self.turn + 1)}", f"Wager: {green(self.wager)}",
+            f"Mult: {purple(self.ladder[self.turn])}", f"Payout: {green(self.get_payout())}"])}")
 
     @staticmethod
     def get_eval_function() -> Callable[[int, int], bool]:
@@ -223,9 +224,13 @@ class AboveOrBelow(CasinoGame):
                 return choice == 'q'
 
     def get_wager_or_quit(self) -> int:
-        if self.turn == 1:
+        if self.turn == 0:
             self.wager = super().get_wager_or_quit()
         return self.wager
+
+    @attach_perk(GRAMBLING_ADDICT, WrapperIndices.GramblingAddict.PAYOUT, value_description='payout')
+    def get_payout(self) -> int:
+        return int(self.wager * self.ladder[self.turn])
 
     def play_round(self, wager: int) -> GameState:
         player = self.game_state.player
@@ -235,12 +240,10 @@ class AboveOrBelow(CasinoGame):
         call_is_correct = self.get_eval_function()
         roll2 = roll_die()
         if call_is_correct(roll1, roll2):
-            payout = int(wager * self.ladder[self.turn])
-            print_and_sleep(green(f"Lucky guess!\nPayout increased to {payout} coins."))
+            self.turn += 1
+            payout = self.get_payout()
+            print_and_sleep(blue(f"Lucky guess!\nPayout increased to {payout} coins.\n"))
             if self.turn == len(self.ladder) - 1 or self.should_cash_out():
-                if perk_is_active(GRAMBLING_ADDICT):
-                    print_and_sleep(purple("Payout increased 5% with Grambling Addict!"))
-                    payout *= 1.05
                 player.coins += payout
                 if self.turn == len(self.ladder):
                     print_and_sleep(f"{blue("You completed the final round.")}")
@@ -256,7 +259,6 @@ class AboveOrBelow(CasinoGame):
             player.coins -= wager
             player.casino_lost += wager
             self.turn = 0
-        self.turn += 1
         return self.game_state
 
 

@@ -2,9 +2,9 @@ from dataclasses import dataclass, field
 from typing import List, TypeVar
 
 from savethewench.data.coffee_items import Coffee_Items
-from savethewench.data.perks import BARTER_SAUCE, TRADE_SHIP, TENCH_GENES
+from savethewench.data.perks import BARTER_SAUCE, TRADE_SHIP, TENCH_GENES, WrapperIndices
 from .coffee_item import CoffeeItem
-from .perk import attach_perk
+from .perk import attach_perk, attach_perks
 
 
 @dataclass
@@ -21,11 +21,11 @@ class CoffeeShop: # class creation
             for item_dict in Coffee_Items
         ]
 
-    @attach_perk(BARTER_SAUCE, TRADE_SHIP, silent=True) # apply perks to cost if owned
+    @attach_perks(BARTER_SAUCE, TRADE_SHIP, silent=True) # apply perks to cost if owned
     def _discounted_cost(self, cost):
         return cost
 
-    @attach_perk(TENCH_GENES, silent=True)  # apply perks to cost if owned
+    @attach_perk(TENCH_GENES, WrapperIndices.TenchGenes.RISK, silent=True)  # apply perks to cost if owned
     def _discounted_risk(self, risk):
         return risk
 

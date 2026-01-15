@@ -6,7 +6,7 @@ from savethewench.event_base import EventType
 from savethewench.model.achievement import load_achievements
 from savethewench.model.base import Combatant
 from savethewench.model.enemy import Enemy
-from savethewench.model.perk import load_perks, attach_perk, perk_is_active
+from savethewench.model.perk import load_perks, perk_is_active, attach_perks
 from savethewench.model.player import Player
 from savethewench.ui import blue, cyan, green, orange, purple, red, yellow, dim
 from savethewench.util import print_and_sleep
@@ -168,6 +168,6 @@ def display_active_perk_count():
     print_and_sleep(f"Perks {dim(f"({len(load_perks(lambda p: p.active))})")}")
 
 
-@attach_perk(USED_SNEAKERS, NEW_SNEAKERS, silent=True)
+@attach_perks(USED_SNEAKERS, NEW_SNEAKERS, silent=True)
 def calculate_flee() -> float:
     return 0.5
