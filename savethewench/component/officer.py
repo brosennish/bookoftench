@@ -2,8 +2,10 @@ import random
 from dataclasses import dataclass
 
 from savethewench import event_logger
+from savethewench.audio import play_music, play_sound
 from savethewench.component.base import functional_component, BinarySelectionComponent, ConditionalComponent
 from savethewench.component.registry import register_component
+from savethewench.data.audio import OFFICER_THEME, BLUNT
 from savethewench.data.components import OFFICER
 from savethewench.data.perks import BROWNMAIL
 from savethewench.data.weapons import SPECIAL
@@ -32,7 +34,10 @@ class OfficerEncounter(BinarySelectionComponent):
                          yes_component=obey_officer,
                          no_component=disobey_officer,
                          )
-        self._display_greeting()
+        self.greeting_displayed = False
+
+    def play_theme(self):
+        play_music(OFFICER_THEME)
 
     @staticmethod
     def _display_greeting() -> None:
@@ -53,6 +58,9 @@ class OfficerEncounter(BinarySelectionComponent):
         ]))
 
     def display_options(self):
+        if not self.greeting_displayed:
+            self._display_greeting()
+            self.greeting_displayed = True
         self._display_header()
         super().display_options()
 
@@ -92,7 +100,10 @@ class PoliceBrutality(Weapon):
     cost: int = 0
     sell_value: int = 0
     type: str = SPECIAL
-    sound: str = ''
+    sound: str = BLUNT
+
+    def use(self) -> None:
+        play_sound(self.sound)
 
 class OfficerHohkken(Enemy):
     def __init__(self, bribe: int):

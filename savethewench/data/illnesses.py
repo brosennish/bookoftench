@@ -10,7 +10,7 @@ INWARD_HAIR_GROWTH_DISORDER = "Inward Hair Growth Disorder"
 All_Illnesses = [
     # --- Instant Death ---
     {'name': LATE_ONSET_SIDS,
-     'description': "Sudden infant death syndrome occurring after infancy.",
+     'description': "Sudden infant death syndrome that occurs after infancy.",
      'levels_until_death': 0,
      'cost': 0,
      'success_rate': 0},

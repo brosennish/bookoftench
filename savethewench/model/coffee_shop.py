@@ -3,7 +3,6 @@ from typing import List, TypeVar
 
 from savethewench.data.coffee_items import Coffee_Items
 from savethewench.data.perks import BARTER_SAUCE, TRADE_SHIP, TENCH_GENES, WrapperIndices
-from .base import Buyable
 from .coffee_item import CoffeeItem
 from .perk import attach_perk, attach_perks
 

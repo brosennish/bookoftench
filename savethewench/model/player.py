@@ -21,6 +21,7 @@ from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, 
 from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk, load_perks, attach_perks
 from .weapon import load_weapons, Weapon
+from ..data.illnesses import PHANTOM_HIM_SYNDROME
 
 
 @dataclass
