@@ -23,7 +23,6 @@ from savethewench.model.util import get_battle_status_view, display_player_achie
 from savethewench.model.weapon import load_discoverable_weapons
 from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
 from savethewench.util import print_and_sleep
-from .bank import BankVisitDecision
 from .base import LabeledSelectionComponent, SelectionBinding
 from .encounters import PostKillEncounters
 from .registry import register_component, get_registered_component
@@ -228,8 +227,7 @@ class Attack(Component):
         if enemy_weapon is not None:
             player.obtain_enemy_weapon(enemy_weapon)
         player.gain_coins(enemy.drop_coins())
-        if player.gain_xp_from_enemy(enemy):
-            BankVisitDecision(self.game_state).run()  # TODO figure out a way to not call this in so many places
+        player.gain_xp_from_enemy(enemy)
         event_logger.log_event(KillEvent())
         self.game_state.current_area.kill_current_enemy()
         PostKillEncounters(self.game_state).run()
@@ -275,8 +273,7 @@ class TryFlee(RandomChoiceComponent):
     @functional_component(state_dependent=True)
     def _flee_success(game_state: GameState):
         event_logger.log_event(FleeEvent(game_state.current_area.current_enemy.name))
-        if game_state.player.gain_xp_other(1):
-            BankVisitDecision(game_state).run()  # TODO figure out a way to not call this in so many places
+        game_state.player.gain_xp_other(1)
 
 
 @register_component(SPAWN_ENEMY)

@@ -8,6 +8,7 @@ from typing import Callable
 
 class EventType(Enum):
     ACHIEVEMENT_UNLOCKED = "achievement_unlocked"
+    BANK_VISIT_DECISION_TRIGGER = "bank_visit_decision_trigger"
     BOUNTY_COLLECTED = "bounty_collected"
     BUY_ITEM = "buy_item"
     BUY_PERK = "buy_perk"

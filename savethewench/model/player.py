@@ -19,9 +19,8 @@ from .base import Combatant, Buyable
 from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent, LevelUpEvent, \
     SwapWeaponEvent, WeaponBrokeEvent, HitEvent, PlayerDeathEvent
 from .item import Item, load_items
-from .perk import attach_perk, perk_is_active, Perk, activate_perk, load_perks, attach_perks
+from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
 from .weapon import load_weapons, Weapon
-from ..data.illnesses import PHANTOM_HIM_SYNDROME
 
 
 @dataclass
@@ -272,30 +271,25 @@ class Player(Combatant):
     def _calculate_xp_from_enemy(enemy: Combatant) -> int:
         return int(enemy.max_hp / 2.8)
 
-    def gain_xp_from_enemy(self, enemy: Combatant) -> bool:
+    def gain_xp_from_enemy(self, enemy: Combatant):
         amount = self._calculate_xp_from_enemy(enemy)
-        return self._gain_xp(amount)
+        self._gain_xp(amount)
 
     @attach_perk(AP_TENCH_STUDIES, WrapperIndices.ApTenchStudies.OTHER_XP, value_description="xp gained")
     def _calculate_xp_other(self, amount: int) -> int:
         return amount
 
-    def gain_xp_other(self, amount: int) -> bool:
+    def gain_xp_other(self, amount: int):
         amount = self._calculate_xp_other(amount)
-        return self._gain_xp(amount)
+        self._gain_xp(amount)
 
-    def _gain_xp(self, amount: int) -> bool:
+    def _gain_xp(self, amount: int):
         self.xp += amount
         print_and_sleep(green(f"You gained {amount} XP!"), 1)
-
-        leveled_up = False
 
         # handles cases where a big XP chunk might give multiple levels
         while self.xp >= self.xp_needed:
             self.level_up()
-            leveled_up = True
-
-        return leveled_up
 
     @attach_perk(TENCH_GENES, WrapperIndices.TenchGenes.SURVIVAL, value_description="illness survival chance")
     def get_illness_survival_probability(self) -> float:
