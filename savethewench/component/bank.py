@@ -6,7 +6,9 @@ from savethewench.component.base import LabeledSelectionComponent, SelectionBind
 from savethewench.component.registry import register_component
 from savethewench.data.audio import BANK_THEME
 from savethewench.data.components import BANK
-from savethewench.model import GameState
+from savethewench.event_base import Listener
+from savethewench.event_logger import subscribe_listener
+from savethewench.model.game_state import GameState, BankVisitDecisionTriggerEvent
 from savethewench.model.util import display_bank_balance
 from savethewench.ui import blue, yellow
 from savethewench.util import print_and_sleep, safe_input
@@ -93,3 +95,10 @@ class BankVisitDecision(BinarySelectionComponent):
 class WithdrawalOnlyBank(BankComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, allow_deposit=False)
+
+
+@subscribe_listener(BankVisitDecisionTriggerEvent)
+class BankVisitDecisionListener(Listener):
+    @staticmethod
+    def handle_event(event: BankVisitDecisionTriggerEvent) -> None:
+        BankVisitDecision(event.game_state).run()

@@ -8,6 +8,7 @@ from savethewench import event_logger
 from savethewench.audio import play_music
 from savethewench.data.illnesses import LATE_ONSET_SIDS
 from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
+from savethewench.event_base import EventType, Event
 from savethewench.event_logger import subscribe_function
 from savethewench.settings import Settings, set_settings
 from savethewench.ui import green, yellow, cyan, blue, red
@@ -18,7 +19,7 @@ from .bank import Bank
 from .coffee_item import CoffeeItem
 from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
-from .events import TravelEvent, BountyCollectedEvent, PlayerDeathEvent, TreatmentEvent
+from .events import TravelEvent, BountyCollectedEvent, PlayerDeathEvent, TreatmentEvent, LevelUpEvent
 from .illness import Illness
 from .illnesses import Illnesses
 from .item import Item
@@ -26,7 +27,6 @@ from .perk import attach_perk, Perk, set_perk_cache
 from .player import Player
 from .shop import Shop
 from .weapon import Weapon
-from ..event_base import EventType
 
 
 @dataclass
@@ -158,8 +158,8 @@ class GameState:
                 print_and_sleep(f"Illness: {yellow(f'{illness.name}')}", 2)
                 print_and_sleep(f"{yellow(f'{illness.description}')}", 2)
                 print_and_sleep(
-                        f"Visit the Free Range Children's Hospital for treatment "
-                        f"or die at level {red(f'{player.illness_death_lvl}')}\n",
+                    f"Visit the Free Range Children's Hospital for treatment "
+                    f"or die at level {red(f'{player.illness_death_lvl}')}\n",
                     3
                 )
             else:
@@ -182,6 +182,10 @@ class GameState:
         def handle_achievement_event(event: AchievementEvent):
             event.activate(self.player)
 
+        @subscribe_function(LevelUpEvent)
+        def trigger_bank_visit_decision(_: LevelUpEvent):
+            event_logger.log_event(BankVisitDecisionTriggerEvent(self))
+
     def is_final_boss_available(self) -> bool:
         return self.current_area.boss_defeated and (self.wench_area == self.current_area) and not self.victory
 
@@ -192,3 +196,9 @@ class GameState:
     def __setstate__(self, state):
         self.__dict__.update(state)
         self.__post_init__()
+
+
+class BankVisitDecisionTriggerEvent(Event):
+    def __init__(self, game_state: GameState):
+        super().__init__(EventType.BANK_VISIT_DECISION_TRIGGER)
+        self.game_state = game_state
