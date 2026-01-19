@@ -171,3 +171,18 @@ class OfficerEvent(Event):
 
     def unpaid(self) -> None:
         print_and_sleep("") # TODO funny dialogue
+
+
+class CoinDelistedEvent(Event):
+    def __init__(self, coin_name: str, seconds_to_delist: int):
+        super().__init__(EventType.COIN_DELISTED, callback=lambda: print_and_sleep(
+            f"{cyan(f"{coin_name}'s")} price has hit {red(0)} and will be delisted in {seconds_to_delist} seconds.",
+            2))
+
+
+class CoinListedEvent(Event):
+    def __init__(self, coin_name: str, initial_price: float):
+        super().__init__(EventType.COIN_LISTED, callback=lambda: print_and_sleep(
+            f"A new cryptocurrency has been born! {coin_name} is now available at the initial price of "
+            f"{green(f"{initial_price:.2f}")} of coin.",
+            2))

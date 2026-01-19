@@ -16,6 +16,8 @@ class EventType(Enum):
     COFFEE_EVENT = "coffee_event"
     COFFEE_SAFE = "coffee_safe"
     COFFEE_SICK = "coffee_sick"
+    COIN_DELISTED = "coin_delisted"
+    COIN_LISTED = "coin_listed"
     CRIT = "crit"
     DEPOSIT = "deposit"
     FAILED_FLEE = "failed_flee"
