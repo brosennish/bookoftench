@@ -8,7 +8,7 @@ from savethewench.event_logger import subscribe_function
 from .base import Buyable
 from .events import LevelUpEvent, PlayerDeathEvent
 from .item import Item, load_items
-from .perk import Perk, load_perks, attach_perk
+from .perk import Perk, load_perks, attach_perk, attach_perks
 from .weapon import Weapon, load_discoverable_weapons
 
 # TODO maybe read these from config
@@ -81,7 +81,7 @@ class Shop:
         self.reset_inventory()
         self._subscribe_listeners()
 
-    @attach_perk(BARTER_SAUCE, TRADE_SHIP, silent=True)
+    @attach_perks(BARTER_SAUCE, TRADE_SHIP, silent=True)
     def _discounted_cost(self, cost):
         return cost
 

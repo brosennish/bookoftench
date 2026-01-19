@@ -25,6 +25,7 @@ from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
 from savethewench.util import print_and_sleep
 from .bank import BankVisitDecision
 from .base import LabeledSelectionComponent, SelectionBinding
+from .encounters import PostKillEncounters
 from .registry import register_component, get_registered_component
 
 
@@ -40,9 +41,15 @@ class Explore(RandomChoiceComponent):
     @functional_component(state_dependent=True)
     def _discover_item(game_state: GameState):
         available = [i for i in load_items()
-                     if i.name not in game_state.player.items]
+                     if i.name not in game_state.player.items
+                     and game_state.current_area in i.areas]
+        if available:
+            item = random.choice(available)
+        else:
+            all_unowned_items = [i for i in load_items()
+                                 if i.name not in game_state.player.items]
+            item = random.choice(all_unowned_items)
 
-        item = random.choice(available)
         game_state.found_item = item
         print_and_sleep(cyan(f"You found {item.name}!"), 1)
 
@@ -225,6 +232,7 @@ class Attack(Component):
             BankVisitDecision(self.game_state).run()  # TODO figure out a way to not call this in so many places
         event_logger.log_event(KillEvent())
         self.game_state.current_area.kill_current_enemy()
+        PostKillEncounters(self.game_state).run()
 
     def run(self) -> GameState:
         player, enemy = self.game_state.player, self.game_state.current_area.current_enemy

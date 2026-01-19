@@ -3,14 +3,14 @@ from typing import Callable, Any
 from savethewench import event_logger
 from savethewench.data.perks import WENCH_LOCATION, USED_SNEAKERS, NEW_SNEAKERS, CROWS_NEST
 from savethewench.event_base import EventType
-from .game_state import GameState
 from savethewench.model.achievement import load_achievements
 from savethewench.model.base import Combatant
 from savethewench.model.enemy import Enemy
-from savethewench.model.perk import load_perks, attach_perk, perk_is_active
+from savethewench.model.perk import load_perks, perk_is_active, attach_perks
 from savethewench.model.player import Player
 from savethewench.ui import blue, cyan, green, orange, purple, red, yellow, dim
 from savethewench.util import print_and_sleep
+from .game_state import GameState
 
 
 # --- HP COLOR CODING ---
@@ -34,18 +34,18 @@ def display_coffee_header(game_state: GameState) -> None:
         f"Coins: {green(f"{player.coins}")}",
         f"Lives: {yellow(f"{player.lives}")}\n"
         "\nMenu:"
-        ])}")
+    ])}")
 
 
 def display_hospital_header(game_state: GameState) -> None:
     player = game_state.player
-    print_and_sleep("Welcome to The Free Range Children's Hospital of Shebokken.")
+    print_and_sleep(f"{blue(f'Welcome to The Free Range Children\'s Hospital of Shebokken.')}", 2)
     print_and_sleep(f"{dim(' | ').join([
         f"Illness: {yellow(f"{player.illness.name}")}",
         f"Cost: {orange(f"{player.illness.cost}")}",
         f"Coins: {green(f"{player.coins}")}",
-        f"Chance of Success: {cyan(f"{int(player.illness.success_rate * 100)}%")}\n"
         ])}")
+    print_and_sleep(f"Chance of Success: {cyan(f'{int(player.illness.success_rate * 100)}%')}\n")
 
 
 def get_player_status_view(game_state: GameState) -> str:
@@ -56,20 +56,20 @@ def get_player_status_view(game_state: GameState) -> str:
         killed_remaining.append(f"Remaining: {yellow(f"{game_state.current_area.enemies_remaining}")}")
 
     player_status = (f"{dim(' | ').join([
-            f"Area: {blue(game_state.current_area.name)}",
-            *killed_remaining,
-            f"Wanted: {purple(game_state.wanted)}",
-            f"Bounty: {purple(f"{game_state.bounty} coins")}"])}"
-                f"\n{dim(' | ').join([
-                    f"\n{orange(player.name)} {dim('-')} Level: {cyan(f"{player.lvl}")}",
-                    f"XP: {cyan(f"{player.xp}/{player.xp_needed}")}",
-                    f"HP: {player_color(f"{player.hp}/{player.max_hp}")}",
-                    f"Coins: {green(f"{player.coins}")}",
-                    f"Lives: {yellow(f"{player.lives}")}"])}")
+        f"Area: {blue(game_state.current_area.name)}",
+        *killed_remaining,
+        f"Wanted: {purple(game_state.wanted)}",
+        f"Bounty: {purple(f"{game_state.bounty} coins")}"])}"
+                     f"\n{dim(' | ').join([
+                         f"\n{orange(player.name)} {dim('-')} Level: {cyan(f"{player.lvl}")}",
+                         f"XP: {cyan(f"{player.xp}/{player.xp_needed}")}",
+                         f"HP: {player_color(f"{player.hp}/{player.max_hp}")}",
+                         f"Coins: {green(f"{player.coins}")}",
+                         f"Lives: {yellow(f"{player.lives}")}"])}")
 
     if game_state.player.illness:
         illness_status = (f"{dim(' | ').join([
-            f"\nIllness: {red(f"{game_state.player.illness.name}")}",
+            f"\nIllness: {yellow(f"{game_state.player.illness.name}")}",
             f"Death Level: {red(f"{game_state.player.illness_death_lvl}")}",
         ])}\n")
 
@@ -88,7 +88,7 @@ def get_battle_status_view(game_state: GameState) -> str:
     def format_combatant_data(cmbt: Combatant, name_color) -> str:
         blind_turns = f"{cmbt.blind_turns} turn{'s' if cmbt.blind_turns > 1 else ''}"
         return (f"\n{name_color(cmbt.name)}"
-                f"{red(f' (blinded {int(cmbt.blind_effect*100)}% for {blind_turns})') if cmbt.blind else ''}"
+                f"{red(f' (blinded {int(cmbt.blind_effect * 100)}% for {blind_turns})') if cmbt.blind else ''}"
                 f"{orange(' (wanted)') if game_state.is_wanted(cmbt) else ''} {dim('-')} "
                 f"{p_color(cmbt.hp, cmbt.max_hp)(f"{cmbt.hp} HP")}"
                 f"\n{cmbt.current_weapon.get_simple_format()}")
@@ -168,6 +168,6 @@ def display_active_perk_count():
     print_and_sleep(f"Perks {dim(f"({len(load_perks(lambda p: p.active))})")}")
 
 
-@attach_perk(USED_SNEAKERS, NEW_SNEAKERS, silent=True)
+@attach_perks(USED_SNEAKERS, NEW_SNEAKERS, silent=True)
 def calculate_flee() -> float:
     return 0.5

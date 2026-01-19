@@ -1,7 +1,7 @@
 from savethewench.audio import play_music
 from savethewench.component.registry import register_component
 from savethewench.component.base import functional_component, GatekeepingComponent, BinarySelectionComponent, NoOpComponent
-from savethewench.data.audio import SHOP_THEME
+from savethewench.data.audio import SHOP_THEME, HOSPITAL_THEME
 from savethewench.data.components import HOSPITAL
 from savethewench.model import GameState
 from savethewench.model.util import display_hospital_header
@@ -28,10 +28,10 @@ class HospitalComponent(BinarySelectionComponent):
 
     def display_options(self):
         display_hospital_header(self.game_state)
-        print_and_sleep(f"{self.query.strip()} (y/n)?")
+        super().display_options()
 
     def play_theme(self):
-        play_music(SHOP_THEME)
+        play_music(HOSPITAL_THEME)
 
     def _return(self):
         self.exit_hospital = True

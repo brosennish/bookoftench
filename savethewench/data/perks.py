@@ -6,6 +6,7 @@ AMBROSE_BLADE = "Ambrose Blade"
 BARTER_SAUCE = "Barter Sauce"
 BEER_GOGGLES = "Beer Goggles"
 BROWN_FRIDAY = "Brown Friday"
+BROWNMAIL = "Brownmail"
 BULLETPROOF = "Bulletproof"
 CROWS_NEST = "Crow's Nest"
 DEATH_CAN_WAIT = "Death Can Wait"
@@ -26,6 +27,7 @@ ROSETTI_THE_GYM_RAT = "Rosetti the Gym Rat"
 SLEDGE_FUND = "Sledge Fund"
 SOLOMON_TRAIN = "Solomon Train"
 TENCH_EYES = "Tench Eyes"
+TENCH_GENES = "Tench Genes"
 TENCH_THE_BOUNTY_HUNTER = "Tench the Bounty Hunter"
 TRADE_SHIP = "Trade Ship"
 USED_SNEAKERS = "Used Sneakers"
@@ -44,15 +46,31 @@ class WrapperType(Enum):
     FLOAT_CHANGE_BY_PERCENT = 5
     NONE = 6
 
+class WrapperIndices:
+    class ApTenchStudies:
+        BATTLE_XP: int = 0
+        OTHER_XP: int = 1
+
+    class GramblingAddict:
+        PLAYS: int = 0
+        PAYOUT: int = 1
+
+    class TenchGenes:
+        RISK: int = 0
+        SURVIVAL: int = 1
+
+
 
 Perks = [
     {
         'name': AP_TENCH_STUDIES,
         'cost': 260,
         'description': "+30% XP from battles and +1 XP from all other sources",
-        # note - this only works for battles
-        'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
-        'wrapper_config': {'change': 30}
+        'wrappers': [
+            {'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT, 'wrapper_config': {'change': 30}},
+            {'wrapper_type': WrapperType.INT_CHANGE, 'wrapper_config': {'change': 1}}
+        ]
+
     },
     {
         'name': KARATE_LESSONS,
@@ -167,6 +185,13 @@ Perks = [
         'wrapper_config': {'change': 3}
     },
     {
+        'name': BROWNMAIL,
+        'cost': 120,
+        'description': "Gets Officer Hohkken off your back",
+        'wrapper_type': WrapperType.BOOLEAN_OVERRIDE,
+        'wrapper_config': {'override': False}
+    },
+    {
         'name': NEW_SNEAKERS,
         'cost': 90,
         'description': "Flee chance +10%",
@@ -196,9 +221,11 @@ Perks = [
         'name': GRAMBLING_ADDICT,
         'cost': 160,
         'description': 'Enjoy +5 plays and +5% payout at the casino',
-        # note - this only works for plays
-        'wrapper_type': WrapperType.INT_CHANGE,
-        'wrapper_config': {'change': 5}
+        'wrappers': [
+            {'wrapper_type': WrapperType.INT_CHANGE, 'wrapper_config': {'change': 5}},
+            {'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT, 'wrapper_config': {'change': 5}}
+        ]
+
     },
     {
         'name': VAMPIRIC_SPERM,
@@ -225,6 +252,15 @@ Perks = [
         'description': "Projectile weapon accuracy +5%",
         'wrapper_type': WrapperType.FLOAT_CHANGE_BY_PERCENT,
         'wrapper_config': {'change': 5}
+    },
+    {
+        'name': TENCH_GENES,
+        'cost': 130,
+        'description': "Illness risk -2% and survival chance +10%",
+        'wrappers': [
+            {'wrapper_type': WrapperType.PERCENT_CHANGE, 'wrapper_config': {'change': -2}},
+            {'wrapper_type': WrapperType.PERCENT_CHANGE, 'wrapper_config': {'change': 10}}
+        ]
     },
     {
         'name': DEATH_CAN_WAIT,

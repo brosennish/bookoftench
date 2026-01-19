@@ -16,7 +16,6 @@ def _very_well():
     print_and_sleep(blue("Very well..."), 1)
 
 
-@register_component(BANK)
 class BankComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState, allow_deposit=True):
         self.allow_deposit = allow_deposit
@@ -40,11 +39,11 @@ class BankComponent(LabeledSelectionComponent):
             print_and_sleep("Welcome to Shebokken Transnational Offshore Bank.\n"
                             "While banking with us, you may deposit or withdraw coins.\n"
                             f"Each time you level up, your account value will increase by "
-                            f"{int(self.bank.interest_rate * 100)}%.", 1)
+                            f"{int(self.bank.interest_rate * 100)}%.", 2)
         else:
             print_and_sleep("Welcome to Shebokken Transnational Offshore Bank.\n"
                             "We do not accept deposits between level-ups.\n"
-                            "Withdrawals will incur a 10% fee.", 1)
+                            "Withdrawals will incur a 10% fee.", 2)
 
     @staticmethod
     @functional_component(state_dependent=True)
@@ -90,6 +89,7 @@ class BankVisitDecision(BinarySelectionComponent):
                          yes_component=BankComponent, no_component=functional_component()(_very_well))
 
 
+@register_component(BANK)
 class WithdrawalOnlyBank(BankComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, allow_deposit=False)
