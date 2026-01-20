@@ -196,15 +196,16 @@ class Combatant(ABC):
         if blind_effect > 0:
             blind_turns = self.current_weapon.get_blind_turns()
             other.set_blind_effect(self.current_weapon.name, blind_effect, blind_turns)
-            if other.blind: # skip if beer goggles prevents blindness
+            if other.blind:  # skip if beer goggles prevents blindness
                 prefix = f"{other.name} has been" if isinstance(other, NPC) else "You have been"
                 print_and_sleep(
-                    purple(f"{prefix} blinded by {self.current_weapon.name}. Accuracy down {int(blind_effect * 100)}% for "
-                           f"{blind_turns} turns"), 1)
+                    purple(
+                        f"{prefix} blinded by {self.current_weapon.name}. Accuracy down {int(blind_effect * 100)}% for "
+                        f"{blind_turns} turns"), 1)
 
     def handle_hit(self, other: "Combatant") -> None:
         self.current_weapon.use()
-        if not self.is_alive(): # solomon train
+        if not self.is_alive():  # solomon train
             return
         base_damage = self.current_weapon.calculate_base_damage()
         crit = random.random() < self.get_crit_chance()

@@ -62,6 +62,7 @@ class AchievementEvent(Event):
         self.achievement.active = True
         self.achievement.activation_action(player)
 
+
 @dataclass
 class BountyCollectedAchievement(Achievement):
 
@@ -70,6 +71,7 @@ class BountyCollectedAchievement(Achievement):
         def handle_event(_: Event):
             if event_logger.get_count(self.event_type) == self.event_threshold:
                 event_logger.log_event(AchievementEvent(self))
+
 
 @dataclass
 class CoffeeAchievement(Achievement):
@@ -80,6 +82,7 @@ class CoffeeAchievement(Achievement):
             if event_logger.get_count(self.event_type) == self.event_threshold:
                 event_logger.log_event(AchievementEvent(self))
 
+
 @dataclass
 class FleeAchievement(Achievement):
 
@@ -88,6 +91,7 @@ class FleeAchievement(Achievement):
         def handle_event(_: Event):
             if event_logger.get_count(self.event_type) == self.event_threshold:
                 event_logger.log_event(AchievementEvent(self))
+
 
 @dataclass
 class KillAchievement(Achievement):
@@ -98,6 +102,7 @@ class KillAchievement(Achievement):
             if event_logger.get_count(self.event_type) == self.event_threshold:
                 event_logger.log_event(AchievementEvent(self))
 
+
 @dataclass
 class LevelUpAchievement(Achievement):
 
@@ -106,6 +111,7 @@ class LevelUpAchievement(Achievement):
         def handle_event(_: Event):
             if event_logger.get_count(self.event_type) == self.event_threshold:
                 event_logger.log_event(AchievementEvent(self))
+
 
 @dataclass
 class TreatmentEventAchievement(Achievement):

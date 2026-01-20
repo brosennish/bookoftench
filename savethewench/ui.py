@@ -38,6 +38,7 @@ def white(text):
 def yellow(text):
     return _format(Fore.YELLOW, text)
 
+
 # Color Constants
 class Colors:
     BLUE = "Blue"
@@ -48,6 +49,7 @@ class Colors:
     RED = "Red"
     WHITE = "White"
     YELLOW = "Yellow"
+
 
 def color_text(color: str, text: str) -> str:
     match color:
@@ -69,6 +71,7 @@ def color_text(color: str, text: str) -> str:
             return yellow(text)
         case _:
             raise NotImplementedError
+
 
 # --- Styles ---
 

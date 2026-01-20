@@ -29,6 +29,7 @@ class Transaction:
     def format_timestamp(self) -> str:
         return self.timestamp.strftime("%Y-%m-%d %H:%M:%S")
 
+
 class PricedQuantity(NamedTuple):
     price: int
     quantity: int

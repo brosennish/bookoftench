@@ -7,7 +7,6 @@ from savethewench.data.perks import BULLETPROOF
 from savethewench.data.weapons import PISTOL, REVOLVER, RIFLE, SHOTGUN
 from savethewench.model.base import WeaponBase, Buyable
 from savethewench.model.perk import attach_perk
-
 from savethewench.ui import dim, cyan, orange, red, yellow
 
 
@@ -35,12 +34,13 @@ class Weapon(WeaponBase, Buyable):
 
     def calculate_base_damage(self) -> int:
         base_damage = self.calculate_base_damage_no_perk()
+
         @attach_perk(BULLETPROOF, value_description="enemy bullet damage",
-                                 condition=lambda: self._is_gun())
+                     condition=lambda: self._is_gun())
         def apply_perks():
             return base_damage
-        return int(apply_perks())
 
+        return int(apply_perks())
 
     def get_blind_effect(self) -> float:
         return self.blind_effect
@@ -63,7 +63,6 @@ class Weapon(WeaponBase, Buyable):
 
 @dataclass
 class SellableWeapon(Weapon):
-
     _sell_value: int = field(init=False)
 
     def __post_init__(self):
@@ -71,7 +70,7 @@ class SellableWeapon(Weapon):
 
     @property
     def sell_value(self):
-        max_uses = load_weapon(self.name).uses # TODO optimize out object construction overhead
+        max_uses = load_weapon(self.name).uses  # TODO optimize out object construction overhead
         if max_uses == -1:
             return self._sell_value
 

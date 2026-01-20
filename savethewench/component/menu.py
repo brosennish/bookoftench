@@ -133,7 +133,8 @@ class InGameMenu(PaginatedMenuComponent):
                  for i, name in enumerate(InGameMenuDefaults.page_one, 1)]]
 
 
-_SAVE_DIR = ".saves" # TODO don't just save straight to a directory in the repo
+_SAVE_DIR = ".saves"  # TODO don't just save straight to a directory in the repo
+
 
 @register_component(SAVE_GAME)
 class SaveGame(Component):

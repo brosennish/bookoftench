@@ -119,12 +119,13 @@ class LabeledSelectionComponent(SelectionComponent):
     def can_exit(self):
         return self.made_selection
 
+
 class PaginatedMenuComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState,
                  top_level_prompt_callback: Callable[[GameState], None] = lambda _: None,
                  main_menu_component: Optional[type[Component]] = None,
                  return_only: bool = False):
-        super().__init__(game_state, bindings=[]) # dynamically set self.binding_map depending on page
+        super().__init__(game_state, bindings=[])  # dynamically set self.binding_map depending on page
         self.top_level_prompt_callback = top_level_prompt_callback
         self.main_menu_component = main_menu_component
         self.pages = self.construct_pages()
@@ -142,6 +143,7 @@ class PaginatedMenuComponent(LabeledSelectionComponent):
                 self.current_page += 1
             else:
                 raise RuntimeError("No next page exists")
+
         return functional_component()(_component)
 
     def _previous_page(self) -> type[Component]:
@@ -150,6 +152,7 @@ class PaginatedMenuComponent(LabeledSelectionComponent):
                 self.current_page -= 1
             else:
                 raise RuntimeError("No previous page exists")
+
         return functional_component()(_component)
 
     def _select_return(self):
@@ -186,7 +189,7 @@ class PaginatedMenuComponent(LabeledSelectionComponent):
         for component in self.construct_components():
             self.binding_map |= component.binding_map
         return super().handle_selection()
-    
+
     def can_exit(self):
         if self.return_only:
             return self.return_selected
@@ -211,7 +214,7 @@ class LinearComponent(Component):
 class BinarySelectionComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState, query: str, yes_component: type[Component],
                  no_component: type[Component],
-    ):
+                 ):
         super().__init__(game_state,
                          bindings=[SelectionBinding('y', '', yes_component),
                                    SelectionBinding('n', '', no_component)])
@@ -286,7 +289,6 @@ class ConditionalComponent(GatekeepingComponent):
                          decision_function=decision_function,
                          accept_component=component,
                          deny_component=NoOpComponent)
-
 
 
 @dataclass

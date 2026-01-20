@@ -17,4 +17,3 @@ class Illnesses:
             Illness(**illness_dict)
             for illness_dict in All_Illnesses
         ]
-

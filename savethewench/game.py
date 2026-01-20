@@ -1,4 +1,3 @@
-import savethewench.data.areas
 from savethewench.audio import stop_all_sounds
 from savethewench.component import InitGame
 from savethewench.component.base import Component

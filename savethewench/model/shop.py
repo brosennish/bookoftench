@@ -103,7 +103,7 @@ class Shop:
     def reset_inventory(self):
         self._item_inventory = random.sample(self._all_items, k=min(self.max_items, len(self._all_items)))
         self._weapon_inventory = random.sample([w for w in self._all_weapons if w.sell_value > 0],
-                          k=min(self.max_weapons, len(self._all_weapons)))
+                                               k=min(self.max_weapons, len(self._all_weapons)))
         self.perk_inventory = random.sample(self._all_perks, k=min(self.max_perks, len(self._all_perks)))
 
     def _subscribe_listeners(self):

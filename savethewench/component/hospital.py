@@ -1,12 +1,14 @@
 from savethewench.audio import play_music
+from savethewench.component.base import functional_component, GatekeepingComponent, BinarySelectionComponent, \
+    NoOpComponent
 from savethewench.component.registry import register_component
-from savethewench.component.base import functional_component, GatekeepingComponent, BinarySelectionComponent, NoOpComponent
-from savethewench.data.audio import SHOP_THEME, HOSPITAL_THEME
+from savethewench.data.audio import HOSPITAL_THEME
 from savethewench.data.components import HOSPITAL
 from savethewench.model import GameState
 from savethewench.model.util import display_hospital_header
 from savethewench.ui import blue
 from savethewench.util import print_and_sleep
+
 
 @register_component(HOSPITAL)
 class HospitalBouncer(GatekeepingComponent):

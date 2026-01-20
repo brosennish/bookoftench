@@ -1,9 +1,8 @@
 from savethewench.audio import play_music
-from savethewench.component.registry import register_component
 from savethewench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
     functional_component, GatekeepingComponent
+from savethewench.component.registry import register_component
 from savethewench.data.audio import SHOP_THEME
-from savethewench.data.coffee_items import Coffee_Items
 from savethewench.data.components import COFFEE_SHOP
 from savethewench.model import GameState
 from savethewench.model.coffee_item import CoffeeItem

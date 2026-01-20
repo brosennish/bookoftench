@@ -89,6 +89,7 @@ def disobey_officer(game_state: GameState):
     OfficerHohkken(calculate_bribe(game_state)).handle_hit(player)
     event_logger.log_event(OfficerEvent(EventType.OFFICER_UNPAID))
 
+
 @dataclass
 class PoliceBrutality(Weapon):
     name: str = "Police Brutality"
@@ -105,10 +106,11 @@ class PoliceBrutality(Weapon):
     def use(self) -> None:
         play_sound(self.sound)
 
+
 class OfficerHohkken(Enemy):
     def __init__(self, bribe: int):
         self.name: str = 'Officer Hohkken'
         self.hp: int = 100
         self.current_weapon: Weapon = PoliceBrutality()
         self.current_weapon.damage = random.randint(5, bribe)
-        self.random_dialogue = [] # TODO maybe add some here?
+        self.random_dialogue = []  # TODO maybe add some here?

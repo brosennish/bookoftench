@@ -80,10 +80,12 @@ class NumericChangeConfig(WrapperConfig):
             case _:
                 raise NotImplementedError(f"{wrapper_type} not implemented")
 
+
 @dataclass
 class FunctionWrapper:
     wrapper_type: WrapperType = WrapperType.NONE
     wrapper_config: WrapperConfig = field(default_factory=WrapperConfig)
+
 
 @dataclass
 class Perk[T](Buyable):
@@ -187,6 +189,7 @@ def attach_perk(perk: str, wrapper_idx: int = 0, value_description: str = "", si
         return wrapper
 
     return decorator
+
 
 def attach_perks(*perks: str, value_description: str = "", silent: bool = False,
                  condition: Callable[[], bool] = lambda: True) -> Callable[[T], T]:

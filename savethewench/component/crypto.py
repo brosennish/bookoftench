@@ -71,7 +71,7 @@ class CryptoExchange(Component):
             if self.selected > len(self.coins) + 1:
                 self.selected = 1
         # key selection for numbered options won't work if we have more than 9 options
-        elif ch in range(ord('1'), ord(str(len(self.coins)))+1):
+        elif ch in range(ord('1'), ord(str(len(self.coins))) + 1):
             self.selected = int(chr(ch))
         elif ch in (ord('r'), ord('R')):
             self.selected = len(self.coins) + 1
@@ -255,12 +255,12 @@ class TransactionHistoryDisplay(CryptoExchangeExtension):
         c_print(stdscr, 0, 0, self.coin.name, curses.COLOR_CYAN)
         c_print(stdscr, 0, len(self.coin.name) + 1, prefix, curses.COLOR_MAGENTA)
 
-
     def add_buy(self, stdscr, transaction: Transaction, line: int):
         c_print(stdscr, line, 0, f"{transaction.format_timestamp()} | Buy {transaction.quantity} @ {transaction.price}")
 
     def add_sell(self, stdscr, transaction: Transaction, line: int):
-        c_print(stdscr, line, 0, f"{transaction.format_timestamp()} | Sell {transaction.quantity} @ {transaction.price}")
+        c_print(stdscr, line, 0,
+                f"{transaction.format_timestamp()} | Sell {transaction.quantity} @ {transaction.price}")
 
     def display_history(self, stdscr):
         line = 2
@@ -271,7 +271,7 @@ class TransactionHistoryDisplay(CryptoExchangeExtension):
             elif transaction.type == TransactionType.SELL:
                 self.add_sell(stdscr, transaction, line)
             line += 1
-        c_print(stdscr, line + 1, 0,"Press <enter> to return.", color=curses.COLOR_CYAN)
+        c_print(stdscr, line + 1, 0, "Press <enter> to return.", color=curses.COLOR_CYAN)
 
     def handle_selection(self, stdscr):
         ch = stdscr.getch()
@@ -308,11 +308,14 @@ class LinePart:
         c_print(stdscr, line, offset, self.value, self.color,
                 underline=self.underlined, highlight=self.highlighted, dim=self.dim)
 
+
 def header_part(value: str) -> LinePart:
     return LinePart(value, underlined=True)
 
+
 def name_part(coin: CryptoCurrency) -> LinePart:
     return LinePart(coin.name, color=curses.COLOR_CYAN, dim=coin.delisted)
+
 
 def price_part(coin: CryptoCurrency) -> LinePart:
     color = (curses.COLOR_RED if coin.historical_percent_change < 0 else
@@ -320,20 +323,25 @@ def price_part(coin: CryptoCurrency) -> LinePart:
              curses.COLOR_WHITE)
     return LinePart(f"{coin.price:.2f}", color=color)
 
+
 def delta_part(coin: CryptoCurrency) -> LinePart:
     color = (curses.COLOR_RED if coin.historical_percent_change < 0 else
              curses.COLOR_GREEN if coin.historical_percent_change > 0 else
              curses.COLOR_WHITE)
     return LinePart(f"{coin.historical_percent_change:.1f}%", color=color)
 
+
 def quantity_owned_part(coin: CryptoCurrency) -> LinePart:
     return LinePart(str(coin.quantity_owned), color=curses.COLOR_MAGENTA)
+
 
 def owned_value_part(coin: CryptoCurrency) -> LinePart:
     return LinePart(f"{round(float(coin.quantity_owned * coin.price), 2)}")
 
+
 def cost_basis_part(coin: CryptoCurrency) -> LinePart:
     return LinePart(f"{round(coin.history.cost_basis, 2)}")
+
 
 def gain_part(coin: CryptoCurrency) -> LinePart:
     color = (curses.COLOR_RED if coin.open_pl < 0 else
@@ -341,11 +349,13 @@ def gain_part(coin: CryptoCurrency) -> LinePart:
              curses.COLOR_WHITE)
     return LinePart(f"{round(coin.open_pl, 2)}", color=color)
 
+
 def gain_pct_part(coin: CryptoCurrency) -> LinePart:
     color = (curses.COLOR_RED if coin.open_pl < 0 else
              curses.COLOR_GREEN if coin.open_pl > 0 else
              curses.COLOR_WHITE)
     return LinePart(f"{coin.open_pl_percent:.1f}%", color=color)
+
 
 class CoinOptions:
     def __init__(self):
@@ -363,7 +373,7 @@ class CoinOptions:
         self.offsets = [0 for _ in range(self.columns)]
         self.offsets[0] = len(str(len(self.coins))) + 3
         lines: List[List[LinePart]] = [[header_part(h) for h in self.headers],
-                                            *[self.get_coin_line_parts(coin) for coin in self.coins]]
+                                       *[self.get_coin_line_parts(coin) for coin in self.coins]]
         widths = [0] * self.columns
         for parts in lines:
             for i, part in enumerate(parts):
@@ -385,9 +395,9 @@ class CoinOptions:
 
     def display(self, stdscr, line: int, selected: int):
         self.display_header(stdscr, line)
-        for i in range(1, len(self.coins)+1):
+        for i in range(1, len(self.coins) + 1):
             c_print(stdscr, line + i, 0, f"[{i}]", curses.COLOR_MAGENTA, highlight=selected == i)
-            self.display_coin(stdscr, line + i, self.coins[i-1])
+            self.display_coin(stdscr, line + i, self.coins[i - 1])
 
     def refresh(self):
         self._ingest_coins()

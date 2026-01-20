@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 from savethewench.ui import dim, cyan, orange, yellow
 
 

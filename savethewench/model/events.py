@@ -1,4 +1,5 @@
 from typing import Optional
+
 from savethewench.audio import play_sound
 from savethewench.data.audio import PURCHASE, GREAT_JOB
 from savethewench.event_base import Event, EventType
@@ -167,7 +168,7 @@ class OfficerEvent(Event):
         super().__init__(event_type, callback=self.paid if event_type == event_type.OFFICER_PAID else self.unpaid)
 
     def paid(self) -> None:
-        print_and_sleep("") # TODO funny dialogue
+        print_and_sleep("")  # TODO funny dialogue
 
     def unpaid(self) -> None:
-        print_and_sleep("") # TODO funny dialogue
+        print_and_sleep("")  # TODO funny dialogue

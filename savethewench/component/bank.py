@@ -75,6 +75,7 @@ class BankComponent(LabeledSelectionComponent):
                     game_state.player.coins += amount
             else:
                 print_and_sleep(yellow("Invalid choice."))
+
         return component
 
     def _return(self):  # TODO stop duplicating this pattern

@@ -33,11 +33,11 @@ class PlayerWeapon(Weapon):
         base_damage = self.calculate_base_damage_no_perk()
 
         @attach_perk(ROSETTI_THE_GYM_RAT, value_description="melee damage",
-                                 condition=lambda: self.type == MELEE)
+                     condition=lambda: self.type == MELEE)
         @attach_perk(AMBROSE_BLADE, value_description="blade damage",
-                                 condition=lambda: self._is_bladed())
+                     condition=lambda: self._is_bladed())
         @attach_perks(KARATE_LESSONS, MARTIAL_ARTS_TRAINING, value_description="bare hands damage",
-                                 condition=lambda: self.name == BARE_HANDS)
+                      condition=lambda: self.name == BARE_HANDS)
         def apply_perks():
             return base_damage
 
@@ -45,7 +45,7 @@ class PlayerWeapon(Weapon):
 
     def get_accuracy(self) -> float:
         @attach_perk(TENCH_EYES, value_description="projectile accuracy",
-                                 condition=lambda: self.type == PROJECTILE)
+                     condition=lambda: self.type == PROJECTILE)
         def apply_perks():
             return self.accuracy
 
@@ -248,7 +248,6 @@ class Player(Combatant):
             if self.add_weapon(enemy_weapon):
                 print_and_sleep(cyan(f"{enemy_weapon.name} added to sack."), 1)
 
-
     @attach_perk(LUCKY_TENCHS_FIN, value_description="crit chance")
     def get_crit_chance(self) -> float:
         return super().get_crit_chance()
@@ -343,7 +342,6 @@ class Player(Combatant):
         self.illness = None
         self.illness_death_lvl = None
 
-
     def handle_broken_weapon(self):
         event_logger.log_event(WeaponBrokeEvent())
         del self.weapon_dict[self.current_weapon.name]
@@ -371,6 +369,7 @@ class Player(Combatant):
                     print_and_sleep(purple(f"Restored {gain} HP with Vampiric Sperm!"), 1)
 
             # for loading from save file
+
     def __setstate__(self, state):
         self.__dict__.update(state)
         self._subscribe_listeners()

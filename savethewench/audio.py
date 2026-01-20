@@ -26,21 +26,25 @@ class AudioProcess:
         if self.file_name is not None and self.volume is not None:
             self._process = subprocess.Popen(
                 ["afplay", "-v", str(self.volume), get_audio_path(self.file_name)],
-            stderr=subprocess.DEVNULL)
+                stderr=subprocess.DEVNULL)
 
     def terminate(self) -> None:
         if self._process is not None:
             self._process.terminate()
         self._process = None
 
+
 _current_music: AudioProcess = AudioProcess()
 ACTIVE_SOUNDS: List[AudioProcess] = []
 
+
 def get_music_volume() -> float:
-    return float(settings.get_music_volume())/100
+    return float(settings.get_music_volume()) / 100
+
 
 def get_sfx_volume() -> float:
-    return float(settings.get_sfx_volume())/100
+    return float(settings.get_sfx_volume()) / 100
+
 
 # --- SFX ---
 
@@ -78,14 +82,17 @@ def play_music(file_name: str) -> None:
         # TODO log/print some message if this fails and disable audio
         _current_music.play()
 
+
 def stop_music() -> None:
     """Stop only the current music track."""
     _current_music.terminate()
+
 
 def restart_music() -> None:
     _current_music.volume = get_music_volume()
     if settings.is_audio_enabled():
         _current_music.play()
+
 
 # --- Global cleanup ---
 
