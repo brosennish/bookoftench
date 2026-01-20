@@ -1,67 +1,17 @@
 import curses
 import time
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from typing import List
 
 import savethewench.service.crypto_service as crypto_service
 from savethewench.audio import play_music, play_sound
 from savethewench.component.base import Component
 from savethewench.component.registry import register_component
-from savethewench.curses_util import init_colors, c_print
+from savethewench.curses_util import init_colors, SimpleWindow, Line, LinePart
 from savethewench.data.audio import CRYPTO_THEME, PURCHASE
 from savethewench.data.components import CRYPTO_EXCHANGE
 from savethewench.model import GameState
 from savethewench.model.crypto import CryptoCurrency, TransactionType
-
-
-@dataclass
-class LinePart:
-    text: str
-    color: int = curses.COLOR_WHITE
-    underline: bool = False
-    highlight: bool = False
-    bold: bool = False
-    dim: bool = False
-    offset: int = 0
-
-    def add_to_line(self, stdscr, line: int, offset: int):
-        c_print(stdscr, line, offset, self.text, self.color,
-                underline=self.underline, highlight=self.highlight, bold=self.bold, dim=self.dim)
-
-
-@dataclass
-class Line:
-    parts: List[LinePart]
-    line_number: int = 0
-
-    def add_to_screen(self, stdscr):
-        for part in self.parts:
-            c_print(stdscr, self.line_number, offset=part.offset, text=part.text, color=part.color,
-                    highlight=part.highlight, underline=part.underline, bold=part.bold, dim=part.dim)
-
-
-class SimpleWindow:
-    def __init__(self, stdscr):
-        self.stdscr = stdscr
-        self._current_line = 0
-        self._lines = []
-
-    def add_line(self, line: Line):
-        line.line_number = self._current_line
-        self._lines.append(line)
-        self.add_newlines(1)
-
-    def add_newlines(self, newlines: int):
-        self._current_line += newlines
-
-    def flush(self):
-        self.stdscr.clear()
-        for line in self._lines:
-            line.add_to_screen(self.stdscr)
-        self.stdscr.refresh()
-        self._lines.clear()
-        self._current_line = 0
 
 
 @register_component(CRYPTO_EXCHANGE)
