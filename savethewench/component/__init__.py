@@ -1,6 +1,7 @@
 from .game import InitGame
 #-- ensure components are registered
 from .actions import *
+from .bank import *
 from .casino import *
 from .coffee_shop import *
 from .crypto import *
