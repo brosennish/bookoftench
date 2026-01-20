@@ -6,22 +6,18 @@ from typing import List, Dict
 import savethewench.service.crypto_service as crypto_service
 from savethewench import event_logger
 from savethewench.audio import play_music
-from savethewench.data.illnesses import LATE_ONSET_SIDS
 from savethewench.data.perks import TENCH_THE_BOUNTY_HUNTER
 from savethewench.event_base import EventType, Event
 from savethewench.event_logger import subscribe_function
 from savethewench.settings import Settings, set_settings
-from savethewench.ui import green, yellow, cyan, blue, red
+from savethewench.ui import green
 from savethewench.util import print_and_sleep
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
 from .bank import Bank
-from .coffee_item import CoffeeItem
 from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
-from .events import TravelEvent, BountyCollectedEvent, PlayerDeathEvent, TreatmentEvent, LevelUpEvent
-from .illness import Illness
-from .illnesses import Illnesses
+from .events import TravelEvent, BountyCollectedEvent, LevelUpEvent
 from .item import Item
 from .perk import attach_perk, Perk, set_perk_cache
 from .player import Player
@@ -59,7 +55,7 @@ class GameState:
 
     @property
     @attach_perk(TENCH_THE_BOUNTY_HUNTER, silent=True)
-    def bounty(self):
+    def bounty(self) -> int:
         return self._bounty
 
     @bounty.setter
@@ -80,13 +76,13 @@ class GameState:
         crypto_service.start()
         self._subscribe_listeners()
 
-    def refresh_bounty(self):
+    def refresh_bounty(self) -> None:
         bounty_area = random.choice(self.areas)
         enemy_choice: Enemy = load_enemy(random.choice(bounty_area.enemies))  # = random.choice(load_enemies())
         self.wanted = enemy_choice.name
         self.bounty = enemy_choice.bounty
 
-    def update_current_area(self, area_name: str):
+    def update_current_area(self, area_name: str) -> None:
         for area in self.areas:
             if area.name == area_name:
                 self.current_area = area
@@ -94,82 +90,8 @@ class GameState:
                 return
         raise KeyError(f"Area '{area_name}' not found")
 
-    def play_current_area_theme(self):
+    def play_current_area_theme(self) -> None:
         play_music(self.current_area.theme)
-
-    def make_treatment_purchase(self):
-        illness = self.player.illness
-
-        if self.player.coins < illness.cost:
-            print_and_sleep(yellow(f"Need more coin"), 1)
-            return False
-
-        if isinstance(illness, Illness):
-            self.do_treatment()
-        else:
-            return False
-        self.player.coins -= illness.cost
-        return True
-
-    def do_treatment(self):
-        player = self.player
-        illness = player.illness
-
-        if random.random() < illness.success_rate:
-            print_and_sleep(f"{cyan('Woah, I really didn\'t expect that to work.')}\n", 2)
-            player.illness = None
-            player.illness_death_lvl = None
-            event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_SUCCESS))
-            return self
-        else:
-            print_and_sleep(blue(
-                f"Shit didn't take. You owe me {illness.cost} of coin. Also - you into crypto?"),
-                2)
-            event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_FAIL))
-            return self
-
-    def make_coffee_purchase(self, coffee_item: CoffeeItem):
-        if self.player.coins < coffee_item.cost:
-            print_and_sleep(yellow(f"Need more coin"), 1)
-            return False
-
-        if isinstance(coffee_item, CoffeeItem):
-            self.coffee_effect(coffee_item)
-        else:
-            return False
-        self.player.coins -= coffee_item.cost
-        return True
-
-    def coffee_effect(self, item: CoffeeItem):
-        player = self.player
-        original_hp = player.hp
-        player.gain_hp(item.hp)
-        print_and_sleep(f"You restored {green(self.player.hp - original_hp)} hp!\n", 1)
-
-        illnesses = Illnesses()
-        illness = random.choice(illnesses.all_illnesses)
-
-        if random.random() < item.risk:
-            if illness.name != LATE_ONSET_SIDS:
-                player.illness = illness
-                player.illness_death_lvl = player.lvl + illness.levels_until_death
-
-                print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're sicker than Hell."), 2)
-                print_and_sleep(f"Illness: {yellow(f'{illness.name}')}", 2)
-                print_and_sleep(f"{yellow(f'{illness.description}')}", 2)
-                print_and_sleep(
-                    f"Visit the Free Range Children's Hospital for treatment "
-                    f"or die at level {red(f'{player.illness_death_lvl}')}\n",
-                    3
-                )
-            else:
-                print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."),
-                                2)
-                print_and_sleep(f"Cause of Death: {red(f'{illness.name}')}", 2)
-                print_and_sleep(f"{red(f'{illness.description}')}", 3)
-                player.hp = 0
-                player.lives -= 1
-                event_logger.log_event(PlayerDeathEvent(player.lives))
 
     def _subscribe_listeners(self):
         @subscribe_function(BountyCollectedEvent)

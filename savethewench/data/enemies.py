@@ -89,7 +89,7 @@ Bosses = [
      'weapons': [weapons.MACHETE, weapons.SLEDGEHAMMER, weapons.SHOTGUN, weapons.CHAINSAW],
      'bounty': 0, 'type': BOSS,
      'preamble': [
-         {'text': "What do we have here?", 'color': Colors.RED,'sleep': 2},
+         {'text': "What do we have here?", 'color': Colors.RED, 'sleep': 2},
          {'text': "Looks like anotha one a dem riverboat bad boys right heuh uh huh.",
           'color': Colors.RED, 'sleep': 2},
          {'text': "Bill's had a hankerin' for some a dat riverboat gumbo, mmhm.", 'color': Colors.RED, 'sleep': 2},
@@ -99,22 +99,22 @@ Bosses = [
      'random_dialogue': [
          {'upper_threshold': 0.08,
           'dialogue': [
-             {'text': "Riverboat... riverboat... we cookin' today, boy.", 'color': Colors.RED, 'sleep': 2},
-             {'text': "Gonna toss some crawdad in dat pot, mmhm.", 'color': Colors.RED, 'sleep': 2},
-             {'text': "Alligator gumbo! Now we talkin'.", 'color': Colors.RED, 'sleep': 2},
-         ]},
+              {'text': "Riverboat... riverboat... we cookin' today, boy.", 'color': Colors.RED, 'sleep': 2},
+              {'text': "Gonna toss some crawdad in dat pot, mmhm.", 'color': Colors.RED, 'sleep': 2},
+              {'text': "Alligator gumbo! Now we talkin'.", 'color': Colors.RED, 'sleep': 2},
+          ]},
          {'upper_threshold': 0.16,
           'dialogue': [
-             {'text': "When you livin' in the swamp, ain't nobody come round lessen dey askin' for trouble...",
-              'color': Colors.RED, 'sleep': 2},
-         ]},
+              {'text': "When you livin' in the swamp, ain't nobody come round lessen dey askin' for trouble...",
+               'color': Colors.RED, 'sleep': 2},
+          ]},
      ]},
 
     {'name': CAPTAIN_HOLE, 'hp': 220,
      'weapons': [weapons.RIFLE, weapons.HARPOON, weapons.KNIFE, weapons.PISTOL],
      'bounty': 0, 'type': BOSS, 'preamble': [
         {'text': "Captain Hole has offered to shoot himself in the jines in exchange for your Tench Filet",
-        'sleep': 4}
+         'sleep': 4}
     ]}
 ]
 
@@ -134,7 +134,7 @@ Final_Boss = {
     'name': DENNY_BILTMORE,
     'hp': 275, 'weapons': [weapons.BRASS_KNUCKLES, weapons.PISTOL, weapons.REVOLVER, weapons.SHOTGUN],
     'bounty': 0, 'type': FINAL_BOSS, 'preamble': [{'text': text, 'color': Colors.RED, 'sleep': 4}
-                                                            for text in _biltmore_preamble_lines.split('\n')],
+                                                  for text in _biltmore_preamble_lines.split('\n')],
     'random_dialogue': [{
         'upper_threshold': 0.08,
         'dialogue': [
@@ -145,4 +145,4 @@ Final_Boss = {
         'dialogue': [
             {'text': "Yes, yes...", 'color': Colors.RED, 'sleep': 2},
             {'text': "Let me just place a quick phone call...", 'color': Colors.RED, 'sleep': 2},
-        ] }]}
+        ]}]}

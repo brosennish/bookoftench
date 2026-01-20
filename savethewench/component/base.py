@@ -12,7 +12,7 @@ class Component(ABC):
     def __init__(self, game_state: GameState):
         self.game_state = game_state
 
-    def play_theme(self):
+    def play_theme(self) -> None:
         pass
 
     @abstractmethod
@@ -21,7 +21,7 @@ class Component(ABC):
 
 
 def functional_component(state_dependent=False) -> Callable[[Callable], type[Component]]:
-    def decorator(func: Callable):
+    def decorator(func: Callable) -> type[Component]:
         class FunctionalComponent(Component):
             def run(self) -> GameState:
                 if state_dependent:
@@ -46,7 +46,7 @@ class SelectionBinding:
     name: str
     component: type[Component]
 
-    def format(self):
+    def format(self) -> str:
         return self.name
 
 
@@ -54,7 +54,7 @@ class SelectionBinding:
 class ReprBinding(SelectionBinding):
     repr_object: Any
 
-    def format(self):
+    def format(self) -> str:
         return self.repr_object
 
 
@@ -64,7 +64,7 @@ class SelectionComponent(Component):
         self.refresh_menu = refresh_menu
 
     @abstractmethod
-    def display_options(self):
+    def display_options(self) -> None:
         pass
 
     @abstractmethod
@@ -96,7 +96,7 @@ class LabeledSelectionComponent(SelectionComponent):
         self.quittable = quittable
         self.made_selection = False
 
-    def display_options(self):
+    def display_options(self) -> None:
         self.top_level_prompt_callback(self.game_state)
         if len(self.binding_map) > 0:
             print_and_sleep(f"{'\n'.join(f"{f"[{v.key}]":<4}: {v.format()}" for _, v in self.binding_map.items())}")
@@ -116,15 +116,16 @@ class LabeledSelectionComponent(SelectionComponent):
             self.made_selection = True
             return self.run_selected_component(self.binding_map[selection])
 
-    def can_exit(self):
+    def can_exit(self) -> bool:
         return self.made_selection
+
 
 class PaginatedMenuComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState,
                  top_level_prompt_callback: Callable[[GameState], None] = lambda _: None,
                  main_menu_component: Optional[type[Component]] = None,
                  return_only: bool = False):
-        super().__init__(game_state, bindings=[]) # dynamically set self.binding_map depending on page
+        super().__init__(game_state, bindings=[])  # dynamically set self.binding_map depending on page
         self.top_level_prompt_callback = top_level_prompt_callback
         self.main_menu_component = main_menu_component
         self.pages = self.construct_pages()
@@ -142,6 +143,7 @@ class PaginatedMenuComponent(LabeledSelectionComponent):
                 self.current_page += 1
             else:
                 raise RuntimeError("No next page exists")
+
         return functional_component()(_component)
 
     def _previous_page(self) -> type[Component]:
@@ -150,6 +152,7 @@ class PaginatedMenuComponent(LabeledSelectionComponent):
                 self.current_page -= 1
             else:
                 raise RuntimeError("No previous page exists")
+
         return functional_component()(_component)
 
     def _select_return(self):
@@ -177,7 +180,7 @@ class PaginatedMenuComponent(LabeledSelectionComponent):
         return [LabeledSelectionComponent(self.game_state, page, self.top_level_prompt_callback),
                 self.construct_control_component()]
 
-    def display_options(self):
+    def display_options(self) -> None:
         for component in self.construct_components():
             component.display_options()
 
@@ -186,8 +189,8 @@ class PaginatedMenuComponent(LabeledSelectionComponent):
         for component in self.construct_components():
             self.binding_map |= component.binding_map
         return super().handle_selection()
-    
-    def can_exit(self):
+
+    def can_exit(self) -> bool:
         if self.return_only:
             return self.return_selected
         return super().can_exit()
@@ -211,13 +214,13 @@ class LinearComponent(Component):
 class BinarySelectionComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState, query: str, yes_component: type[Component],
                  no_component: type[Component],
-    ):
+                 ):
         super().__init__(game_state,
                          bindings=[SelectionBinding('y', '', yes_component),
                                    SelectionBinding('n', '', no_component)])
         self.query = query
 
-    def display_options(self):
+    def display_options(self) -> None:
         print_and_sleep(f"{self.query.strip()} (y/n)?")
 
 
@@ -288,10 +291,9 @@ class ConditionalComponent(GatekeepingComponent):
                          deny_component=NoOpComponent)
 
 
-
 @dataclass
 class ColoredNameSelectionBinding(SelectionBinding):
     color: Callable[[str], str]
 
-    def format(self):
+    def format(self) -> str:
         return self.color(self.name)

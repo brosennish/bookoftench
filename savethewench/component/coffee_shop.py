@@ -1,15 +1,20 @@
+import random
+
+from savethewench import event_logger
 from savethewench.audio import play_music
-from savethewench.component.registry import register_component
 from savethewench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
-    functional_component, GatekeepingComponent
+    functional_component, GatekeepingComponent, Component
+from savethewench.component.registry import register_component
 from savethewench.data.audio import SHOP_THEME
-from savethewench.data.coffee_items import Coffee_Items
 from savethewench.data.components import COFFEE_SHOP
 from savethewench.model import GameState
 from savethewench.model.coffee_item import CoffeeItem
 from savethewench.model.coffee_shop import CoffeeShop
+from savethewench.model.events import PlayerDeathEvent
+from savethewench.model.illness import load_illnesses
+from savethewench.model.player import Player
 from savethewench.model.util import display_coffee_header
-from savethewench.ui import blue, yellow
+from savethewench.ui import blue, yellow, green, red
 from savethewench.util import print_and_sleep
 
 
@@ -45,7 +50,7 @@ class CoffeeShopComponent(LabeledSelectionComponent):
         ]
         self.exit_shop = False
 
-    def play_theme(self):
+    def play_theme(self) -> None:
         play_music(SHOP_THEME)
 
     def _return(self):
@@ -56,12 +61,12 @@ class CoffeeShopComponent(LabeledSelectionComponent):
             f"{blue('next time!')}\n"
         ), 1)
 
-    def can_exit(self):
+    def can_exit(self) -> bool:
         return (self.exit_shop
                 or not self.game_state.player.is_alive()
                 or self.game_state.player.is_sick())
 
-    def display_options(self):
+    def display_options(self) -> None:
         print_and_sleep(
             f"{blue('Welcome to ')} "
             f"{yellow('*cough cough* ')} "
@@ -71,9 +76,44 @@ class CoffeeShopComponent(LabeledSelectionComponent):
             component.display_options()
 
     @staticmethod
-    def _make_purchase_component(coffee_item: CoffeeItem):
+    def _make_purchase_component(coffee_item: CoffeeItem) -> type[Component]:
         @functional_component(state_dependent=True)
         def purchase_component(game_state: GameState):
-            game_state.make_coffee_purchase(coffee_item)
+            player = game_state.player
+            if player.coins < coffee_item.cost:
+                print_and_sleep(yellow(f"Need more coin"), 1)
+            else:
+                player.coins -= coffee_item.cost
+                apply_coffee_effect(coffee_item, player)
 
         return purchase_component
+
+
+def apply_coffee_effect(item: CoffeeItem, player: Player):
+    original_hp = player.hp
+    player.gain_hp(item.hp)
+    print_and_sleep(f"You restored {green(player.hp - original_hp)} hp!", 1)
+
+    illness = random.choice(load_illnesses())
+
+    if random.random() < item.risk:
+        if illness.causes_instant_death:
+            print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."),
+                            2)
+            print_and_sleep(f"Cause of Death: {red(f'{illness.name}')}", 2)
+            print_and_sleep(f"{red(f'{illness.description}')}", 3)
+            player.hp = 0
+            player.lives -= 1
+            event_logger.log_event(PlayerDeathEvent(player.lives))
+        else:
+            player.illness = illness
+            player.illness_death_lvl = player.lvl + illness.levels_until_death
+
+            print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're sicker than Hell."), 2)
+            print_and_sleep(f"Illness: {yellow(f'{illness.name}')}", 2)
+            print_and_sleep(f"{yellow(f'{illness.description}')}", 2)
+            print_and_sleep(
+                f"Visit the Free Range Children's Hospital for treatment "
+                f"or die at level {red(f'{player.illness_death_lvl}')}\n",
+                3
+            )

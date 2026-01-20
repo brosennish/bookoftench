@@ -9,4 +9,3 @@ Shit_Coin_Names = ['Krill', 'Cray', 'Dry', 'Wet', 'Mayor', 'Sea', 'Gravel', 'Car
                    'Gumbo', 'Slime', 'Love', 'Pub', 'Ocean', 'Bayou', 'Mensch', 'Jasper', 'Jeffrey', 'Denny', 'Sledge',
                    'Crispy', 'Ledge', 'Bridge', 'Train', 'Jump', 'World', 'Death', 'Hole', 'Captain', 'Swim', 'Spawn',
                    'Egg', 'Consolation', 'Shag', 'Champion', 'Boy', 'Salt', 'Water', 'Wave', 'Boat', 'Yacht', 'River']
-

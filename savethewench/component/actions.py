@@ -213,7 +213,7 @@ class Attack(Component):
         super().__init__(game_state)
         self.failed_flee = False
 
-    def handle_enemy_death(self, player, enemy):
+    def handle_enemy_death(self, player, enemy) -> None:
         if enemy.type == FINAL_BOSS:
             self.game_state.victory = True
             return
@@ -257,7 +257,7 @@ class FailedFlee(Attack):
 
 
 class FleeSelectionBinding(SelectionBinding):
-    def format(self):
+    def format(self) -> str:
         return f"Flee ({int(calculate_flee() * 100)}%)"
 
 
@@ -303,10 +303,10 @@ class Battle(LabeledSelectionComponent):
         self.fled = False
         self._subscribe_listeners()
 
-    def play_theme(self):
+    def play_theme(self) -> None:
         play_music(BATTLE_THEME)
 
-    def can_exit(self):
+    def can_exit(self) -> bool:
         return self.fled or not (self.player.is_alive() and self.enemy.is_alive())
 
     def _subscribe_listeners(self):
@@ -321,13 +321,13 @@ class FightBoss(Battle):
         super().__init__(game_state)
         self.enemy = self.game_state.current_area.summon_boss()
 
-    def play_theme(self):
+    def play_theme(self) -> None:
         play_music(self.enemy.theme)
 
     @staticmethod
     @functional_component(state_dependent=True)
     # TODO generalize this and get it out of component
-    def captain_hole_action(game_state: GameState):
+    def captain_hole_action(game_state: GameState) -> None:
         del game_state.player.items[TENCH_FILET]
         injury = random.randint(25, 50)
         game_state.current_area.boss.hp -= injury
