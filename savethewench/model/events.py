@@ -3,6 +3,7 @@ from typing import Optional
 from savethewench.audio import play_sound
 from savethewench.data.audio import PURCHASE, GREAT_JOB
 from savethewench.event_base import Event, EventType
+from savethewench.model.illness import Illness
 from savethewench.ui import green, cyan, red, yellow, dim
 from savethewench.util import print_and_sleep
 
@@ -158,9 +159,13 @@ class CoffeeEvent(Event):
 
 
 class TreatmentEvent(Event):
-    def __init__(self, illness, event_type: EventType):
-        super().__init__(event_type)
+    def __init__(self, illness: Illness, event_type: EventType):
+        super().__init__(event_type, callback=self._callback)
         self.illness = illness
+
+    def _callback(self):
+        if self.type == EventType.TREATMENT_SUCCESS:
+            print_and_sleep(green(f"You have been cured of {self.illness.name}!"), 2)
 
 
 class OfficerEvent(Event):

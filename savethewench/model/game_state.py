@@ -97,37 +97,6 @@ class GameState:
     def play_current_area_theme(self) -> None:
         play_music(self.current_area.theme)
 
-    def make_treatment_purchase(self) -> bool:
-        illness = self.player.illness
-
-        if self.player.coins < illness.cost:
-            print_and_sleep(yellow(f"Need more coin"), 1)
-            return False
-
-        if isinstance(illness, Illness):
-            self.do_treatment()
-        else:
-            return False
-        self.player.coins -= illness.cost
-        return True
-
-    def do_treatment(self):
-        player = self.player
-        illness = player.illness
-
-        if random.random() < illness.success_rate:
-            print_and_sleep(f"{cyan('Woah, I really didn\'t expect that to work.')}\n", 2)
-            player.illness = None
-            player.illness_death_lvl = None
-            event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_SUCCESS))
-            return self
-        else:
-            print_and_sleep(blue(
-                f"Shit didn't take. You owe me {illness.cost} of coin. Also - you into crypto?"),
-                2)
-            event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_FAIL))
-            return self
-
     def make_coffee_purchase(self, coffee_item: CoffeeItem):
         if self.player.coins < coffee_item.cost:
             print_and_sleep(yellow(f"Need more coin"), 1)
