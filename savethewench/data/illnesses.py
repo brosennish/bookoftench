@@ -6,7 +6,7 @@ PHANTOM_HIM_SYNDROME = "Phantom Him Syndrome"
 RESTLESS_BUTT_SYNDROME = "Restless Butt Syndrome"
 INWARD_HAIR_GROWTH_DISORDER = "Inward Hair Growth Disorder"
 
-All_Illnesses = [
+Illnesses = [
     # --- Instant Death ---
     {'name': LATE_ONSET_SIDS,
      'description': "Sudden infant death syndrome that occurs after infancy.",
