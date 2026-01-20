@@ -75,7 +75,7 @@ class Boss(Enemy):
         data = copy.deepcopy(data)
         if 'preamble' in data:
             data['preamble'] = [DisplayableText(**d) for d in data['preamble']]
-        return super().from_dict(data)
+        return Boss(**data)
 
     def do_preamble(self) -> None:
         for displayableText in self.preamble:

@@ -39,6 +39,7 @@ class SaveTheWenchGame:
             for area in game_state.areas:
                 if area.name == "City":
                     area.actions_menu.pages[-1].append(CRYPTO_EXCHANGE)
+            game_state.current_area.enemy_count = 0
             component_type(game_state).run()
         except KeyboardInterrupt:
             print_and_sleep("\nExiting...", 1)
