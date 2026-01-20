@@ -32,12 +32,12 @@ class State:
 _state: Optional[State] = None
 
 
-def init(market_state: CryptoMarketState):
+def init(market_state: CryptoMarketState) -> None:
     global _state
     _state = State(market_state)
 
 
-def _run():
+def _run() -> None:
     coins = _state.active_coins
     shit_coin_generator = _state.market_state.shit_coin_generator
     while not _state.stop_event.is_set():
@@ -49,7 +49,7 @@ def _run():
         _state.stop_event.wait(_state.interval)
 
 
-def start():
+def start() -> None:
     if _state.thread.is_alive():
         return
     service_start = time.time()
@@ -58,7 +58,7 @@ def start():
     _state.thread.start()
 
 
-def stop():
+def stop() -> None:
     _state.stop_event.set()
     _state.thread.join()
     _state.executor.shutdown(wait=True)

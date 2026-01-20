@@ -1,6 +1,6 @@
 from savethewench.audio import play_music
 from savethewench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
-    functional_component, GatekeepingComponent
+    functional_component, GatekeepingComponent, Component
 from savethewench.component.registry import register_component
 from savethewench.data.audio import SHOP_THEME
 from savethewench.data.components import COFFEE_SHOP
@@ -44,7 +44,7 @@ class CoffeeShopComponent(LabeledSelectionComponent):
         ]
         self.exit_shop = False
 
-    def play_theme(self):
+    def play_theme(self) -> None:
         play_music(SHOP_THEME)
 
     def _return(self):
@@ -55,12 +55,12 @@ class CoffeeShopComponent(LabeledSelectionComponent):
             f"{blue('next time!')}\n"
         ), 1)
 
-    def can_exit(self):
+    def can_exit(self) -> bool:
         return (self.exit_shop
                 or not self.game_state.player.is_alive()
                 or self.game_state.player.is_sick())
 
-    def display_options(self):
+    def display_options(self) -> None:
         print_and_sleep(
             f"{blue('Welcome to ')} "
             f"{yellow('*cough cough* ')} "
@@ -70,7 +70,7 @@ class CoffeeShopComponent(LabeledSelectionComponent):
             component.display_options()
 
     @staticmethod
-    def _make_purchase_component(coffee_item: CoffeeItem):
+    def _make_purchase_component(coffee_item: CoffeeItem) -> type[Component]:
         @functional_component(state_dependent=True)
         def purchase_component(game_state: GameState):
             game_state.make_coffee_purchase(coffee_item)

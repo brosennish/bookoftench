@@ -12,7 +12,7 @@ def flush_input():
         termios.tcflush(sys.stdin, termios.TCIFLUSH)
 
 
-def skippable_sleep(seconds):
+def skippable_sleep(seconds) -> None:
     end = t.time() + seconds
     while t.time() < end:
         r, _, _ = select.select([sys.stdin], [], [], 0)

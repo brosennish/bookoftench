@@ -96,10 +96,10 @@ class Perk[T](Buyable):
     wrappers: List[FunctionWrapper] = field(default_factory=list)
 
     @property
-    def active(self):
+    def active(self) -> bool:
         return self._active
 
-    def activate(self):
+    def activate(self) -> None:
         print_and_sleep(purple(f"{self.name} added to perks."), 1)
         self._active = True
 
@@ -109,7 +109,7 @@ class Perk[T](Buyable):
         wrapper = self.wrappers[index]
         return wrapper.wrapper_config.to_wrapper(self.name, wrapper.wrapper_type)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
             f"Cost: {orange(self.cost):<18}",
@@ -120,7 +120,7 @@ class Perk[T](Buyable):
 _PERKS: Dict[str, Perk] = {}
 
 
-def set_perk_cache(perk_cache: Dict[str, Perk]):
+def set_perk_cache(perk_cache: Dict[str, Perk]) -> None:
     global _PERKS
     _PERKS = perk_cache
 
@@ -167,7 +167,7 @@ def load_perk(perk_name: str) -> Perk:
     return load_perks(lambda p: p.name == perk_name)[0]
 
 
-def activate_perk(perk_name: str):
+def activate_perk(perk_name: str) -> None:
     load_perk(perk_name).activate()
 
 

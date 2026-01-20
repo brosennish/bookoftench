@@ -47,7 +47,7 @@ class OwnedHeap:
     def total_quantity(self) -> int:
         return sum(q for _, q in self._heap)
 
-    def pop_sold(self, quantity: int):
+    def pop_sold(self, quantity: int) -> None:
         if quantity == 0:
             return
         p, q = heapq.heappop(self._heap)
@@ -56,7 +56,7 @@ class OwnedHeap:
         elif quantity > q:
             self.pop_sold(quantity - q)
 
-    def push_bought(self, quantity: int, price: int):
+    def push_bought(self, quantity: int, price: int) -> None:
         heapq.heappush(self._heap, PricedQuantity(price, quantity))
 
 
@@ -76,11 +76,11 @@ class TransactionHistory:
     def owned(self) -> int:
         return self._owned_heap.total_quantity
 
-    def log_buy(self, quantity: int, price: int):
+    def log_buy(self, quantity: int, price: int) -> None:
         self.transactions.append(Transaction(quantity=quantity, price=price, type=TransactionType.BUY))
         self._owned_heap.push_bought(quantity, price)
 
-    def log_sell(self, quantity: int, price: int):
+    def log_sell(self, quantity: int, price: int) -> None:
         self.transactions.append(Transaction(quantity=quantity, price=price, type=TransactionType.SELL))
         self._owned_heap.pop_sold(quantity)
 
@@ -110,7 +110,7 @@ class CryptoCurrency:
         self._start_price = self.price
 
     @property
-    def start_time(self):
+    def start_time(self) -> float:
         return self._last_update
 
     @start_time.setter
@@ -139,10 +139,10 @@ class CryptoCurrency:
     def delisted(self) -> bool:
         return self.price == 0
 
-    def freeze(self):
+    def freeze(self) -> None:
         self.frozen = True
 
-    def unfreeze(self):
+    def unfreeze(self) -> None:
         self.start_time = time.time()
         self.ipo = False
         self.frozen = False
@@ -161,7 +161,7 @@ class CryptoCurrency:
             pass  # TODO
         self.price = max(new_price, 0)
 
-    def poll_market(self):
+    def poll_market(self) -> None:
         current_time = time.time()
         if self.frozen:
             self._last_update = current_time
@@ -172,10 +172,10 @@ class CryptoCurrency:
             self._update_trigger()
             self._last_update = current_time
 
-    def log_purchase(self, quantity: int, price: int):
+    def log_purchase(self, quantity: int, price: int) -> None:
         self.history.log_buy(quantity, price)
 
-    def log_sale(self, quantity: int, price: int):
+    def log_sale(self, quantity: int, price: int) -> None:
         self.history.log_sell(quantity, price)
 
 

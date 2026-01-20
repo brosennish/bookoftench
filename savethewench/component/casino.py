@@ -33,7 +33,7 @@ def can_gamble(game_state: GameState) -> bool:
 
 
 @functional_component(state_dependent=True)
-def display_crapped_out_message(game_state: GameState):
+def display_crapped_out_message(game_state: GameState) -> None:
     player = game_state.player
     message = "You're out of plays. Buy a perk or level up, bozo.\n" if player.remaining_plays == 0 else \
         "Later, bozo.\n"
@@ -63,10 +63,10 @@ class Casino(LabeledSelectionComponent):
     def _return(self):
         self.leave_casino = True
 
-    def can_exit(self):
+    def can_exit(self) -> bool:
         return self.leave_casino
 
-    def play_theme(self):
+    def play_theme(self) -> None:
         play_music(CASINO_THEME)
 
 

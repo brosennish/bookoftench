@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import random
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
@@ -52,7 +54,7 @@ class PlayerWeapon(Weapon):
         return apply_perks()
 
     @classmethod
-    def from_weapon(cls, weapon: Weapon):
+    def from_weapon(cls, weapon: Weapon) -> PlayerWeapon:
         return cls(**weapon.__dict__)
 
 
@@ -100,25 +102,25 @@ class Player(Combatant):
     @property
     @attach_perk(GRAMBLIN_MAN, silent=True)
     @attach_perk(GRAMBLING_ADDICT, WrapperIndices.GramblingAddict.PLAYS, silent=True)
-    def max_plays(self):
+    def max_plays(self) -> int:
         return self._max_plays
 
     @property
     @attach_perks(NOMADS_LAND, VAGABONDAGE, silent=True)
-    def max_items(self):
+    def max_items(self) -> int:
         return self._max_items
 
     @property
     @attach_perks(NOMADS_LAND, VAGABONDAGE, silent=True)
-    def max_weapons(self):
+    def max_weapons(self) -> int:
         return self._max_weapons
 
     @property  # specifically made for returning a calculated value: print(player.xp_needed)
-    def xp_needed(self):
+    def xp_needed(self) -> int:
         return 100 + (self.lvl - 1) * 10
 
     @property
-    def remaining_plays(self):
+    def remaining_plays(self) -> int:
         return self.max_plays - self.games_played
 
     @property
@@ -138,7 +140,7 @@ class Player(Combatant):
     def get_items(self) -> List[Item]:
         return list(self.items.values())
 
-    def display_item_count(self):
+    def display_item_count(self) -> None:
         print_and_sleep(f"Items {dim(f"({len(self.items)}/{self.max_items})")}")
 
     def add_item(self, item: Item) -> bool:
@@ -156,7 +158,7 @@ class Player(Combatant):
     def _apply_hp_bonus(self, base: int) -> int:
         return base
 
-    def use_item(self, name: str):
+    def use_item(self, name: str) -> None:
         item = self.items[name]
         gain = int(min(self.max_hp - self.hp, self._apply_hp_bonus(item.hp)))
         self.gain_hp(gain)
@@ -180,19 +182,19 @@ class Player(Combatant):
         self.coins -= buyable.cost
         return True
 
-    def sell_item(self, name: str):
+    def sell_item(self, name: str) -> None:
         item = self.items[name]
         self.coins += item.sell_value
         del self.items[name]
         event_logger.log_event(ItemSoldEvent(item.name, item.sell_value))
 
-    def gain_hp(self, amount: int):
+    def gain_hp(self, amount: int) -> None:
         self.hp = min(self.max_hp, self.hp + amount)  # clamp on max_hp
 
-    def display_weapon_count(self):
+    def display_weapon_count(self) -> None:
         print_and_sleep(f"Weapons {dim(f"({len(self.weapon_dict)}/{self.max_weapons})")}")
 
-    def display_equip_header(self):
+    def display_equip_header(self) -> None:
         self.display_weapon_count()
         print_and_sleep(f"{cyan(self.current_weapon.name)} {dim('(Equipped)')}", newline_prefix=False)
 
@@ -210,7 +212,7 @@ class Player(Combatant):
             self.weapon_dict[weapon.name] = PlayerWeapon.from_weapon(weapon)
             return True
 
-    def sell_weapon(self, name: str):
+    def sell_weapon(self, name: str) -> None:
         sellable_weapon = self.weapon_dict[name].to_sellable_weapon()
         self.coins += sellable_weapon.sell_value
         del self.weapon_dict[name]
@@ -219,24 +221,24 @@ class Player(Combatant):
             self.current_weapon = PlayerWeapon.from_weapon(selection)
         event_logger.log_event(ItemSoldEvent(sellable_weapon.name, sellable_weapon.sell_value))
 
-    def equip_weapon(self, name: str):
+    def equip_weapon(self, name: str) -> None:
         if name != self.current_weapon.name:
             event_logger.log_event(SwapWeaponEvent())
             self.current_weapon = self.weapon_dict[name]
             print_and_sleep(cyan(f"{name} equipped."), 1)
 
-    def swap_found_item(self, old_name: str, found_item: Item):
+    def swap_found_item(self, old_name: str, found_item: Item) -> None:
         del self.items[old_name]
         self.items[found_item.name] = found_item
         print_and_sleep(cyan(f"{old_name} discarded. {found_item.name} added to sack."), 1)
 
-    def swap_found_weapon(self, old_name: str, found_weapon: Weapon):
+    def swap_found_weapon(self, old_name: str, found_weapon: Weapon) -> None:
         del self.weapon_dict[old_name]
         self.weapon_dict[found_weapon.name] = PlayerWeapon.from_weapon(found_weapon)
         self.current_weapon = self.weapon_dict[found_weapon.name]
         print_and_sleep(cyan(f"{old_name} discarded. {found_weapon.name} equipped."), 1)
 
-    def obtain_enemy_weapon(self, enemy_weapon: Weapon):
+    def obtain_enemy_weapon(self, enemy_weapon: Weapon) -> None:
         match = next((w for w in self.weapon_dict.values()
                       if w.name == enemy_weapon.name), None)
         if match:
@@ -260,7 +262,7 @@ class Player(Combatant):
         activate_perk(perk.name)
         return True
 
-    def gain_coins(self, amount: int):
+    def gain_coins(self, amount: int) -> None:
         self.coins += amount
         print_and_sleep(green(f"You gained {amount} coins!"), 1)
 
@@ -270,7 +272,7 @@ class Player(Combatant):
     def _calculate_xp_from_enemy(enemy: Combatant) -> int:
         return int(enemy.max_hp / 2.8)
 
-    def gain_xp_from_enemy(self, enemy: Combatant):
+    def gain_xp_from_enemy(self, enemy: Combatant) -> None:
         amount = self._calculate_xp_from_enemy(enemy)
         self._gain_xp(amount)
 
@@ -278,11 +280,11 @@ class Player(Combatant):
     def _calculate_xp_other(self, amount: int) -> int:
         return amount
 
-    def gain_xp_other(self, amount: int):
+    def gain_xp_other(self, amount: int) -> None:
         amount = self._calculate_xp_other(amount)
         self._gain_xp(amount)
 
-    def _gain_xp(self, amount: int):
+    def _gain_xp(self, amount: int) -> None:
         self.xp += amount
         print_and_sleep(green(f"You gained {amount} XP!"), 1)
 
@@ -294,7 +296,7 @@ class Player(Combatant):
     def get_illness_survival_probability(self) -> float:
         return 0.0
 
-    def level_up(self):
+    def level_up(self) -> None:
         # ---- core level-up effects live here ----
         self.xp -= self.xp_needed
         self.lvl += 1
@@ -330,7 +332,7 @@ class Player(Combatant):
                 self.illness = None
                 self.illness_death_lvl = None
 
-    def apply_death_penalties(self):
+    def apply_death_penalties(self) -> None:
         self.coins = int(self.coins * 0.25) if perk_is_active(WALLET_CHAIN) else 0  # TODO use the framework for this
         self.items = item_defaults()
         self.weapon_dict = weapon_defaults()
@@ -342,7 +344,7 @@ class Player(Combatant):
         self.illness = None
         self.illness_death_lvl = None
 
-    def handle_broken_weapon(self):
+    def handle_broken_weapon(self) -> None:
         event_logger.log_event(WeaponBrokeEvent())
         del self.weapon_dict[self.current_weapon.name]
         self.current_weapon = self.weapon_dict[BARE_HANDS]
@@ -368,8 +370,7 @@ class Player(Combatant):
                     self.gain_hp(gain)
                     print_and_sleep(purple(f"Restored {gain} HP with Vampiric Sperm!"), 1)
 
-            # for loading from save file
-
+    # for loading from save file
     def __setstate__(self, state):
         self.__dict__.update(state)
         self._subscribe_listeners()

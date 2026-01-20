@@ -1,6 +1,6 @@
 from savethewench.audio import play_music
 from savethewench.component.base import functional_component, GatekeepingComponent, BinarySelectionComponent, \
-    NoOpComponent
+    NoOpComponent, Component
 from savethewench.component.registry import register_component
 from savethewench.data.audio import HOSPITAL_THEME
 from savethewench.data.components import HOSPITAL
@@ -28,24 +28,24 @@ class HospitalComponent(BinarySelectionComponent):
                          )
         self.exit_hospital = False
 
-    def display_options(self):
+    def display_options(self) -> None:
         display_hospital_header(self.game_state)
         super().display_options()
 
-    def play_theme(self):
+    def play_theme(self) -> None:
         play_music(HOSPITAL_THEME)
 
     def _return(self):
         self.exit_hospital = True
         print_and_sleep(blue("You'll be back!"), 1)
 
-    def can_exit(self):
+    def can_exit(self) -> bool:
         return (self.exit_hospital
                 or not self.game_state.player.is_alive()
                 or not self.game_state.player.is_sick())
 
     @staticmethod
-    def _make_purchase_component():
+    def _make_purchase_component() -> type[Component]:
         @functional_component(state_dependent=True)
         def purchase_component(game_state: GameState):
             game_state.make_treatment_purchase()

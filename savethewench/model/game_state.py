@@ -59,7 +59,7 @@ class GameState:
 
     @property
     @attach_perk(TENCH_THE_BOUNTY_HUNTER, silent=True)
-    def bounty(self):
+    def bounty(self) -> int:
         return self._bounty
 
     @bounty.setter
@@ -80,13 +80,13 @@ class GameState:
         crypto_service.start()
         self._subscribe_listeners()
 
-    def refresh_bounty(self):
+    def refresh_bounty(self) -> None:
         bounty_area = random.choice(self.areas)
         enemy_choice: Enemy = load_enemy(random.choice(bounty_area.enemies))  # = random.choice(load_enemies())
         self.wanted = enemy_choice.name
         self.bounty = enemy_choice.bounty
 
-    def update_current_area(self, area_name: str):
+    def update_current_area(self, area_name: str) -> None:
         for area in self.areas:
             if area.name == area_name:
                 self.current_area = area
@@ -94,10 +94,10 @@ class GameState:
                 return
         raise KeyError(f"Area '{area_name}' not found")
 
-    def play_current_area_theme(self):
+    def play_current_area_theme(self) -> None:
         play_music(self.current_area.theme)
 
-    def make_treatment_purchase(self):
+    def make_treatment_purchase(self) -> bool:
         illness = self.player.illness
 
         if self.player.coins < illness.cost:

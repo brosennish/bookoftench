@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import random
 from dataclasses import dataclass, field
 from typing import List
@@ -48,10 +50,10 @@ class Weapon(WeaponBase, Buyable):
     def get_blind_turns(self) -> int:
         return random.randint(self.blind_turns_min, self.blind_turns_max)
 
-    def to_sellable_weapon(self):
+    def to_sellable_weapon(self) -> SellableWeapon:
         return SellableWeapon(**vars(self))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
             f"{f"Cost: {orange(self.cost)}":<24}",
@@ -69,7 +71,7 @@ class SellableWeapon(Weapon):
         self._sell_value = self.sell_value
 
     @property
-    def sell_value(self):
+    def sell_value(self) -> int:
         max_uses = load_weapon(self.name).uses  # TODO optimize out object construction overhead
         if max_uses == -1:
             return self._sell_value
@@ -82,7 +84,7 @@ class SellableWeapon(Weapon):
     def sell_value(self, value):
         self._sell_value = value
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
             f"{f"Value: {orange(self.sell_value)}":<24}",

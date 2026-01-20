@@ -1,4 +1,5 @@
 import os
+from typing import AnyStr
 
 # Themes
 AREA_BOSS_THEME = "area_boss_theme.wav"
@@ -41,5 +42,5 @@ WELCOME_TO_HELL = "welcome_to_hell.wav"
 
 
 # TODO make sure this works regardless of cwd
-def get_audio_path(filename):
+def get_audio_path(filename) -> AnyStr:
     return os.path.abspath(os.path.join('savethewench/data/audio', filename))

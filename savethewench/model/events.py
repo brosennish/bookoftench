@@ -23,7 +23,7 @@ class PurchaseEvent(Event):
         super().__init__(event_type)
         self.callback = lambda: self._callback(name, amount)
 
-    def sub_callback(self):
+    def sub_callback(self) -> None:
         pass
 
     def _callback(self, name, amount):
@@ -37,7 +37,7 @@ class BuyItemEvent(PurchaseEvent):
         super().__init__(EventType.BUY_ITEM, name, amount)
         self.sub_msg = f"{name} added to sack."
 
-    def sub_callback(self):
+    def sub_callback(self) -> None:
         print_and_sleep(cyan(self.sub_msg), 1)
 
 
@@ -46,7 +46,7 @@ class BuyWeaponEvent(PurchaseEvent):
         super().__init__(EventType.BUY_WEAPON, name, amount)
         self.sub_msg = f"{name} added to weapons. Uses: {uses}\n"
 
-    def sub_callback(self):
+    def sub_callback(self) -> None:
         print_and_sleep(cyan(self.sub_msg), 1)
 
 

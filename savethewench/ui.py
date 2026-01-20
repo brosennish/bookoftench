@@ -7,35 +7,35 @@ def _format(ansi_code, text) -> str:
 
 # --- Colors ---
 
-def blue(text):
+def blue(text) -> str:
     return _format(Fore.BLUE, text)
 
 
-def cyan(text):
+def cyan(text) -> str:
     return _format(Fore.CYAN, text)
 
 
-def green(text):
+def green(text) -> str:
     return _format(Fore.GREEN, text)
 
 
-def orange(text):
+def orange(text) -> str:
     return _format("\033[38;5;208m", text)
 
 
-def purple(text):
+def purple(text) -> str:
     return _format(Fore.MAGENTA, text)
 
 
-def red(text):
+def red(text) -> str:
     return _format(Fore.RED, text)
 
 
-def white(text):
+def white(text) -> str:
     return _format(Fore.WHITE, text)
 
 
-def yellow(text):
+def yellow(text) -> str:
     return _format(Fore.YELLOW, text)
 
 
@@ -75,18 +75,9 @@ def color_text(color: str, text: str) -> str:
 
 # --- Styles ---
 
-def bright(text):
+def bright(text) -> str:
     return _format(Style.BRIGHT, text)
 
 
-def dim(text):
+def dim(text) -> str:
     return _format(Style.DIM, text)
-
-
-# TODO - does it even make sense to have these last two?
-def normal(text):
-    return _format(Style.NORMAL, text)
-
-
-def reset(text):
-    return _format(Style.RESET_ALL, text)

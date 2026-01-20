@@ -29,7 +29,7 @@ class Achievement:
     reward_value: Optional[int] = None
     active: bool = False
 
-    def activation_action(self, player: Player):
+    def do_activation_action(self, player: Player) -> None:
         reward_str: str = ''
         reward_callback = lambda: None  # so we can print the achievement unlock before any reward messaging
         match self.reward_type:
@@ -58,9 +58,9 @@ class AchievementEvent(Event):
         super().__init__(EventType.ACHIEVEMENT_UNLOCKED)
         self.achievement = achievement
 
-    def activate(self, player: Player):
+    def activate(self, player: Player) -> None:
         self.achievement.active = True
-        self.achievement.activation_action(player)
+        self.achievement.do_activation_action(player)
 
 
 @dataclass

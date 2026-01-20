@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import copy
 import random
 from dataclasses import dataclass, field
@@ -45,7 +47,7 @@ class Enemy(Combatant, NPC):
     def drop_coins(self) -> int:
         return self.coins
 
-    def handle_broken_weapon(self):
+    def handle_broken_weapon(self) -> None:
         del self.weapon_dict[self.current_weapon.name]
         if len(self.weapon_dict) == 0:
             self.weapon_dict[BARE_HANDS] = load_weapon(BARE_HANDS)
@@ -69,13 +71,13 @@ class Boss(Enemy):
     preamble: List[DisplayableText] = field(default_factory=list)
 
     @classmethod
-    def from_dict(cls, data: dict):
+    def from_dict(cls, data: dict) -> Boss:
         data = copy.deepcopy(data)
         if 'preamble' in data:
             data['preamble'] = [DisplayableText(**d) for d in data['preamble']]
         return super().from_dict(data)
 
-    def do_preamble(self):
+    def do_preamble(self) -> None:
         for displayableText in self.preamble:
             displayableText.display()
 

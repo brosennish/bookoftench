@@ -12,24 +12,24 @@ _LISTENERS: Dict[type[Event], Set[type[Listener]]] = defaultdict(set)
 # to GameState in particular, so that counts can be
 # serialized more easily when game is saved and
 # set when game is loaded
-def set_counter(counter: Counter):
+def set_counter(counter: Counter) -> None:
     global _COUNTER
     _COUNTER = counter
 
 
-def log_event(event: Event):
+def log_event(event: Event) -> None:
     _COUNTER[event.type] += 1
     event.callback()
     _notify(event)
 
 
-def add_subscriber(listener: Listener, *event_types: type[Event]):
+def add_subscriber(listener: Listener, *event_types: type[Event]) -> None:
     global _LISTENERS
     for event_type in event_types:
         _LISTENERS[event_type].add(type[listener])
 
 
-def remove_subscriber(listener: Listener):
+def remove_subscriber(listener: Listener) -> None:
     global _LISTENERS
     for event_type, listener_classes in _LISTENERS.items():
         if type(listener) in listener_classes:
@@ -40,12 +40,12 @@ def get_count(event_type: EventType) -> int:
     return _COUNTER[event_type]
 
 
-def _notify(event: Event):
+def _notify(event: Event) -> None:
     for listener_class in _LISTENERS[type(event)]:
         listener_class.handle_event(event=event)
 
 
-def reset():
+def reset() -> None:
     global _COUNTER, _LISTENERS
     _COUNTER.clear()
     _LISTENERS.clear()
@@ -53,8 +53,8 @@ def reset():
 
 # annotate a class to subscribe to provided event types
 # class must implement event_base.Listener
-def subscribe_listener(*event_types: type[Event]):
-    def decorator(cls: type[Listener]):
+def subscribe_listener(*event_types: type[Event]) -> Callable[[type[Listener]], None]:
+    def decorator(cls: type[Listener]) -> None:
         global _LISTENERS
         for event_type in event_types:
             _LISTENERS[event_type].add(cls)

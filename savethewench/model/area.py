@@ -93,7 +93,7 @@ class Area:
         self.current_enemy = final_boss
         return self.current_enemy
 
-    def kill_current_enemy(self):
+    def kill_current_enemy(self) -> None:
         self.enemies_killed += 1
         if self.current_enemy == self.boss:
             self.boss_defeated = True

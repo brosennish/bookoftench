@@ -19,7 +19,7 @@ class AudioProcess:
             return self._process.poll() is None
         return False
 
-    def play(self):
+    def play(self) -> None:
         if self._process is not None:
             if self.is_playing():
                 self.terminate()

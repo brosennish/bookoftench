@@ -36,7 +36,7 @@ class OfficerEncounter(BinarySelectionComponent):
                          )
         self.greeting_displayed = False
 
-    def play_theme(self):
+    def play_theme(self) -> None:
         play_music(OFFICER_THEME)
 
     @staticmethod
@@ -57,7 +57,7 @@ class OfficerEncounter(BinarySelectionComponent):
             f"Bribe: {purple(calculate_bribe(self.game_state))}",
         ]))
 
-    def display_options(self):
+    def display_options(self) -> None:
         if not self.greeting_displayed:
             self._display_greeting()
             self.greeting_displayed = True
@@ -70,7 +70,7 @@ def is_officer_lurking() -> bool:
     return random.random() < 0.08
 
 
-def calculate_bribe(game_state: GameState):
+def calculate_bribe(game_state: GameState) -> int:
     return min(game_state.player.lvl * 10, 50)
 
 
