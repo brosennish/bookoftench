@@ -70,9 +70,10 @@ class SimpleWindow:
         self._current_line += newlines
 
     def flush(self):
-        self.stdscr.clear()
+        self.stdscr.erase()
         for line in self._lines:
             line.add_to_screen(self.stdscr)
-        self.stdscr.refresh()
+        self.stdscr.noutrefresh()
+        curses.doupdate()
         self._lines.clear()
         self._current_line = 0
