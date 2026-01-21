@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import copy
 import random
 from abc import ABC, abstractmethod
@@ -35,19 +37,19 @@ class WeaponBase(ABC):
     def get_accuracy(self) -> float:
         return self.accuracy
 
-    def play_sound(self):
+    def play_sound(self) -> None:
         if len(self.sound) > 0:
             play_sound(self.sound)
 
-    def use(self):
+    def use(self) -> None:
         if self.uses < 0:
             return
         self.uses -= 1
 
-    def is_broken(self):
+    def is_broken(self) -> bool:
         return self.uses == 0
 
-    def format_uses(self):
+    def format_uses(self) -> str:
         if self.uses == -1:
             return cyan('∞')
         elif self.uses == 1:
@@ -57,7 +59,7 @@ class WeaponBase(ABC):
         else:
             return f"{self.uses}"
 
-    def get_simple_format(self):
+    def get_simple_format(self) -> str:
         return f"{cyan(self.name)}\n{dim(' | ').join([
             f"{dim("Damage:")} {red(f"{self.damage}")}",
             f"{dim("Accuracy:")} {yellow(f"{self.accuracy}")}",
@@ -79,7 +81,7 @@ class DisplayableText:
     color: str = None
     sleep: int = 0
 
-    def display(self):
+    def display(self) -> None:
         print_and_sleep(color_text(self.color, self.text) if self.color is not None else self.text, seconds=self.sleep)
 
 
@@ -88,12 +90,12 @@ class RandomDisplayableText:
     upper_threshold: float
     dialogue: List[DisplayableText]
 
-    def display(self):
+    def display(self) -> None:
         for dt in self.dialogue:
             dt.display()
 
     @classmethod
-    def from_dict(cls, data: dict):
+    def from_dict(cls, data: dict) -> RandomDisplayableText:
         return cls(
             upper_threshold=data['upper_threshold'],
             dialogue=[DisplayableText(**d) for d in data['dialogue']],
@@ -108,7 +110,7 @@ class NPC:
     def __post_init__(self):
         self.random_dialogue.sort(key=lambda x: x.upper_threshold)
 
-    def do_random_dialogue(self):
+    def do_random_dialogue(self) -> None:
         roll = random.random()
         for rdt in self.random_dialogue:
             if roll <= rdt.upper_threshold:
@@ -116,7 +118,7 @@ class NPC:
                 break
 
     @classmethod
-    def from_dict(cls, data: dict):
+    def from_dict(cls, data: dict) -> NPC:
         data = copy.deepcopy(data)
         if 'random_dialogue' in data:
             data['random_dialogue'] = [RandomDisplayableText.from_dict(d) for d in data['random_dialogue']]
@@ -149,7 +151,7 @@ class Combatant(ABC):
             print_and_sleep(purple("Sledge Hammond took steroids and restored 3 HP!"), 1)
         return damage
 
-    def reset_blindness(self):
+    def reset_blindness(self) -> None:
         self.blind: bool = False
         self.blinded_by: str = ''
         self.blind_effect: float = 0.0
@@ -166,7 +168,7 @@ class Combatant(ABC):
     def get_crit_chance(self) -> float:
         return self.current_weapon.crit
 
-    def handle_miss(self):
+    def handle_miss(self) -> None:
         if isinstance(self, NPC):
             print_and_sleep(yellow(f"{self.name} missed!"), 1)
         else:
@@ -182,10 +184,10 @@ class Combatant(ABC):
             event_logger.log_event(CritEvent())
 
     @abstractmethod
-    def handle_broken_weapon(self):
+    def handle_broken_weapon(self) -> None:
         pass
 
-    def set_blind_effect(self, blinded_by: str, blind_effect: float, blind_turns: int):
+    def set_blind_effect(self, blinded_by: str, blind_effect: float, blind_turns: int) -> None:
         self.blind = True
         self.blinded_by = blinded_by
         self.blind_effect = blind_effect
@@ -196,15 +198,16 @@ class Combatant(ABC):
         if blind_effect > 0:
             blind_turns = self.current_weapon.get_blind_turns()
             other.set_blind_effect(self.current_weapon.name, blind_effect, blind_turns)
-            if other.blind: # skip if beer goggles prevents blindness
+            if other.blind:  # skip if beer goggles prevents blindness
                 prefix = f"{other.name} has been" if isinstance(other, NPC) else "You have been"
                 print_and_sleep(
-                    purple(f"{prefix} blinded by {self.current_weapon.name}. Accuracy down {int(blind_effect * 100)}% for "
-                           f"{blind_turns} turns"), 1)
+                    purple(
+                        f"{prefix} blinded by {self.current_weapon.name}. Accuracy down {int(blind_effect * 100)}% for "
+                        f"{blind_turns} turns"), 1)
 
     def handle_hit(self, other: "Combatant") -> None:
         self.current_weapon.use()
-        if not self.is_alive(): # solomon train
+        if not self.is_alive():  # solomon train
             return
         base_damage = self.current_weapon.calculate_base_damage()
         crit = random.random() < self.get_crit_chance()

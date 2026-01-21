@@ -11,7 +11,6 @@ from savethewench.model.game_state import GameState
 from savethewench.model.perk import attach_perk
 from savethewench.ui import blue, cyan, green, orange, purple, yellow, dim, red
 from savethewench.util import print_and_sleep, safe_input
-from .bank import BankVisitDecision
 from .base import LabeledSelectionComponent, SelectionBinding, NoOpComponent, \
     GatekeepingComponent, functional_component, Component, BinarySelectionComponent, TextDisplayingComponent
 from .registry import register_component
@@ -34,7 +33,7 @@ def can_gamble(game_state: GameState) -> bool:
 
 
 @functional_component(state_dependent=True)
-def display_crapped_out_message(game_state: GameState):
+def display_crapped_out_message(game_state: GameState) -> None:
     player = game_state.player
     message = "You're out of plays. Buy a perk or level up, bozo.\n" if player.remaining_plays == 0 else \
         "Later, bozo.\n"
@@ -64,10 +63,10 @@ class Casino(LabeledSelectionComponent):
     def _return(self):
         self.leave_casino = True
 
-    def can_exit(self):
+    def can_exit(self) -> bool:
         return self.leave_casino
 
-    def play_theme(self):
+    def play_theme(self) -> None:
         play_music(CASINO_THEME)
 
 
@@ -148,8 +147,7 @@ class KrillOrCray(CasinoGame):
             player.casino_won += payout
             print_and_sleep(green(f"Lucky guess, bozo! You won {payout} coins."), 0.5)
             play_sound(GOLF_CLAP)
-            if player.gain_xp_other(1):
-                BankVisitDecision(self.game_state).run()  # TODO figure out a way to not call this in so many places
+            player.gain_xp_other(1)
         else:
             print_and_sleep(
                 blue("Bozo's blunder. Classic. Could've seen that coming from six or eight miles away."), 2)
@@ -247,9 +245,7 @@ class AboveOrBelow(CasinoGame):
                 player.coins += payout
                 if self.turn == len(self.ladder):
                     print_and_sleep(f"{blue("You completed the final round.")}")
-                    if player.gain_xp_other(3):
-                        BankVisitDecision(
-                            self.game_state).run()  # TODO figure out a way to not call this in so many places
+                    player.gain_xp_other(3)
                 print_and_sleep(f"{green(f"You cashed out {payout} coins!")}")
                 player.casino_won += payout
                 self.player_quit = True

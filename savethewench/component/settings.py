@@ -1,4 +1,3 @@
-import time
 from typing import List, Callable, Tuple
 
 from savethewench import settings
@@ -7,7 +6,7 @@ from savethewench.data.components import SETTINGS
 from savethewench.model import GameState
 from savethewench.ui import yellow
 from savethewench.util import safe_input, print_and_sleep
-from .base import PaginatedMenuComponent, functional_component, Component, SelectionBinding, LabeledSelectionComponent
+from .base import PaginatedMenuComponent, functional_component, Component, SelectionBinding
 from .registry import register_component
 
 

@@ -23,7 +23,7 @@ class Bank:
     def interest_rate(self) -> float:
         return self._interest_rate
 
-    def make_deposit(self, amount: int):
+    def make_deposit(self, amount: int) -> None:
         self.balance += amount
         event_logger.log_event(BankDepositEvent(amount))
 
@@ -35,7 +35,7 @@ class Bank:
         event_logger.log_event(BankWithdrawalEvent(amount))
         return True
 
-    def apply_interest(self):
+    def apply_interest(self) -> None:
         self.interest += int(self.balance * self.interest_rate)
         self.balance += int(self.balance * self.interest_rate)
 

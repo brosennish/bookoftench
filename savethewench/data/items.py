@@ -30,7 +30,6 @@ UNIDENTIFIED_MUSHROOMS = "Unidentified Mushrooms"
 UNWANTED_PROTEIN = "Unwanted Protein"
 VERY_SPICY_NOODLES = "Very Spicy Noodles"
 
-
 Items = [
     # --- Tier 1 (10 HP) ---
     {'name': ANTS_ON_A_LOG, 'hp': 10, 'cost': 9, 'sell_value': 3, 'areas': [FOREST, SWAMP]},

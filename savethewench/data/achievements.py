@@ -16,6 +16,7 @@ TENCH_BUNDY = "Tench Bundy"
 TENCH_KILLS = "Tench Kills"
 VIGILANTE = "Vigilante"
 
+
 class RewardType(Enum):
     XP = "xp"
     COIN = "coin"

@@ -6,8 +6,7 @@ PHANTOM_HIM_SYNDROME = "Phantom Him Syndrome"
 RESTLESS_BUTT_SYNDROME = "Restless Butt Syndrome"
 INWARD_HAIR_GROWTH_DISORDER = "Inward Hair Growth Disorder"
 
-
-All_Illnesses = [
+Illnesses = [
     # --- Instant Death ---
     {'name': LATE_ONSET_SIDS,
      'description': "Sudden infant death syndrome that occurs after infancy.",
@@ -32,7 +31,6 @@ All_Illnesses = [
      'cost': 125,
      'success_rate': 0.95},
 
-
     # --- Three Levels ---
     {'name': MIND_EATING_BACTERIAL_DISEASE,
      'description': "An infection involving mind-eating bacteria.",
@@ -50,4 +48,3 @@ All_Illnesses = [
      'cost': 50,
      'success_rate': 0.15},
 ]
-

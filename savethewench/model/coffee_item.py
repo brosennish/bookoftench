@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 from savethewench.model.base import Buyable
 from savethewench.ui import dim, red, cyan, orange, green
 

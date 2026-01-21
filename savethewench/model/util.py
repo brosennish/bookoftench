@@ -44,7 +44,7 @@ def display_hospital_header(game_state: GameState) -> None:
         f"Illness: {yellow(f"{player.illness.name}")}",
         f"Cost: {orange(f"{player.illness.cost}")}",
         f"Coins: {green(f"{player.coins}")}",
-        ])}")
+    ])}")
     print_and_sleep(f"Chance of Success: {cyan(f'{int(player.illness.success_rate * 100)}%')}\n")
 
 
@@ -102,7 +102,7 @@ def display_bank_balance(game_state: GameState) -> None:
         f"Bank: {green(f"{game_state.bank.balance}")}"])}\n")
 
 
-def display_game_overview(game_state: GameState):
+def display_game_overview(game_state: GameState) -> None:
     player = game_state.player
     player_color = p_color(player.hp, player.max_hp)
 
@@ -141,7 +141,7 @@ def display_game_overview(game_state: GameState):
     display_stat("Times Traveled", event_logger.get_count(EventType.TRAVEL), blue)
 
 
-def display_player_achievements(_: GameState):
+def display_player_achievements(_: GameState) -> None:
     achievements = [a for a in load_achievements() if a.active]
     if len(achievements) == 0:
         print_and_sleep(yellow("Your achievements are dry."), 1)
@@ -164,7 +164,7 @@ def display_active_perks(game_state: GameState) -> None:
             print_and_sleep(purple(f"{perk.name} | {perk.description}"))
 
 
-def display_active_perk_count():
+def display_active_perk_count() -> None:
     print_and_sleep(f"Perks {dim(f"({len(load_perks(lambda p: p.active))})")}")
 
 

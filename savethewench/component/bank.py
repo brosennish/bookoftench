@@ -2,11 +2,13 @@ from typing import List
 
 from savethewench.audio import play_music
 from savethewench.component.base import LabeledSelectionComponent, SelectionBinding, functional_component, \
-    BinarySelectionComponent
+    BinarySelectionComponent, Component
 from savethewench.component.registry import register_component
 from savethewench.data.audio import BANK_THEME
 from savethewench.data.components import BANK
-from savethewench.model import GameState
+from savethewench.event_base import Listener
+from savethewench.event_logger import subscribe_listener
+from savethewench.model.game_state import GameState, BankVisitDecisionTriggerEvent
 from savethewench.model.util import display_bank_balance
 from savethewench.ui import blue, yellow
 from savethewench.util import print_and_sleep, safe_input
@@ -24,7 +26,7 @@ class BankComponent(LabeledSelectionComponent):
         self.leave_bank = False
         self._display_greeting()
 
-    def play_theme(self):
+    def play_theme(self) -> None:
         play_music(BANK_THEME)
 
     def _get_bindings(self) -> List[SelectionBinding]:
@@ -60,7 +62,7 @@ class BankComponent(LabeledSelectionComponent):
             print_and_sleep(yellow("Invalid choice."))
 
     @staticmethod
-    def _make_withdrawal(incur_fee=False):
+    def _make_withdrawal(incur_fee=False) -> type[Component]:
         @functional_component(state_dependent=True)
         def component(game_state: GameState):
             raw_amount = safe_input("How much would you like to withdraw?")
@@ -73,13 +75,14 @@ class BankComponent(LabeledSelectionComponent):
                     game_state.player.coins += amount
             else:
                 print_and_sleep(yellow("Invalid choice."))
+
         return component
 
     def _return(self):  # TODO stop duplicating this pattern
         _very_well()
         self.leave_bank = True
 
-    def can_exit(self):
+    def can_exit(self) -> bool:
         return self.leave_bank
 
 
@@ -93,3 +96,10 @@ class BankVisitDecision(BinarySelectionComponent):
 class WithdrawalOnlyBank(BankComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, allow_deposit=False)
+
+
+@subscribe_listener(BankVisitDecisionTriggerEvent)
+class BankVisitDecisionListener(Listener):
+    @staticmethod
+    def handle_event(event: BankVisitDecisionTriggerEvent) -> None:
+        BankVisitDecision(event.game_state).run()
