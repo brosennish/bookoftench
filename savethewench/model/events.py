@@ -177,3 +177,21 @@ class OfficerEvent(Event):
 
     def unpaid(self) -> None:
         print_and_sleep("")  # TODO funny dialogue
+
+
+# TODO for crypto events, figure out a method of alerting that doesn't print to console
+# printing to console screws up curses display if player is in the crypto market component when a coin is (de)listed
+class CoinDelistingScheduledEvent(Event):
+    def __init__(self, coin_name: str, seconds_to_delist: int):
+        super().__init__(EventType.COIN_DELISTING_SCHEDULED)
+                         #callback=lambda: print_and_sleep(f"{coin_name} will be delisted in {seconds_to_delist} seconds."))
+
+class CoinDelistedEvent(Event):
+    def __init__(self, coin_name: str):
+        super().__init__(EventType.COIN_DELISTED)
+                         #callback=lambda: print_and_sleep(f"{coin_name} has been delisted."))
+
+class CoinListedEvent(Event):
+    def __init__(self, coin_name: str, price: int):
+        super().__init__(EventType.COIN_LISTED)
+                         #callback=lambda: print_and_sleep(f"{coin_name} is now available for {price} of coin."))

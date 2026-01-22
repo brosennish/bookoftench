@@ -5,7 +5,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import Optional, List
 
-from savethewench.model.crypto import CryptoMarketState, CryptoCurrency, ShitCoinGenerator
+from savethewench.model.crypto import CryptoMarketState, CryptoCurrency
 
 
 class State:
@@ -24,9 +24,9 @@ class State:
     def max_active_coins(self) -> int:
         return self.market_state.max_active_coins
 
-    @property
-    def shit_coin_generator(self) -> ShitCoinGenerator:
-        return self.market_state.shit_coin_generator
+    def populate_market_state(self):
+        while len(self.active_coins) < self.max_active_coins:
+            self.market_state.list_new_coin()
 
 
 _state: Optional[State] = None
@@ -34,18 +34,17 @@ _state: Optional[State] = None
 
 def init(market_state: CryptoMarketState) -> None:
     global _state
+    if _state is not None:
+        # TODO log that state is being reinitialized and old thread is being killed
+        stop()
     _state = State(market_state)
 
 
 def _run() -> None:
-    coins = _state.active_coins
-    shit_coin_generator = _state.market_state.shit_coin_generator
     while not _state.stop_event.is_set():
-        while len(coins) < _state.max_active_coins:
-            coins.append(shit_coin_generator.generate())
-        for coin in coins:
-            func = coin.poll_market if coin.delisted else coin.poll_market
-            _state.executor.submit(func)
+        _state.populate_market_state()
+        for coin in _state.active_coins:
+            _state.executor.submit(coin.poll_market if not coin.zeroed else coin.poll_delist)
         _state.stop_event.wait(_state.interval)
 
 
