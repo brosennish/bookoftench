@@ -46,6 +46,7 @@ class WrapperType(Enum):
     FLOAT_CHANGE_BY_PERCENT = 5
     NONE = 6
 
+
 class WrapperIndices:
     class ApTenchStudies:
         BATTLE_XP: int = 0
@@ -58,7 +59,6 @@ class WrapperIndices:
     class TenchGenes:
         RISK: int = 0
         SURVIVAL: int = 1
-
 
 
 Perks = [

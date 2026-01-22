@@ -35,17 +35,17 @@ class ShopComponent(LabeledSelectionComponent):
         ]
         self.exit_shop = False
 
-    def play_theme(self):
+    def play_theme(self) -> None:
         play_music(SHOP_THEME)
 
     def _return(self):
         self.exit_shop = True
         print_and_sleep(blue("Until next time!"), 1)
 
-    def can_exit(self):
+    def can_exit(self) -> bool:
         return self.exit_shop
 
-    def display_options(self):
+    def display_options(self) -> None:
         print(f"\n{blue("Welcome! You have")} {green(self.game_state.player.coins)} {blue("coins.")}\n")
         for component in self.selection_components:
             component.display_options()

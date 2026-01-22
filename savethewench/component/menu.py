@@ -25,7 +25,7 @@ class StartMenu(LabeledSelectionComponent):
                                    SelectionBinding(key='L', name="Load Game", component=LoadGame),
                                    SelectionBinding(key='Q', name="Quit", component=QuitGame)])
 
-    def can_exit(self):
+    def can_exit(self) -> bool:
         return self.game_state.victory or not self.game_state.player.is_alive()
 
 
@@ -58,7 +58,7 @@ class TutorialDecision(BinarySelectionComponent):
                          yes_component=Tutorial,
                          no_component=Intro)
 
-    def play_theme(self):
+    def play_theme(self) -> None:
         play_music(INTRO_THEME)
 
 
@@ -92,7 +92,7 @@ The champion informed you that a wench has been captured - he can feel it in his
 Save her before her life runs dry...
 """)))
 
-    def play_theme(self):
+    def play_theme(self) -> None:
         play_music(INTRO_THEME)
 
 
@@ -117,10 +117,10 @@ class ActionMenu(PaginatedMenuComponent):
         return [[SelectionBinding(str(i), name, get_registered_component(name))
                  for i, name in enumerate(spec, 1)] for spec in pages]
 
-    def play_theme(self):
+    def play_theme(self) -> None:
         self.game_state.play_current_area_theme()
 
-    def can_exit(self):
+    def can_exit(self) -> bool:
         return self.game_state.victory or not self.game_state.player.is_alive()
 
 
@@ -133,7 +133,8 @@ class InGameMenu(PaginatedMenuComponent):
                  for i, name in enumerate(InGameMenuDefaults.page_one, 1)]]
 
 
-_SAVE_DIR = ".saves" # TODO don't just save straight to a directory in the repo
+_SAVE_DIR = ".saves"  # TODO don't just save straight to a directory in the repo
+
 
 @register_component(SAVE_GAME)
 class SaveGame(Component):
@@ -155,7 +156,7 @@ class LoadGame(Component):
         super().__init__(game_state)
         self.save_file = None
 
-    def set_save_file(self, save_file: str):
+    def set_save_file(self, save_file: str) -> None:
         self.save_file = save_file
 
     def run(self) -> GameState:

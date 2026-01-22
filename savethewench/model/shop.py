@@ -31,17 +31,17 @@ class Shop:
 
     @property
     @attach_perk(BROWN_FRIDAY, silent=True)
-    def max_items(self):
+    def max_items(self) -> int:
         return _MAX_ITEMS
 
     @property
     @attach_perk(BROWN_FRIDAY, silent=True)
-    def max_weapons(self):
+    def max_weapons(self) -> int:
         return _MAX_WEAPONS
 
     @property
     @attach_perk(BROWN_FRIDAY, silent=True)
-    def max_perks(self):
+    def max_perks(self) -> int:
         return _MAX_PERKS
 
     @property
@@ -82,7 +82,7 @@ class Shop:
         self._subscribe_listeners()
 
     @attach_perks(BARTER_SAUCE, TRADE_SHIP, silent=True)
-    def _discounted_cost(self, cost):
+    def _discounted_cost(self, cost) -> int:
         return cost
 
     B = TypeVar("B", bound=Buyable)
@@ -92,7 +92,7 @@ class Shop:
             buyable.cost = self._discounted_cost(buyable.cost)
         return buyables
 
-    def remove_listing(self, buyable: Buyable):
+    def remove_listing(self, buyable: Buyable) -> None:
         if isinstance(buyable, Item) and buyable in self.item_inventory:
             self.item_inventory.remove(buyable)
         if isinstance(buyable, Weapon) and buyable in self.weapon_inventory:
@@ -100,10 +100,10 @@ class Shop:
         if isinstance(buyable, Perk) and buyable in self.perk_inventory:
             self.perk_inventory.remove(buyable)
 
-    def reset_inventory(self):
+    def reset_inventory(self) -> None:
         self._item_inventory = random.sample(self._all_items, k=min(self.max_items, len(self._all_items)))
         self._weapon_inventory = random.sample([w for w in self._all_weapons if w.sell_value > 0],
-                          k=min(self.max_weapons, len(self._all_weapons)))
+                                               k=min(self.max_weapons, len(self._all_weapons)))
         self.perk_inventory = random.sample(self._all_perks, k=min(self.max_perks, len(self._all_perks)))
 
     def _subscribe_listeners(self):

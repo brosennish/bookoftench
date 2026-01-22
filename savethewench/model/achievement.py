@@ -29,7 +29,7 @@ class Achievement:
     reward_value: Optional[int] = None
     active: bool = False
 
-    def activation_action(self, player: Player):
+    def do_activation_action(self, player: Player) -> None:
         reward_str: str = ''
         reward_callback = lambda: None  # so we can print the achievement unlock before any reward messaging
         match self.reward_type:
@@ -58,9 +58,10 @@ class AchievementEvent(Event):
         super().__init__(EventType.ACHIEVEMENT_UNLOCKED)
         self.achievement = achievement
 
-    def activate(self, player: Player):
+    def activate(self, player: Player) -> None:
         self.achievement.active = True
-        self.achievement.activation_action(player)
+        self.achievement.do_activation_action(player)
+
 
 @dataclass
 class BountyCollectedAchievement(Achievement):
@@ -71,6 +72,7 @@ class BountyCollectedAchievement(Achievement):
             if event_logger.get_count(self.event_type) == self.event_threshold:
                 event_logger.log_event(AchievementEvent(self))
 
+
 @dataclass
 class CoffeeAchievement(Achievement):
 
@@ -79,6 +81,7 @@ class CoffeeAchievement(Achievement):
         def handle_event(_: Event):
             if event_logger.get_count(self.event_type) == self.event_threshold:
                 event_logger.log_event(AchievementEvent(self))
+
 
 @dataclass
 class FleeAchievement(Achievement):
@@ -89,6 +92,7 @@ class FleeAchievement(Achievement):
             if event_logger.get_count(self.event_type) == self.event_threshold:
                 event_logger.log_event(AchievementEvent(self))
 
+
 @dataclass
 class KillAchievement(Achievement):
 
@@ -98,6 +102,7 @@ class KillAchievement(Achievement):
             if event_logger.get_count(self.event_type) == self.event_threshold:
                 event_logger.log_event(AchievementEvent(self))
 
+
 @dataclass
 class LevelUpAchievement(Achievement):
 
@@ -106,6 +111,7 @@ class LevelUpAchievement(Achievement):
         def handle_event(_: Event):
             if event_logger.get_count(self.event_type) == self.event_threshold:
                 event_logger.log_event(AchievementEvent(self))
+
 
 @dataclass
 class TreatmentEventAchievement(Achievement):

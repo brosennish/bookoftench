@@ -1,67 +1,17 @@
 import curses
 import time
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from typing import List
 
 import savethewench.service.crypto_service as crypto_service
 from savethewench.audio import play_music, play_sound
 from savethewench.component.base import Component
 from savethewench.component.registry import register_component
-from savethewench.curses_util import init_colors, c_print
+from savethewench.curses_util import init_colors, SimpleWindow, Line, LinePart
 from savethewench.data.audio import CRYPTO_THEME, PURCHASE
 from savethewench.data.components import CRYPTO_EXCHANGE
 from savethewench.model import GameState
 from savethewench.model.crypto import CryptoCurrency, TransactionType
-
-
-@dataclass
-class LinePart:
-    text: str
-    color: int = curses.COLOR_WHITE
-    underline: bool = False
-    highlight: bool = False
-    bold: bool = False
-    dim: bool = False
-    offset: int = 0
-
-    def add_to_line(self, stdscr, line: int, offset: int):
-        c_print(stdscr, line, offset, self.text, self.color,
-                underline=self.underline, highlight=self.highlight, bold=self.bold, dim=self.dim)
-
-
-@dataclass
-class Line:
-    parts: List[LinePart]
-    line_number: int = 0
-
-    def add_to_screen(self, stdscr):
-        for part in self.parts:
-            c_print(stdscr, self.line_number, offset=part.offset, text=part.text, color=part.color,
-                    highlight=part.highlight, underline=part.underline, bold=part.bold, dim=part.dim)
-
-
-class SimpleWindow:
-    def __init__(self, stdscr):
-        self.stdscr = stdscr
-        self._current_line = 0
-        self._lines = []
-
-    def add_line(self, line: Line):
-        line.line_number = self._current_line
-        self._lines.append(line)
-        self.add_newlines(1)
-
-    def add_newlines(self, newlines: int):
-        self._current_line += newlines
-
-    def flush(self):
-        self.stdscr.clear()
-        for line in self._lines:
-            line.add_to_screen(self.stdscr)
-        self.stdscr.refresh()
-        self._lines.clear()
-        self._current_line = 0
 
 
 @register_component(CRYPTO_EXCHANGE)
@@ -74,10 +24,10 @@ class CryptoExchange(Component):
         self.curs_set = 0
         self.can_exit = False
 
-    def play_theme(self):
+    def play_theme(self) -> None:
         play_music(CRYPTO_THEME)
 
-    def add_header(self, window):
+    def add_header(self, window) -> None:
         window.add_line(Line(parts=[LinePart('Crypto Market', color=curses.COLOR_MAGENTA, underline=True, bold=True)]))
         window.add_newlines(1)
         greeting_parts = [LinePart(f"Welcome, {self.game_state.player.name}. You have ", color=curses.COLOR_WHITE),
@@ -89,21 +39,21 @@ class CryptoExchange(Component):
             offset += len(part.text)
         window.add_line(Line(greeting_parts))
 
-    def add_additional_options(self, window):
+    def add_additional_options(self, window) -> None:
         window.add_newlines(1)
         window.add_line(
             Line([LinePart('[R]', color=curses.COLOR_MAGENTA, highlight=self.selected == len(self.coins) + 1),
                   LinePart('Return', color=curses.COLOR_CYAN, offset=4)]))
 
-    def add_coin_options(self, window):
+    def add_coin_options(self, window) -> None:
         window.add_newlines(1)
         for line in self.coin_options.to_lines(self.selected):
             window.add_line(line)
 
-    def add_prompt(self, window):
+    def add_prompt(self, window) -> None:
         pass
 
-    def handle_selection(self, stdscr):
+    def handle_selection(self, stdscr) -> None:
         # Note - logic will need to change if we ever want more than 10 numbered options
         ch = stdscr.getch()
         if ch in (curses.KEY_ENTER, 10, 13):
@@ -129,7 +79,7 @@ class CryptoExchange(Component):
         elif ch in (ord('r'), ord('R')):
             self.selected = len(self.coins) + 1
 
-    def c_run(self, stdscr):
+    def c_run(self, stdscr) -> None:
         init_colors()
         window = SimpleWindow(stdscr)
         self.play_theme()
@@ -158,7 +108,7 @@ class CryptoExchange(Component):
 
 
 class CryptoExchangeExtension(CryptoExchange):
-    def run(self):
+    def run(self) -> GameState:
         raise RuntimeError("Quantity Selector not runnable from outside of preexisting curses context")
 
 
@@ -169,30 +119,43 @@ class CoinActionSelector(CryptoExchangeExtension):
         self.coin = self.coins[self.selected - 1]
         self.sub_selection = 0
 
-    def add_additional_options(self, window):
+    def add_additional_options(self, window) -> None:
         window.add_newlines(1)
-        window.add_line(Line([LinePart('[B]', color=curses.COLOR_MAGENTA, highlight=self.sub_selection == 0),
-                              LinePart('Buy', color=curses.COLOR_CYAN, offset=4)]))
-        if self.coin.quantity_owned > 0:
-            window.add_line(Line([LinePart('[S]', color=curses.COLOR_MAGENTA, highlight=self.sub_selection == 1),
-                                  LinePart('Sell', color=curses.COLOR_CYAN, offset=4)]))
+        if not self.coin.zeroed:
+            window.add_line(Line([LinePart('[B]', color=curses.COLOR_MAGENTA, highlight=self.sub_selection == 0),
+                                  LinePart('Buy', color=curses.COLOR_CYAN, offset=4)]))
+            if self.coin.quantity_owned > 0:
+                window.add_line(Line([LinePart('[S]', color=curses.COLOR_MAGENTA, highlight=self.sub_selection == 1),
+                                      LinePart('Sell', color=curses.COLOR_CYAN, offset=4)]))
         window.add_line(Line([LinePart('[H]', color=curses.COLOR_MAGENTA,
-                                       highlight=self.sub_selection == (2 if self.coin.quantity_owned > 0 else 1)),
+                                       highlight=self.sub_selection == (0 if self.coin.zeroed else (
+                                           1 if self.coin.quantity_owned == 0 else 2)
+                                       )),
                               LinePart('History', color=curses.COLOR_CYAN, offset=4)]))
         window.add_newlines(1)
         window.add_line(Line([LinePart('[R]', color=curses.COLOR_MAGENTA,
-                                       highlight=self.sub_selection == (3 if self.coin.quantity_owned > 0 else 2)),
+                                       highlight=self.sub_selection == (1 if self.coin.zeroed else (
+                                           2 if self.coin.quantity_owned == 0 else 3)
+                                       )),
                               LinePart('Return', color=curses.COLOR_CYAN, offset=4)]))
 
-    def handle_selection(self, stdscr):
+    def handle_selection(self, stdscr) -> None:
         ch = stdscr.getch()
 
+        # TODO refactor this spaghetti mess
         if ch in (curses.KEY_ENTER, 10, 13):
             self.can_exit = True
             if self.sub_selection == 0:
-                BuySelector(self.game_state, self.selected).c_run(stdscr)
+                if self.coin.zeroed:
+                    self.can_exit = False
+                    TransactionHistoryDisplay(self.game_state, self.coin).c_run(stdscr)
+                else:
+                    BuySelector(self.game_state, self.selected).c_run(stdscr)
             elif self.sub_selection == 1:
-                if self.coin.quantity_owned > 0:
+                if self.coin.zeroed: # player selected Return
+                    if not self.coin.ipo:
+                        self.coin.unfreeze()
+                elif self.coin.quantity_owned > 0:
                     SellSelector(self.game_state, self.selected).c_run(stdscr)
                 else:
                     self.can_exit = False
@@ -206,19 +169,19 @@ class CoinActionSelector(CryptoExchangeExtension):
         elif ch == curses.KEY_UP:
             self.sub_selection -= 1
             if self.sub_selection < 0:
-                self.sub_selection = (3 if self.coin.quantity_owned > 0 else 2)
+                self.sub_selection = (1 if self.coin.zeroed else (3 if self.coin.quantity_owned > 0 else 2))
         elif ch == curses.KEY_DOWN:
             self.sub_selection += 1
-            if self.sub_selection > (3 if self.coin.quantity_owned > 0 else 2):
+            if self.sub_selection > (1 if self.coin.zeroed else (3 if self.coin.quantity_owned > 0 else 2)):
                 self.sub_selection = 0
         elif ch in (ord('b'), ord('B')):
-            self.sub_selection = 0
+            self.sub_selection = (self.sub_selection if self.coin.zeroed else 0)
         elif ch in (ord('s'), ord('S')):
-            self.sub_selection = 1 if self.coin.quantity_owned > 0 else self.sub_selection
+            self.sub_selection = (self.sub_selection if (self.coin.quantity_owned == 0 or self.coin.zeroed) else 1)
         elif ch in (ord('h'), ord('H')):
-            self.sub_selection = 1 if self.coin.quantity_owned == 0 else 2
+            self.sub_selection = (0 if self.coin.zeroed else (2 if self.coin.quantity_owned > 0 else 1))
         elif ch in (ord('r'), ord('R')):
-            self.sub_selection = 2 if self.coin.quantity_owned == 0 else 3
+            self.sub_selection = (1 if self.coin.zeroed else (3 if self.coin.quantity_owned > 0 else 2))
 
 
 class QuantitySelector(CryptoExchangeExtension, ABC):
@@ -230,18 +193,18 @@ class QuantitySelector(CryptoExchangeExtension, ABC):
         self.user_input = ""
 
     @abstractmethod
-    def get_max_quantity(self):
+    def get_max_quantity(self) -> int:
         pass
 
     @abstractmethod
-    def add_prompt(self, window: SimpleWindow):
+    def add_prompt(self, window: SimpleWindow) -> None:
         pass
 
     @abstractmethod
-    def handle_quantity(self, quantity: int):
+    def handle_quantity(self, quantity: int) -> None:
         pass
 
-    def handle_selection(self, stdscr):
+    def handle_selection(self, stdscr) -> None:
         ch = stdscr.getch()
         if ord('0') <= ch <= ord('9'):
             if self.user_input == "0":
@@ -263,16 +226,16 @@ class QuantitySelector(CryptoExchangeExtension, ABC):
 
 class BuySelector(QuantitySelector):
 
-    def get_max_quantity(self):
+    def get_max_quantity(self) -> int:
         return int(self.game_state.player.coins / self.coin.price)
 
-    def add_prompt(self, window):
+    def add_prompt(self, window) -> None:
         window.add_newlines(1)
         window.add_line(
             Line([LinePart(f"How much {self.coin.name} do you want to buy? (max {self.get_max_quantity()})")]))
         window.add_line(Line([LinePart('> ', color=curses.COLOR_BLUE), LinePart(self.user_input, offset=2)]))
 
-    def handle_quantity(self, quantity: int):
+    def handle_quantity(self, quantity: int) -> None:
         int_price = int(self.coin.price)
         total_cost = quantity * int(self.coin.price)
         self.game_state.player.coins -= total_cost
@@ -281,16 +244,16 @@ class BuySelector(QuantitySelector):
 
 class SellSelector(QuantitySelector):
 
-    def get_max_quantity(self):
+    def get_max_quantity(self) -> int:
         return self.coin.quantity_owned
 
-    def add_prompt(self, window):
+    def add_prompt(self, window) -> None:
         window.add_newlines(1)
         window.add_line(
             Line([LinePart(f"How much {self.coin.name} do you want to sell? (max {self.get_max_quantity()})")]))
         window.add_line(Line([LinePart('> ', color=curses.COLOR_BLUE), LinePart(self.user_input, offset=2)]))
 
-    def handle_quantity(self, quantity: int):
+    def handle_quantity(self, quantity: int) -> None:
         int_price = int(self.coin.price)
         total_cost = quantity * int(self.coin.price)
         self.game_state.player.coins += total_cost
@@ -305,18 +268,18 @@ class TransactionHistoryDisplay(CryptoExchangeExtension):
         self.transactions_per_page = 10
         self.page = 0
 
-    def add_header(self, window: SimpleWindow):
+    def add_header(self, window: SimpleWindow) -> None:
         window.add_line(Line([LinePart(self.coin.name, color=curses.COLOR_CYAN),
                               LinePart("Transaction History:", color=curses.COLOR_MAGENTA,
                                        offset=len(self.coin.name) + 1)]))
 
-    def add_coin_options(self, window):
+    def add_coin_options(self, window) -> None:
         pass
 
-    def add_additional_options(self, window: SimpleWindow):
+    def add_additional_options(self, window: SimpleWindow) -> None:
         pass
 
-    def add_prompt(self, window: SimpleWindow):
+    def add_prompt(self, window: SimpleWindow) -> None:
         window.add_newlines(1)
         for i in range(len(self.coin.history.transactions)):
             transaction = self.coin.history.transactions[i]
@@ -329,7 +292,7 @@ class TransactionHistoryDisplay(CryptoExchangeExtension):
         window.add_newlines(1)
         window.add_line(Line([LinePart("Press <enter> to return.", color=curses.COLOR_CYAN)]))
 
-    def handle_selection(self, stdscr):
+    def handle_selection(self, stdscr) -> None:
         ch = stdscr.getch()
         if ch in (curses.KEY_ENTER, 10, 13):
             self.can_exit = True
@@ -340,7 +303,10 @@ def header_part(value: str) -> LinePart:
 
 
 def name_part(coin: CryptoCurrency) -> LinePart:
-    return LinePart(coin.name, color=curses.COLOR_CYAN, dim=coin.delisted)
+    name = coin.name
+    if coin.zeroed:
+        name = f"{name} (delists in {int(coin.seconds_until_delist)}s)"
+    return LinePart(name, color=curses.COLOR_CYAN, dim=coin.zeroed)
 
 
 def price_part(coin: CryptoCurrency) -> LinePart:
@@ -422,5 +388,5 @@ class CoinOptions:
             res.append(Line(parts))
         return res
 
-    def refresh(self):
+    def refresh(self) -> None:
         self._ingest_coins()

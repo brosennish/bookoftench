@@ -1,8 +1,8 @@
 import copy
 import random
 from dataclasses import dataclass, field
-from functools import partial
-from typing import List, Callable, Dict
+from functools import partial, wraps
+from typing import List, Callable, Dict, ParamSpec
 from typing import TypeVar
 
 from savethewench.data import Perks
@@ -12,6 +12,7 @@ from savethewench.ui import purple, dim, cyan, orange
 from savethewench.util import print_and_sleep
 
 T = TypeVar('T')
+P = ParamSpec("P")
 
 
 @dataclass
@@ -80,10 +81,12 @@ class NumericChangeConfig(WrapperConfig):
             case _:
                 raise NotImplementedError(f"{wrapper_type} not implemented")
 
+
 @dataclass
 class FunctionWrapper:
     wrapper_type: WrapperType = WrapperType.NONE
     wrapper_config: WrapperConfig = field(default_factory=WrapperConfig)
+
 
 @dataclass
 class Perk[T](Buyable):
@@ -94,10 +97,10 @@ class Perk[T](Buyable):
     wrappers: List[FunctionWrapper] = field(default_factory=list)
 
     @property
-    def active(self):
+    def active(self) -> bool:
         return self._active
 
-    def activate(self):
+    def activate(self) -> None:
         print_and_sleep(purple(f"{self.name} added to perks."), 1)
         self._active = True
 
@@ -107,7 +110,7 @@ class Perk[T](Buyable):
         wrapper = self.wrappers[index]
         return wrapper.wrapper_config.to_wrapper(self.name, wrapper.wrapper_type)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
             f"Cost: {orange(self.cost):<18}",
@@ -118,7 +121,7 @@ class Perk[T](Buyable):
 _PERKS: Dict[str, Perk] = {}
 
 
-def set_perk_cache(perk_cache: Dict[str, Perk]):
+def set_perk_cache(perk_cache: Dict[str, Perk]) -> None:
     global _PERKS
     _PERKS = perk_cache
 
@@ -165,7 +168,7 @@ def load_perk(perk_name: str) -> Perk:
     return load_perks(lambda p: p.name == perk_name)[0]
 
 
-def activate_perk(perk_name: str):
+def activate_perk(perk_name: str) -> None:
     load_perk(perk_name).activate()
 
 
@@ -174,12 +177,13 @@ def perk_is_active(perk_name: str) -> bool:
 
 
 def attach_perk(perk: str, wrapper_idx: int = 0, value_description: str = "", silent: bool = False,
-                condition: Callable[[], bool] = lambda: True) -> Callable[[T], T]:
+                condition: Callable[[], bool] = lambda: True) -> Callable[[Callable[[P], T]], Callable[[P], T]]:
     perk_impl = load_perk(perk)
 
-    def decorator(func):
-        def wrapper(*args, **kwargs):
-            value = func(*args, **kwargs)
+    def decorator(func: Callable[[P], T]) -> Callable[[P], T]:
+        @wraps(func)
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+            value: T = func(*args, **kwargs)
             if perk_is_active(perk_impl.name) and condition():
                 value = perk_impl.get_wrapper(wrapper_idx)(value, value_description, silent)
             return value
@@ -188,9 +192,16 @@ def attach_perk(perk: str, wrapper_idx: int = 0, value_description: str = "", si
 
     return decorator
 
+
 def attach_perks(*perks: str, value_description: str = "", silent: bool = False,
-                 condition: Callable[[], bool] = lambda: True) -> Callable[[T], T]:
-    fn = lambda x: x
-    for perk_name in perks:
-        fn = attach_perk(perk_name, value_description=value_description, silent=silent, condition=condition)(fn)
-    return fn
+                 condition: Callable[[], bool] = lambda: True) -> Callable[[Callable[[P], T]], Callable[[P], T]]:
+    if len(perks) == 0:
+        raise ValueError('No perk names provided to attach.')
+
+    # decompose "attach_perks" into "attach_perk" invocations
+    def decorator(func: Callable[[P], T]) -> Callable[[P], T]:
+        for perk in perks:
+            func = attach_perk(perk, value_description=value_description, silent=silent, condition=condition)(func)
+        return func
+
+    return decorator

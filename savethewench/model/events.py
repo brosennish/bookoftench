@@ -1,7 +1,9 @@
 from typing import Optional
+
 from savethewench.audio import play_sound
 from savethewench.data.audio import PURCHASE, GREAT_JOB
 from savethewench.event_base import Event, EventType
+from savethewench.model.illness import Illness
 from savethewench.ui import green, cyan, red, yellow, dim
 from savethewench.util import print_and_sleep
 
@@ -22,7 +24,7 @@ class PurchaseEvent(Event):
         super().__init__(event_type)
         self.callback = lambda: self._callback(name, amount)
 
-    def sub_callback(self):
+    def sub_callback(self) -> None:
         pass
 
     def _callback(self, name, amount):
@@ -36,7 +38,7 @@ class BuyItemEvent(PurchaseEvent):
         super().__init__(EventType.BUY_ITEM, name, amount)
         self.sub_msg = f"{name} added to sack."
 
-    def sub_callback(self):
+    def sub_callback(self) -> None:
         print_and_sleep(cyan(self.sub_msg), 1)
 
 
@@ -45,7 +47,7 @@ class BuyWeaponEvent(PurchaseEvent):
         super().__init__(EventType.BUY_WEAPON, name, amount)
         self.sub_msg = f"{name} added to weapons. Uses: {uses}\n"
 
-    def sub_callback(self):
+    def sub_callback(self) -> None:
         print_and_sleep(cyan(self.sub_msg), 1)
 
 
@@ -157,9 +159,13 @@ class CoffeeEvent(Event):
 
 
 class TreatmentEvent(Event):
-    def __init__(self, illness, event_type: EventType):
-        super().__init__(event_type)
+    def __init__(self, illness: Illness, event_type: EventType):
+        super().__init__(event_type, callback=self._callback)
         self.illness = illness
+
+    def _callback(self):
+        if self.type == EventType.TREATMENT_SUCCESS:
+            print_and_sleep(green(f"You have been cured of {self.illness.name}!"), 2)
 
 
 class OfficerEvent(Event):
@@ -167,22 +173,25 @@ class OfficerEvent(Event):
         super().__init__(event_type, callback=self.paid if event_type == event_type.OFFICER_PAID else self.unpaid)
 
     def paid(self) -> None:
-        print_and_sleep("") # TODO funny dialogue
+        print_and_sleep("")  # TODO funny dialogue
 
     def unpaid(self) -> None:
-        print_and_sleep("") # TODO funny dialogue
+        print_and_sleep("")  # TODO funny dialogue
 
+
+# TODO for crypto events, figure out a method of alerting that doesn't print to console
+# printing to console screws up curses display if player is in the crypto market component when a coin is (de)listed
+class CoinDelistingScheduledEvent(Event):
+    def __init__(self, coin_name: str, seconds_to_delist: int):
+        super().__init__(EventType.COIN_DELISTING_SCHEDULED)
+                         #callback=lambda: print_and_sleep(f"{coin_name} will be delisted in {seconds_to_delist} seconds."))
 
 class CoinDelistedEvent(Event):
-    def __init__(self, coin_name: str, seconds_to_delist: int):
-        super().__init__(EventType.COIN_DELISTED, callback=lambda: print_and_sleep(
-            f"{cyan(f"{coin_name}'s")} price has hit {red(0)} and will be delisted in {seconds_to_delist} seconds.",
-            2))
-
+    def __init__(self, coin_name: str):
+        super().__init__(EventType.COIN_DELISTED)
+                         #callback=lambda: print_and_sleep(f"{coin_name} has been delisted."))
 
 class CoinListedEvent(Event):
-    def __init__(self, coin_name: str, initial_price: float):
-        super().__init__(EventType.COIN_LISTED, callback=lambda: print_and_sleep(
-            f"A new cryptocurrency has been born! {coin_name} is now available at the initial price of "
-            f"{green(f"{initial_price:.2f}")} of coin.",
-            2))
+    def __init__(self, coin_name: str, price: int):
+        super().__init__(EventType.COIN_LISTED)
+                         #callback=lambda: print_and_sleep(f"{coin_name} is now available for {price} of coin."))

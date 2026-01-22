@@ -9,8 +9,10 @@ CITY = "City"
 FOREST = "Forest"
 SWAMP = "Swamp"
 
+
 class EncounterType(Enum):
     POST_KILL = 0
+
 
 # TODO tweak 'explore_probabilities' for each area as desired
 # map names of registered components to (int percent) probabilities
