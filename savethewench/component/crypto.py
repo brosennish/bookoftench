@@ -121,28 +121,43 @@ class CoinActionSelector(CryptoExchangeExtension):
 
     def add_additional_options(self, window) -> None:
         window.add_newlines(1)
-        window.add_line(Line([LinePart('[B]', color=curses.COLOR_MAGENTA, highlight=self.sub_selection == 0),
-                              LinePart('Buy', color=curses.COLOR_CYAN, offset=4)]))
-        if self.coin.quantity_owned > 0:
-            window.add_line(Line([LinePart('[S]', color=curses.COLOR_MAGENTA, highlight=self.sub_selection == 1),
-                                  LinePart('Sell', color=curses.COLOR_CYAN, offset=4)]))
+        if not self.coin.zeroed:
+            window.add_line(Line([LinePart('[B]', color=curses.COLOR_MAGENTA, highlight=self.sub_selection == 0),
+                                  LinePart('Buy', color=curses.COLOR_CYAN, offset=4)]))
+            if self.coin.quantity_owned > 0:
+                window.add_line(Line([LinePart('[S]', color=curses.COLOR_MAGENTA, highlight=self.sub_selection == 1),
+                                      LinePart('Sell', color=curses.COLOR_CYAN, offset=4)]))
         window.add_line(Line([LinePart('[H]', color=curses.COLOR_MAGENTA,
-                                       highlight=self.sub_selection == (2 if self.coin.quantity_owned > 0 else 1)),
+                                       highlight=self.sub_selection == (0 if self.coin.zeroed else (
+                                           1 if self.coin.quantity_owned == 0 else 2)
+                                       )),
                               LinePart('History', color=curses.COLOR_CYAN, offset=4)]))
         window.add_newlines(1)
         window.add_line(Line([LinePart('[R]', color=curses.COLOR_MAGENTA,
-                                       highlight=self.sub_selection == (3 if self.coin.quantity_owned > 0 else 2)),
+                                       highlight=self.sub_selection == (1 if self.coin.zeroed else (
+                                           2 if self.coin.quantity_owned == 0 else 3)
+                                       )),
                               LinePart('Return', color=curses.COLOR_CYAN, offset=4)]))
+        window.add_newlines(1)
+        window.add_line(Line([LinePart(f"sub_selection: {self.sub_selection}")]))
 
     def handle_selection(self, stdscr) -> None:
         ch = stdscr.getch()
 
+        # TODO refactor this spaghetti mess
         if ch in (curses.KEY_ENTER, 10, 13):
             self.can_exit = True
             if self.sub_selection == 0:
-                BuySelector(self.game_state, self.selected).c_run(stdscr)
+                if self.coin.zeroed:
+                    self.can_exit = False
+                    TransactionHistoryDisplay(self.game_state, self.coin).c_run(stdscr)
+                else:
+                    BuySelector(self.game_state, self.selected).c_run(stdscr)
             elif self.sub_selection == 1:
-                if self.coin.quantity_owned > 0:
+                if self.coin.zeroed: # player selected Return
+                    if not self.coin.ipo:
+                        self.coin.unfreeze()
+                elif self.coin.quantity_owned > 0:
                     SellSelector(self.game_state, self.selected).c_run(stdscr)
                 else:
                     self.can_exit = False
@@ -156,19 +171,19 @@ class CoinActionSelector(CryptoExchangeExtension):
         elif ch == curses.KEY_UP:
             self.sub_selection -= 1
             if self.sub_selection < 0:
-                self.sub_selection = (3 if self.coin.quantity_owned > 0 else 2)
+                self.sub_selection = (1 if self.coin.zeroed else (3 if self.coin.quantity_owned > 0 else 2))
         elif ch == curses.KEY_DOWN:
             self.sub_selection += 1
-            if self.sub_selection > (3 if self.coin.quantity_owned > 0 else 2):
+            if self.sub_selection > (1 if self.coin.zeroed else (3 if self.coin.quantity_owned > 0 else 2)):
                 self.sub_selection = 0
         elif ch in (ord('b'), ord('B')):
-            self.sub_selection = 0
+            self.sub_selection = (self.sub_selection if self.coin.zeroed else 0)
         elif ch in (ord('s'), ord('S')):
-            self.sub_selection = 1 if self.coin.quantity_owned > 0 else self.sub_selection
+            self.sub_selection = (self.sub_selection if (self.coin.quantity_owned == 0 or self.coin.zeroed) else 1)
         elif ch in (ord('h'), ord('H')):
-            self.sub_selection = 1 if self.coin.quantity_owned == 0 else 2
+            self.sub_selection = (0 if self.coin.zeroed else (2 if self.coin.quantity_owned > 0 else 1))
         elif ch in (ord('r'), ord('R')):
-            self.sub_selection = 2 if self.coin.quantity_owned == 0 else 3
+            self.sub_selection = (1 if self.coin.zeroed else (3 if self.coin.quantity_owned > 0 else 2))
 
 
 class QuantitySelector(CryptoExchangeExtension, ABC):
@@ -290,7 +305,10 @@ def header_part(value: str) -> LinePart:
 
 
 def name_part(coin: CryptoCurrency) -> LinePart:
-    return LinePart(coin.name, color=curses.COLOR_CYAN, dim=coin.delisted)
+    name = coin.name
+    if coin.zeroed:
+        name = f"{name} (delists in {int(coin.seconds_until_delist)}s)"
+    return LinePart(name, color=curses.COLOR_CYAN, dim=coin.zeroed)
 
 
 def price_part(coin: CryptoCurrency) -> LinePart:
