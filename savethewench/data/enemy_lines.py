@@ -1,3 +1,5 @@
+import random
+
 from savethewench.data.enemies import *
 
 Enemy_Lines = {
@@ -20,3 +22,9 @@ Enemy_Lines = {
     SKIN_COLLECTOR: ["I don't just collect skins... I collect souls too."],
     }
 
+
+def get_enemy_encounter_line(enemy_type) -> str | None:
+    if enemy_type not in Enemy_Lines:
+        return None
+    else:
+        return random.choice(Enemy_Lines[enemy_type])
