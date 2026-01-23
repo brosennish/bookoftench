@@ -20,7 +20,7 @@ from savethewench.model.item import load_items
 from savethewench.model.perk import load_perks, Perk, attach_perk, perk_is_active
 from savethewench.model.util import get_battle_status_view, display_player_achievements, \
     display_game_overview, calculate_flee, display_active_perks
-from savethewench.model.weapon import load_discoverable_weapons
+from savethewench.model.weapon import load_discoverable_weapons, load_weapon
 from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
 from savethewench.util import print_and_sleep
 from .base import LabeledSelectionComponent, SelectionBinding
@@ -238,12 +238,22 @@ class Attack(Component):
             player.attack(enemy)
         if enemy.is_alive():
             enemy.attack(player)
+            self.enemy_switch_weapon()
         if not enemy.is_alive():
             self.handle_enemy_death(player, enemy)
         if not player.is_alive():
             player.lives -= 1
             event_logger.log_event(PlayerDeathEvent(player.lives))
         return self.game_state
+
+    def enemy_switch_weapon(self):
+        enemy = self.game_state.current_area.current_enemy
+        current_weapon = self.game_state.current_area.current_enemy.current_weapon
+        if random.random() < 0.20:
+            options = [i for i in enemy.weapon_dict if i != current_weapon.name]
+            if options:
+                selection = random.choice(options)
+                enemy.current_weapon = load_weapon(selection)
 
 
 class FailedFlee(Attack):
