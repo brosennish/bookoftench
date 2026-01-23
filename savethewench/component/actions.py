@@ -26,6 +26,7 @@ from savethewench.util import print_and_sleep
 from .base import LabeledSelectionComponent, SelectionBinding
 from .encounters import PostKillEncounters
 from .registry import register_component, get_registered_component
+from ..data.weapons import BARE_HANDS
 
 
 @register_component(EXPLORE)
@@ -249,8 +250,9 @@ class Attack(Component):
     def enemy_switch_weapon(self):
         enemy = self.game_state.current_area.current_enemy
         current_weapon = self.game_state.current_area.current_enemy.current_weapon
-        if random.random() < 0.20:
-            options = [i for i in enemy.weapon_dict if i != current_weapon.name]
+        if current_weapon != BARE_HANDS and random.random() < 0.20:
+            options = [i for i in enemy.weapon_dict if i != current_weapon.name
+                       and i != BARE_HANDS]
             if options:
                 selection = random.choice(options)
                 enemy.current_weapon = load_weapon(selection)
