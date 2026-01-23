@@ -23,8 +23,7 @@ Enemy_Lines = {
     }
 
 
-def get_enemy_encounter_line(enemy_type) -> str | None:
-    if enemy_type not in Enemy_Lines:
+def get_enemy_encounter_line(enemy) -> str | None:
+    if enemy.name not in Enemy_Lines:
         return None
-    else:
-        return random.choice(Enemy_Lines[enemy_type])
+    return random.choice(Enemy_Lines[enemy.name])

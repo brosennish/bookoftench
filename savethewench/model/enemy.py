@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Dict
 
 from savethewench.audio import play_sound
-from savethewench.data import Enemies, enemy_lines
+from savethewench.data import Enemies
 from savethewench.data.audio import AREA_BOSS_THEME, GATOR
 from savethewench.data.enemies import Bosses, Final_Boss, BAYOU_BILL
 from savethewench.data.perks import RICKETY_PICKPOCKET
