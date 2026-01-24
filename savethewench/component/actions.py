@@ -14,19 +14,19 @@ from savethewench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION, DEATH_CAN_WAIT
 from savethewench.event_logger import subscribe_function
+from savethewench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE
 from savethewench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent
 from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
 from savethewench.model.perk import load_perks, Perk, attach_perk, perk_is_active
 from savethewench.model.util import get_battle_status_view, display_player_achievements, \
     display_game_overview, calculate_flee, display_active_perks
-from savethewench.model.weapon import load_discoverable_weapons, load_weapon
+from savethewench.model.weapon import load_discoverable_weapons
 from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
 from savethewench.util import print_and_sleep
 from .base import LabeledSelectionComponent, SelectionBinding
 from .encounters import PostKillEncounters
 from .registry import register_component, get_registered_component
-from ..data.weapons import BARE_HANDS
 
 
 @register_component(EXPLORE)
@@ -239,23 +239,14 @@ class Attack(Component):
             player.attack(enemy)
         if enemy.is_alive():
             enemy.attack(player)
-            self.enemy_switch_weapon()
+            if random.random() < ENEMY_SWITCH_WEAPON_CHANCE:
+                enemy.current_weapon = enemy.enemy_switch_weapon()
         if not enemy.is_alive():
             self.handle_enemy_death(player, enemy)
         if not player.is_alive():
             player.lives -= 1
             event_logger.log_event(PlayerDeathEvent(player.lives))
         return self.game_state
-
-    def enemy_switch_weapon(self):
-        enemy = self.game_state.current_area.current_enemy
-        current_weapon = self.game_state.current_area.current_enemy.current_weapon
-        if current_weapon != BARE_HANDS and random.random() < 0.20:
-            options = [i for i in enemy.weapon_dict if i != current_weapon.name
-                       and i != BARE_HANDS]
-            if options:
-                selection = random.choice(options)
-                enemy.current_weapon = load_weapon(selection)
 
 
 class FailedFlee(Attack):
