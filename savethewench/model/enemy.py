@@ -8,7 +8,7 @@ from typing import List, Optional, Dict
 from savethewench.audio import play_sound
 from savethewench.data import Enemies
 from savethewench.data.audio import AREA_BOSS_THEME, GATOR
-from savethewench.data.enemies import Bosses, Final_Boss, BAYOU_BILL
+from savethewench.data.enemies import Bosses, Final_Boss, BAYOU_BILL, Enemy_Lines
 from savethewench.data.perks import RICKETY_PICKPOCKET
 from savethewench.data.weapons import BARE_HANDS
 from savethewench.ui import purple
@@ -52,6 +52,12 @@ class Enemy(Combatant, NPC):
         if len(self.weapon_dict) == 0:
             self.weapon_dict[BARE_HANDS] = load_weapon(BARE_HANDS)
         self.current_weapon = random.choice(list(self.weapon_dict.values()))
+
+
+    def get_enemy_encounter_line(self) -> str | None:
+        if self.name not in Enemy_Lines:
+            return None
+        return random.choice(Enemy_Lines[self.name])
 
 
 def load_enemy(name: str) -> Enemy:
