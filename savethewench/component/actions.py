@@ -6,7 +6,7 @@ from savethewench import event_logger
 from savethewench.audio import play_music, play_sound, stop_music
 from savethewench.component.base import TextDisplayingComponent, functional_component, Component, \
     ColoredNameSelectionBinding, BinarySelectionComponent, \
-    NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding
+    NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent
 from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
 from savethewench.data.components import EXPLORE, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, OVERVIEW, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_COIN, DISCOVER_PERK
@@ -117,7 +117,14 @@ class Travel(LabeledSelectionComponent):
 
 
 @register_component(USE_ITEM)
-class UseItem(LabeledSelectionComponent):
+class UseItem(GatekeepingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, decision_function=lambda: len(game_state.player.items) > 0,
+                         accept_component=ItemSelectionComponent, deny_component=functional_component()(lambda:
+                print_and_sleep(yellow(f"Your inventory is dry."), 1)))
+
+
+class ItemSelectionComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
                          bindings=[SelectionBinding(key=str(i),
