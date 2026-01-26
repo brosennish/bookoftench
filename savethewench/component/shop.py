@@ -10,8 +10,10 @@ from savethewench.component.officer import OfficerEncounter
 from savethewench.component.registry import register_component
 from savethewench.data.audio import SHOP_THEME
 from savethewench.data.components import SHOP
+from savethewench.data.perks import CATFISH_BURGLAR
 from savethewench.model import GameState
 from savethewench.model.base import Buyable
+from savethewench.model.perk import attach_perk
 from savethewench.model.util import display_active_perk_count
 from savethewench.ui import green, blue
 from savethewench.util import print_and_sleep
@@ -87,6 +89,7 @@ class BuyOrStealDecision(LabeledSelectionComponent):
         ], quittable=True)
 
     @staticmethod
+    @attach_perk(CATFISH_BURGLAR, value_description="shoplifting odds")
     def calculate_success_chance(buyable: Buyable) -> int:
         upper_bound = max(_max_steal_chance - buyable.cost, _steal_spread)
         return random.randint(max(1, upper_bound - _steal_spread), upper_bound)
