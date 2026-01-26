@@ -1,19 +1,18 @@
-import os
-import pickle
 import sys
-from functools import partial
-from typing import List
+from typing import List, Callable
 
-from savethewench.audio import play_music
+from savethewench.audio import play_music, stop_all_sounds
 from savethewench.component.base import Component, LinearComponent, BinarySelectionComponent, \
-    TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, functional_component, PaginatedMenuComponent
+    TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, functional_component, PaginatedMenuComponent, \
+    NoOpComponent
 from savethewench.data.audio import INTRO_THEME
 from savethewench.data.components import EXPLORE, AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, NEW_GAME, SAVE_GAME, QUIT_GAME, \
     LOAD_GAME, InGameMenuDefaults
 from savethewench.model import GameState
 from savethewench.model.area import AreaActions
+from savethewench.model.persistence import load_save_slots, SaveSlot
 from savethewench.model.util import get_player_status_view
-from savethewench.ui import red, cyan
+from savethewench.ui import red, yellow
 from savethewench.util import print_and_sleep, safe_input
 from .registry import get_registered_component, register_component
 
@@ -35,6 +34,7 @@ class NewGame(LinearComponent):
         super().__init__(GameState(), TutorialDecision)
 
     def execute_current(self) -> GameState:
+        stop_all_sounds()
         player = self.game_state.player
         while not player.name:
             player.name = safe_input("What is your name?")
@@ -126,53 +126,56 @@ class ActionMenu(PaginatedMenuComponent):
 
 class InGameMenu(PaginatedMenuComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, return_only=True)
+        super().__init__(game_state, returnable=True)
 
     def construct_pages(self) -> List[List[SelectionBinding]]:
         return [[SelectionBinding(str(i), name, get_registered_component(name))
                  for i, name in enumerate(InGameMenuDefaults.page_one, 1)]]
 
 
-_SAVE_DIR = ".saves"  # TODO don't just save straight to a directory in the repo
+class SavedGameInteractingComponent(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState, action: Callable[[SaveSlot], type[Component]]):
+        super().__init__(game_state, bindings=[
+            SelectionBinding(str(slot.slot_id),
+                             slot.get_displayable_format(),
+                             action(slot))
+            for slot in load_save_slots()])
 
 
 @register_component(SAVE_GAME)
-class SaveGame(Component):
-    def run(self) -> GameState:
-        save_file = f"{self.game_state.player.name}.tench"
+class SaveGame(SavedGameInteractingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, action=self.save_with_overwrite_check)
 
-        if not os.path.isdir(_SAVE_DIR):
-            os.mkdir(_SAVE_DIR)
-        with open(f"{_SAVE_DIR}/{save_file}", "wb") as f:  # noinspection PyTypeChecker
-            pickle.dump(self.game_state, f)
+    @staticmethod
+    def save_with_overwrite_check(slot: SaveSlot) -> type[Component]:
+        save_game = functional_component(state_dependent=True)(slot.save_game)
+        if slot.is_empty:
+            return save_game
 
-        print_and_sleep(cyan("Game saved."), 1)
-        return self.game_state
+        class OverwriteCheck(BinarySelectionComponent):
+            def __init__(self, gs: GameState):
+                super().__init__(gs,
+                                 query=f"A saved game already exists in slot {slot.slot_id}.\n\nDo you wish to proceed?",
+                                 yes_component=save_game,
+                                 no_component=NoOpComponent)
+
+        return OverwriteCheck
 
 
 @register_component(LOAD_GAME)
-class LoadGame(Component):
+class LoadGame(SavedGameInteractingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state)
-        self.save_file = None
+        super().__init__(game_state, action=self.load_to_action_menu)
 
-    def set_save_file(self, save_file: str) -> None:
-        self.save_file = save_file
+    @staticmethod
+    def load_to_action_menu(slot: SaveSlot) -> type[Component]:
+        if slot.is_empty:
+            return functional_component()(
+                lambda: print_and_sleep(yellow(f"No saved game exists in slot {slot.slot_id}.")))
 
-    def run(self) -> GameState:
-        saves = dict((str(i), n) for (i, n) in enumerate(set(fn.split(".")[0] for fn in os.listdir(_SAVE_DIR)))) \
-            if os.path.isdir(_SAVE_DIR) else {}
-        if len(saves) == 0:
-            print_and_sleep(red("No saved games exist."))
-            return self.game_state
+        class GameStateInjectedActionMenu(ActionMenu):
+            def __init__(self, _: GameState):
+                super().__init__(slot.load_game())
 
-        self.game_state = LabeledSelectionComponent(self.game_state, bindings=[
-            SelectionBinding(str(i), fn.split(".")[0], functional_component()(
-                partial(self.set_save_file, f"{_SAVE_DIR}/{fn}")))
-            for (i, fn) in enumerate(sorted(os.listdir(_SAVE_DIR)), 1)
-        ], quittable=True).run()
-        if self.save_file is not None:
-            with open(self.save_file, "rb") as f:
-                self.game_state = pickle.load(f)
-            return ActionMenu(self.game_state).run()
-        return self.game_state
+        return GameStateInjectedActionMenu
