@@ -182,7 +182,6 @@ class Player(Combatant):
         self.coins -= buyable.cost
         return True
 
-
     def steal_buyable(self, buyable) -> bool:
         if isinstance(buyable, Item) and self.add_item(buyable):
             event_logger.log_event(StealItemEvent(buyable.name, buyable.cost))
@@ -193,7 +192,6 @@ class Player(Combatant):
         else:
             return False
         return True
-
 
     def sell_item(self, name: str) -> None:
         item = self.items[name]

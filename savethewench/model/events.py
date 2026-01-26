@@ -212,14 +212,16 @@ class OfficerEvent(Event):
 class CoinDelistingScheduledEvent(Event):
     def __init__(self, coin_name: str, seconds_to_delist: int):
         super().__init__(EventType.COIN_DELISTING_SCHEDULED)
-                         #callback=lambda: print_and_sleep(f"{coin_name} will be delisted in {seconds_to_delist} seconds."))
+        # callback=lambda: print_and_sleep(f"{coin_name} will be delisted in {seconds_to_delist} seconds."))
+
 
 class CoinDelistedEvent(Event):
     def __init__(self, coin_name: str):
         super().__init__(EventType.COIN_DELISTED)
-                         #callback=lambda: print_and_sleep(f"{coin_name} has been delisted."))
+        # callback=lambda: print_and_sleep(f"{coin_name} has been delisted."))
+
 
 class CoinListedEvent(Event):
     def __init__(self, coin_name: str, price: int):
         super().__init__(EventType.COIN_LISTED)
-                         #callback=lambda: print_and_sleep(f"{coin_name} is now available for {price} of coin."))
+        # callback=lambda: print_and_sleep(f"{coin_name} is now available for {price} of coin."))

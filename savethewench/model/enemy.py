@@ -20,6 +20,7 @@ from .weapon import Weapon, load_weapon, load_weapons
 # Constants
 ENEMY_SWITCH_WEAPON_CHANCE = 0.2
 
+
 @dataclass
 class Enemy(Combatant, NPC):
     name: str = ''
@@ -64,7 +65,6 @@ class Enemy(Combatant, NPC):
             self.current_weapon = load_weapon(selection)
             print_and_sleep(cyan(f"{self.name} equipped {self.current_weapon.name}."), 1)
         return self.current_weapon
-
 
     def get_enemy_encounter_line(self) -> str | None:
         if self.name not in Enemy_Lines:

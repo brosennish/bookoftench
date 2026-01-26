@@ -16,8 +16,8 @@ from savethewench.model.util import display_active_perk_count
 from savethewench.ui import green, blue
 from savethewench.util import print_and_sleep
 
-_MAX_STEAL_CHANCE = 75
-_STEAL_SPREAD = 5
+_max_steal_chance = 75
+_steal_spread = 5
 
 
 @register_component(SHOP)
@@ -64,7 +64,7 @@ class ShopComponent(LabeledSelectionComponent):
         return self.game_state.shop.player_is_banned or self.exit_shop
 
     def display_options(self) -> None:
-        print(f"\n{blue("Welcome! You have")} {green(self.game_state.player.coins)} {blue("coins.")}\n")
+        print_and_sleep(f"{blue("Welcome! You have")} {green(self.game_state.player.coins)} {blue("coins.")}\n")
         for component in self.selection_components:
             component.display_options()
 
@@ -82,14 +82,14 @@ class BuyOrStealDecision(LabeledSelectionComponent):
         success_chance = self.calculate_success_chance(buyable)
         super().__init__(game_state, bindings=[
             SelectionBinding('B', f"Buy ({buyable.cost} of coin)", self._make_purchase_component(buyable)),
-            SelectionBinding('S', f"Steal ({success_chance}% chance of success)",
+            SelectionBinding('S', f"Steal ({success_chance}%)",
                              self._make_steal_component(buyable, success_chance))
         ], quittable=True)
 
     @staticmethod
     def calculate_success_chance(buyable: Buyable) -> int:
-        upper_bound = max(_MAX_STEAL_CHANCE - buyable.cost, _STEAL_SPREAD)
-        return random.randint(max(1, upper_bound - _STEAL_SPREAD), upper_bound)
+        upper_bound = max(_max_steal_chance - buyable.cost, _steal_spread)
+        return random.randint(max(1, upper_bound - _steal_spread), upper_bound)
 
     @staticmethod
     def _make_purchase_component(buyable: Buyable):
