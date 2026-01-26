@@ -6,6 +6,7 @@ from functools import partial
 from savethewench.audio import play_music
 from savethewench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
     functional_component, Component, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent
+from savethewench.component.officer import OfficerEncounter
 from savethewench.component.registry import register_component
 from savethewench.data.audio import SHOP_THEME
 from savethewench.data.components import SHOP
@@ -15,9 +16,9 @@ from savethewench.model.util import display_active_perk_count
 from savethewench.ui import green, blue
 from savethewench.util import print_and_sleep
 
-
 _MAX_STEAL_CHANCE = 75
 _STEAL_SPREAD = 5
+
 
 @register_component(SHOP)
 class ShopBouncer(GatekeepingComponent):
@@ -112,8 +113,7 @@ class StealItem(RandomChoiceComponent):
     def __init__(self, game_state: GameState, buyable: Buyable, success_chance: int):
         super().__init__(game_state, bindings=[
             ProbabilityBinding(success_chance, self._make_steal_component(buyable)),
-            ProbabilityBinding(100 - success_chance,
-                               functional_component(state_dependent=True)(lambda gs: gs.shop.ban_player()))
+            ProbabilityBinding(100 - success_chance, self.busted_component)
         ])
 
     @staticmethod
@@ -125,6 +125,12 @@ class StealItem(RandomChoiceComponent):
                 game_state.shop.remove_listing(buyable)
 
         return steal_component
+
+    @staticmethod
+    @functional_component(state_dependent=True)
+    def busted_component(game_state: GameState):
+        game_state.shop.ban_player()
+        OfficerEncounter(game_state).run()
 
 
 class SellItem(LabeledSelectionComponent):
