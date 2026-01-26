@@ -14,6 +14,7 @@ from savethewench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION, DEATH_CAN_WAIT
 from savethewench.event_logger import subscribe_function
+from savethewench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE
 from savethewench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent
 from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
@@ -238,6 +239,8 @@ class Attack(Component):
             player.attack(enemy)
         if enemy.is_alive():
             enemy.attack(player)
+            if random.random() < ENEMY_SWITCH_WEAPON_CHANCE:
+                enemy.current_weapon = enemy.enemy_switch_weapon()
         if not enemy.is_alive():
             self.handle_enemy_death(player, enemy)
         if not player.is_alive():

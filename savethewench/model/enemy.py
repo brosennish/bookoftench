@@ -11,12 +11,14 @@ from savethewench.data.audio import AREA_BOSS_THEME, GATOR
 from savethewench.data.enemies import Bosses, Final_Boss, BAYOU_BILL
 from savethewench.data.perks import RICKETY_PICKPOCKET
 from savethewench.data.weapons import BARE_HANDS
-from savethewench.ui import purple
+from savethewench.ui import purple, cyan
 from savethewench.util import print_and_sleep
 from .base import Combatant, NPC, DisplayableText
 from .perk import attach_perk
 from .weapon import Weapon, load_weapon, load_weapons
 
+# Constants
+ENEMY_SWITCH_WEAPON_CHANCE = 0.2
 
 @dataclass
 class Enemy(Combatant, NPC):
@@ -52,6 +54,16 @@ class Enemy(Combatant, NPC):
         if len(self.weapon_dict) == 0:
             self.weapon_dict[BARE_HANDS] = load_weapon(BARE_HANDS)
         self.current_weapon = random.choice(list(self.weapon_dict.values()))
+
+    def enemy_switch_weapon(self) -> Weapon:
+        current_weapon = self.current_weapon
+        options = [i for i in self.weapon_dict if i != current_weapon.name
+                   and i != BARE_HANDS]
+        if options:
+            selection = random.choice(options)
+            self.current_weapon = load_weapon(selection)
+            print_and_sleep(cyan(f"{self.name} equipped {self.current_weapon.name}."), 1)
+        return self.current_weapon
 
 
 def load_enemy(name: str) -> Enemy:
