@@ -124,12 +124,13 @@ class PaginatedMenuComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState,
                  top_level_prompt_callback: Callable[[GameState], None] = lambda _: None,
                  main_menu_component: Optional[type[Component]] = None,
-                 return_only: bool = False):
+                 returnable: bool = False, return_only: bool = False):
         super().__init__(game_state, bindings=[])  # dynamically set self.binding_map depending on page
         self.top_level_prompt_callback = top_level_prompt_callback
         self.main_menu_component = main_menu_component
         self.pages = self.construct_pages()
         self.current_page = 0
+        self.returnable = returnable or return_only
         self.return_only = return_only
         self.return_selected = False
 
@@ -168,7 +169,7 @@ class PaginatedMenuComponent(LabeledSelectionComponent):
             res.append(next_page_binding)
         if self.main_menu_component is not None:
             res.append(SelectionBinding('M', 'Main Menu', self.main_menu_component))
-        if self.return_only:
+        if self.returnable:
             res.append(SelectionBinding('R', 'Return', functional_component()(self._select_return)))
         return LabeledSelectionComponent(self.game_state, res)
 
@@ -193,7 +194,8 @@ class PaginatedMenuComponent(LabeledSelectionComponent):
     def can_exit(self) -> bool:
         if self.return_only:
             return self.return_selected
-        return super().can_exit()
+        else:
+            return self.return_selected or super().can_exit()
 
 
 class LinearComponent(Component):
