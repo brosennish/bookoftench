@@ -32,6 +32,7 @@ class EventType(Enum):
     PLAYER_DEATH = "player_death"
     SELL_ITEM = "sell_item"
     SELL_WEAPON = "sell_weapon"
+    STEAL = "steal"
     STEAL_ITEM = "steal_item"
     STEAL_PERK = "steal_perk"
     STEAL_WEAPON = "steal_weapon"

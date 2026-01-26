@@ -7,6 +7,7 @@ CHICKEN = "Chicken"
 DRY_FIVE = "Dry Five"
 FIRST_BUST = "First Bust"
 GOLDEN_TENCH = "Golden Tench"
+KELPTOMANIAC = "Kelptomaniac"
 KRILL_OR_BE_KRILLED = "Krill Or Be Krilled"
 LEVEL_TENCH = "Level Tench"
 MASTER_OF_TENCH = "Master of Tench"
@@ -136,4 +137,13 @@ Achievements = [
         'event_type': EventType.TREATMENT_EVENT,
         'event_threshold': 5
     },
+    {
+        'id': KELPTOMANIAC,
+        'name': KELPTOMANIAC,
+        'description': "Shoplift 5 times",
+        'reward_type': RewardType.XP,
+        'reward_value': 20,
+        'event_type': EventType.STEAL,
+        'event_threshold': 5
+    }
 ]

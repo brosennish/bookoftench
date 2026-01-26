@@ -9,7 +9,7 @@ from savethewench.data.perks import WENCH_LOCATION
 from savethewench.event_base import EventType, Event
 from savethewench.event_logger import subscribe_function
 from savethewench.model.events import KillEvent, CoffeeEvent, LevelUpEvent, FleeEvent, BountyCollectedEvent, \
-    TreatmentEvent
+    TreatmentEvent, StealItemEvent, StealWeaponEvent, StealPerkEvent, StealEventBase, GenericStealEvent
 from savethewench.model.perk import Perk, load_perks
 from savethewench.model.player import Player
 from savethewench.ui import orange
@@ -123,6 +123,15 @@ class TreatmentEventAchievement(Achievement):
                 event_logger.log_event(AchievementEvent(self))
 
 
+@dataclass
+class StealingAchievement(Achievement):
+
+    def __post_init__(self):
+        @subscribe_function(GenericStealEvent, name_override=self.id)
+        def handle_event(_: Event):
+            if event_logger.get_count(self.event_type) == self.event_threshold:
+                event_logger.log_event(AchievementEvent(self))
+
 _ACHIEVEMENTS: Dict[str, Achievement] = {}
 
 
@@ -158,6 +167,11 @@ def load_achievements() -> List[Achievement]:
                 res.append(_ACHIEVEMENTS[achievement.id])
             case EventType.LEVEL_UP:
                 achievement = LevelUpAchievement(**d)
+                if achievement.id not in _ACHIEVEMENTS:
+                    _ACHIEVEMENTS[achievement.id] = achievement
+                res.append(_ACHIEVEMENTS[achievement.id])
+            case EventType.STEAL:
+                achievement = StealingAchievement(**d)
                 if achievement.id not in _ACHIEVEMENTS:
                     _ACHIEVEMENTS[achievement.id] = achievement
                 res.append(_ACHIEVEMENTS[achievement.id])

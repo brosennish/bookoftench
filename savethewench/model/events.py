@@ -56,7 +56,7 @@ class BuyPerkEvent(PurchaseEvent):
         super().__init__(EventType.BUY_PERK, name, amount)
 
 
-class StealEvent(Event):
+class StealEventBase(Event):
     def __init__(self, event_type: EventType, name: str, amount: int):
         super().__init__(event_type)
         self.callback = lambda: self._callback(name, amount)
@@ -69,17 +69,22 @@ class StealEvent(Event):
         print_and_sleep(red(f"But you are now destined for Hell."), 2)
 
 
-class StealItemEvent(StealEvent):
+class GenericStealEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.STEAL)
+
+
+class StealItemEvent(StealEventBase):
     def __init__(self, item_name: str, amount: int):
         super().__init__(EventType.STEAL_ITEM, item_name, amount)
 
 
-class StealPerkEvent(StealEvent):
+class StealPerkEvent(StealEventBase):
     def __init__(self, perk_name: str, amount: int):
         super().__init__(EventType.STEAL_PERK, perk_name, amount)
 
 
-class StealWeaponEvent(StealEvent):
+class StealWeaponEvent(StealEventBase):
     def __init__(self, weapon_name: str, amount: int):
         super().__init__(EventType.STEAL_WEAPON, weapon_name, amount)
 
