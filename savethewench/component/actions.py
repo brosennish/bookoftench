@@ -66,6 +66,8 @@ class Explore(RandomChoiceComponent):
         available = [w for w in load_discoverable_weapons()
                      if w.name not in game_state.player.weapon_dict]
 
+        if len(available) == 0:  # shouldn't ever be the case in actual gameplay, but need this in debug mode
+            available = load_discoverable_weapons()
         weapon = random.choice(available)
         game_state.found_weapon = weapon
         print_and_sleep(cyan(f"You found {'an' if weapon.name[0].lower() in 'aeiou' else 'a'} {weapon.name}!"),

@@ -19,7 +19,7 @@ from savethewench.ui import yellow, dim, green, cyan, purple, red
 from savethewench.util import print_and_sleep
 from .base import Combatant, Buyable
 from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent, LevelUpEvent, \
-    SwapWeaponEvent, WeaponBrokeEvent, HitEvent, PlayerDeathEvent
+    SwapWeaponEvent, WeaponBrokeEvent, HitEvent, PlayerDeathEvent, StealItemEvent, StealWeaponEvent, StealPerkEvent
 from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
 from .weapon import load_weapons, Weapon
@@ -181,6 +181,19 @@ class Player(Combatant):
             return False
         self.coins -= buyable.cost
         return True
+
+
+    def steal_buyable(self, buyable) -> bool:
+        if isinstance(buyable, Item) and self.add_item(buyable):
+            event_logger.log_event(StealItemEvent(buyable.name, buyable.cost))
+        elif isinstance(buyable, Weapon) and self.add_weapon(buyable):
+            event_logger.log_event(StealWeaponEvent(buyable.name, buyable.cost))
+        elif isinstance(buyable, Perk) and self.add_perk(buyable):
+            event_logger.log_event(StealPerkEvent(buyable.name, buyable.cost))
+        else:
+            return False
+        return True
+
 
     def sell_item(self, name: str) -> None:
         item = self.items[name]

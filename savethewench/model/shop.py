@@ -5,6 +5,8 @@ from typing import List, TypeVar
 from savethewench.data.perks import BROWN_FRIDAY, BARTER_SAUCE, TRADE_SHIP
 from savethewench.event_base import Event
 from savethewench.event_logger import subscribe_function
+from savethewench.ui import red
+from savethewench.util import print_and_sleep
 from .base import Buyable
 from .events import LevelUpEvent, PlayerDeathEvent
 from .item import Item, load_items
@@ -20,6 +22,8 @@ _MAX_PERKS: int = 3
 @dataclass
 class Shop:
     area_name: str
+
+    player_is_banned: bool = False
 
     _all_items: List[Item] = field(init=False)
     _all_weapons: List[Weapon] = field(init=False)
@@ -81,8 +85,9 @@ class Shop:
         self.reset_inventory()
         self._subscribe_listeners()
 
+    @staticmethod
     @attach_perks(BARTER_SAUCE, TRADE_SHIP, silent=True)
-    def _discounted_cost(self, cost) -> int:
+    def _discounted_cost(cost: int) -> int:
         return cost
 
     B = TypeVar("B", bound=Buyable)
@@ -106,9 +111,19 @@ class Shop:
                                                k=min(self.max_weapons, len(self._all_weapons)))
         self.perk_inventory = random.sample(self._all_perks, k=min(self.max_perks, len(self._all_perks)))
 
+    def ban_player(self):
+        self.player_is_banned = True
+        # TODO - some kind of sound effect here
+        print_and_sleep(red(f"You think you're slick?"), 1)
+        print_and_sleep(red(
+            f"Well bad news - you're not welcome at this here shop here in the {self.area_name} no more, bozo."), 2)
+        print_and_sleep(red(f"Come back when you level up."), 1)
+
     def _subscribe_listeners(self):
-        @subscribe_function(LevelUpEvent, PlayerDeathEvent)
-        def handle_level_up(_: Event):
+        @subscribe_function(LevelUpEvent, PlayerDeathEvent, name_override=f"{self.area_name}_shop_reset")
+        def handle_reset_events(_: Event):
+            self.player_is_banned = False
+            print_and_sleep(f"UNBANNING PLAYER from {self.area_name}. self.player_is_banned = {self.player_is_banned}")
             self.reset_inventory()
 
     # for loading from save file

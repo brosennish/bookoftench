@@ -17,6 +17,7 @@ from savethewench.util import print_and_sleep
 
 @dataclass
 class Buyable:
+    name: str
     cost: int
 
 
