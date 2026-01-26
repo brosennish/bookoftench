@@ -34,6 +34,7 @@ class SaveTheWenchGame:
             player.coins = 10000
             player.max_hp = 1000
             player.hp = player.max_hp
+            player.xp = 99
             for weapon in load_discoverable_weapons():
                 player.weapon_dict[weapon.name] = PlayerWeapon.from_weapon(weapon)
             for area in game_state.areas:

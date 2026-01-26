@@ -58,7 +58,6 @@ class Area:
 
     def __post_init__(self):
         self.boss = load_boss(self.boss_name)
-        self.shop = Shop(self.name)
 
     @property
     def post_kill_components(self) -> List[str]:

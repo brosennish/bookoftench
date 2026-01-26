@@ -5,7 +5,7 @@ from typing import List, TypeVar
 from savethewench.data.perks import BROWN_FRIDAY, BARTER_SAUCE, TRADE_SHIP
 from savethewench.event_base import Event
 from savethewench.event_logger import subscribe_function
-from savethewench.ui import red
+from savethewench.ui import red, green
 from savethewench.util import print_and_sleep
 from .base import Buyable
 from .events import LevelUpEvent, PlayerDeathEvent
@@ -122,8 +122,9 @@ class Shop:
     def _subscribe_listeners(self):
         @subscribe_function(LevelUpEvent, PlayerDeathEvent, name_override=f"{self.area_name}_shop_reset")
         def handle_reset_events(_: Event):
+            if self.player_is_banned:
+                print_and_sleep(green(f"You can once again access the shop in the {self.area_name}."), 1.5)
             self.player_is_banned = False
-            print_and_sleep(f"UNBANNING PLAYER from {self.area_name}. self.player_is_banned = {self.player_is_banned}")
             self.reset_inventory()
 
     # for loading from save file

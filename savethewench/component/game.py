@@ -10,8 +10,8 @@ from savethewench.util import print_and_sleep
 
 
 class InitGame(GatekeepingComponent):
-    def __init__(self, game_state: GameState = GameState()):
-        super().__init__(game_state,
+    def __init__(self, _: GameState):
+        super().__init__(GameState(),
                          decision_function=self._decision_function,
                          accept_component=VictoryOrDeathHandler,
                          deny_component=StartMenu)
