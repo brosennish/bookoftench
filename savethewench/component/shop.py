@@ -25,7 +25,7 @@ class ShopBouncer(GatekeepingComponent):
         super().__init__(game_state, decision_function=self._player_can_enter_shop,
                          accept_component=ShopComponent,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("You're banned, bozo. Come back when you level up'"), 1.5)))
+                             blue("You're banned, bozo. Come back when you level up."), 1.5)))
 
     def _player_can_enter_shop(self) -> bool:
         return not self.game_state.shop.player_is_banned
