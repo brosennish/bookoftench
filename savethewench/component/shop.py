@@ -66,7 +66,9 @@ class ShopComponent(LabeledSelectionComponent):
         return self.game_state.shop.player_is_banned or self.exit_shop
 
     def display_options(self) -> None:
-        print_and_sleep(f"{blue("Welcome! You have")} {green(self.game_state.player.coins)} {blue("coins.")}\n")
+        area = self.game_state.current_area.name
+        message = f"Welcome to the {area} Shop! You have"
+        print_and_sleep(f"{blue(f'{message}')} {green(self.game_state.player.coins)} {blue("coins.")}\n")
         for component in self.selection_components:
             component.display_options()
 
