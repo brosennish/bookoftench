@@ -54,10 +54,6 @@ class Metadata:
                 f"Last Save: {datetime.fromtimestamp(self.save_time).strftime("%Y-%m-%d %H:%M:%S")}")
 
 
-def slot_directory(slot_id: int) -> Path:
-    return Path(f"{_SAVE_DIR}/slot_{slot_id}")
-
-
 @dataclass
 class SaveSlot:
     slot_id: int
