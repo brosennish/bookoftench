@@ -4,7 +4,7 @@ import copy
 import random
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Dict, List
+from typing import Dict, List, Self
 
 from savethewench import event_logger
 from savethewench.audio import play_sound
@@ -120,7 +120,7 @@ class NPC:
                 break
 
     @classmethod
-    def from_dict(cls, data: dict) -> NPC:
+    def from_dict(cls, data: dict) -> Self:
         data = copy.deepcopy(data)
         if 'random_dialogue' in data:
             data['random_dialogue'] = [RandomDisplayableText.from_dict(d) for d in data['random_dialogue']]
