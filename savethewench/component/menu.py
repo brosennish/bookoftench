@@ -10,7 +10,7 @@ from savethewench.data.components import EXPLORE, AREA_BOSS_FIGHT, FINAL_BOSS_FI
     LOAD_GAME, InGameMenuDefaults
 from savethewench.model import GameState
 from savethewench.model.area import AreaActions
-from savethewench.model.persistence import load_save_slots, SaveSlot
+from savethewench.persistence import load_save_slots, SaveSlot
 from savethewench.model.util import get_player_status_view
 from savethewench.ui import red, yellow
 from savethewench.util import print_and_sleep, safe_input
@@ -139,7 +139,7 @@ class SavedGameInteractingComponent(LabeledSelectionComponent):
             SelectionBinding(str(slot.slot_id),
                              slot.get_displayable_format(),
                              action(slot))
-            for slot in load_save_slots()])
+            for slot in load_save_slots()], quittable=True)
 
 
 @register_component(SAVE_GAME)
