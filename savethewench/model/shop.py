@@ -1,5 +1,5 @@
 import random
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from typing import List, TypeVar
 
 from savethewench.data.perks import BROWN_FRIDAY, BARTER_SAUCE, TRADE_SHIP
@@ -61,7 +61,7 @@ class Shop:
     @property
     def weapon_inventory(self) -> List[Weapon]:
         while len(self._weapon_inventory) < self.max_weapons:
-            self._weapon_inventory.append(Weapon(**random.choice(self._all_weapons).__dict__))
+            self._weapon_inventory.append(Weapon.from_dict(asdict(random.choice(self._all_weapons))))
         return self.apply_discounts(self._weapon_inventory)
 
     @weapon_inventory.setter
@@ -71,7 +71,7 @@ class Shop:
     @property
     def perk_inventory(self) -> List[Perk]:
         while len(self._perk_inventory) < self.max_perks:
-            self._perk_inventory.append(Perk(**random.choice(self._perk_inventory).__dict__))
+            self._perk_inventory.append(Perk.from_dict(asdict(random.choice(self._perk_inventory))))
         return self.apply_discounts(self._perk_inventory)
 
     @perk_inventory.setter
@@ -94,7 +94,7 @@ class Shop:
 
     def apply_discounts(self, buyables: List[B]) -> List[B]:
         for buyable in buyables:
-            buyable.cost = self._discounted_cost(buyable.cost)
+            buyable.cost = self._discounted_cost(buyable.original_cost)
         return buyables
 
     def remove_listing(self, buyable: Buyable) -> None:

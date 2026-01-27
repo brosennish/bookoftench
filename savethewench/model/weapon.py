@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import random
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from typing import List
 
 from savethewench.data import Weapons
@@ -51,7 +51,7 @@ class Weapon(WeaponBase, Buyable):
         return random.randint(self.blind_turns_min, self.blind_turns_max)
 
     def to_sellable_weapon(self) -> SellableWeapon:
-        return SellableWeapon(**vars(self))
+        return SellableWeapon.from_dict(asdict(self))
 
     def __repr__(self) -> str:
         return dim(' | ').join([

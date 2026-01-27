@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import random
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from typing import Dict, List, Optional
 
 from savethewench import event_logger
@@ -56,7 +56,7 @@ class PlayerWeapon(Weapon):
 
     @classmethod
     def from_weapon(cls, weapon: Weapon) -> PlayerWeapon:
-        return cls(**weapon.__dict__)
+        return cls.from_dict(asdict(weapon))
 
 
 def item_defaults() -> Dict[str, Item]:
