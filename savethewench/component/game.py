@@ -10,7 +10,7 @@ from savethewench.util import print_and_sleep
 
 
 class InitGame(GatekeepingComponent):
-    def __init__(self, _: GameState):
+    def __init__(self, _: GameState = None):
         super().__init__(GameState(),
                          decision_function=self._decision_function,
                          accept_component=VictoryOrDeathHandler,
