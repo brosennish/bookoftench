@@ -201,12 +201,14 @@ Enemy_Lines = {
     HUMANOID_CAVE_CREATURE: ["God may be merciful... loving... but I am not God. I am not God.",
                              "You think you are holy... but you are not holy. Do you even live in a hole?",
                              "I am one with God, because I am God. You are not God... you are not God."],
-    HAND_FISHERMAN: ["If you count your hand as a catch, you catch something every time! Unless a catfish bites it off...",
-                     "I'd use a pole but the fish are just way too big. They ate my first three born.",
-                     "Once, I pulled a man out of a hole - but, to his dismay, I put him back, because I wasn't fishing for men that day."],
-    VOODOO_PRIESTESS: ["I will shrink your head, then raise the dead, then shrink their heads, 'cause I love shrinkin' heads.",
-                       "I can tell you your future... It's very dark. Soon, you will see what I mean.",
-                       "Does it drive you crazy then I shake my stick?"],
+    HAND_FISHERMAN: [
+        "If you count your hand as a catch, you catch something every time! Unless a catfish bites it off...",
+        "I'd use a pole but the fish are just way too big. They ate my first three born.",
+        "Once, I pulled a man out of a hole - but, to his dismay, I put him back, because I wasn't fishing for men that day."],
+    VOODOO_PRIESTESS: [
+        "I will shrink your head, then raise the dead, then shrink their heads, 'cause I love shrinkin' heads.",
+        "I can tell you your future... It's very dark. Soon, you will see what I mean.",
+        "Does it drive you crazy then I shake my stick?"],
     BAYOU_MAN: ["When you livin' out here in the bayou ain't nobody come 'round.",
                 "Without some fresh feed it's easy for a boy to come up cold out here on the bayou.",
                 "Riverboat, Crawdad, Alligator Gumbo!",
@@ -215,4 +217,4 @@ Enemy_Lines = {
                      "Your skin looks very comfortable. May I try it on?",
                      "Where did you get your skin? It's so... fresh.",
                      "You have to lotion your skins before they run dry."]
-    }
+}

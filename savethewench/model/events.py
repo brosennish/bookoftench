@@ -56,6 +56,39 @@ class BuyPerkEvent(PurchaseEvent):
         super().__init__(EventType.BUY_PERK, name, amount)
 
 
+class StealEventBase(Event):
+    def __init__(self, event_type: EventType, name: str, amount: int):
+        super().__init__(event_type)
+        self.callback = lambda: self._callback(name, amount)
+
+    @staticmethod
+    def _callback(name, amount):
+        # TODO - sound effect
+        print_and_sleep(green(f"You successfully stole {name}."), 1)
+        print_and_sleep(yellow(f"Saved yourself {amount} of coin there."), 1)
+        print_and_sleep(red(f"But you are now destined for Hell."), 2)
+
+
+class GenericStealEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.STEAL)
+
+
+class StealItemEvent(StealEventBase):
+    def __init__(self, item_name: str, amount: int):
+        super().__init__(EventType.STEAL_ITEM, item_name, amount)
+
+
+class StealPerkEvent(StealEventBase):
+    def __init__(self, perk_name: str, amount: int):
+        super().__init__(EventType.STEAL_PERK, perk_name, amount)
+
+
+class StealWeaponEvent(StealEventBase):
+    def __init__(self, weapon_name: str, amount: int):
+        super().__init__(EventType.STEAL_WEAPON, weapon_name, amount)
+
+
 class ItemSoldEvent(Event):
     def __init__(self, name: str, value: int):
         super().__init__(EventType.SELL_ITEM,
@@ -184,14 +217,16 @@ class OfficerEvent(Event):
 class CoinDelistingScheduledEvent(Event):
     def __init__(self, coin_name: str, seconds_to_delist: int):
         super().__init__(EventType.COIN_DELISTING_SCHEDULED)
-                         #callback=lambda: print_and_sleep(f"{coin_name} will be delisted in {seconds_to_delist} seconds."))
+        # callback=lambda: print_and_sleep(f"{coin_name} will be delisted in {seconds_to_delist} seconds."))
+
 
 class CoinDelistedEvent(Event):
     def __init__(self, coin_name: str):
         super().__init__(EventType.COIN_DELISTED)
-                         #callback=lambda: print_and_sleep(f"{coin_name} has been delisted."))
+        # callback=lambda: print_and_sleep(f"{coin_name} has been delisted."))
+
 
 class CoinListedEvent(Event):
     def __init__(self, coin_name: str, price: int):
         super().__init__(EventType.COIN_LISTED)
-                         #callback=lambda: print_and_sleep(f"{coin_name} is now available for {price} of coin."))
+        # callback=lambda: print_and_sleep(f"{coin_name} is now available for {price} of coin."))

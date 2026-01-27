@@ -130,13 +130,13 @@ class CoinActionSelector(CryptoExchangeExtension):
         window.add_line(Line([LinePart('[H]', color=curses.COLOR_MAGENTA,
                                        highlight=self.sub_selection == (0 if self.coin.zeroed else (
                                            1 if self.coin.quantity_owned == 0 else 2)
-                                       )),
+                                                                        )),
                               LinePart('History', color=curses.COLOR_CYAN, offset=4)]))
         window.add_newlines(1)
         window.add_line(Line([LinePart('[R]', color=curses.COLOR_MAGENTA,
                                        highlight=self.sub_selection == (1 if self.coin.zeroed else (
                                            2 if self.coin.quantity_owned == 0 else 3)
-                                       )),
+                                                                        )),
                               LinePart('Return', color=curses.COLOR_CYAN, offset=4)]))
 
     def handle_selection(self, stdscr) -> None:
@@ -152,7 +152,7 @@ class CoinActionSelector(CryptoExchangeExtension):
                 else:
                     BuySelector(self.game_state, self.selected).c_run(stdscr)
             elif self.sub_selection == 1:
-                if self.coin.zeroed: # player selected Return
+                if self.coin.zeroed:  # player selected Return
                     if not self.coin.ipo:
                         self.coin.unfreeze()
                 elif self.coin.quantity_owned > 0:

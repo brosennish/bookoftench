@@ -15,7 +15,7 @@ from savethewench.data.cryptocurrencies import Crypto_Currencies, Shit_Coin_Name
 from savethewench.model.events import CoinListedEvent, CoinDelistedEvent, CoinDelistingScheduledEvent
 
 _max_update_latency = 3  # seconds
-_delisting_latency = 30 # seconds
+_delisting_latency = 30  # seconds
 _max_coins = 5
 
 
@@ -113,7 +113,7 @@ class CryptoCurrency:
     __delisted: bool = False  # internal only
 
     def __post_init__(self):
-        self.price = self.price # run value through setter
+        self.price = self.price  # run value through setter
         self._update_trigger()
         self._sigma = self.volatility / 2.0
         self._start_price = self.price
@@ -310,9 +310,9 @@ class CryptoMarketState:
 
     def __getstate__(self):
         state = self.__dict__.copy()
-        state.pop("lock", None) # remove before serialization (save game)
+        state.pop("lock", None)  # remove before serialization (save game)
         return state
 
     def __setstate__(self, state):
         self.__dict__.update(state)
-        self.lock = RLock() # add again after deserialization (load game)
+        self.lock = RLock()  # add again after deserialization (load game)

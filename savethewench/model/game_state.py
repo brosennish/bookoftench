@@ -33,7 +33,7 @@ class GameState:
     areas: List[Area] = field(default_factory=load_areas)
     current_area: Area = None
 
-    wench_area: Area = field(default_factory=lambda: random.choice(load_areas()))  # TODO
+    wench_area: Area = None
 
     found_item: Item = None
     found_weapon: Weapon = None
@@ -65,6 +65,8 @@ class GameState:
     def __post_init__(self):
         if self.current_area is None:
             self.current_area = self.areas[0]
+        if self.wench_area is None:
+            self.wench_area = random.choice(self.areas)
         if len(self.wanted) == 0:
             self.refresh_bounty()
         event_logger.set_counter(self.event_counter)

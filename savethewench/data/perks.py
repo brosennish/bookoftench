@@ -8,6 +8,7 @@ BEER_GOGGLES = "Beer Goggles"
 BROWN_FRIDAY = "Brown Friday"
 BROWNMAIL = "Brownmail"
 BULLETPROOF = "Bulletproof"
+CATFISH_BURGLAR = "Catfish Burglar"
 CROWS_NEST = "Crow's Nest"
 DEATH_CAN_WAIT = "Death Can Wait"
 DOCTOR_FISH = "Doctor Fish"
@@ -134,6 +135,13 @@ Perks = [
         'description': "Steal an extra 20–30 coins from every enemy you defeat",
         'wrapper_type': WrapperType.BOUNDED_RANDOM,
         'wrapper_config': {'lower_bound': 20, 'upper_bound': 30}
+    },
+    {
+        'name': CATFISH_BURGLAR,
+        'cost': 100,
+        'description': "Boost shoplifting odds by 10%",
+        'wrapper_type': WrapperType.INT_CHANGE,
+        'wrapper_config': {'change': 10}
     },
     {
         'name': MARTIAL_ARTS_TRAINING,
