@@ -30,6 +30,7 @@ class WeaponBase(ABC):
     spread: int
     crit: float
     sound: str
+    type: str
 
     def calculate_base_damage(self) -> int:
         base = self.damage + random.randint(-self.spread, self.spread)  # Base damage +/- 10
@@ -217,7 +218,7 @@ class Combatant(ABC):
         if isinstance(other, NPC):
             print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
-            event_logger.log_event(HitEvent(self.current_weapon.name))
+            event_logger.log_event(HitEvent(self.current_weapon.type))
         else:
             print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
