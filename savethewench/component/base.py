@@ -235,7 +235,7 @@ class TextDisplayingComponent(LinearComponent):
     def execute_current(self) -> GameState:
         self.display_callback(self.game_state)
         safe_input()
-        return self.next_component(self.game_state).run()
+        return self.game_state
 
 
 @dataclass
