@@ -3,7 +3,7 @@ from __future__ import annotations
 import copy
 import random
 from dataclasses import dataclass, field
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Self
 
 from savethewench.audio import play_sound
 from savethewench.data import Enemies
@@ -89,11 +89,11 @@ class Boss(Enemy):
     preamble: List[DisplayableText] = field(default_factory=list)
 
     @classmethod
-    def from_dict(cls, data: dict) -> Boss:
+    def from_dict(cls, data: dict) -> Self:
         data = copy.deepcopy(data)
         if 'preamble' in data:
             data['preamble'] = [DisplayableText(**d) for d in data['preamble']]
-        return Boss(**data)
+        return super().from_dict(data)
 
     def do_preamble(self) -> None:
         for displayableText in self.preamble:

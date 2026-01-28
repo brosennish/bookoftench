@@ -4,7 +4,7 @@ import copy
 import random
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field, fields
-from typing import Dict, List
+from typing import Dict, List, Self
 
 from savethewench import event_logger
 from savethewench.audio import play_sound
@@ -43,6 +43,7 @@ class WeaponBase(ABC):
     spread: int
     crit: float
     sound: str
+    type: str
 
     def calculate_base_damage(self) -> int:
         base = self.damage + random.randint(-self.spread, self.spread)  # Base damage +/- 10
@@ -132,7 +133,7 @@ class NPC:
                 break
 
     @classmethod
-    def from_dict(cls, data: dict) -> NPC:
+    def from_dict(cls, data: dict) -> Self:
         data = copy.deepcopy(data)
         if 'random_dialogue' in data:
             data['random_dialogue'] = [RandomDisplayableText.from_dict(d) for d in data['random_dialogue']]
@@ -230,7 +231,7 @@ class Combatant(ABC):
         if isinstance(other, NPC):
             print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
-            event_logger.log_event(HitEvent(self.current_weapon.name))
+            event_logger.log_event(HitEvent(self.current_weapon.type))
         else:
             print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
