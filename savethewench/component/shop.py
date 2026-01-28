@@ -70,8 +70,7 @@ class ShopComponent(LabeledSelectionComponent):
         message = f"Welcome to the {area} Shop!"
         print_and_sleep(f"{blue(f'{message}')}")
 
-        display = display_shop_header(self.game_state)
-        print_and_sleep(display, 0)
+        display_shop_header(self.game_state)
 
         for component in self.selection_components:
             component.display_options()
