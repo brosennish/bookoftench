@@ -14,7 +14,7 @@ from savethewench.data.perks import CATFISH_BURGLAR
 from savethewench.model import GameState
 from savethewench.model.base import Buyable
 from savethewench.model.perk import attach_perk
-from savethewench.model.util import display_active_perk_count
+from savethewench.model.util import display_active_perk_count, display_shop_header
 from savethewench.ui import green, blue
 from savethewench.util import print_and_sleep
 
@@ -67,8 +67,12 @@ class ShopComponent(LabeledSelectionComponent):
 
     def display_options(self) -> None:
         area = self.game_state.current_area.name
-        message = f"Welcome to the {area} Shop! You have"
-        print_and_sleep(f"{blue(f'{message}')} {green(self.game_state.player.coins)} {blue("coins.")}\n")
+        message = f"Welcome to the {area} Shop!"
+        print_and_sleep(f"{blue(f'{message}')}")
+
+        display = display_shop_header(self.game_state)
+        print_and_sleep(display, 0)
+
         for component in self.selection_components:
             component.display_options()
 
