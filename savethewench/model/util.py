@@ -48,6 +48,19 @@ def display_hospital_header(game_state: GameState) -> None:
     print_and_sleep(f"Chance of Success: {cyan(f'{int(player.illness.success_rate * 100)}%')}\n")
 
 
+def display_shop_header(game_state: GameState):
+    player = game_state.player
+    player_color = p_color(player.hp, player.max_hp)
+
+    print_and_sleep(
+        dim(" | ").join([
+            f"Coins: {green(player.coins)}",
+            f"HP: {player_color(f'{player.hp}/{player.max_hp}')}",
+            f"Lives: {yellow(player.lives)}",
+        ])
+    )
+
+
 def get_player_status_view(game_state: GameState) -> str:
     player = game_state.player
     player_color = p_color(player.hp, player.max_hp)
