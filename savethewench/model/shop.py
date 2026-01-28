@@ -10,7 +10,7 @@ from savethewench.util import print_and_sleep
 from .base import Buyable
 from .events import LevelUpEvent, PlayerDeathEvent
 from .item import Item, load_items
-from .perk import Perk, load_perks, attach_perk, attach_perks
+from .perk import Perk, load_perks, attach_perk, attach_perks, perk_is_active
 from .weapon import Weapon, load_discoverable_weapons
 
 # TODO maybe read these from config
@@ -70,8 +70,11 @@ class Shop:
 
     @property
     def perk_inventory(self) -> List[Perk]:
-        while len(self._perk_inventory) < self.max_perks:
-            self._perk_inventory.append(Perk.from_dict(asdict(random.choice(self._perk_inventory))))
+        self._perk_inventory = [p for p in self._perk_inventory if not perk_is_active(p.name)]
+        if len(self._perk_inventory) < self.max_perks:
+            available = [p for p in self._all_perks if not (perk_is_active(p.name) or p in self._perk_inventory)]
+            random.shuffle(available)
+            self._perk_inventory += available[:self.max_perks - len(self._perk_inventory)]
         return self.apply_discounts(self._perk_inventory)
 
     @perk_inventory.setter
@@ -94,6 +97,7 @@ class Shop:
 
     def apply_discounts(self, buyables: List[B]) -> List[B]:
         for buyable in buyables:
+            # noinspection PyTypeChecker
             buyable.cost = self._discounted_cost(buyable.original_cost)
         return buyables
 

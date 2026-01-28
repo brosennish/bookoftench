@@ -15,7 +15,7 @@ from savethewench.model import GameState
 from savethewench.model.base import Buyable
 from savethewench.model.perk import attach_perk
 from savethewench.model.util import display_active_perk_count, display_shop_header
-from savethewench.ui import green, blue
+from savethewench.ui import blue
 from savethewench.util import print_and_sleep
 
 _max_steal_chance = 75
