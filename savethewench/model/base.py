@@ -3,7 +3,7 @@ from __future__ import annotations
 import copy
 import random
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 from typing import Dict, List, Self
 
 from savethewench import event_logger
@@ -19,6 +19,19 @@ from savethewench.util import print_and_sleep
 class Buyable:
     name: str
     cost: int
+    _original_cost: int = field(init=False)
+
+    def __post_init__(self):
+        self._original_cost = self.cost
+
+    @property
+    def original_cost(self) -> int:
+        return self._original_cost
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        init_fields = {f.name for f in fields(cls) if f.init}
+        return cls(**{k: v for k, v in data.items() if k in init_fields})
 
 
 @dataclass

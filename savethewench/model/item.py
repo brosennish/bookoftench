@@ -1,4 +1,6 @@
-from dataclasses import dataclass
+from __future__ import annotations
+
+from dataclasses import dataclass, asdict
 from typing import List
 
 from savethewench.data import Items
@@ -26,8 +28,8 @@ class Item(Buyable):
             f"HP: +{green(self.hp)}"
         ])
 
-    def to_sellable_item(self) -> "SellableItem":
-        return SellableItem(**vars(self))
+    def to_sellable_item(self) -> SellableItem:
+        return SellableItem.from_dict(asdict(self))
 
     def __repr__(self):
         return dim(' | ').join([
