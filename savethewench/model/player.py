@@ -241,9 +241,14 @@ class Player(Combatant):
             print_and_sleep(cyan(f"{name} equipped."), 1)
 
     def swap_found_item(self, old_name: str, found_item: Item) -> None:
-        del self.items[old_name]
+        if self.hp < self.max_hp:
+            self.use_item(old_name)
+            print_and_sleep(cyan(f"{found_item.name} added to sack."), 1)
+        else:
+            del self.items[old_name]
+            print_and_sleep(cyan(f"{old_name} discarded. {found_item.name} added to sack."), 1)
         self.items[found_item.name] = found_item
-        print_and_sleep(cyan(f"{old_name} discarded. {found_item.name} added to sack."), 1)
+        
 
     def swap_found_weapon(self, old_name: str, found_weapon: Weapon) -> None:
         del self.weapon_dict[old_name]
