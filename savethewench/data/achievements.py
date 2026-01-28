@@ -104,7 +104,7 @@ Achievements = [
     {
         'id': FIRST_BUST,
         'name': "First Bust",
-        'description': "Collect 1 bounties",
+        'description': "Collect 1 bounty",
         'reward_type': RewardType.XP,
         'reward_value': 5,
         'event_type': EventType.BOUNTY_COLLECTED,
