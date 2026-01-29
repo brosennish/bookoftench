@@ -30,6 +30,7 @@ class EventType(Enum):
     OFFICER_PAID = "officer_paid"
     OFFICER_UNPAID = "officer_unpaid"
     PLAYER_DEATH = "player_death"
+    SAVE_GAME_DECISION_TRIGGER = "save_game_decision_trigger"
     SELL_ITEM = "sell_item"
     SELL_WEAPON = "sell_weapon"
     STEAL = "steal"

@@ -2,6 +2,7 @@ from savethewench.audio import stop_all_sounds
 from savethewench.component import InitGame
 from savethewench.component.base import Component
 from savethewench.data.components import CRYPTO_EXCHANGE
+from savethewench.globals import enable_debug_mode
 from savethewench.model import GameState
 from savethewench.model.perk import load_perks
 from savethewench.model.player import PlayerWeapon
@@ -26,6 +27,7 @@ class SaveTheWenchGame:
     @staticmethod
     def debug_from(component_type: type[Component]):
         try:
+            enable_debug_mode()
             game_state = GameState()
             for perk in load_perks():
                 perk._active = True

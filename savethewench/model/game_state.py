@@ -107,8 +107,9 @@ class GameState:
             event.activate(self.player)
 
         @subscribe_function(LevelUpEvent)
-        def trigger_bank_visit_decision(_: LevelUpEvent):
+        def trigger_level_up_events(_: LevelUpEvent):
             event_logger.log_event(BankVisitDecisionTriggerEvent(self))
+            event_logger.log_event(SaveGameDecisionTriggerEvent(self))
 
     def is_final_boss_available(self) -> bool:
         return self.current_area.boss_defeated and (self.wench_area == self.current_area) and not self.victory
@@ -125,4 +126,10 @@ class GameState:
 class BankVisitDecisionTriggerEvent(Event):
     def __init__(self, game_state: GameState):
         super().__init__(EventType.BANK_VISIT_DECISION_TRIGGER)
+        self.game_state = game_state
+
+
+class SaveGameDecisionTriggerEvent(Event):
+    def __init__(self, game_state: GameState):
+        super().__init__(EventType.SAVE_GAME_DECISION_TRIGGER)
         self.game_state = game_state
