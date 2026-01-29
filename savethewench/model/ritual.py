@@ -39,8 +39,8 @@ def apply_ritual_effect(ritual: Ritual, player: Player):
             player.lives += 1
             print_and_sleep(f"{cyan(f'Praise be to the inferior Carp. Lives: {player.lives}')}", 2)
         else:
-            player.lives -= 1
-            if player.lives > 0:
+            if player.lives > 1:
+                player.lives -= 1
                 print_and_sleep(f"{red(f'Ritual was a bust. Carp didn\'t take. Lives: {player.lives}')}", 2)
             else:
                 print_and_sleep(f"{red(f'Ritual was a bust. Carp didn\'t take.')}", 2)
