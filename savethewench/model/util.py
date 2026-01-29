@@ -37,6 +37,15 @@ def display_coffee_header(game_state: GameState) -> None:
     ])}")
 
 
+def display_occultist_header(game_state: GameState) -> None:
+    player = game_state.player
+
+    print_and_sleep(f"{dim(' | ').join([
+        f"Coins: {green(f"{player.coins}")}",
+        f"Lives: {yellow(f"{player.lives}")}\n"
+    ])}")
+
+
 def display_hospital_header(game_state: GameState) -> None:
     player = game_state.player
     print_and_sleep(f"{blue(f'Welcome to The Free Range Children\'s Hospital of Shebokken.')}", 2)

@@ -6,6 +6,7 @@ from .coffee_shop import *
 from .crypto import *
 from .game import InitGame
 from .hospital import *
+from .occultist import *
 from .officer import *
 from .settings import *
 from .shop import *
