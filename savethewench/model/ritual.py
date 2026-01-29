@@ -24,26 +24,27 @@ class Ritual(Buyable):
             f"{purple(self.description)}",
         ])
 
+
+    def invoke(self, player: Player):
+        if self.name == TENCH_SACRIFICE:
+            player.lives += 1
+            print_and_sleep(f"{cyan(f'Praise be to the superior Tench. Lives: {player.lives}')}", 2)
+        elif self.name == CARP_SACRIFICE:
+            if random.random() < 0.5:
+                player.lives += 1
+                print_and_sleep(f"{cyan(f'Praise be to the inferior Carp. Lives: {player.lives}')}", 2)
+            else:
+                player.lives -= 1
+                if player.lives > 1:
+                    print_and_sleep(f"{red(f'Ritual was a bust. Carp didn\'t take. Lives: {player.lives}')}", 2)
+                else:
+                    print_and_sleep(f"{red(f'Ritual was a bust. Carp didn\'t take.')}", 2)
+                    player.hp = 0
+                    event_logger.log_event(PlayerDeathEvent(player.lives))
+
+
 def load_rituals() -> List[Ritual]:
     return [
         Ritual(**ritual_dict)
         for ritual_dict in Rituals
     ]
-
-def apply_ritual_effect(ritual: Ritual, player: Player):
-    if ritual.name == TENCH_SACRIFICE:
-        player.lives += 1
-        print_and_sleep(f"{cyan(f'Praise be to the superior Tench. Lives: {player.lives}')}", 2)
-    elif ritual.name == CARP_SACRIFICE:
-        if random.random() < 0.5:
-            player.lives += 1
-            print_and_sleep(f"{cyan(f'Praise be to the inferior Carp. Lives: {player.lives}')}", 2)
-        else:
-            player.lives -= 1
-            if player.lives > 1:
-                print_and_sleep(f"{red(f'Ritual was a bust. Carp didn\'t take. Lives: {player.lives}')}", 2)
-            else:
-                print_and_sleep(f"{red(f'Ritual was a bust. Carp didn\'t take.')}", 2)
-                player.hp = 0
-                event_logger.log_event(PlayerDeathEvent(player.lives))
-

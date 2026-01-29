@@ -3,7 +3,7 @@ from savethewench.component.base import LabeledSelectionComponent, SelectionBind
 from savethewench.component.registry import register_component
 from savethewench.data.components import OCCULTIST
 from savethewench.model import GameState
-from savethewench.model.ritual import Ritual, load_rituals, apply_ritual_effect
+from savethewench.model.ritual import Ritual, load_rituals
 from savethewench.model.util import display_occultist_header
 from savethewench.ui import blue, yellow
 from savethewench.util import print_and_sleep
@@ -55,6 +55,6 @@ class OccultistComponent(LabeledSelectionComponent):
                 print_and_sleep(yellow(f"Need more coin"), 1)
             else:
                 player.coins -= ritual.cost
-                apply_ritual_effect(ritual, player)
+                ritual.invoke(player)
 
         return purchase_component
