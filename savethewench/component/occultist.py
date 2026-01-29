@@ -48,7 +48,7 @@ class OccultistComponent(LabeledSelectionComponent):
     def can_exit(self) -> bool:
         return (self.leave
                 or not self.game_state.player.is_alive()
-                or self.game_state.player.is_sick())
+                )
 
     def display_options(self) -> None:
         print_and_sleep(
