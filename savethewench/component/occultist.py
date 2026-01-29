@@ -60,7 +60,6 @@ class OccultistComponent(LabeledSelectionComponent):
                 print_and_sleep(yellow(f"Need more coin"), 1)
             else:
                 player.coins -= ritual.cost
-                if apply_ritual_effect(ritual, player) == 0:
-                    DeathHandler(game_state).run()
+                apply_ritual_effect(ritual, player)
 
         return purchase_component
