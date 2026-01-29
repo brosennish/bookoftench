@@ -1,6 +1,5 @@
 from savethewench.component import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, register_component
-from savethewench.component.game import DeathHandler
 from savethewench.data.components import OCCULTIST
 from savethewench.model import GameState
 from savethewench.model.ritual import Ritual, ritual_inventory, apply_ritual_effect
@@ -31,9 +30,6 @@ class OccultistComponent(LabeledSelectionComponent):
             ),
         ]
         self.leave = False
-
-    def play_theme(self) -> None:
-        pass
 
     def _return(self):
         self.leave = True
