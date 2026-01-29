@@ -1,9 +1,12 @@
+import random
 from dataclasses import dataclass
 from typing import List
 
-from savethewench.data.rituals import Rituals
+from savethewench.data.rituals import Rituals, TENCH_SACRIFICE, CARP_SACRIFICE
 from savethewench.model.base import Buyable
-from savethewench.ui import cyan, orange, dim, purple
+from savethewench.model.player import Player
+from savethewench.ui import cyan, orange, dim, purple, red
+from savethewench.util import print_and_sleep
 
 
 @dataclass
@@ -24,3 +27,16 @@ def ritual_inventory() -> List[Ritual]:
         Ritual(**ritual_dict)
         for ritual_dict in Rituals
     ]
+
+def apply_ritual_effect(ritual: Ritual, player: Player) -> int:
+    if ritual.name == TENCH_SACRIFICE:
+        player.lives += 1
+        print_and_sleep(f"{cyan(f'Praise be to the superior Tench. Lives: {player.lives}')}", 2)
+    elif ritual.name == CARP_SACRIFICE:
+        if random.random() < 0.5:
+            player.lives += 1
+            print_and_sleep(f"{cyan(f'Praise be to the inferior Carp. Lives: {player.lives}')}", 2)
+        else:
+            player.lives -= 1
+            print_and_sleep(f"{red(f'Ritual was a bust. Carp didn\'t take. Lives: {player.lives}')}", 2)
+    return player.lives

@@ -1,15 +1,11 @@
-import random
-
 from savethewench.component import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, register_component
 from savethewench.component.game import DeathHandler
 from savethewench.data.components import OCCULTIST
-from savethewench.data.rituals import TENCH_SACRIFICE, CARP_SACRIFICE
 from savethewench.model import GameState
-from savethewench.model.player import Player
-from savethewench.model.ritual import Ritual, ritual_inventory
+from savethewench.model.ritual import Ritual, ritual_inventory, apply_ritual_effect
 from savethewench.model.util import display_occultist_header
-from savethewench.ui import blue, yellow, cyan, red
+from savethewench.ui import blue, yellow
 from savethewench.util import print_and_sleep
 
 
@@ -68,16 +64,3 @@ class OccultistComponent(LabeledSelectionComponent):
                     DeathHandler(game_state).run()
 
         return purchase_component
-
-def apply_ritual_effect(ritual: Ritual, player: Player) -> int:
-    if ritual.name == TENCH_SACRIFICE:
-        player.lives += 1
-        print_and_sleep(f"{cyan(f'Praise be to the superior Tench. Lives: {player.lives}')}", 2)
-    elif ritual.name == CARP_SACRIFICE:
-        if random.random() < 0.5:
-            player.lives += 1
-            print_and_sleep(f"{cyan(f'Praise be to the inferior Carp. Lives: {player.lives}')}", 2)
-        else:
-            player.lives -= 1
-            print_and_sleep(f"{red(f'Ritual was a bust. Carp didn\'t take. Lives: {player.lives}')}", 2)
-    return player.lives
