@@ -1,5 +1,6 @@
-from savethewench.component import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
-    functional_component, register_component
+from savethewench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
+    functional_component
+from savethewench.component.registry import register_component
 from savethewench.data.components import OCCULTIST
 from savethewench.model import GameState
 from savethewench.model.ritual import Ritual, load_rituals, apply_ritual_effect
