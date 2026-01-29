@@ -60,8 +60,10 @@ class Shop:
 
     @property
     def weapon_inventory(self) -> List[Weapon]:
-        while len(self._weapon_inventory) < self.max_weapons:
-            self._weapon_inventory.append(Weapon.from_dict(asdict(random.choice(self._all_weapons))))
+        if len(self._weapon_inventory) < self.max_weapons:
+            available = [w for w in self._all_weapons if w not in self._weapon_inventory]
+            random.shuffle(available)
+            self._weapon_inventory += available[:self.max_weapons - len(self._weapon_inventory)]
         return self.apply_discounts(self._weapon_inventory)
 
     @weapon_inventory.setter
