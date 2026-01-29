@@ -1,31 +1,27 @@
 import sys
-from typing import List, Callable
+from typing import List
 
 from savethewench.audio import play_music, stop_all_sounds
 from savethewench.component.base import Component, LinearComponent, BinarySelectionComponent, \
-    TextDisplayingComponent, LabeledSelectionComponent, SelectionBinding, functional_component, PaginatedMenuComponent, \
-    NoOpComponent
+    TextDisplayingComponent, SelectionBinding, PaginatedMenuComponent
 from savethewench.data.audio import INTRO_THEME
-from savethewench.data.components import EXPLORE, AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, NEW_GAME, SAVE_GAME, QUIT_GAME, \
-    LOAD_GAME, InGameMenuDefaults
+from savethewench.data.components import EXPLORE, AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, NEW_GAME, QUIT_GAME, \
+    InGameMenuDefaults, StartGameMenuDefaults
 from savethewench.model import GameState
 from savethewench.model.area import AreaActions
-from savethewench.persistence import load_save_slots, SaveSlot
 from savethewench.model.util import get_player_status_view
-from savethewench.ui import red, yellow
+from savethewench.ui import red
 from savethewench.util import print_and_sleep, safe_input
 from .registry import get_registered_component, register_component
 
 
-class StartMenu(LabeledSelectionComponent):
+class StartMenu(PaginatedMenuComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state,
-                         bindings=[SelectionBinding(key='N', name="New Game", component=NewGame),
-                                   SelectionBinding(key='L', name="Load Game", component=LoadGame),
-                                   SelectionBinding(key='Q', name="Quit", component=QuitGame)])
+        super().__init__(game_state)
 
-    def can_exit(self) -> bool:
-        return self.game_state.victory or not self.game_state.player.is_alive()
+    def construct_pages(self) -> List[List[SelectionBinding]]:
+        return [[SelectionBinding(str(i), name, get_registered_component(name))
+                 for i, name in enumerate(StartGameMenuDefaults.page_one, 1)]]
 
 
 @register_component(NEW_GAME)
@@ -131,51 +127,3 @@ class InGameMenu(PaginatedMenuComponent):
     def construct_pages(self) -> List[List[SelectionBinding]]:
         return [[SelectionBinding(str(i), name, get_registered_component(name))
                  for i, name in enumerate(InGameMenuDefaults.page_one, 1)]]
-
-
-class SavedGameInteractingComponent(LabeledSelectionComponent):
-    def __init__(self, game_state: GameState, action: Callable[[SaveSlot], type[Component]]):
-        super().__init__(game_state, bindings=[
-            SelectionBinding(str(slot.slot_id),
-                             slot.get_displayable_format(),
-                             action(slot))
-            for slot in load_save_slots()], quittable=True)
-
-
-@register_component(SAVE_GAME)
-class SaveGame(SavedGameInteractingComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state, action=self.save_with_overwrite_check)
-
-    @staticmethod
-    def save_with_overwrite_check(slot: SaveSlot) -> type[Component]:
-        save_game = functional_component(state_dependent=True)(slot.save_game)
-        if slot.is_empty:
-            return save_game
-
-        class OverwriteCheck(BinarySelectionComponent):
-            def __init__(self, gs: GameState):
-                super().__init__(gs,
-                                 query=f"A saved game already exists in slot {slot.slot_id}.\n\nDo you wish to proceed?",
-                                 yes_component=save_game,
-                                 no_component=NoOpComponent)
-
-        return OverwriteCheck
-
-
-@register_component(LOAD_GAME)
-class LoadGame(SavedGameInteractingComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state, action=self.load_to_action_menu)
-
-    @staticmethod
-    def load_to_action_menu(slot: SaveSlot) -> type[Component]:
-        if slot.is_empty:
-            return functional_component()(
-                lambda: print_and_sleep(yellow(f"No saved game exists in slot {slot.slot_id}.")))
-
-        class GameStateInjectedActionMenu(ActionMenu):
-            def __init__(self, _: GameState):
-                super().__init__(slot.load_game())
-
-        return GameStateInjectedActionMenu

@@ -9,6 +9,7 @@ from .hospital import *
 from .occultist import *
 from .officer import *
 from .settings import *
+from .storage import *
 from .shop import *
 
 # --

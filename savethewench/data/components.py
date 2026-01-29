@@ -31,10 +31,14 @@ TRAVEL = "Travel"
 USE_ITEM = "Use Item"
 
 
+class StartGameMenuDefaults:
+    page_one: List[str] = [NEW_GAME, LOAD_GAME, QUIT_GAME]
+
+
 class ActionMenuDefaults:
     page_one: List[str] = [EXPLORE, USE_ITEM, EQUIP_WEAPON, SHOP, TRAVEL]
     page_two: List[str] = [ACHIEVEMENTS, BANK, CASINO, PERKS, OVERVIEW]
 
 
 class InGameMenuDefaults:
-    page_one: List[str] = [NEW_GAME, SAVE_GAME, LOAD_GAME, SETTINGS, QUIT_GAME]
+    page_one: List[str] = [NEW_GAME, SETTINGS, QUIT_GAME]
