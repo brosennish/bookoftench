@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import pickle
+import random
 import time
 from dataclasses import dataclass, asdict
 from datetime import datetime
@@ -99,6 +100,8 @@ class SaveSlot:
     def load_game(self) -> GameState:
         if self.is_empty:
             raise ValueError(f"No saved game exists in slot {self.slot_id}")
+
+        random.seed(self.metadata.save_time)
 
         with open(self._game_state_path, "rb") as f:
             return pickle.load(f)
