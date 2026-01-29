@@ -4,10 +4,10 @@ from savethewench.component import LabeledSelectionComponent, SelectionBinding, 
     functional_component, register_component
 from savethewench.component.game import DeathHandler
 from savethewench.data.components import OCCULTIST
-from savethewench.data.rituals import TENCH_SACRIFICE, CARP_SACRIFICE, ritual_inventory
+from savethewench.data.rituals import TENCH_SACRIFICE, CARP_SACRIFICE
 from savethewench.model import GameState
 from savethewench.model.player import Player
-from savethewench.model.ritual import Ritual
+from savethewench.model.ritual import Ritual, ritual_inventory
 from savethewench.model.util import display_occultist_header
 from savethewench.ui import blue, yellow, cyan, red
 from savethewench.util import print_and_sleep

@@ -1,5 +1,7 @@
 from dataclasses import dataclass
+from typing import List
 
+from savethewench.data.rituals import Rituals
 from savethewench.model.base import Buyable
 from savethewench.ui import cyan, orange, dim, purple
 
@@ -16,3 +18,9 @@ class Ritual(Buyable):
             f"Cost: {orange(self.cost)}",
             f"{purple(self.description)}",
         ])
+
+def ritual_inventory() -> List[Ritual]:
+    return [
+        Ritual(**ritual_dict)
+        for ritual_dict in Rituals
+    ]
