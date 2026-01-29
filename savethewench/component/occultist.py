@@ -2,7 +2,7 @@ from savethewench.component import LabeledSelectionComponent, SelectionBinding, 
     functional_component, register_component
 from savethewench.data.components import OCCULTIST
 from savethewench.model import GameState
-from savethewench.model.ritual import Ritual, ritual_inventory, apply_ritual_effect
+from savethewench.model.ritual import Ritual, load_rituals, apply_ritual_effect
 from savethewench.model.util import display_occultist_header
 from savethewench.ui import blue, yellow
 from savethewench.util import print_and_sleep
@@ -11,7 +11,7 @@ from savethewench.util import print_and_sleep
 @register_component(OCCULTIST)
 class OccultistComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        ritual_options = ritual_inventory()
+        ritual_options = load_rituals()
 
         ritual_bindings = [ReprBinding(str(i + 1), ritual.name, self._make_purchase_component(ritual), ritual) for
                          i, ritual in enumerate(ritual_options)]

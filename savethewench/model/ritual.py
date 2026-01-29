@@ -24,7 +24,7 @@ class Ritual(Buyable):
             f"{purple(self.description)}",
         ])
 
-def ritual_inventory() -> List[Ritual]:
+def load_rituals() -> List[Ritual]:
     return [
         Ritual(**ritual_dict)
         for ritual_dict in Rituals
