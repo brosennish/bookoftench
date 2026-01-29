@@ -1,7 +1,7 @@
 from enum import Enum
 
 from . import audio, enemies
-from .components import ActionMenuDefaults, COFFEE_SHOP, HOSPITAL, OFFICER
+from .components import ActionMenuDefaults, COFFEE_SHOP, HOSPITAL, OFFICER, OCCULTIST
 
 # Constants
 CAVE = "Cave"
@@ -33,7 +33,8 @@ Areas = [
     {'name': CAVE,
      'enemies': [enemies.MINER, enemies.SPELUNKER, enemies.MOLE_PERSON,
                  enemies.HUMANOID_CAVE_CREATURE],
-     'boss_name': enemies.CAPTAIN_HOLE, 'theme': audio.CAVE_THEME},
+     'boss_name': enemies.CAPTAIN_HOLE, 'theme': audio.CAVE_THEME,
+     'actions_menu': {'pages': [ActionMenuDefaults.page_one, ActionMenuDefaults.page_two, [OCCULTIST]]}},
     {'name': SWAMP,
      'enemies': [enemies.HAND_FISHERMAN, enemies.BAYOU_MAN, enemies.VOODOO_PRIESTESS,
                  enemies.SKIN_COLLECTOR],
