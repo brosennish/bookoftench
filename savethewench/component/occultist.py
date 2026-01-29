@@ -4,9 +4,8 @@ from savethewench.component import LabeledSelectionComponent, SelectionBinding, 
     functional_component, register_component
 from savethewench.component.game import DeathHandler
 from savethewench.data.components import OCCULTIST
-from savethewench.data.rituals import TENCH_SACRIFICE, CARP_SACRIFICE
+from savethewench.data.rituals import TENCH_SACRIFICE, CARP_SACRIFICE, ritual_inventory
 from savethewench.model import GameState
-from savethewench.model.occultist import Occultist
 from savethewench.model.player import Player
 from savethewench.model.ritual import Ritual
 from savethewench.model.util import display_occultist_header
@@ -17,8 +16,7 @@ from savethewench.util import print_and_sleep
 @register_component(OCCULTIST)
 class OccultistComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        occultist = Occultist()
-        ritual_options = occultist.ritual_inventory
+        ritual_options = ritual_inventory()
 
         ritual_bindings = [ReprBinding(str(i + 1), ritual.name, self._make_purchase_component(ritual), ritual) for
                          i, ritual in enumerate(ritual_options)]
