@@ -37,9 +37,7 @@ class OccultistComponent(LabeledSelectionComponent):
         print_and_sleep(f"{blue('Farewell.')}", 1)
 
     def can_exit(self) -> bool:
-        return (self.leave
-                or not self.game_state.player.is_alive()
-                )
+        return self.leave or not self.game_state.player.is_alive()
 
     def display_options(self) -> None:
         print_and_sleep(
