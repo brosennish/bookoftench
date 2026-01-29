@@ -1,5 +1,6 @@
 from typing import List
 
+from savethewench.globals import is_debug_mode
 from savethewench.ui import purple
 
 ACHIEVEMENTS = "Achievements"
