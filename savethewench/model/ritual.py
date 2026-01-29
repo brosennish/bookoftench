@@ -35,7 +35,7 @@ def apply_ritual_effect(ritual: Ritual, player: Player):
         player.lives += 1
         print_and_sleep(f"{cyan(f'Praise be to the superior Tench. Lives: {player.lives}')}", 2)
     elif ritual.name == CARP_SACRIFICE:
-        if random.random() < 0:
+        if random.random() < 0.5:
             player.lives += 1
             print_and_sleep(f"{cyan(f'Praise be to the inferior Carp. Lives: {player.lives}')}", 2)
         else:

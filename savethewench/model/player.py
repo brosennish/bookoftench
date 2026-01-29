@@ -70,7 +70,7 @@ def weapon_defaults() -> Dict[str, PlayerWeapon]:
 @dataclass
 class Player(Combatant):
     name: str = ''
-    lives: int = 1
+    lives: int = 3
     lvl: int = 1
     hp: int = 100
     max_hp: int = 100
@@ -79,7 +79,7 @@ class Player(Combatant):
     illness: Optional[Illness] = None
     illness_death_lvl: Optional[int] = None
 
-    coins: int = 100
+    coins: int = 0
     casino_won: int = 0
     casino_lost: int = 0
     games_played: int = 0
