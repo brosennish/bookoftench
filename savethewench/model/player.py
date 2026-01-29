@@ -155,8 +155,9 @@ class Player(Combatant):
             self.items[item.name] = item
             return True
 
+    @staticmethod
     @attach_perks(HEALTH_NUT, DOCTOR_FISH, value_description="hp gained")
-    def _apply_hp_bonus(self, base: int) -> int:
+    def _apply_hp_bonus(base: int) -> int:
         return base
 
     def use_item(self, name: str) -> None:

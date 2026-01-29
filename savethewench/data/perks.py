@@ -168,7 +168,7 @@ Perks = [
         'name': HEALTH_NUT,
         'cost': 150,
         'description': "Gain +25% health from items",
-        'wrapper_type': WrapperType.PERCENT_CHANGE,
+        'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
         'wrapper_config': {'change': 25}
     },
     {
