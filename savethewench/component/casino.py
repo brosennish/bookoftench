@@ -19,10 +19,10 @@ from .registry import register_component
 @register_component(CASINO)
 class CasinoBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: game_state.player.coins > 0,
+        super().__init__(game_state, decision_function=lambda: game_state.player.coins >= 5,
                          accept_component=CasinoCheck,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("Your paper's no good here.\nCome back with some coins.\n"), 1.5)))
+                             blue("Your paper's no good here.\nCome back when you have at least 5 of coin.\n"), 1.5)))
 
 
 # --- Casino entry / gatekeeping ---
