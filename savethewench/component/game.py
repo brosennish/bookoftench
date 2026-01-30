@@ -73,7 +73,7 @@ class NewGame(LinearComponent):
         stop_all_sounds()
         player = self.game_state.player
         while not player.name:
-            player.name = safe_input("What is your name?")
+            player.name = safe_input("What be your name?")
         return self.game_state
 
 
@@ -90,7 +90,7 @@ class QuitGame(Component):
 class TutorialDecision(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
-                         query="Do tutorial?",
+                         query="Need an overview?",
                          yes_component=Tutorial,
                          no_component=Intro)
 
