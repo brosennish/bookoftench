@@ -30,6 +30,7 @@ RIFLE = "Rifle"
 SHOTGUN = "Shotgun"
 SHOVEL = "Shovel"
 SLEDGEHAMMER = "Sledgehammer"
+TENCH_CANNON = "Tench Cannon"
 VOODOO_STAFF = "Voodoo Staff"
 
 # Types
@@ -121,6 +122,10 @@ Weapons = [
 
     {'name': SLEDGEHAMMER, 'damage': 40, 'uses': 10, 'accuracy': 0.68, 'spread': 8, 'crit': 0.22,
      'cost': 100, 'sell_value': 50, 'type': MELEE, 'sound': audio.BLUNT},
+
+    # --- Special ---
+    {'name': TENCH_CANNON, 'damage': 100, 'uses': 1, 'accuracy': 0.2, 'spread': 10, 'crit': 0.1,
+     'cost': 100, 'sell_value': 30, 'type': PROJECTILE, 'sound': audio.SHOTGUN},
 
     # --- Enemy / Monster ---
     {'name': CLAWS, 'damage': 22, 'uses': -1, 'accuracy': 0.86, 'spread': 4, 'crit': 0.18,
