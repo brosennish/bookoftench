@@ -37,14 +37,20 @@ class Rite(Buyable):
 
     def perform(self, player: Player):
         if self.name == RITE_OF_ILLUMINATION:
-            print_and_sleep(f"{cyan('Your vision has been restored.')}", 2)
-            player.blind = False
-            player.blind_turns = 0
+            if not player.blind:
+                print_and_sleep(f"{cyan('Your vision remains clear.')}", 2)
+            else:
+                print_and_sleep(f"{cyan('Your vision has been restored.')}", 2)
+                player.blind = False
+                player.blind_turns = 0
 
         elif self.name == RITE_OF_PURIFICATION:
-            print_and_sleep(f"{cyan(f'You have been cured of {player.illness}.')}", 2)
-            player.illness = None
-            player.illness_death_lvl = None
+            if not player.illness:
+                print_and_sleep(f"{cyan(f'You remain free of contamination.')}", 2)
+            else:
+                print_and_sleep(f"{cyan(f'You have been cured of {player.illness}.')}", 2)
+                player.illness = None
+                player.illness_death_lvl = None
 
         elif self.name == RITE_OF_RESTORATION:
             gain = random.randint(0, 50)
