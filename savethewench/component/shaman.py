@@ -51,7 +51,7 @@ class ShamanComponent(LabeledSelectionComponent):
 
     def display_options(self) -> None:
         print_and_sleep(
-            f"{blue('Mind if I smoke my cigar?')}"
+            f"{blue('Mind if I smoke my cigar?\n')}", 1.5
         )
         for component in self.selection_components:
             component.display_options()

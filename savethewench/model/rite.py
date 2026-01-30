@@ -15,22 +15,21 @@ class Rite(Buyable):
     description: str
     cost: int
 
-
     def get_simple_format(self, player: Player) -> str:
         display_cost = self.cost
         if self.name == TOAD_JUICE:
             display_cost = player.blind_turns * 5
+
         return dim(' | ').join([
-            cyan(f"{self.name:<13}"),
-            f"Cost: {orange(display_cost):<3}",
+            cyan(f"{self.name:<16}"),
+            f"Cost: {orange(f'{display_cost:<3}')}",
             f"{purple(self.description)}",
         ])
 
-
     def __repr__(self):
         return dim(' | ').join([
-            cyan(f"{self.name:<13}"),
-            f"Cost: {orange(self.cost):<3}",
+            cyan(f"{self.name:<16}"),
+            f"Cost: {orange(f'{self.cost:<3}')}",
             f"{purple(self.description)}",
         ])
 
@@ -48,7 +47,7 @@ class Rite(Buyable):
             if not player.illness:
                 print_and_sleep(f"{cyan(f'You remain free of contamination.')}", 2)
             else:
-                print_and_sleep(f"{cyan(f'You have been cured of {player.illness}.')}", 2)
+                print_and_sleep(f"{cyan(f'You have been cured of {player.illness.name}.')}", 2)
                 player.illness = None
                 player.illness_death_lvl = None
 
