@@ -2,10 +2,10 @@ from savethewench.component.base import LabeledSelectionComponent, SelectionBind
     functional_component, GatekeepingComponent
 from savethewench.component.registry import register_component
 from savethewench.data.components import SHAMAN
-from savethewench.data.rites import RITE_OF_ILLUMINATION
+from savethewench.data.rites import TOAD_JUICE
 from savethewench.model import GameState
 from savethewench.model.rite import Rite, load_rites
-from savethewench.model.util import display_occultist_header
+from savethewench.model.util import display_shaman_header
 from savethewench.ui import blue, yellow
 from savethewench.util import print_and_sleep
 
@@ -33,7 +33,7 @@ class ShamanComponent(LabeledSelectionComponent):
             LabeledSelectionComponent(
                 game_state,
                 rite_bindings,
-                top_level_prompt_callback=display_occultist_header,
+                top_level_prompt_callback=display_shaman_header,
             ),
             LabeledSelectionComponent(
                 game_state,
@@ -63,7 +63,7 @@ class ShamanComponent(LabeledSelectionComponent):
             player = game_state.player
             true_cost = rite.cost
 
-            if rite.name == RITE_OF_ILLUMINATION: # I couldn't find a better place to update the cost (max 3 rites)
+            if rite.name == TOAD_JUICE: # I couldn't find a better place to update the cost (max 3 rites)
                 true_cost = rite.cost + (5 * player.blind_turns)
 
             if player.coins < true_cost:

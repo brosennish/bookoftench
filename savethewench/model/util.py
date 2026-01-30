@@ -46,8 +46,23 @@ def display_occultist_header(game_state: GameState) -> None:
     ])}")
 
 
+def display_shaman_header(game_state: GameState) -> None:
+    player = game_state.player
+    player_color = p_color(player.hp, player.max_hp)
+
+    print_and_sleep(f"{dim(' | ').join([
+        f"Coins: {green(f"{player.coins}")}",
+        f"HP: {player_color(f"{player.hp}/{player.max_hp}")}",
+        f"Lives: {yellow(f"{player.lives}")}\n",
+        f"Illness: {yellow(f"{player.illness.name}")}",
+        f"Death Level: {red(f"{player.illness_death_lvl}")}",
+        f"Blind Turns: {purple(f"{player.blind_turns}")}",
+    ])}")
+
+
 def display_hospital_header(game_state: GameState) -> None:
     player = game_state.player
+
     print_and_sleep(f"{blue(f'Welcome to The Free Range Children\'s Hospital of Shebokken.')}", 2)
     print_and_sleep(f"{dim(' | ').join([
         f"Illness: {yellow(f"{player.illness.name}")}",

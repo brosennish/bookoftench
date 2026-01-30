@@ -1,9 +1,9 @@
-RITE_OF_ILLUMINATION = "Rite of Illumination"
-RITE_OF_RESTORATION = "Rite of Restoration"
-RITE_OF_PURIFICATION = "Rite of Purification"
+TOAD_JUICE = "Toad Juice"
+SHAMANS_CIGAR = "Shaman's Cigar"
+HERBAL_TEA = "Herbal Tea"
 
 Rites = [
-    {'name': RITE_OF_ILLUMINATION, 'description': 'Cure blindness', 'cost': 5},
-    {'name': RITE_OF_PURIFICATION, 'description': 'Cure illness (100% chance)', 'cost': 200},
-    {'name': RITE_OF_RESTORATION, 'description': 'Restore hp (0-50)', 'cost': 18},
+    {'name': TOAD_JUICE, 'description': 'Cure blindness', 'cost': 5},
+    {'name': HERBAL_TEA, 'description': 'Cure illness (100% chance)', 'cost': 200},
+    {'name': SHAMANS_CIGAR, 'description': 'Restore hp (0-50)', 'cost': 18},
 ]
