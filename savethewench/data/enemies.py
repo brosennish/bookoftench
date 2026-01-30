@@ -2,7 +2,7 @@ from savethewench.ui import Colors
 from . import audio, weapons
 
 # Constants
-BANDIT = "Bandit"
+PICKPOCKET = "Pickpocket"
 BAYOU_BILL = "Bayou Bill"
 BAYOU_MAN = "Bayou Man"
 CAPTAIN_HOLE = "Captain Hole"
@@ -34,7 +34,7 @@ Enemies = [
     # ========================
     #        CITY ENEMIES
     # ========================
-    {'name': BANDIT, 'hp': 90, 'weapons': [weapons.KNIFE, weapons.BAT], 'bounty': 75, 'type': NORMAL},
+    {'name': PICKPOCKET, 'hp': 90, 'weapons': [weapons.KNIFE, weapons.BAT], 'bounty': 75, 'type': NORMAL},
     {'name': GOON, 'hp': 100, 'weapons': [weapons.CHILI_POWDER, weapons.BAT, weapons.PISTOL],
      'bounty': 100, 'type': NORMAL},
     {'name': PIMP, 'hp': 110,
@@ -128,7 +128,7 @@ Its last location was the Biltmore Estate...
 You travel there and enter the grand corridor...
 Denny Biltmore stands before you...
 "I've waited a long, long time to put you down..."
-"I knew if I captured the champion's beloved Meg Craig, he would send you to her rescue..."
+"I knew if I captured the champion's beloved Chula, he would send you to her rescue..."
 "Well, let's have at it then.\""""
 Final_Boss = {
     'name': DENNY_BILTMORE,
@@ -153,7 +153,7 @@ Final_Boss = {
 
 
 Enemy_Lines = {
-    BANDIT: ["Give me all of your coin, or else!",
+    PICKPOCKET: ["Give me all of your coin, or else!",
              "I stole coin from an old lady today... or was that yesterday? Probably both.",
              "I live to steal and steal to live... or maybe I just steal to steal?",
              "I need coin to go out West, so I can steal coin out West."],
