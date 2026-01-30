@@ -21,7 +21,7 @@ class EncounterType(Enum):
 #                                DISCOVER_WEAPON: 10, DISCOVER_PERK: 5}
 Areas = [
     {'name': CITY,
-     'enemies': [enemies.PICKPOCKET, enemies.GOON, enemies.PIMP, enemies.HOBO,
+     'enemies': [enemies.THIEF, enemies.GOON, enemies.PIMP, enemies.HOBO,
                  enemies.SERIAL_KILLER],
      'boss_name': enemies.THE_MAYOR, 'theme': audio.CITY_THEME,
      'actions_menu': {'pages': [ActionMenuDefaults.page_one, ActionMenuDefaults.page_two, [COFFEE_SHOP, HOSPITAL]]},

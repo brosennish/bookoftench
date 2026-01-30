@@ -2,7 +2,7 @@ from savethewench.ui import Colors
 from . import audio, weapons
 
 # Constants
-PICKPOCKET = "Pickpocket"
+THIEF = "Thief"
 BAYOU_BILL = "Bayou Bill"
 BAYOU_MAN = "Bayou Man"
 CAPTAIN_HOLE = "Captain Hole"
@@ -34,7 +34,7 @@ Enemies = [
     # ========================
     #        CITY ENEMIES
     # ========================
-    {'name': PICKPOCKET, 'hp': 90, 'weapons': [weapons.KNIFE, weapons.BAT], 'bounty': 75, 'type': NORMAL},
+    {'name': THIEF, 'hp': 90, 'weapons': [weapons.KNIFE, weapons.BAT], 'bounty': 75, 'type': NORMAL},
     {'name': GOON, 'hp': 100, 'weapons': [weapons.CHILI_POWDER, weapons.BAT, weapons.PISTOL],
      'bounty': 100, 'type': NORMAL},
     {'name': PIMP, 'hp': 110,
@@ -153,7 +153,7 @@ Final_Boss = {
 
 
 Enemy_Lines = {
-    PICKPOCKET: ["Give me all of your coin, or else!",
+    THIEF: ["Give me all of your coin, or else!",
              "I stole coin from an old lady today... or was that yesterday? Probably both.",
              "I live to steal and steal to live... or maybe I just steal to steal?",
              "I need coin to go out West, so I can steal coin out West."],
