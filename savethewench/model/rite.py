@@ -2,12 +2,10 @@ import random
 from dataclasses import dataclass
 from typing import List
 
-from savethewench import event_logger
-from savethewench.data.rituals import Rites, RITE_OF_HEALING, RITE_OF_CLEANSING
+from savethewench.data.rites import Rites, RITE_OF_ILLUMINATION, RITE_OF_PURIFICATION, RITE_OF_RESTORATION
 from savethewench.model.base import Buyable
-from savethewench.model.events import PlayerDeathEvent
 from savethewench.model.player import Player
-from savethewench.ui import cyan, orange, dim, purple, red
+from savethewench.ui import cyan, orange, dim, purple, green
 from savethewench.util import print_and_sleep
 
 
@@ -17,34 +15,46 @@ class Rite(Buyable):
     description: str
     cost: int
 
+
+    def get_simple_format(self, player: Player) -> str:
+        display_cost = self.cost
+        if self.name == RITE_OF_ILLUMINATION:
+            display_cost = player.blind_turns * 5
+        return dim(' | ').join([
+            cyan(f"{self.name:<20}"),
+            f"Cost: {orange(display_cost):<3}",
+            f"{purple(self.description)}",
+        ])
+
+
     def __repr__(self):
         return dim(' | ').join([
-            cyan(f"{self.name:<15}"),
-            f"Cost: {orange(self.cost)}",
+            cyan(f"{self.name:<20}"),
+            f"Cost: {orange(self.cost):<3}",
             f"{purple(self.description)}",
         ])
 
 
     def perform(self, player: Player):
-        if self.name == TENCH_SACRIFICE:
-            player.lives += 1
-            print_and_sleep(f"{cyan(f'Praise be to the superior Tench. Lives: {player.lives}')}", 2)
-        elif self.name == CARP_SACRIFICE:
-            if random.random() < 0.5:
-                player.lives += 1
-                print_and_sleep(f"{cyan(f'Praise be to the inferior Carp. Lives: {player.lives}')}", 2)
-            else:
-                player.lives -= 1
-                if player.lives > 1:
-                    print_and_sleep(f"{red(f'Ritual was a bust. Carp didn\'t take. Lives: {player.lives}')}", 2)
-                else:
-                    print_and_sleep(f"{red(f'Ritual was a bust. Carp didn\'t take.')}", 2)
-                    player.hp = 0
-                    event_logger.log_event(PlayerDeathEvent(player.lives))
+        if self.name == RITE_OF_ILLUMINATION:
+            print_and_sleep(f"{cyan('Your vision has been restored.')}", 2)
+            player.blind = False
+            player.blind_turns = 0
+
+        elif self.name == RITE_OF_PURIFICATION:
+            print_and_sleep(f"{cyan(f'You have been cured of {player.illness}.')}", 2)
+            player.illness = None
+            player.illness_death_lvl = None
+
+        elif self.name == RITE_OF_RESTORATION:
+            gain = random.randint(0, 50)
+            original_hp = player.hp
+            player.gain_hp(gain)
+            print_and_sleep(f"You restored {green(player.hp - original_hp)} hp.", 2)
 
 
-def load_rituals() -> List[Ritual]:
+def load_rites() -> List[Rite]:
     return [
-        Ritual(**ritual_dict)
-        for ritual_dict in Rituals
+        Rite(**rite_dict)
+        for rite_dict in Rites
     ]
