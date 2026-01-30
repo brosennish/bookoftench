@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import List
 
 from savethewench import event_logger
-from savethewench.data.rituals import Rituals, TENCH_SACRIFICE, CARP_SACRIFICE
+from savethewench.data.rituals import Rites, RITE_OF_HEALING, RITE_OF_CLEANSING
 from savethewench.model.base import Buyable
 from savethewench.model.events import PlayerDeathEvent
 from savethewench.model.player import Player
@@ -25,7 +25,7 @@ class Rite(Buyable):
         ])
 
 
-    def invoke(self, player: Player):
+    def perform(self, player: Player):
         if self.name == TENCH_SACRIFICE:
             player.lives += 1
             print_and_sleep(f"{cyan(f'Praise be to the superior Tench. Lives: {player.lives}')}", 2)
