@@ -32,11 +32,11 @@ Areas = [
      'boss_name': enemies.SLEDGE_HAMMOND, 'theme': audio.FOREST_THEME},
     {'name': CAVE,
      'enemies': [enemies.MINER, enemies.SPELUNKER, enemies.MOLE_PERSON,
-                 enemies.HUMANOID_CAVE_CREATURE],
+                 enemies.HUMANOID_CAVE_CREATURE, enemies.DISGRACED_EXILE],
      'boss_name': enemies.CAPTAIN_HOLE, 'theme': audio.CAVE_THEME,
      'actions_menu': {'pages': [ActionMenuDefaults.page_one, ActionMenuDefaults.page_two, [OCCULTIST]]}},
     {'name': SWAMP,
      'enemies': [enemies.HAND_FISHERMAN, enemies.BAYOU_MAN, enemies.VOODOO_PRIESTESS,
-                 enemies.SKIN_COLLECTOR],
+                 enemies.SKIN_COLLECTOR, enemies.DISGRACED_EXILE],
      'boss_name': enemies.BAYOU_BILL, 'theme': audio.SWAMP_THEME},
 ]
