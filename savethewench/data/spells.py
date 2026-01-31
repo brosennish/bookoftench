@@ -17,7 +17,7 @@ Wizard_Lines = [
     "The difference between love and magic? Love is magical, but magic is not love.",
     "My name isn't Wizard, but no one cares.",
     "Harry Potter is a false idol.",
-    "The real hogwarts is much, much darker.",
+    "The real Hogwarts is much, much darker.",
     "I once turned myself into a rock and couldn't turn myself back for 5,000 years.",
     "People only like me because I do magic... but I don't like them because they don't do magic.",
     "It's not easy being a Wizard. Everyone thinks you're a character and not a real person with feelings.",
