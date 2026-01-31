@@ -3,7 +3,7 @@ from __future__ import annotations
 import copy
 import random
 from dataclasses import dataclass, field
-from typing import List, Dict
+from typing import List, Dict, Set
 
 from savethewench.data import Areas
 from savethewench.data.areas import EncounterType
@@ -47,6 +47,7 @@ class Area:
     theme: str
     enemy_count: int = field(default_factory=lambda: random.randint(10, 15))
     enemies_killed: int = 0
+    enemies_seen: Set[str] = field(default_factory=set)
     boss_defeated: bool = False
     boss: Boss = None
     current_enemy = None
@@ -68,7 +69,14 @@ class Area:
         return max(self.enemy_count - self.enemies_killed, 0)
 
     def spawn_enemy(self, player_level: int) -> Enemy:
-        enemy = load_enemy(random.choice(self.enemies))
+        available = [i for i in self.enemies if i not in self.enemies_seen]
+        if not available:
+            self.enemies_seen.clear()
+            available = self.enemies
+        enemy_name = random.choice(available)
+        enemy = load_enemy(enemy_name)
+        self.enemies_seen.add(enemy_name)
+
         enemy.hp += player_level - 1
         enemy.hp += random.randint(-5, 5)
         elite_chance = min(0.10, max(0.0, (player_level - 1) * 0.02))
