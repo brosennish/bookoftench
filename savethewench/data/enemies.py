@@ -165,6 +165,19 @@ Final_Boss = {
 
 
 Enemy_Lines = {
+    ANCIENT_MAN: ["The Hindustan Times underestimated my age by a few thousand years.",
+                  "Is Hammurabi still in power?",
+                  "I've never left this cave for fear of falling off the edge of the Earth.",
+                  "Plato autographed my favorite rock. It's somewhere in my rockpile.",
+                  "I know how the Pyramids were built. I was there.",
+                  "My liberation is imminent, but yours is... what's more imminent than imminent?"],
+    BODY_BUILDER: ["Some sculpt marble, some sculpt clay. I sculpt my body.",
+                "Don't call me beefcake. I'm 100% beef.",
+                "I can bench a million, easy.",
+                "Body oil is worth its weight in gold. Well, it should be."
+                "My neighbor, Gary, is a hell of a speller. Pecs need work though."
+                "Everything I need comes in an unlabeled bottle."
+                "I'm more concerned about gains than I am about shrinkage."],
     THIEF: ["Give me all of your coin, or else!",
              "I stole coin from an old lady today... or was that yesterday? Probably both.",
              "I live to steal and steal to live... or maybe I just steal to steal?",
