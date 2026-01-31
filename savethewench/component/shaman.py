@@ -1,8 +1,10 @@
+import random
+
 from savethewench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, GatekeepingComponent
 from savethewench.component.registry import register_component
 from savethewench.data.components import SHAMAN
-from savethewench.data.rites import TOAD_JUICE
+from savethewench.data.rites import TOAD_JUICE, Shaman_Lines
 from savethewench.model import GameState
 from savethewench.model.rite import Rite, load_rites
 from savethewench.model.util import display_shaman_header
@@ -50,8 +52,9 @@ class ShamanComponent(LabeledSelectionComponent):
         return self.leave or not self.game_state.player.is_alive()
 
     def display_options(self) -> None:
+        message = random.choice(Shaman_Lines)
         print_and_sleep(
-            f"{blue('Mind if I smoke my cigar?\n')}", 1.5
+            f"{blue(message)}\n", 1.5
         )
         for component in self.selection_components:
             component.display_options()
