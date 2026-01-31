@@ -124,7 +124,7 @@ def display_bank_balance(game_state: GameState) -> None:
         f"Bank: {green(f"{game_state.bank.balance}")}"])}\n")
 
 
-def display_game_overview(game_state: GameState) -> None:
+def display_game_stats(game_state: GameState) -> None:
     player = game_state.player
     player_color = p_color(player.hp, player.max_hp)
 
