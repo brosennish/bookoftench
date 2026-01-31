@@ -208,7 +208,7 @@ Enemy_Lines = {
     VOODOO_PRIESTESS: [
         "I will shrink your head, then raise the dead, then shrink their heads, 'cause I love shrinkin' heads.",
         "I can tell you your future... It's very dark. Soon, you will see what I mean.",
-        "Does it drive you crazy then I shake my stick?"],
+        "Does it drive you crazy when I shake my stick?"],
     BAYOU_MAN: ["When you livin' out here in the bayou ain't nobody come 'round.",
                 "Without some fresh feed it's easy for a boy to come up cold out here on the bayou.",
                 "Riverboat, Crawdad, Alligator Gumbo!",
