@@ -19,6 +19,7 @@ HUMANOID_CAVE_CREATURE = "Humanoid Cave Creature"
 HUNTER = "Hunter"
 MINER = "Miner"
 MOLE_PERSON = "Mole Person"
+PARK_RANGER = "Park Ranger"
 PIMP = "Pimp"
 POACHER = "Poacher"
 SERIAL_KILLER = "Serial Killer"
@@ -55,9 +56,11 @@ Enemies = [
      'bounty': 50, 'type': NORMAL},
     {'name': HUNTER, 'hp': 90, 'weapons': [weapons.KNIFE, weapons.RIFLE, weapons.BEAR_SPRAY],
      'bounty': 75, 'type': NORMAL},
-    {'name': BIGFOOT_IMPERSONATOR, 'hp': 100, 'weapons': [weapons.PISTOL, weapons.CLAWS, weapons.BEAR_SPRAY],
+    {'name': PARK_RANGER, 'hp': 95, 'weapons': [weapons.MACHETE, weapons.KNIFE, weapons.BEAR_SPRAY],
+     'bounty': 85, 'type': NORMAL},
+    {'name': POACHER, 'hp': 100, 'weapons': [weapons.CROSSBOW, weapons.MACHETE, weapons.BEAR_SPRAY],
      'bounty': 100, 'type': NORMAL},
-    {'name': POACHER, 'hp': 110, 'weapons': [weapons.CROSSBOW, weapons.MACHETE, weapons.BEAR_SPRAY],
+    {'name': BIGFOOT_IMPERSONATOR, 'hp': 110, 'weapons': [weapons.PISTOL, weapons.CLAWS, weapons.BEAR_SPRAY],
      'bounty': 125, 'type': NORMAL},
 
     # ========================
@@ -168,6 +171,10 @@ Final_Boss = {
 
 
 Enemy_Lines = {
+    PARK_RANGER: ["If you see Bigfoot, don't be alarmed. It's just a deranged man in a furry suit.",
+                   "There are frequent crash landings here. We harvest and sell the remains to the local shop.",
+                   "Have you seen any Mystical Mushrooms? I'm going to a music festival this weekend.",
+                   "The man who owns the government paid me to take you out. Sorry mate."],
     ANCIENT_MAN: ["The Hindustan Times underestimated my age by a few thousand years.",
                   "Is Hammurabi still in power?",
                   "I've never left this cave for fear of falling off the edge of the Earth.",
