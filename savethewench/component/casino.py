@@ -232,7 +232,6 @@ class AboveOrBelow(CasinoGame):
 
     def play_round(self, wager: int) -> GameState:
         player = self.game_state.player
-        player.games_played += 1
         self.display_status()
         roll1 = roll_die()
         call_is_correct = self.get_eval_function()
@@ -249,12 +248,14 @@ class AboveOrBelow(CasinoGame):
                 print_and_sleep(f"{green(f"You cashed out {payout} coins!")}")
                 player.casino_won += payout
                 self.player_quit = True
+                player.games_played += 1
                 return self.game_state
         else:
             print_and_sleep(yellow("Your guess was dry."))
             player.coins -= wager
             player.casino_lost += wager
             self.turn = 0
+            player.games_played += 1
         return self.game_state
 
 
