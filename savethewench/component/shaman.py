@@ -22,7 +22,7 @@ class ShamanBouncer(GatekeepingComponent):
 
 class ShamanComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        rite_options = load_rites()
+        rite_options = load_rites(game_state.player)
 
         rite_bindings = [ReprBinding(str(i + 1), rite.name, self._make_purchase_component(rite), rite) for
                          i, rite in enumerate(rite_options)]

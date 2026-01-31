@@ -58,8 +58,13 @@ class Rite(Buyable):
             print_and_sleep(f"You restored {green(player.hp - original_hp)} hp.", 2)
 
 
-def load_rites() -> List[Rite]:
+def load_rites(player: Player) -> List[Rite]:
+    Correct = Rites.copy()
+    for i in Correct:
+        if i['name'] == TOAD_JUICE:
+            i['cost'] = 5 + (5 * player.blind_turns)
+
     return [
         Rite(**rite_dict)
-        for rite_dict in Rites
+        for rite_dict in Correct
     ]
