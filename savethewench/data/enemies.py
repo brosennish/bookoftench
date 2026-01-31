@@ -2,7 +2,7 @@ from savethewench.ui import Colors
 from . import audio, weapons
 
 # Constants
-THIEF = "Thief"
+ANCIENT_MAN = "Ancient Man"
 BAYOU_BILL = "Bayou Bill"
 BAYOU_MAN = "Bayou Man"
 BIGFOOT_IMPERSONATOR = "Bigfoot Impersonator"
@@ -24,6 +24,7 @@ SKIN_COLLECTOR = "Skin Collector"
 SLEDGE_HAMMOND = "Sledge Hammond"
 SPELUNKER = "Spelunker"
 THE_MAYOR = "The Mayor"
+THIEF = "Thief"
 VOODOO_PRIESTESS = "Voodoo Priestess"
 
 # Types
@@ -60,6 +61,7 @@ Enemies = [
     # ========================
     {'name': MINER, 'hp': 80, 'weapons': [weapons.PICKAXE, weapons.KNIFE], 'bounty': 50, 'type': NORMAL},
     {'name': SPELUNKER, 'hp': 90, 'weapons': [weapons.PICKAXE, weapons.KNIFE], 'bounty': 75, 'type': NORMAL},
+    {'name': ANCIENT_MAN, 'hp': 95, 'weapons': [weapons.HARPOON, weapons.KNIFE], 'bounty': 85, 'type': NORMAL},
     {'name': MOLE_PERSON, 'hp': 100, 'weapons': [weapons.CLAWS, weapons.PICKAXE], 'bounty': 100, 'type': NORMAL},
     {'name': HUMANOID_CAVE_CREATURE, 'hp': 110, 'weapons': [weapons.CLAWS, weapons.SLEDGEHAMMER],
      'bounty': 125, 'type': NORMAL},
