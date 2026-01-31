@@ -1,9 +1,12 @@
+ITEM = 'item'
 ITEM_MAGIC = "Item Magic"
+WEAPON = 'weapon'
 WEAPON_MAGIC = "Weapon Magic"
 
+
 Spells = [
-    {'name': ITEM_MAGIC, 'description': 'Conjure a random item', 'cost': 30},
-    {'name': WEAPON_MAGIC, 'description': 'Conjure a random weapon', 'cost': 60}
+    {'name': ITEM_MAGIC, 'description': 'Conjure a random item', 'cost': 30, 'type': ITEM},
+    {'name': WEAPON_MAGIC, 'description': 'Conjure a random weapon', 'cost': 60, 'type': WEAPON},
 ]
 
 Wizard_Lines = [

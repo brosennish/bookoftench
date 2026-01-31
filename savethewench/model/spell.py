@@ -14,6 +14,7 @@ class Spell(Buyable):
     name: str
     description: str
     cost: int
+    type: str
 
     def __repr__(self):
         return dim(' | ').join([

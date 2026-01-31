@@ -4,10 +4,10 @@ from savethewench.component.base import LabeledSelectionComponent, SelectionBind
     functional_component, GatekeepingComponent
 from savethewench.component.registry import register_component
 from savethewench.data.components import WIZARD
-from savethewench.data.spells import Wizard_Lines
+from savethewench.data.spells import Wizard_Lines, WEAPON, ITEM
 from savethewench.model import GameState
 from savethewench.model.spell import load_spells, Spell
-from savethewench.model.util import display_occultist_header
+from savethewench.model.util import display_wizard_header
 from savethewench.ui import blue, yellow
 from savethewench.util import print_and_sleep
 
@@ -16,11 +16,10 @@ from savethewench.util import print_and_sleep
 class WizardBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
-        super().__init__(game_state, decision_function=lambda: player.get_weapons() is not None
-                                                               or player.get_items() is not None,
+        super().__init__(game_state, decision_function=lambda: player.coins >= 30,
                          accept_component=WizardComponent,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("Come back with an item or weapon!\nI gotta take a wiz anyway."), 1.5)))
+                             blue("Come back when you have 30 of coin!\nI gotta take a wiz anyway."), 1.5)))
 
 
 class WizardComponent(LabeledSelectionComponent):
@@ -67,6 +66,12 @@ class WizardComponent(LabeledSelectionComponent):
             player = game_state.player
             if player.coins < spell.cost:
                 print_and_sleep(yellow(f"Need more coin"), 1)
+            if spell.type == WEAPON:
+                if len(player.get_weapons()) == player.max_weapons:
+                    print_and_sleep(yellow(f"No room in sack"), 1)
+            if spell.type == ITEM:
+                if len(player.get_weapons()) == player.max_items:
+                    print_and_sleep(yellow(f"No room in sack"), 1)
             else:
                 player.coins -= spell.cost
                 spell.cast(player)
