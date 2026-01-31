@@ -4,7 +4,9 @@ from typing import List
 
 from savethewench.data.spells import ITEM_MAGIC, WEAPON_MAGIC, Spells
 from savethewench.model.base import Buyable
+from savethewench.model.item import load_items
 from savethewench.model.player import Player
+from savethewench.model.weapon import load_weapons
 from savethewench.ui import cyan, orange, dim, purple
 from savethewench.util import print_and_sleep
 
@@ -26,9 +28,18 @@ class Spell(Buyable):
 
     def cast(self, player: Player):
         if self.name == ITEM_MAGIC:
-            print_and_sleep(f"{cyan(f'TEXT')}", 2)
+            filtered = [i for i in load_items() if i.name not in player.items]
+            item = random.choice(filtered)
+            player.add_item(item)
+
+            print_and_sleep(f"{cyan(f'{item.name} magically added to sack.')}", 2)
+
         elif self.name == WEAPON_MAGIC:
-            print_and_sleep(f"{cyan(f'TEXT')}", 2)
+            filtered = [w for w in load_weapons() if w.name not in player.get_weapons()]
+            weapon = random.choice(filtered)
+            player.add_weapon(weapon)
+
+            print_and_sleep(f"{cyan(f'{weapon.name} magically added to sack.')}", 2)
 
 
 def load_spells() -> List[Spell]:
