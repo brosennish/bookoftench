@@ -2,7 +2,7 @@ from savethewench.ui import Colors
 from . import audio, weapons
 
 # Constants
-BANDIT = "Bandit"
+THIEF = "Thief"
 BAYOU_BILL = "Bayou Bill"
 BAYOU_MAN = "Bayou Man"
 CAPTAIN_HOLE = "Captain Hole"
@@ -34,7 +34,7 @@ Enemies = [
     # ========================
     #        CITY ENEMIES
     # ========================
-    {'name': BANDIT, 'hp': 90, 'weapons': [weapons.KNIFE, weapons.BAT], 'bounty': 75, 'type': NORMAL},
+    {'name': THIEF, 'hp': 90, 'weapons': [weapons.KNIFE, weapons.BAT], 'bounty': 75, 'type': NORMAL},
     {'name': GOON, 'hp': 100, 'weapons': [weapons.CHILI_POWDER, weapons.BAT, weapons.PISTOL],
      'bounty': 100, 'type': NORMAL},
     {'name': PIMP, 'hp': 110,
@@ -128,7 +128,7 @@ Its last location was the Biltmore Estate...
 You travel there and enter the grand corridor...
 Denny Biltmore stands before you...
 "I've waited a long, long time to put you down..."
-"I knew if I captured the champion's beloved Meg Craig, he would send you to her rescue..."
+"I knew if I captured the champion's beloved Chula, he would send you to her rescue..."
 "Well, let's have at it then.\""""
 Final_Boss = {
     'name': DENNY_BILTMORE,
@@ -153,7 +153,7 @@ Final_Boss = {
 
 
 Enemy_Lines = {
-    BANDIT: ["Give me all of your coin, or else!",
+    THIEF: ["Give me all of your coin, or else!",
              "I stole coin from an old lady today... or was that yesterday? Probably both.",
              "I live to steal and steal to live... or maybe I just steal to steal?",
              "I need coin to go out West, so I can steal coin out West."],
@@ -182,8 +182,7 @@ Enemy_Lines = {
                       "They didn't exile me - I exiled them... from myself.",
                       "I'm mostly lonely - except when the feral lads come by. Then I'm lonely and terrified.",
                       "There's another exile out here who's not disgraced, but revered. We couldn't be more different."],
-    HUNTER: ["I kill things when I don't have to... and I enjoy it!",
-             "Why hang out with girls when I can be out here in the cold hunting by myself?",
+    HUNTER: ["Why hang out with girls when I can be out here in the cold hunting by myself?",
              "Once I got bored of hunting animals, I started hunting people instead. You know, just for fun.",
              "I hang animals on my wall and my wife hates them all."],
     POACHER: ["Protected species? More like I'm going to put its head on my wall, species.",
@@ -209,7 +208,7 @@ Enemy_Lines = {
         "I will shrink your head, then raise the dead, then shrink their heads, 'cause I love shrinkin' heads.",
         "I can tell you your future... It's very dark. Soon, you will see what I mean.",
         "Does it drive you crazy then I shake my stick?"],
-    BAYOU_MAN: ["When you livin' out here in the bayou ain't nobody come 'round.",
+    BAYOU_MAN: ["When you livin' in the swamp ain't nobody come 'round.",
                 "Without some fresh feed it's easy for a boy to come up cold out here on the bayou.",
                 "Riverboat, Crawdad, Alligator Gumbo!",
                 "I'd hate to see you get cold out here on the bayou."],
