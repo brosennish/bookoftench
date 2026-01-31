@@ -11,6 +11,7 @@ CAPTAIN_HOLE = "Captain Hole"
 DENNY_BILTMORE = "Denny Biltmore"
 DISGRACED_EXILE = "Disgraced Exile"
 GOON = "Goon"
+GRAVE_ROBBER = "Grave Robber"
 HAND_FISHERMAN = "Hand Fisherman"
 HIKER = "Hiker"
 HOBO = "Hobo"
@@ -56,7 +57,7 @@ Enemies = [
      'bounty': 75, 'type': NORMAL},
     {'name': BIGFOOT_IMPERSONATOR, 'hp': 100, 'weapons': [weapons.PISTOL, weapons.CLAWS, weapons.BEAR_SPRAY],
      'bounty': 100, 'type': NORMAL},
-    {'name': POACHER, 'hp': 125, 'weapons': [weapons.CROSSBOW, weapons.MACHETE, weapons.BEAR_SPRAY],
+    {'name': POACHER, 'hp': 110, 'weapons': [weapons.CROSSBOW, weapons.MACHETE, weapons.BEAR_SPRAY],
      'bounty': 125, 'type': NORMAL},
 
     # ========================
@@ -75,6 +76,8 @@ Enemies = [
     {'name': HAND_FISHERMAN, 'hp': 80, 'weapons': [weapons.HATCHET, weapons.KNIFE], 'bounty': 50, 'type': NORMAL},
     {'name': VOODOO_PRIESTESS, 'hp': 90,
      'weapons': [weapons.VOODOO_STAFF, weapons.KNIFE, weapons.CHILI_POWDER], 'bounty': 75, 'type': NORMAL},
+    {'name': GRAVE_ROBBER, 'hp': 95,
+     'weapons': [weapons.SHOVEL, weapons.KNIFE, weapons.POCKET_SAND], 'bounty': 85, 'type': NORMAL},
     {'name': BAYOU_MAN, 'hp': 100, 'weapons': [weapons.MACHETE, weapons.SHOTGUN], 'bounty': 100, 'type': NORMAL},
     {'name': SKIN_COLLECTOR, 'hp': 110, 'weapons': [weapons.MACHETE, weapons.CHAINSAW], 'bounty': 125, 'type': NORMAL},
 
@@ -170,18 +173,25 @@ Enemy_Lines = {
                   "I've never left this cave for fear of falling off the edge of the Earth.",
                   "Plato autographed my favorite rock. It's somewhere in my rockpile.",
                   "I know how the Pyramids were built. I was there.",
-                  "My liberation is imminent, but yours is... what's more imminent than imminent?"],
+                  "My liberation is imminent, but yours is... what's more imminent than imminent?",
+                  "A rich man hired me to kill you. While I don't need money, I do need blood to drink."],
     BODY_BUILDER: ["Some sculpt marble, some sculpt clay. I sculpt my body.",
                 "Don't call me beefcake. I'm 100% beef.",
                 "I can bench a million, easy.",
                 "Body oil is worth its weight in gold. Well, it should be."
                 "My neighbor, Gary, is a hell of a speller. Pecs need work though."
                 "Everything I need comes in an unlabeled bottle."
-                "I'm more concerned about gains than I am about shrinkage."],
+                "I'm more concerned about gains than I am about shrinkage.",
+                "The guy who hired me was rich, but I totally could've kicked his ass."],
+    GRAVE_ROBBER: ["The skeletons don't need jewelry.",
+                   "They'll be turned into rent soon anyway.",
+                   "A well-dressed man gave me coin to bury you, dead or alive.",
+                   "When I'm dead, I hope someone robs my grave. I also hope I'm a zombie when he does."],
     THIEF: ["Give me all of your coin, or else!",
-             "I stole coin from an old lady today... or was that yesterday? Probably both.",
-             "I live to steal and steal to live... or maybe I just steal to steal?",
-             "I need coin to go out West, so I can steal coin out West."],
+            "I stole coin from an old lady today... or was that yesterday? Probably both.",
+            "I live to steal and steal to live... or maybe I just steal to steal?",
+            "I need coin to go out West, so I can steal coin out West.",
+            "An old, rich guy paid me coin to take you out. Who knew you could get coin without stealing?"],
     GOON: ["I'll do anything for coin, as long as it's violent.",
            "Without my sunglasses, I'm nothing...",
            "I often call Michelob Chounce for legal support on account of my violent lifestyle.",
@@ -197,7 +207,8 @@ Enemy_Lines = {
     SERIAL_KILLER: ["If God taketh, but I take your life... am I not, then, God?",
                     "God can do a lot, but he can't do the things I can do to you.",
                     "I get a lot of hand-penned letters from the mayor.",
-                    "How do I know you?"],
+                    "How do I know you?",
+                    "A rich man gave me coin to add you to my list."],
     HIKER: ["I'm alone in the woods, so you must be a murderer. I've seen movies!",
             "Are chipmunks dangerous? I figure if there's enough of them they could take me out...",
             "All mushrooms are safe to eat, right?",

@@ -37,6 +37,6 @@ Areas = [
      'actions_menu': {'pages': [ActionMenuDefaults.page_one, ActionMenuDefaults.page_two, [OCCULTIST]]}},
     {'name': SWAMP,
      'enemies': [enemies.HAND_FISHERMAN, enemies.BAYOU_MAN, enemies.VOODOO_PRIESTESS,
-                 enemies.SKIN_COLLECTOR, enemies.DISGRACED_EXILE],
+                 enemies.SKIN_COLLECTOR, enemies.DISGRACED_EXILE, enemies.GRAVE_ROBBER],
      'boss_name': enemies.BAYOU_BILL, 'theme': audio.SWAMP_THEME},
 ]
