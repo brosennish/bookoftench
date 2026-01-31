@@ -30,6 +30,7 @@ SHOP = "Shop"
 SPAWN_ENEMY = "Spawn Enemy"
 TRAVEL = "Travel"
 USE_ITEM = "Use Item"
+WIZARD = "Wizard"
 
 
 class StartGameMenuDefaults:
