@@ -14,6 +14,7 @@ from savethewench.ui import purple, yellow, blue
 from savethewench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
 from .shop import Shop
+from ..data.enemies import Enemy_Adjectives
 
 _explore_defaults = {
     DISCOVER_COIN: 20,
@@ -79,6 +80,8 @@ class Area:
             enemy.coins = int(enemy.coins * 1.5)
             print_and_sleep(f"{yellow("An enemy appears!")} {purple("(Elite enemy!)")}", 1)
         else:
+            adj = random.choice(Enemy_Adjectives)
+            enemy.name = f"{adj} {enemy.name}"
             print_and_sleep(yellow("An enemy appears!"), 1)
         enemy_lines = enemy.get_enemy_encounter_line()
         if enemy_lines:
