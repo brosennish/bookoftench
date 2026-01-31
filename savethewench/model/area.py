@@ -69,7 +69,7 @@ class Area:
         return max(self.enemy_count - self.enemies_killed, 0)
 
     def spawn_enemy(self, player_level: int) -> Enemy:
-        available = (i for i in self.enemies if i not in self.enemies_seen)
+        available = [i for i in self.enemies if i not in self.enemies_seen]
         if not available:
             self.enemies_seen.clear()
             available = self.enemies
