@@ -28,7 +28,7 @@ Areas = [
      'encounters': [{'type': EncounterType.POST_KILL, 'component': OFFICER}]},
     {'name': FOREST,
      'enemies': [enemies.HIKER, enemies.HUNTER, enemies.POACHER,
-                 enemies.DISGRACED_EXILE, enemies.SERIAL_KILLER],
+                 enemies.DISGRACED_EXILE, enemies.SERIAL_KILLER, enemies.BIGFOOT_IMPERSONATOR],
      'boss_name': enemies.SLEDGE_HAMMOND, 'theme': audio.FOREST_THEME},
     {'name': CAVE,
      'enemies': [enemies.MINER, enemies.SPELUNKER, enemies.MOLE_PERSON,
