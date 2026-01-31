@@ -1,4 +1,4 @@
-# Save the Wench
+# The Book of Tench
 
 A terminal-based roguelite RPG with sound, written in Python.
 
