@@ -6,6 +6,7 @@ ANCIENT_MAN = "Ancient Man"
 BAYOU_BILL = "Bayou Bill"
 BAYOU_MAN = "Bayou Man"
 BIGFOOT_IMPERSONATOR = "Bigfoot Impersonator"
+BODY_BUILDER = "Body Builder"
 CAPTAIN_HOLE = "Captain Hole"
 DENNY_BILTMORE = "Denny Biltmore"
 DISGRACED_EXILE = "Disgraced Exile"
@@ -43,6 +44,8 @@ Enemies = [
      'bounty': 100, 'type': NORMAL},
     {'name': PIMP, 'hp': 110,
      'weapons': [weapons.PEPPER_SPRAY, weapons.BRASS_KNUCKLES, weapons.REVOLVER], 'bounty': 125, 'type': NORMAL},
+    {'name': BODY_BUILDER, 'hp': 125,
+     'weapons': [weapons.BAT, weapons.BRASS_KNUCKLES], 'bounty': 125, 'type': NORMAL},
 
     # ========================
     #       FOREST ENEMIES

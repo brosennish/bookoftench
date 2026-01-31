@@ -22,7 +22,7 @@ class EncounterType(Enum):
 Areas = [
     {'name': CITY,
      'enemies': [enemies.THIEF, enemies.GOON, enemies.PIMP, enemies.HOBO,
-                 enemies.SERIAL_KILLER],
+                 enemies.SERIAL_KILLER, enemies.BODY_BUILDER],
      'boss_name': enemies.THE_MAYOR, 'theme': audio.CITY_THEME,
      'actions_menu': {'pages': [ActionMenuDefaults.page_one, ActionMenuDefaults.page_two, [COFFEE_SHOP, HOSPITAL]]},
      'encounters': [{'type': EncounterType.POST_KILL, 'component': OFFICER}]},
