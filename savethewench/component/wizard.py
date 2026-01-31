@@ -1,0 +1,74 @@
+import random
+
+from savethewench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
+    functional_component, GatekeepingComponent
+from savethewench.component.registry import register_component
+from savethewench.data.components import WIZARD
+from savethewench.data.spells import Wizard_Lines
+from savethewench.model import GameState
+from savethewench.model.spell import load_spells, Spell
+from savethewench.model.util import display_occultist_header
+from savethewench.ui import blue, yellow
+from savethewench.util import print_and_sleep
+
+
+@register_component(WIZARD)
+class WizardBouncer(GatekeepingComponent):
+    def __init__(self, game_state: GameState):
+        player = game_state.player
+        super().__init__(game_state, decision_function=lambda: player.get_weapons() is not None
+                                                               or player.get_items() is not None,
+                         accept_component=WizardComponent,
+                         deny_component=functional_component()(lambda: print_and_sleep(
+                             blue("Come back with an item or weapon!\nI gotta take a wiz anyway."), 1.5)))
+
+
+class WizardComponent(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState):
+        spell_options = load_spells()
+
+        spell_bindings = [ReprBinding(str(i + 1), spell.name, self._make_purchase_component(spell), spell) for
+                         i, spell in enumerate(spell_options)]
+        return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
+        super().__init__(game_state, refresh_menu=True,
+                         bindings=[*spell_bindings, return_binding])
+        self.selection_components = [
+            LabeledSelectionComponent(
+                game_state,
+                spell_bindings,
+                top_level_prompt_callback=display_wizard_header,
+            ),
+            LabeledSelectionComponent(
+                game_state,
+                [return_binding]
+            ),
+        ]
+        self.leave = False
+
+    def _return(self):
+        self.leave = True
+        print_and_sleep(f"{blue('Hush, mortal. Be gone with you.')}", 1)
+
+    def can_exit(self) -> bool:
+        return self.leave or not self.game_state.player.is_alive()
+
+    def display_options(self) -> None:
+        message = random.choice(Wizard_Lines)
+        print_and_sleep(
+            f"{blue(message)}"
+        )
+        for component in self.selection_components:
+            component.display_options()
+
+    @staticmethod
+    def _make_purchase_component(spell: Spell) -> type[Component]:
+        @functional_component(state_dependent=True)
+        def purchase_component(game_state: GameState):
+            player = game_state.player
+            if player.coins < spell.cost:
+                print_and_sleep(yellow(f"Need more coin"), 1)
+            else:
+                player.coins -= spell.cost
+                spell.cast(player)
+
+        return purchase_component
