@@ -226,7 +226,7 @@ class Combatant(ABC):
             return
         base_damage = self.current_weapon.calculate_base_damage()
         crit = random.random() < self.get_crit_chance()
-        damage_inflicted = base_damage * 2 if crit else base_damage  # 2x damage if crit, otherwise dmg after spread
+        damage_inflicted = round(base_damage * 1.5) if crit else base_damage  # 1.5x damage if crit
         if isinstance(other, NPC):
             print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
