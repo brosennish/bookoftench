@@ -79,7 +79,7 @@ class Player(Combatant):
     illness: Optional[Illness] = None
     illness_death_lvl: Optional[int] = None
 
-    coins: int = 0
+    coins: int = 100
     casino_won: int = 0
     casino_lost: int = 0
     games_played: int = 0

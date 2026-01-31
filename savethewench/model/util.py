@@ -51,8 +51,8 @@ def display_wizard_header(game_state: GameState) -> None:
 
     print_and_sleep(f"{dim(' | ').join([
         f"Coins: {green(f"{player.coins}")}",
-        f"Items: {cyan(f"({len(player.items)}/{player.max_items}")}",
-        f"Weapons: {cyan(f"({len(player.get_weapons())}/{player.max_weapons}")}"
+        f"Items: {cyan(f"{len(player.items)}/{player.max_items}")}",
+        f"Weapons: {cyan(f"{len(player.get_weapons())}/{player.max_weapons}")}"
     ])}\n")
 
 
