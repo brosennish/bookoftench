@@ -61,15 +61,11 @@ class ShamanComponent(LabeledSelectionComponent):
         @functional_component(state_dependent=True)
         def purchase_component(game_state: GameState):
             player = game_state.player
-            true_cost = rite.cost
 
-            if rite.name == TOAD_JUICE: # I couldn't find a better place to update the cost (max 3 rites)
-                true_cost = rite.cost + (5 * player.blind_turns)
-
-            if player.coins < true_cost:
+            if player.coins < rite.cost:
                 print_and_sleep(yellow(f"Need more coin"), 1)
             else:
-                player.coins -= true_cost
+                player.coins -= rite.cost
                 rite.perform(player)
 
         return purchase_component
