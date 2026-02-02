@@ -15,7 +15,7 @@ from savethewench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
 from .shop import Shop
 
-_explore_defaults = {
+_search_defaults = {
     DISCOVER_COIN: 20,
     DISCOVER_ITEM: 10,
     DISCOVER_PERK: 1,
@@ -53,7 +53,7 @@ class Area:
     current_enemy = None
 
     shop: Shop = field(default_factory=Shop)
-    explore_probabilities: Dict[str, int] = field(default_factory=lambda: _explore_defaults)
+    search_probabilities: Dict[str, int] = field(default_factory=lambda: _search_defaults)
     actions_menu: AreaActions = field(default_factory=AreaActions.defaults)
     encounters: List[AreaEncounter] = field(default_factory=list)
 

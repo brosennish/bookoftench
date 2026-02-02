@@ -8,7 +8,7 @@ from savethewench.component.base import TextDisplayingComponent, functional_comp
     ColoredNameSelectionBinding, BinarySelectionComponent, \
     NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent
 from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
-from savethewench.data.components import EXPLORE, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
+from savethewench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_COIN, DISCOVER_PERK
 from savethewench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from savethewench.data.items import TENCH_FILET
@@ -29,10 +29,10 @@ from .encounters import PostKillEncounters
 from .registry import register_component, get_registered_component
 
 
-@register_component(EXPLORE)
-class Explore(RandomChoiceComponent):
+@register_component(SEARCH)
+class Search(RandomChoiceComponent):
     def __init__(self, game_state: GameState):
-        ep = game_state.current_area.explore_probabilities
+        ep = game_state.current_area.search_probabilities
         super().__init__(game_state, bindings=[ProbabilityBinding(prob, get_registered_component(name))
                                                for name, prob in ep.items()])
 

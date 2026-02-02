@@ -14,13 +14,13 @@ DISCOVER_ITEM = "Discover Item"
 DISCOVER_PERK = "Discover Perk"
 DISCOVER_WEAPON = "Discover Weapon"
 EQUIP_WEAPON = "Equip Weapon"
-EXPLORE = "Explore"
 FINAL_BOSS_FIGHT = purple("BATTLE DENNY BILTMORE")
 HOSPITAL = "Hospital"
 LOAD_GAME = "Load Game"
 NEW_GAME = "New Game"
 OCCULTIST = "Occultist"
 OFFICER = "Officer"
+SEARCH = "Search"
 STATS = "Stats"
 PERKS = "Perks"
 QUIT_GAME = "Quit"
@@ -37,7 +37,7 @@ class StartGameMenuDefaults:
 
 
 class ActionMenuDefaults:
-    page_one: List[str] = [EXPLORE, USE_ITEM, EQUIP_WEAPON, SHOP, TRAVEL]
+    page_one: List[str] = [SEARCH, USE_ITEM, EQUIP_WEAPON, SHOP, TRAVEL]
     page_two: List[str] = [ACHIEVEMENTS, BANK, CASINO, PERKS, STATS]
 
 
