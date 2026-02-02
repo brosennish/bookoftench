@@ -56,20 +56,20 @@ class Search(RandomChoiceComponent):
                 print_and_sleep(
                     f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
                     f"{color(f"({find.rarity})")} and restored {green(player.hp - original_hp)} hp.",
-                    2)
+                    3)
                 return
 
         if find.value > 0:
             print_and_sleep(
             f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
                 f"{color(f'({find.rarity})')} and sold it for {green(find.value)} of coin.",
-            2)
+            3)
             player.gain_coins(find.value)
             return
 
         print_and_sleep(
             f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
-        f"{color(f'({find.rarity})')}!", 2)
+        f"{color(f'({find.rarity})')}!", 2.5)
         return
 
 

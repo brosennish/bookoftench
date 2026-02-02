@@ -90,7 +90,7 @@ class Area:
             print_and_sleep(yellow("An enemy appears!"), 1)
         enemy_lines = enemy.get_enemy_encounter_line()
         if enemy_lines:
-            print_and_sleep(f"{blue(f'"{enemy_lines}"')}", )
+            print_and_sleep(f"{blue(f'"{enemy_lines}"')}", 3)
         self.current_enemy = enemy
         return self.current_enemy
 
