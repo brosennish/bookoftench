@@ -59,11 +59,11 @@ class Search(RandomChoiceComponent):
                                 f"and restored {green(player.hp - original_hp)} hp.", 2)
                 return
         else:
-            print_and_sleep(f"You found {article} {cyan(find.name)} {color(f"({find.rarity})")} and sold it for {green(find.value)} of coin.",
-                            1)
+            print_and_sleep(
+                f"You found {article} {cyan(find.name)} {color(f"({find.rarity})")} and sold it for {green(find.value)} of coin.",
+                1)
             player.gain_coins(find.value)
             return
-
 
     @staticmethod
     @register_component(DISCOVER_ITEM)
@@ -108,7 +108,6 @@ class Search(RandomChoiceComponent):
         else:
             return SwapFoundWeaponYN(game_state).run()
 
-
     @staticmethod
     @register_component(DISCOVER_PERK)
     @functional_component()
@@ -142,7 +141,10 @@ class UseItem(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, decision_function=lambda: len(game_state.player.items) > 0,
                          accept_component=ItemSelectionComponent, deny_component=functional_component()(lambda:
-                print_and_sleep(yellow(f"Your inventory is dry."), 1)))
+                                                                                                        print_and_sleep(
+                                                                                                            yellow(
+                                                                                                                f"Your inventory is dry."),
+                                                                                                            1)))
 
 
 class ItemSelectionComponent(LabeledSelectionComponent):
