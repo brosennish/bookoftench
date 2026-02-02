@@ -10,17 +10,22 @@ Search_Discoverables = [
     # --- A/AN before names when displayed ---
 
     # --- common ---
-    {"name": "Pair of Sunglasses", "value": 3, "hp": 0, "rarity": COMMON, "areas": [CAVE, CITY, FOREST, SWAMP]},
+    {"pre": "a", "name": "Pair of Sunglasses", "value": 3, "hp": 0, "rarity": COMMON,
+     "areas": [CAVE, CITY, FOREST, SWAMP]},
 
     # --- uncommon ---
-    {"name": "Pocket Watch", "value": 10, "hp": 0, "rarity": UNCOMMON, "areas": [CAVE, CITY, FOREST, SWAMP]},
+    {"pre": "a", "name": "Pocket Watch", "value": 10, "hp": 0, "rarity": UNCOMMON,
+     "areas": [CAVE, CITY, FOREST, SWAMP]},
 
     # --- rare ---
-    {"name": "Digital Camera", "value": 20, "hp": 0, "rarity": RARE, "areas": [CAVE, CITY, FOREST, SWAMP]},
+    {"pre": "a", "name": "Digital Camera", "value": 20, "hp": 0, "rarity": RARE,
+     "areas": [CAVE, CITY, FOREST, SWAMP]},
 
     # --- legendary ---
-    {"name": "Gold Chain", "value": 100, "hp": 0, "rarity": LEGENDARY, "areas": [CAVE, CITY, FOREST, SWAMP]},
+    {"pre": "a", "name": "Gold Chain", "value": 100, "hp": 0, "rarity": LEGENDARY,
+     "areas": [CAVE, CITY, FOREST, SWAMP]},
 
     # --- mythic ---
-    {"name": "Golden Tench", "value": 1000, "hp": 0, "rarity": MYTHIC, "areas": [CAVE, CITY, FOREST, SWAMP]},
+    {"pre": "", "name": "Denny Biltmore's Lost Pinky Ring", "value": 1000, "hp": 0, "rarity": MYTHIC,
+     "areas": [CAVE, CITY, FOREST, SWAMP]},
 ]

@@ -48,20 +48,20 @@ class Search(RandomChoiceComponent):
                      in d.areas and d.rarity == rarity]
 
         find = random.choice(available)
-        article = 'an' if find.name[0].lower() in 'aeiou' else 'a'
+        pre = find.pre
 
         # TODO - add logic supporting a/an
         if player.hp < player.max_hp:
             if find.hp > 0:
                 original_hp = player.hp
                 player.gain_hp(find.hp)
-                print_and_sleep(f"You found {article} {cyan(find.name)} {color(f"({find.rarity})")} "
+                print_and_sleep(f"You found {pre} {cyan(find.name)} {color(f"({find.rarity})")} "
                                 f"and restored {green(player.hp - original_hp)} hp.", 2)
                 return
         else:
             print_and_sleep(
-                f"You found {article} {cyan(find.name)} {color(f"({find.rarity})")} and sold it for {green(find.value)} of coin.",
-                1)
+                f"You found {pre} {cyan(find.name)} {color(f"({find.rarity})")} "
+                f"and sold it for {green(find.value)} of coin.",1)
             player.gain_coins(find.value)
             return
 
