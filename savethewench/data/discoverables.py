@@ -36,11 +36,11 @@ Search_Discoverables = [
      "areas": [CITY]},
     {"pre": "a", "name": "Ghost", "value": 0, "hp": 0, "rarity": COMMON,
      "areas": [CAVE, CITY, FOREST, SWAMP]},
-    {"pre": "an", "name": "Glory Hole", "value": 0, "hp": 0, "rarity": COMMON,
+    {"pre": "a", "name": "Glory Hole", "value": 0, "hp": 0, "rarity": COMMON,
      "areas": [CITY]},
     {"pre": "a", "name": "Hot Dog Burger", "value": 3, "hp": 5, "rarity": COMMON,
      "areas": [CITY]},
-    {"pre": "some", "name": "Medical Pizza", "value": 0, "hp": 4, "rarity": COMMON,
+    {"pre": "a", "name": "Slice of Medical Pizza", "value": 0, "hp": 4, "rarity": COMMON,
      "areas": [CITY]},
     {"pre": "some", "name": "Nectar", "value": 0, "hp": 1, "rarity": COMMON,
      "areas": [FOREST, SWAMP]},
@@ -66,7 +66,7 @@ Search_Discoverables = [
      "areas": [CAVE, FOREST, SWAMP]},
 
     # --- uncommon (6-15 value | 0-10 hp) ---
-    {"pre": "some", "name": "Adult Binky (Unused)", "value": 6, "hp": 0, "rarity": UNCOMMON,
+    {"pre": "an", "name": "Adult Binky (Unused)", "value": 6, "hp": 0, "rarity": UNCOMMON,
      "areas": [CITY, FOREST, SWAMP]},
     {"pre": "a", "name": "Balloon Man Comic Book", "value": 9, "hp": 0, "rarity": UNCOMMON,
      "areas": [CAVE, CITY, FOREST, SWAMP]},
