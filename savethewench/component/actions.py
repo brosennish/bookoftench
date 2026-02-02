@@ -12,13 +12,13 @@ from savethewench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVE
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, DISCOVER_PERK
 from savethewench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from savethewench.data.items import TENCH_FILET
-from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION, DEATH_CAN_WAIT
+from savethewench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT
 from savethewench.event_logger import subscribe_function
 from savethewench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE
 from savethewench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent
 from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
-from savethewench.model.perk import load_perks, Perk, attach_perk, perk_is_active
+from savethewench.model.perk import load_perks, Perk, perk_is_active
 from savethewench.model.util import get_battle_status_view, display_player_achievements, \
     display_game_stats, calculate_flee, display_active_perks
 from savethewench.model.weapon import load_discoverable_weapons
@@ -83,7 +83,6 @@ class Search(RandomChoiceComponent):
     @register_component(DISCOVER_DISCOVERABLE)
     @functional_component(state_dependent=True)
     def _discover_discoverable(game_state: GameState):
-        @attach_perk(METAL_DETECTIVE, value_description="coin")
         def find(): return random.randint(10, 25)
 
         coins = find()
