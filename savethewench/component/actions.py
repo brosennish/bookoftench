@@ -22,6 +22,7 @@ from savethewench.model.perk import load_perks, Perk, perk_is_active
 from savethewench.model.util import get_battle_status_view, display_player_achievements, \
     display_game_stats, calculate_flee, display_active_perks
 from savethewench.model.weapon import load_discoverable_weapons
+from savethewench.model.discoverable import Discoverable, load_discoverables, search_discoverable_rarity
 from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
 from savethewench.util import print_and_sleep
 from .base import LabeledSelectionComponent, SelectionBinding
@@ -35,6 +36,31 @@ class Search(RandomChoiceComponent):
         ep = game_state.current_area.search_probabilities
         super().__init__(game_state, bindings=[ProbabilityBinding(prob, get_registered_component(name))
                                                for name, prob in ep.items()])
+
+    @staticmethod
+    @register_component(DISCOVER_DISCOVERABLE)
+    @functional_component(state_dependent=True)
+    def _discover_discoverable(game_state: GameState):
+        player = game_state.player
+        rarity = search_discoverable_rarity()
+        available = [d for d in load_discoverables() if game_state.current_area
+                     in d.areas and d.rarity == rarity]
+        
+        selection = random.choice(available)
+
+        # TODO - add logic supporting a/an
+        if player.hp < player.max_hp:
+            if selection.hp > 0:
+                original_hp = player.hp
+                player.gain_hp(selection.hp)
+                print_and_sleep(cyan(f"You found {cyan(selection.name)} and restored {green(player.hp - original_hp)} hp."), 1.5)
+                return
+        else:
+            print_and_sleep(cyan(f"You found {cyan(selection.name)} and sold it for {green(selection.value)} of coin."),
+                            1.5)
+            player.gain_coins(selection.value)
+            return
+
 
     @staticmethod
     @register_component(DISCOVER_ITEM)
@@ -79,16 +105,6 @@ class Search(RandomChoiceComponent):
         else:
             return SwapFoundWeaponYN(game_state).run()
 
-    @staticmethod
-    @register_component(DISCOVER_DISCOVERABLE)
-    @functional_component(state_dependent=True)
-    def _discover_discoverable(game_state: GameState):
-
-        def find(): return random.randint(10, 25)
-
-        coins = find()
-        print_and_sleep(green(f"You found {coins} of coin!"), 1)
-        game_state.player.coins += coins
 
     @staticmethod
     @register_component(DISCOVER_PERK)
