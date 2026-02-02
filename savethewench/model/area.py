@@ -16,11 +16,11 @@ from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
 from .shop import Shop
 
 _search_defaults = {
-    DISCOVER_DISCOVERABLE: 20,
-    DISCOVER_ITEM: 10,
     DISCOVER_PERK: 1,
-    DISCOVER_WEAPON: 10,
-    SPAWN_ENEMY: 45
+    DISCOVER_ITEM: 5,
+    DISCOVER_WEAPON: 5,
+    DISCOVER_DISCOVERABLE: 30,
+    SPAWN_ENEMY: 40
 }
 
 

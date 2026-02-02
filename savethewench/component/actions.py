@@ -83,6 +83,7 @@ class Search(RandomChoiceComponent):
     @register_component(DISCOVER_DISCOVERABLE)
     @functional_component(state_dependent=True)
     def _discover_discoverable(game_state: GameState):
+
         def find(): return random.randint(10, 25)
 
         coins = find()
