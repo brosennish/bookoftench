@@ -10,7 +10,7 @@ Search_Discoverables = [
     # RARITY REFLECTS FREQUENCY, HEADERS ARE SUGGESTED VALUE RANGES
 
     # --- common (1-5 value | 0-5 hp) ---
-    {"pre": "some", "name": "Adult Binky (Used)", "value": 1, "hp": 0, "rarity": COMMON,
+    {"pre": "an", "name": "Adult Binky (Used)", "value": 1, "hp": 0, "rarity": COMMON,
      "areas": [CITY, FOREST, SWAMP]},
     {"pre": "some", "name": "Ants on a Log", "value": 0, "hp": 2, "rarity": COMMON,
      "areas": [FOREST, SWAMP]},
