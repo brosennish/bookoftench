@@ -1,4 +1,3 @@
-# --- rarities ---
 from savethewench.data.areas import CAVE, CITY, FOREST, SWAMP
 
 COMMON = "Common"
@@ -8,14 +7,16 @@ LEGENDARY = "Legendary"
 MYTHIC = "Mythic"
 
 Search_Discoverables = [
+    # --- A/AN before names when displayed ---
+
     # --- common ---
-    {"name": "Sunglasses", "value": 5, "hp": 0, "rarity": COMMON, "areas": [CAVE, CITY, FOREST, SWAMP]},
+    {"name": "Pair of Sunglasses", "value": 3, "hp": 0, "rarity": COMMON, "areas": [CAVE, CITY, FOREST, SWAMP]},
 
     # --- uncommon ---
     {"name": "Pocket Watch", "value": 10, "hp": 0, "rarity": UNCOMMON, "areas": [CAVE, CITY, FOREST, SWAMP]},
 
     # --- rare ---
-    {"name": "Digital Camera", "value": 25, "hp": 0, "rarity": RARE, "areas": [CAVE, CITY, FOREST, SWAMP]},
+    {"name": "Digital Camera", "value": 20, "hp": 0, "rarity": RARE, "areas": [CAVE, CITY, FOREST, SWAMP]},
 
     # --- legendary ---
     {"name": "Gold Chain", "value": 100, "hp": 0, "rarity": LEGENDARY, "areas": [CAVE, CITY, FOREST, SWAMP]},
