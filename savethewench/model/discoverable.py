@@ -1,8 +1,9 @@
 import random
-from dataclasses import dataclass, field
-from typing import List, Dict
+from dataclasses import dataclass
+from typing import List, Callable, Any
 
 from savethewench.data.discoverables import Search_Discoverables, MYTHIC, LEGENDARY, RARE, UNCOMMON, COMMON
+from savethewench.ui import purple, orange, blue, green, yellow
 
 
 @dataclass
@@ -29,6 +30,20 @@ def search_discoverable_rarity() -> str:
         rarity = COMMON
 
     return rarity
+
+
+def rarity_color(rarity: str) -> Callable[[Any], str] | Any:
+    if rarity == MYTHIC:
+        return orange
+    elif rarity == LEGENDARY:
+        return purple
+    elif rarity == RARE:
+        return blue
+    elif rarity == UNCOMMON:
+        return green
+    else:
+        return yellow
+
 
 def load_discoverables() -> List[Discoverable]:
     return [Discoverable(**d) for d in Search_Discoverables]
