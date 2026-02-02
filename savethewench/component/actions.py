@@ -69,7 +69,7 @@ class Search(RandomChoiceComponent):
 
         print_and_sleep(
             f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
-        f"{color(f'({find.rarity})!')}", 2)
+        f"{color(f'({find.rarity})')}!", 2)
         return
 
 
