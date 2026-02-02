@@ -48,22 +48,23 @@ class Search(RandomChoiceComponent):
                      in d.areas and d.rarity == rarity]
 
         find = random.choice(available)
-        pre = find.pre
 
-        # TODO - add logic supporting a/an
         if player.hp < player.max_hp:
             if find.hp > 0:
                 original_hp = player.hp
                 player.gain_hp(find.hp)
-                print_and_sleep(f"You found {pre} {cyan(find.name)} {color(f"({find.rarity})")} "
-                                f"and restored {green(player.hp - original_hp)} hp.", 2)
+                print_and_sleep(
+                    f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
+                    f"{color(f"({find.rarity})")} and restored {green(player.hp - original_hp)} hp.",
+                    2)
                 return
-        else:
-            print_and_sleep(
-                f"You found {pre} {cyan(find.name)} {color(f"({find.rarity})")} "
-                f"and sold it for {green(find.value)} of coin.",1)
-            player.gain_coins(find.value)
-            return
+
+        print_and_sleep(
+        f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
+            f"{color(f'({find.rarity})')} and sold it for {green(find.value)} of coin.",
+        2)
+        player.gain_coins(find.value)
+        return
 
     @staticmethod
     @register_component(DISCOVER_ITEM)

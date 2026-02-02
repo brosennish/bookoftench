@@ -8,7 +8,7 @@ from savethewench.ui import purple, orange, blue, green, yellow
 
 @dataclass
 class Discoverable:
-    pre: str
+    pre: str | None
     name: str
     value: int
     hp: int

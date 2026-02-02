@@ -7,8 +7,6 @@ LEGENDARY = "Legendary"
 MYTHIC = "Mythic"
 
 Search_Discoverables = [
-    # --- A/AN before names when displayed ---
-
     # --- common ---
     {"pre": "a", "name": "Pair of Sunglasses", "value": 3, "hp": 0, "rarity": COMMON,
      "areas": [CAVE, CITY, FOREST, SWAMP]},
@@ -26,6 +24,6 @@ Search_Discoverables = [
      "areas": [CAVE, CITY, FOREST, SWAMP]},
 
     # --- mythic ---
-    {"pre": "", "name": "Denny Biltmore's Lost Pinky Ring", "value": 1000, "hp": 0, "rarity": MYTHIC,
+    {"pre": None, "name": "Denny Biltmore's Lost Pinky Ring", "value": 1000, "hp": 0, "rarity": MYTHIC,
      "areas": [CAVE, CITY, FOREST, SWAMP]},
 ]
