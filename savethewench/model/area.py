@@ -7,7 +7,7 @@ from typing import List, Dict, Set
 
 from savethewench.data import Areas
 from savethewench.data.areas import EncounterType
-from savethewench.data.components import ActionMenuDefaults, DISCOVER_COIN, DISCOVER_ITEM, DISCOVER_PERK, \
+from savethewench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
     SPAWN_ENEMY
 from savethewench.ui import purple, yellow, blue
@@ -16,7 +16,7 @@ from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
 from .shop import Shop
 
 _search_defaults = {
-    DISCOVER_COIN: 20,
+    DISCOVER_DISCOVERABLE: 20,
     DISCOVER_ITEM: 10,
     DISCOVER_PERK: 1,
     DISCOVER_WEAPON: 10,

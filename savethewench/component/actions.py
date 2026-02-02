@@ -9,7 +9,7 @@ from savethewench.component.base import TextDisplayingComponent, functional_comp
     NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent
 from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
 from savethewench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
-    AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_COIN, DISCOVER_PERK
+    AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, DISCOVER_PERK
 from savethewench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION, DEATH_CAN_WAIT
@@ -80,9 +80,9 @@ class Search(RandomChoiceComponent):
             return SwapFoundWeaponYN(game_state).run()
 
     @staticmethod
-    @register_component(DISCOVER_COIN)
+    @register_component(DISCOVER_DISCOVERABLE)
     @functional_component(state_dependent=True)
-    def _discover_coin(game_state: GameState):
+    def _discover_discoverable(game_state: GameState):
         @attach_perk(METAL_DETECTIVE, value_description="coin")
         def find(): return random.randint(10, 25)
 
