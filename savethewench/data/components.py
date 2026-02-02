@@ -21,6 +21,7 @@ LOAD_GAME = "Load Game"
 NEW_GAME = "New Game"
 OCCULTIST = "Occultist"
 OFFICER = "Officer"
+OVERVIEW = "Overview"
 STATS = "Stats"
 PERKS = "Perks"
 QUIT_GAME = "Quit"
@@ -38,8 +39,10 @@ class StartGameMenuDefaults:
 
 class ActionMenuDefaults:
     page_one: List[str] = [EXPLORE, USE_ITEM, EQUIP_WEAPON, SHOP, TRAVEL]
-    page_two: List[str] = [ACHIEVEMENTS, BANK, CASINO, PERKS, STATS]
+    page_two: List[str] = [BANK, CASINO, OVERVIEW]
 
+class OverviewMenuDefaults:
+    page_one: List[str] = [ACHIEVEMENTS, PERKS, STATS]
 
 class InGameMenuDefaults:
     page_one: List[str] = [NEW_GAME, SETTINGS, QUIT_GAME]
