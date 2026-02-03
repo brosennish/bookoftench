@@ -49,6 +49,20 @@ class Search(RandomChoiceComponent):
 
         find = random.choice(available)
 
+        # take damage if find.hp < 0
+        if find.hp < 0:
+            original_hp = player.hp
+            player.lose_hp(abs(find.hp))
+            print_and_sleep(
+                f"You{f' {find.pre} ' if find.pre else ' '}{yellow(find.name)} "
+                f"{color(f"({find.rarity})")} and lost {red(original_hp - player.hp)} hp.",
+                3)
+            if player.hp == 0:
+                player.lives -= 1
+                event_logger.log_event(PlayerDeathEvent(player.lives))
+            return
+
+        # heal if discoverable.hp and player.hp < max_hp
         if player.hp < player.max_hp:
             if find.hp > 0:
                 original_hp = player.hp
@@ -59,6 +73,7 @@ class Search(RandomChoiceComponent):
                     3)
                 return
 
+        # gain coin if value greater than 0
         if find.value > 0:
             print_and_sleep(
             f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
@@ -67,6 +82,7 @@ class Search(RandomChoiceComponent):
             player.gain_coins(find.value)
             return
 
+        # print found message if neutral
         print_and_sleep(
             f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
         f"{color(f'({find.rarity})')}!", 2.5)

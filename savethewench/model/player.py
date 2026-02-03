@@ -203,7 +203,10 @@ class Player(Combatant):
         event_logger.log_event(ItemSoldEvent(item.name, item.sell_value))
 
     def gain_hp(self, amount: int) -> None:
-        self.hp = min(self.max_hp, self.hp + amount)  # clamp on max_hp
+        self.hp = min(self.max_hp, self.hp + amount)
+
+    def lose_hp(self, amount: int) -> None:
+        self.hp = max(0, self.hp - amount)
 
     def display_weapon_count(self) -> None:
         print_and_sleep(f"Weapons {dim(f"({len(self.weapon_dict)}/{self.max_weapons})")}")
