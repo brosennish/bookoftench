@@ -14,10 +14,10 @@ class EncounterType(Enum):
     POST_KILL = 0
 
 
-# TODO tweak 'explore_probabilities' for each area as desired
+# TODO tweak 'search_probabilities' for each area as desired
 # map names of registered components to (int percent) probabilities
 # can include *any* registered component - useful for future npc encounters, etc...
-# e.g. 'explore_probabilities': {DISCOVER_COIN: 20, SPAWN_ENEMY: 30, DISCOVER_ITEM: 30,
+# e.g. 'search_probabilities': {DISCOVER_COIN: 20, SPAWN_ENEMY: 30, DISCOVER_ITEM: 30,
 #                                DISCOVER_WEAPON: 10, DISCOVER_PERK: 5}
 Areas = [
     {'name': CITY,

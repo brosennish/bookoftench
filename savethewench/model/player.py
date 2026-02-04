@@ -203,7 +203,10 @@ class Player(Combatant):
         event_logger.log_event(ItemSoldEvent(item.name, item.sell_value))
 
     def gain_hp(self, amount: int) -> None:
-        self.hp = min(self.max_hp, self.hp + amount)  # clamp on max_hp
+        self.hp = min(self.max_hp, self.hp + amount)
+
+    def lose_hp(self, amount: int) -> None:
+        self.hp = max(0, self.hp - amount)
 
     def display_weapon_count(self) -> None:
         print_and_sleep(f"Weapons {dim(f"({len(self.weapon_dict)}/{self.max_weapons})")}")
@@ -283,7 +286,7 @@ class Player(Combatant):
 
     def gain_coins(self, amount: int) -> None:
         self.coins += amount
-        print_and_sleep(green(f"You gained {amount} coins!"), 1)
+        print_and_sleep(green(f"You gained {amount} of coin!"), 1)
 
     @staticmethod
     @attach_perk(INTRO_TO_TENCH, value_description="xp gained")

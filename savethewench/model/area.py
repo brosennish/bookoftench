@@ -7,7 +7,7 @@ from typing import List, Dict, Set
 
 from savethewench.data import Areas
 from savethewench.data.areas import EncounterType
-from savethewench.data.components import ActionMenuDefaults, DISCOVER_COIN, DISCOVER_ITEM, DISCOVER_PERK, \
+from savethewench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
     SPAWN_ENEMY
 from savethewench.data.enemies import Enemy_Adjectives
@@ -16,12 +16,12 @@ from savethewench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
 from .shop import Shop
 
-_explore_defaults = {
-    DISCOVER_COIN: 20,
-    DISCOVER_ITEM: 10,
+_search_defaults = {
     DISCOVER_PERK: 1,
-    DISCOVER_WEAPON: 10,
-    SPAWN_ENEMY: 45
+    DISCOVER_ITEM: 5,
+    DISCOVER_WEAPON: 5,
+    DISCOVER_DISCOVERABLE: 30,
+    SPAWN_ENEMY: 40
 }
 
 
@@ -54,7 +54,7 @@ class Area:
     current_enemy = None
 
     shop: Shop = field(default_factory=Shop)
-    explore_probabilities: Dict[str, int] = field(default_factory=lambda: _explore_defaults)
+    search_probabilities: Dict[str, int] = field(default_factory=lambda: _search_defaults)
     actions_menu: AreaActions = field(default_factory=AreaActions.defaults)
     encounters: List[AreaEncounter] = field(default_factory=list)
 
@@ -93,7 +93,7 @@ class Area:
             print_and_sleep(yellow("An enemy appears!"), 1)
         enemy_lines = enemy.get_enemy_encounter_line()
         if enemy_lines:
-            print_and_sleep(f"{blue(f'"{enemy_lines}"')}", )
+            print_and_sleep(f"{blue(f'{enemy_lines}')}", 3)
         self.current_enemy = enemy
         return self.current_enemy
 
