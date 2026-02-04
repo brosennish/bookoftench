@@ -20,7 +20,6 @@ KARATE_LESSONS = "Karate Lessons"
 LEATHER_SKIN = "Leather Skin"
 LUCKY_TENCHS_FIN = "Lucky Tench's Fin"
 MARTIAL_ARTS_TRAINING = "Martial Arts Training"
-METAL_DETECTIVE = "Metal Detective"
 NEW_SNEAKERS = "New Sneakers"
 NOMADS_LAND = "Nomad's Land"
 RICKETY_PICKPOCKET = "Rickety Pickpocket"
@@ -239,13 +238,6 @@ Perks = [
         'name': VAMPIRIC_SPERM,
         'cost': 200,
         'description': 'Heal 3 HP each time you land a melee attack',
-    },
-    {
-        'name': METAL_DETECTIVE,
-        'cost': 110,
-        'description': "Find up to 20 extra coins when exploring",
-        'wrapper_type': WrapperType.BOUNDED_RANDOM,
-        'wrapper_config': {'lower_bound': 0, 'upper_bound': 20}
     },
     {
         'name': TENCH_THE_BOUNTY_HUNTER,

@@ -1,7 +1,7 @@
 from typing import List
 
 from savethewench.component.base import SelectionBinding, PaginatedMenuComponent
-from savethewench.data.components import EXPLORE, AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, InGameMenuDefaults, \
+from savethewench.data.components import SEARCH, AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, InGameMenuDefaults, \
     StartGameMenuDefaults, SAVE_GAME, LOAD_GAME, OverviewMenuDefaults
 from savethewench.globals import is_debug_mode
 from savethewench.model import GameState
@@ -30,9 +30,9 @@ class ActionMenu(PaginatedMenuComponent):
         pages = []
         for page in area_actions.pages:
             modified = [c for c in page]
-            if EXPLORE in modified:
+            if SEARCH in modified:
                 if self.game_state.current_area.enemies_remaining == 0:
-                    modified.remove(EXPLORE)
+                    modified.remove(SEARCH)
                     if not self.game_state.current_area.boss_defeated:
                         modified = [AREA_BOSS_FIGHT, *modified]
                     elif self.game_state.is_final_boss_available():

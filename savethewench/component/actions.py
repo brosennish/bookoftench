@@ -8,21 +8,22 @@ from savethewench.component.base import TextDisplayingComponent, functional_comp
     ColoredNameSelectionBinding, BinarySelectionComponent, \
     NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent
 from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
-from savethewench.data.components import EXPLORE, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
-    AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_COIN, DISCOVER_PERK, \
+from savethewench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
+    AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, DISCOVER_PERK, \
     OVERVIEW
 from savethewench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from savethewench.data.items import TENCH_FILET
-from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION, DEATH_CAN_WAIT
+from savethewench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT
 from savethewench.event_logger import subscribe_function
 from savethewench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE
 from savethewench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent
 from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
-from savethewench.model.perk import load_perks, Perk, attach_perk, perk_is_active
+from savethewench.model.perk import load_perks, Perk, perk_is_active
 from savethewench.model.util import get_battle_status_view, display_player_achievements, \
     display_game_stats, calculate_flee, display_active_perks
 from savethewench.model.weapon import load_discoverable_weapons
+from savethewench.model.discoverable import load_discoverables, search_discoverable_rarity, rarity_color
 from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
 from savethewench.util import print_and_sleep
 from .base import LabeledSelectionComponent, SelectionBinding
@@ -31,12 +32,64 @@ from .menu import OverviewMenu
 from .registry import register_component, get_registered_component
 
 
-@register_component(EXPLORE)
-class Explore(RandomChoiceComponent):
+@register_component(SEARCH)
+class Search(RandomChoiceComponent):
     def __init__(self, game_state: GameState):
-        ep = game_state.current_area.explore_probabilities
+        ep = game_state.current_area.search_probabilities
         super().__init__(game_state, bindings=[ProbabilityBinding(prob, get_registered_component(name))
                                                for name, prob in ep.items()])
+
+    @staticmethod
+    @register_component(DISCOVER_DISCOVERABLE)
+    @functional_component(state_dependent=True)
+    def _discover_discoverable(game_state: GameState):
+        player = game_state.player
+        rarity = search_discoverable_rarity()
+        color = rarity_color(rarity)
+        available = [d for d in load_discoverables() if game_state.current_area.name
+                     in d.areas and d.rarity == rarity]
+
+        find = random.choice(available)
+
+        # take damage if find.hp < 0
+        if find.hp < 0:
+            original_hp = player.hp
+            player.lose_hp(abs(find.hp))
+            print_and_sleep(
+                f"You{f' {find.pre} ' if find.pre else ' '}{yellow(find.name)} "
+                f"{color(f"({find.rarity})")} and lost {red(original_hp - player.hp)} hp.",
+                2)
+            if player.hp == 0:
+                player.lives -= 1
+                event_logger.log_event(PlayerDeathEvent(player.lives))
+            return
+
+        # heal if discoverable.hp and player.hp < max_hp
+        if player.hp < player.max_hp:
+            if find.hp > 0:
+                original_hp = player.hp
+                player.gain_hp(find.hp)
+                print_and_sleep(
+                    f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
+                    f"{color(f"({find.rarity})")} and restored {green(player.hp - original_hp)} hp.",
+                    2)
+                return
+
+        # gain coin if value greater than 0
+        if find.value > 0:
+            print_and_sleep(
+            f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
+                f"{color(f'({find.rarity})')} worth {green(find.value)} of coin.",
+            2)
+            player.gain_coins(find.value)
+            return
+
+        # print found message if neutral
+        print_and_sleep(
+            f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
+        f"{color(f'({find.rarity})')}!", 2)
+        return
+
 
     @staticmethod
     @register_component(DISCOVER_ITEM)
@@ -82,17 +135,6 @@ class Explore(RandomChoiceComponent):
             return SwapFoundWeaponYN(game_state).run()
 
     @staticmethod
-    @register_component(DISCOVER_COIN)
-    @functional_component(state_dependent=True)
-    def _discover_coin(game_state: GameState):
-        @attach_perk(METAL_DETECTIVE, value_description="coin")
-        def find(): return random.randint(10, 25)
-
-        coins = find()
-        print_and_sleep(green(f"You found {coins} of coin!"), 1)
-        game_state.player.coins += coins
-
-    @staticmethod
     @register_component(DISCOVER_PERK)
     @functional_component()
     def _discover_perk():
@@ -123,9 +165,11 @@ class Travel(LabeledSelectionComponent):
 @register_component(USE_ITEM)
 class UseItem(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: len(game_state.player.items) > 0,
-                         accept_component=ItemSelectionComponent, deny_component=functional_component()(lambda:
-                print_and_sleep(yellow(f"Your inventory is dry."), 1)))
+        super().__init__(game_state,
+                         decision_function=lambda: len(game_state.player.items) > 0,
+                         accept_component=ItemSelectionComponent,
+                         deny_component=functional_component()(
+                             lambda: print_and_sleep(yellow(f"Your inventory is dry."),1)))
 
 
 class ItemSelectionComponent(LabeledSelectionComponent):

@@ -113,7 +113,6 @@ def apply_coffee_effect(item: CoffeeItem, player: Player):
             print_and_sleep(f"Illness: {yellow(f'{illness.name}')}", 2)
             print_and_sleep(f"{yellow(f'{illness.description}')}", 2)
             print_and_sleep(
-                f"Visit the Free Range Children's Hospital for treatment "
-                f"or die at level {red(f'{player.illness_death_lvl}')}\n",
+                f"Seek treatment or die at level {red(f'{player.illness_death_lvl}')}\n",
                 3
             )

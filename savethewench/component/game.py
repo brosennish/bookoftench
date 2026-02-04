@@ -105,7 +105,7 @@ class Tutorial(TextDisplayingComponent):
                          display_callback=lambda _: print_and_sleep("""
 SAVE THE WENCH - HOW TO PLAY
 
-    1. Explore areas to find enemies, loot, perks, and events
+    1. Search areas to find discoverables and encounter enemies
     2. Fight enemies in turn-based combat to earn XP and coins
     3. Buy and sell items and weapons in the shop
     4. Use items freely during your turn or between battles
