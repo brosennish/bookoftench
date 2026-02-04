@@ -10,11 +10,11 @@ from savethewench.data.areas import EncounterType
 from savethewench.data.components import ActionMenuDefaults, DISCOVER_COIN, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
     SPAWN_ENEMY
+from savethewench.data.enemies import Enemy_Adjectives
 from savethewench.ui import purple, yellow, blue
 from savethewench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
 from .shop import Shop
-from ..data.enemies import Enemy_Adjectives
 
 _explore_defaults = {
     DISCOVER_COIN: 20,
