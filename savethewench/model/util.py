@@ -46,8 +46,34 @@ def display_occultist_header(game_state: GameState) -> None:
     ])}")
 
 
+def display_shaman_header(game_state: GameState) -> None:
+    player = game_state.player
+    player_color = p_color(player.hp, player.max_hp)
+
+    player_status = dim(' | ').join([
+        f"{orange(player.name)} {dim('-')} Level: {cyan(player.lvl)}",
+        f"HP: {player_color(f'{player.hp}/{player.max_hp}')}",
+        f"Coins: {green(player.coins)}",
+        f"Lives: {yellow(player.lives)}",
+    ])
+
+    lines = [player_status]
+
+    if player.illness:
+        lines.append(dim(' | ').join([
+            f"Illness: {yellow(player.illness.name)}",
+            f"Death Level: {red(player.illness_death_lvl)}",
+        ]))
+
+    if player.blind:
+        lines.append(f"Blind Turns: {red(player.blind_turns)}")
+
+    print("\n".join(lines))
+
+
 def display_hospital_header(game_state: GameState) -> None:
     player = game_state.player
+
     print_and_sleep(f"{blue(f'Welcome to The Free Range Children\'s Hospital of Shebokken.')}", 2)
     print_and_sleep(f"{dim(' | ').join([
         f"Illness: {yellow(f"{player.illness.name}")}",
@@ -89,10 +115,10 @@ def get_player_status_view(game_state: GameState) -> str:
                          f"Coins: {green(f"{player.coins}")}",
                          f"Lives: {yellow(f"{player.lives}")}"])}")
 
-    if game_state.player.illness:
+    if player.illness:
         illness_status = (f"{dim(' | ').join([
-            f"\nIllness: {yellow(f"{game_state.player.illness.name}")}",
-            f"Death Level: {red(f"{game_state.player.illness_death_lvl}")}",
+            f"\nIllness: {yellow(f"{player.illness.name}")}",
+            f"Death Level: {red(f"{player.illness_death_lvl}")}",
         ])}\n")
 
         return "\n".join([

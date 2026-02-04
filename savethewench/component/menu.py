@@ -2,7 +2,7 @@ from typing import List
 
 from savethewench.component.base import SelectionBinding, PaginatedMenuComponent
 from savethewench.data.components import SEARCH, AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, InGameMenuDefaults, \
-    StartGameMenuDefaults, SAVE_GAME, LOAD_GAME
+    StartGameMenuDefaults, SAVE_GAME, LOAD_GAME, OverviewMenuDefaults
 from savethewench.globals import is_debug_mode
 from savethewench.model import GameState
 from savethewench.model.area import AreaActions
@@ -56,5 +56,17 @@ class InGameMenu(PaginatedMenuComponent):
         page = [c for c in InGameMenuDefaults.page_one]
         if is_debug_mode():
             page += [SAVE_GAME, LOAD_GAME]
+        return [[SelectionBinding(str(i), name, get_registered_component(name))
+                 for i, name in enumerate(page, 1)]]
+
+
+class OverviewMenu(PaginatedMenuComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, returnable=True)
+
+    def construct_pages(self) -> List[List[SelectionBinding]]:
+        page = [c for c in OverviewMenuDefaults.page_one]
+        if is_debug_mode():
+            page += []
         return [[SelectionBinding(str(i), name, get_registered_component(name))
                  for i, name in enumerate(page, 1)]]
