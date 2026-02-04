@@ -163,12 +163,11 @@ class Travel(LabeledSelectionComponent):
 @register_component(USE_ITEM)
 class UseItem(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: len(game_state.player.items) > 0,
-                         accept_component=ItemSelectionComponent, deny_component=functional_component()(lambda:
-                                                                                                        print_and_sleep(
-                                                                                                            yellow(
-                                                                                                                f"Your inventory is dry."),
-                                                                                                            1)))
+        super().__init__(game_state,
+                         decision_function=lambda: len(game_state.player.items) > 0,
+                         accept_component=ItemSelectionComponent,
+                         deny_component=functional_component()(
+                             lambda: print_and_sleep(yellow(f"Your inventory is dry."),1)))
 
 
 class ItemSelectionComponent(LabeledSelectionComponent):
