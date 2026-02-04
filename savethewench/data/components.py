@@ -1,6 +1,5 @@
 from typing import List
 
-from savethewench.globals import is_debug_mode
 from savethewench.ui import purple
 
 ACHIEVEMENTS = "Achievements"
@@ -22,6 +21,7 @@ NEW_GAME = "New Game"
 OCCULTIST = "Occultist"
 OFFICER = "Officer"
 OVERVIEW = "Overview"
+STATS = "Stats"
 PERKS = "Perks"
 QUIT_GAME = "Quit"
 SAVE_GAME = "Save Game"
@@ -39,7 +39,11 @@ class StartGameMenuDefaults:
 
 class ActionMenuDefaults:
     page_one: List[str] = [EXPLORE, USE_ITEM, EQUIP_WEAPON, SHOP, TRAVEL]
-    page_two: List[str] = [ACHIEVEMENTS, BANK, CASINO, PERKS, OVERVIEW]
+    page_two: List[str] = [BANK, CASINO, OVERVIEW]
+
+
+class OverviewMenuDefaults:
+    page_one: List[str] = [ACHIEVEMENTS, PERKS, STATS]
 
 
 class InGameMenuDefaults:

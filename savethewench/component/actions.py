@@ -8,8 +8,9 @@ from savethewench.component.base import TextDisplayingComponent, functional_comp
     ColoredNameSelectionBinding, BinarySelectionComponent, \
     NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent
 from savethewench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
-from savethewench.data.components import EXPLORE, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, OVERVIEW, TRAVEL, \
-    AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_COIN, DISCOVER_PERK
+from savethewench.data.components import EXPLORE, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
+    AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_COIN, DISCOVER_PERK, \
+    OVERVIEW
 from savethewench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from savethewench.data.items import TENCH_FILET
 from savethewench.data.perks import METAL_DETECTIVE, WENCH_LOCATION, DEATH_CAN_WAIT
@@ -20,12 +21,13 @@ from savethewench.model.game_state import GameState
 from savethewench.model.item import load_items
 from savethewench.model.perk import load_perks, Perk, attach_perk, perk_is_active
 from savethewench.model.util import get_battle_status_view, display_player_achievements, \
-    display_game_overview, calculate_flee, display_active_perks
+    display_game_stats, calculate_flee, display_active_perks
 from savethewench.model.weapon import load_discoverable_weapons
 from savethewench.ui import green, purple, yellow, dim, red, cyan, blue
 from savethewench.util import print_and_sleep
 from .base import LabeledSelectionComponent, SelectionBinding
 from .encounters import PostKillEncounters
+from .menu import OverviewMenu
 from .registry import register_component, get_registered_component
 
 
@@ -382,7 +384,15 @@ class DisplayPerks(TextDisplayingComponent):
         super().__init__(game_state, display_callback=display_active_perks)
 
 
-@register_component(OVERVIEW)
-class Overview(TextDisplayingComponent):
+@register_component(STATS)
+class Stats(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, display_callback=display_game_overview)
+        super().__init__(game_state, display_callback=display_game_stats)
+
+
+@register_component(OVERVIEW)
+class Overview(GatekeepingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, decision_function=lambda: game_state.player.is_alive(),
+                         accept_component=OverviewMenu, deny_component=functional_component()(lambda:
+                print_and_sleep(yellow(f"You're a dang ghost."), 1)))
