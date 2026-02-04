@@ -277,3 +277,25 @@ Enemy_Lines = {
                      "You have to lotion your skins before they run dry.",
                      "He said that if I do it I can keep the skin..."]
 }
+
+# ========================
+#        ENEMY ADJECTIVES
+# ========================
+
+Enemy_Adjectives = [
+    "Agitated", "Bestial", "Bloodthirsty", "Cannibalistic", "Crazed",
+    "Cursed", "Damned", "Dastardly", "Degenerate",
+    "Delirious", "Demented", "Depraved", "Deranged", "Detestable",
+    "Diabolical", "Disgruntled", "Disillusioned",
+    "Disoriented", "Disturbed", "Drug-fueled",
+    "Drunken", "Dubious", "Evil", "Fallen", "Feral",
+    "Forgotten", "Godless", "Hallucinatory", "Heartless",
+    "Heinous", "Hostile", "Idolatrous", "Immoral",
+    "Inbred", "Insane", "Jaded", "Malevolent", "Malicious",
+    "Merciless", "Misguided", "Moralless",
+    "Obscene", "Possessed", "Psychotic",
+    "Rabid", "Sadistic", "Sinful", "Soulless",
+    "Tench-eyed", "Typical", "Unholy",
+    "Uninspired", "Unnatural", "Unstable", "Untrustworthy",
+    "Vile", "Wretched",
+]
