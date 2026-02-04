@@ -46,6 +46,16 @@ def display_occultist_header(game_state: GameState) -> None:
     ])}")
 
 
+def display_wizard_header(game_state: GameState) -> None:
+    player = game_state.player
+
+    print_and_sleep(f"{dim(' | ').join([
+        f"Coins: {green(f"{player.coins}")}",
+        f"Items: {cyan(f"{len(player.items)}/{player.max_items}")}",
+        f"Weapons: {cyan(f"{len(player.get_weapons())}/{player.max_weapons}")}"
+    ])}\n")
+
+
 def display_shaman_header(game_state: GameState) -> None:
     player = game_state.player
     player_color = p_color(player.hp, player.max_hp)

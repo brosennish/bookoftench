@@ -10,8 +10,9 @@ from .occultist import *
 from .officer import *
 from .settings import *
 from .shaman import *
-from .storage import *
 from .shop import *
+from .storage import *
+from .wizard import *
 
 # --
 
