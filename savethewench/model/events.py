@@ -4,7 +4,7 @@ from savethewench.audio import play_sound
 from savethewench.data.audio import PURCHASE, GREAT_JOB
 from savethewench.event_base import Event, EventType
 from savethewench.model.illness import Illness
-from savethewench.ui import green, cyan, red, yellow, dim
+from savethewench.ui import green, cyan, red, yellow, dim, blue
 from savethewench.util import print_and_sleep
 
 
@@ -206,10 +206,16 @@ class OfficerEvent(Event):
         super().__init__(event_type, callback=self.paid if event_type == event_type.OFFICER_PAID else self.unpaid)
 
     def paid(self) -> None:
-        print_and_sleep("")  # TODO funny dialogue
+        print_and_sleep(f"{blue("Thanks for the coin ther'.")}", 1.5)
+        print_and_sleep(f"{blue("Unfortunately, uh... I got some bad news for ya's.")}", 1.5)
+        print_and_sleep(f"{blue("Your whole family was, uh... dragged down.")}", 1.5)
+        print_and_sleep(f"{blue("The whole bunch.")}", 1.5)
+
 
     def unpaid(self) -> None:
-        print_and_sleep("")  # TODO funny dialogue
+        print_and_sleep(f"{blue("...")}", 1.5)
+        print_and_sleep(f"{blue("This is Officer Hohkken.")}", 1.5)
+
 
 
 # TODO for crypto events, figure out a method of alerting that doesn't print to console

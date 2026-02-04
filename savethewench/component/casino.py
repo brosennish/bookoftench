@@ -19,10 +19,10 @@ from .registry import register_component
 @register_component(CASINO)
 class CasinoBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: game_state.player.coins > 0,
+        super().__init__(game_state, decision_function=lambda: game_state.player.coins >= 5,
                          accept_component=CasinoCheck,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("Your paper's no good here.\nCome back with some coins.\n"), 1.5)))
+                             blue("Your paper's no good here.\nCome back when you have at least 5 of coin.\n"), 1.5)))
 
 
 # --- Casino entry / gatekeeping ---
@@ -232,7 +232,6 @@ class AboveOrBelow(CasinoGame):
 
     def play_round(self, wager: int) -> GameState:
         player = self.game_state.player
-        player.games_played += 1
         self.display_status()
         roll1 = roll_die()
         call_is_correct = self.get_eval_function()
@@ -249,12 +248,14 @@ class AboveOrBelow(CasinoGame):
                 print_and_sleep(f"{green(f"You cashed out {payout} coins!")}")
                 player.casino_won += payout
                 self.player_quit = True
+                player.games_played += 1
                 return self.game_state
         else:
             print_and_sleep(yellow("Your guess was dry."))
             player.coins -= wager
             player.casino_lost += wager
             self.turn = 0
+            player.games_played += 1
         return self.game_state
 
 

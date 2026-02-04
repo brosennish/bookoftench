@@ -73,7 +73,7 @@ class NewGame(LinearComponent):
         stop_all_sounds()
         player = self.game_state.player
         while not player.name:
-            player.name = safe_input("What is your name?")
+            player.name = safe_input("What be your name?")
         return self.game_state
 
 
@@ -90,7 +90,7 @@ class QuitGame(Component):
 class TutorialDecision(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
-                         query="Do tutorial?",
+                         query="Need an overview?",
                          yes_component=Tutorial,
                          no_component=Intro)
 
@@ -123,9 +123,10 @@ class Intro(TextDisplayingComponent):
         super().__init__(game_state,
                          next_component=ActionMenu,
                          display_callback=lambda _: print_and_sleep(red("""
-You swim up to a rocky beach with nothing but your knife and a tench.
-The champion informed you that a wench has been captured - he can feel it in his jines.
-Save her before her life runs dry...
+You wash ashore on a deserted beach on the outskirts of Shebokken.
+The champion has informed you that his mother, Chula, was taken in the night.
+It is up to you to locate her and return her to the champion...
+before her life runs dry.
 """)))
 
     def play_theme(self) -> None:
@@ -142,7 +143,7 @@ class ContinueGame(TextDisplayingComponent):
     @staticmethod
     def _display_and_reset(game_state: GameState):
         print_and_sleep(red("""
-You wake up in a dumpster behind Showgirls 3.
+You awaken in a dumpster behind Showgirls 3.
 You're buried beneath a pile of detritus and covered in slime...
 There are parts of another man or men scattered around you."""), 3)
         game_state.player.apply_death_penalties()

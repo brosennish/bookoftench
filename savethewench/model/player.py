@@ -362,6 +362,7 @@ class Player(Combatant):
         self.blind_turns = 0
         self.illness = None
         self.illness_death_lvl = None
+        self._max_plays = 10
 
     def handle_broken_weapon(self) -> None:
         event_logger.log_event(WeaponBrokeEvent())
