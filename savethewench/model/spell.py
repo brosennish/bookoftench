@@ -35,7 +35,7 @@ class Spell(Buyable):
             print_and_sleep(f"{cyan(f'{item.name} magically added to sack.')}", 2)
 
         elif self.name == WEAPON_MAGIC:
-            filtered = [w for w in load_weapons() if w.name not in player.get_weapons()
+            filtered = [w for w in load_weapons() if w.name not in [pw.name for pw in player.get_weapons()]
                         and w.uses > 0]
             weapon = random.choice(filtered)
 
