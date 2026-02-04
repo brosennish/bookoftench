@@ -1,7 +1,10 @@
+import random
+
 from savethewench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component
 from savethewench.component.registry import register_component
 from savethewench.data.components import OCCULTIST
+from savethewench.data.rituals import Occultist_Lines
 from savethewench.model import GameState
 from savethewench.model.ritual import Ritual, load_rituals
 from savethewench.model.util import display_occultist_header
@@ -40,8 +43,9 @@ class OccultistComponent(LabeledSelectionComponent):
         return self.leave or not self.game_state.player.is_alive()
 
     def display_options(self) -> None:
+        message = random.choice(Occultist_Lines)
         print_and_sleep(
-            f"{blue('Tench magic gives life, Carp magic might. Shall I perform a ritual?')}"
+            f"{blue(message)}\n"
         )
         for component in self.selection_components:
             component.display_options()
