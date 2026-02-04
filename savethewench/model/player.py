@@ -286,10 +286,7 @@ class Player(Combatant):
 
     def gain_coins(self, amount: int) -> None:
         self.coins += amount
-        word = "coins!"
-        if amount == 1:
-            word = "coin!"
-        print_and_sleep(green(f"You gained {amount} {word}"), 1)
+        print_and_sleep(green(f"You gained {amount} of coin!"), 1)
 
     @staticmethod
     @attach_perk(INTRO_TO_TENCH, value_description="xp gained")
