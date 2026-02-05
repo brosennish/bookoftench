@@ -308,7 +308,7 @@ class Player(Combatant):
 
     def _gain_xp(self, amount: int) -> None:
         self.xp += amount
-        print_and_sleep(green(f"You gained {amount} XP!"), 1)
+        print_and_sleep(cyan(f"You gained {amount} XP!"), 1)
 
         # handles cases where a big XP chunk might give multiple levels
         while self.xp >= self.xp_needed:
