@@ -1,6 +1,6 @@
 import argparse
 
-from savethewench import SaveTheWenchGame
+from bookoftench import SaveTheWenchGame
 
 
 def load_component(class_name):
