@@ -71,14 +71,14 @@ def display_shaman_header(game_state: GameState) -> None:
 
     if player.illness:
         lines.append(dim(' | ').join([
-            f"Illness: {yellow(player.illness.name)}",
+            f"\nIllness: {yellow(player.illness.name)}",
             f"Death Level: {red(player.illness_death_lvl)}",
         ]))
 
     if player.blind:
         lines.append(f"Blind Turns: {red(player.blind_turns)}")
 
-    print("\n".join(lines))
+    print("\n".join(lines), "\n")
 
 
 def display_hospital_header(game_state: GameState) -> None:
