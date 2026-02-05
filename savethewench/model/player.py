@@ -337,7 +337,6 @@ class Player(Combatant):
             if filtered:
                 item_reward = random.choice(filtered)
                 self.items[item_reward.name] = item_reward
-                item_reward = str(item_reward.to_sellable_item())
 
         event_logger.log_event(LevelUpEvent(self.lvl, old_max, self.max_hp, item_reward, cash_reward))
 
