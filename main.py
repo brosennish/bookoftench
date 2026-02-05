@@ -7,7 +7,7 @@ def load_component(class_name):
     import importlib
     import inspect
     import pkgutil
-    package = importlib.import_module('savethewench.component')
+    package = importlib.import_module('bookoftench.component')
 
     for _, module_name, _ in pkgutil.iter_modules(package.__path__):
         module = importlib.import_module(f"{package.__name__}.{module_name}")
