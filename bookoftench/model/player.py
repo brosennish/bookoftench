@@ -132,6 +132,7 @@ class Player(Combatant):
     def blind(self, blind: bool) -> None:
         if blind and perk_is_active(BEER_GOGGLES):
             print_and_sleep(purple(f"{BEER_GOGGLES} prevented blindness."), 1)
+            self.blind_turns = 0
         else:
             self._blind = blind
 
