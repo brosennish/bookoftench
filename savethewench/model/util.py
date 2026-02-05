@@ -65,20 +65,15 @@ def display_shaman_header(game_state: GameState) -> None:
         f"HP: {player_color(f'{player.hp}/{player.max_hp}')}",
         f"Coins: {green(player.coins)}",
         f"Lives: {yellow(player.lives)}",
+        ])
+
+    status_line_two = dim(' | ').join([
+        f"\nIllness: {yellow(player.illness.name) if player.illness else "None"}",
+        f"Death Level: {red(player.illness_death_lvl) if player.illness_death_lvl else "N/A"}",
+        f"Blind Turns: {red(player.blind_turns) if player.blind_turns else "0"}",
     ])
 
-    lines = [player_status]
-
-    if player.illness:
-        lines.append(dim(' | ').join([
-            f"\nIllness: {yellow(player.illness.name)}",
-            f"Death Level: {red(player.illness_death_lvl)}",
-        ]))
-
-    if player.blind:
-        lines.append(f"Blind Turns: {red(player.blind_turns)}")
-
-    print("\n".join(lines), "\n")
+    print(player_status, "\n", status_line_two, "\n")
 
 
 def display_hospital_header(game_state: GameState) -> None:
