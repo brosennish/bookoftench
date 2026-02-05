@@ -105,9 +105,9 @@ class LabeledSelectionComponent(SelectionComponent):
         return binding.component(self.game_state).run()
 
     def handle_selection(self) -> GameState:
-        selection = safe_input(f"Please enter a selection{' (q to exit)' if self.quittable else ''}").strip().lower()
+        selection = safe_input(f"Please enter a selection{' (r to return)' if self.quittable else ''}").strip().lower()
         if selection not in self.binding_map:
-            if self.quittable and selection == 'q':
+            if self.quittable and selection == 'r':
                 self.made_selection = True
             else:
                 print_and_sleep(yellow("Invalid selection"), 0.5)
