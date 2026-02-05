@@ -24,7 +24,7 @@ class CoffeeBouncer(GatekeepingComponent):
         super().__init__(game_state, decision_function=lambda: game_state.player.illness is None,
                          accept_component=CoffeeShopComponent,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("Get *cough cough* lost. No sickos allowed.\n"), 1.5)))
+                             blue(f"Get {yellow('*cough cough*')} {blue('lost. No sickos allowed.')}\n"), 1.5)))
 
 
 class CoffeeShopComponent(LabeledSelectionComponent):
