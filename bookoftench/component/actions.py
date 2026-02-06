@@ -118,8 +118,8 @@ class Search(RandomChoiceComponent):
     @register_component(DISCOVER_WEAPON)
     @functional_component(state_dependent=True)
     def _discover_weapon(game_state: GameState):
-        available = [w for w in load_discoverable_weapons()
-                     if w.name not in game_state.player.weapon_dict]
+        available = [w for w in load_discoverable_weapons() if game_state.current_area.name in w.areas
+                    and w.name not in game_state.player.weapon_dict]
 
         if len(available) == 0:  # shouldn't ever be the case in actual gameplay, but need this in debug mode
             available = load_discoverable_weapons()
