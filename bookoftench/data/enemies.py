@@ -1,15 +1,36 @@
 from bookoftench.ui import Colors
-from . import audio, weapons
+from . import audio, weapons as w
 
-# Constants
+
+# Areas
+CAVE = "Cave"
+CITY = "City"
+FOREST = "Forest"
+SWAMP = "Swamp"
+
+# Names
 ANCIENT_MAN = "Ancient Man"
+ARCHAEOLOGIST = "Archaeologist"
 BAYOU_BILL = "Bayou Bill"
 BAYOU_MAN = "Bayou Man"
 BIGFOOT_IMPERSONATOR = "Bigfoot Impersonator"
+BIRDER = "Birder"
 BODY_BUILDER = "Body Builder"
+BONE_COLLECTOR = "Bone Collector"
 CAPTAIN_HOLE = "Captain Hole"
+CARD_JOCKEY = "Card Jockey"
+CLONE = "Clone"
+CLOWN = "Clown"
 DENNY_BILTMORE = "Denny Biltmore"
 DISGRACED_EXILE = "Disgraced Exile"
+DOOMSDAY_PREPPER = "Doomsday Prepper"
+EXPLORER = "Explorer"
+FERAL_PHILOSOPHER = "Feral Philosopher"
+FORAGER = "Forager"
+FORTUNE_TELLER = "Fortune Teller"
+FROGGER = "Frogger"
+FUGITIVE = "Fugitive"
+GATOR_WRESTLER = "Gator Wrestler"
 GOON = "Goon"
 GRAVE_ROBBER = "Grave Robber"
 HAND_FISHERMAN = "Hand Fisherman"
@@ -17,16 +38,31 @@ HIKER = "Hiker"
 HOBO = "Hobo"
 HUMANOID_CAVE_CREATURE = "Humanoid Cave Creature"
 HUNTER = "Hunter"
+INFLUENCER = "Influencer"
+LIFE_COACH = "Life Coach"
+MASCOT = "Mascot"
+MIME = "Mime"
 MINER = "Miner"
 MOLE_PERSON = "Mole Person"
+MOONSHINER = "Moonshiner"
+MUSHROOM_HUNTER = "Mushroom Hunter"
 PARK_RANGER = "Park Ranger"
+PARTY_ANIMAL = "Party Animal"
 PIMP = "Pimp"
 POACHER = "Poacher"
+PROSPECTOR = "Prospector"
 SERIAL_KILLER = "Serial Killer"
+SENTIENT_ROBOT = "Sentient Robot"
 SKIN_COLLECTOR = "Skin Collector"
 SLEDGE_HAMMOND = "Sledge Hammond"
+SLEEPWALKER = "Sleepwalker"
+SMUGGLER = "Smuggler"
 SPELUNKER = "Spelunker"
+SURVIVALIST = "Survivalist"
+SURVIVOR = "Survivor"
 THE_MAYOR = "The Mayor"
+TELEPATHIC_MUTE = "Telepathic Mute"
+TRACKER = "Tracker"
 THIEF = "Thief"
 VOODOO_PRIESTESS = "Voodoo Priestess"
 
@@ -39,72 +75,98 @@ Enemies = [
     # ========================
     #        CITY ENEMIES
     # ========================
-    {'name': HOBO, 'hp': 80, 'weapons': [weapons.BROKEN_BOTTLE, weapons.KNIFE, weapons.POCKET_SAND],
-     'bounty': 50, 'type': NORMAL},
-    {'name': THIEF, 'hp': 90, 'weapons': [weapons.KNIFE, weapons.BAT], 'bounty': 75, 'type': NORMAL},
-    {'name': GOON, 'hp': 100, 'weapons': [weapons.CHILI_POWDER, weapons.BAT, weapons.PISTOL],
-     'bounty': 100, 'type': NORMAL},
-    {'name': PIMP, 'hp': 110,
-     'weapons': [weapons.PEPPER_SPRAY, weapons.BRASS_KNUCKLES, weapons.REVOLVER], 'bounty': 125, 'type': NORMAL},
-    {'name': BODY_BUILDER, 'hp': 125,
-     'weapons': [weapons.BAT, weapons.BRASS_KNUCKLES], 'bounty': 125, 'type': NORMAL},
+    # --- new ---
+    {'name': CARD_JOCKEY, 'hp': 85, 'w': [], 'bounty': 80, 'type': NORMAL, 'areas': [CITY]},
+    {'name': CLONE, 'hp': 100, 'w': [], 'bounty': 105, 'type': NORMAL, 'areas': [CITY]},
+    {'name': CLOWN, 'hp': 95, 'w': [], 'bounty': 85, 'type': NORMAL, 'areas': [CITY]},
+    {'name': FROGGER, 'hp': 90, 'w': [], 'bounty': 85, 'type': NORMAL, 'areas': [CITY]},
+    {'name': INFLUENCER, 'hp': 75, 'w': [], 'bounty': 35, 'type': NORMAL, 'areas': [CITY]},
+    {'name': LIFE_COACH, 'hp': 85, 'w': [], 'bounty': 45, 'type': NORMAL, 'areas': [CITY]},
+    {'name': MASCOT, 'hp': 95, 'w': [], 'bounty': 55, 'type': NORMAL, 'areas': [CITY]},
+    {'name': MIME, 'hp': 105, 'w': [], 'bounty': 65, 'type': NORMAL, 'areas': [CITY]},
+    {'name': PARTY_ANIMAL, 'hp': 105, 'w': [], 'bounty': 95, 'type': NORMAL, 'areas': [CITY]},
+    {'name': SENTIENT_ROBOT, 'hp': 115, 'w': [], 'bounty': 105, 'type': NORMAL, 'areas': [CITY]},
+    {'name': SLEEPWALKER, 'hp': 95, 'w': [], 'bounty': 75, 'type': NORMAL, 'areas': [CITY]},
+
+    # --- original ---
+    {'name': BODY_BUILDER, 'hp': 125, 'w': [w.BAT, w.BRASS_KNUCKLES], 'bounty': 125, 'type': NORMAL, 'areas': [CITY]},
+    {'name': GOON, 'hp': 105, 'w': [w.CHILI_POWDER, w.BAT, w.PISTOL], 'bounty': 100, 'type': NORMAL, 'areas': [CITY]},
+    {'name': HOBO, 'hp': 85, 'w': [w.BROKEN_BOTTLE, w.KNIFE, w.POCKET_SAND], 'bounty': 50, 'type': NORMAL, 'areas': [CITY]},
+    {'name': PIMP, 'hp': 95, 'w': [w.PEPPER_SPRAY, w.BRASS_KNUCKLES, w.REVOLVER], 'bounty': 125, 'type': NORMAL, 'areas': [CITY]},
+    {'name': SERIAL_KILLER, 'hp': 120, 'w': [w.KNIFE, w.MACHETE], 'bounty': 200, 'type': NORMAL, 'areas': [CITY]},
+    {'name': THIEF, 'hp': 85, 'w': [w.KNIFE, w.BAT], 'bounty': 75, 'type': NORMAL, 'areas': [CITY]},
 
     # ========================
     #       FOREST ENEMIES
     # ========================
-    {'name': HIKER, 'hp': 80, 'weapons': [weapons.HATCHET, weapons.KNIFE, weapons.BEAR_SPRAY],
-     'bounty': 50, 'type': NORMAL},
-    {'name': HUNTER, 'hp': 90, 'weapons': [weapons.KNIFE, weapons.RIFLE, weapons.BEAR_SPRAY],
-     'bounty': 75, 'type': NORMAL},
-    {'name': PARK_RANGER, 'hp': 95, 'weapons': [weapons.MACHETE, weapons.KNIFE, weapons.BEAR_SPRAY],
-     'bounty': 85, 'type': NORMAL},
-    {'name': POACHER, 'hp': 100, 'weapons': [weapons.CROSSBOW, weapons.MACHETE, weapons.BEAR_SPRAY],
-     'bounty': 100, 'type': NORMAL},
-    {'name': BIGFOOT_IMPERSONATOR, 'hp': 110, 'weapons': [weapons.PISTOL, weapons.CLAWS, weapons.BEAR_SPRAY],
-     'bounty': 125, 'type': NORMAL},
+    # --- new ---
+    {'name': BIRDER, 'hp': 75, 'w': [], 'bounty': 40, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': DOOMSDAY_PREPPER, 'hp': 90, 'w': [], 'bounty': 60, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': FERAL_PHILOSOPHER, 'hp': 85, 'w': [], 'bounty': 65, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': FORAGER, 'hp': 90, 'w': [], 'bounty': 45, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': MUSHROOM_HUNTER, 'hp': 100, 'w': [], 'bounty': 75, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': SURVIVALIST, 'hp': 100, 'w': [], 'bounty': 55, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': TELEPATHIC_MUTE, 'hp': 90, 'w': [], 'bounty': 75, 'type': NORMAL, 'areas': [FOREST]},
+
+    # --- original ---
+    {'name': BIGFOOT_IMPERSONATOR, 'hp': 115, 'w': [w.PISTOL, w.CLAWS, w.BEAR_SPRAY], 'bounty': 125, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': DISGRACED_EXILE, 'hp': 80, 'w': [w.HATCHET, w.SHOVEL], 'bounty': 75, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': HIKER, 'hp': 90, 'w': [w.HATCHET, w.KNIFE, w.BEAR_SPRAY], 'bounty': 50, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': HUNTER, 'hp': 100, 'w': [w.KNIFE, w.RIFLE, w.BEAR_SPRAY], 'bounty': 75, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': PARK_RANGER, 'hp': 100, 'w': [w.MACHETE, w.KNIFE, w.BEAR_SPRAY], 'bounty': 85, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': POACHER, 'hp': 100, 'w': [w.CROSSBOW, w.MACHETE, w.BEAR_SPRAY], 'bounty': 100, 'type': NORMAL, 'areas': [FOREST]},
 
     # ========================
     #        CAVE ENEMIES
     # ========================
-    {'name': MINER, 'hp': 80, 'weapons': [weapons.PICKAXE, weapons.KNIFE], 'bounty': 50, 'type': NORMAL},
-    {'name': SPELUNKER, 'hp': 90, 'weapons': [weapons.PICKAXE, weapons.KNIFE], 'bounty': 75, 'type': NORMAL},
-    {'name': ANCIENT_MAN, 'hp': 95, 'weapons': [weapons.HARPOON, weapons.KNIFE], 'bounty': 85, 'type': NORMAL},
-    {'name': MOLE_PERSON, 'hp': 100, 'weapons': [weapons.CLAWS, weapons.PICKAXE], 'bounty': 100, 'type': NORMAL},
-    {'name': HUMANOID_CAVE_CREATURE, 'hp': 110, 'weapons': [weapons.CLAWS, weapons.SLEDGEHAMMER],
-     'bounty': 125, 'type': NORMAL},
+    # --- new ---
+    {'name': ARCHAEOLOGIST, 'hp': 80, 'w': [], 'bounty': 25, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': EXPLORER, 'hp': 100, 'w': [], 'bounty': 65, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': FUGITIVE, 'hp': 90, 'w': [], 'bounty': 125, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': PROSPECTOR, 'hp': 80, 'w': [], 'bounty': 45, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': SURVIVOR, 'hp': 100, 'w': [], 'bounty': 35, 'type': NORMAL, 'areas': [CAVE]},
+
+    # --- original ---
+    {'name': ANCIENT_MAN, 'hp': 80, 'w': [w.HARPOON, w.KNIFE], 'bounty': 85, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': HUMANOID_CAVE_CREATURE, 'hp': 110, 'w': [w.CLAWS, w.SLEDGEHAMMER], 'bounty': 125, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': MINER, 'hp': 80, 'w': [w.PICKAXE, w.KNIFE], 'bounty': 50, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': MOLE_PERSON, 'hp': 105, 'w': [w.CLAWS, w.PICKAXE], 'bounty': 100, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': SPELUNKER, 'hp': 85, 'w': [w.PICKAXE, w.KNIFE], 'bounty': 75, 'type': NORMAL, 'areas': [CAVE]},
 
     # ========================
     #        SWAMP ENEMIES
     # ========================
-    {'name': HAND_FISHERMAN, 'hp': 80, 'weapons': [weapons.HATCHET, weapons.KNIFE], 'bounty': 50, 'type': NORMAL},
-    {'name': VOODOO_PRIESTESS, 'hp': 90,
-     'weapons': [weapons.VOODOO_STAFF, weapons.KNIFE, weapons.CHILI_POWDER], 'bounty': 75, 'type': NORMAL},
-    {'name': GRAVE_ROBBER, 'hp': 95,
-     'weapons': [weapons.SHOVEL, weapons.KNIFE, weapons.POCKET_SAND], 'bounty': 85, 'type': NORMAL},
-    {'name': BAYOU_MAN, 'hp': 100, 'weapons': [weapons.MACHETE, weapons.SHOTGUN], 'bounty': 100, 'type': NORMAL},
-    {'name': SKIN_COLLECTOR, 'hp': 110, 'weapons': [weapons.MACHETE, weapons.CHAINSAW], 'bounty': 125, 'type': NORMAL},
+    # --- new ---
+    {'name': BONE_COLLECTOR, 'hp': 110, 'w': [], 'bounty': 125, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': FORTUNE_TELLER, 'hp': 80, 'w': [], 'bounty': 35, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': GATOR_WRESTLER, 'hp': 110, 'w': [], 'bounty': 75, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': MOONSHINER, 'hp': 80, 'w': [], 'bounty': 95, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': SMUGGLER, 'hp': 85, 'w': [], 'bounty': 105, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': TRACKER, 'hp': 90, 'w': [], 'bounty': 45, 'type': NORMAL, 'areas': [SWAMP]},
 
-    # ========================
-    #        MULTI-LOCATION ENEMIES
-    # ========================
-    {'name': SERIAL_KILLER, 'hp': 120, 'weapons': [weapons.KNIFE, weapons.MACHETE], 'bounty': 200, 'type': NORMAL},
-    {'name': DISGRACED_EXILE, 'hp': 90, 'weapons': [weapons.HATCHET, weapons.SHOVEL], 'bounty': 75, 'type': NORMAL},
+    # --- original ---
+    {'name': BAYOU_MAN, 'hp': 105, 'w': [w.MACHETE, w.SHOTGUN], 'bounty': 100, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': GRAVE_ROBBER, 'hp': 95, 'w': [w.SHOVEL, w.KNIFE, w.POCKET_SAND], 'bounty': 85, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': HAND_FISHERMAN, 'hp': 90, 'w': [w.HATCHET, w.KNIFE], 'bounty': 50, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': SKIN_COLLECTOR, 'hp': 110, 'w': [w.MACHETE, w.CHAINSAW], 'bounty': 125, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': VOODOO_PRIESTESS, 'hp': 80, 'w': [w.VOODOO_STAFF, w.KNIFE, w.CHILI_POWDER], 'bounty': 75, 'type': NORMAL, 'areas': [SWAMP]},
 ]
+
 
 Bosses = [
     # ========================
     #        AREA BOSSES
     # ========================
     {'name': SLEDGE_HAMMOND, 'hp': 250,
-     'weapons': [weapons.SLEDGEHAMMER, weapons.AXE, weapons.CHAINSAW, weapons.BRASS_KNUCKLES],
+     'w': [w.SLEDGEHAMMER, w.AXE, w.CHAINSAW, w.BRASS_KNUCKLES],
      'bounty': 0, 'type': BOSS, 'preamble': {}},
 
     {'name': THE_MAYOR, 'hp': 200,
-     'weapons': [weapons.PISTOL, weapons.SHOTGUN, weapons.REVOLVER, weapons.BRASS_KNUCKLES],
+     'w': [w.PISTOL, w.SHOTGUN, w.REVOLVER, w.BRASS_KNUCKLES],
      'bounty': 0, 'type': BOSS, 'theme': audio.FINAL_BOSS_THEME},
 
     {'name': BAYOU_BILL, 'hp': 200,
-     'weapons': [weapons.MACHETE, weapons.SLEDGEHAMMER, weapons.SHOTGUN, weapons.CHAINSAW],
+     'w': [w.MACHETE, w.SLEDGEHAMMER, w.SHOTGUN, w.CHAINSAW],
      'bounty': 0, 'type': BOSS,
      'preamble': [
          {'text': "What do we have here?", 'color': Colors.RED, 'sleep': 2},
@@ -129,7 +191,7 @@ Bosses = [
      ]},
 
     {'name': CAPTAIN_HOLE, 'hp': 220,
-     'weapons': [weapons.RIFLE, weapons.HARPOON, weapons.KNIFE, weapons.PISTOL],
+     'w': [w.RIFLE, w.HARPOON, w.KNIFE, w.PISTOL],
      'bounty': 0, 'type': BOSS, 'preamble': [
         {'text': "Captain Hole has offered to shoot himself in the jines in exchange for your Tench Filet",
          'sleep': 4}
@@ -150,7 +212,7 @@ Denny Biltmore stands before you...
 "Well, let's have at it then.\""""
 Final_Boss = {
     'name': DENNY_BILTMORE,
-    'hp': 275, 'weapons': [weapons.BRASS_KNUCKLES, weapons.PISTOL, weapons.REVOLVER, weapons.SHOTGUN],
+    'hp': 275, 'w': [w.BRASS_KNUCKLES, w.PISTOL, w.REVOLVER, w.SHOTGUN],
     'bounty': 0, 'type': FINAL_BOSS, 'preamble': [{'text': text, 'color': Colors.RED, 'sleep': 4}
                                                   for text in _biltmore_preamble_lines.split('\n')],
     'random_dialogue': [{
@@ -171,120 +233,219 @@ Final_Boss = {
 
 
 Enemy_Lines = {
-    PARK_RANGER: ["If you see Bigfoot, don't be alarmed. It's just a deranged man in a furry suit.",
-                  "There are frequent crash landings here. We harvest and sell the remains to the local shop.",
-                  "Have you seen any Mystical Mushrooms? I'm going to a music festival this weekend.",
-                  "The man who owns the government paid me to take you out. Sorry mate.",
-                  "You're from Shebokken? I made the best love of my life in Shebokken.", ],
-    ANCIENT_MAN: ["The Hindustan Times underestimated my age by a few thousand years.",
-                  "Is Hammurabi still in power?",
-                  "I've never left this cave for fear of falling off the edge of the Earth.",
-                  "Plato autographed my favorite rock. It's somewhere in my rockpile.",
-                  "I know how the Pyramids were built. I was there.",
-                  "My liberation is imminent, but yours is... what's more imminent than imminent?",
-                  "A rich man hired me to kill you. While I don't need money, I do need blood to drink."],
-    BODY_BUILDER: ["Some sculpt marble, some sculpt clay. I sculpt my body.",
-                   "Don't call me beefcake. I'm 100% beef.",
-                   "I can bench a million, easy.",
-                   "Body oil is worth its weight in gold. Well, it should be."
-                   "My neighbor, Gary, is a hell of a speller. Pecs need work though."
-                   "Everything I need comes in an unlabeled bottle."
-                   "I'm more concerned about gains than I am about shrinkage.",
-                   "The guy who hired me was rich, but I totally could've kicked his ass."],
-    GRAVE_ROBBER: ["The skeletons don't need jewelry.",
-                   "They'll be turned into rent soon anyway.",
-                   "A well-dressed man gave me coin to bury you, dead or alive.",
-                   "When I'm dead, I hope someone robs my grave. I also hope I'm a zombie when he does.",
-                   "One time I fell asleep in a grave I robbed and woke up under a pile of dirt.",
-                   "Zombies are real. Trust me, I would know."],
-    THIEF: ["Give me all of your coin, or else!",
-            "I stole coin from an old lady today... or was that yesterday? Probably both.",
-            "I live to steal and steal to live... or maybe I just steal to steal?",
-            "I need coin to go out West, so I can steal coin out West.",
-            "An old, rich guy paid me coin to take you out. Who knew you could get coin without stealing?"],
-    GOON: ["I'll do anything for coin, as long as it's violent.",
-           "Without my sunglasses, I'm nothing...",
-           "I often call Michelob Chounce for legal support on account of my violent lifestyle.",
-           "School's for suckers and chumps. Why learn when I can beat people up?",
-           "Guy with slicked hair gave me coin to beat the stink out of you and then some."],
-    PIMP: ["I love my hoes.",
-           "If you die, I will give your coin to my hoes.",
-           "Hoes or not, I sure do love them.",
-           "I'm nothing without my hoes.",
-           "Fly guy tossed me coin to toss you out. Couldn't say no, it's the middle of dry season."],
-    HOBO: ["Give me those coins or I'll cut off your loins!",
-           "I ate a rapper yesterday. No 'w'.",
-           "People don't give me coin unless I kill them.",
-           "You know how much Mystery Meat I can buy with just a small amount of coin?",
-           "Guy says to me, he says to take you out. Gives me coin. What, I'm gonna say no?"],
-    SERIAL_KILLER: ["If God taketh, but I take your life... am I not, then, God?",
-                    "God can do a lot, but he can't do the things I can do to you.",
-                    "I get a lot of hand-penned letters from the mayor.",
-                    "How do I know you?",
-                    "A rich man gave me coin to add you to my list."],
-    HIKER: ["I'm alone in the woods, so you must be a murderer. I've seen movies!",
-            "Are chipmunks dangerous? I figure if there's enough of them they could take me out...",
-            "All mushrooms are safe to eat, right?",
-            "I thought I heard a bear, but it was just a leaf blowing in the wind.",
-            "I need money if I'm gonna keep trekking, so I took a payment to take your life... or whatever."],
-    DISGRACED_EXILE: ["You know, life was actually worse before I was exiled.",
-                      "If the town understood why I tried to burn it down, maybe they wouldn't have exiled me.",
-                      "They didn't exile me - I exiled them... from myself.",
-                      "I'm mostly lonely - except when the feral lads come by. Then I'm lonely and terrified.",
-                      "There's another exile out here who's not disgraced, but revered. We couldn't be more different.",
-                      "The life of an exile isn't cheap. Well, it is, actually."],
-    HUNTER: ["Why hang out with girls when I can be out here in the cold hunting by myself?",
-             "Once I got bored of hunting animals, I started hunting people instead. You know, just for fun.",
-             "I hang animals on my wall and my wife hates them all.",
-             "He said he'd pay me to hunt a man. Getting paid... to hunt a man? Hells yeah!"],
-    POACHER: ["Protected species? More like I'm going to put its head on my wall, species.",
-              "Tusks are sharp, but I'm the sharpest.",
-              "People pay me coin to kill illegal stuff. So what? Sue me! Well, don't do that, actually.",
-              "Normally, I pay for killing. This time, however, I was the one who was paid. Let's do this."],
-    MINER: ["I thought I found some coal a month ago... turns out poop looks a lot like coal in the pitch dark.",
-            "I nearly had a heart attack when I heard a man talking in the mine. Turns out it was just me, talking to myself.",
-            "All of my friends worked in these mines. They're all dead now. Maybe I should get a different job?",
-            "There was a bloody envelope full of cash and your picture in my mining helmet when I'd come to."],
-    SPELUNKER: ["I haven't found anything, but my mom always says I'm the real treasure."
-                "I got into this because of a video game... and now I'm in one! Oh my god... how do I go back!?",
-                "People think spelunking is just playing around in dark, wet holes.",
-                "A man paid me to kill you. I asked my mom if it's okay. She nodded absently while reading The Shebokken Times!"],
-    MOLE_PERSON: ["fircnosdnvkclgnsdksnlfdkdfmkmcyufgkuyfk",
-                  "orihgeoiwsifdjnwsietnvirodbrgnioevndoirnguyf",
-                  "ihfedkjnefdnefidnifnidnuygfkuyfv",
-                  "ioefhdfeiodnsjkgnfdkjneidsngilrjdlighjdlisfngfdi"],
-    HUMANOID_CAVE_CREATURE: ["God may be merciful... loving... but I am not God. I am not God.",
-                             "You think you are holy... but you are not holy. Do you even live in a hole?",
-                             "I am one with God, because I am God. You are not God... you are not God."
-                             "Man pays. God accepts. Man pays."],
+
+    # ===== CITY (existing + new empty) =====
+    CARD_JOCKEY: [],
+    CLONE: [],
+    CLOWN: [],
+    FROGGER: [],
+    INFLUENCER: [],
+    LIFE_COACH: [],
+    MASCOT: [],
+    MIME: [],
+    PARTY_ANIMAL: [],
+    SENTIENT_ROBOT: [],
+    SLEEPWALKER: [],
+
+    BODY_BUILDER: [
+        "Body oil is worth its weight in gold. Well, it should be."
+        "Everything I need comes in an unlabeled bottle."
+        "I can bench a million, easy.",
+        "I'm more concerned about gains than I am about shrinkage.",
+        "My neighbor, Gary, is a hell of a speller. Pecs need work though."
+        "Some sculpt marble. Others sculpt clay. I sculpt my body.",
+        "The guy who hired me was rich, but I totally could've kicked his ass.",
+        "Don't call me beefcake. I'm 100% beef.",
+    ],
+
+    GOON: [
+        "Guy with slicked hair gave me coin to beat the stink out of you and then some.",
+        "I'll do anything for coin, as long as it's violent.",
+        "I often call Michelob Chounce for legal support on account of my violent lifestyle.",
+        "School's for suckers and chumps. Why learn when I can beat people up?",
+        "Without my sunglasses, I'm nothing...",
+    ],
+
+    HOBO: [
+        "Give me those coins or I'll cut off your loins!",
+        "Guy says to me, he says to take you out. Gives me coin. What, I'm gonna say no?",
+        "I ate a rapper yesterday. No 'w'.",
+        "People don't give me coin unless I kill them.",
+        "You know how much Mystery Meat I can buy with just a small amount of coin?",
+    ],
+
+    PIMP: [
+        "Fly guy tossed me coin to toss you out. Couldn't say no, it's the middle of dry season.",
+        "Hoes or not, I sure do love them.",
+        "I love my hoes.",
+        "If you die, I will give your coin to my hoes.",
+        "I'm nothing without my hoes.",
+    ],
+
+    SERIAL_KILLER: [
+        "A rich man gave me coin to add you to my list.",
+        "God can do a lot, but he can't do the things I can do to you.",
+        "How do I know you?",
+        "I get a lot of hand-penned letters from the mayor.",
+        "If God taketh, but I take your life... am I not, then, God?",
+    ],
+
+    THIEF: [
+        "An old, rich guy paid me coin to take you out. Who knew you could get coin without stealing?",
+        "Give me all of your coin, or else!",
+        "I live to steal and steal to live... or maybe I just steal to steal?",
+        "I need coin to go out West, so I can steal coin out West.",
+        "I stole coin from an old lady today... or was that yesterday? Probably both.",
+    ],
+
+    # ===== FOREST =====
+    BIRDER: [],
+    DOOMSDAY_PREPPER: [],
+    FERAL_PHILOSOPHER: [],
+    FORAGER: [],
+    MUSHROOM_HUNTER: [],
+    SURVIVALIST: [],
+    TELEPATHIC_MUTE: [],
+
+    PARK_RANGER: [
+        "Have you seen any Mystical Mushrooms? I'm going to a music festival this weekend.",
+        "If you see Bigfoot, don't be alarmed. It's just a deranged man in a furry suit.",
+        "The man who owns the government paid me to take you out. Sorry mate.",
+        "There are frequent crash landings here. We harvest and sell the remains to the local shop.",
+        "You're from Shebokken? I made the best love of my life in Shebokken.",
+    ],
+
+    DISGRACED_EXILE: [
+        "If the town understood why I tried to burn it down, maybe they wouldn't have exiled me.",
+        "I'm mostly lonely - except when the feral lads come by. Then I'm lonely and terrified.",
+        "The life of an exile isn't cheap. Well, it is, actually.",
+        "There's another exile out here who's not disgraced, but revered. We couldn't be more different.",
+        "They didn't exile me - I exiled them... from myself.",
+        "You know, life was actually worse before I was exiled.",
+    ],
+
+    HIKER: [
+        "All mushrooms are safe to eat, right?",
+        "Are chipmunks dangerous? I figure if there's enough of them they could take me out...",
+        "I need money if I'm gonna keep trekking, so I took a payment to take your life... or whatever.",
+        "I thought I heard a bear, but it was just a leaf blowing in the wind.",
+        "I'm alone in the woods, so you must be a murderer. I've seen movies!",
+    ],
+
+    HUNTER: [
+        "He said he'd pay me to hunt a man. Getting paid... to hunt a man? Hells yeah!",
+        "I hang animals on my wall and my wife hates them all.",
+        "Once I got bored of hunting animals, I started hunting people instead. You know, just for fun.",
+        "Why hang out with girls when I can be out here in the cold hunting by myself?",
+    ],
+
+    POACHER: [
+        "Normally, I pay for killing. This time, however, I was the one who was paid. Let's do this.",
+        "People pay me coin to kill illegal stuff. So what? Sue me! Well, don't do that, actually.",
+        "Protected species? More like I'm going to put its head on my wall, species.",
+        "Tusks are sharp, but I'm the sharpest.",
+    ],
+
+    # ===== CAVE =====
+    ARCHAEOLOGIST: [],
+    EXPLORER: [],
+    FUGITIVE: [],
+    PROSPECTOR: [],
+    SURVIVOR: [],
+
+    ANCIENT_MAN: [
+        "A rich man hired me to kill you. While I don't need money, I do need blood to drink.",
+        "I know how the Pyramids were built. I was there.",
+        "I've never left this cave for fear of falling off the edge of the Earth.",
+        "Is Hammurabi still in power?",
+        "My liberation is imminent, but yours is... what's more imminent than imminent?",
+        "Plato autographed my favorite rock. It's somewhere in my rockpile.",
+        "The Hindustan Times underestimated my age by a few thousand years.",
+    ],
+
+    MINER: [
+        "All of my friends worked in these mines. They're all dead now. Maybe I should get a different job?",
+        "I nearly had a heart attack when I heard a man talking in the mine. Turns out it was just me, talking to myself.",
+        "I thought I found some coal a month ago... turns out poop looks a lot like coal in the pitch dark.",
+        "There was a bloody envelope full of cash and your picture in my mining helmet when I'd come to.",
+    ],
+
+    SPELUNKER: [
+        "A man paid me to kill you. I asked my mom if it's okay. She nodded absently while reading The Shebokken Times!",
+        "I got into this because of a video game... and now I'm in one! Oh my god... how do I go back!?",
+        "I haven't found anything, but my mom always says I'm the real treasure."
+        "People think spelunking is just playing around in dark, wet holes.",
+    ],
+
+    MOLE_PERSON: [
+        "fircnosdnvkclgnsdksnlfdkdfmkmcyufgkuyfk",
+        "ihfedkjnefdnefidnifnidnuygfkuyfv",
+        "ioefhdfeiodnsjkgnfdkjneidsngilrjdlighjdlisfngfdi",
+        "orihgeoiwsifdjnwsietnvirodbrgnioevndoirnguyf",
+    ],
+
+    HUMANOID_CAVE_CREATURE: [
+        "God may be merciful... loving... but I am not God. I am not God.",
+        "I am one with God, because I am God. You are not God... you are not God."
+        "Man pays. God accepts. Man pays.",
+        "You think you are holy... but you are not holy. Do you even live in a hole?",
+    ],
+
+    # ===== SWAMP =====
+    BONE_COLLECTOR: [],
+    FORTUNE_TELLER: [],
+    GATOR_WRESTLER: [],
+    MOONSHINER: [],
+    SMUGGLER: [],
+    TRACKER: [],
+
+    BAYOU_MAN: [
+        "I'd hate to see you get cold out here on the bayou.",
+        "Riverboat, Crawdad, Alligator Gumbo!",
+        "When you livin' in the swamp ain't nobody come 'round.",
+        "Without some fresh feed it's easy for a boy to come up cold out here on the bayou.",
+    ],
+
+    GRAVE_ROBBER: [
+        "A well-dressed man gave me coin to bury you, dead or alive.",
+        "One time I fell asleep in a grave I robbed and woke up under a pile of dirt.",
+        "The skeletons don't need jewelry.",
+        "They'll be turned into rent soon anyway.",
+        "When I'm dead, I hope someone robs my grave. I also hope I'm a zombie when he does.",
+        "Zombies are real. Trust me, I would know.",
+    ],
+
     HAND_FISHERMAN: [
-        "If you count your hand as a catch, you catch something every time! Unless a catfish bites it off...",
+        "He pulled me out of a catfish's mouth. How could I turn down his request? Sorry, bud!",
         "I'd use a pole but the fish are just way too big. They ate my first three born.",
+        "If you count your hand as a catch, you catch something every time! Unless a catfish bites it off...",
         "Once, I pulled a man out of a hole - but, to his dismay, I put him back, because I wasn't fishing for men that day.",
-        "He pulled me out of a catfish's mouth. How could I turn down his request? Sorry, bud!"],
+    ],
+
+    SKIN_COLLECTOR: [
+        "He said that if I do it I can keep the skin...",
+        "I don't just collect skins... I collect souls too. Oh, and baseball cards.",
+        "Where did you get your skin? It's so... fresh.",
+        "You have to lotion your skins before they run dry.",
+        "Your skin looks very comfortable. May I try it on?",
+    ],
+
     VOODOO_PRIESTESS: [
-        "I will shrink your head, then raise the dead, then shrink their heads, 'cause I love shrinkin' heads.",
-        "I can tell you your future... It's very dark. Soon, you will see what I mean.",
         "Does it drive you crazy when I shake my stick?",
-        "Once your head is mine, I will be able to afford a new case to display all of my shrunken heads."],
-    BAYOU_MAN: ["When you livin' in the swamp ain't nobody come 'round.",
-                "Without some fresh feed it's easy for a boy to come up cold out here on the bayou.",
-                "Riverboat, Crawdad, Alligator Gumbo!",
-                "I'd hate to see you get cold out here on the bayou."],
-    SKIN_COLLECTOR: ["I don't just collect skins... I collect souls too. Oh, and baseball cards.",
-                     "Your skin looks very comfortable. May I try it on?",
-                     "Where did you get your skin? It's so... fresh.",
-                     "You have to lotion your skins before they run dry.",
-                     "He said that if I do it I can keep the skin..."]
+        "I can tell you your future... It's very dark. Soon, you will see what I mean.",
+        "I will shrink your head, then raise the dead, then shrink their heads, 'cause I love shrinkin' heads.",
+        "Once your head is mine, I will be able to afford a new case to display all of my shrunken heads.",
+    ],
 }
+
 
 # ========================
 #        ENEMY ADJECTIVES
 # ========================
 
 Enemy_Adjectives = [
-    "Agitated", "Bestial", "Bloodthirsty", "Cannibalistic", "Crazed",
-    "Cursed", "Damned", "Dastardly", "Degenerate",
+    "Agitated", "Bestial", "Bloodthirsty", "Cannibalistic", "Crazy",
+    "Crazed", "Cursed", "Damned", "Dastardly", "Degenerate",
     "Delirious", "Demented", "Depraved", "Deranged", "Detestable",
     "Diabolical", "Disgruntled", "Disillusioned",
     "Disoriented", "Disturbed", "Drug-fueled",
