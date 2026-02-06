@@ -1,9 +1,13 @@
 import bookoftench.data.audio as audio
-from bookoftench.data.areas import CAVE, CITY, FOREST, SWAMP
 
 # --------- #
 # Constants #
 # --------- #
+
+CAVE = "Cave"
+CITY = "City"
+FOREST = "Forest"
+SWAMP = "Swamp"
 
 # Names
 AXE = "Axe"

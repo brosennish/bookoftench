@@ -10,7 +10,6 @@ from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE
 from bookoftench.data.enemies import SLEDGE_HAMMOND
-from bookoftench.model.area import Area
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
 from bookoftench.ui import red, yellow, color_text, purple, cyan, dim
 from bookoftench.util import print_and_sleep
@@ -20,9 +19,8 @@ from bookoftench.util import print_and_sleep
 class Buyable:
     name: str
     cost: int
-    _original_cost: int = field(init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self._original_cost = self.cost
 
     @property
@@ -45,7 +43,7 @@ class WeaponBase(ABC):
     crit: float
     sound: str
     type: str
-    areas: List[str] | None
+    areas: list[str] | None = None
 
     def calculate_base_damage(self) -> int:
         base = self.damage + random.randint(-self.spread, self.spread)  # Base damage +/- 10
