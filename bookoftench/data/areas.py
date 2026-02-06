@@ -1,6 +1,7 @@
 from enum import Enum
 
-from . import audio, enemies, Enemies
+from . import audio, enemies
+from bookoftench.data.enemies import Enemies
 from .components import ActionMenuDefaults, COFFEE_SHOP, HOSPITAL, OFFICER, OCCULTIST, SHAMAN, WIZARD
 
 # Constants

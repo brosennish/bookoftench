@@ -76,17 +76,17 @@ Enemies = [
     #        CITY ENEMIES
     # ========================
     # --- new ---
-    {'name': CARD_JOCKEY, 'hp': 85, 'weapons': [], 'bounty': 80, 'type': NORMAL, 'areas': [CITY]},
-    {'name': CLONE, 'hp': 100, 'weapons': [], 'bounty': 105, 'type': NORMAL, 'areas': [CITY]},
-    {'name': CLOWN, 'hp': 95, 'weapons': [], 'bounty': 85, 'type': NORMAL, 'areas': [CITY]},
-    {'name': FROGGER, 'hp': 90, 'weapons': [], 'bounty': 85, 'type': NORMAL, 'areas': [CITY]},
-    {'name': INFLUENCER, 'hp': 75, 'weapons': [], 'bounty': 35, 'type': NORMAL, 'areas': [CITY]},
-    {'name': LIFE_COACH, 'hp': 85, 'weapons': [], 'bounty': 45, 'type': NORMAL, 'areas': [CITY]},
-    {'name': MASCOT, 'hp': 95, 'weapons': [], 'bounty': 55, 'type': NORMAL, 'areas': [CITY]},
-    {'name': MIME, 'hp': 105, 'weapons': [], 'bounty': 65, 'type': NORMAL, 'areas': [CITY]},
-    {'name': PARTY_ANIMAL, 'hp': 105, 'weapons': [], 'bounty': 95, 'type': NORMAL, 'areas': [CITY]},
-    {'name': SENTIENT_ROBOT, 'hp': 115, 'weapons': [], 'bounty': 105, 'type': NORMAL, 'areas': [CITY]},
-    {'name': SLEEPWALKER, 'hp': 95, 'weapons': [], 'bounty': 75, 'type': NORMAL, 'areas': [CITY]},
+    {'name': CARD_JOCKEY, 'hp': 85, 'weapons': [w.KNIFE], 'bounty': 80, 'type': NORMAL, 'areas': [CITY]},
+    {'name': CLONE, 'hp': 100, 'weapons': [w.KNIFE], 'bounty': 105, 'type': NORMAL, 'areas': [CITY]},
+    {'name': CLOWN, 'hp': 95, 'weapons': [w.KNIFE], 'bounty': 85, 'type': NORMAL, 'areas': [CITY]},
+    {'name': FROGGER, 'hp': 90, 'weapons': [w.KNIFE], 'bounty': 85, 'type': NORMAL, 'areas': [CITY]},
+    {'name': INFLUENCER, 'hp': 75, 'weapons': [w.KNIFE], 'bounty': 35, 'type': NORMAL, 'areas': [CITY]},
+    {'name': LIFE_COACH, 'hp': 85, 'weapons': [w.KNIFE], 'bounty': 45, 'type': NORMAL, 'areas': [CITY]},
+    {'name': MASCOT, 'hp': 95, 'weapons': [w.KNIFE], 'bounty': 55, 'type': NORMAL, 'areas': [CITY]},
+    {'name': MIME, 'hp': 105, 'weapons': [w.KNIFE], 'bounty': 65, 'type': NORMAL, 'areas': [CITY]},
+    {'name': PARTY_ANIMAL, 'hp': 105, 'weapons': [w.KNIFE], 'bounty': 95, 'type': NORMAL, 'areas': [CITY]},
+    {'name': SENTIENT_ROBOT, 'hp': 115, 'weapons': [w.KNIFE], 'bounty': 105, 'type': NORMAL, 'areas': [CITY]},
+    {'name': SLEEPWALKER, 'hp': 95, 'weapons': [w.KNIFE], 'bounty': 75, 'type': NORMAL, 'areas': [CITY]},
 
     # --- original ---
     {'name': BODY_BUILDER, 'hp': 125, 'weapons': [w.BAT, w.BRASS_KNUCKLES], 'bounty': 125, 'type': NORMAL, 'areas': [CITY]},
@@ -100,13 +100,13 @@ Enemies = [
     #       FOREST ENEMIES
     # ========================
     # --- new ---
-    {'name': BIRDER, 'hp': 75, 'weapons': [], 'bounty': 40, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': DOOMSDAY_PREPPER, 'hp': 90, 'weapons': [], 'bounty': 60, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': FERAL_PHILOSOPHER, 'hp': 85, 'weapons': [], 'bounty': 65, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': FORAGER, 'hp': 90, 'weapons': [], 'bounty': 45, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': MUSHROOM_HUNTER, 'hp': 100, 'weapons': [], 'bounty': 75, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': SURVIVALIST, 'hp': 100, 'weapons': [], 'bounty': 55, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': TELEPATHIC_MUTE, 'hp': 90, 'weapons': [], 'bounty': 75, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': BIRDER, 'hp': 75, 'weapons': [w.KNIFE], 'bounty': 40, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': DOOMSDAY_PREPPER, 'hp': 90, 'weapons': [w.KNIFE], 'bounty': 60, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': FERAL_PHILOSOPHER, 'hp': 85, 'weapons': [w.KNIFE], 'bounty': 65, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': FORAGER, 'hp': 90, 'weapons': [w.KNIFE], 'bounty': 45, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': MUSHROOM_HUNTER, 'hp': 100, 'weapons': [w.KNIFE], 'bounty': 75, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': SURVIVALIST, 'hp': 100, 'weapons': [w.KNIFE], 'bounty': 55, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': TELEPATHIC_MUTE, 'hp': 90, 'weapons': [w.KNIFE], 'bounty': 75, 'type': NORMAL, 'areas': [FOREST]},
 
     # --- original ---
     {'name': BIGFOOT_IMPERSONATOR, 'hp': 115, 'weapons': [w.PISTOL, w.CLAWS, w.BEAR_SPRAY], 'bounty': 125, 'type': NORMAL, 'areas': [FOREST]},
@@ -120,11 +120,11 @@ Enemies = [
     #        CAVE ENEMIES
     # ========================
     # --- new ---
-    {'name': ARCHAEOLOGIST, 'hp': 80, 'weapons': [], 'bounty': 25, 'type': NORMAL, 'areas': [CAVE]},
-    {'name': EXPLORER, 'hp': 100, 'weapons': [], 'bounty': 65, 'type': NORMAL, 'areas': [CAVE]},
-    {'name': FUGITIVE, 'hp': 90, 'weapons': [], 'bounty': 125, 'type': NORMAL, 'areas': [CAVE]},
-    {'name': PROSPECTOR, 'hp': 80, 'weapons': [], 'bounty': 45, 'type': NORMAL, 'areas': [CAVE]},
-    {'name': SURVIVOR, 'hp': 100, 'weapons': [], 'bounty': 35, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': ARCHAEOLOGIST, 'hp': 80, 'weapons': [w.KNIFE], 'bounty': 25, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': EXPLORER, 'hp': 100, 'weapons': [w.KNIFE], 'bounty': 65, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': FUGITIVE, 'hp': 90, 'weapons': [w.KNIFE], 'bounty': 125, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': PROSPECTOR, 'hp': 80, 'weapons': [w.KNIFE], 'bounty': 45, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': SURVIVOR, 'hp': 100, 'weapons': [w.KNIFE], 'bounty': 35, 'type': NORMAL, 'areas': [CAVE]},
 
     # --- original ---
     {'name': ANCIENT_MAN, 'hp': 80, 'weapons': [w.HARPOON, w.KNIFE], 'bounty': 85, 'type': NORMAL, 'areas': [CAVE]},
@@ -137,12 +137,12 @@ Enemies = [
     #        SWAMP ENEMIES
     # ========================
     # --- new ---
-    {'name': BONE_COLLECTOR, 'hp': 110, 'weapons': [], 'bounty': 125, 'type': NORMAL, 'areas': [SWAMP]},
-    {'name': FORTUNE_TELLER, 'hp': 80, 'weapons': [], 'bounty': 35, 'type': NORMAL, 'areas': [SWAMP]},
-    {'name': GATOR_WRESTLER, 'hp': 110, 'weapons': [], 'bounty': 75, 'type': NORMAL, 'areas': [SWAMP]},
-    {'name': MOONSHINER, 'hp': 80, 'weapons': [], 'bounty': 95, 'type': NORMAL, 'areas': [SWAMP]},
-    {'name': SMUGGLER, 'hp': 85, 'weapons': [], 'bounty': 105, 'type': NORMAL, 'areas': [SWAMP]},
-    {'name': TRACKER, 'hp': 90, 'weapons': [], 'bounty': 45, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': BONE_COLLECTOR, 'hp': 110, 'weapons': [w.KNIFE], 'bounty': 125, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': FORTUNE_TELLER, 'hp': 80, 'weapons': [w.KNIFE], 'bounty': 35, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': GATOR_WRESTLER, 'hp': 110, 'weapons': [w.KNIFE], 'bounty': 75, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': MOONSHINER, 'hp': 80, 'weapons': [w.KNIFE], 'bounty': 95, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': SMUGGLER, 'hp': 85, 'weapons': [w.KNIFE], 'bounty': 105, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': TRACKER, 'hp': 90, 'weapons': [w.KNIFE], 'bounty': 45, 'type': NORMAL, 'areas': [SWAMP]},
 
     # --- original ---
     {'name': BAYOU_MAN, 'hp': 105, 'weapons': [w.MACHETE, w.SHOTGUN], 'bounty': 100, 'type': NORMAL, 'areas': [SWAMP]},
