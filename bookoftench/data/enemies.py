@@ -76,80 +76,80 @@ Enemies = [
     #        CITY ENEMIES
     # ========================
     # --- new ---
-    {'name': CARD_JOCKEY, 'hp': 85, 'w': [], 'bounty': 80, 'type': NORMAL, 'areas': [CITY]},
-    {'name': CLONE, 'hp': 100, 'w': [], 'bounty': 105, 'type': NORMAL, 'areas': [CITY]},
-    {'name': CLOWN, 'hp': 95, 'w': [], 'bounty': 85, 'type': NORMAL, 'areas': [CITY]},
-    {'name': FROGGER, 'hp': 90, 'w': [], 'bounty': 85, 'type': NORMAL, 'areas': [CITY]},
-    {'name': INFLUENCER, 'hp': 75, 'w': [], 'bounty': 35, 'type': NORMAL, 'areas': [CITY]},
-    {'name': LIFE_COACH, 'hp': 85, 'w': [], 'bounty': 45, 'type': NORMAL, 'areas': [CITY]},
-    {'name': MASCOT, 'hp': 95, 'w': [], 'bounty': 55, 'type': NORMAL, 'areas': [CITY]},
-    {'name': MIME, 'hp': 105, 'w': [], 'bounty': 65, 'type': NORMAL, 'areas': [CITY]},
-    {'name': PARTY_ANIMAL, 'hp': 105, 'w': [], 'bounty': 95, 'type': NORMAL, 'areas': [CITY]},
-    {'name': SENTIENT_ROBOT, 'hp': 115, 'w': [], 'bounty': 105, 'type': NORMAL, 'areas': [CITY]},
-    {'name': SLEEPWALKER, 'hp': 95, 'w': [], 'bounty': 75, 'type': NORMAL, 'areas': [CITY]},
+    {'name': CARD_JOCKEY, 'hp': 85, 'weapons': [], 'bounty': 80, 'type': NORMAL, 'areas': [CITY]},
+    {'name': CLONE, 'hp': 100, 'weapons': [], 'bounty': 105, 'type': NORMAL, 'areas': [CITY]},
+    {'name': CLOWN, 'hp': 95, 'weapons': [], 'bounty': 85, 'type': NORMAL, 'areas': [CITY]},
+    {'name': FROGGER, 'hp': 90, 'weapons': [], 'bounty': 85, 'type': NORMAL, 'areas': [CITY]},
+    {'name': INFLUENCER, 'hp': 75, 'weapons': [], 'bounty': 35, 'type': NORMAL, 'areas': [CITY]},
+    {'name': LIFE_COACH, 'hp': 85, 'weapons': [], 'bounty': 45, 'type': NORMAL, 'areas': [CITY]},
+    {'name': MASCOT, 'hp': 95, 'weapons': [], 'bounty': 55, 'type': NORMAL, 'areas': [CITY]},
+    {'name': MIME, 'hp': 105, 'weapons': [], 'bounty': 65, 'type': NORMAL, 'areas': [CITY]},
+    {'name': PARTY_ANIMAL, 'hp': 105, 'weapons': [], 'bounty': 95, 'type': NORMAL, 'areas': [CITY]},
+    {'name': SENTIENT_ROBOT, 'hp': 115, 'weapons': [], 'bounty': 105, 'type': NORMAL, 'areas': [CITY]},
+    {'name': SLEEPWALKER, 'hp': 95, 'weapons': [], 'bounty': 75, 'type': NORMAL, 'areas': [CITY]},
 
     # --- original ---
-    {'name': BODY_BUILDER, 'hp': 125, 'w': [w.BAT, w.BRASS_KNUCKLES], 'bounty': 125, 'type': NORMAL, 'areas': [CITY]},
-    {'name': GOON, 'hp': 105, 'w': [w.CHILI_POWDER, w.BAT, w.PISTOL], 'bounty': 100, 'type': NORMAL, 'areas': [CITY]},
-    {'name': HOBO, 'hp': 85, 'w': [w.BROKEN_BOTTLE, w.KNIFE, w.POCKET_SAND], 'bounty': 50, 'type': NORMAL, 'areas': [CITY]},
-    {'name': PIMP, 'hp': 95, 'w': [w.PEPPER_SPRAY, w.BRASS_KNUCKLES, w.REVOLVER], 'bounty': 125, 'type': NORMAL, 'areas': [CITY]},
-    {'name': SERIAL_KILLER, 'hp': 120, 'w': [w.KNIFE, w.MACHETE], 'bounty': 200, 'type': NORMAL, 'areas': [CITY]},
-    {'name': THIEF, 'hp': 85, 'w': [w.KNIFE, w.BAT], 'bounty': 75, 'type': NORMAL, 'areas': [CITY]},
+    {'name': BODY_BUILDER, 'hp': 125, 'weapons': [w.BAT, w.BRASS_KNUCKLES], 'bounty': 125, 'type': NORMAL, 'areas': [CITY]},
+    {'name': GOON, 'hp': 105, 'weapons': [w.CHILI_POWDER, w.BAT, w.PISTOL], 'bounty': 100, 'type': NORMAL, 'areas': [CITY]},
+    {'name': HOBO, 'hp': 85, 'weapons': [w.BROKEN_BOTTLE, w.KNIFE, w.POCKET_SAND], 'bounty': 50, 'type': NORMAL, 'areas': [CITY]},
+    {'name': PIMP, 'hp': 95, 'weapons': [w.PEPPER_SPRAY, w.BRASS_KNUCKLES, w.REVOLVER], 'bounty': 125, 'type': NORMAL, 'areas': [CITY]},
+    {'name': SERIAL_KILLER, 'hp': 120, 'weapons': [w.KNIFE, w.MACHETE], 'bounty': 200, 'type': NORMAL, 'areas': [CITY]},
+    {'name': THIEF, 'hp': 85, 'weapons': [w.KNIFE, w.BAT], 'bounty': 75, 'type': NORMAL, 'areas': [CITY]},
 
     # ========================
     #       FOREST ENEMIES
     # ========================
     # --- new ---
-    {'name': BIRDER, 'hp': 75, 'w': [], 'bounty': 40, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': DOOMSDAY_PREPPER, 'hp': 90, 'w': [], 'bounty': 60, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': FERAL_PHILOSOPHER, 'hp': 85, 'w': [], 'bounty': 65, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': FORAGER, 'hp': 90, 'w': [], 'bounty': 45, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': MUSHROOM_HUNTER, 'hp': 100, 'w': [], 'bounty': 75, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': SURVIVALIST, 'hp': 100, 'w': [], 'bounty': 55, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': TELEPATHIC_MUTE, 'hp': 90, 'w': [], 'bounty': 75, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': BIRDER, 'hp': 75, 'weapons': [], 'bounty': 40, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': DOOMSDAY_PREPPER, 'hp': 90, 'weapons': [], 'bounty': 60, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': FERAL_PHILOSOPHER, 'hp': 85, 'weapons': [], 'bounty': 65, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': FORAGER, 'hp': 90, 'weapons': [], 'bounty': 45, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': MUSHROOM_HUNTER, 'hp': 100, 'weapons': [], 'bounty': 75, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': SURVIVALIST, 'hp': 100, 'weapons': [], 'bounty': 55, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': TELEPATHIC_MUTE, 'hp': 90, 'weapons': [], 'bounty': 75, 'type': NORMAL, 'areas': [FOREST]},
 
     # --- original ---
-    {'name': BIGFOOT_IMPERSONATOR, 'hp': 115, 'w': [w.PISTOL, w.CLAWS, w.BEAR_SPRAY], 'bounty': 125, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': DISGRACED_EXILE, 'hp': 80, 'w': [w.HATCHET, w.SHOVEL], 'bounty': 75, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': HIKER, 'hp': 90, 'w': [w.HATCHET, w.KNIFE, w.BEAR_SPRAY], 'bounty': 50, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': HUNTER, 'hp': 100, 'w': [w.KNIFE, w.RIFLE, w.BEAR_SPRAY], 'bounty': 75, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': PARK_RANGER, 'hp': 100, 'w': [w.MACHETE, w.KNIFE, w.BEAR_SPRAY], 'bounty': 85, 'type': NORMAL, 'areas': [FOREST]},
-    {'name': POACHER, 'hp': 100, 'w': [w.CROSSBOW, w.MACHETE, w.BEAR_SPRAY], 'bounty': 100, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': BIGFOOT_IMPERSONATOR, 'hp': 115, 'weapons': [w.PISTOL, w.CLAWS, w.BEAR_SPRAY], 'bounty': 125, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': DISGRACED_EXILE, 'hp': 80, 'weapons': [w.HATCHET, w.SHOVEL], 'bounty': 75, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': HIKER, 'hp': 90, 'weapons': [w.HATCHET, w.KNIFE, w.BEAR_SPRAY], 'bounty': 50, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': HUNTER, 'hp': 100, 'weapons': [w.KNIFE, w.RIFLE, w.BEAR_SPRAY], 'bounty': 75, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': PARK_RANGER, 'hp': 100, 'weapons': [w.MACHETE, w.KNIFE, w.BEAR_SPRAY], 'bounty': 85, 'type': NORMAL, 'areas': [FOREST]},
+    {'name': POACHER, 'hp': 100, 'weapons': [w.CROSSBOW, w.MACHETE, w.BEAR_SPRAY], 'bounty': 100, 'type': NORMAL, 'areas': [FOREST]},
 
     # ========================
     #        CAVE ENEMIES
     # ========================
     # --- new ---
-    {'name': ARCHAEOLOGIST, 'hp': 80, 'w': [], 'bounty': 25, 'type': NORMAL, 'areas': [CAVE]},
-    {'name': EXPLORER, 'hp': 100, 'w': [], 'bounty': 65, 'type': NORMAL, 'areas': [CAVE]},
-    {'name': FUGITIVE, 'hp': 90, 'w': [], 'bounty': 125, 'type': NORMAL, 'areas': [CAVE]},
-    {'name': PROSPECTOR, 'hp': 80, 'w': [], 'bounty': 45, 'type': NORMAL, 'areas': [CAVE]},
-    {'name': SURVIVOR, 'hp': 100, 'w': [], 'bounty': 35, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': ARCHAEOLOGIST, 'hp': 80, 'weapons': [], 'bounty': 25, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': EXPLORER, 'hp': 100, 'weapons': [], 'bounty': 65, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': FUGITIVE, 'hp': 90, 'weapons': [], 'bounty': 125, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': PROSPECTOR, 'hp': 80, 'weapons': [], 'bounty': 45, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': SURVIVOR, 'hp': 100, 'weapons': [], 'bounty': 35, 'type': NORMAL, 'areas': [CAVE]},
 
     # --- original ---
-    {'name': ANCIENT_MAN, 'hp': 80, 'w': [w.HARPOON, w.KNIFE], 'bounty': 85, 'type': NORMAL, 'areas': [CAVE]},
-    {'name': HUMANOID_CAVE_CREATURE, 'hp': 110, 'w': [w.CLAWS, w.SLEDGEHAMMER], 'bounty': 125, 'type': NORMAL, 'areas': [CAVE]},
-    {'name': MINER, 'hp': 80, 'w': [w.PICKAXE, w.KNIFE], 'bounty': 50, 'type': NORMAL, 'areas': [CAVE]},
-    {'name': MOLE_PERSON, 'hp': 105, 'w': [w.CLAWS, w.PICKAXE], 'bounty': 100, 'type': NORMAL, 'areas': [CAVE]},
-    {'name': SPELUNKER, 'hp': 85, 'w': [w.PICKAXE, w.KNIFE], 'bounty': 75, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': ANCIENT_MAN, 'hp': 80, 'weapons': [w.HARPOON, w.KNIFE], 'bounty': 85, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': HUMANOID_CAVE_CREATURE, 'hp': 110, 'weapons': [w.CLAWS, w.SLEDGEHAMMER], 'bounty': 125, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': MINER, 'hp': 80, 'weapons': [w.PICKAXE, w.KNIFE], 'bounty': 50, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': MOLE_PERSON, 'hp': 105, 'weapons': [w.CLAWS, w.PICKAXE], 'bounty': 100, 'type': NORMAL, 'areas': [CAVE]},
+    {'name': SPELUNKER, 'hp': 85, 'weapons': [w.PICKAXE, w.KNIFE], 'bounty': 75, 'type': NORMAL, 'areas': [CAVE]},
 
     # ========================
     #        SWAMP ENEMIES
     # ========================
     # --- new ---
-    {'name': BONE_COLLECTOR, 'hp': 110, 'w': [], 'bounty': 125, 'type': NORMAL, 'areas': [SWAMP]},
-    {'name': FORTUNE_TELLER, 'hp': 80, 'w': [], 'bounty': 35, 'type': NORMAL, 'areas': [SWAMP]},
-    {'name': GATOR_WRESTLER, 'hp': 110, 'w': [], 'bounty': 75, 'type': NORMAL, 'areas': [SWAMP]},
-    {'name': MOONSHINER, 'hp': 80, 'w': [], 'bounty': 95, 'type': NORMAL, 'areas': [SWAMP]},
-    {'name': SMUGGLER, 'hp': 85, 'w': [], 'bounty': 105, 'type': NORMAL, 'areas': [SWAMP]},
-    {'name': TRACKER, 'hp': 90, 'w': [], 'bounty': 45, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': BONE_COLLECTOR, 'hp': 110, 'weapons': [], 'bounty': 125, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': FORTUNE_TELLER, 'hp': 80, 'weapons': [], 'bounty': 35, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': GATOR_WRESTLER, 'hp': 110, 'weapons': [], 'bounty': 75, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': MOONSHINER, 'hp': 80, 'weapons': [], 'bounty': 95, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': SMUGGLER, 'hp': 85, 'weapons': [], 'bounty': 105, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': TRACKER, 'hp': 90, 'weapons': [], 'bounty': 45, 'type': NORMAL, 'areas': [SWAMP]},
 
     # --- original ---
-    {'name': BAYOU_MAN, 'hp': 105, 'w': [w.MACHETE, w.SHOTGUN], 'bounty': 100, 'type': NORMAL, 'areas': [SWAMP]},
-    {'name': GRAVE_ROBBER, 'hp': 95, 'w': [w.SHOVEL, w.KNIFE, w.POCKET_SAND], 'bounty': 85, 'type': NORMAL, 'areas': [SWAMP]},
-    {'name': HAND_FISHERMAN, 'hp': 90, 'w': [w.HATCHET, w.KNIFE], 'bounty': 50, 'type': NORMAL, 'areas': [SWAMP]},
-    {'name': SKIN_COLLECTOR, 'hp': 110, 'w': [w.MACHETE, w.CHAINSAW], 'bounty': 125, 'type': NORMAL, 'areas': [SWAMP]},
-    {'name': VOODOO_PRIESTESS, 'hp': 80, 'w': [w.VOODOO_STAFF, w.KNIFE, w.CHILI_POWDER], 'bounty': 75, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': BAYOU_MAN, 'hp': 105, 'weapons': [w.MACHETE, w.SHOTGUN], 'bounty': 100, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': GRAVE_ROBBER, 'hp': 95, 'weapons': [w.SHOVEL, w.KNIFE, w.POCKET_SAND], 'bounty': 85, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': HAND_FISHERMAN, 'hp': 90, 'weapons': [w.HATCHET, w.KNIFE], 'bounty': 50, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': SKIN_COLLECTOR, 'hp': 110, 'weapons': [w.MACHETE, w.CHAINSAW], 'bounty': 125, 'type': NORMAL, 'areas': [SWAMP]},
+    {'name': VOODOO_PRIESTESS, 'hp': 80, 'weapons': [w.VOODOO_STAFF, w.KNIFE, w.CHILI_POWDER], 'bounty': 75, 'type': NORMAL, 'areas': [SWAMP]},
 ]
 
 
@@ -158,15 +158,15 @@ Bosses = [
     #        AREA BOSSES
     # ========================
     {'name': SLEDGE_HAMMOND, 'hp': 250,
-     'w': [w.SLEDGEHAMMER, w.AXE, w.CHAINSAW, w.BRASS_KNUCKLES],
+     'weapons': [w.SLEDGEHAMMER, w.AXE, w.CHAINSAW, w.BRASS_KNUCKLES],
      'bounty': 0, 'type': BOSS, 'preamble': {}},
 
     {'name': THE_MAYOR, 'hp': 200,
-     'w': [w.PISTOL, w.SHOTGUN, w.REVOLVER, w.BRASS_KNUCKLES],
+     'weapons': [w.PISTOL, w.SHOTGUN, w.REVOLVER, w.BRASS_KNUCKLES],
      'bounty': 0, 'type': BOSS, 'theme': audio.FINAL_BOSS_THEME},
 
     {'name': BAYOU_BILL, 'hp': 200,
-     'w': [w.MACHETE, w.SLEDGEHAMMER, w.SHOTGUN, w.CHAINSAW],
+     'weapons': [w.MACHETE, w.SLEDGEHAMMER, w.SHOTGUN, w.CHAINSAW],
      'bounty': 0, 'type': BOSS,
      'preamble': [
          {'text': "What do we have here?", 'color': Colors.RED, 'sleep': 2},
@@ -191,7 +191,7 @@ Bosses = [
      ]},
 
     {'name': CAPTAIN_HOLE, 'hp': 220,
-     'w': [w.RIFLE, w.HARPOON, w.KNIFE, w.PISTOL],
+     'weapons': [w.RIFLE, w.HARPOON, w.KNIFE, w.PISTOL],
      'bounty': 0, 'type': BOSS, 'preamble': [
         {'text': "Captain Hole has offered to shoot himself in the jines in exchange for your Tench Filet",
          'sleep': 4}
@@ -212,7 +212,7 @@ Denny Biltmore stands before you...
 "Well, let's have at it then.\""""
 Final_Boss = {
     'name': DENNY_BILTMORE,
-    'hp': 275, 'w': [w.BRASS_KNUCKLES, w.PISTOL, w.REVOLVER, w.SHOTGUN],
+    'hp': 275, 'weapons': [w.BRASS_KNUCKLES, w.PISTOL, w.REVOLVER, w.SHOTGUN],
     'bounty': 0, 'type': FINAL_BOSS, 'preamble': [{'text': text, 'color': Colors.RED, 'sleep': 4}
                                                   for text in _biltmore_preamble_lines.split('\n')],
     'random_dialogue': [{

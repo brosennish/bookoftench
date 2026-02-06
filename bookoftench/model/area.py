@@ -13,7 +13,7 @@ from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABL
 from bookoftench.data.enemies import Enemy_Adjectives
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
-from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
+from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss, load_enemies
 from .shop import Shop
 
 _search_defaults = {
@@ -73,7 +73,6 @@ class Area:
         available = [i for i in self.enemies if i not in self.enemies_seen]
         if not available:
             self.enemies_seen.clear()
-            available = self.enemies
         enemy_name = random.choice(available)
         if len(self.enemies_seen) >= 1:
             if random.random() < min(0.10, 0.01 * len(self.enemies_seen)):
