@@ -23,6 +23,7 @@ class Weapon(WeaponBase, Buyable):
     cost: int
     sell_value: int
     type: str
+    areas: list[str] | None
 
     blind_effect: float = 0.0
     blind_turns_min: int = 0
