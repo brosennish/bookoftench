@@ -45,7 +45,7 @@ class OccultistComponent(LabeledSelectionComponent):
     def display_options(self) -> None:
         message = random.choice(Occultist_Lines)
         print_and_sleep(
-            f"{blue(message)}\n"
+            f"{blue(message)}\n", 1.5
         )
         for component in self.selection_components:
             component.display_options()

@@ -54,7 +54,7 @@ class WizardComponent(LabeledSelectionComponent):
     def display_options(self) -> None:
         message = random.choice(Wizard_Lines)
         print_and_sleep(
-            f"{blue(message)}"
+            f"{blue(message)}", 1.5
         )
         for component in self.selection_components:
             component.display_options()
