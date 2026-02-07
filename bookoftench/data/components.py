@@ -48,4 +48,4 @@ class OverviewMenuDefaults:
 
 
 class InGameMenuDefaults:
-    page_one: List[str] = [NEW_GAME, SETTINGS, QUIT_GAME]
+    page_one: List[str] = [NEW_GAME, SETTINGS, SAVE_GAME, QUIT_GAME]
