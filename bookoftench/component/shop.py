@@ -89,7 +89,7 @@ class BuyOrStealDecision(LabeledSelectionComponent):
         success_chance = self.calculate_success_chance(buyable)
         super().__init__(game_state, bindings=[
             SelectionBinding('B', f"Buy ({buyable.cost} of coin)", self._make_purchase_component(buyable)),
-            SelectionBinding('S', f"Steal ({success_chance}%)",
+            SelectionBinding('S', f"Steal ({success_chance}% chance)",
                              self._make_steal_component(buyable, success_chance))
         ], quittable=True)
 
