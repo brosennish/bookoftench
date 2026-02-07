@@ -67,17 +67,15 @@ class Enemy(Combatant, NPC):
         return self.current_weapon
 
     def get_enemy_encounter_line(self) -> str | None:
-        if self.name not in Enemy_Lines:
+        if not Enemy_Lines[self.name]:
             return None
         return random.choice(Enemy_Lines[self.name])
-
 
 def load_enemy(name: str) -> Enemy:
     matches = load_enemies([name])
     if len(matches) == 0:
         raise ValueError(f"Could not find enemy data for {name}")
     return matches[0]
-
 
 def load_enemies(restriction: List[str] = None) -> List[Enemy]:
     return [Enemy(**d) for d in Enemies if restriction is None or d['name'] in restriction]
