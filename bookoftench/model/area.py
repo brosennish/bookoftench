@@ -75,7 +75,7 @@ class Area:
             self.enemies_seen.clear()
         enemy_name = random.choice(available)
         if len(self.enemies_seen) >= 1:
-            if random.random() < min(0.10, 0.01 * len(self.enemies_seen)):
+            if random.random() < min(0.15, 0.01 * len(self.enemies_seen)):
                 enemy_name = random.choice(tuple(self.enemies_seen))
         enemy = load_enemy(enemy_name)
         self.enemies_seen.add(enemy_name)
