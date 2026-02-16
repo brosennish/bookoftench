@@ -1,63 +1,62 @@
 # Book of Tench
 
-A terminal-based roguelite RPG with sound, written in Python.
+Terminal-based roguelite RPG built in Python to explore modular architecture, event-driven design, and system ownership.
 
 ---
 
-## About This Repo
+## Purpose
 
-This project acts as a structured game sandbox focused on gameplay systems, architecture, and modular design.
-It is an ongoing collaboration between brothers Brodie and Brock Sennish.
+Book of Tench serves as a long-running collaboration focused on architectural clarity, separation of concerns, and iterative refinement.
 
-The focus is on **design, structure, and iteration** more than completing a finished product.
-
----
-
-## What’s Inside
-
-Book of Tench includes a working terminal-based roguelite loop built around modular systems, including:
-
-* Turn-based combat flow
-* Enemy spawning and encounters
-* Event-driven reactions and listeners
-* State-driven player and enemy models
-* Persistence, audio, and curses-based UI utilities
-
-Systems are separated so gameplay flow, data, and side-effects remain easy to follow.
+The goal is not rapid feature completion, but disciplined system design and clean responsibility boundaries across components.
 
 ---
 
-## Project Structure (High Level)
+## Core Systems
 
-```
+- Turn-based combat orchestration  
+- Event-driven reactions using a listener pattern  
+- State-driven player and enemy domain models  
+- Modular component → service → model layering  
+- Persistence (save/load) system  
+- Audio integration and curses-based terminal UI  
+
+Gameplay flow, state mutation, and side-effects are intentionally separated to maintain architectural control as the project grows.
+
+---
+
+## Architectural Structure (High Level)
+
+```text
 bookoftench/
 │
-├── component/      # Flow owners that route game phases and coordinate systems
-├── data/           # Static definitions (enemies, items, configuration data)
-├── model/          # Core state objects and domain models
-├── service/        # Logic layers that perform actions or mutate state
+├── component/      # Flow owners coordinating phases
+├── service/        # Logic layers mutating state
+├── model/          # Core domain/state objects
+├── data/           # Static definitions
 │
-├── audio.py        # Sound handling
+├── listeners.py    # Event-driven reactions
+├── persistence.py  # Save/load handling
+├── audio.py        # Sound system
 ├── curses_util.py  # Terminal UI helpers
-├── event_base.py   # Event definitions
-├── event_logger.py # Event logging utilities
-├── game.py         # Core game orchestration
-├── globals.py      # Shared constants/state references
-├── listeners.py    # Event listeners and reactions
-├── persistence.py  # Save/load logic
-├── settings.py     # Configuration values
-├── ui.py           # Display/UI helpers
-└── util.py         # General utilities
-
-main.py             # Application entry point
+└── main.py         # Entry point
 ```
+--- 
 
+## Architectural Intent
+
+The project emphasizes:
+
+- Explicit ownership boundaries
+- Flow vs mutation vs reaction separation
+- Event-driven extensibility
+- Long-term maintainability over short-term convenience
+  
 ---
 
 ## Run
-
 ```bash
 python3 main.py
 ```
 
-No external services or setup required.
+No external services required.
