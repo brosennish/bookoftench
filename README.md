@@ -2,15 +2,11 @@
 
 Terminal-based roguelite RPG built in Python to explore modular architecture, event-driven design, and system ownership.
 
----
-
 ## Purpose
 
 Book of Tench serves as a long-running collaboration focused on architectural clarity, separation of concerns, and iterative refinement.
 
 The goal is not rapid feature completion, but disciplined system design and clean responsibility boundaries across components.
-
----
 
 ## Core Systems
 
@@ -22,8 +18,6 @@ The goal is not rapid feature completion, but disciplined system design and clea
 - Audio integration and curses-based terminal UI  
 
 Gameplay flow, state mutation, and side-effects are intentionally separated to maintain architectural control as the project grows.
-
----
 
 ## Architectural Structure (High Level)
 
@@ -41,7 +35,6 @@ bookoftench/
 ├── curses_util.py  # Terminal UI helpers
 └── main.py         # Entry point
 ```
---- 
 
 ## Architectural Intent
 
@@ -51,10 +44,9 @@ The project emphasizes:
 - Flow vs mutation vs reaction separation
 - Event-driven extensibility
 - Long-term maintainability over short-term convenience
-  
----
 
 ## Run
+
 ```bash
 python3 main.py
 ```
