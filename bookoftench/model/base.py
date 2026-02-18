@@ -19,9 +19,8 @@ from bookoftench.util import print_and_sleep
 class Buyable:
     name: str
     cost: int
-    _original_cost: int = field(init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self._original_cost = self.cost
 
     @property
@@ -44,6 +43,7 @@ class WeaponBase(ABC):
     crit: float
     sound: str
     type: str
+    areas: list[str] | None = None
 
     def calculate_base_damage(self) -> int:
         base = self.damage + random.randint(-self.spread, self.spread)  # Base damage +/- 10
