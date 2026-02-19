@@ -67,7 +67,7 @@ class Enemy(Combatant, NPC):
         return self.current_weapon
 
     def get_enemy_encounter_line(self) -> str | None:
-        if not Enemy_Lines[self.name]:
+        if self.name not in Enemy_Lines:
             return None
         return random.choice(Enemy_Lines[self.name])
 
