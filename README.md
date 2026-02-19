@@ -1,6 +1,6 @@
 # Book of Tench
 
-Terminal-based roguelite RPG built in Python to explore modular architecture, event-driven design, and system ownership.
+Terminal-based roguelite RPG built in Python.
 
 ## Core Systems
 
