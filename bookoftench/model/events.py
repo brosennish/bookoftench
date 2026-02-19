@@ -145,7 +145,7 @@ class LevelUpEvent(Event):
         print_and_sleep(green(f"You have reached level {level}!\n"), 2)
         print(green(f"MAX HP: {old_max_hp} -> {new_max_hp}"))
         if item_reward is not None:
-            print(cyan(f"\nReward: {item_reward}"))
+            print(cyan(f"\nReward: {item_reward.name}"))
         print_and_sleep(green(f"You were awarded {cash_reward} of coin."), 2)
 
 

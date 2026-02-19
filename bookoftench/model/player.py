@@ -307,7 +307,7 @@ class Player(Combatant):
 
     def _gain_xp(self, amount: int) -> None:
         self.xp += amount
-        print_and_sleep(green(f"You gained {amount} XP!"), 1)
+        print_and_sleep(cyan(f"You gained {amount} XP!"), 1)
 
         # handles cases where a big XP chunk might give multiple levels
         while self.xp >= self.xp_needed:
@@ -336,7 +336,6 @@ class Player(Combatant):
             if filtered:
                 item_reward = random.choice(filtered)
                 self.items[item_reward.name] = item_reward
-                item_reward = str(item_reward.to_sellable_item())
 
         event_logger.log_event(LevelUpEvent(self.lvl, old_max, self.max_hp, item_reward, cash_reward))
 

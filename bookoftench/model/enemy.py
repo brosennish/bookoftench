@@ -72,13 +72,11 @@ class Enemy(Combatant, NPC):
             return None
         return random.choice(Enemy_Lines[self.name])
 
-
 def load_enemy(name: str) -> Enemy:
     matches = load_enemies([name])
     if len(matches) == 0:
         raise ValueError(f"Could not find enemy data for {name}")
     return matches[0]
-
 
 def load_enemies(restriction: List[str] = None) -> List[Enemy]:
     return [Enemy(**d) for d in Enemies if restriction is None or d['name'] in restriction]

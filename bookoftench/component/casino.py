@@ -87,8 +87,8 @@ class CasinoGame(Component):
         print_and_sleep(f"Coins: {green(player.coins)} {dim('|')} Plays: {cyan(player.remaining_plays)}")
         while True:
             raw_wager = safe_input("[#] : Wager\n"
-                                   "[q] : Leave").strip().lower()
-            if raw_wager != 'q' and not raw_wager.isdigit():
+                                   "[R] : Return").strip().lower()
+            if raw_wager != 'r' and not raw_wager.isdigit():
                 print_and_sleep(yellow("Invalid choice."))
             elif raw_wager.isdigit():
                 if int(raw_wager) < 5:
@@ -159,7 +159,7 @@ class KrillOrCray(CasinoGame):
 
 def roll_die() -> int:
     roll = random.randint(1, 6)
-    safe_input("[ ] Roll the die")
+    safe_input("Roll the die")
     print_and_sleep(cyan(f"You rolled a {roll}."))
     return roll
 
@@ -215,11 +215,11 @@ class AboveOrBelow(CasinoGame):
     def should_cash_out() -> bool:
         while True:
             choice = safe_input("[C] : Continue\n"
-                                "[Q] : Cash Out\n")
-            if choice not in ('q', 'c'):
+                                "[$] : Cash Out\n")
+            if choice not in ('c', '$'):
                 print_and_sleep(yellow("Invalid choice."))
             else:
-                return choice == 'q'
+                return choice == '$'
 
     def get_wager_or_quit(self) -> int:
         if self.turn == 0:
