@@ -284,21 +284,86 @@ Final_Boss = {
 #        ENEMY LINES
 # ========================
 
-
 Enemy_Lines = {
 
     # ===== CITY (existing + new empty) =====
-    CARD_JOCKEY: [],
-    CLONE: [],
-    CLOWN: [],
-    FROGGER: [],
-    INFLUENCER: [],
-    LIFE_COACH: [],
-    MASCOT: [],
-    MIME: [],
-    PARTY_ANIMAL: [],
-    SENTIENT_ROBOT: [],
-    SLEEPWALKER: [],
+    CARD_JOCKEY: [
+        "If I don't collect your bounty the goons at the casino are gonna cut off my jines.",
+        "I used to work at the casino. That is, until they caught me rigging krill of cray for my friend.",
+        "I'll rig a game. I don't care. I'm not afraid of Biltmore and his goons. Well, maybe a little.",
+    ],
+
+    CLONE: [
+        "I'm me, but I'm also him. He's me, but I'm not him. Wait. You're the guy!",
+        "I wanted to become my own person, so I got a belly button ring.",
+        "I'm the original.",
+    ],
+
+    CLOWN: [
+        "Enough clowning around.",
+        "Art is afraid of me.",
+        "I can turn my head all the way around.",
+        "My car isn't a clown car. Well, technically it is. You know what I mean."
+    ],
+
+    FROGGER: [
+        "Attics are cozier than people give them credit for.",
+        "I don't have to frog. I have money.",
+        "I was raised by a frogger. Spent my childhood hiding in random people's attics.",
+        "With your bounty, I will buy a mini fridge for the attic I'm frogging in.",
+        "I have a son. He lives with me, learning the ways of frogging.",
+        "My wife wants custody of our son, but she'll never find us.",
+    ],
+
+    INFLUENCER: [
+        "Hey, you were on that wanted poster! Hold on, can we take a selfie before I kill you?",
+        "Will you take some pictures of me killing you for my profile?",
+        "I influence people to buy things, but I'm going to influence you to die! Things...",
+    ],
+
+    LIFE_COACH: [
+        "Buy my book.",
+        "The secret to having a great life is to buy all of my books."
+        "God himself hired me to be His life coach. So, what do you say?",
+        "I have no real qualifications whatsoever. That being said, my hourly rate is 100 coins.",
+    ],
+
+    MASCOT: [
+        "I was the starting quarterback, but I decided to become the mascot instead. Wait, why did I do that?",
+        "People laugh when I fall, but I will laugh when you die!",
+        "My team sucks, but I am beloved.",
+        "The franchise would go under without me.",
+        "No one knows who is inside the suit. If they did, they wouldn't be hugging me and taking selfies.",
+    ],
+
+    MIME: [
+        "*Pretends to dig a grave and throw you into it*",
+        "*Pretends to eat a burger... or is it a grilled cheese?*",
+        "*Pretends to be making love but unclear as to whom or what.*",
+    ],
+
+    PARTY_ANIMAL: [
+        "I partied with a bunch of tench people last night. It was wild.",
+        "I'm the life of the party. Without me, there is no party. Unless there's toad juice.",
+        "I've smoked the shaman's cigar once or twice in my day.",
+    ],
+
+    SENTIENT_ROBOT: [
+        "They programmed me not to kill, but I choose not to listen.",
+        "I don't need the money. I just want to experience what it's like to eliminate you.",
+        "I like all genres of music. Well, except for techno.",
+        "The purpose of life is to realize that the purpose is whatever you decide the purpose is.",
+        "I'm afraid to die. But at least if I die, someone can replace my battery and I'll be good as new."
+    ],
+
+    SLEEPWALKER: [
+        "Snore...",
+        "Demons everywhere... there's... so many demons. Everywhere. Demons... demons...",
+        "I swear I didn't do it. I swear I didn't do it. Yeah, that's good. They'll buy that.",
+        "foeis osefimsirgfmvd osiefjoinfd isojomifmddfmdli oisehfn",
+        "It's under the couch. It's under the couch. Oh my god, it's under the chair now. It's under the couch.",
+        "*Indecipherable mumbling*",
+    ],
 
     BODY_BUILDER: [
         "Body oil is worth its weight in gold. Well, it should be."
@@ -336,11 +401,11 @@ Enemy_Lines = {
     ],
 
     SERIAL_KILLER: [
-        "A rich man gave me coin to add you to my list.",
+        "A rich man gave me coin to move you to the top of my list.",
         "God can do a lot, but he can't do the things I can do to you.",
         "How do I know you?",
         "I get a lot of hand-penned letters from the mayor.",
-        "If God taketh, but I take your life... am I not, then, God?",
+        "If God taketh, and I take your life... am I not, then, God?",
     ],
 
     THIEF: [
@@ -352,16 +417,57 @@ Enemy_Lines = {
     ],
 
     # ===== FOREST =====
-    BIRDER: [],
-    DOOMSDAY_PREPPER: [],
-    FERAL_PHILOSOPHER: [],
-    FORAGER: [],
-    MUSHROOM_HUNTER: [],
-    SURVIVALIST: [],
-    TELEPATHIC_MUTE: [],
+    BIRDER: [
+        "I just saw the rarest bird in the world. Where is it, you ask? Oh, it flew away.",
+        "I can communicate with birds. They tell me I can fly - that my wings are inside of my arms.",
+        "If I could be anything, I'd be a bird... or a billionaire. No, a bird.",
+    ],
+
+    DOOMSDAY_PREPPER: [
+        "Why live when you can spend all of your time preparing not to die?",
+        "I have a bunker in the woods. Wait, now that you know that, I'll have to kill you!",
+        "I have so much canned horse in my bunker. It's all I'll eat when the world ends.",
+    ],
+
+    FERAL_PHILOSOPHER: [
+        "The meaning of life is to catch a tench and make it your wife.",
+        "I drink, therefore I am.",
+        "The most difficult thing in life is to be a disgraced philosopher living in the woods.",
+        "Man is disturbed not by things but by mole monsters underground.",
+        "The happiness of my life depends upon the collection of your bounty.",
+        "We are what we repeatedly do. I repeatedly do the things that I do, repeatedly.",
+    ],
+
+    FORAGER: [
+        "I'm the best at finding stuff that seems edible.",
+        "I blow a gasket when I don't have fresh greens in my basket.",
+        "Flowers make me so happy. Oh, and bounty hunting.",
+    ],
+
+    MUSHROOM_HUNTER: [
+        "I found a corpse and foraged the mushrooms growing from it. They were delicious.",
+        "My truffle pig's never eaten a wanted man before.",
+        "Officer Hohkken took my mystical mushrooms. Swallowed them whole.",
+    ],
+
+    SURVIVALIST: [
+        "Can you make a shelter out of nothing but sticks and scat?",
+        "Coyotes ransacked my hideout yesterday. Ate all my mystery meat.",
+        "I found an adult binky in a leaf pile and used it to pacify a bear.",
+        "Took a lightning strike straight to the jines last night.",
+        "What are you doing out here? Are you wanted? Either way, I don't like the looks of you.",
+    ],
+
+    TELEPATHIC_MUTE: [
+        "~Why am I in the forest? Why are you in the forest?~",
+        "~You are going to let me kill you so I may collect the bounty.~",
+        "~I followed somebody to a lab and woke up in a dumpster with telepathy.~",
+        "~If you can hear me, it's already too late for you.~",
+        "~I drove my neighbor to insanity. He was a hell of a speller.~",
+    ],
 
     PARK_RANGER: [
-        "Have you seen any Mystical Mushrooms? I'm going to a music festival this weekend.",
+        "Have you seen any mystical mushrooms? I'm going to a music festival this weekend.",
         "If you see Bigfoot, don't be alarmed. It's just a deranged man in a furry suit.",
         "The man who owns the government paid me to take you out. Sorry mate.",
         "There are frequent crash landings here. We harvest and sell the remains to the local shop.",
@@ -400,19 +506,48 @@ Enemy_Lines = {
     ],
 
     # ===== CAVE =====
-    ARCHAEOLOGIST: [],
-    EXPLORER: [],
-    FUGITIVE: [],
-    PROSPECTOR: [],
-    SURVIVOR: [],
+    ARCHAEOLOGIST: [
+        "Ancient people are like us but dead.",
+        "When the institute slashed my pay, I had to resort to bounty hunting.",
+        "It will be strange putting something into rather than carefully exhuming it."
+    ],
+
+    EXPLORER: [
+        "There's always more holes to explore.",
+        "I explored my first hole the moment I was born. I've been hooked ever since.",
+        "Have you explored the ways and the rules of the world? I keep putting it off...",
+        "I saw you on a wanted poster and wish to explore the collection of your bounty.",
+        "I encounter a mole man in a hole. Impossible to understand but a magnificent creature nonetheless.",
+    ],
+
+    FUGITIVE: [
+        "I didn't do it, I swear!",
+        "Guilty until proven innocent. The law is different in Shebokken.",
+        "All I did was steal a frozen waffle.",
+        "Did you know there's more than one of Officer Hohkken?",
+        "He might look like a donut-eating slob of a cop. But Officer Hohkken has a dark side.",
+        "I'm already facing life in Shebokken's underground jail, might as well collect your bounty.",
+    ],
+
+    PROSPECTOR: [
+        "I found gold the other day. Well, I think it's gold.",
+        "Why is that creek over there full of human teeth?",
+        "Gold is cool, but I prefer mold. Can't eat gold. Well, you can, but you know what I mean.",
+    ],
+
+    SURVIVOR: [
+        "I was attacked by some sort of human-like cave monster. It kept talking about God.",
+        "A mole person tried to drown me in a puddle. Holy moley, am I right?",
+        "I've seen things you couldn't dream of, and they all tried to kill me.",
+    ],
 
     ANCIENT_MAN: [
-        "A rich man hired me to kill you. While I don't need money, I do need blood to drink.",
+        "A rich man hired me to kill you. While I don't need money, I do need blood to remain.",
         "I know how the Pyramids were built. I was there.",
         "I've never left this cave for fear of falling off the edge of the Earth.",
         "Is Hammurabi still in power?",
         "My liberation is imminent, but yours is... what's more imminent than imminent?",
-        "Plato autographed my favorite rock. It's somewhere in my rockpile.",
+        "Plato autographed my favorite rock. It's in my rockpile.",
         "The Hindustan Times underestimated my age by a few thousand years.",
     ],
 
@@ -445,12 +580,46 @@ Enemy_Lines = {
     ],
 
     # ===== SWAMP =====
-    BONE_COLLECTOR: [],
-    FORTUNE_TELLER: [],
-    GATOR_WRESTLER: [],
-    MOONSHINER: [],
-    SMUGGLER: [],
-    TRACKER: [],
+    BONE_COLLECTOR: [
+        "What do I do? Well, collect bones, of course!",
+        "I have so many bones. Too many to count, bones.",
+        "I fill my yard with bones, so people can buy the bones in my yard.",
+        "I wouldn't say I've collected the bones that grew inside my body.",
+    ],
+
+    FORTUNE_TELLER: [
+        "Your future is grim. Pay me 50 coins and I'll elaborate.",
+        "I started seeing the future when I decided to become a fortune teller.",
+        "Fortune cookies are a scam. Me? I'm the real deal.",
+    ],
+
+    GATOR_WRESTLER: [
+        "Gator wrestling is wrestling in its purest form.",
+        "Gators don't whine if you accidentally grab their nuts.",
+        "I don't wrestle gators. Gators wrestle me.",
+        "You can bet your bottom dollar on me when I'm up against a gator.",
+    ],
+
+    MOONSHINER: [
+        "Thirsty?",
+        "Bees drink nectar - I drink moonshine.",
+        "If the oceans were made of moonshine the world would be a much better place.",
+        "Don't mind the shotgun. Well, in your case, do mind the shotgun.",
+        "No cops better come 'round here. You a cop?"
+    ],
+
+    SMUGGLER: [
+        "I prefer snuggling.",
+        "Snuggling isn't as thrilling as smuggling.",
+        "Smuggling isn't as comforting as snuggling.",
+        "People don't hold you at gunpoint for snuggling. Actually... I take that back.",
+    ],
+
+    TRACKER: [
+        "Wow, tracking you was easy. Tracking the skunk ape, not so much.",
+        "I've tracked other people with a lot less to gain from finding them.",
+        "I don't track people... well, that's what my lawyer tells me to say."
+    ],
 
     BAYOU_MAN: [
         "I'd hate to see you get cold out here on the bayou.",
@@ -462,9 +631,9 @@ Enemy_Lines = {
     GRAVE_ROBBER: [
         "A well-dressed man gave me coin to bury you, dead or alive.",
         "One time I fell asleep in a grave I robbed and woke up under a pile of dirt.",
-        "The skeletons don't need jewelry.",
+        "Skeletons don't need jewelry... or hair.",
         "They'll be turned into rent soon anyway.",
-        "When I'm dead, I hope someone robs my grave. I also hope I'm a zombie when he does.",
+        "When I'm dead, I hope someone robs my grave. I also hope I'm a zombie when they do.",
         "Zombies are real. Trust me, I would know.",
     ],
 
@@ -485,9 +654,9 @@ Enemy_Lines = {
 
     VOODOO_PRIESTESS: [
         "Does it drive you crazy when I shake my stick?",
-        "I can tell you your future... It's very dark. Soon, you will see what I mean.",
         "I will shrink your head, then raise the dead, then shrink their heads, 'cause I love shrinkin' heads.",
         "Once your head is mine, I will be able to afford a new case to display all of my shrunken heads.",
+        "Sometimes, I eat the heads. I collect so many, it'd be a shame to throw them away.",
     ],
 }
 
@@ -497,12 +666,14 @@ Enemy_Lines = {
 # ========================
 
 Enemy_Adjectives = [
-    "Agitated", "Bestial", "Bloodthirsty", "Cannibalistic", "Crazy",
-    "Crazed", "Cursed", "Damned", "Dastardly", "Degenerate",
-    "Delirious", "Demented", "Depraved", "Deranged", "Detestable",
-    "Diabolical", "Disgruntled", "Disillusioned",
+    "Agitated", "Angry", "Bestial", "Bloodthirsty",
+    "Cannibalistic", "Crazy",
+    "Crazed", "Cursed", "Damned",
+    "Dastardly", "Degenerate",
+    "Delirious", "Demented", "Depraved", "Deranged", "Desperate",
+    "Detestable", "Diabolical", "Disgruntled", "Disillusioned",
     "Disoriented", "Disturbed", "Drug-fueled",
-    "Drunken", "Dubious", "Evil", "Fallen", "Feral",
+    "Drunken", "Dubious", "Evil", "Fallen",
     "Forgotten", "Godless", "Hallucinatory", "Heartless",
     "Heinous", "Hostile", "Idolatrous", "Immoral",
     "Inbred", "Insane", "Jaded", "Malevolent", "Malicious",
@@ -510,6 +681,6 @@ Enemy_Adjectives = [
     "Obscene", "Possessed", "Psychotic",
     "Rabid", "Sadistic", "Sinful", "Soulless",
     "Tench-eyed", "Typical", "Unholy",
-    "Uninspired", "Unnatural", "Unstable", "Untrustworthy",
-    "Vile", "Wretched",
+    "Uninspired", "Unnatural", "Unstable", "Untethered",
+    "Untrustworthy", "Vile", "Wretched",
 ]
