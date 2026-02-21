@@ -309,12 +309,16 @@ Enemy_Lines = {
     FROGGER: [
         "Attics are cozier than people give them credit for.",
         "I don't have to frog. I have money.",
-        "I was raised by a frogger. Spent my childhood hiding in random people's attics."
+        "I was raised by a frogger. Spent my childhood hiding in random people's attics.",
+        "With your bounty, I will buy a mini fridge for the attic I'm frogging in.",
+        "I have a son. He lives with me, learning the ways of frogging.",
+        "My wife wants custody of our son, but she'll never find us.",
     ],
 
     INFLUENCER: [
         "Hey, you were on that wanted poster! Hold on, can we take a selfie before I kill you?",
         "Will you take some pictures of me killing you for my profile?",
+        "I influence people to buy things, but I'm going to influence you to die! Things...",
     ],
 
     LIFE_COACH: [
@@ -335,11 +339,13 @@ Enemy_Lines = {
     MIME: [
         "*Pretends to dig a grave and throw you into it*",
         "*Pretends to eat a burger... or is it a grilled cheese?*",
+        "*Pretends to be making love but unclear as to whom or what.*",
     ],
 
     PARTY_ANIMAL: [
         "I partied with a bunch of tench people last night. It was wild.",
-        "I'm the life of the party. Without me, there is no party. Unless there's toad juice."
+        "I'm the life of the party. Without me, there is no party. Unless there's toad juice.",
+        "I've smoked the shaman's cigar once or twice in my day.",
     ],
 
     SENTIENT_ROBOT: [
@@ -417,21 +423,51 @@ Enemy_Lines = {
         "If I could be anything, I'd be a bird... or a billionaire. No, a bird.",
     ],
 
-    DOOMSDAY_PREPPER: [],
-    FERAL_PHILOSOPHER: [],
-    FORAGER: [],
-    MUSHROOM_HUNTER: [],
-    SURVIVALIST: [],
+    DOOMSDAY_PREPPER: [
+        "Why live when you can spend all of your time preparing not to die?",
+        "I have a bunker in the woods. Wait, now that you know that, I'll have to kill you!",
+        "I have so much canned horse in my bunker. It's all I'll eat when the world ends.",
+    ],
+
+    FERAL_PHILOSOPHER: [
+        "The meaning of life is to catch a tench and make it your wife.",
+        "I drink, therefore I am.",
+        "The most difficult thing in life is to be a disgraced philosopher living in the woods.",
+        "Man is disturbed not by things but by mole monsters underground.",
+        "The happiness of my life depends upon the collection of your bounty.",
+        "We are what we repeatedly do. I repeatedly do the things that I do, repeatedly.",
+    ],
+
+    FORAGER: [
+        "I'm the best at finding stuff that seems edible.",
+        "I blow a gasket when I don't have fresh greens in my basket.",
+        "Flowers make me so happy. Oh, and bounty hunting.",
+    ],
+
+    MUSHROOM_HUNTER: [
+        "I found a corpse and foraged the mushrooms growing from it. They were delicious.",
+        "My truffle pig's never eaten a wanted man before.",
+        "Officer Hohkken took my mystical mushrooms. Swallowed them whole.",
+    ],
+
+    SURVIVALIST: [
+        "Can you make a shelter out of nothing but sticks and scat?",
+        "Coyotes ransacked my hideout yesterday. Ate all my mystery meat.",
+        "I found an adult binky in a leaf pile and used it to pacify a bear.",
+        "Took a lightning strike straight to the jines last night.",
+        "What are you doing out here? Are you wanted? Either way, I don't like the looks of you.",
+    ],
 
     TELEPATHIC_MUTE: [
         "~Why am I in the forest? Why are you in the forest?~",
         "~You are going to let me kill you so I may collect the bounty.~",
         "~I followed somebody to a lab and woke up in a dumpster with telepathy.~",
         "~If you can hear me, it's already too late for you.~",
+        "~I drove my neighbor to insanity. He was a hell of a speller.~",
     ],
 
     PARK_RANGER: [
-        "Have you seen any Mystical Mushrooms? I'm going to a music festival this weekend.",
+        "Have you seen any mystical mushrooms? I'm going to a music festival this weekend.",
         "If you see Bigfoot, don't be alarmed. It's just a deranged man in a furry suit.",
         "The man who owns the government paid me to take you out. Sorry mate.",
         "There are frequent crash landings here. We harvest and sell the remains to the local shop.",
@@ -476,10 +512,34 @@ Enemy_Lines = {
         "It will be strange putting something into rather than carefully exhuming it."
     ],
 
-    EXPLORER: [],
-    FUGITIVE: [],
-    PROSPECTOR: [],
-    SURVIVOR: [],
+    EXPLORER: [
+        "There's always more holes to explore.",
+        "I explored my first hole the moment I was born. I've been hooked ever since.",
+        "Have you explored the ways and the rules of the world? I keep putting it off...",
+        "I saw you on a wanted poster and wish to explore the collection of your bounty.",
+        "I encounter a mole man in a hole. Impossible to understand but a magnificent creature nonetheless.",
+    ],
+
+    FUGITIVE: [
+        "I didn't do it, I swear!",
+        "Guilty until proven innocent. The law is different in Shebokken.",
+        "All I did was steal a frozen waffle.",
+        "Did you know there's more than one of Officer Hohkken?",
+        "He might look like a donut-eating slob of a cop. But Officer Hohkken has a dark side.",
+        "I'm already facing life in Shebokken's underground jail, might as well collect your bounty.",
+    ],
+
+    PROSPECTOR: [
+        "I found gold the other day. Well, I think it's gold.",
+        "Why is that creek over there full of human teeth?",
+        "Gold is cool, but I prefer mold. Can't eat gold. Well, you can, but you know what I mean.",
+    ],
+
+    SURVIVOR: [
+        "I was attacked by some sort of human-like cave monster. It kept talking about God.",
+        "A mole person tried to drown me in a puddle. Holy moley, am I right?",
+        "I've seen things you couldn't dream of, and they all tried to kill me.",
+    ],
 
     ANCIENT_MAN: [
         "A rich man hired me to kill you. While I don't need money, I do need blood to remain.",
@@ -523,6 +583,8 @@ Enemy_Lines = {
     BONE_COLLECTOR: [
         "What do I do? Well, collect bones, of course!",
         "I have so many bones. Too many to count, bones.",
+        "I fill my yard with bones, so people can buy the bones in my yard.",
+        "I wouldn't say I've collected the bones that grew inside my body.",
     ],
 
     FORTUNE_TELLER: [
@@ -534,14 +596,29 @@ Enemy_Lines = {
     GATOR_WRESTLER: [
         "Gator wrestling is wrestling in its purest form.",
         "Gators don't whine if you accidentally grab their nuts.",
+        "I don't wrestle gators. Gators wrestle me.",
+        "You can bet your bottom dollar on me when I'm up against a gator.",
     ],
 
-    MOONSHINER: [],
-    SMUGGLER: [],
+    MOONSHINER: [
+        "Thirsty?",
+        "Bees drink nectar - I drink moonshine.",
+        "If the oceans were made of moonshine the world would be a much better place.",
+        "Don't mind the shotgun. Well, in your case, do mind the shotgun.",
+        "No cops better come 'round here. You a cop?"
+    ],
+
+    SMUGGLER: [
+        "I prefer snuggling.",
+        "Snuggling isn't as thrilling as smuggling.",
+        "Smuggling isn't as comforting as snuggling.",
+        "People don't hold you at gunpoint for snuggling. Actually... I take that back.",
+    ],
 
     TRACKER: [
         "Wow, tracking you was easy. Tracking the skunk ape, not so much.",
         "I've tracked other people with a lot less to gain from finding them.",
+        "I don't track people... well, that's what my lawyer tells me to say."
     ],
 
     BAYOU_MAN: [
@@ -589,12 +666,14 @@ Enemy_Lines = {
 # ========================
 
 Enemy_Adjectives = [
-    "Agitated", "Bestial", "Bloodthirsty", "Cannibalistic", "Crazy",
-    "Crazed", "Cursed", "Damned", "Dastardly", "Degenerate",
+    "Agitated", "Angry", "Bestial", "Bloodthirsty",
+    "Cannibalistic", "Crazy",
+    "Crazed", "Cursed", "Damned",
+    "Dastardly", "Degenerate",
     "Delirious", "Demented", "Depraved", "Deranged", "Desperate",
     "Detestable", "Diabolical", "Disgruntled", "Disillusioned",
     "Disoriented", "Disturbed", "Drug-fueled",
-    "Drunken", "Dubious", "Evil", "Fallen", "Feral",
+    "Drunken", "Dubious", "Evil", "Fallen",
     "Forgotten", "Godless", "Hallucinatory", "Heartless",
     "Heinous", "Hostile", "Idolatrous", "Immoral",
     "Inbred", "Insane", "Jaded", "Malevolent", "Malicious",
