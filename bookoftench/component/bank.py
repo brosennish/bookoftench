@@ -69,10 +69,9 @@ class BankComponent(LabeledSelectionComponent):
             if raw_amount.isdigit():
                 amount = int(raw_amount)
                 if incur_fee:
-                    amount = int(amount * 0.9)
                     print_and_sleep(yellow("10% fee applied."), 1)
                 if game_state.bank.make_withdrawal(amount):
-                    game_state.player.coins += amount
+                    game_state.player.coins += int(amount * 0.9)
             else:
                 print_and_sleep(yellow("Invalid choice."))
 
