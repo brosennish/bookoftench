@@ -162,8 +162,9 @@ class Combatant(ABC):
             self.do_random_dialogue()
         # TODO generalize, get specific logic out of components
         if self.name == SLEDGE_HAMMOND:
-            self.hp += 3
-            print_and_sleep(purple("Sledge Hammond took steroids and restored 3 HP!"), 1)
+            if self.hp > 0:
+                self.hp += 3
+                print_and_sleep(purple("Sledge Hammond took steroids and restored 3 HP!"), 1)
         return damage
 
     def reset_blindness(self) -> None:
