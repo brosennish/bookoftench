@@ -29,6 +29,7 @@ class Enemy(Combatant, NPC):
     bounty: int = 0
     type: str = ''
     flee: float = 0
+    strength: float = 0
     areas: List[str] = field(default_factory=list)
     items: List[str] = field(default_factory=list)
     coins: int = random.randint(5, 50)
