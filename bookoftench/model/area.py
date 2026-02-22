@@ -83,6 +83,7 @@ class Area:
 
         enemy.hp += round((enemy.hp * 0.03) * player_level - 1)
         enemy.hp += random.randint(-3, 3)
+        enemy_lines = enemy.get_enemy_encounter_line()
         elite_chance = min(0.15, max(0.0, (player_level - 1) * 0.03))
         if random.random() < elite_chance:
             enemy.name = f"Elite {enemy.name}"
@@ -93,7 +94,6 @@ class Area:
         else:
             print_and_sleep(yellow("An enemy appears!"), 1)
 
-        enemy_lines = enemy.get_enemy_encounter_line()
         if enemy_lines:
             print_and_sleep(f"{blue(f'{enemy_lines}')}", 3)
 
