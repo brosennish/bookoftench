@@ -8,6 +8,7 @@ CAVE = "Cave"
 CITY = "City"
 FOREST = "Forest"
 SWAMP = "Swamp"
+NA = "NA" # Not applicable / can't be found or purchased
 
 # Names
 AXE = "Axe"
@@ -109,22 +110,22 @@ Weapons = [
     {'name': POCKET_SAND, 'damage': 0, 'uses': 1, 'accuracy': 0.90, 'spread': 0, 'crit': 0.00,
      'cost': 20, 'sell_value': 8, 'type': BLIND, 'sound': '',
      'blind_effect': 0.10, 'blind_turns_min': 3, 'blind_turns_max': 5,
-     'areas': None},
+     'areas': NA},
 
     # =====================================================
     #                       TIER 1
     # =====================================================
     {'name': FOAM_FINGER, 'damage': 5, 'uses': -1, 'accuracy': 0.88, 'spread': 3, 'crit': 0.10,
      'cost': 0, 'sell_value': 0, 'type': MELEE, 'sound': audio.PUNCH,
-     'areas': None},
+     'areas': NA},
 
     {'name': PILLOW, 'damage': 1, 'uses': -1, 'accuracy': 0.88, 'spread': 0, 'crit': 0.10,
      'cost': 0, 'sell_value': 0, 'type': MELEE, 'sound': audio.PUNCH,
-     'areas': None},
+     'areas': NA},
 
     {'name': BINOCULARS, 'damage': 12, 'uses': 7, 'accuracy': 0.84, 'spread': 5, 'crit': 0.11,
      'cost': 18, 'sell_value': 9, 'type': MELEE, 'sound': audio.BLUNT,
-     'areas': None},
+     'areas': NA},
 
     {'name': BROKEN_BOTTLE, 'damage': 13, 'uses': 6, 'accuracy': 0.84, 'spread': 5, 'crit': 0.11,
      'cost': 18, 'sell_value': 9, 'type': MELEE, 'sound': audio.BLADE,
@@ -140,7 +141,7 @@ Weapons = [
 
     {'name': TREKKING_POLE, 'damage': 13, 'uses': 9, 'accuracy': 0.87, 'spread': 4, 'crit': 0.12,
      'cost': 24, 'sell_value': 12, 'type': MELEE, 'sound': audio.BLADE,
-     'areas': None},
+     'areas': NA},
 
     # =====================================================
     #                       TIER 2
@@ -183,15 +184,15 @@ Weapons = [
 
     {'name': POOL_CUE, 'damage': 18, 'uses': 10, 'accuracy': 0.83, 'spread': 3, 'crit': 0.07,
      'cost': 24, 'sell_value': 12, 'type': MELEE, 'sound': audio.BLUNT,
-     'areas': None},
+     'areas': NA},
 
     {'name': SELFIE_STICK, 'damage': 12, 'uses': 13, 'accuracy': 0.87, 'spread': 2, 'crit': 0.05,
      'cost': 14, 'sell_value': 7, 'type': MELEE, 'sound': audio.BLUNT,
-     'areas': None},
+     'areas': NA},
 
     {'name': SHIV, 'damage': 18, 'uses': 10, 'accuracy': 0.89, 'spread': 2, 'crit': 0.12,
      'cost': 20, 'sell_value': 10, 'type': MELEE, 'sound': audio.BLADE,
-     'areas': None},
+     'areas': NA},
 
     {'name': SHOVEL, 'damage': 21, 'uses': 8, 'accuracy': 0.79, 'spread': 5, 'crit': 0.08,
      'cost': 38, 'sell_value': 19, 'type': MELEE, 'sound': audio.BLUNT,
@@ -199,7 +200,7 @@ Weapons = [
 
     {'name': SUITCASE, 'damage': 15, 'uses': 11, 'accuracy': 0.84, 'spread': 3, 'crit': 0.06,
      'cost': 16, 'sell_value': 8, 'type': MELEE, 'sound': audio.BLUNT,
-     'areas': None},
+     'areas': NA},
 
     {'name': SWITCHBLADE, 'damage': 19, 'uses': 11, 'accuracy': 0.90, 'spread': 2, 'crit': 0.13,
      'cost': 28, 'sell_value': 14, 'type': MELEE, 'sound': audio.BLADE,
@@ -215,11 +216,11 @@ Weapons = [
 
     {'name': TRIPOD, 'damage': 17, 'uses': 10, 'accuracy': 0.83, 'spread': 3, 'crit': 0.07,
      'cost': 22, 'sell_value': 11, 'type': MELEE, 'sound': audio.BLUNT,
-     'areas': None},
+     'areas': NA},
 
     {'name': WALKING_STICK, 'damage': 15, 'uses': 12, 'accuracy': 0.87, 'spread': 2, 'crit': 0.05,
      'cost': 18, 'sell_value': 9, 'type': MELEE, 'sound': audio.BLUNT,
-     'areas': None},
+     'areas': NA},
 
     {'name': WOODEN_CLUB, 'damage': 18, 'uses': 11, 'accuracy': 0.81, 'spread': 4, 'crit': 0.08,
      'cost': 24, 'sell_value': 12, 'type': MELEE, 'sound': audio.BLUNT,
@@ -351,14 +352,14 @@ Weapons = [
     # =====================================================
     {'name': CLAWS, 'damage': 22, 'uses': -1, 'accuracy': 0.86, 'spread': 5, 'crit': 0.10,
      'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'sound': audio.PUNCH,
-     'areas': None},
+     'areas': NA},
 
     {'name': LASER_BEAMS, 'damage': 30, 'uses': -1, 'accuracy': 0.70, 'spread': 3, 'crit': 0.12,
      'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'sound': audio.MAGIC,
-     'areas': None},
+     'areas': NA},
 
     {'name': VOODOO_STAFF, 'damage': 28, 'uses': -1, 'accuracy': 0.76, 'spread': 5, 'crit': 0.09,
      'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'sound': audio.MAGIC,
-     'areas': None},
+     'areas': NA},
 
 ]
