@@ -92,30 +92,30 @@ Weapons = [
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
     # --- Blinding / Debuff ---
-    {'name': PEPPER_SPRAY, 'damage': 6, 'uses': 3, 'accuracy': 0.85, 'spread': 2,
+    {'name': PEPPER_SPRAY, 'damage': 0, 'uses': 3, 'accuracy': 0.85, 'spread': 0,
      'crit': 0.05, 'cost': 25, 'sell_value': 12, 'type': BLIND, 'sound': '',
      'blind_effect': 0.50, 'blind_turns_min': 2, 'blind_turns_max': 4,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
-    {'name': BEAR_SPRAY, 'damage': 0, 'uses': 1, 'accuracy': 0.85, 'spread': 0, 'crit': 0.00,
+    {'name': BEAR_SPRAY, 'damage': 0, 'uses': 1, 'accuracy': 0.85, 'spread': 0, 'crit': 0,
      'cost': 60, 'sell_value': 30, 'type': BLIND, 'sound': '',
      'blind_effect': 0.75, 'blind_turns_min': 2, 'blind_turns_max': 4,
      'areas': [CAVE, FOREST, SWAMP]},
 
-    {'name': CHILI_POWDER, 'damage': 4, 'uses': 1, 'accuracy': 0.90, 'spread': 1, 'crit': 0.02,
+    {'name': CHILI_POWDER, 'damage': 0, 'uses': 1, 'accuracy': 0.90, 'spread': 0, 'crit': 0,
      'cost': 30, 'sell_value': 15, 'type': BLIND, 'sound': '',
-     'blind_effect': 0.15, 'blind_turns_min': 3, 'blind_turns_max': 5,
+     'blind_effect': 0.25, 'blind_turns_min': 3, 'blind_turns_max': 5,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
-    {'name': POCKET_SAND, 'damage': 0, 'uses': 1, 'accuracy': 0.90, 'spread': 0, 'crit': 0.00,
+    {'name': POCKET_SAND, 'damage': 0, 'uses': 1, 'accuracy': 0.90, 'spread': 0, 'crit': 0,
      'cost': 20, 'sell_value': 8, 'type': BLIND, 'sound': '',
-     'blind_effect': 0.10, 'blind_turns_min': 3, 'blind_turns_max': 5,
+     'blind_effect': 0.15, 'blind_turns_min': 3, 'blind_turns_max': 5,
      'areas': NA},
 
     # =====================================================
     #                       TIER 1
     # =====================================================
-    {'name': FOAM_FINGER, 'damage': 5, 'uses': -1, 'accuracy': 0.88, 'spread': 3, 'crit': 0.10,
+    {'name': FOAM_FINGER, 'damage': 1, 'uses': -1, 'accuracy': 0.88, 'spread': 3, 'crit': 0.10,
      'cost': 0, 'sell_value': 0, 'type': MELEE, 'sound': audio.PUNCH,
      'areas': NA},
 
@@ -123,15 +123,15 @@ Weapons = [
      'cost': 0, 'sell_value': 0, 'type': MELEE, 'sound': audio.PUNCH,
      'areas': NA},
 
-    {'name': BINOCULARS, 'damage': 12, 'uses': 7, 'accuracy': 0.84, 'spread': 5, 'crit': 0.11,
+    {'name': BINOCULARS, 'damage': 11, 'uses': 7, 'accuracy': 0.84, 'spread': 3, 'crit': 0.11,
      'cost': 18, 'sell_value': 9, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': NA},
 
-    {'name': BROKEN_BOTTLE, 'damage': 13, 'uses': 6, 'accuracy': 0.84, 'spread': 5, 'crit': 0.11,
+    {'name': BROKEN_BOTTLE, 'damage': 14, 'uses': 6, 'accuracy': 0.84, 'spread': 4, 'crit': 0.11,
      'cost': 18, 'sell_value': 9, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
-    {'name': HATCHET, 'damage': 18, 'uses': 8, 'accuracy': 0.83, 'spread': 5, 'crit': 0.10,
+    {'name': HATCHET, 'damage': 18, 'uses': 8, 'accuracy': 0.83, 'spread': 4, 'crit': 0.10,
      'cost': 30, 'sell_value': 15, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [CAVE, FOREST, SWAMP]},
 
@@ -139,38 +139,38 @@ Weapons = [
      'cost': 24, 'sell_value': 12, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
-    {'name': TREKKING_POLE, 'damage': 13, 'uses': 9, 'accuracy': 0.87, 'spread': 4, 'crit': 0.12,
+    {'name': TREKKING_POLE, 'damage': 13, 'uses': 9, 'accuracy': 0.87, 'spread': 2, 'crit': 0.12,
      'cost': 24, 'sell_value': 12, 'type': MELEE, 'sound': audio.BLADE,
      'areas': NA},
 
     # =====================================================
     #                       TIER 2
     # =====================================================
-    {'name': BASEBALL_BAT, 'damage': 22, 'uses': 10, 'accuracy': 0.82, 'spread': 4, 'crit': 0.10,
+    {'name': BASEBALL_BAT, 'damage': 23, 'uses': 10, 'accuracy': 0.82, 'spread': 4, 'crit': 0.10,
      'cost': 42, 'sell_value': 21, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': [CITY, FOREST, SWAMP]},
 
-    {'name': BONE_CLUB, 'damage': 20, 'uses': 9, 'accuracy': 0.78, 'spread': 5, 'crit': 0.08,
+    {'name': BONE_CLUB, 'damage': 20, 'uses': 9, 'accuracy': 0.78, 'spread': 3, 'crit': 0.08,
      'cost': 28, 'sell_value': 14, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': [FOREST, SWAMP, CAVE]},
 
-    {'name': BRASS_KNUCKLES, 'damage': 21, 'uses': 11, 'accuracy': 0.91, 'spread': 4, 'crit': 0.11,
+    {'name': BRASS_KNUCKLES, 'damage': 21, 'uses': 11, 'accuracy': 0.91, 'spread': 3, 'crit': 0.11,
      'cost': 50, 'sell_value': 25, 'type': MELEE, 'sound': audio.PUNCH,
      'areas': [CITY]},
 
-    {'name': CANE, 'damage': 13, 'uses': 12, 'accuracy': 0.86, 'spread': 2, 'crit': 0.05,
-     'cost': 18, 'sell_value': 9, 'type': MELEE, 'sound': audio.BLUNT,
+    {'name': CANE, 'damage': 15, 'uses': 12, 'accuracy': 0.86, 'spread': 2, 'crit': 0.05,
+     'cost': 20, 'sell_value': 10, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': [CITY]},
 
     {'name': CHISEL, 'damage': 17, 'uses': 9, 'accuracy': 0.84, 'spread': 3, 'crit': 0.11,
      'cost': 22, 'sell_value': 11, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [CITY, CAVE]},
 
-    {'name': CROWBAR, 'damage': 23, 'uses': 8, 'accuracy': 0.81, 'spread': 5, 'crit': 0.08,
+    {'name': CROWBAR, 'damage': 23, 'uses': 8, 'accuracy': 0.81, 'spread': 4, 'crit': 0.08,
      'cost': 45, 'sell_value': 22, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': [CITY]},
 
-    {'name': FLASHLIGHT, 'damage': 11, 'uses': 14, 'accuracy': 0.90, 'spread': 2, 'crit': 0.04,
+    {'name': FLASHLIGHT, 'damage': 11, 'uses': 14, 'accuracy': 0.90, 'spread': 1, 'crit': 0.04,
      'cost': 16, 'sell_value': 8, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': [CITY, CAVE]},
 
@@ -178,31 +178,31 @@ Weapons = [
      'cost': 34, 'sell_value': 17, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [SWAMP]},
 
-    {'name': POCKET_KNIFE, 'damage': 15, 'uses': 12, 'accuracy': 0.89, 'spread': 2, 'crit': 0.09,
+    {'name': POCKET_KNIFE, 'damage': 16, 'uses': 12, 'accuracy': 0.89, 'spread': 3, 'crit': 0.09,
      'cost': 18, 'sell_value': 9, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [CITY, FOREST]},
 
-    {'name': POOL_CUE, 'damage': 18, 'uses': 10, 'accuracy': 0.83, 'spread': 3, 'crit': 0.07,
+    {'name': POOL_CUE, 'damage': 13, 'uses': 10, 'accuracy': 0.83, 'spread': 1, 'crit': 0.07,
      'cost': 24, 'sell_value': 12, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': NA},
 
-    {'name': SELFIE_STICK, 'damage': 12, 'uses': 13, 'accuracy': 0.87, 'spread': 2, 'crit': 0.05,
-     'cost': 14, 'sell_value': 7, 'type': MELEE, 'sound': audio.BLUNT,
+    {'name': SELFIE_STICK, 'damage': 10, 'uses': 13, 'accuracy': 0.87, 'spread': 1, 'crit': 0.05,
+     'cost': 12, 'sell_value': 6, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': NA},
 
-    {'name': SHIV, 'damage': 18, 'uses': 10, 'accuracy': 0.89, 'spread': 2, 'crit': 0.12,
+    {'name': SHIV, 'damage': 18, 'uses': 10, 'accuracy': 0.89, 'spread': 3, 'crit': 0.12,
      'cost': 20, 'sell_value': 10, 'type': MELEE, 'sound': audio.BLADE,
      'areas': NA},
 
-    {'name': SHOVEL, 'damage': 21, 'uses': 8, 'accuracy': 0.79, 'spread': 5, 'crit': 0.08,
+    {'name': SHOVEL, 'damage': 22, 'uses': 8, 'accuracy': 0.79, 'spread': 4, 'crit': 0.08,
      'cost': 38, 'sell_value': 19, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
-    {'name': SUITCASE, 'damage': 15, 'uses': 11, 'accuracy': 0.84, 'spread': 3, 'crit': 0.06,
+    {'name': SUITCASE, 'damage': 13, 'uses': 11, 'accuracy': 0.84, 'spread': 2, 'crit': 0.06,
      'cost': 16, 'sell_value': 8, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': NA},
 
-    {'name': SWITCHBLADE, 'damage': 19, 'uses': 11, 'accuracy': 0.90, 'spread': 2, 'crit': 0.13,
+    {'name': SWITCHBLADE, 'damage': 19, 'uses': 11, 'accuracy': 0.90, 'spread': 4, 'crit': 0.13,
      'cost': 28, 'sell_value': 14, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [CITY]},
 
@@ -210,19 +210,19 @@ Weapons = [
      'cost': 30, 'sell_value': 15, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': [CITY, SWAMP]},
 
-    {'name': TROWEL, 'damage': 14, 'uses': 13, 'accuracy': 0.88, 'spread': 2, 'crit': 0.06,
+    {'name': TROWEL, 'damage': 13, 'uses': 13, 'accuracy': 0.88, 'spread': 2, 'crit': 0.06,
      'cost': 14, 'sell_value': 7, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [FOREST, CAVE]},
 
-    {'name': TRIPOD, 'damage': 17, 'uses': 10, 'accuracy': 0.83, 'spread': 3, 'crit': 0.07,
+    {'name': TRIPOD, 'damage': 13, 'uses': 10, 'accuracy': 0.83, 'spread': 1, 'crit': 0.07,
      'cost': 22, 'sell_value': 11, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': NA},
 
-    {'name': WALKING_STICK, 'damage': 15, 'uses': 12, 'accuracy': 0.87, 'spread': 2, 'crit': 0.05,
+    {'name': WALKING_STICK, 'damage': 12, 'uses': 12, 'accuracy': 0.87, 'spread': 1, 'crit': 0.05,
      'cost': 18, 'sell_value': 9, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': NA},
 
-    {'name': WOODEN_CLUB, 'damage': 18, 'uses': 11, 'accuracy': 0.81, 'spread': 4, 'crit': 0.08,
+    {'name': WOODEN_CLUB, 'damage': 19, 'uses': 11, 'accuracy': 0.81, 'spread': 3, 'crit': 0.08,
      'cost': 24, 'sell_value': 12, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': [FOREST, SWAMP]},
 
@@ -234,11 +234,11 @@ Weapons = [
      'cost': 65, 'sell_value': 32, 'type': MELEE, 'sound': audio.AXE,
      'areas': [CITY, FOREST, SWAMP]},
 
-    {'name': BONE_SAW, 'damage': 24, 'uses': 7, 'accuracy': 0.83, 'spread': 3, 'crit': 0.14,
+    {'name': BONE_SAW, 'damage': 24, 'uses': 7, 'accuracy': 0.83, 'spread': 4, 'crit': 0.14,
      'cost': 46, 'sell_value': 23, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [CITY, CAVE, SWAMP]},
 
-    {'name': BRANCH_SPEAR, 'damage': 20, 'uses': 8, 'accuracy': 0.78, 'spread': 5, 'crit': 0.09,
+    {'name': BRANCH_SPEAR, 'damage': 20, 'uses': 8, 'accuracy': 0.78, 'spread': 4, 'crit': 0.09,
      'cost': 28, 'sell_value': 14, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [FOREST, SWAMP]},
 
@@ -250,7 +250,7 @@ Weapons = [
      'cost': 60, 'sell_value': 30, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [CITY, FOREST, SWAMP]},
 
-    {'name': MEAT_CLEAVER, 'damage': 23, 'uses': 9, 'accuracy': 0.82, 'spread': 3, 'crit': 0.13,
+    {'name': MEAT_CLEAVER, 'damage': 23, 'uses': 9, 'accuracy': 0.82, 'spread': 4, 'crit': 0.13,
      'cost': 38, 'sell_value': 19, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [CITY, SWAMP]},
 
@@ -258,7 +258,7 @@ Weapons = [
      'cost': 55, 'sell_value': 28, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': [CAVE, FOREST]},
 
-    {'name': SCYTHE, 'damage': 27, 'uses': 9, 'accuracy': 0.79, 'spread': 4, 'crit': 0.11,
+    {'name': SCYTHE, 'damage': 27, 'uses': 9, 'accuracy': 0.79, 'spread': 5, 'crit': 0.11,
      'cost': 33, 'sell_value': 16, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [FOREST, SWAMP]},
 
@@ -266,30 +266,30 @@ Weapons = [
      'cost': 33, 'sell_value': 16, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [FOREST, SWAMP]},
 
-    {'name': STONE_SPEAR, 'damage': 22, 'uses': 8, 'accuracy': 0.77, 'spread': 5, 'crit': 0.10,
+    {'name': STONE_SPEAR, 'damage': 22, 'uses': 8, 'accuracy': 0.77, 'spread': 4, 'crit': 0.10,
      'cost': 36, 'sell_value': 18, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [CAVE, FOREST]},
 
-    {'name': SURVIVAL_KNIFE, 'damage': 21, 'uses': 12, 'accuracy': 0.86, 'spread': 3, 'crit': 0.12,
+    {'name': SURVIVAL_KNIFE, 'damage': 21, 'uses': 12, 'accuracy': 0.86, 'spread': 4, 'crit': 0.12,
      'cost': 32, 'sell_value': 16, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [FOREST, SWAMP, CAVE]},
 
-    {'name': TORCH_CLUB, 'damage': 24, 'uses': 8, 'accuracy': 0.79, 'spread': 5, 'crit': 0.12,
+    {'name': TORCH_CLUB, 'damage': 22, 'uses': 8, 'accuracy': 0.79, 'spread': 3, 'crit': 0.12,
      'cost': 44, 'sell_value': 22, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': [CAVE, FOREST]},
 
     # =====================================================
     #                       TIER 4 (PROJECTILE)
     # =====================================================
-    {'name': COMPOUND_BOW, 'damage': 29, 'uses': 10, 'accuracy': 0.75, 'spread': 6, 'crit': 0.18,
+    {'name': COMPOUND_BOW, 'damage': 29, 'uses': 10, 'accuracy': 0.75, 'spread': 5, 'crit': 0.18,
      'cost': 75, 'sell_value': 37, 'type': PROJECTILE, 'sound': audio.ARROW,
      'areas': [FOREST, SWAMP]},
 
-    {'name': CROSSBOW, 'damage': 34, 'uses': 6, 'accuracy': 0.90, 'spread': 3, 'crit': 0.13,
+    {'name': CROSSBOW, 'damage': 34, 'uses': 6, 'accuracy': 0.90, 'spread': 5, 'crit': 0.13,
      'cost': 80, 'sell_value': 40, 'type': PROJECTILE, 'sound': audio.ARROW,
      'areas': [FOREST, SWAMP]},
 
-    {'name': FLARE_GUN, 'damage': 27, 'uses': 5, 'accuracy': 0.72, 'spread': 7, 'crit': 0.16,
+    {'name': FLARE_GUN, 'damage': 27, 'uses': 5, 'accuracy': 0.72, 'spread': 3, 'crit': 0.16,
      'cost': 60, 'sell_value': 30, 'type': PROJECTILE, 'sound': audio.PISTOL,
      'areas': [CITY, SWAMP]},
 
@@ -297,46 +297,46 @@ Weapons = [
      'cost': 85, 'sell_value': 42, 'type': PROJECTILE, 'sound': audio.ARROW,
      'areas': [CITY, SWAMP]},
 
-    {'name': LONGBOW, 'damage': 26, 'uses': 11, 'accuracy': 0.76, 'spread': 6, 'crit': 0.15,
+    {'name': LONGBOW, 'damage': 26, 'uses': 11, 'accuracy': 0.76, 'spread': 5, 'crit': 0.15,
      'cost': 68, 'sell_value': 34, 'type': PROJECTILE, 'sound': audio.ARROW,
      'areas': [FOREST]},
 
-    {'name': NAIL_GUN, 'damage': 28, 'uses': 6, 'accuracy': 0.73, 'spread': 7, 'crit': 0.14,
+    {'name': NAIL_GUN, 'damage': 28, 'uses': 6, 'accuracy': 0.73, 'spread': 4, 'crit': 0.14,
      'cost': 70, 'sell_value': 35, 'type': PROJECTILE, 'sound': audio.ARROW,
      'areas': [CITY]},
 
-    {'name': PISTOL, 'damage': 31, 'uses': 6, 'accuracy': 0.83, 'spread': 4, 'crit': 0.11,
+    {'name': PISTOL, 'damage': 31, 'uses': 6, 'accuracy': 0.83, 'spread': 5, 'crit': 0.11,
      'cost': 70, 'sell_value': 34, 'type': PROJECTILE, 'sound': audio.PISTOL,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
-    {'name': REVOLVER, 'damage': 36, 'uses': 5, 'accuracy': 0.70, 'spread': 5, 'crit': 0.10,
+    {'name': REVOLVER, 'damage': 38, 'uses': 5, 'accuracy': 0.70, 'spread': 6, 'crit': 0.10,
      'cost': 78, 'sell_value': 39, 'type': PROJECTILE, 'sound': audio.PISTOL,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
-    {'name': RIFLE, 'damage': 39, 'uses': 6, 'accuracy': 0.90, 'spread': 4, 'crit': 0.12,
+    {'name': RIFLE, 'damage': 36, 'uses': 6, 'accuracy': 0.90, 'spread': 5, 'crit': 0.12,
      'cost': 82, 'sell_value': 41, 'type': PROJECTILE, 'sound': audio.RIFLE,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
-    {'name': SHOTGUN, 'damage': 41, 'uses': 4, 'accuracy': 0.75, 'spread': 6, 'crit': 0.09,
+    {'name': SHOTGUN, 'damage': 40, 'uses': 4, 'accuracy': 0.75, 'spread': 6, 'crit': 0.09,
      'cost': 90, 'sell_value': 45, 'type': PROJECTILE, 'sound': audio.SHOTGUN,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
-    {'name': SLINGSHOT, 'damage': 18, 'uses': 14, 'accuracy': 0.84, 'spread': 3, 'crit': 0.12,
-     'cost': 28, 'sell_value': 14, 'type': PROJECTILE, 'sound': audio.ARROW,
+    {'name': SLINGSHOT, 'damage': 17, 'uses': 14, 'accuracy': 0.84, 'spread': 2, 'crit': 0.12,
+     'cost': 27, 'sell_value': 14, 'type': PROJECTILE, 'sound': audio.ARROW,
      'areas': [CITY, FOREST, SWAMP]},
 
-    {'name': T_SHIRT_CANNON, 'damage': 24, 'uses': 9, 'accuracy': 0.72, 'spread': 7, 'crit': 0.09,
-     'cost': 55, 'sell_value': 27, 'type': PROJECTILE, 'sound': audio.SHOTGUN,
+    {'name': T_SHIRT_CANNON, 'damage': 22, 'uses': 9, 'accuracy': 0.72, 'spread': 3, 'crit': 0.09,
+     'cost': 53, 'sell_value': 27, 'type': PROJECTILE, 'sound': audio.SHOTGUN,
      'areas': [CITY]},
 
     # =====================================================
     #                       TIER 5 (HEAVY)
     # =====================================================
-    {'name': CHAINSAW, 'damage': 39, 'uses': 6, 'accuracy': 0.71, 'spread': 6, 'crit': 0.10,
+    {'name': CHAINSAW, 'damage': 40, 'uses': 6, 'accuracy': 0.71, 'spread': 7, 'crit': 0.10,
      'cost': 95, 'sell_value': 47, 'type': MELEE, 'sound': audio.CHAINSAW,
      'areas': [CITY, FOREST, SWAMP]},
 
-    {'name': SLEDGEHAMMER, 'damage': 42, 'uses': 10, 'accuracy': 0.69, 'spread': 6, 'crit': 0.08,
+    {'name': SLEDGEHAMMER, 'damage': 38, 'uses': 10, 'accuracy': 0.69, 'spread': 6, 'crit': 0.08,
      'cost': 100, 'sell_value': 50, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
@@ -350,15 +350,15 @@ Weapons = [
     # =====================================================
     #                NOT OBTAINABLE BY PLAYER
     # =====================================================
-    {'name': CLAWS, 'damage': 22, 'uses': -1, 'accuracy': 0.86, 'spread': 5, 'crit': 0.10,
+    {'name': CLAWS, 'damage': 22, 'uses': -1, 'accuracy': 0.86, 'spread': 4, 'crit': 0.10,
      'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'sound': audio.PUNCH,
      'areas': NA},
 
-    {'name': LASER_BEAMS, 'damage': 30, 'uses': -1, 'accuracy': 0.70, 'spread': 3, 'crit': 0.12,
+    {'name': LASER_BEAMS, 'damage': 30, 'uses': -1, 'accuracy': 0.70, 'spread': 4, 'crit': 0.12,
      'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'sound': audio.MAGIC,
      'areas': NA},
 
-    {'name': VOODOO_STAFF, 'damage': 28, 'uses': -1, 'accuracy': 0.76, 'spread': 5, 'crit': 0.09,
+    {'name': VOODOO_STAFF, 'damage': 28, 'uses': -1, 'accuracy': 0.76, 'spread': 7, 'crit': 0.09,
      'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'sound': audio.MAGIC,
      'areas': NA},
 

@@ -47,7 +47,7 @@ Illnesses = [
      'success_rate': 0.70},
 
     {'name': MAD_TENCH_DISEASE,
-     'description': "A condition characterized by going mad over the sanctity of tench.",
+     'description': "A condition characterized by a loss of sanity over the sanctity of tench.",
      'levels_until_death': 3,
      'cost': 60,
      'success_rate': 0.20},

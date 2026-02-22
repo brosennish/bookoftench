@@ -85,8 +85,8 @@ class Player(Combatant):
     games_played: int = 0
 
     _max_plays: int = 10
-    _max_items: int = 5
-    _max_weapons: int = 5
+    _max_items: int = 4
+    _max_weapons: int = 4
 
     _blind = False
     # TODO maybe add starting items/weapons to config file
@@ -321,8 +321,7 @@ class Player(Combatant):
         # ---- core level-up effects live here ----
         self.xp -= self.xp_needed
         self.lvl += 1
-        cash_reward = 80 + (self.lvl * 10)
-        self.coins += cash_reward
+        self.coins += 100
         self.games_played = 0
 
         old_max = self.max_hp

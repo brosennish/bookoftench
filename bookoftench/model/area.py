@@ -18,10 +18,10 @@ from .shop import Shop
 
 _search_defaults = {
     DISCOVER_PERK: 1,
-    DISCOVER_ITEM: 5,
-    DISCOVER_WEAPON: 5,
-    DISCOVER_DISCOVERABLE: 50,
-    SPAWN_ENEMY: 25
+    DISCOVER_ITEM: 4,
+    DISCOVER_WEAPON: 4,
+    DISCOVER_DISCOVERABLE: 45,
+    SPAWN_ENEMY: 30
 }
 
 
@@ -81,9 +81,10 @@ class Area:
         enemy = load_enemy(enemy_name)
         self.enemies_seen.add(enemy_name)
 
-        enemy.hp += player_level - 1
-        enemy.hp += random.randint(-5, 5)
-        elite_chance = min(0.10, max(0.0, (player_level - 1) * 0.02))
+        enemy.hp += random.randint(-3, 3) #  apply hp spread first
+        enemy.hp += round((enemy.hp * 0.03) * player_level - 1) #  then apply hp scaling
+        enemy_lines = enemy.get_enemy_encounter_line() #  get the line before mutating enemy.name
+        elite_chance = min(0.15, max(0.0, (player_level - 1) * 0.03))
         if random.random() < elite_chance:
             enemy.name = f"Elite {enemy.name}"
             enemy.hp = int(enemy.hp * 1.5)
@@ -93,7 +94,6 @@ class Area:
         else:
             print_and_sleep(yellow("An enemy appears!"), 1)
 
-        enemy_lines = enemy.get_enemy_encounter_line()
         if enemy_lines:
             print_and_sleep(f"{blue(f'{enemy_lines}')}", 3)
 
