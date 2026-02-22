@@ -32,7 +32,7 @@ class Enemy(Combatant, NPC):
     strength: float = 0
     areas: List[str] = field(default_factory=list)
     items: List[str] = field(default_factory=list)
-    coins: int = random.randint(5, 50)
+    coins: int = random.randint(10, 60)
     alive: bool = True
 
     current_weapon: Weapon = field(init=False)
