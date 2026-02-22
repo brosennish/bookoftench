@@ -266,7 +266,8 @@ Denny Biltmore stands before you...
 Final_Boss = {
     'name': DENNY_BILTMORE,
     'hp': 325, 'weapons': [w.BRASS_KNUCKLES, w.PISTOL, w.REVOLVER, w.SHOTGUN],
-    'bounty': 0, 'type': FINAL_BOSS, 'preamble': [{'text': text, 'color': Colors.RED, 'sleep': 4}
+    'bounty': 0, 'type': FINAL_BOSS, 'theme': audio.FINAL_BOSS_THEME,
+    'preamble': [{'text': text, 'color': Colors.RED, 'sleep': 4}
                                                   for text in _biltmore_preamble_lines.split('\n')],
     'random_dialogue': [{
         'upper_threshold': 0.08,
