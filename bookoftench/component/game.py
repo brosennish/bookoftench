@@ -103,15 +103,15 @@ class Tutorial(TextDisplayingComponent):
         super().__init__(game_state,
                          next_component=Intro,
                          display_callback=lambda _: print_and_sleep("""
-SAVE THE WENCH - HOW TO PLAY
+BOOK OF TENCH - HOW TO PLAY
 
     1. Search areas to find discoverables and encounter enemies
     2. Fight enemies in turn-based combat to earn XP and coins
-    3. Buy and sell items and weapons in the shop
+    3. Buy and sell items, weapons and perks in the shop
     4. Use items freely during your turn or between battles
     5. Gain perks that permanently affect combat, coins, or luck
     6. Play casino games to risk coins for big rewards
-    7. Store coins in the bank to earn interest upon level-up
+    7. Store coins in the bank to protect wealth earn interest upon level-up
     8. Each area has a boss and a hidden number of enemies
     9. Clear the wench’s area to unlock the final showdown
     10. Defeat the final boss to save the wench and win the game

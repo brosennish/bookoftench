@@ -20,7 +20,7 @@ _search_defaults = {
     DISCOVER_PERK: 1,
     DISCOVER_ITEM: 4,
     DISCOVER_WEAPON: 4,
-    DISCOVER_DISCOVERABLE: 45,
+    DISCOVER_DISCOVERABLE: 50,
     SPAWN_ENEMY: 30
 }
 
@@ -82,7 +82,7 @@ class Area:
         self.enemies_seen.add(enemy_name)
 
         enemy.hp += random.randint(-3, 3) #  apply hp spread first
-        enemy.hp += round((enemy.hp * 0.03) * player_level - 1) #  then apply hp scaling
+        enemy.hp += round((enemy.hp * 0.03) * max(player_level - 2, 0)) #  then apply hp scaling
         enemy_lines = enemy.get_enemy_encounter_line() #  get the line before mutating enemy.name
         elite_chance = min(0.15, max(0.0, (player_level - 1) * 0.03))
         if random.random() < elite_chance:

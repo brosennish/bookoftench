@@ -27,12 +27,12 @@ class Enemy(Combatant, NPC):
     hp: int = 0
     weapons: List[str] = field(default_factory=list)
     bounty: int = 0
+    coins: int = 0
     type: str = ''
     flee: float = 0
     strength: float = 0
     areas: List[str] = field(default_factory=list)
     items: List[str] = field(default_factory=list)
-    coins: int = random.randint(5, 50)
     alive: bool = True
 
     current_weapon: Weapon = field(init=False)
@@ -51,7 +51,9 @@ class Enemy(Combatant, NPC):
 
     @attach_perk(RICKETY_PICKPOCKET, value_description="coins dropped")
     def drop_coins(self) -> int:
-        return self.coins
+        self.coins += random.randint(-5, 10)
+        coins = max(self.coins, 0)
+        return coins
 
     def handle_broken_weapon(self) -> None:
         del self.weapon_dict[self.current_weapon.name]
