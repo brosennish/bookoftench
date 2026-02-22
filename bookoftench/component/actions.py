@@ -69,7 +69,7 @@ class Search(RandomChoiceComponent):
         if player.hp < player.max_hp:
             if find.hp > 0:
                 original_hp = player.hp
-                player.gain_hp(find.hp)
+                player.gain_hp(find.hp + random.randint(0, 3))
                 print_and_sleep(
                     f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
                     f"{color(f"({find.rarity})")} and restored {green(player.hp - original_hp)} hp.",
