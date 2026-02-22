@@ -19,13 +19,13 @@ class Discoverable:
 def search_discoverable_rarity() -> str:
     roll = random.random()
 
-    if roll < 0.001:
+    if roll < 0.0001:
         rarity = MYTHIC
-    elif roll < 0.01:
+    elif roll < 0.001:
         rarity = LEGENDARY
     elif roll < 0.1:
         rarity = RARE
-    elif roll < 0.3:
+    elif roll < 0.35:
         rarity = UNCOMMON
     else:
         rarity = COMMON
