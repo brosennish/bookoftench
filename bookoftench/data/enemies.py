@@ -212,15 +212,15 @@ Bosses = [
     # ========================
     {'name': SLEDGE_HAMMOND, 'hp': 250,
      'weapons': [w.SLEDGEHAMMER, w.AXE, w.CHAINSAW, w.BRASS_KNUCKLES, w.INJECTION_NEEDLE],
-     'bounty': 0, 'type': BOSS, 'preamble': {}},
+     'bounty': 0, 'type': BOSS, 'flee': 1, 'preamble': {}},
 
     {'name': THE_MAYOR, 'hp': 250,
      'weapons': [w.PISTOL, w.SHOTGUN, w.REVOLVER, w.BRASS_KNUCKLES, w.BASEBALL_BAT],
-     'bounty': 0, 'type': BOSS, 'theme': audio.FINAL_BOSS_THEME},
+     'bounty': 0, 'type': BOSS, 'flee': 1, 'theme': audio.FINAL_BOSS_THEME},
 
     {'name': BAYOU_BILL, 'hp': 250,
      'weapons': [w.MACHETE, w.SLEDGEHAMMER, w.SHOTGUN, w.CHAINSAW, w.FROG_GIG],
-     'bounty': 0, 'type': BOSS,
+     'bounty': 0, 'type': BOSS, 'flee': 1,
      'preamble': [
          {'text': "What do we have here?", 'color': Colors.RED, 'sleep': 2},
          {'text': "Looks like anotha one a dem riverboat bad boys right heuh uh huh.",
@@ -245,7 +245,7 @@ Bosses = [
 
     {'name': CAPTAIN_HOLE, 'hp': 250,
      'weapons': [w.RIFLE, w.HARPOON, w.KNIFE, w.PISTOL, w.MACHETE],
-     'bounty': 0, 'type': BOSS, 'preamble': [
+     'bounty': 0, 'type': BOSS, 'flee': 1, 'preamble': [
         {'text': "Captain Hole has offered to shoot himself in the jines in exchange for your Tench Filet",
          'sleep': 4}
     ]}
@@ -266,7 +266,7 @@ Denny Biltmore stands before you...
 Final_Boss = {
     'name': DENNY_BILTMORE,
     'hp': 325, 'weapons': [w.BRASS_KNUCKLES, w.PISTOL, w.REVOLVER, w.SHOTGUN],
-    'bounty': 0, 'type': FINAL_BOSS, 'theme': audio.FINAL_BOSS_THEME,
+    'bounty': 0, 'type': FINAL_BOSS, 'flee': 1, 'theme': audio.FINAL_BOSS_THEME,
     'preamble': [{'text': text, 'color': Colors.RED, 'sleep': 4}
                                                   for text in _biltmore_preamble_lines.split('\n')],
     'random_dialogue': [{
