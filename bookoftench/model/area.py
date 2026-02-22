@@ -81,9 +81,9 @@ class Area:
         enemy = load_enemy(enemy_name)
         self.enemies_seen.add(enemy_name)
 
-        enemy.hp += round((enemy.hp * 0.03) * player_level - 1)
-        enemy.hp += random.randint(-3, 3)
-        enemy_lines = enemy.get_enemy_encounter_line()
+        enemy.hp += random.randint(-3, 3) #  apply hp spread first
+        enemy.hp += round((enemy.hp * 0.03) * player_level - 1) #  then apply hp scaling
+        enemy_lines = enemy.get_enemy_encounter_line() #  get the line before mutating enemy.name
         elite_chance = min(0.15, max(0.0, (player_level - 1) * 0.03))
         if random.random() < elite_chance:
             enemy.name = f"Elite {enemy.name}"
