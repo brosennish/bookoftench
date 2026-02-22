@@ -27,12 +27,12 @@ class Enemy(Combatant, NPC):
     hp: int = 0
     weapons: List[str] = field(default_factory=list)
     bounty: int = 0
+    coins: int = 0
     type: str = ''
     flee: float = 0
     strength: float = 0
     areas: List[str] = field(default_factory=list)
     items: List[str] = field(default_factory=list)
-    coins: int = random.randint(10, 60)
     alive: bool = True
 
     current_weapon: Weapon = field(init=False)
