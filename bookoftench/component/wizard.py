@@ -72,7 +72,7 @@ class WizardComponent(LabeledSelectionComponent):
                     print_and_sleep(yellow(f"No room in sack"), 2)
                     return
             if spell.type == ITEM:
-                if len(player.get_weapons()) == player.max_items:
+                if len(player.items) == player.max_items:
                     print_and_sleep(yellow(f"No room in sack"), 2)
                     return
 
