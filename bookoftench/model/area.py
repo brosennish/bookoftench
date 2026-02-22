@@ -83,7 +83,7 @@ class Area:
 
         enemy.hp += player_level - 1
         enemy.hp += random.randint(-5, 5)
-        elite_chance = min(0.10, max(0.0, (player_level - 1) * 0.02))
+        elite_chance = min(0.15, max(0.0, (player_level - 1) * 0.03))
         if random.random() < elite_chance:
             enemy.name = f"Elite {enemy.name}"
             enemy.hp = int(enemy.hp * 1.5)
