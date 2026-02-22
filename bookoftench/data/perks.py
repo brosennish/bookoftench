@@ -165,10 +165,10 @@ Perks = [
     },
     {
         'name': HEALTH_NUT,
-        'cost': 150,
-        'description': "Gain +25% health from items",
+        'cost': 110,
+        'description': "Gain +10% health from items",
         'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
-        'wrapper_config': {'change': 25}
+        'wrapper_config': {'change': 10}
     },
     {
         'name': INTRO_TO_TENCH,
