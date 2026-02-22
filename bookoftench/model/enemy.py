@@ -52,7 +52,8 @@ class Enemy(Combatant, NPC):
     @attach_perk(RICKETY_PICKPOCKET, value_description="coins dropped")
     def drop_coins(self) -> int:
         self.coins += random.randint(-5, 10)
-        return self.coins
+        coins = max(self.coins, 0)
+        return coins
 
     def handle_broken_weapon(self) -> None:
         del self.weapon_dict[self.current_weapon.name]
