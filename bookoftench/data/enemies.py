@@ -102,7 +102,7 @@ Enemies = [
      'bounty': 130, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
 
     # --- original ---
-    {'name': BODY_BUILDER, 'hp': 120, 'weapons': [w.BASEBALL_BAT, w.INJECTION_NEEDLE],
+    {'name': BODY_BUILDER, 'hp': 110, 'weapons': [w.BASEBALL_BAT, w.INJECTION_NEEDLE],
      'bounty': 195, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
     {'name': GOON, 'hp': 105, 'weapons': [w.BASEBALL_BAT, w.SHOTGUN, w.BRASS_KNUCKLES],
      'bounty': 185, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
@@ -110,7 +110,7 @@ Enemies = [
      'bounty': 135, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
     {'name': PIMP, 'hp': 95, 'weapons': [w.CANE, w.BRASS_KNUCKLES, w.REVOLVER, w.SWITCHBLADE],
      'bounty': 190, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
-    {'name': SERIAL_KILLER, 'hp': 110, 'weapons': [w.BONE_SAW, w.KNIFE, w.MEAT_CLEAVER],
+    {'name': SERIAL_KILLER, 'hp': 105, 'weapons': [w.BONE_SAW, w.KNIFE, w.MEAT_CLEAVER],
      'bounty': 250, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY, FOREST]},
     {'name': THIEF, 'hp': 90, 'weapons': [w.KNIFE, w.CROWBAR, w.PISTOL],
      'bounty': 170, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
@@ -143,9 +143,9 @@ Enemies = [
      'bounty': 115, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [FOREST]},
     {'name': HUNTER, 'hp': 100, 'weapons': [w.KNIFE, w.RIFLE, w.BEAR_SPRAY, w.LONGBOW, w.BEAR_SPRAY],
      'bounty': 175, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [FOREST]},
-    {'name': PARK_RANGER, 'hp': 100, 'weapons': [w.FLARE_GUN, w.KNIFE, w.BEAR_SPRAY, w.MACHETE, w.LONGBOW],
+    {'name': PARK_RANGER, 'hp': 95, 'weapons': [w.FLARE_GUN, w.KNIFE, w.BEAR_SPRAY, w.MACHETE, w.LONGBOW],
      'bounty': 165, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [FOREST]},
-    {'name': POACHER, 'hp': 100, 'weapons': [w.CROSSBOW, w.MACHETE, w.KNIFE, w.COMPOUND_BOW],
+    {'name': POACHER, 'hp': 95, 'weapons': [w.CROSSBOW, w.MACHETE, w.KNIFE, w.COMPOUND_BOW],
      'bounty': 225, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [FOREST]},
 
     # ========================
