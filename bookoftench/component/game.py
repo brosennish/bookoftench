@@ -51,7 +51,7 @@ class VictoryHandler(TextDisplayingComponent):
 
     @staticmethod
     def _display(_: GameState):
-        print_and_sleep(f"You defeated the evil Denny Biltmore and rescued the wench!\n", 1)
+        print_and_sleep(f"You defeated the evil Denny Biltmore and rescued Chula!\n", 1)
         play_sound(GREAT_JOB)
         print_and_sleep(green("You win!"), 3)
 
