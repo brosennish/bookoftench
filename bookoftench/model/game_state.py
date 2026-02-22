@@ -79,7 +79,11 @@ class GameState:
         self._subscribe_listeners()
 
     def refresh_bounty(self) -> None:
-        bounty_area = random.choice(self.areas)
+        valid_areas = [i for i in self.areas if i.enemies_remaining > 0]
+        if valid_areas:
+            bounty_area = random.choice(valid_areas)
+        else:
+            bounty_area = random.choice(self.areas)
         enemy_choice: Enemy = load_enemy(random.choice(bounty_area.enemies))  # = random.choice(load_enemies())
         self.wanted = enemy_choice.name
         self.bounty = enemy_choice.bounty
