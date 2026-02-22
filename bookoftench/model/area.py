@@ -73,6 +73,7 @@ class Area:
         available = [i for i in self.enemies if i not in self.enemies_seen]
         if not available:
             self.enemies_seen.clear()
+            available = [i for i in self.enemies if i not in self.enemies_seen]
         enemy_name = random.choice(available)
         if len(self.enemies_seen) >= 1:
             if random.random() < min(0.15, 0.01 * len(self.enemies_seen)):
