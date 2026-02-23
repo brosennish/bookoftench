@@ -60,8 +60,8 @@ Items = [
     {'name': BAT_MATTER, 'hp': 15, 'cost': 13, 'sell_value': 5, 'areas': [CAVE]},
     {'name': SOMEWHAT_SPICY_NOODLES, 'hp': 18, 'cost': 15, 'sell_value': 6, 'areas': [CITY]},
     {'name': ORGANIC_SLUDGE, 'hp': 16, 'cost': 14, 'sell_value': 5, 'areas': [CITY]},
-    {'name': EGG_ON_EGGS, 'hp': 18, 'cost': 14, 'sell_value': 5, 'areas': [CAVE, CITY, FOREST, SWAMP]},
-    {'name': EGGS_ON_EGG, 'hp': 18, 'cost': 14, 'sell_value': 5, 'areas': [CAVE, CITY, FOREST, SWAMP]},
+    {'name': EGG_ON_EGGS, 'hp': 18, 'cost': 16, 'sell_value': 5, 'areas': [CAVE, CITY, FOREST, SWAMP]},
+    {'name': EGGS_ON_EGG, 'hp': 18, 'cost': 16, 'sell_value': 5, 'areas': [CAVE, CITY, FOREST, SWAMP]},
     {'name': MYSTERY_MEAT, 'hp': 20, 'cost': 18, 'sell_value': 7, 'areas': [CAVE, SWAMP]},
     {'name': CRAY, 'hp': 20, 'cost': 18, 'sell_value': 7, 'areas': [CAVE, SWAMP]},
     {'name': CAMPBELLS_GOOP, 'hp': 20, 'cost': 20, 'sell_value': 8, 'areas': [CITY, CAVE, FOREST]},
@@ -86,13 +86,13 @@ Items = [
     {'name': CARP_FILET, 'hp': 35, 'cost': 38, 'sell_value': 16, 'areas': [CITY]},
     {'name': HOG_LOINS, 'hp': 35, 'cost': 35, 'sell_value': 16, 'areas': [FOREST, SWAMP]},
     {'name': UNIDENTIFIED_MUSHROOMS, 'hp': 35, 'cost': 35, 'sell_value': 18, 'areas': [CAVE, FOREST, SWAMP]},
+    {'name': CANNED_HORSE, 'hp': 35, 'cost': 34, 'sell_value': 17, 'areas': [CITY, CAVE]},
 
     # --- Tier 5 (38–40 HP) ---
-    {'name': CANNED_HORSE, 'hp': 38, 'cost': 40, 'sell_value': 16, 'areas': [CITY, CAVE]},
     {'name': SUSPICIOUS_GUMBO, 'hp': 39, 'cost': 42, 'sell_value': 16, 'areas': [FOREST, SWAMP]},
     {'name': GIANT_TENTACLE, 'hp': 38, 'cost': 40, 'sell_value': 17, 'areas': [CITY]},
     {'name': MYSTICAL_MUSHROOMS, 'hp': 39, 'cost': 42, 'sell_value': 17, 'areas': [CAVE, FOREST, SWAMP]},
-    {'name': ALIEN_REMAINS, 'hp': 40, 'cost': 45, 'sell_value': 20, 'areas': [FOREST]},
+    {'name': ALIEN_REMAINS, 'hp': 39, 'cost': 45, 'sell_value': 20, 'areas': [FOREST]},
     {'name': TENCH_FILET, 'hp': 40, 'cost': 43, 'sell_value': 18, 'areas': [CITY]},
-    {'name': PANTHER_LOINS, 'hp': 40, 'cost': 42, 'sell_value': 19, 'areas': [FOREST, SWAMP]},
+    {'name': PANTHER_LOINS, 'hp': 37, 'cost': 39, 'sell_value': 19, 'areas': [FOREST, SWAMP]},
 ]
