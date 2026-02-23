@@ -77,17 +77,17 @@ Enemies = [
     # ========================
     # --- new ---
     {'name': CARD_JOCKEY, 'hp': 85, 'weapons': [w.SWITCHBLADE, w.POOL_CUE, w.PEPPER_SPRAY],
-     'bounty': 160, 'coins': 100, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
+     'bounty': 160, 'coins': 85, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
     {'name': CLONE, 'hp': 100, 'weapons': [w.POCKET_KNIFE, w.CANE, w.CHILI_POWDER],
-     'bounty': 175, 'coins': 30, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
+     'bounty': 175, 'coins': 25, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
     {'name': CLOWN, 'hp': 100, 'weapons': [w.BROKEN_BOTTLE, w.MEAT_CLEAVER],
-     'bounty': 155, 'coins': 40, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
+     'bounty': 155, 'coins': 30, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
     {'name': FROGGER, 'hp': 100, 'weapons': [w.FROG_GIG, w.PILLOW, w.PISTOL, w.POCKET_KNIFE],
      'bounty': 160, 'coins': 25, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
     {'name': INFLUENCER, 'hp': 75, 'weapons': [w.POCKET_KNIFE, w.SELFIE_STICK, w.PEPPER_SPRAY],
-     'bounty': 120, 'coins': 85, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
+     'bounty': 120, 'coins': 65, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
     {'name': LIFE_COACH, 'hp': 90, 'weapons': [w.KNIFE, w.BASEBALL_BAT, w.FIRE_AXE],
-     'bounty': 150, 'coins': 45, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
+     'bounty': 150, 'coins': 40, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
     {'name': MAGICIAN, 'hp': 85, 'weapons': [w.SWITCHBLADE, w.SUITCASE, w.PISTOL],
      'bounty': 140, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
     {'name': MASCOT, 'hp': 100, 'weapons': [w.T_SHIRT_CANNON, w.FOAM_FINGER, w.BROKEN_BOTTLE],
@@ -105,13 +105,13 @@ Enemies = [
     {'name': BODY_BUILDER, 'hp': 110, 'weapons': [w.BASEBALL_BAT, w.INJECTION_NEEDLE],
      'bounty': 195, 'coins': 45, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
     {'name': GOON, 'hp': 105, 'weapons': [w.BASEBALL_BAT, w.SHOTGUN, w.BRASS_KNUCKLES],
-     'bounty': 185, 'coins': 65, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
+     'bounty': 185, 'coins': 50, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
     {'name': HOBO, 'hp': 85, 'weapons': [w.BROKEN_BOTTLE, w.KNIFE, w.POCKET_SAND],
      'bounty': 135, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
     {'name': PIMP, 'hp': 95, 'weapons': [w.CANE, w.BRASS_KNUCKLES, w.REVOLVER, w.SWITCHBLADE],
-     'bounty': 190, 'coins': 75, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
+     'bounty': 190, 'coins': 70, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
     {'name': SERIAL_KILLER, 'hp': 105, 'weapons': [w.BONE_SAW, w.KNIFE, w.MEAT_CLEAVER],
-     'bounty': 250, 'coins': 50, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY, FOREST]},
+     'bounty': 250, 'coins': 45, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY, FOREST]},
     {'name': THIEF, 'hp': 90, 'weapons': [w.KNIFE, w.CROWBAR, w.PISTOL],
      'bounty': 170, 'coins': 65, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [CITY]},
 
@@ -146,7 +146,7 @@ Enemies = [
     {'name': PARK_RANGER, 'hp': 95, 'weapons': [w.FLARE_GUN, w.KNIFE, w.BEAR_SPRAY, w.MACHETE, w.LONGBOW],
      'bounty': 165, 'coins': 45, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [FOREST]},
     {'name': POACHER, 'hp': 95, 'weapons': [w.CROSSBOW, w.MACHETE, w.KNIFE, w.COMPOUND_BOW],
-     'bounty': 225, 'coins': 60, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [FOREST]},
+     'bounty': 225, 'coins': 65, 'type': NORMAL, 'flee': 1, 'strength': 1,  'areas': [FOREST]},
 
     # ========================
     #        CAVE ENEMIES
