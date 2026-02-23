@@ -18,8 +18,8 @@ from .shop import Shop
 
 _search_defaults = {
     DISCOVER_PERK: 1,
-    DISCOVER_ITEM: 4,
-    DISCOVER_WEAPON: 4,
+    DISCOVER_ITEM: 3,
+    DISCOVER_WEAPON: 3,
     DISCOVER_DISCOVERABLE: 50,
     SPAWN_ENEMY: 30
 }
