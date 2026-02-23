@@ -55,7 +55,7 @@ class Search(RandomChoiceComponent):
         # take damage if find.hp < 0
         if find.hp < 0:
             original_hp = player.hp
-            player.lose_hp(abs(find.hp + random.randint(0, 5)))
+            player.lose_hp(abs(find.hp - random.randint(0, 3)))
             print_and_sleep(
                 f"You{f' {find.pre} ' if find.pre else ' '}{yellow(find.name)} "
                 f"{color(f"({find.rarity})")} and lost {red(original_hp - player.hp)} hp.",
