@@ -324,7 +324,7 @@ Enemy_Lines = {
 
     LIFE_COACH: [
         "Buy my book.",
-        "The secret to having a great life is to buy all of my books."
+        "The secret to having a great life is to buy all of my books.",
         "God himself hired me to be His life coach. So, what do you say?",
         "I have no real qualifications whatsoever. That being said, my hourly rate is 100 coins.",
     ],
