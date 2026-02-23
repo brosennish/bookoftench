@@ -74,21 +74,21 @@ Perks = [
     },
     {
         'name': KARATE_LESSONS,
-        'cost': 50,
+        'cost': 55,
         'description': "Bare Hands +2 damage",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 2}
     },
     {
         'name': BEER_GOGGLES,
-        'cost': 85,
+        'cost': 99,
         'description': "Prevents blindness",
         'wrapper_type': WrapperType.BOOLEAN_OVERRIDE,
         'wrapper_config': {'override': False}
     },
     {
         'name': BROWN_FRIDAY,
-        'cost': 120,
+        'cost': 123,
         'description': "Shop inventories contain +1 listing",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 1}
@@ -102,38 +102,38 @@ Perks = [
     },
     {
         'name': LUCKY_TENCHS_FIN,
-        'cost': 80,
+        'cost': 111,
         'description': "Crit chance +5%",
         'wrapper_type': WrapperType.PERCENT_CHANGE,
         'wrapper_config': {'change': 5}
     },
     {
         'name': DOCTOR_FISH,
-        'cost': 110,
+        'cost': 120,
         'description': "Healing items restore +2 additional HP",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 2}
     },
     {
         'name': VAGABONDAGE,
-        'cost': 100,
+        'cost': 125,
         'description': "Carry +1 weapon and item",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 1}
     },
     {
         'name': NOMADS_LAND,
-        'cost': 100,
+        'cost': 125,
         'description': "Carry +1 weapon and item",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 1}
     },
     {
         'name': RICKETY_PICKPOCKET,
-        'cost': 130,
-        'description': "Steal an extra 20–30 coins from every enemy you defeat",
+        'cost': 120,
+        'description': "Steal an extra 10-25 coins from every enemy you defeat",
         'wrapper_type': WrapperType.BOUNDED_RANDOM,
-        'wrapper_config': {'lower_bound': 20, 'upper_bound': 30}
+        'wrapper_config': {'lower_bound': 10, 'upper_bound': 25}
     },
     {
         'name': CATFISH_BURGLAR,
@@ -144,7 +144,7 @@ Perks = [
     },
     {
         'name': MARTIAL_ARTS_TRAINING,
-        'cost': 100,
+        'cost': 85,
         'description': "Bare Hands +3 damage",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 3}
@@ -158,7 +158,7 @@ Perks = [
     },
     {
         'name': LEATHER_SKIN,
-        'cost': 160,
+        'cost': 165,
         'description': "Take 10% less damage from attacks",
         'wrapper_type': WrapperType.PERCENT_CHANGE,
         'wrapper_config': {'change': -10}
@@ -172,14 +172,14 @@ Perks = [
     },
     {
         'name': INTRO_TO_TENCH,
-        'cost': 140,
+        'cost': 145,
         'description': "+15% XP gained from winning battles",
         'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
         'wrapper_config': {'change': 15}
     },
     {
         'name': ROSETTI_THE_GYM_RAT,
-        'cost': 140,
+        'cost': 155,
         'description': "Melee weapons do +10% damage",
         'wrapper_type': WrapperType.PERCENT_CHANGE,
         'wrapper_config': {'change': 10}
@@ -200,21 +200,21 @@ Perks = [
     },
     {
         'name': NEW_SNEAKERS,
-        'cost': 90,
+        'cost': 99,
         'description': "Flee chance +10%",
         'wrapper_type': WrapperType.PERCENT_CHANGE,
         'wrapper_config': {'change': 10}
     },
     {
         'name': BULLETPROOF,
-        'cost': 130,
+        'cost': 140,
         'description': "Take 10% less damage from guns",
         'wrapper_type': WrapperType.PERCENT_CHANGE,
         'wrapper_config': {'change': -10}
     },
     {
         'name': WALLET_CHAIN,
-        'cost': 90,
+        'cost': 100,
         'description': 'Save 25% of your coins upon death',
     },
     {
@@ -264,12 +264,12 @@ Perks = [
     },
     {
         'name': DEATH_CAN_WAIT,
-        'cost': 150,
+        'cost': 180,
         'description': "Once per battle, a fatal blow leaves you at 1 HP",
     },
     {
         'name': BARTER_SAUCE,
-        'cost': 140,
+        'cost': 150,
         'description': "Shop prices are 10% lower",
         'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
         'wrapper_config': {'change': -10}
@@ -288,12 +288,12 @@ Perks = [
     },
     {
         'name': SOLOMON_TRAIN,
-        'cost': 300,
+        'cost': 250,
         'description': "10% chance to negate a fatal blow and instantly kill the enemy instead",
     },
     {
         'name': WENCH_LOCATION,
-        'cost': 400,
+        'cost': 500,
         'description': "Reveal the wench's location",
     },
 ]
