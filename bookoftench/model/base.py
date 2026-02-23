@@ -46,8 +46,8 @@ class WeaponBase(ABC):
     areas: list[str] | None = None
 
     def calculate_base_damage(self) -> int:
-        base = self.damage + random.randint(-self.spread, self.spread)  # Base damage +/- 10
-        return max(5, base)  # Damage >= 5
+        base = self.damage + random.randint(-self.spread, self.spread)
+        return max(0, base)
 
     def get_accuracy(self) -> float:
         return self.accuracy

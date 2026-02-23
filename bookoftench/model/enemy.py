@@ -51,7 +51,7 @@ class Enemy(Combatant, NPC):
 
     @attach_perk(RICKETY_PICKPOCKET, value_description="coins dropped")
     def drop_coins(self) -> int:
-        self.coins += random.randint(-5, 10)
+        self.coins += random.randint(-5, 5)
         coins = max(self.coins, 0)
         return coins
 

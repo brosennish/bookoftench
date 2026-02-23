@@ -131,7 +131,7 @@ Weapons = [
      'cost': 18, 'sell_value': 9, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
-    {'name': HATCHET, 'damage': 18, 'uses': 8, 'accuracy': 0.83, 'spread': 4, 'crit': 0.10,
+    {'name': HATCHET, 'damage': 18, 'uses': 8, 'accuracy': 0.84, 'spread': 4, 'crit': 0.10,
      'cost': 30, 'sell_value': 15, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [CAVE, FOREST, SWAMP]},
 
