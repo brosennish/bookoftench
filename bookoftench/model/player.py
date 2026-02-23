@@ -321,7 +321,8 @@ class Player(Combatant):
         # ---- core level-up effects live here ----
         self.xp -= self.xp_needed
         self.lvl += 1
-        self.coins += 100
+        cash_reward = 100
+        self.coins += cash_reward
         self.games_played = 0
 
         old_max = self.max_hp
