@@ -82,7 +82,7 @@ WOODEN_CLUB = "Wooden Club"
 # Types
 BLIND = 'blind'
 MELEE = 'melee'
-PROJECTILE = 'projectile'
+RANGED = 'ranged'
 SPECIAL = 'special'
 
 Weapons = [
@@ -282,51 +282,51 @@ Weapons = [
     #                       TIER 4 (PROJECTILE)
     # =====================================================
     {'name': COMPOUND_BOW, 'damage': 29, 'uses': 10, 'accuracy': 0.75, 'var': 5, 'crit': 0.18,
-     'cost': 75, 'sell_value': 37, 'type': PROJECTILE, 'sound': audio.ARROW,
+     'cost': 75, 'sell_value': 37, 'type': RANGED, 'sound': audio.ARROW,
      'areas': [FOREST, SWAMP]},
 
     {'name': CROSSBOW, 'damage': 34, 'uses': 6, 'accuracy': 0.90, 'var': 5, 'crit': 0.13,
-     'cost': 80, 'sell_value': 40, 'type': PROJECTILE, 'sound': audio.ARROW,
+     'cost': 80, 'sell_value': 40, 'type': RANGED, 'sound': audio.ARROW,
      'areas': [FOREST, SWAMP]},
 
     {'name': FLARE_GUN, 'damage': 27, 'uses': 5, 'accuracy': 0.72, 'var': 3, 'crit': 0.16,
-     'cost': 60, 'sell_value': 30, 'type': PROJECTILE, 'sound': audio.PISTOL,
+     'cost': 60, 'sell_value': 30, 'type': RANGED, 'sound': audio.PISTOL,
      'areas': [CITY, SWAMP]},
 
     {'name': HARPOON, 'damage': 35, 'uses': 6, 'accuracy': 0.79, 'var': 5, 'crit': 0.10,
-     'cost': 85, 'sell_value': 42, 'type': PROJECTILE, 'sound': audio.ARROW,
+     'cost': 85, 'sell_value': 42, 'type': RANGED, 'sound': audio.ARROW,
      'areas': [CITY, SWAMP]},
 
     {'name': LONGBOW, 'damage': 26, 'uses': 11, 'accuracy': 0.76, 'var': 5, 'crit': 0.15,
-     'cost': 68, 'sell_value': 34, 'type': PROJECTILE, 'sound': audio.ARROW,
+     'cost': 68, 'sell_value': 34, 'type': RANGED, 'sound': audio.ARROW,
      'areas': [FOREST]},
 
     {'name': NAIL_GUN, 'damage': 28, 'uses': 6, 'accuracy': 0.73, 'var': 4, 'crit': 0.14,
-     'cost': 70, 'sell_value': 35, 'type': PROJECTILE, 'sound': audio.ARROW,
+     'cost': 70, 'sell_value': 35, 'type': RANGED, 'sound': audio.ARROW,
      'areas': [CITY]},
 
     {'name': PISTOL, 'damage': 31, 'uses': 6, 'accuracy': 0.83, 'var': 5, 'crit': 0.11,
-     'cost': 70, 'sell_value': 34, 'type': PROJECTILE, 'sound': audio.PISTOL,
+     'cost': 70, 'sell_value': 34, 'type': RANGED, 'sound': audio.PISTOL,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
     {'name': REVOLVER, 'damage': 38, 'uses': 5, 'accuracy': 0.70, 'var': 6, 'crit': 0.10,
-     'cost': 78, 'sell_value': 39, 'type': PROJECTILE, 'sound': audio.PISTOL,
+     'cost': 78, 'sell_value': 39, 'type': RANGED, 'sound': audio.PISTOL,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
     {'name': RIFLE, 'damage': 36, 'uses': 6, 'accuracy': 0.90, 'var': 5, 'crit': 0.12,
-     'cost': 82, 'sell_value': 41, 'type': PROJECTILE, 'sound': audio.RIFLE,
+     'cost': 82, 'sell_value': 41, 'type': RANGED, 'sound': audio.RIFLE,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
     {'name': SHOTGUN, 'damage': 40, 'uses': 4, 'accuracy': 0.75, 'var': 6, 'crit': 0.09,
-     'cost': 90, 'sell_value': 45, 'type': PROJECTILE, 'sound': audio.SHOTGUN,
+     'cost': 90, 'sell_value': 45, 'type': RANGED, 'sound': audio.SHOTGUN,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
     {'name': SLINGSHOT, 'damage': 17, 'uses': 14, 'accuracy': 0.84, 'var': 2, 'crit': 0.12,
-     'cost': 27, 'sell_value': 14, 'type': PROJECTILE, 'sound': audio.ARROW,
+     'cost': 27, 'sell_value': 14, 'type': RANGED, 'sound': audio.ARROW,
      'areas': [CITY, FOREST, SWAMP]},
 
     {'name': T_SHIRT_CANNON, 'damage': 22, 'uses': 9, 'accuracy': 0.72, 'var': 3, 'crit': 0.09,
-     'cost': 53, 'sell_value': 27, 'type': PROJECTILE, 'sound': audio.SHOTGUN,
+     'cost': 53, 'sell_value': 27, 'type': RANGED, 'sound': audio.SHOTGUN,
      'areas': [CITY]},
 
     # =====================================================
@@ -344,7 +344,7 @@ Weapons = [
     #                       SPECIAL
     # =====================================================
     {'name': TENCH_CANNON, 'damage': 100, 'uses': 1, 'accuracy': 0.20, 'var': 8, 'crit': 0.10,
-     'cost': 100, 'sell_value': 30, 'type': PROJECTILE, 'sound': audio.SHOTGUN,
+     'cost': 100, 'sell_value': 30, 'type': RANGED, 'sound': audio.SHOTGUN,
      'areas': [CITY]},
 
     # =====================================================
