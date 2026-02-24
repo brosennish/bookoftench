@@ -16,9 +16,9 @@ class Item(Buyable):
     sell_value: int
     areas: List[str]
 
-    def get_simple_format(self) -> str:
+    def get_simple_format(self, length: int) -> str:
         return dim(' | ').join([
-            cyan(f"{self.name:<24}"),
+            cyan(f"{self.name:<{length}}"),
             f"HP: +{green(self.hp)}"
         ])
 
