@@ -74,13 +74,6 @@ class WeaponBase(ABC):
         else:
             return f"{self.uses}"
 
-    def get_simple_format(self) -> str:
-        return f"{cyan(self.name)}\n{dim(' | ').join([
-            f"{dim("Damage:")} {red(f"{self.damage:<3}")}",
-            f"{dim("Accuracy:")} {yellow(f"{self.accuracy:<4}")}",
-            f"{dim("Uses:")} {self.format_uses()}"
-        ])}"
-
     def get_complete_format(self) -> str:
         return f"{cyan(self.name)}\n{dim(' | ').join([
             f"{dim("Dmg:")} {red(f"{self.damage:<3}")}",
