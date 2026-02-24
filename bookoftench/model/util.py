@@ -144,7 +144,7 @@ def get_battle_status_view(game_state: GameState) -> str:
                 f"{red(f' (blinded {int(cmbt.blind_effect * 100)}% for {blind_turns})') if cmbt.blind else ''}"
                 f"{orange(' (wanted)') if game_state.is_wanted(cmbt) else ''} {dim('-')} "
                 f"{p_color(cmbt.hp, cmbt.max_hp)(f"{cmbt.hp} HP")}"
-                f"\n{cmbt.current_weapon.get_simple_format()}")
+                f"\n{cmbt.current_weapon.get_complete_format()}")
 
     return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, purple)}\n"
 
