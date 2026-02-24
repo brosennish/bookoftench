@@ -49,7 +49,7 @@ class Weapon(WeaponBase, Buyable):
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
             f"Value: {orange(self.sell_value):<17}",
-            f"{dim("Dmg:")} {red(f"{self.damage:<4}")}",
+            f"{dim("Dmg:")} {red(f"{self.damage:<3}")}",
             f"{dim("Acc:")} {yellow(f"{self.accuracy:<4}")}",
             f"{dim("Crit:")} {yellow(f"{self.crit:<4}")}",
             f"{dim("Var:")} {f"{blue(f"{self.var}")}"}",
@@ -81,7 +81,7 @@ class SellableWeapon(Weapon):
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
             f"Value: {orange(self.sell_value):<17}",
-            f"{dim("Dmg:")} {red(f"{self.damage:<4}")}",
+            f"{dim("Dmg:")} {red(f"{self.damage:<3}")}",
             f"{dim("Acc:")} {yellow(f"{self.accuracy:<4}")}",
             f"{dim("Crit:")} {yellow(f"{self.crit:<4}")}",
             f"{dim("Var:")} {f"{blue(f"{self.var}")}"}",
