@@ -24,6 +24,7 @@ NEW_SNEAKERS = "New Sneakers"
 NOMADS_LAND = "Nomad's Land"
 RICKETY_PICKPOCKET = "Rickety Pickpocket"
 ROSETTI_THE_GYM_RAT = "Rosetti the Gym Rat"
+SHERLOCK_TENCH = "Sherlock Tench"
 SLEDGE_FUND = "Sledge Fund"
 SOLOMON_TRAIN = "Solomon Train"
 TENCH_EYES = "Tench Eyes"
@@ -240,8 +241,13 @@ Perks = [
         'description': 'Heal 3 HP each time you land a melee attack',
     },
     {
-        'name': TENCH_THE_BOUNTY_HUNTER,
+        'name': SHERLOCK_TENCH,
         'cost': 120,
+        'description': "+10% chance to find the wanted enemy when searching their area",
+    },
+    {
+        'name': TENCH_THE_BOUNTY_HUNTER,
+        'cost': 100,
         'description': "Earn +25 coins from each bounty enemy",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 25}
