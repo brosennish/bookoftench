@@ -1,11 +1,13 @@
 import random
 
+from bookoftench import event_logger
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
 from bookoftench.data.components import SHAMAN
 from bookoftench.data.rites import Shaman_Lines
 from bookoftench.model import GameState
+from bookoftench.model.events import ShamanEvent
 from bookoftench.model.rite import Rite, load_rites
 from bookoftench.model.util import display_shaman_header
 from bookoftench.ui import blue, yellow
@@ -70,6 +72,7 @@ class ShamanComponent(LabeledSelectionComponent):
                 print_and_sleep(yellow(f"Need more coin"), 1)
             else:
                 player.coins -= rite.cost
+                event_logger.log_event(ShamanEvent())
                 rite.perform(player)
 
         return purchase_component

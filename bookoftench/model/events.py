@@ -1,5 +1,6 @@
 from typing import Optional
 
+from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import PURCHASE, GREAT_JOB
 from bookoftench.event_base import Event, EventType
@@ -183,6 +184,40 @@ class BountyCollectedEvent(Event):
     def __init__(self, enemy_name):
         super().__init__(EventType.BOUNTY_COLLECTED)
         self.enemy_name = enemy_name
+
+
+class DiscoveryEventCommon(Event):
+    def __init__(self):
+        super().__init__(EventType.DISCOVERY_COMMON)
+
+class DiscoveryEventUncommon(Event):
+    def __init__(self):
+        super().__init__(EventType.DISCOVERY_UNCOMMON)
+
+class DiscoveryEventRare(Event):
+    def __init__(self):
+        super().__init__(EventType.DISCOVERY_RARE)
+
+class DiscoveryEventLegendary(Event):
+    def __init__(self):
+        super().__init__(EventType.DISCOVERY_LEGENDARY)
+
+class DiscoveryEventMythic(Event):
+    def __init__(self):
+        super().__init__(EventType.DISCOVERY_MYTHIC)
+
+
+class OccultistEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.PAY_OCCULTIST)
+
+class ShamanEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.PAY_SHAMAN)
+
+class WizardEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.PAY_WIZARD)
 
 
 class CoffeeEvent(Event):

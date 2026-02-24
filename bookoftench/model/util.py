@@ -8,7 +8,7 @@ from bookoftench.model.base import Combatant
 from bookoftench.model.enemy import Enemy
 from bookoftench.model.perk import load_perks, perk_is_active, attach_perks
 from bookoftench.model.player import Player
-from bookoftench.ui import blue, cyan, green, orange, purple, red, yellow, dim
+from bookoftench.ui import blue, cyan, green, orange, purple, red, yellow, dim, white
 from bookoftench.util import print_and_sleep
 from .game_state import GameState
 
@@ -162,34 +162,51 @@ def display_game_stats(game_state: GameState) -> None:
     width = 18  # adjust if you want wider/narrower labels
 
     def display_stat(title: str, value: Any, value_color: Callable[[str], str]) -> None:
-        print(f"{title:<{width}} {dim('|')} {value_color(value)}")
+        print(f"{title:<{width}} {(white(dim('|')))} {value_color(value)}")
 
     display_stat("Current Level", player.lvl, cyan)
     display_stat("Current HP", player.hp, player_color)
+    display_stat("Deaths", event_logger.get_count(EventType.PLAYER_DEATH), red)
 
     display_stat("Coins", player.coins, green)
-    display_stat("Bank", game_state.bank.balance, green)
-    display_stat("Deposits", event_logger.get_count(EventType.DEPOSIT), orange)
-    display_stat("Withdrawals", event_logger.get_count(EventType.WITHDRAW), orange)
+    display_stat("Bank Balance", game_state.bank.balance, green)
+    display_stat("Deposited", event_logger.get_count(EventType.DEPOSIT), green)
+    display_stat("Withdrawn", event_logger.get_count(EventType.WITHDRAW), green)
     display_stat("Interest Earned", game_state.bank.interest, green)
 
     display_stat("Casino Won", player.casino_won, green)
     display_stat("Casino Lost", player.casino_lost, red)
 
-    display_stat("Hits", event_logger.get_count(EventType.HIT), cyan)
-    display_stat("Misses", event_logger.get_count(EventType.MISS), cyan)
-    display_stat("Critical Hits", event_logger.get_count(EventType.CRIT), cyan)
+    display_stat("Hits", event_logger.get_count(EventType.HIT), red)
+    display_stat("Misses", event_logger.get_count(EventType.MISS), blue)
+    display_stat("Critical Hits", event_logger.get_count(EventType.CRIT), red)
+    display_stat("Successful Flees", event_logger.get_count(EventType.FLEE), cyan)
+    display_stat("Failed Flees", event_logger.get_count(EventType.FAILED_FLEE), yellow)
 
-    display_stat("Enemies Killed", event_logger.get_count(EventType.KILL), red)
+    display_stat("Enemies Killed", event_logger.get_count(EventType.KILL), cyan)
     display_stat("Bounties Claimed", event_logger.get_count(EventType.BOUNTY_COLLECTED), purple)
+    display_stat("Shoplifts", event_logger.get_count(EventType.STEAL), cyan)
+    display_stat("Bribes Paid", event_logger.get_count(EventType.OFFICER_PAID), green)
+    display_stat("Police Brutalities", event_logger.get_count(EventType.OFFICER_UNPAID), red)
 
     display_stat("Areas Cleared", sum(1 for a in game_state.areas if a.enemies_remaining == 0), blue)
-    display_stat("Bosses Defeated", sum(1 for a in game_state.areas if a.boss_defeated), red)
+    display_stat("Bosses Defeated", sum(1 for a in game_state.areas if a.boss_defeated), cyan)
 
-    display_stat("Items Purchased", event_logger.get_count(EventType.BUY_ITEM), cyan)
-    display_stat("Items Used", event_logger.get_count(EventType.USE_ITEM), cyan)
-    display_stat("Weapons Purchased", event_logger.get_count(EventType.BUY_WEAPON), cyan)
-    display_stat("Perks Owned", event_logger.get_count(EventType.BUY_PERK), cyan)
+    display_stat("Items Purchased", event_logger.get_count(EventType.BUY_ITEM), green)
+    display_stat("Weapons Purchased", event_logger.get_count(EventType.BUY_WEAPON), green)
+    display_stat("Perks Purchased", event_logger.get_count(EventType.BUY_WEAPON), green)
+    display_stat("Perks Owned", event_logger.get_count(EventType.BUY_PERK), purple)
+
+    display_stat("Coffees Purchased", event_logger.get_count(EventType.COFFEE_EVENT), green)
+    display_stat("Occultist Used", event_logger.get_count(EventType.PAY_OCCULTIST), purple)
+    display_stat("Shaman Used", event_logger.get_count(EventType.PAY_SHAMAN), purple)
+    display_stat("Wizard Used", event_logger.get_count(EventType.PAY_WIZARD), purple)
+
+    display_stat("Common Finds", event_logger.get_count(EventType.DISCOVERY_COMMON), yellow)
+    display_stat("Uncommon Finds", event_logger.get_count(EventType.DISCOVERY_UNCOMMON), green)
+    display_stat("Rare Finds", event_logger.get_count(EventType.DISCOVERY_RARE), blue)
+    display_stat("Legendary Finds", event_logger.get_count(EventType.DISCOVERY_LEGENDARY), orange)
+    display_stat("Mythic Finds", event_logger.get_count(EventType.DISCOVERY_MYTHIC), purple)
 
     display_stat("Times Traveled", event_logger.get_count(EventType.TRAVEL), blue)
 

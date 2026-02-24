@@ -11,7 +11,7 @@ from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE
 from bookoftench.data.enemies import SLEDGE_HAMMOND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
-from bookoftench.ui import red, yellow, color_text, purple, cyan, dim, green, blue
+from bookoftench.ui import red, yellow, color_text, purple, cyan, dim, blue
 from bookoftench.util import print_and_sleep
 
 

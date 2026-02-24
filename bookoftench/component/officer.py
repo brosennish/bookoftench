@@ -96,7 +96,7 @@ class PoliceBrutality(Weapon):
     damage: int = 0
     uses: int = -1
     accuracy: float = 1.0
-    spread: int = 0
+    var: int = 0
     crit: float = 0.0
     cost: int = 0
     sell_value: int = 0
