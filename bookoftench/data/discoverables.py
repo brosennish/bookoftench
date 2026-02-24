@@ -186,7 +186,7 @@ Search_Discoverables = [
      "areas": [CAVE, CITY, FOREST, SWAMP]},
     {"pre": "a", "name": "Human-Laid Egg", "value": 6, "hp": 9, "rarity": UNCOMMON,
      "areas": [CAVE, CITY, FOREST, SWAMP]},
-    {"pre": "some", "name": "Lava Lamp", "value": 12, "hp": 0, "rarity": UNCOMMON,
+    {"pre": "a", "name": "Lava Lamp", "value": 12, "hp": 0, "rarity": UNCOMMON,
      "areas": [CITY]},
     {"pre": "some", "name": "Lawn Darts", "value": 8, "hp": 0, "rarity": UNCOMMON,
      "areas": [FOREST]},
