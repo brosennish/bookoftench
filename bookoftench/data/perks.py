@@ -65,10 +65,10 @@ class WrapperIndices:
 Perks = [
     {
         'name': AP_TENCH_STUDIES,
-        'cost': 260,
-        'description': "+30% XP from battles and +1 XP from all other sources",
+        'cost': 222,
+        'description': "+20% XP from battles and +1 XP from all other sources",
         'wrappers': [
-            {'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT, 'wrapper_config': {'change': 30}},
+            {'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT, 'wrapper_config': {'change': 20}},
             {'wrapper_type': WrapperType.INT_CHANGE, 'wrapper_config': {'change': 1}}
         ]
 
@@ -97,9 +97,9 @@ Perks = [
     {
         'name': SLEDGE_FUND,
         'cost': 160,
-        'description': "Bank interest rate +5%",
+        'description': "Bank interest rate +8%",
         'wrapper_type': WrapperType.PERCENT_CHANGE,
-        'wrapper_config': {'change': 5}
+        'wrapper_config': {'change': 8}
     },
     {
         'name': LUCKY_TENCHS_FIN,
@@ -117,14 +117,14 @@ Perks = [
     },
     {
         'name': VAGABONDAGE,
-        'cost': 125,
+        'cost': 130,
         'description': "Carry +1 weapon and item",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 1}
     },
     {
         'name': NOMADS_LAND,
-        'cost': 125,
+        'cost': 130,
         'description': "Carry +1 weapon and item",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 1}
@@ -173,17 +173,17 @@ Perks = [
     },
     {
         'name': INTRO_TO_TENCH,
-        'cost': 145,
-        'description': "+15% XP gained from winning battles",
+        'cost': 135,
+        'description': "+10% XP gained from winning battles",
         'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
-        'wrapper_config': {'change': 15}
+        'wrapper_config': {'change': 10}
     },
     {
         'name': ROSETTI_THE_GYM_RAT,
-        'cost': 155,
-        'description': "Melee weapons do +10% damage",
+        'cost': 145,
+        'description': "Melee weapons do +8% damage",
         'wrapper_type': WrapperType.PERCENT_CHANGE,
-        'wrapper_config': {'change': 10}
+        'wrapper_config': {'change': 8}
     },
     {
         'name': AMBROSE_BLADE,
