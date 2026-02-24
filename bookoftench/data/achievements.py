@@ -113,11 +113,11 @@ Achievements = [
     {
         'id': VIGILANTE,
         'name': "Vigilante",
-        'description': "Collect 5 bounties",
+        'description': "Collect 3 bounties",
         'reward_type': RewardType.XP,
-        'reward_value': 10,
+        'reward_value': 20,
         'event_type': EventType.BOUNTY_COLLECTED,
-        'event_threshold': 5
+        'event_threshold': 3
     },
     {
         'id': PATIENT_68,
@@ -131,11 +131,11 @@ Achievements = [
     {
         'id': ALWAYS_SOMETHING,
         'name': "Always Something",
-        'description': "Receive treatment 5 times",
+        'description': "Receive treatment 3 times",
         'reward_type': RewardType.XP,
         'reward_value': 20,
         'event_type': EventType.TREATMENT_EVENT,
-        'event_threshold': 5
+        'event_threshold': 3
     },
     {
         'id': KELPTOMANIAC,
