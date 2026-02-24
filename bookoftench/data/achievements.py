@@ -64,7 +64,6 @@ Achievements = [
         'name': "Dry Five",
         'description': "Reach level 5",
         'reward_type': RewardType.PERK,
-        'reward_value': 55,
         'event_type': EventType.LEVEL_UP,
         'event_threshold': 5
     },
@@ -106,7 +105,7 @@ Achievements = [
         'name': "First Bust",
         'description': "Collect 1 bounty",
         'reward_type': RewardType.XP,
-        'reward_value': 5,
+        'reward_value': 10,
         'event_type': EventType.BOUNTY_COLLECTED,
         'event_threshold': 1
     },

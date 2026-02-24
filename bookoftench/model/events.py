@@ -1,6 +1,5 @@
 from typing import Optional
 
-from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import PURCHASE, GREAT_JOB
 from bookoftench.event_base import Event, EventType
