@@ -190,13 +190,14 @@ def display_game_stats(game_state: GameState) -> None:
     display_stat("Police Brutalities", event_logger.get_count(EventType.OFFICER_UNPAID), red)
 
     display_stat("Areas Cleared", sum(1 for a in game_state.areas if a.enemies_remaining == 0), blue)
-    display_stat("Bosses Defeated", sum(1 for a in game_state.areas if a.boss_defeated), orange)
+    display_stat("Bosses Defeated", sum(1 for a in game_state.areas if a.boss_defeated), cyan)
 
-    display_stat("Items Purchased", event_logger.get_count(EventType.BUY_ITEM), cyan)
-    display_stat("Items Used", event_logger.get_count(EventType.USE_ITEM), cyan)
-    display_stat("Weapons Purchased", event_logger.get_count(EventType.BUY_WEAPON), cyan)
+    display_stat("Items Purchased", event_logger.get_count(EventType.BUY_ITEM), green)
+    display_stat("Weapons Purchased", event_logger.get_count(EventType.BUY_WEAPON), green)
+    display_stat("Perks Purchased", event_logger.get_count(EventType.BUY_WEAPON), green)
     display_stat("Perks Owned", event_logger.get_count(EventType.BUY_PERK), purple)
-    display_stat("Coffees Purchased", event_logger.get_count(EventType.COFFEE_EVENT), cyan)
+    display_stat("Coffees Purchased", event_logger.get_count(EventType.COFFEE_EVENT), green)
+
 
     display_stat("Times Traveled", event_logger.get_count(EventType.TRAVEL), blue)
 
