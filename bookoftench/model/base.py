@@ -10,6 +10,7 @@ from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE
 from bookoftench.data.enemies import SLEDGE_HAMMOND
+from bookoftench.data.weapons import MELEE
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
 from bookoftench.ui import red, yellow, color_text, purple, cyan, dim, blue
 from bookoftench.util import print_and_sleep
@@ -155,6 +156,9 @@ class Combatant(ABC):
     blind_effect: float = 0.0
     blind_turns: int = 0
 
+    def __init__(self):
+        self.strength = None
+
     def is_alive(self) -> bool:
         return self.hp > 0
 
@@ -235,6 +239,8 @@ class Combatant(ABC):
                             f"{red(damage_inflicted)} damage!", 1)
             event_logger.log_event(HitEvent(self.current_weapon.type))
         else:
+            if self.current_weapon.type == MELEE:
+                damage_inflicted = round(self.strength * damage_inflicted)  # apply enemy strength value to damage
             print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
         self.handle_crit(crit)
