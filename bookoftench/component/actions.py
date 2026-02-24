@@ -189,7 +189,7 @@ class EquipWeapon(LabeledSelectionComponent):
         super().__init__(game_state,
                          bindings=[SelectionBinding(
                              key=str(i),
-                             name=weapon.get_simple_format(),
+                             name=weapon.get_complete_format(),
                              component=functional_component()(
                                  partial(game_state.player.equip_weapon, weapon.name)))
                              for (i, weapon) in enumerate(game_state.player.get_weapons(), 1)],
@@ -250,7 +250,7 @@ class SwapFoundWeaponMenu(LabeledSelectionComponent):
             bindings=[
                 SelectionBinding(
                     key=str(i),
-                    name=weapon.get_simple_format(),
+                    name=weapon.get_complete_format(),
                     component=functional_component()(
                         partial(game_state.player.swap_found_weapon, weapon.name, found)
                     )
@@ -258,7 +258,7 @@ class SwapFoundWeaponMenu(LabeledSelectionComponent):
                 for i, weapon in enumerate(valid, 1)
             ],
             top_level_prompt_callback=lambda gs: (
-                print_and_sleep(dim(gs.found_weapon.get_simple_format()), 0),
+                print_and_sleep(dim(gs.found_weapon.get_complete_format()), 0),
             )[-1],
             quittable=True
         )
