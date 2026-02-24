@@ -54,7 +54,6 @@ class Casino(LabeledSelectionComponent):
         super().__init__(game_state, bindings=[
             SelectionBinding('1', "Krill or Cray", KrillOrCray),
             SelectionBinding('2', "Above or Below", AboveOrBelowRulesDecision),
-            SelectionBinding('3', "TBD", NoOpComponent),
             SelectionBinding('R', "Return", functional_component()(lambda: self._return())),
         ])
         self.leave_casino = False

@@ -111,7 +111,7 @@ BOOK OF TENCH - HOW TO PLAY
     4. Use items freely during your turn or between battles
     5. Gain perks that permanently affect combat, coins, or luck
     6. Play casino games to risk coins for big rewards
-    7. Store coins in the bank to protect wealth earn interest upon level-up
+    7. Store coins in the bank to protect wealth earn interest 
     8. Each area has a boss and a hidden number of enemies
     9. Clear the wench’s area to unlock the final showdown
     10. Defeat the final boss to save the wench and win the game
