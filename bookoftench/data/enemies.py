@@ -510,7 +510,7 @@ Enemy_Lines = {
     ARCHAEOLOGIST: [
         "Ancient people are like us but dead.",
         "When the institute slashed my pay, I had to resort to bounty hunting.",
-        "It will be strange putting something into rather than carefully exhuming it."
+        "It will be strange putting something into the ground rather than carefully exhuming it."
     ],
 
     EXPLORER: [
