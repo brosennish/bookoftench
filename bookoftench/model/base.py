@@ -77,7 +77,7 @@ class WeaponBase(ABC):
 
     def get_complete_format(self) -> str:
         return f"{cyan(self.name)}\n{dim(' | ').join([
-            f"{dim("Dmg:")} {red(f"{self.damage:<3}")}",
+            f"{dim("Dmg:")} {red(f"{self.damage:<2}")}",
             f"{dim("Acc:")} {yellow(f"{self.accuracy:<4}")}",
             f"{dim("Crit:")} {yellow(f"{self.crit:<4}")}",
             f"{dim("Var:")} {f"{blue(f"{self.var}")}"}",
