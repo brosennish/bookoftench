@@ -185,25 +185,9 @@ class BountyCollectedEvent(Event):
         self.enemy_name = enemy_name
 
 
-class DiscoveryEventCommon(Event):
-    def __init__(self):
-        super().__init__(EventType.DISCOVERY_COMMON)
-
-class DiscoveryEventUncommon(Event):
-    def __init__(self):
-        super().__init__(EventType.DISCOVERY_UNCOMMON)
-
-class DiscoveryEventRare(Event):
-    def __init__(self):
-        super().__init__(EventType.DISCOVERY_RARE)
-
-class DiscoveryEventLegendary(Event):
-    def __init__(self):
-        super().__init__(EventType.DISCOVERY_LEGENDARY)
-
-class DiscoveryEventMythic(Event):
-    def __init__(self):
-        super().__init__(EventType.DISCOVERY_MYTHIC)
+class DiscoveryEvent(Event):
+    def __init__(self, event_type: EventType):
+        super().__init__(event_type)
 
 
 class OccultistEvent(Event):

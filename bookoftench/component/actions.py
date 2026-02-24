@@ -56,15 +56,15 @@ class Search(RandomChoiceComponent):
 
         # log event for stats
         if rarity == COMMON:
-            event_logger.log_event(DiscoveryEventCommon())
+            event_logger.log_event(DiscoveryEvent())
         elif rarity == UNCOMMON:
-            event_logger.log_event(DiscoveryEventUncommon())
+            event_logger.log_event(DiscoveryEvent())
         elif rarity == RARE:
-            event_logger.log_event(DiscoveryEventRare())
+            event_logger.log_event(DiscoveryEvent())
         elif rarity == LEGENDARY:
-            event_logger.log_event(DiscoveryEventLegendary())
+            event_logger.log_event(DiscoveryEvent())
         else:
-            event_logger.log_event(DiscoveryEventMythic())
+            event_logger.log_event(DiscoveryEvent())
 
         # take damage if find.hp < 0
         if find.hp < 0:
