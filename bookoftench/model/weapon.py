@@ -9,7 +9,7 @@ from bookoftench.data.perks import BULLETPROOF
 from bookoftench.data.weapons import PISTOL, REVOLVER, RIFLE, SHOTGUN
 from bookoftench.model.base import WeaponBase, Buyable
 from bookoftench.model.perk import attach_perk
-from bookoftench.ui import dim, cyan, orange, red, yellow
+from bookoftench.ui import dim, cyan, orange, red, yellow, blue
 
 
 @dataclass
@@ -48,12 +48,12 @@ class Weapon(WeaponBase, Buyable):
     def __repr__(self) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
-            f"{f"Cost: {orange(self.cost)}":<24}",
-            f"{f"DMG: {red(self.damage)}":<16}",
-            f"{f"ACC: {yellow(self.accuracy)}":<18}",
-            f"Uses: {self.format_uses()}"
+            f"{dim("Dmg:")} {red(f"{self.damage:<3}")}",
+            f"{dim("Acc:")} {yellow(f"{self.accuracy:<4}")}",
+            f"{dim("Crit:")} {yellow(f"{self.crit:<4}")}",
+            f"{dim("Var:")} {f"{blue(f"{self.var}")}"}",
+            f"{dim("Uses:")} {self.format_uses()}",
         ])
-
 
 @dataclass
 class SellableWeapon(Weapon):
@@ -79,10 +79,11 @@ class SellableWeapon(Weapon):
     def __repr__(self) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
-            f"{f"Value: {orange(self.sell_value)}":<24}",
-            f"{f"DMG: {red(self.damage)}":<16}",
-            f"{f"ACC: {yellow(self.accuracy)}":<18}",
-            f"Uses: {self.uses}"
+            f"{dim("Dmg:")} {red(f"{self.damage:<3}")}",
+            f"{dim("Acc:")} {yellow(f"{self.accuracy:<4}")}",
+            f"{dim("Crit:")} {yellow(f"{self.crit:<4}")}",
+            f"{dim("Var:")} {f"{blue(f"{self.var}")}"}",
+            f"{dim("Uses:")} {self.format_uses()}",
         ])
 
 
