@@ -11,7 +11,7 @@ from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE
 from bookoftench.data.enemies import SLEDGE_HAMMOND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
-from bookoftench.ui import red, yellow, color_text, purple, cyan, dim, orange
+from bookoftench.ui import red, yellow, color_text, purple, cyan, dim, green, blue
 from bookoftench.util import print_and_sleep
 
 
@@ -85,8 +85,8 @@ class WeaponBase(ABC):
         return f"{cyan(self.name)}\n{dim(' | ').join([
             f"{dim("Dmg:")} {red(f"{self.damage:<3}")}",
             f"{dim("Acc:")} {yellow(f"{self.accuracy:<4}")}",
-            f"{dim("Crit:")} {orange(f"{self.crit:<4}")}",
-            f"{dim("Var:")} {f"{self.var}"}",
+            f"{dim("Crit:")} {yellow(f"{self.crit:<4}")}",
+            f"{dim("Var:")} {f"{blue(f"{self.var}")}"}",
             f"{dim("Uses:")} {self.format_uses()}",
         ])}"
 
