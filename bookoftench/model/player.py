@@ -4,6 +4,8 @@ import random
 from dataclasses import dataclass, field, asdict
 from typing import Dict, List, Optional
 
+from numpy.ma.extras import average
+
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import RIFLE
@@ -293,7 +295,7 @@ class Player(Combatant):
     @attach_perk(INTRO_TO_TENCH, value_description="xp gained")
     @attach_perk(AP_TENCH_STUDIES, WrapperIndices.ApTenchStudies.BATTLE_XP, value_description="xp gained")
     def _calculate_xp_from_enemy(enemy: Combatant) -> int:
-        return int(enemy.max_hp / 2.8)
+        return round((enemy.max_hp / 2.8) * ((enemy.strength + enemy.acc) / 2))
 
     def gain_xp_from_enemy(self, enemy: Combatant) -> None:
         amount = self._calculate_xp_from_enemy(enemy)
