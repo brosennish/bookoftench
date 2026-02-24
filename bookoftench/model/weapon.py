@@ -48,6 +48,7 @@ class Weapon(WeaponBase, Buyable):
     def __repr__(self) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
+            f"Value: {orange(self.sell_value):<17}",
             f"{dim("Dmg:")} {red(f"{self.damage:<3}")}",
             f"{dim("Acc:")} {yellow(f"{self.accuracy:<4}")}",
             f"{dim("Crit:")} {yellow(f"{self.crit:<4}")}",
@@ -79,6 +80,7 @@ class SellableWeapon(Weapon):
     def __repr__(self) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
+            f"Value: {orange(self.sell_value):<17}",
             f"{dim("Dmg:")} {red(f"{self.damage:<3}")}",
             f"{dim("Acc:")} {yellow(f"{self.accuracy:<4}")}",
             f"{dim("Crit:")} {yellow(f"{self.crit:<4}")}",

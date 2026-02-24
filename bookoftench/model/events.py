@@ -185,6 +185,21 @@ class BountyCollectedEvent(Event):
         self.enemy_name = enemy_name
 
 
+class OccultistEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.PAY_OCCULTIST)
+
+
+class ShamanEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.PAY_SHAMAN)
+
+
+class WizardEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.PAY_WIZARD)
+
+
 class CoffeeEvent(Event):
     def __init__(self, coffee_item, event_type: EventType):
         super().__init__(event_type)
