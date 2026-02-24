@@ -9,7 +9,7 @@ from bookoftench.data.perks import WENCH_LOCATION
 from bookoftench.event_base import EventType, Event
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.events import KillEvent, CoffeeEvent, LevelUpEvent, FleeEvent, BountyCollectedEvent, \
-    TreatmentEvent, GenericStealEvent, DiscoveryEventLegendary, DiscoveryEventMythic
+    TreatmentEvent, GenericStealEvent, DiscoveryEvent
 from bookoftench.model.perk import Perk, load_perks
 from bookoftench.model.player import Player
 from bookoftench.ui import orange
@@ -87,7 +87,7 @@ class CoffeeAchievement(Achievement):
 class DiscoveryAchievement(Achievement):
 
     def __post_init__(self):
-        @subscribe_function(DiscoveryEventLegendary, DiscoveryEventMythic, name_override=self.id)
+        @subscribe_function(DiscoveryEvent, name_override=self.id)
         def handle_event(_: Event):
             if event_logger.get_count(self.event_type) == self.event_threshold:
                 event_logger.log_event(AchievementEvent(self))
