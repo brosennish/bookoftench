@@ -343,7 +343,7 @@ Weapons = [
     # =====================================================
     #                       SPECIAL
     # =====================================================
-    {'name': TENCH_CANNON, 'damage': 100, 'uses': 1, 'accuracy': 0.20, 'var': 8, 'crit': 0.10,
+    {'name': TENCH_CANNON, 'damage': 99, 'uses': 1, 'accuracy': 0.20, 'var': 8, 'crit': 0.10,
      'cost': 100, 'sell_value': 30, 'type': RANGED, 'sound': audio.SHOTGUN,
      'areas': [CITY]},
 
