@@ -8,7 +8,7 @@ from bookoftench.model.base import Combatant
 from bookoftench.model.enemy import Enemy
 from bookoftench.model.perk import load_perks, perk_is_active, attach_perks
 from bookoftench.model.player import Player
-from bookoftench.ui import blue, cyan, green, orange, purple, red, yellow, dim
+from bookoftench.ui import blue, cyan, green, orange, purple, red, yellow, dim, white
 from bookoftench.util import print_and_sleep
 from .game_state import GameState
 
@@ -162,15 +162,16 @@ def display_game_stats(game_state: GameState) -> None:
     width = 18  # adjust if you want wider/narrower labels
 
     def display_stat(title: str, value: Any, value_color: Callable[[str], str]) -> None:
-        print(f"{title:<{width}} {dim('|')} {value_color(value)}")
+        print(f"{title:<{width}} {(white(dim('|')))} {value_color(value)}")
 
     display_stat("Current Level", player.lvl, cyan)
     display_stat("Current HP", player.hp, player_color)
+    display_stat("Deaths", event_logger.get_count(EventType.PLAYER_DEATH), red)
 
     display_stat("Coins", player.coins, green)
-    display_stat("Bank", game_state.bank.balance, green)
-    display_stat("Deposits", event_logger.get_count(EventType.DEPOSIT), orange)
-    display_stat("Withdrawals", event_logger.get_count(EventType.WITHDRAW), orange)
+    display_stat("Bank Balance", game_state.bank.balance, green)
+    display_stat("Deposited", event_logger.get_count(EventType.DEPOSIT), orange)
+    display_stat("Withdrawn", event_logger.get_count(EventType.WITHDRAW), orange)
     display_stat("Interest Earned", game_state.bank.interest, green)
 
     display_stat("Casino Won", player.casino_won, green)
@@ -179,6 +180,7 @@ def display_game_stats(game_state: GameState) -> None:
     display_stat("Hits", event_logger.get_count(EventType.HIT), cyan)
     display_stat("Misses", event_logger.get_count(EventType.MISS), cyan)
     display_stat("Critical Hits", event_logger.get_count(EventType.CRIT), cyan)
+    display_stat("Times Fled", event_logger.get_count(EventType.FLEE), cyan)
 
     display_stat("Enemies Killed", event_logger.get_count(EventType.KILL), red)
     display_stat("Bounties Claimed", event_logger.get_count(EventType.BOUNTY_COLLECTED), purple)
