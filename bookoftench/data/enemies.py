@@ -340,7 +340,7 @@ Enemy_Lines = {
     MIME: [
         "*Pretends to dig a grave and throw you into it*",
         "*Pretends to eat a burger... or is it a grilled cheese?*",
-        "*Pretends to be making love but unclear as to whom or what.*",
+        "*Pretends to be making love but to whom or what is unclear*",
     ],
 
     PARTY_ANIMAL: [
