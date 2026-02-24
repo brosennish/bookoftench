@@ -14,7 +14,9 @@ from bookoftench.data.enemies import Enemy_Adjectives
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss, load_enemies
+from .perk import perk_is_active
 from .shop import Shop
+from ..data.perks import SHERLOCK_TENCH
 
 _search_defaults = {
     DISCOVER_PERK: 1,
@@ -69,17 +71,26 @@ class Area:
     def enemies_remaining(self) -> int:
         return max(self.enemy_count - self.enemies_killed, 0)
 
-    def spawn_enemy(self, player_level: int) -> Enemy:
+    def spawn_enemy(self, wanted: str, player_level: int) -> Enemy:
+        wanted = load_enemy(wanted)
         available = [i for i in self.enemies if i not in self.enemies_seen]
+
         if not available:
-            self.enemies_seen.clear()
+            self.enemies_seen.clear()  # if all enemies seen, reset the pool
             available = [i for i in self.enemies if i not in self.enemies_seen]
-        enemy_name = random.choice(available)
-        if len(self.enemies_seen) >= 1:
-            if random.random() < min(0.15, 0.01 * len(self.enemies_seen)):
-                enemy_name = random.choice(tuple(self.enemies_seen))
-        enemy = load_enemy(enemy_name)
-        self.enemies_seen.add(enemy_name)
+
+        enemy_name = random.choice(available)  # Initial enemy selection
+
+        if len(self.enemies_seen) >= 1:  # Calculate odds of seeing a seen enemy if 1+ in enemies_seen
+            if random.random() < min(0.15, 0.01 * len(self.enemies_seen)):  # If random < scaling float value
+                enemy_name = random.choice(tuple(self.enemies_seen))  # Select enemy from seen
+
+        if perk_is_active(SHERLOCK_TENCH):  # 10% chance of wanted enemy encounter if perk is active
+            if self.name in wanted.areas and random.random() < 0.10:
+                enemy_name = wanted.name
+
+        enemy = load_enemy(enemy_name)  # convert selected enemy to Enemy
+        self.enemies_seen.add(enemy_name)  # add selected enemy to enemies_seen
 
         enemy.hp += random.randint(-2, 2) #  apply hp spread first
         enemy.hp += round((enemy.hp * 0.03) * max(player_level - 1, 0)) #  then apply hp scaling
