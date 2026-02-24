@@ -10,7 +10,7 @@ from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE
 from bookoftench.data.enemies import SLEDGE_HAMMOND
-from bookoftench.data.weapons import MELEE
+from bookoftench.data.weapons import MELEE, RANGED
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
 from bookoftench.ui import red, yellow, color_text, purple, cyan, dim, blue
 from bookoftench.util import print_and_sleep
@@ -158,6 +158,7 @@ class Combatant(ABC):
 
     def __init__(self):
         self.strength = None
+        self.acc = None
 
     def is_alive(self) -> bool:
         return self.hp > 0
@@ -180,12 +181,14 @@ class Combatant(ABC):
         self.blind_turns: int = 0
 
     def calculate_accuracy(self) -> float:
+        base = self.current_weapon.get_accuracy()
+        accuracy = base * self.acc if self.current_weapon.type == RANGED else base
         if self.blind:
             self.blind_turns -= 1
             if self.blind_turns == 0:
                 self.reset_blindness()
-            return self.current_weapon.get_accuracy() * (1 - self.blind_effect)
-        return self.current_weapon.get_accuracy()
+            return accuracy * (1 - self.blind_effect)
+        return accuracy
 
     def get_crit_chance(self) -> float:
         return self.current_weapon.crit
@@ -234,15 +237,17 @@ class Combatant(ABC):
         base_damage = self.current_weapon.calculate_base_damage()
         crit = random.random() < self.get_crit_chance()
         damage_inflicted = round(base_damage * 1.5) if crit else base_damage  # 1.5x damage if crit
+        if self.current_weapon.type == MELEE:
+            damage_inflicted = round(self.strength * damage_inflicted)  # mult damage by strength value
+
         if isinstance(other, NPC):
             print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
             event_logger.log_event(HitEvent(self.current_weapon.type))
         else:
-            if self.current_weapon.type == MELEE:
-                damage_inflicted = round(self.strength * damage_inflicted)  # apply enemy strength value to damage
             print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
+
         self.handle_crit(crit)
         other.take_damage(damage_inflicted, self)
         self.handle_blinding(other)

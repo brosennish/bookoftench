@@ -12,7 +12,7 @@ from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GR
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM, TENCH_GENES, \
     WrapperIndices
-from bookoftench.data.weapons import BARE_HANDS, KNIFE, MELEE, PROJECTILE, MACHETE, FIRE_AXE, AXE
+from bookoftench.data.weapons import BARE_HANDS, KNIFE, MELEE, RANGED, MACHETE, FIRE_AXE, AXE
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.illness import Illness
 from bookoftench.ui import yellow, dim, green, cyan, purple, red
@@ -48,7 +48,7 @@ class PlayerWeapon(Weapon):
 
     def get_accuracy(self) -> float:
         @attach_perk(TENCH_EYES, value_description="projectile accuracy",
-                     condition=lambda: self.type == PROJECTILE)
+                     condition=lambda: self.type == RANGED)
         def apply_perks():
             return self.accuracy
 
@@ -75,6 +75,8 @@ class Player(Combatant):
     hp: int = 100
     max_hp: int = 100
     xp: int = 0
+    strength: int = 1
+    acc: int = 1
 
     illness: Optional[Illness] = None
     illness_death_lvl: Optional[int] = None
