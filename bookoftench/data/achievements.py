@@ -122,7 +122,7 @@ Achievements = [
     {
         'id': PATIENT_68,
         'name': "Patient 68",
-        'description': "Visit the hospital for treatment",
+        'description': "Receive first treatment",
         'reward_type': RewardType.XP,
         'reward_value': 10,
         'event_type': EventType.TREATMENT_EVENT,

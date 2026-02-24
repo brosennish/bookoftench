@@ -49,11 +49,9 @@ class Rite(Buyable):
             if not player.illness:
                 print_and_sleep(f"{cyan(f'You remain free of contamination.')}", 2)
             else:
-                print_and_sleep(f"{cyan(f'You have been cured of {player.illness.name}.')}", 2)
-                event_logger.log_event(TreatmentEvent(player.illness, EventType.PAY_SHAMAN))
+                event_logger.log_event(TreatmentEvent(player.illness, EventType.TREATMENT_EVENT))
                 player.illness = None
                 player.illness_death_lvl = None
-
 
         elif self.name == SHAMANS_CIGAR:
             gain = random.randint(0, 50)
