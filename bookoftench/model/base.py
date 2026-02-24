@@ -11,7 +11,7 @@ from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE
 from bookoftench.data.enemies import SLEDGE_HAMMOND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
-from bookoftench.ui import red, yellow, color_text, purple, cyan, dim
+from bookoftench.ui import red, yellow, color_text, purple, cyan, dim, orange
 from bookoftench.util import print_and_sleep
 
 
@@ -39,14 +39,14 @@ class WeaponBase(ABC):
     damage: int
     uses: int
     accuracy: float
-    spread: int
+    var: int
     crit: float
     sound: str
     type: str
     areas: list[str] | None = None
 
     def calculate_base_damage(self) -> int:
-        base = self.damage + random.randint(-self.spread, self.spread)
+        base = self.damage + random.randint(-self.var, self.var)
         return max(0, base)
 
     def get_accuracy(self) -> float:
@@ -79,6 +79,15 @@ class WeaponBase(ABC):
             f"{dim("Damage:")} {red(f"{self.damage:<3}")}",
             f"{dim("Accuracy:")} {yellow(f"{self.accuracy:<4}")}",
             f"{dim("Uses:")} {self.format_uses()}"
+        ])}"
+
+    def get_complete_format(self) -> str:
+        return f"{cyan(self.name)}\n{dim(' | ').join([
+            f"{dim("Dmg:")} {red(f"{self.damage:<3}")}",
+            f"{dim("Acc:")} {yellow(f"{self.accuracy:<4}")}",
+            f"{dim("Crit:")} {orange(f"{self.crit:<4}")}",
+            f"{dim("Var:")} {f"{self.var}"}",
+            f"{dim("Uses:")} {self.format_uses()}",
         ])}"
 
     @abstractmethod
