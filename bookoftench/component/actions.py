@@ -188,9 +188,14 @@ class UseItem(GatekeepingComponent):
 
 class ItemSelectionComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
+        self.length = 0
+        for i in game_state.player.items.keys():
+            if len(i) > self.length:
+                self.length = len(i) + 1
+
         super().__init__(game_state,
                          bindings=[SelectionBinding(key=str(i),
-                                                    name=item.get_simple_format(),
+                                                    name=item.get_simple_format(self.length),
                                                     component=functional_component()(
                                                         partial(game_state.player.use_item, item.name)))
                                    for (i, item) in enumerate(game_state.player.get_items(), 1)],
@@ -223,13 +228,17 @@ class SwapFoundItemMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         found = game_state.found_item
         valid = list(i for i in game_state.player.items.values())
+        length = 0
+        for i in game_state.player.items.keys():
+            if len(i) > length:
+                length = len(i) + 1
 
         super().__init__(
             game_state,
             bindings=[
                 SelectionBinding(
                     key=str(i),
-                    name=item.get_simple_format(),
+                    name=item.get_simple_format(length),
                     component=functional_component()(
                         partial(game_state.player.swap_found_item, item.name, found)
                     )
