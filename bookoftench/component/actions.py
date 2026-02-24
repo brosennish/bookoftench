@@ -18,8 +18,7 @@ from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.discoverable import load_discoverables, search_discoverable_rarity, rarity_color
 from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE
-from bookoftench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent, DiscoveryEventCommon, \
-    DiscoveryEventUncommon, DiscoveryEventRare, DiscoveryEventLegendary, DiscoveryEventMythic
+from bookoftench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent, DiscoveryEvent
 from bookoftench.model.game_state import GameState
 from bookoftench.model.item import load_items
 from bookoftench.model.perk import load_perks, Perk, perk_is_active
@@ -33,6 +32,7 @@ from .encounters import PostKillEncounters
 from .menu import OverviewMenu
 from .registry import register_component, get_registered_component
 from ..data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE
+from ..event_base import EventType
 
 
 @register_component(SEARCH)
@@ -56,15 +56,15 @@ class Search(RandomChoiceComponent):
 
         # log event for stats
         if rarity == COMMON:
-            event_logger.log_event(DiscoveryEventCommon())
+            event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_COMMON))
         elif rarity == UNCOMMON:
-            event_logger.log_event(DiscoveryEventUncommon())
+            event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_UNCOMMON))
         elif rarity == RARE:
-            event_logger.log_event(DiscoveryEventRare())
+            event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_RARE))
         elif rarity == LEGENDARY:
-            event_logger.log_event(DiscoveryEventLegendary())
+            event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_LEGENDARY))
         else:
-            event_logger.log_event(DiscoveryEventMythic())
+            event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_MYTHIC))
 
         # take damage if find.hp < 0
         if find.hp < 0:

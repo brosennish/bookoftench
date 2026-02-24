@@ -7,7 +7,7 @@ from bookoftench.component.registry import register_component
 from bookoftench.data.components import SHAMAN
 from bookoftench.data.rites import Shaman_Lines
 from bookoftench.model import GameState
-from bookoftench.model.events import ShamanEvent
+from bookoftench.model.events import ShamanEvent, TreatmentEvent
 from bookoftench.model.rite import Rite, load_rites
 from bookoftench.model.util import display_shaman_header
 from bookoftench.ui import blue, yellow

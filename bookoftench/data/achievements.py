@@ -7,10 +7,13 @@ CHICKEN = "Chicken"
 DRY_FIVE = "Dry Five"
 FIRST_BUST = "First Bust"
 GOLDEN_TENCH = "Golden Tench"
+KARMIC_DECEIVER = "Karmic Deceiver"
 KELPTOMANIAC = "Kelptomaniac"
 KRILL_OR_BE_KRILLED = "Krill Or Be Krilled"
+LEGENDARY = "Legendary"
 LEVEL_TENCH = "Level Tench"
 MASTER_OF_TENCH = "Master of Tench"
+MYTHIC = "Mythic"
 PATIENT_68 = "Patient 68"
 RECKLESS = "Reckless"
 TENCH_BUNDY = "Tench Bundy"
@@ -64,7 +67,6 @@ Achievements = [
         'name': "Dry Five",
         'description': "Reach level 5",
         'reward_type': RewardType.PERK,
-        'reward_value': 55,
         'event_type': EventType.LEVEL_UP,
         'event_threshold': 5
     },
@@ -106,7 +108,7 @@ Achievements = [
         'name': "First Bust",
         'description': "Collect 1 bounty",
         'reward_type': RewardType.XP,
-        'reward_value': 5,
+        'reward_value': 10,
         'event_type': EventType.BOUNTY_COLLECTED,
         'event_threshold': 1
     },
@@ -122,7 +124,7 @@ Achievements = [
     {
         'id': PATIENT_68,
         'name': "Patient 68",
-        'description': "Visit the hospital for treatment",
+        'description': "Receive first treatment",
         'reward_type': RewardType.XP,
         'reward_value': 10,
         'event_type': EventType.TREATMENT_EVENT,
@@ -138,12 +140,39 @@ Achievements = [
         'event_threshold': 3
     },
     {
+        'id': KARMIC_DECEIVER,
+        'name': "Karmic Deceiver",
+        'description': "Shoplift 1 time",
+        'reward_type': RewardType.XP,
+        'reward_value': 10,
+        'event_type': EventType.STEAL,
+        'event_threshold': 1
+    },
+    {
         'id': KELPTOMANIAC,
-        'name': KELPTOMANIAC,
+        'name': "Kelptomaniac",
         'description': "Shoplift 5 times",
         'reward_type': RewardType.XP,
         'reward_value': 20,
         'event_type': EventType.STEAL,
         'event_threshold': 5
-    }
+    },
+    {
+        'id': LEGENDARY,
+        'name': "Legendary",
+        'description': "Make a legendary discovery",
+        'reward_type': RewardType.XP,
+        'reward_value': 10,
+        'event_type': EventType.DISCOVERY_LEGENDARY,
+        'event_threshold': 1
+    },
+    {
+        'id': MYTHIC,
+        'name': "Mythic",
+        'description': "Make a mythical discovery",
+        'reward_type': RewardType.XP,
+        'reward_value': 20,
+        'event_type': EventType.DISCOVERY_MYTHIC,
+        'event_threshold': 1
+    },
 ]

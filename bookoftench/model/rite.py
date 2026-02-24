@@ -2,8 +2,11 @@ import random
 from dataclasses import dataclass
 from typing import List
 
+from bookoftench import event_logger
 from bookoftench.data.rites import Rites, TOAD_JUICE, HERBAL_TEA, SHAMANS_CIGAR
+from bookoftench.event_base import EventType
 from bookoftench.model.base import Buyable
+from bookoftench.model.events import TreatmentEvent
 from bookoftench.model.player import Player
 from bookoftench.ui import cyan, orange, dim, purple, green
 from bookoftench.util import print_and_sleep
@@ -46,7 +49,7 @@ class Rite(Buyable):
             if not player.illness:
                 print_and_sleep(f"{cyan(f'You remain free of contamination.')}", 2)
             else:
-                print_and_sleep(f"{cyan(f'You have been cured of {player.illness.name}.')}", 2)
+                event_logger.log_event(TreatmentEvent(player.illness, EventType.TREATMENT_EVENT))
                 player.illness = None
                 player.illness_death_lvl = None
 
@@ -58,12 +61,12 @@ class Rite(Buyable):
 
 
 def load_rites(player: Player) -> List[Rite]:
-    Correct = Rites.copy()
-    for i in Correct:
+    correct = Rites.copy()
+    for i in correct:
         if i['name'] == TOAD_JUICE:
             i['cost'] = 5 + (5 * player.blind_turns)
 
     return [
         Rite(**rite_dict)
-        for rite_dict in Correct
+        for rite_dict in correct
     ]
