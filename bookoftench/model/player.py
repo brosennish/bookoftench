@@ -295,7 +295,7 @@ class Player(Combatant):
     @attach_perk(INTRO_TO_TENCH, value_description="xp gained")
     @attach_perk(AP_TENCH_STUDIES, WrapperIndices.ApTenchStudies.BATTLE_XP, value_description="xp gained")
     def _calculate_xp_from_enemy(enemy: Combatant) -> int:
-        return round((enemy.max_hp / 2.8) * ((enemy.strength + enemy.acc) / 2))
+        return round((enemy.max_hp / 2.75) * ((enemy.strength + enemy.acc) / 2))
 
     def gain_xp_from_enemy(self, enemy: Combatant) -> None:
         amount = self._calculate_xp_from_enemy(enemy)

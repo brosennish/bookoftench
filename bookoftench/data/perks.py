@@ -269,17 +269,17 @@ Perks = [
     },
     {
         'name': BARTER_SAUCE,
-        'cost': 150,
-        'description': "Shop prices are 10% lower",
+        'cost': 100,
+        'description': "Shop prices are 5% lower",
         'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
-        'wrapper_config': {'change': -10}
+        'wrapper_config': {'change': -5}
     },
     {
         'name': TRADE_SHIP,
-        'cost': 300,
-        'description': "Shop prices are 20% lower",
+        'cost': 165,
+        'description': "Shop prices are 10% lower",
         'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
-        'wrapper_config': {'change': -20}
+        'wrapper_config': {'change': -10}
     },
     {
         'name': CROWS_NEST,
