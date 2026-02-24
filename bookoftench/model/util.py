@@ -202,6 +202,12 @@ def display_game_stats(game_state: GameState) -> None:
     display_stat("Shaman Used", event_logger.get_count(EventType.PAY_SHAMAN), purple)
     display_stat("Wizard Used", event_logger.get_count(EventType.PAY_WIZARD), purple)
 
+    display_stat("Common Finds", event_logger.get_count(EventType.DISCOVERY_COMMON), yellow)
+    display_stat("Uncommon Finds", event_logger.get_count(EventType.DISCOVERY_UNCOMMON), green)
+    display_stat("Rare Finds", event_logger.get_count(EventType.DISCOVERY_RARE), blue)
+    display_stat("Legendary Finds", event_logger.get_count(EventType.DISCOVERY_LEGENDARY), orange)
+    display_stat("Mythic Finds", event_logger.get_count(EventType.DISCOVERY_MYTHIC), purple)
+
     display_stat("Times Traveled", event_logger.get_count(EventType.TRAVEL), blue)
 
 

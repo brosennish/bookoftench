@@ -1,11 +1,13 @@
 import random
 
+from bookoftench import event_logger
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component
 from bookoftench.component.registry import register_component
 from bookoftench.data.components import OCCULTIST
 from bookoftench.data.rituals import Occultist_Lines
 from bookoftench.model import GameState
+from bookoftench.model.events import OccultistEvent
 from bookoftench.model.ritual import Ritual, load_rituals
 from bookoftench.model.util import display_occultist_header
 from bookoftench.ui import blue, yellow
@@ -59,6 +61,7 @@ class OccultistComponent(LabeledSelectionComponent):
                 print_and_sleep(yellow(f"Need more coin"), 1)
             else:
                 player.coins -= ritual.cost
+                event_logger.log_event(OccultistEvent())
                 ritual.invoke(player)
 
         return purchase_component

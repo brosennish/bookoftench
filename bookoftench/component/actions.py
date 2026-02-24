@@ -18,7 +18,8 @@ from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.discoverable import load_discoverables, search_discoverable_rarity, rarity_color
 from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE
-from bookoftench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent
+from bookoftench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent, DiscoveryEventCommon, \
+    DiscoveryEventUncommon, DiscoveryEventRare, DiscoveryEventLegendary, DiscoveryEventMythic
 from bookoftench.model.game_state import GameState
 from bookoftench.model.item import load_items
 from bookoftench.model.perk import load_perks, Perk, perk_is_active
@@ -31,6 +32,7 @@ from .base import LabeledSelectionComponent, SelectionBinding
 from .encounters import PostKillEncounters
 from .menu import OverviewMenu
 from .registry import register_component, get_registered_component
+from ..data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE
 
 
 @register_component(SEARCH)
@@ -51,6 +53,18 @@ class Search(RandomChoiceComponent):
                      in d.areas and d.rarity == rarity]
 
         find = random.choice(available)
+
+        # log event for stats
+        if rarity == COMMON:
+            event_logger.log_event(DiscoveryEventCommon())
+        elif rarity == UNCOMMON:
+            event_logger.log_event(DiscoveryEventUncommon())
+        elif rarity == RARE:
+            event_logger.log_event(DiscoveryEventRare())
+        elif rarity == LEGENDARY:
+            event_logger.log_event(DiscoveryEventLegendary())
+        else:
+            event_logger.log_event(DiscoveryEventMythic())
 
         # take damage if find.hp < 0
         if find.hp < 0:

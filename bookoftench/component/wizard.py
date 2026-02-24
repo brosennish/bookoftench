@@ -1,11 +1,13 @@
 import random
 
+from bookoftench import event_logger
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
 from bookoftench.data.components import WIZARD
 from bookoftench.data.spells import Wizard_Lines, WEAPON, ITEM
 from bookoftench.model import GameState
+from bookoftench.model.events import WizardEvent
 from bookoftench.model.spell import load_spells, Spell
 from bookoftench.model.util import display_wizard_header
 from bookoftench.ui import blue, yellow
@@ -77,6 +79,7 @@ class WizardComponent(LabeledSelectionComponent):
                     return
 
             player.coins -= spell.cost
+            event_logger.log_event(WizardEvent())
             spell.cast(player)
 
         return purchase_component
