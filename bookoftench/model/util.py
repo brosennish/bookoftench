@@ -198,9 +198,9 @@ def display_game_stats(game_state: GameState) -> None:
     display_stat("Perks Owned", event_logger.get_count(EventType.BUY_PERK), purple)
 
     display_stat("Coffees Purchased", event_logger.get_count(EventType.COFFEE_EVENT), green)
-    display_stat("Occultist Purchases", event_logger.get_count(EventType.PAY_OCCULTIST), purple)
-    display_stat("Shaman Purchases", event_logger.get_count(EventType.PAY_SHAMAN), purple)
-    display_stat("Wizard Purchases", event_logger.get_count(EventType.PAY_WIZARD), purple)
+    display_stat("Occultist Used", event_logger.get_count(EventType.PAY_OCCULTIST), purple)
+    display_stat("Shaman Used", event_logger.get_count(EventType.PAY_SHAMAN), purple)
+    display_stat("Wizard Used", event_logger.get_count(EventType.PAY_WIZARD), purple)
 
     display_stat("Times Traveled", event_logger.get_count(EventType.TRAVEL), blue)
 
