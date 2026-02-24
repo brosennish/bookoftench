@@ -7,6 +7,7 @@ CHICKEN = "Chicken"
 DRY_FIVE = "Dry Five"
 FIRST_BUST = "First Bust"
 GOLDEN_TENCH = "Golden Tench"
+KARMIC_DECEIVER = "Karmic Deceiver"
 KELPTOMANIAC = "Kelptomaniac"
 KRILL_OR_BE_KRILLED = "Krill Or Be Krilled"
 LEVEL_TENCH = "Level Tench"
@@ -137,8 +138,17 @@ Achievements = [
         'event_threshold': 3
     },
     {
+        'id': KARMIC_DECEIVER,
+        'name': "Karmic Deceiver",
+        'description': "Shoplift 1 time",
+        'reward_type': RewardType.XP,
+        'reward_value': 10,
+        'event_type': EventType.STEAL,
+        'event_threshold': 1
+    },
+    {
         'id': KELPTOMANIAC,
-        'name': KELPTOMANIAC,
+        'name': "Kelptomaniac",
         'description': "Shoplift 5 times",
         'reward_type': RewardType.XP,
         'reward_value': 20,
