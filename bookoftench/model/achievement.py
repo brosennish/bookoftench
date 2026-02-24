@@ -84,7 +84,7 @@ class CoffeeAchievement(Achievement):
 
 
 @dataclass
-class DiscoveryEventAchievement(Achievement):
+class DiscoveryAchievement(Achievement):
 
     def __post_init__(self):
         @subscribe_function(DiscoveryEventLegendary, DiscoveryEventMythic, name_override=self.id)
@@ -163,6 +163,16 @@ def load_achievements() -> List[Achievement]:
                 res.append(_ACHIEVEMENTS[achievement.id])
             case EventType.COFFEE_EVENT:
                 achievement = CoffeeAchievement(**d)
+                if achievement.id not in _ACHIEVEMENTS:
+                    _ACHIEVEMENTS[achievement.id] = achievement
+                res.append(_ACHIEVEMENTS[achievement.id])
+            case EventType.DISCOVERY_LEGENDARY:
+                achievement = DiscoveryAchievement(**d)
+                if achievement.id not in _ACHIEVEMENTS:
+                    _ACHIEVEMENTS[achievement.id] = achievement
+                res.append(_ACHIEVEMENTS[achievement.id])
+            case EventType.DISCOVERY_MYTHIC:
+                achievement = DiscoveryAchievement(**d)
                 if achievement.id not in _ACHIEVEMENTS:
                     _ACHIEVEMENTS[achievement.id] = achievement
                 res.append(_ACHIEVEMENTS[achievement.id])
