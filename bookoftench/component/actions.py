@@ -363,7 +363,8 @@ class SpawnEnemy(LinearComponent):
         super().__init__(game_state, next_component=Battle)
 
     def execute_current(self) -> GameState:
-        self.game_state.current_area.spawn_enemy(self.game_state.player.lvl)
+        wanted = self.game_state.wanted
+        self.game_state.current_area.spawn_enemy(wanted, self.game_state.player.lvl)
         return self.game_state
 
 
