@@ -100,6 +100,8 @@ class Area:
             enemy.name = f"Elite {enemy.name}"
             enemy.hp = int(enemy.hp * 1.5)
             enemy.max_hp = int(enemy.max_hp * 1.5)
+            enemy.strength += 0.1
+            enemy.acc += 0.1
             enemy.coins = int(enemy.coins * 1.5)
             print_and_sleep(f"{yellow("An enemy appears!")} {purple("(Elite enemy!)")}", 1)
         else:
