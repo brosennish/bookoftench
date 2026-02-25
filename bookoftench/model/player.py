@@ -327,6 +327,8 @@ class Player(Combatant):
         self.lvl += 1
         cash_reward = max(50, (100 - (10 * (self.lvl - 1))))
         self.coins += cash_reward
+        self.strength += 0.02
+        self.acc += 0.02
         self.games_played = 0
 
         old_max = self.max_hp
