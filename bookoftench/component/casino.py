@@ -57,7 +57,7 @@ class Casino(LabeledSelectionComponent):
             SelectionBinding('R', "Return", functional_component()(lambda: self._return())),
         ])
         self.leave_casino = False
-        print_and_sleep(blue("Welcome to Riverboat Casino, where the water flows like brine."), 2)
+        print_and_sleep(blue("Welcome to Riverboat Casino, where the water tastes like brine."), 2)
 
     def _return(self):
         self.leave_casino = True
