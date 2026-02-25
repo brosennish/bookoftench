@@ -305,8 +305,12 @@ class Attack(Component):
         enemy_weapon = enemy.drop_weapon()
         if enemy_weapon is not None:
             player.obtain_enemy_weapon(enemy_weapon)
-        player.gain_coins(enemy.drop_coins())
+
+        coins = enemy.drop_coins()
+        coins *= min(1.5, 1 + ((player.lvl - 1) * 0.1))
+        player.gain_coins(round(coins))
         player.gain_xp_from_enemy(enemy)
+
         event_logger.log_event(KillEvent())
         self.game_state.current_area.kill_current_enemy()
         PostKillEncounters(self.game_state).run()
