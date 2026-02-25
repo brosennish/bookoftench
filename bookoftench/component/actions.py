@@ -307,7 +307,7 @@ class Attack(Component):
             player.obtain_enemy_weapon(enemy_weapon)
 
         coins = enemy.drop_coins()
-        coins *= min(1.5, 1 + ((player.lvl - 1) * 0.1))
+        coins *= min(1.25, 1 + ((player.lvl - 1) * 0.025))
         player.gain_coins(round(coins))
         player.gain_xp_from_enemy(enemy)
 
