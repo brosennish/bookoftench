@@ -290,7 +290,7 @@ Enemy_Lines = {
     # ===== CITY (existing + new empty) =====
     CARD_JOCKEY: [
         "If I don't collect your bounty the goons at the casino are gonna cut off my jines.",
-        "I used to work at the casino. That is, until they caught me rigging krill of cray for my friend.",
+        "I used to work at the casino. That is, until they caught me rigging krill or cray for my friend.",
         "I'll rig a game. I don't care. I'm not afraid of Biltmore and his goons. Well, maybe a little.",
     ],
 
