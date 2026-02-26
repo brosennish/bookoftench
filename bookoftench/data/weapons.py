@@ -97,7 +97,7 @@ Weapons = [
 
     # --- Blinding / Debuff ---
     {'name': PEPPER_SPRAY, 'damage': 0, 'uses': 3, 'accuracy': 0.85, 'var': 0,
-     'crit': 0.05, 'cost': 25, 'sell_value': 12, 'type': BLIND, 'sound': '',
+     'crit': 0, 'cost': 25, 'sell_value': 12, 'type': BLIND, 'sound': '',
      'blind_effect': 0.50, 'blind_turns_min': 2, 'blind_turns_max': 4,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
