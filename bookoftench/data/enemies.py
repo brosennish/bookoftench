@@ -80,7 +80,7 @@ Enemies = [
      'bounty': 160, 'coins': 85, 'type': NORMAL, 'flee': 1, 'strength': 0.85, 'acc': 1.08, 'areas': [CITY]},
     {'name': CLONE, 'hp': 100, 'weapons': [w.POCKET_KNIFE, w.CANE, w.CHILI_POWDER],
      'bounty': 175, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 0.98, 'areas': [CITY]},
-    {'name': CLOWN, 'hp': 100, 'weapons': [w.BROKEN_BOTTLE, w.MEAT_CLEAVER],
+    {'name': CLOWN, 'hp': 100, 'weapons': [w.BROKEN_BOTTLE, w.MEAT_CLEAVER, w.RUBBER_CHICKEN],
      'bounty': 155, 'coins': 25, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.05, 'areas': [CITY]},
     {'name': FROGGER, 'hp': 100, 'weapons': [w.FROG_GIG, w.PILLOW, w.PISTOL],
      'bounty': 160, 'coins': 40, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [CITY]},
@@ -102,11 +102,11 @@ Enemies = [
      'bounty': 130, 'coins': 20, 'type': NORMAL, 'flee': 1, 'strength': 1.05, 'acc': 0.75, 'areas': [CITY]},
 
     # --- original ---
-    {'name': BODY_BUILDER, 'hp': 110, 'weapons': [w.BASEBALL_BAT, w.INJECTION_NEEDLE],
+    {'name': BODY_BUILDER, 'hp': 110, 'weapons': [w.BASEBALL_BAT, w.INJECTION_NEEDLE, w.DUMBBELL],
      'bounty': 195, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.3, 'acc': 0.9, 'areas': [CITY]},
     {'name': GOON, 'hp': 105, 'weapons': [w.BASEBALL_BAT, w.SHOTGUN, w.BRASS_KNUCKLES],
      'bounty': 185, 'coins': 40, 'type': NORMAL, 'flee': 1, 'strength': 1.15, 'acc': 1.1, 'areas': [CITY]},
-    {'name': HOBO, 'hp': 85, 'weapons': [w.BROKEN_BOTTLE, w.KNIFE, w.POCKET_SAND],
+    {'name': HOBO, 'hp': 85, 'weapons': [w.BROKEN_BOTTLE, w.KNIFE, w.POCKET_SAND, w.BRICK],
      'bounty': 135, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [CITY]},
     {'name': PIMP, 'hp': 95, 'weapons': [w.CANE, w.BRASS_KNUCKLES, w.REVOLVER, w.SWITCHBLADE],
      'bounty': 190, 'coins': 85, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.1, 'areas': [CITY]},
@@ -123,7 +123,7 @@ Enemies = [
      'bounty': 125, 'coins': 30, 'type': NORMAL, 'flee': 1, 'strength': 0.70, 'acc': 0.78, 'areas': [FOREST]},
     {'name': DOOMSDAY_PREPPER, 'hp': 95, 'weapons': [w.KNIFE, w.PISTOL],
      'bounty': 180, 'coins': 55, 'type': NORMAL, 'flee': 1, 'strength': 1.15, 'acc': 1.15, 'areas': [FOREST]},
-    {'name': FERAL_PHILOSOPHER, 'hp': 85, 'weapons': [w.CANE, w.PISTOL, w.SCYTHE],
+    {'name': FERAL_PHILOSOPHER, 'hp': 85, 'weapons': [w.CANE, w.PISTOL, w.SCYTHE, w.HARDCOVER_BOOK],
      'bounty': 155, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 0.9, 'acc': 1.05, 'areas': [FOREST]},
     {'name': FORAGER, 'hp': 90, 'weapons': [w.KNIFE, w.SICKLE, w.BEAR_SPRAY],
      'bounty': 130, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [FOREST]},
@@ -139,7 +139,7 @@ Enemies = [
      'bounty': 190, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.15, 'acc': 1, 'areas': [FOREST]},
     {'name': DISGRACED_EXILE, 'hp': 85, 'weapons': [w.KNIFE, w.HATCHET, w.SHOVEL, w.TROWEL],
      'bounty': 150, 'coins': 25, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [CAVE, FOREST, SWAMP]},
-    {'name': HIKER, 'hp': 90, 'weapons': [w.TREKKING_POLE, w.KNIFE, w.BEAR_SPRAY, w.BINOCULARS],
+    {'name': HIKER, 'hp': 90, 'weapons': [w.TREKKING_POLE, w.SURVIVAL_KNIFE, w.BEAR_SPRAY],
      'bounty': 115, 'coins': 30, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [FOREST]},
     {'name': HUNTER, 'hp': 100, 'weapons': [w.KNIFE, w.RIFLE, w.BEAR_SPRAY, w.LONGBOW],
      'bounty': 175, 'coins': 45, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.15, 'areas': [FOREST]},
@@ -152,7 +152,7 @@ Enemies = [
     #        CAVE ENEMIES
     # ========================
     # --- new ---
-    {'name': ARCHAEOLOGIST, 'hp': 80, 'weapons': [w.FLASHLIGHT, w.CHISEL, w.PEPPER_SPRAY],
+    {'name': ARCHAEOLOGIST, 'hp': 80, 'weapons': [w.FLASHLIGHT, w.CHISEL, w.HARDCOVER_BOOK],
      'bounty': 130, 'coins': 55, 'type': NORMAL, 'flee': 1, 'strength': 0.85, 'acc': 0.88, 'areas': [CAVE]},
     {'name': EXPLORER, 'hp': 100, 'weapons': [w.BINOCULARS, w.TREKKING_POLE, w.LONGBOW, w.SURVIVAL_KNIFE],
      'bounty': 140, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1, 'areas': [CAVE]},
