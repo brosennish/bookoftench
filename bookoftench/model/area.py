@@ -94,9 +94,12 @@ class Area:
 
         enemy.hp += random.randint(-2, 2) #  apply hp spread first
         enemy.hp += round((enemy.hp * 0.03) * max(player_level - 1, 0)) #  then apply hp scaling
+        enemy.strength = round(enemy.strength + random.uniform(-0.03, 0.03))
+        enemy.acc = round(enemy.acc + random.uniform(-0.03, 0.03))
         enemy.coins = max(0, enemy.coins + random.randint(-5, 5))
         enemy_lines = enemy.get_enemy_encounter_line() #  get the line before mutating enemy.name
         elite_chance = min(0.15, max(0.0, (player_level - 1) * 0.03))
+
         if random.random() < elite_chance:
             enemy.name = f"Elite {enemy.name}"
             enemy.hp = int(enemy.hp * 1.5)
@@ -110,7 +113,6 @@ class Area:
 
         if enemy_lines:
             print_and_sleep(f"{blue(f'{enemy_lines}')}", 3)
-
         adj = random.choice(Enemy_Adjectives)
         enemy.name = f"{adj} {enemy.name}"
 
