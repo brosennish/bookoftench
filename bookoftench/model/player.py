@@ -77,8 +77,8 @@ class Player(Combatant):
     hp: int = 100
     max_hp: int = 100
     xp: int = 0
-    strength: int = 1
-    acc: int = 1
+    strength: float = 1
+    acc: float = 1
 
     illness: Optional[Illness] = None
     illness_death_lvl: Optional[int] = None
