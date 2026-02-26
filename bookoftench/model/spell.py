@@ -35,6 +35,7 @@ class Spell(Buyable):
 
         elif self.name == WEAPON_MAGIC:
             filtered = [w for w in load_weapons() if w.name not in [pw.name for pw in player.get_weapons()]
+                        and w.tier > 1
                         and w.uses > 0]
             weapon = random.choice(filtered)
 
