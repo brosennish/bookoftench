@@ -77,62 +77,62 @@ Enemies = [
     # ========================
     # --- new ---
     {'name': CARD_JOCKEY, 'hp': 85, 'weapons': [w.SWITCHBLADE, w.POOL_CUE, w.PEPPER_SPRAY],
-     'bounty': 160, 'coins': 85, 'type': NORMAL, 'flee': 1, 'strength': 0.88, 'acc': 1.05, 'areas': [CITY]},
+     'bounty': 160, 'coins': 85, 'type': NORMAL, 'flee': 1, 'strength': 0.85, 'acc': 1.08, 'areas': [CITY]},
     {'name': CLONE, 'hp': 100, 'weapons': [w.POCKET_KNIFE, w.CANE, w.CHILI_POWDER],
-     'bounty': 175, 'coins': 25, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1, 'areas': [CITY]},
+     'bounty': 175, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 0.98, 'areas': [CITY]},
     {'name': CLOWN, 'hp': 100, 'weapons': [w.BROKEN_BOTTLE, w.MEAT_CLEAVER],
-     'bounty': 155, 'coins': 30, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.05, 'areas': [CITY]},
-    {'name': FROGGER, 'hp': 100, 'weapons': [w.FROG_GIG, w.PILLOW, w.PISTOL, w.POCKET_KNIFE],
-     'bounty': 160, 'coins': 25, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [CITY]},
+     'bounty': 155, 'coins': 25, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.05, 'areas': [CITY]},
+    {'name': FROGGER, 'hp': 100, 'weapons': [w.FROG_GIG, w.PILLOW, w.PISTOL],
+     'bounty': 160, 'coins': 40, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [CITY]},
     {'name': INFLUENCER, 'hp': 75, 'weapons': [w.POCKET_KNIFE, w.SELFIE_STICK, w.PEPPER_SPRAY],
-     'bounty': 120, 'coins': 65, 'type': NORMAL, 'flee': 1, 'strength': 0.8, 'acc': 0.8, 'areas': [CITY]},
+     'bounty': 135, 'coins': 65, 'type': NORMAL, 'flee': 1, 'strength': 0.75, 'acc': 0.75, 'areas': [CITY]},
     {'name': LIFE_COACH, 'hp': 90, 'weapons': [w.KNIFE, w.BASEBALL_BAT, w.FIRE_AXE],
      'bounty': 150, 'coins': 40, 'type': NORMAL, 'flee': 1, 'strength': 1.05, 'acc': 1, 'areas': [CITY]},
     {'name': MAGICIAN, 'hp': 85, 'weapons': [w.SWITCHBLADE, w.SUITCASE, w.PISTOL],
-     'bounty': 140, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': .9, 'acc': 0.9, 'areas': [CITY]},
+     'bounty': 150, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': .9, 'acc': 0.9, 'areas': [CITY]},
     {'name': MASCOT, 'hp': 100, 'weapons': [w.T_SHIRT_CANNON, w.FOAM_FINGER, w.BROKEN_BOTTLE],
      'bounty': 135, 'coins': 30, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1, 'areas': [CITY]},
     {'name': MIME, 'hp': 90, 'weapons': [w.SLINGSHOT, w.CANE, w.SUITCASE],
-     'bounty': 165, 'coins': 25, 'type': NORMAL, 'flee': 1, 'strength': 0.9, 'acc': 0.9, 'areas': [CITY]},
+     'bounty': 150, 'coins': 15, 'type': NORMAL, 'flee': 1, 'strength': 0.9, 'acc': 0.9, 'areas': [CITY]},
     {'name': PARTY_ANIMAL, 'hp': 95, 'weapons': [w.BROKEN_BOTTLE, w.POOL_CUE],
-     'bounty': 155, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.15, 'acc': 1.05, 'areas': [CITY]},
+     'bounty': 170, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.12, 'acc': 1.02, 'areas': [CITY]},
     {'name': SENTIENT_ROBOT, 'hp': 110, 'weapons': [w.LASER_BEAMS],
-     'bounty': 200, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 1.2, 'acc': 1.2, 'areas': [CITY]},
+     'bounty': 220, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 1.25, 'acc': 1.15, 'areas': [CITY]},
     {'name': SLEEPWALKER, 'hp': 95, 'weapons': [w.PILLOW, w.SHOTGUN],
-     'bounty': 130, 'coins': 40, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 0.75, 'areas': [CITY]},
+     'bounty': 130, 'coins': 20, 'type': NORMAL, 'flee': 1, 'strength': 1.05, 'acc': 0.75, 'areas': [CITY]},
 
     # --- original ---
     {'name': BODY_BUILDER, 'hp': 110, 'weapons': [w.BASEBALL_BAT, w.INJECTION_NEEDLE],
-     'bounty': 195, 'coins': 45, 'type': NORMAL, 'flee': 1, 'strength': 1.3, 'acc': 0.9, 'areas': [CITY]},
+     'bounty': 195, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.3, 'acc': 0.9, 'areas': [CITY]},
     {'name': GOON, 'hp': 105, 'weapons': [w.BASEBALL_BAT, w.SHOTGUN, w.BRASS_KNUCKLES],
-     'bounty': 185, 'coins': 50, 'type': NORMAL, 'flee': 1, 'strength': 1.15, 'acc': 1.1, 'areas': [CITY]},
+     'bounty': 185, 'coins': 40, 'type': NORMAL, 'flee': 1, 'strength': 1.15, 'acc': 1.1, 'areas': [CITY]},
     {'name': HOBO, 'hp': 85, 'weapons': [w.BROKEN_BOTTLE, w.KNIFE, w.POCKET_SAND],
      'bounty': 135, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [CITY]},
     {'name': PIMP, 'hp': 95, 'weapons': [w.CANE, w.BRASS_KNUCKLES, w.REVOLVER, w.SWITCHBLADE],
-     'bounty': 190, 'coins': 70, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.1, 'areas': [CITY]},
+     'bounty': 190, 'coins': 85, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.1, 'areas': [CITY]},
     {'name': SERIAL_KILLER, 'hp': 105, 'weapons': [w.BONE_SAW, w.KNIFE, w.MEAT_CLEAVER],
-     'bounty': 250, 'coins': 45, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1.1, 'areas': [CITY, FOREST]},
+     'bounty': 235, 'coins': 45, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1.1, 'areas': [CITY, FOREST]},
     {'name': THIEF, 'hp': 90, 'weapons': [w.KNIFE, w.CROWBAR, w.PISTOL],
-     'bounty': 170, 'coins': 65, 'type': NORMAL, 'flee': 1, 'strength': 0.95, 'acc': 1.1, 'areas': [CITY]},
+     'bounty': 170, 'coins': 80, 'type': NORMAL, 'flee': 1, 'strength': 0.95, 'acc': 1.12, 'areas': [CITY]},
 
     # ========================
     #       FOREST ENEMIES
     # ========================
     # --- new ---
-    {'name': BIRDER, 'hp': 75, 'weapons': [w.TRIPOD, w.BINOCULARS, w.PISTOL, w.PEPPER_SPRAY],
-     'bounty': 115, 'coins': 40, 'type': NORMAL, 'flee': 1, 'strength': 0.75, 'acc': 0.8, 'areas': [FOREST]},
-    {'name': DOOMSDAY_PREPPER, 'hp': 95, 'weapons': [w.KNIFE, w.PISTOL, w.SHOTGUN],
-     'bounty': 165, 'coins': 70, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1.2, 'areas': [FOREST]},
+    {'name': BIRDER, 'hp': 75, 'weapons': [w.TRIPOD, w.BINOCULARS, w.PEPPER_SPRAY],
+     'bounty': 125, 'coins': 30, 'type': NORMAL, 'flee': 1, 'strength': 0.70, 'acc': 0.78, 'areas': [FOREST]},
+    {'name': DOOMSDAY_PREPPER, 'hp': 95, 'weapons': [w.KNIFE, w.PISTOL],
+     'bounty': 180, 'coins': 55, 'type': NORMAL, 'flee': 1, 'strength': 1.15, 'acc': 1.15, 'areas': [FOREST]},
     {'name': FERAL_PHILOSOPHER, 'hp': 85, 'weapons': [w.CANE, w.PISTOL, w.SCYTHE],
-     'bounty': 170, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 0.9, 'acc': 1, 'areas': [FOREST]},
+     'bounty': 155, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 0.9, 'acc': 1.05, 'areas': [FOREST]},
     {'name': FORAGER, 'hp': 90, 'weapons': [w.KNIFE, w.SICKLE, w.BEAR_SPRAY],
      'bounty': 130, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [FOREST]},
     {'name': MUSHROOM_HUNTER, 'hp': 100, 'weapons': [w.KNIFE, w.SICKLE, w.BEAR_SPRAY],
      'bounty': 145, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [FOREST]},
     {'name': SURVIVALIST, 'hp': 100, 'weapons': [w.SURVIVAL_KNIFE, w.LONGBOW, w.BRANCH_SPEAR],
-     'bounty': 155, 'coins': 30, 'type': NORMAL, 'flee': 1, 'strength': 1.2, 'acc': 1, 'areas': [FOREST]},
+     'bounty': 170, 'coins': 20, 'type': NORMAL, 'flee': 1, 'strength': 1.22, 'acc': 1.05, 'areas': [FOREST]},
     {'name': TELEPATHIC_MUTE, 'hp': 90, 'weapons': [w.SCYTHE, w.SLINGSHOT, w.CHILI_POWDER],
-     'bounty': 170, 'coins': 40, 'type': NORMAL, 'flee': 1, 'strength': 0.9, 'acc': 1.1, 'areas': [FOREST]},
+     'bounty': 170, 'coins': 40, 'type': NORMAL, 'flee': 1, 'strength': 0.85, 'acc': 1.08, 'areas': [FOREST]},
 
     # --- original ---
     {'name': BIGFOOT_IMPERSONATOR, 'hp': 110, 'weapons': [w.WOODEN_CLUB, w.BRANCH_SPEAR, w.CLAWS, w.BEAR_SPRAY],
@@ -141,33 +141,33 @@ Enemies = [
      'bounty': 150, 'coins': 25, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [CAVE, FOREST, SWAMP]},
     {'name': HIKER, 'hp': 90, 'weapons': [w.TREKKING_POLE, w.KNIFE, w.BEAR_SPRAY, w.BINOCULARS],
      'bounty': 115, 'coins': 30, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [FOREST]},
-    {'name': HUNTER, 'hp': 100, 'weapons': [w.KNIFE, w.RIFLE, w.BEAR_SPRAY, w.LONGBOW, w.BEAR_SPRAY],
-     'bounty': 175, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.2, 'areas': [FOREST]},
+    {'name': HUNTER, 'hp': 100, 'weapons': [w.KNIFE, w.RIFLE, w.BEAR_SPRAY, w.LONGBOW],
+     'bounty': 175, 'coins': 45, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.15, 'areas': [FOREST]},
     {'name': PARK_RANGER, 'hp': 95, 'weapons': [w.FLARE_GUN, w.KNIFE, w.BEAR_SPRAY, w.MACHETE, w.LONGBOW],
-     'bounty': 165, 'coins': 45, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1.2, 'areas': [FOREST]},
+     'bounty': 165, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1.15, 'areas': [FOREST]},
     {'name': POACHER, 'hp': 95, 'weapons': [w.CROSSBOW, w.MACHETE, w.KNIFE, w.COMPOUND_BOW],
-     'bounty': 225, 'coins': 65, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1.2, 'areas': [FOREST]},
+     'bounty': 210, 'coins': 55, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1.2, 'areas': [FOREST]},
 
     # ========================
     #        CAVE ENEMIES
     # ========================
     # --- new ---
-    {'name': ARCHAEOLOGIST, 'hp': 80, 'weapons': [w.FLASHLIGHT, w.CHISEL, w.PICKAXE, w.PEPPER_SPRAY],
-     'bounty': 120, 'coins': 65, 'type': NORMAL, 'flee': 1, 'strength': 0.9, 'acc': 0.9, 'areas': [CAVE]},
+    {'name': ARCHAEOLOGIST, 'hp': 80, 'weapons': [w.FLASHLIGHT, w.CHISEL, w.PEPPER_SPRAY],
+     'bounty': 130, 'coins': 55, 'type': NORMAL, 'flee': 1, 'strength': 0.85, 'acc': 0.88, 'areas': [CAVE]},
     {'name': EXPLORER, 'hp': 100, 'weapons': [w.BINOCULARS, w.TREKKING_POLE, w.LONGBOW, w.SURVIVAL_KNIFE],
-     'bounty': 140, 'coins': 40, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1, 'areas': [CAVE]},
+     'bounty': 140, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1, 'areas': [CAVE]},
     {'name': FUGITIVE, 'hp': 95, 'weapons': [w.SHIV, w.INJECTION_NEEDLE, w.PISTOL, w.POCKET_SAND],
-     'bounty': 225, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1.1, 'areas': [CAVE, FOREST, SWAMP]},
+     'bounty': 215, 'coins': 20, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1.1, 'areas': [CAVE, FOREST, SWAMP]},
     {'name': PROSPECTOR, 'hp': 90, 'weapons': [w.FLASHLIGHT, w.PICKAXE, w.CHISEL],
-     'bounty': 115, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 0.95, 'areas': [CAVE]},
+     'bounty': 115, 'coins': 45, 'type': NORMAL, 'flee': 1, 'strength': 1.03, 'acc': 0.98, 'areas': [CAVE]},
     {'name': SURVIVOR, 'hp': 100, 'weapons': [w.FLARE_GUN, w.SURVIVAL_KNIFE, w.POCKET_SAND],
-     'bounty': 145, 'coins': 30, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1.05, 'areas': [CAVE]},
+     'bounty': 145, 'coins': 20, 'type': NORMAL, 'flee': 1, 'strength': 1.12, 'acc': 1.08, 'areas': [CAVE]},
 
     # --- original ---
     {'name': ANCIENT_MAN, 'hp': 85, 'weapons': [w.TORCH_CLUB, w.STONE_SPEAR, w.OBSIDIAN_KNIFE],
-     'bounty': 150, 'coins': 25, 'type': NORMAL, 'flee': 1, 'strength': 0.85, 'acc': 0.9, 'areas': [CAVE]},
+     'bounty': 150, 'coins': 25, 'type': NORMAL, 'flee': 1, 'strength': 0.85, 'acc': 0.92, 'areas': [CAVE]},
     {'name': HUMANOID_CAVE_CREATURE, 'hp': 110, 'weapons': [w.CLAWS, w.SCYTHE, w.BONE_CLUB],
-     'bounty': 200, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 1.2, 'acc': 1, 'areas': [CAVE]},
+     'bounty': 215, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 1.2, 'acc': 1, 'areas': [CAVE]},
     {'name': MINER, 'hp': 90, 'weapons': [w.FLASHLIGHT, w.KNIFE, w.PICKAXE],
      'bounty': 115, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.05, 'acc': 1, 'areas': [CAVE]},
     {'name': MOLE_PERSON, 'hp': 105, 'weapons': [w.CLAWS, w.PICKAXE, w.BONE_CLUB],
@@ -180,29 +180,29 @@ Enemies = [
     # ========================
     # --- new ---
     {'name': BONE_COLLECTOR, 'hp': 105, 'weapons': [w.BONE_SAW, w.BONE_CLUB, w.MEAT_CLEAVER],
-     'bounty': 205, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.15, 'acc': 1, 'areas': [SWAMP]},
+     'bounty': 215, 'coins': 20, 'type': NORMAL, 'flee': 1, 'strength': 1.15, 'acc': 1, 'areas': [SWAMP]},
     {'name': FORTUNE_TELLER, 'hp': 80, 'weapons': [w.KNIFE, w.PEPPER_SPRAY, w.PISTOL],
-     'bounty': 130, 'coins': 45, 'type': NORMAL, 'flee': 1, 'strength': 0.85, 'acc': 0.95, 'areas': [SWAMP]},
+     'bounty': 140, 'coins': 60, 'type': NORMAL, 'flee': 1, 'strength': 0.80, 'acc': 0.92, 'areas': [SWAMP]},
     {'name': GATOR_WRESTLER, 'hp': 110, 'weapons': [w.FROG_GIG, w.SHOTGUN, w.SURVIVAL_KNIFE],
      'bounty': 195, 'coins': 50, 'type': NORMAL, 'flee': 1, 'strength': 1.2, 'acc': 1, 'areas': [SWAMP]},
     {'name': MOONSHINER, 'hp': 85, 'weapons': [w.SWITCHBLADE, w.SHOTGUN, w.NAIL_GUN],
-     'bounty': 170, 'coins': 55, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.1, 'areas': [SWAMP]},
+     'bounty': 170, 'coins': 70, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.1, 'areas': [SWAMP]},
     {'name': SMUGGLER, 'hp': 90, 'weapons': [w.KNIFE, w.INJECTION_NEEDLE, w.POCKET_SAND, w.PISTOL],
-     'bounty': 210, 'coins': 85, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1.15, 'areas': [SWAMP]},
-    {'name': TRACKER, 'hp': 90, 'weapons': [w.FLASHLIGHT, w.KNIFE, w.LONGBOW, w.RIFLE],
-     'bounty': 160, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1.1, 'areas': [SWAMP]},
+     'bounty': 220, 'coins': 100, 'type': NORMAL, 'flee': 1, 'strength': 1.13, 'acc': 1.12, 'areas': [SWAMP]},
+    {'name': TRACKER, 'hp': 90, 'weapons': [w.FLASHLIGHT, w.KNIFE, w.RIFLE],
+     'bounty': 170, 'coins': 30, 'type': NORMAL, 'flee': 1, 'strength': 1.12, 'acc': 1.12, 'areas': [SWAMP]},
 
     # --- original ---
     {'name': BAYOU_MAN, 'hp': 105, 'weapons': [w.FROG_GIG, w.GAFF_HOOK, w.SHOTGUN],
      'bounty': 185, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.2, 'acc': 1.1, 'areas': [SWAMP]},
     {'name': GRAVE_ROBBER, 'hp': 95, 'weapons': [w.POCKET_KNIFE, w.SHOVEL, w.CROWBAR, w.POCKET_SAND],
-     'bounty': 165, 'coins': 30, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [SWAMP]},
+     'bounty': 165, 'coins': 40, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [SWAMP]},
     {'name': HAND_FISHERMAN, 'hp': 90, 'weapons': [w.KNIFE, w.FISHING_SPEAR, w.GAFF_HOOK, w.FROG_GIG],
      'bounty': 150, 'coins': 30, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1, 'areas': [SWAMP]},
     {'name': SKIN_COLLECTOR, 'hp': 105, 'weapons': [w.KNIFE, w.MEAT_CLEAVER, w.CHAINSAW, w.MACHETE],
-     'bounty': 230, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1.1, 'areas': [SWAMP]},
+     'bounty': 220, 'coins': 25, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1.1, 'areas': [SWAMP]},
     {'name': VOODOO_PRIESTESS, 'hp': 80, 'weapons': [w.VOODOO_STAFF, w.CHILI_POWDER],
-     'bounty': 150, 'coins': 50, 'type': NORMAL, 'flee': 1, 'strength': 0.85, 'acc': 1.1, 'areas': [SWAMP]},
+     'bounty': 150, 'coins': 45, 'type': NORMAL, 'flee': 1, 'strength': 0.85, 'acc': 1.08, 'areas': [SWAMP]},
 ]
 
 
@@ -210,17 +210,17 @@ Bosses = [
     # ========================
     #        AREA BOSSES
     # ========================
-    {'name': SLEDGE_HAMMOND, 'hp': 225,
+    {'name': SLEDGE_HAMMOND, 'hp': 250,
      'weapons': [w.SLEDGEHAMMER, w.AXE, w.CHAINSAW, w.BRASS_KNUCKLES, w.INJECTION_NEEDLE],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1.25,  'preamble': {}},
+     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1.25, 'acc': 1.08, 'preamble': []},
 
     {'name': THE_MAYOR, 'hp': 250,
      'weapons': [w.PISTOL, w.SHOTGUN, w.REVOLVER, w.BRASS_KNUCKLES, w.BASEBALL_BAT],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1,  'theme': audio.FINAL_BOSS_THEME},
+     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1.15, 'acc': 1.18, 'theme': audio.FINAL_BOSS_THEME},
 
     {'name': BAYOU_BILL, 'hp': 250,
      'weapons': [w.MACHETE, w.SLEDGEHAMMER, w.SHOTGUN, w.CHAINSAW, w.FROG_GIG],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1.1,
+     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1.2, 'acc': 1.12,
      'preamble': [
          {'text': "What do we have here?", 'color': Colors.RED, 'sleep': 2},
          {'text': "Looks like anotha one a dem riverboat bad boys right heuh uh huh.",
@@ -238,14 +238,14 @@ Bosses = [
           ]},
          {'upper_threshold': 0.16,
           'dialogue': [
-              {'text': "When you livin' in the swamp, ain't nobody come round lessen dey askin' for trouble...",
+              {'text': "When you livin' in the swamp, ain't nobody come 'round lessen dey askin' for trouble...",
                'color': Colors.RED, 'sleep': 2},
           ]},
      ]},
 
     {'name': CAPTAIN_HOLE, 'hp': 250,
      'weapons': [w.RIFLE, w.HARPOON, w.KNIFE, w.PISTOL, w.MACHETE],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1.1,  'preamble': [
+     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1.2, 'acc': 1.15, 'preamble': [
         {'text': "Captain Hole has offered to shoot himself in the jines in exchange for your Tench Filet",
          'sleep': 4}
     ]}
@@ -265,8 +265,8 @@ I knew if I captured the champion's beloved Chula, he would send you to her resc
 Well, let's have at it then."""
 Final_Boss = {
     'name': DENNY_BILTMORE,
-    'hp': 325, 'weapons': [w.BRASS_KNUCKLES, w.PISTOL, w.REVOLVER, w.SHOTGUN],
-    'bounty': 0, 'type': FINAL_BOSS, 'flee': 1, 'strength': 1,  'theme': audio.FINAL_BOSS_THEME,
+    'hp': 325, 'weapons': [w.BRASS_KNUCKLES, w.REVOLVER, w.SHOTGUN, w.CANE],
+    'bounty': 0, 'type': FINAL_BOSS, 'flee': 1, 'strength': 1.22, 'acc': 1.2, 'theme': audio.FINAL_BOSS_THEME,
     'preamble': [{'text': text, 'color': Colors.RED, 'sleep': 4}
                                                   for text in _biltmore_preamble_lines.split('\n')],
     'random_dialogue': [{
@@ -319,13 +319,13 @@ Enemy_Lines = {
     INFLUENCER: [
         "Hey, you were on that wanted poster! Hold on, can we take a selfie before I kill you?",
         "Will you take some pictures of me killing you for my profile?",
-        "I influence people to buy things, but I'm going to influence you to die! Things...",
+        "Will you follow me when you're in Hell?",
     ],
 
     LIFE_COACH: [
         "Buy my book.",
         "The secret to having a great life is to buy all of my books.",
-        "God himself hired me to be His life coach. So, what do you say?",
+        "God himself hired me to be his life coach. So, what do you say?",
         "I have no real qualifications whatsoever. That being said, my hourly rate is 100 coins.",
     ],
 
@@ -367,11 +367,11 @@ Enemy_Lines = {
     ],
 
     BODY_BUILDER: [
-        "Body oil is worth its weight in gold. Well, it should be."
-        "Everything I need comes in an unlabeled bottle."
+        "Body oil is worth its weight in gold. Well, it should be.",
+        "Everything I need comes in an unlabeled bottle.",
         "I can bench a million, easy.",
         "I'm more concerned about gains than I am about shrinkage.",
-        "My neighbor, Gary, is a hell of a speller. Pecs need work though."
+        "My neighbor, Gary, is a hell of a speller. Pecs need work though.",
         "Some sculpt marble. Others sculpt clay. I sculpt my body.",
         "The guy who hired me was rich, but I totally could've kicked his ass.",
         "Don't call me beefcake. I'm 100% beef.",
@@ -434,7 +434,7 @@ Enemy_Lines = {
         "The meaning of life is to catch a tench and make it your wife.",
         "I drink, therefore I am.",
         "The most difficult thing in life is to be a disgraced philosopher living in the woods.",
-        "Man is disturbed not by things but by mole monsters underground.",
+        "Man is disturbed not by things, but by mole monsters underground.",
         "The happiness of my life depends upon the collection of your bounty.",
         "We are what we repeatedly do. I repeatedly do the things that I do, repeatedly.",
     ],
@@ -456,7 +456,7 @@ Enemy_Lines = {
         "Coyotes ransacked my hideout yesterday. Ate all my mystery meat.",
         "I found an adult binky in a leaf pile and used it to pacify a bear.",
         "Took a lightning strike straight to the jines last night.",
-        "What are you doing out here? Are you wanted? Either way, I don't like the looks of you.",
+        "What are you doing out here? Are you wanted? Either way, I don't like the look of you.",
     ],
 
     TELEPATHIC_MUTE: [
@@ -518,7 +518,7 @@ Enemy_Lines = {
         "I explored my first hole the moment I was born. I've been hooked ever since.",
         "Have you explored the ways and the rules of the world? I keep putting it off...",
         "I saw you on a wanted poster and wish to explore the collection of your bounty.",
-        "I encounter a mole man in a hole. Impossible to understand but a magnificent creature nonetheless.",
+        "I encountered a mole man in a hole. Impossible to understand, but a remarkable specimen nonetheless.",
     ],
 
     FUGITIVE: [
@@ -562,7 +562,7 @@ Enemy_Lines = {
     SPELUNKER: [
         "A man paid me to kill you. I asked my mom if it's okay. She nodded absently while reading The Shebokken Times!",
         "I got into this because of a video game... and now I'm in one! Oh my god... how do I go back!?",
-        "I haven't found anything, but my mom always says I'm the real treasure."
+        "I haven't found anything, but my mom always says I'm the real treasure.",
         "People think spelunking is just playing around in dark, wet holes.",
     ],
 
@@ -575,7 +575,7 @@ Enemy_Lines = {
 
     HUMANOID_CAVE_CREATURE: [
         "God may be merciful... loving... but I am not God. I am not God.",
-        "I am one with God, because I am God. You are not God... you are not God."
+        "I am one with God, because I am God. You are not God... you are not God.",
         "Man pays. God accepts. Man pays.",
         "You think you are holy... but you are not holy. Do you even live in a hole?",
     ],
@@ -617,7 +617,7 @@ Enemy_Lines = {
     ],
 
     TRACKER: [
-        "Wow, tracking you was easy. Tracking the skunk ape, not so much.",
+        "Wow. Tracking you was easy. Tracking the skunk ape... not so much.",
         "I've tracked other people with a lot less to gain from finding them.",
         "I don't track people... well, that's what my lawyer tells me to say."
     ],
@@ -642,7 +642,7 @@ Enemy_Lines = {
         "He pulled me out of a catfish's mouth. How could I turn down his request? Sorry, bud!",
         "I'd use a pole but the fish are just way too big. They ate my first three born.",
         "If you count your hand as a catch, you catch something every time! Unless a catfish bites it off...",
-        "Once, I pulled a man out of a hole - but, to his dismay, I put him back, because I wasn't fishing for men that day.",
+        "One time, I pulled a man out of a hole. We cooked up something new for dinner that night.",
     ],
 
     SKIN_COLLECTOR: [
