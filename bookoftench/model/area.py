@@ -22,7 +22,7 @@ _search_defaults = {
     DISCOVER_PERK: 1,
     DISCOVER_ITEM: 3,
     DISCOVER_WEAPON: 3,
-    DISCOVER_DISCOVERABLE: 50,
+    DISCOVER_DISCOVERABLE: 45,
     SPAWN_ENEMY: 30
 }
 
@@ -86,7 +86,7 @@ class Area:
                 enemy_name = random.choice(tuple(self.enemies_seen))  # Select enemy from seen
 
         if perk_is_active(SHERLOCK_TENCH):  # 10% chance of wanted enemy encounter if perk is active
-            if self.name in wanted.areas and random.random() < 0.10:
+            if self.name in wanted.areas and random.random() < 0.15:
                 enemy_name = wanted.name
 
         enemy = load_enemy(enemy_name)  # convert selected enemy to Enemy

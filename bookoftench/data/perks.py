@@ -65,13 +65,20 @@ class WrapperIndices:
 Perks = [
     {
         'name': AP_TENCH_STUDIES,
-        'cost': 222,
-        'description': "+20% XP from battles and +1 XP from all other sources",
+        'cost': 200,
+        'description': "+10% XP from battles and +1 XP from all other sources",
         'wrappers': [
-            {'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT, 'wrapper_config': {'change': 20}},
+            {'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT, 'wrapper_config': {'change': 10}},
             {'wrapper_type': WrapperType.INT_CHANGE, 'wrapper_config': {'change': 1}}
         ]
 
+    },
+    {
+        'name': INTRO_TO_TENCH,
+        'cost': 95,
+        'description': "+5% XP gained from winning battles",
+        'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
+        'wrapper_config': {'change': 5}
     },
     {
         'name': KARATE_LESSONS,
@@ -82,7 +89,7 @@ Perks = [
     },
     {
         'name': BEER_GOGGLES,
-        'cost': 99,
+        'cost': 100,
         'description': "Prevents blindness",
         'wrapper_type': WrapperType.BOOLEAN_OVERRIDE,
         'wrapper_config': {'override': False}
@@ -96,7 +103,7 @@ Perks = [
     },
     {
         'name': SLEDGE_FUND,
-        'cost': 160,
+        'cost': 180,
         'description': "Bank interest rate +8%",
         'wrapper_type': WrapperType.PERCENT_CHANGE,
         'wrapper_config': {'change': 8}
@@ -131,14 +138,14 @@ Perks = [
     },
     {
         'name': RICKETY_PICKPOCKET,
-        'cost': 120,
+        'cost': 130,
         'description': "Steal an extra 10-25 coins from every enemy you defeat",
         'wrapper_type': WrapperType.BOUNDED_RANDOM,
         'wrapper_config': {'lower_bound': 10, 'upper_bound': 25}
     },
     {
         'name': CATFISH_BURGLAR,
-        'cost': 100,
+        'cost': 120,
         'description': "Boost shoplifting odds by 10%",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 10}
@@ -168,13 +175,6 @@ Perks = [
         'name': HEALTH_NUT,
         'cost': 110,
         'description': "Gain +10% health from items",
-        'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
-        'wrapper_config': {'change': 10}
-    },
-    {
-        'name': INTRO_TO_TENCH,
-        'cost': 135,
-        'description': "+10% XP gained from winning battles",
         'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
         'wrapper_config': {'change': 10}
     },
@@ -237,13 +237,13 @@ Perks = [
     },
     {
         'name': VAMPIRIC_SPERM,
-        'cost': 200,
+        'cost': 220,
         'description': 'Heal 3 HP each time you land a melee attack',
     },
     {
         'name': SHERLOCK_TENCH,
         'cost': 120,
-        'description': "+10% chance to find the wanted enemy when searching their area",
+        'description': "+15% chance to find the wanted enemy when searching their area",
     },
     {
         'name': TENCH_THE_BOUNTY_HUNTER,
@@ -270,7 +270,7 @@ Perks = [
     },
     {
         'name': DEATH_CAN_WAIT,
-        'cost': 180,
+        'cost': 200,
         'description': "Once per battle, a fatal blow leaves you at 1 HP",
     },
     {
@@ -282,7 +282,7 @@ Perks = [
     },
     {
         'name': TRADE_SHIP,
-        'cost': 165,
+        'cost': 160,
         'description': "Shop prices are 10% lower",
         'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
         'wrapper_config': {'change': -10}

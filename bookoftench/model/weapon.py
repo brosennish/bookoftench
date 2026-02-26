@@ -15,6 +15,7 @@ from bookoftench.ui import dim, cyan, orange, red, yellow, blue
 @dataclass
 class Weapon(WeaponBase, Buyable):
     sell_value: int = 0
+    tier: int = 0
 
     blind_effect: float = 0.0
     blind_turns_min: int = 0
