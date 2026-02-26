@@ -49,18 +49,19 @@ Achievements = [
         'id': TENCH_BUNDY,
         'name': "Tench Bundy",
         'description': "Defeat 25 enemies",
-        'reward_type': RewardType.PERK,
+        'reward_type': RewardType.XP,
+        'reward_value': 50,
         'event_type': EventType.KILL,
         'event_threshold': 25
     },
     {
         'id': RECKLESS,
         'name': "Reckless",
-        'description': "Drink 15 coffee items",
+        'description': "Drink 10 coffee items",
         'reward_type': RewardType.XP,
-        'reward_value': 15,
+        'reward_value': 25,
         'event_type': EventType.COFFEE_EVENT,
-        'event_threshold': 15
+        'event_threshold': 10
     },
     {
         'id': DRY_FIVE,
@@ -99,7 +100,7 @@ Achievements = [
         'name': "Chicken",
         'description': "Flee 10 times",
         'reward_type': RewardType.XP,
-        'reward_value': 10,
+        'reward_value': 15,
         'event_type': EventType.FLEE,
         'event_threshold': 10
     },
@@ -115,11 +116,11 @@ Achievements = [
     {
         'id': VIGILANTE,
         'name': "Vigilante",
-        'description': "Collect 3 bounties",
+        'description': "Collect 5 bounties",
         'reward_type': RewardType.XP,
-        'reward_value': 20,
+        'reward_value': 30,
         'event_type': EventType.BOUNTY_COLLECTED,
-        'event_threshold': 3
+        'event_threshold': 5
     },
     {
         'id': PATIENT_68,
