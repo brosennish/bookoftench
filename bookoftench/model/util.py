@@ -240,8 +240,8 @@ def get_battle_info_view(game_state: GameState) -> str:
 
     def format_combatant_data(cmbt: Player | Enemy, name_color) -> str:
         return (f"\n{name_color(cmbt.name)}"
-                f"\n{dim('Strength: ')} {red(cmbt.strength)}"
-                f"\n{dim('Accuracy: ')} {yellow(cmbt.acc)}"
+                f"\n{dim('Strength: ')} {red(round(cmbt.strength, 2))}"
+                f"\n{dim('Accuracy: ')} {yellow(round(cmbt.acc, 2))}"
                 f"\n{dim('Coins:    ')} {green(cmbt.coins)}")
 
     return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, purple)}\n"
