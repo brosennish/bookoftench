@@ -11,7 +11,7 @@ from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
-    OVERVIEW
+    OVERVIEW, INFO
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from bookoftench.data.items import TENCH_FILET
 from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT
@@ -23,7 +23,7 @@ from bookoftench.model.game_state import GameState
 from bookoftench.model.item import load_items
 from bookoftench.model.perk import load_perks, Perk, perk_is_active
 from bookoftench.model.util import get_battle_status_view, display_player_achievements, \
-    display_game_stats, calculate_flee, display_active_perks
+    display_game_stats, calculate_flee, display_active_perks, display_battle_info
 from bookoftench.model.weapon import load_discoverable_weapons
 from bookoftench.ui import green, purple, yellow, dim, red, cyan, blue
 from bookoftench.util import print_and_sleep
@@ -305,8 +305,12 @@ class Attack(Component):
         enemy_weapon = enemy.drop_weapon()
         if enemy_weapon is not None:
             player.obtain_enemy_weapon(enemy_weapon)
-        player.gain_coins(enemy.drop_coins())
+
+        coins = enemy.drop_coins()
+        coins *= min(1.25, 1 + ((player.lvl - 1) * 0.025))
+        player.gain_coins(round(coins))
         player.gain_xp_from_enemy(enemy)
+
         event_logger.log_event(KillEvent())
         self.game_state.current_area.kill_current_enemy()
         PostKillEncounters(self.game_state).run()
@@ -376,7 +380,7 @@ class Battle(LabeledSelectionComponent):
                              SelectionBinding('I', "Use Item", UseItem),
                              SelectionBinding('S', "Switch Weapon", EquipWeapon),
                              FleeSelectionBinding('F', "Flee (50%)", TryFlee),
-                             SelectionBinding('P', "Perks", DisplayPerks)
+                             SelectionBinding('V', "View", DisplayInfo)
                          ])
         self.player = self.game_state.player
         if perk_is_active(DEATH_CAN_WAIT):
@@ -450,6 +454,12 @@ class Achievements(TextDisplayingComponent):
 class DisplayPerks(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, display_callback=display_active_perks)
+
+
+@register_component(INFO)
+class DisplayInfo(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_battle_info)
 
 
 @register_component(STATS)

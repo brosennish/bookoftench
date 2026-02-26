@@ -37,7 +37,7 @@ class Weapon(WeaponBase, Buyable):
         return int(apply_perks())
 
     def get_blind_effect(self) -> float:
-        return self.blind_effect
+        return self.blind_effect + (random.uniform(-0.05, 0.05))
 
     def get_blind_turns(self) -> int:
         return random.randint(self.blind_turns_min, self.blind_turns_max)
@@ -48,7 +48,7 @@ class Weapon(WeaponBase, Buyable):
     def __repr__(self) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
-            f"Value: {orange(self.sell_value):<17}",
+            f"Cost: {orange(self.cost):<17}",
             f"{dim("Dmg:")} {red(f"{self.damage:<3}")}",
             f"{dim("Acc:")} {yellow(f"{self.accuracy:<4}")}",
             f"{dim("Crit:")} {yellow(f"{self.crit:<4}")}",

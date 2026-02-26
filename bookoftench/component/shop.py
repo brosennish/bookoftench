@@ -43,7 +43,7 @@ class ShopComponent(LabeledSelectionComponent):
         perk_bindings = [ReprBinding(str(i + 1), perk.name, self._make_buy_or_steal_component(perk), perk) for
                          i, perk in
                          enumerate(game_state.shop.perk_inventory, len(item_bindings) + len(weapon_bindings))]
-        sell_binding = SelectionBinding('S', "Sell Item", SellItem)
+        sell_binding = SelectionBinding('S', "Sell", SellItem)
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
         super().__init__(game_state, refresh_menu=True,
                          bindings=[*item_bindings, *weapon_bindings, *perk_bindings, sell_binding, return_binding])

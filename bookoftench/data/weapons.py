@@ -20,6 +20,7 @@ BONE_CLUB = "Bone Club"
 BONE_SAW = "Bone Saw"
 BRANCH_SPEAR = "Branch Spear"
 BRASS_KNUCKLES = "Brass Knuckles"
+BRICK = "Brick"
 BROKEN_BOTTLE = "Broken Bottle"
 CANE = "Cane"
 CHAINSAW = "Chainsaw"
@@ -29,6 +30,7 @@ CLAWS = "Claws"
 COMPOUND_BOW = "Compound Bow"
 CROSSBOW = "Crossbow"
 CROWBAR = "Crowbar"
+DUMBBELL = "Dumbbell"
 FIRE_AXE = "Fire Axe"
 FISHING_SPEAR = "Fishing Spear"
 FLASHLIGHT = "Flashlight"
@@ -36,6 +38,7 @@ FLARE_GUN = "Flare Gun"
 FOAM_FINGER = "Foam Finger"
 FROG_GIG = "Frog Gig"
 GAFF_HOOK = "Gaff Hook"
+HARDCOVER_BOOK = "Hardcover Book"
 HARPOON = "Harpoon"
 HATCHET = "Hatchet"
 INJECTION_NEEDLE = "Injection Needle"
@@ -55,6 +58,7 @@ POCKET_SAND = "Pocket Sand"
 POOL_CUE = "Pool Cue"
 REVOLVER = "Revolver"
 RIFLE = "Rifle"
+RUBBER_CHICKEN = "Rubber Chicken"
 SCYTHE = "Scythe"
 SELFIE_STICK = "Selfie Stick"
 SHIV = "Shiv"
@@ -93,23 +97,23 @@ Weapons = [
 
     # --- Blinding / Debuff ---
     {'name': PEPPER_SPRAY, 'damage': 0, 'uses': 3, 'accuracy': 0.85, 'var': 0,
-     'crit': 0.05, 'cost': 25, 'sell_value': 12, 'type': BLIND, 'sound': '',
+     'crit': 0, 'cost': 25, 'sell_value': 12, 'type': BLIND, 'sound': '',
      'blind_effect': 0.50, 'blind_turns_min': 2, 'blind_turns_max': 4,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
     {'name': BEAR_SPRAY, 'damage': 0, 'uses': 1, 'accuracy': 0.85, 'var': 0, 'crit': 0,
      'cost': 60, 'sell_value': 30, 'type': BLIND, 'sound': '',
-     'blind_effect': 0.75, 'blind_turns_min': 2, 'blind_turns_max': 4,
+     'blind_effect': 0.65, 'blind_turns_min': 2, 'blind_turns_max': 4,
      'areas': [CAVE, FOREST, SWAMP]},
 
     {'name': CHILI_POWDER, 'damage': 0, 'uses': 1, 'accuracy': 0.90, 'var': 0, 'crit': 0,
      'cost': 30, 'sell_value': 15, 'type': BLIND, 'sound': '',
-     'blind_effect': 0.25, 'blind_turns_min': 3, 'blind_turns_max': 5,
+     'blind_effect': 0.30, 'blind_turns_min': 3, 'blind_turns_max': 5,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
     {'name': POCKET_SAND, 'damage': 0, 'uses': 1, 'accuracy': 0.90, 'var': 0, 'crit': 0,
      'cost': 20, 'sell_value': 8, 'type': BLIND, 'sound': '',
-     'blind_effect': 0.15, 'blind_turns_min': 3, 'blind_turns_max': 5,
+     'blind_effect': 0.20, 'blind_turns_min': 3, 'blind_turns_max': 5,
      'areas': NA},
 
     # =====================================================
@@ -139,6 +143,10 @@ Weapons = [
      'cost': 24, 'sell_value': 12, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
+    {'name': RUBBER_CHICKEN, 'damage': 9, 'uses': 14, 'accuracy': 0.88, 'var': 2, 'crit': 0.07,
+     'cost': 14, 'sell_value': 7, 'type': MELEE, 'sound': audio.PUNCH,
+     'areas': [CITY]},
+
     {'name': TREKKING_POLE, 'damage': 13, 'uses': 9, 'accuracy': 0.87, 'var': 2, 'crit': 0.12,
      'cost': 24, 'sell_value': 12, 'type': MELEE, 'sound': audio.BLADE,
      'areas': NA},
@@ -154,11 +162,15 @@ Weapons = [
      'cost': 28, 'sell_value': 14, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': [FOREST, SWAMP, CAVE]},
 
-    {'name': BRASS_KNUCKLES, 'damage': 21, 'uses': 11, 'accuracy': 0.91, 'var': 3, 'crit': 0.11,
-     'cost': 50, 'sell_value': 25, 'type': MELEE, 'sound': audio.PUNCH,
+    {'name': BRASS_KNUCKLES, 'damage': 21, 'uses': 11, 'accuracy': 0.89, 'var': 3, 'crit': 0.11,
+     'cost': 55, 'sell_value': 25, 'type': MELEE, 'sound': audio.PUNCH,
      'areas': [CITY]},
 
-    {'name': CANE, 'damage': 15, 'uses': 12, 'accuracy': 0.86, 'var': 2, 'crit': 0.05,
+    {'name': BRICK, 'damage': 22, 'uses': 6, 'accuracy': 0.78, 'var': 5, 'crit': 0.07,
+     'cost': 20, 'sell_value': 10, 'type': MELEE, 'sound': audio.BLUNT,
+     'areas': [CITY]},
+
+    {'name': CANE, 'damage': 15, 'uses': 12, 'accuracy': 0.86, 'var': 2, 'crit': 0.08,
      'cost': 20, 'sell_value': 10, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': [CITY]},
 
@@ -170,13 +182,21 @@ Weapons = [
      'cost': 45, 'sell_value': 22, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': [CITY]},
 
-    {'name': FLASHLIGHT, 'damage': 11, 'uses': 14, 'accuracy': 0.90, 'var': 1, 'crit': 0.04,
-     'cost': 16, 'sell_value': 8, 'type': MELEE, 'sound': audio.BLUNT,
+    {'name': DUMBBELL, 'damage': 26, 'uses': 12, 'accuracy': 0.82, 'var': 4, 'crit': 0.09,
+     'cost': 44, 'sell_value': 22, 'type': MELEE, 'sound': audio.BLUNT,
+     'areas': [CITY]},
+
+    {'name': FLASHLIGHT, 'damage': 11, 'uses': 14, 'accuracy': 0.88, 'var': 1, 'crit': 0.04,
+     'cost': 20, 'sell_value': 8, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': [CITY, CAVE]},
 
     {'name': FISHING_SPEAR, 'damage': 21, 'uses': 9, 'accuracy': 0.80, 'var': 4, 'crit': 0.10,
      'cost': 34, 'sell_value': 17, 'type': MELEE, 'sound': audio.BLADE,
      'areas': [SWAMP]},
+
+    {'name': HARDCOVER_BOOK, 'damage': 14, 'uses': 9, 'accuracy': 0.89, 'var': 2, 'crit': 0.05,
+     'cost': 18, 'sell_value': 9, 'type': MELEE, 'sound': audio.BLUNT,
+     'areas': [CITY, CAVE]},
 
     {'name': POCKET_KNIFE, 'damage': 16, 'uses': 12, 'accuracy': 0.89, 'var': 3, 'crit': 0.09,
      'cost': 18, 'sell_value': 9, 'type': MELEE, 'sound': audio.BLADE,
@@ -285,8 +305,8 @@ Weapons = [
      'cost': 75, 'sell_value': 37, 'type': RANGED, 'sound': audio.ARROW,
      'areas': [FOREST, SWAMP]},
 
-    {'name': CROSSBOW, 'damage': 34, 'uses': 6, 'accuracy': 0.90, 'var': 5, 'crit': 0.13,
-     'cost': 80, 'sell_value': 40, 'type': RANGED, 'sound': audio.ARROW,
+    {'name': CROSSBOW, 'damage': 34, 'uses': 6, 'accuracy': 0.84, 'var': 5, 'crit': 0.13,
+     'cost': 85, 'sell_value': 40, 'type': RANGED, 'sound': audio.ARROW,
      'areas': [FOREST, SWAMP]},
 
     {'name': FLARE_GUN, 'damage': 27, 'uses': 5, 'accuracy': 0.72, 'var': 3, 'crit': 0.16,
@@ -305,7 +325,7 @@ Weapons = [
      'cost': 70, 'sell_value': 35, 'type': RANGED, 'sound': audio.ARROW,
      'areas': [CITY]},
 
-    {'name': PISTOL, 'damage': 31, 'uses': 6, 'accuracy': 0.83, 'var': 5, 'crit': 0.11,
+    {'name': PISTOL, 'damage': 31, 'uses': 6, 'accuracy': 0.85, 'var': 5, 'crit': 0.11,
      'cost': 70, 'sell_value': 34, 'type': RANGED, 'sound': audio.PISTOL,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
@@ -313,11 +333,11 @@ Weapons = [
      'cost': 78, 'sell_value': 39, 'type': RANGED, 'sound': audio.PISTOL,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
-    {'name': RIFLE, 'damage': 36, 'uses': 6, 'accuracy': 0.90, 'var': 5, 'crit': 0.12,
-     'cost': 82, 'sell_value': 41, 'type': RANGED, 'sound': audio.RIFLE,
+    {'name': RIFLE, 'damage': 36, 'uses': 6, 'accuracy': 0.86, 'var': 5, 'crit': 0.12,
+     'cost': 88, 'sell_value': 41, 'type': RANGED, 'sound': audio.RIFLE,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
-    {'name': SHOTGUN, 'damage': 40, 'uses': 4, 'accuracy': 0.75, 'var': 6, 'crit': 0.09,
+    {'name': SHOTGUN, 'damage': 40, 'uses': 4, 'accuracy': 0.73, 'var': 7, 'crit': 0.09,
      'cost': 90, 'sell_value': 45, 'type': RANGED, 'sound': audio.SHOTGUN,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
@@ -336,7 +356,7 @@ Weapons = [
      'cost': 95, 'sell_value': 47, 'type': MELEE, 'sound': audio.CHAINSAW,
      'areas': [CITY, FOREST, SWAMP]},
 
-    {'name': SLEDGEHAMMER, 'damage': 38, 'uses': 10, 'accuracy': 0.69, 'var': 6, 'crit': 0.08,
+    {'name': SLEDGEHAMMER, 'damage': 38, 'uses': 10, 'accuracy': 0.71, 'var': 6, 'crit': 0.08,
      'cost': 100, 'sell_value': 50, 'type': MELEE, 'sound': audio.BLUNT,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
@@ -344,7 +364,7 @@ Weapons = [
     #                       SPECIAL
     # =====================================================
     {'name': TENCH_CANNON, 'damage': 99, 'uses': 1, 'accuracy': 0.20, 'var': 8, 'crit': 0.10,
-     'cost': 100, 'sell_value': 30, 'type': RANGED, 'sound': audio.SHOTGUN,
+     'cost': 100, 'sell_value': 50, 'type': RANGED, 'sound': audio.SHOTGUN,
      'areas': [CITY]},
 
     # =====================================================
@@ -354,7 +374,7 @@ Weapons = [
      'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'sound': audio.PUNCH,
      'areas': NA},
 
-    {'name': LASER_BEAMS, 'damage': 30, 'uses': -1, 'accuracy': 0.70, 'var': 4, 'crit': 0.12,
+    {'name': LASER_BEAMS, 'damage': 30, 'uses': -1, 'accuracy': 0.74, 'var': 4, 'crit': 0.12,
      'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'sound': audio.MAGIC,
      'areas': NA},
 

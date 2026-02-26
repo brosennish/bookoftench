@@ -227,7 +227,7 @@ class Combatant(ABC):
                 prefix = f"{other.name} has been" if isinstance(other, NPC) else "You have been"
                 print_and_sleep(
                     purple(
-                        f"{prefix} blinded by {self.current_weapon.name}. Accuracy down {int(blind_effect * 100)}% for "
+                        f"{prefix} blinded by {self.current_weapon.name}. Accuracy down {round(blind_effect * 100)}% for "
                         f"{blind_turns} turns"), 1)
 
     def handle_hit(self, other: "Combatant") -> None:
