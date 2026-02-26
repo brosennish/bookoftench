@@ -4,8 +4,6 @@ import random
 from dataclasses import dataclass, field, asdict
 from typing import Dict, List, Optional
 
-from numpy.ma.extras import average
-
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import RIFLE

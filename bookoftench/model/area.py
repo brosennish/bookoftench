@@ -86,7 +86,7 @@ class Area:
                 enemy_name = random.choice(tuple(self.enemies_seen))  # Select enemy from seen
 
         if perk_is_active(SHERLOCK_TENCH):  # 10% chance of wanted enemy encounter if perk is active
-            if self.name in wanted.areas and random.random() < 0.10:
+            if self.name in wanted.areas and random.random() < 0.15:
                 enemy_name = wanted.name
 
         enemy = load_enemy(enemy_name)  # convert selected enemy to Enemy
