@@ -8,7 +8,7 @@ from bookoftench.model.base import Combatant
 from bookoftench.model.enemy import Enemy
 from bookoftench.model.perk import load_perks, perk_is_active, attach_perks
 from bookoftench.model.player import Player
-from bookoftench.ui import blue, cyan, green, orange, purple, red, yellow, dim, white
+from bookoftench.ui import blue, cyan, green, orange, purple, red, yellow, dim, white, _format
 from bookoftench.util import print_and_sleep
 from .game_state import GameState
 
@@ -222,6 +222,34 @@ def display_player_achievements(_: GameState) -> None:
 
 
 def display_active_perks(game_state: GameState) -> None:
+    active_perks = [p for p in load_perks() if p.active]
+    if len(active_perks) == 0:
+        print_and_sleep(yellow("Your perks are dry."), 1)
+    else:
+        print_and_sleep(f"Your Perks:")
+        if perk_is_active(WENCH_LOCATION):
+            print_and_sleep(f'Wench Location: {blue(game_state.wench_area.name)}')
+
+        for perk in sorted(active_perks, key=lambda a: a.name):
+            print_and_sleep(purple(f"{perk.name} | {perk.description}"))
+
+
+def get_battle_info_view(game_state: GameState) -> str:
+    player: Player = game_state.player
+    enemy: Enemy = game_state.current_area.current_enemy
+
+    def format_combatant_data(cmbt: Player | Enemy, name_color) -> str:
+        return (f"\n{name_color(cmbt.name)}"
+                f"\n{dim('Strength: ')} {red(cmbt.strength)}"
+                f"\n{dim('Accuracy: ')} {yellow(cmbt.acc)}"
+                f"\n{dim('Coins:    ')} {green(cmbt.coins)}")
+
+    return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, purple)}\n"
+
+
+def display_battle_info(game_state: GameState) -> None:
+    print_and_sleep(get_battle_info_view(game_state))
+
     active_perks = [p for p in load_perks() if p.active]
     if len(active_perks) == 0:
         print_and_sleep(yellow("Your perks are dry."), 1)
