@@ -323,7 +323,7 @@ class Player(Combatant):
         # ---- core level-up effects live here ----
         self.xp -= self.xp_needed
         self.lvl += 1
-        cash_reward = max(50, (100 - (10 * (self.lvl - 1))))
+        cash_reward = max(50, (100 - (10 * (self.lvl - 2))))
         self.coins += cash_reward
         self.strength += 0.02
         self.acc += 0.02
