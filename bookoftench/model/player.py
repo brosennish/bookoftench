@@ -60,7 +60,7 @@ class PlayerWeapon(Weapon):
 
 
 def item_defaults() -> Dict[str, Item]:
-    return dict((it.name, it) for it in load_items([TENCH_FILET, IOU]))
+    return dict((it.name, it) for it in load_items([TENCH_FILET]))
 
 
 def weapon_defaults() -> Dict[str, PlayerWeapon]:
