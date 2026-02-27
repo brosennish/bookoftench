@@ -3,7 +3,7 @@ from .areas import CITY, CAVE, FOREST, SWAMP
 ABANDONED_EYEBALLS = "Abandoned Eyeballs"
 ALIEN_REMAINS = "Alien Remains"
 ANTS_ON_A_LOG = "Ants On A Log"
-BAT_MATTER ="BaT Matter"
+BAT_MATTER ="Bat Matter"
 BERRIES = "Berries"
 BONE_MEAL = "Bone Meal"
 CAMPBELLS_GOOP = "Campbell's Goop"
