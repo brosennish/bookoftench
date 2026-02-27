@@ -226,7 +226,7 @@ Weapons = [
      'cost': 30, 'sell_value': 15, 'type': MELEE, 'tier': 2, 'sound': audio.BLADE,
      'areas': [CAVE, FOREST, SWAMP]},
 
-    {'name': KNIFE, 'damage': 16, 'uses': 9, 'accuracy': 0.89, 'var': 4, 'crit': 0.12,
+    {'name': KNIFE, 'damage': 17, 'uses': 9, 'accuracy': 0.89, 'var': 4, 'crit': 0.12,
      'cost': 24, 'sell_value': 12, 'type': MELEE, 'tier': 2, 'sound': audio.BLADE,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
