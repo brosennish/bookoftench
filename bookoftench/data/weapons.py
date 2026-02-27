@@ -105,7 +105,7 @@ Weapons = [
      'blind_effect': 0.50, 'blind_turns_min': 2, 'blind_turns_max': 4,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
-    {'name': BEAR_SPRAY, 'damage': 0, 'uses': 1, 'accuracy': 0.85, 'var': 0, 'crit': 0,
+    {'name': BEAR_SPRAY, 'damage': 0, 'uses': 2, 'accuracy': 0.85, 'var': 0, 'crit': 0,
      'cost': 60, 'sell_value': 30, 'type': BLIND, 'tier': 0, 'sound': '',
      'blind_effect': 0.65, 'blind_turns_min': 2, 'blind_turns_max': 4,
      'areas': [CAVE, FOREST, SWAMP]},
