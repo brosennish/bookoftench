@@ -321,7 +321,7 @@ class Attack(Component):
             player.attack(enemy)
         if enemy.is_alive():
             enemy.attack(player)
-            if random.random() < ENEMY_SWITCH_WEAPON_CHANCE:
+            if player.is_alive() and random.random() < ENEMY_SWITCH_WEAPON_CHANCE:
                 enemy.current_weapon = enemy.enemy_switch_weapon()
         if not enemy.is_alive():
             self.handle_enemy_death(player, enemy)
