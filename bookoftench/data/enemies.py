@@ -97,7 +97,7 @@ Enemies = [
     {'name': PARTY_ANIMAL, 'hp': 95, 'weapons': [w.BROKEN_BOTTLE, w.POOL_CUE],
      'bounty': 170, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.12, 'acc': 1.02, 'areas': [CITY]},
     {'name': SENTIENT_ROBOT, 'hp': 110, 'weapons': [w.LASER_BEAMS],
-     'bounty': 220, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 1.25, 'acc': 1.15, 'areas': [CITY]},
+     'bounty': 220, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 1.2, 'acc': 1.15, 'areas': [CITY]},
     {'name': SLEEPWALKER, 'hp': 95, 'weapons': [w.PILLOW, w.SHOTGUN],
      'bounty': 130, 'coins': 20, 'type': NORMAL, 'flee': 1, 'strength': 1.05, 'acc': 0.75, 'areas': [CITY]},
 
