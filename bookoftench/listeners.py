@@ -1,6 +1,6 @@
 from bookoftench.event_base import Listener
 from bookoftench.model.events import ItemUsedEvent, TravelEvent
-from bookoftench.ui import yellow, cyan
+from bookoftench.ui import yellow, cyan, dim
 from .audio import play_music
 from .data.audio import TRAVEL_THEME
 from .data.items import NORMAL, FLEE
@@ -17,7 +17,7 @@ class ItemUsedListener(Listener):
                 f"You used {event.item_name}: Your current HP is {event.player_hp}/{event.player_max_hp}", 1)
         if event.item_type == FLEE:
             print_and_sleep(
-                f"You used {event.item_name}.", 1)
+                f"{dim(f"You used {event.item_name} to escape.")}", 1)
         if event.items_remaining == 0:
             print_and_sleep(yellow(f"Your inventory is dry."), 1)
 
