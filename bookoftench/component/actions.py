@@ -383,6 +383,7 @@ class Battle(LabeledSelectionComponent):
                              SelectionBinding('V', "View", DisplayInfo)
                          ])
         self.player = self.game_state.player
+        self.player.can_flee = False
         if perk_is_active(DEATH_CAN_WAIT):
             self.player.cheat_death_enabled = True
         self.enemy = self.game_state.current_area.current_enemy
@@ -393,7 +394,7 @@ class Battle(LabeledSelectionComponent):
         play_music(BATTLE_THEME)
 
     def can_exit(self) -> bool:
-        return self.fled or not (self.player.is_alive() and self.enemy.is_alive())
+        return self.fled or self.player.can_flee or not (self.player.is_alive() and self.enemy.is_alive())
 
     def _subscribe_listeners(self):
         @subscribe_function(FleeEvent)

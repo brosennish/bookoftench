@@ -16,17 +16,18 @@ class Item(Buyable):
     cost: int
     sell_value: int
     areas: List[str]
+    desc: str | None
 
     def get_simple_format(self, length: int) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:<{length}}"),
-            f"HP: +{green(self.hp)}"
+            (f"HP: +{green(self.hp)}" if self.hp > 0 else f"{self.desc}")
         ])
 
     def get_found_format(self) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:}"),
-            f"HP: +{green(self.hp)}"
+            (f"HP: +{green(self.hp)}" if self.hp > 0 else f"{self.desc}")
         ])
 
     def to_sellable_item(self) -> SellableItem:
@@ -36,7 +37,7 @@ class Item(Buyable):
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
             f"Cost: {orange(self.cost):<18}",
-            f"HP: +{green(self.hp)}"
+            (f"HP: +{green(self.hp)}" if self.hp > 0 else f"{self.desc}"),
         ])
 
 
@@ -46,7 +47,7 @@ class SellableItem(Item):
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
             f"Value: {orange(self.sell_value):<17}",
-            f"HP: +{green(self.hp)}"
+            (f"HP: +{green(self.hp)}" if self.hp > 0 else f"{self.desc}"),
         ])
 
 
