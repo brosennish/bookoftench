@@ -22,6 +22,7 @@ GIANT_TENTACLE = "Giant Tentacle"
 GIZZARDS_AND_LIVERS = "Gizzards and Livers"
 GOBY = "Goby"
 HOG_LOINS = "Hog Loins"
+IOU = "IOU"
 KRILL = "Krill"
 LACED_HONEY = "Laced Honey"
 LOST_SAUCE = "Lost Sauce"
@@ -34,6 +35,7 @@ OCEAN_MAN_LUNCH_BOX = "Ocean Man Lunch Box"
 ORGANIC_SLUDGE = "Organic Sludge"
 OWL_EGG = "Owl Egg"
 PANTHER_LOINS = "Panther Loins"
+SMOKE_BOMB = "Smoke Bomb"
 SOMEWHAT_SPICY_NOODLES = "Somewhat Spicy Noodles"
 SOUR_MILK = "Sour Milk"
 STALE_GREENS = "Stale Greens"
@@ -49,6 +51,10 @@ FLEE = "Flee"
 NORMAL = "Normal"
 
 Items = [
+    # --- SPECIAL ---
+    {'name': IOU, 'type': FLEE, 'hp': 0, 'cost': 15, 'sell_value': 4, 'areas': [CAVE, CITY, FOREST, SWAMP]},
+    {'name': SMOKE_BOMB, 'type': FLEE, 'hp': 0, 'cost': 25, 'sell_value': 7, 'areas': [CAVE, CITY, FOREST, SWAMP]},
+
     # --- Tier 1 (10 HP) ---
     {'name': ANTS_ON_A_LOG, 'type': NORMAL, 'hp': 10, 'cost': 11, 'sell_value': 4, 'areas': [FOREST, SWAMP]},
     {'name': BERRIES, 'type': NORMAL, 'hp': 10, 'cost': 11, 'sell_value': 4, 'areas': [FOREST]},
