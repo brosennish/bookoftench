@@ -11,6 +11,7 @@ from bookoftench.ui import dim, cyan, orange, green
 @dataclass
 class Item(Buyable):
     name: str
+    type: str
     hp: int
     cost: int
     sell_value: int
