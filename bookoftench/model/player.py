@@ -7,7 +7,7 @@ from typing import Dict, List, Optional
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import RIFLE
-from bookoftench.data.items import TENCH_FILET
+from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, IOU
 from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM, TENCH_GENES, \
@@ -20,7 +20,7 @@ from bookoftench.util import print_and_sleep
 from .base import Combatant, Buyable
 from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent, LevelUpEvent, \
     SwapWeaponEvent, WeaponBrokeEvent, HitEvent, PlayerDeathEvent, StealItemEvent, StealWeaponEvent, StealPerkEvent, \
-    GenericStealEvent
+    GenericStealEvent, FleeEvent
 from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
 from .weapon import load_weapons, Weapon
@@ -60,7 +60,7 @@ class PlayerWeapon(Weapon):
 
 
 def item_defaults() -> Dict[str, Item]:
-    return dict((it.name, it) for it in load_items([TENCH_FILET]))
+    return dict((it.name, it) for it in load_items([TENCH_FILET, IOU]))
 
 
 def weapon_defaults() -> Dict[str, PlayerWeapon]:
@@ -80,6 +80,8 @@ class Player(Combatant):
 
     illness: Optional[Illness] = None
     illness_death_lvl: Optional[int] = None
+
+    can_flee: bool = False
 
     coins: int = 25
     casino_won: int = 0
@@ -164,12 +166,16 @@ class Player(Combatant):
 
     def use_item(self, name: str) -> None:
         item = self.items[name]
-        gain = int(min(self.max_hp - self.hp, self._apply_hp_bonus(item.hp)))
-        self.gain_hp(gain)
+        gain = 0
+        if item.type == NORMAL:
+            gain = int(min(self.max_hp - self.hp, self._apply_hp_bonus(item.hp)))
+            self.gain_hp(gain)
+        elif item.type == FLEE:
+            self.can_flee = True
 
         # Remove from actual inventory
         del self.items[item.name]
-        event_logger.log_event(ItemUsedEvent(item.name, len(self.items), self.hp, self.max_hp, gain))
+        event_logger.log_event(ItemUsedEvent(item.name, item.type, len(self.items), self.hp, self.max_hp, gain))
 
     def make_purchase(self, buyable: Buyable) -> bool:
         if self.coins < buyable.cost:
