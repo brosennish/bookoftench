@@ -357,7 +357,7 @@ class Player(Combatant):
                 self.illness_death_lvl = None
 
     def apply_death_penalties(self) -> None:
-        self.coins = int(self.coins * 0.25) if perk_is_active(WALLET_CHAIN) else 0  # TODO use the framework for this
+        self.coins = max(25, int(self.coins * 0.25)) if perk_is_active(WALLET_CHAIN) else 25  # TODO use the framework for this
         self.items = item_defaults()
         self.weapon_dict = weapon_defaults()
         self.current_weapon = self.weapon_dict[BARE_HANDS]
