@@ -194,7 +194,7 @@ def display_game_stats(game_state: GameState) -> None:
 
     display_stat("Items Purchased", event_logger.get_count(EventType.BUY_ITEM), green)
     display_stat("Weapons Purchased", event_logger.get_count(EventType.BUY_WEAPON), green)
-    display_stat("Perks Purchased", event_logger.get_count(EventType.BUY_WEAPON), green)
+    display_stat("Perks Purchased", event_logger.get_count(EventType.BUY_PERK), green)
     display_stat("Perks Owned", event_logger.get_count(EventType.BUY_PERK), purple)
 
     display_stat("Coffees Purchased", event_logger.get_count(EventType.COFFEE_EVENT), green)
