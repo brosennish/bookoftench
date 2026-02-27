@@ -38,7 +38,11 @@ class Weapon(WeaponBase, Buyable):
         return int(apply_perks())
 
     def get_blind_effect(self) -> float:
-        return self.blind_effect + (random.uniform(-0.05, 0.05))
+        effect = self.blind_effect
+        if effect > 0:
+            return effect + random.uniform(-0.05, 0.05)
+        else:
+            return self.blind_effect
 
     def get_blind_turns(self) -> int:
         return random.randint(self.blind_turns_min, self.blind_turns_max)
