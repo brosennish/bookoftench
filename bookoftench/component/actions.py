@@ -65,6 +65,9 @@ class BuildComponent(LabeledSelectionComponent):
             player.strength = build.str
             player.acc = build.acc
             player.coins = build.coins
+            if build.illness:
+                player.illness = build.illness
+                player.illness_death_lvl = 1 + build.illness.levels_until_death
             player.items = dict((it.name, it) for it in build.items)
             player.weapon_dict = {it.name: PlayerWeapon.from_weapon(it) for it in build.weapons}
             for p in build.perks:
