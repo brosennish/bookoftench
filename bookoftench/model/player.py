@@ -7,7 +7,7 @@ from typing import Dict, List, Optional
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import RIFLE
-from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE
+from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, IOU
 from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM, TENCH_GENES, \
@@ -60,7 +60,7 @@ class PlayerWeapon(Weapon):
 
 
 def item_defaults() -> Dict[str, Item]:
-    return dict((it.name, it) for it in load_items([TENCH_FILET]))
+    return dict((it.name, it) for it in load_items([TENCH_FILET, IOU]))
 
 
 def weapon_defaults() -> Dict[str, PlayerWeapon]:
