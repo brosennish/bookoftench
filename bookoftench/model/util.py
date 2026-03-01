@@ -158,12 +158,14 @@ def display_bank_balance(game_state: GameState) -> None:
 def display_game_stats(game_state: GameState) -> None:
     player = game_state.player
     player_color = p_color(player.hp, player.max_hp)
+    player_build = player.build
 
     width = 18  # adjust if you want wider/narrower labels
 
     def display_stat(title: str, value: Any, value_color: Callable[[str], str]) -> None:
         print(f"{title:<{width}} {(white(dim('|')))} {value_color(value)}")
 
+    display_stat("Build", str(player_build.name), orange)
     display_stat("Current Level", player.lvl, cyan)
     display_stat("Current HP", player.hp, player_color)
     display_stat("Deaths", event_logger.get_count(EventType.PLAYER_DEATH), red)
@@ -191,11 +193,6 @@ def display_game_stats(game_state: GameState) -> None:
 
     display_stat("Areas Cleared", sum(1 for a in game_state.areas if a.enemies_remaining == 0), blue)
     display_stat("Bosses Defeated", sum(1 for a in game_state.areas if a.boss_defeated), cyan)
-
-    display_stat("Items Purchased", event_logger.get_count(EventType.BUY_ITEM), green)
-    display_stat("Weapons Purchased", event_logger.get_count(EventType.BUY_WEAPON), green)
-    display_stat("Perks Purchased", event_logger.get_count(EventType.BUY_PERK), green)
-    display_stat("Perks Owned", event_logger.get_count(EventType.BUY_PERK), purple)
 
     display_stat("Coffees Purchased", event_logger.get_count(EventType.COFFEE_EVENT), green)
     display_stat("Occultist Used", event_logger.get_count(EventType.PAY_OCCULTIST), purple)
