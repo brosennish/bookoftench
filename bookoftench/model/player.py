@@ -12,7 +12,7 @@ from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GR
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM, TENCH_GENES, \
     WrapperIndices
-from bookoftench.data.weapons import BARE_HANDS, KNIFE, MELEE, RANGED, MACHETE, FIRE_AXE, AXE
+from bookoftench.data.weapons import BARE_HANDS, KNIFE, MELEE, RANGED, BLADED
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.illness import Illness
 from bookoftench.ui import yellow, dim, green, cyan, purple, red
@@ -30,7 +30,7 @@ from .weapon import load_weapons, Weapon
 class PlayerWeapon(Weapon):
 
     def _is_bladed(self) -> bool:
-        return self.name in (KNIFE, MACHETE, AXE, FIRE_AXE)
+        return self.name in BLADED
 
     def calculate_base_damage(self) -> int:
         base_damage = self.calculate_base_damage_no_perk()

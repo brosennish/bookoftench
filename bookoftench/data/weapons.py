@@ -42,6 +42,7 @@ HARDCOVER_BOOK = "Hardcover Book"
 HARPOON = "Harpoon"
 HATCHET = "Hatchet"
 INJECTION_NEEDLE = "Injection Needle"
+KATANA = "Katana"
 KNIFE = "Knife"
 LASER_BEAMS = "Laser Beams"
 LONGBOW = "Longbow"
@@ -88,6 +89,35 @@ BLIND = 'blind'
 MELEE = 'melee'
 RANGED = 'ranged'
 SPECIAL = 'special'
+
+
+BLADED = [
+    AXE,
+    BONE_SAW,
+    BRANCH_SPEAR,
+    BROKEN_BOTTLE,
+    CHAINSAW,
+    CHISEL,
+    FIRE_AXE,
+    FISHING_SPEAR,
+    FROG_GIG,
+    GAFF_HOOK,
+    HATCHET,
+    INJECTION_NEEDLE,
+    KATANA,
+    KNIFE,
+    MACHETE,
+    MEAT_CLEAVER,
+    OBSIDIAN_KNIFE,
+    POCKET_KNIFE,
+    SCYTHE,
+    SHIV,
+    SICKLE,
+    STONE_SPEAR,
+    SURVIVAL_KNIFE,
+    SWITCHBLADE,
+    TROWEL,
+]
 
 Weapons = [
     # =====================================================
@@ -335,6 +365,10 @@ Weapons = [
     {'name': HARPOON, 'damage': 35, 'uses': 6, 'accuracy': 0.79, 'var': 3, 'crit': 0.10,
      'cost': 85, 'sell_value': 42, 'type': RANGED, 'tier': 4, 'sound': audio.ARROW,
      'areas': [CITY, SWAMP]},
+
+    {'name': KATANA, 'damage': 33, 'uses': 8, 'accuracy': 0.81, 'var': 5, 'crit': 0.15,
+     'cost': 88, 'sell_value': 40, 'type': MELEE, 'tier': 4, 'sound': audio.BLADE,
+     'areas': [CITY]},
 
     {'name': LONGBOW, 'damage': 26, 'uses': 11, 'accuracy': 0.76, 'var': 3, 'crit': 0.15,
      'cost': 68, 'sell_value': 34, 'type': RANGED, 'tier': 4, 'sound': audio.ARROW,
