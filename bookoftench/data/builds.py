@@ -10,7 +10,7 @@ COWARD = "Coward"
 DENNY = "Denny"
 MERCENARY = "Mercenary"
 SHOPAHOLIC = "Shopaholic"
-TENCH = "TENCH"
+TENCH = "Tench"
 
 Builds = [
     {'name': CAT_BURGLAR, 'hp': 100, 'str': 1, 'acc': 1, 'coins': 0,

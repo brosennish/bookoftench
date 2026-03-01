@@ -19,11 +19,11 @@ from .build import Build
 from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
 from .events import TravelEvent, BountyCollectedEvent, LevelUpEvent
-from .item import Item
-from .perk import attach_perk, Perk, set_perk_cache
+from .item import Item, load_items
+from .perk import attach_perk, Perk, set_perk_cache, load_perk
 from .player import Player
 from .shop import Shop
-from .weapon import Weapon
+from .weapon import Weapon, load_weapons
 from ..data.builds import Builds
 
 
@@ -55,7 +55,28 @@ class GameState:
 
     @property
     def build_inventory(self) -> List[Build]:
-        return [Build(**d) for d in Builds]
+        builds_list = []
+        for d in Builds:
+            items = load_items([i_name for i_name in d["items"]])
+            weapons = load_weapons([w_name for w_name in d["weapons"]])
+            perks = []
+            for i in d["perks"]:
+                p = load_perk(i)
+                perks.append(p)
+
+            build_obj = Build(
+                name=d["name"],
+                notes=d.get("notes"),
+                hp=d["hp"],
+                str=d["str"],
+                acc=d["acc"],
+                coins=d["coins"],
+                items=items,
+                weapons=weapons,
+                perks=perks,
+            )
+            builds_list.append(build_obj)
+        return builds_list
 
     @property
     def shop(self) -> Shop:
