@@ -46,7 +46,7 @@ Builds = [
      'perks': [TENCH_THE_BOUNTY_HUNTER, SHERLOCK_TENCH],
      'illness': None,
      'notes': 'Enjoys collecting bounties... but mostly killing.'},
-    {'name': SHOPAHOLIC, 'hp': 100, 'str': 0.85, 'acc': 0.85, 'coins': 199,
+    {'name': SHOPAHOLIC, 'hp': 100, 'str': 0.85, 'acc': 0.85, 'coins': 100,
      'items': [IOU],
      'weapons': [BARE_HANDS],
      'perks': [BROWN_FRIDAY, BARTER_SAUCE, TRADE_SHIP],
