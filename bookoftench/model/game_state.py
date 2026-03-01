@@ -19,12 +19,14 @@ from .build import Build
 from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
 from .events import TravelEvent, BountyCollectedEvent, LevelUpEvent
+from .illness import load_illnesses, load_illness
 from .item import Item, load_items
 from .perk import attach_perk, Perk, set_perk_cache, load_perk
 from .player import Player
 from .shop import Shop
 from .weapon import Weapon, load_weapons
 from ..data.builds import Builds
+from ..data.illnesses import Illnesses
 
 
 @dataclass
@@ -63,6 +65,11 @@ class GameState:
             for i in d["perks"]:
                 p = load_perk(i)
                 perks.append(p)
+            if d['illness']:
+                illness_dict = next(b for b in Illnesses if b['name'] == d["illness"])
+                illness = load_illness(illness_dict)
+            else:
+                illness = None
 
             build_obj = Build(
                 name=d["name"],
@@ -71,6 +78,7 @@ class GameState:
                 str=d["str"],
                 acc=d["acc"],
                 coins=d["coins"],
+                illness=illness,
                 items=items,
                 weapons=weapons,
                 perks=perks,

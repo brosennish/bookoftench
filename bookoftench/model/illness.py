@@ -30,3 +30,9 @@ class Illness:
 
 def load_illnesses(restriction: List[str] = None) -> List[Illness]:
     return [Illness(**d) for d in Illnesses if restriction is None or d['name'] in restriction]
+
+def load_illness(entry: dict | None) -> Illness | None:
+    if entry:
+        return Illness(**entry)
+    else:
+        return None
