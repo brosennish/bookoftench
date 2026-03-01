@@ -38,7 +38,7 @@ Builds = [
      'illness': None,
      'notes': "Moral deficiencies of man, physical capacities of robot. What could go wrong?"},
     {'name': DENNY, 'hp': 100, 'str': 1, 'acc': 1, 'coins': 25,
-     'items': [TENCH_FILET, IOU],
+     'items': [TENCH_FILET],
      'weapons': [BARE_HANDS, KNIFE],
      'perks': [],
      'illness': None,
