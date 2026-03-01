@@ -61,6 +61,7 @@ class BuildComponent(LabeledSelectionComponent):
             player = game_state.player
             player.build = build
             player.hp = build.hp
+            player.max_hp = build.hp
             player.strength = build.str
             player.acc = build.acc
             player.coins = build.coins
