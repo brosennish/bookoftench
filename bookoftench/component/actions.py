@@ -45,7 +45,7 @@ class BuildComponent(LabeledSelectionComponent):
         super().__init__(game_state, refresh_menu=True,
                          bindings=[*build_bindings])
         self.selection_components = [
-            LabeledSelectionComponent(game_state, build_bindings, lambda gs: gs.player.display_item_count()),
+            LabeledSelectionComponent(game_state, build_bindings),
         ]
 
     def display_options(self) -> None:

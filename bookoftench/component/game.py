@@ -1,13 +1,14 @@
 import sys
 
 from bookoftench.audio import play_sound, stop_all_sounds, play_music
+from bookoftench.component import BuildComponent
 from bookoftench.component.base import GatekeepingComponent, TextDisplayingComponent, BinarySelectionComponent, \
     LinearComponent, Component
 from bookoftench.component.menu import ActionMenu
 from bookoftench.component.menu import StartMenu
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import DEVIL_THUNDER, GREAT_JOB, INTRO_THEME
-from bookoftench.data.components import QUIT_GAME, NEW_GAME
+from bookoftench.data.components import QUIT_GAME, NEW_GAME, BUILD_SELECTION
 from bookoftench.model import GameState
 from bookoftench.ui import red, green
 from bookoftench.util import print_and_sleep, safe_input
@@ -67,13 +68,24 @@ class DeathHandler(GatekeepingComponent):
 @register_component(NEW_GAME)
 class NewGame(LinearComponent):
     def __init__(self, _: GameState):
-        super().__init__(GameState(), TutorialDecision)
+        super().__init__(GameState(), BuildSelect)
 
     def execute_current(self) -> GameState:
         stop_all_sounds()
         player = self.game_state.player
         while not player.name:
             player.name = safe_input("What be your name?")
+        return self.game_state
+
+
+@register_component(BUILD_SELECTION)
+class BuildSelect(LinearComponent):
+    def __init__(self, _: GameState):
+        super().__init__(GameState(), TutorialDecision)
+
+    def execute_current(self) -> GameState:
+        stop_all_sounds()
+        BuildComponent(self.game_state).run()
         return self.game_state
 
 
