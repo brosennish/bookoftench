@@ -72,9 +72,6 @@ class NewGame(LinearComponent):
 
     def execute_current(self) -> GameState:
         stop_all_sounds()
-        player = self.game_state.player
-        while not player.name:
-            player.name = safe_input("What be your name?")
         return self.game_state
 
 
@@ -83,8 +80,11 @@ class BuildSelect(LinearComponent):
     def __init__(self, _: GameState):
         super().__init__(GameState(), TutorialDecision)
 
-    def execute_current(self) -> GameState:
+    def execute_current(self) -> None:
         stop_all_sounds()
+        player = self.game_state.player
+        while not player.name:
+            player.name = safe_input("What be your name?")
         BuildComponent(self.game_state).run()
         return self.game_state
 
