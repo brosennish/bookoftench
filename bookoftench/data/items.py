@@ -45,6 +45,7 @@ TOAD_STOOL = "Toad Stool"
 UNIDENTIFIED_MUSHROOMS = "Unidentified Mushrooms"
 UNWANTED_PROTEIN = "Unwanted Protein"
 VERY_SPICY_NOODLES = "Very Spicy Noodles"
+WORMHOLE = "Wormhole"
 
 # --- types ---
 FLEE = "Flee"
@@ -52,8 +53,10 @@ NORMAL = "Normal"
 
 Items = [
     # --- SPECIAL ---
-    {'name': IOU, 'type': FLEE, 'hp': 0, 'cost': 15, 'sell_value': 4, 'areas': [CAVE, CITY, FOREST, SWAMP], 'desc': 'Use to escape from battle'},
-    {'name': SMOKE_BOMB, 'type': FLEE, 'hp': 0, 'cost': 25, 'sell_value': 7, 'areas': [CAVE, CITY, FOREST, SWAMP], 'desc': 'Use to escape from battle'},
+    {'name': IOU, 'type': FLEE, 'hp': 0, 'cost': 10, 'sell_value': 3, 'areas': [CAVE, CITY, FOREST, SWAMP], 'desc': 'Use to escape from battle'},
+    {'name': SMOKE_BOMB, 'type': FLEE, 'hp': 0, 'cost': 20, 'sell_value': 7, 'areas': [CAVE, CITY, FOREST, SWAMP], 'desc': 'Use to escape from battle'},
+    {'name': WORMHOLE, 'type': FLEE, 'hp': 0, 'cost': 30, 'sell_value': 11, 'areas': [CAVE, CITY, FOREST, SWAMP],
+     'desc': 'Use to escape from battle'},
 
     # --- Tier 1 (10 HP) ---
     {'name': ANTS_ON_A_LOG, 'type': NORMAL, 'hp': 10, 'cost': 11, 'sell_value': 4, 'areas': [FOREST, SWAMP], 'desc': None},
