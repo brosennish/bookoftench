@@ -9,9 +9,10 @@ from bookoftench.util import print_and_sleep
 
 
 class ItemUsedEvent(Event):
-    def __init__(self, item_name: str, items_remaining: int, player_hp: int,
+    def __init__(self, item_name: str, item_type: str, items_remaining: int, player_hp: int,
                  player_max_hp: int, bonus: int = 0):
         super().__init__(EventType.USE_ITEM)
+        self.item_type = item_type
         self.item_name = item_name
         self.items_remaining = items_remaining
         self.player_hp = player_hp
