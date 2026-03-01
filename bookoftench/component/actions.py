@@ -47,10 +47,6 @@ class BuildComponent(LabeledSelectionComponent):
         self.selection_components = [
             LabeledSelectionComponent(game_state, build_bindings, lambda gs: gs.player.display_item_count()),
         ]
-        self.can_exit = False
-
-    def can_exit(self) -> bool:
-        return self.game_state.player.build
 
     def display_options(self) -> None:
         print_and_sleep("What be your build?")
@@ -68,9 +64,8 @@ class BuildComponent(LabeledSelectionComponent):
             player.strength = build.str
             player.acc = build.acc
             player.coins = build.coins
-            player.items = dict((it.name, it) for it in load_items([i.name for i in build.items]))
-            player.weapons = dict((it.name, PlayerWeapon.from_weapon(it)) for
-                                  it in load_weapons([w.name for w in build.weapons]))
+            player.items = dict((it.name, it) for it in build.items)
+            player.weapon_dict = {it.name: PlayerWeapon.from_weapon(it) for it in build.weapons}
             for p in build.perks:
                 activate_perk(p.name)
 
