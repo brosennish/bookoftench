@@ -5,7 +5,7 @@ from bookoftench.data.perks import USED_SNEAKERS, NEW_SNEAKERS, TENCH_EYES, TENC
     BROWN_FRIDAY, LUCKY_TENCHS_FIN, DOCTOR_FISH, TENCH_THE_BOUNTY_HUNTER, SHERLOCK_TENCH, CATFISH_BURGLAR, \
     RICKETY_PICKPOCKET, BROWNMAIL, DEATH_CAN_WAIT, SOLOMON_TRAIN
 from bookoftench.data.weapons import BARE_HANDS, KNIFE, REVOLVER, CROWBAR, TENCH_CANNON, POCKET_KNIFE, HARDCOVER_BOOK, \
-    CLAWS, LASER_BEAMS
+    CLAWS, LASER_BEAMS, INJECTION_NEEDLE
 
 # Constants
 CAT_BURGLAR = "Cat Burglar"
@@ -51,7 +51,7 @@ Builds = [
      'notes': "Half man - half dog. The wife won't say which half she likes better."},
     {'name': MAKE_A_FISH, 'hp': 80, 'str': 0.75, 'acc': 0.75, 'coins': 500,
      'items': [OCEAN_MAN_LUNCH_BOX, EAGLE_EGG],
-     'weapons': [BARE_HANDS, POCKET_KNIFE, HARDCOVER_BOOK],
+     'weapons': [BARE_HANDS, INJECTION_NEEDLE, HARDCOVER_BOOK],
      'perks': [BROWNMAIL, NEW_SNEAKERS, DEATH_CAN_WAIT, SOLOMON_TRAIN],
      'illness': MAD_TENCH_DISEASE,
     'notes': 'Terminally ill but foundationally sponsored.'},

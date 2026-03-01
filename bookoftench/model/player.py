@@ -12,7 +12,7 @@ from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GR
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM, TENCH_GENES, \
     WrapperIndices
-from bookoftench.data.weapons import BARE_HANDS, KNIFE, MELEE, RANGED, BLADED
+from bookoftench.data.weapons import BARE_HANDS, KNIFE, MELEE, RANGED, BLADED, LASER_BEAMS, VOODOO_STAFF, CLAWS
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.illness import Illness
 from bookoftench.ui import yellow, dim, green, cyan, purple, red
@@ -25,6 +25,7 @@ from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, 
 from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
 from .weapon import load_weapons, Weapon
+from ..data.builds import DENNY
 
 
 @dataclass
@@ -65,7 +66,11 @@ def item_defaults() -> Dict[str, Item]:
 
 
 def weapon_defaults() -> Dict[str, PlayerWeapon]:
-    return dict((it.name, PlayerWeapon.from_weapon(it)) for it in load_weapons([BARE_HANDS, KNIFE]))
+        return dict((it.name, PlayerWeapon.from_weapon(it)) for it in load_weapons([BARE_HANDS]))
+
+def build_weapon_defaults(build: Build | None) -> Dict[str, PlayerWeapon]:
+    weapons = [i.name for i in build.weapons if i.name in [BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF]]
+    return dict((it.name, PlayerWeapon.from_weapon(it)) for it in load_weapons(weapons))
 
 
 @dataclass
@@ -367,8 +372,9 @@ class Player(Combatant):
     def apply_death_penalties(self) -> None:
         self.coins = round(self.coins * 0.25) if perk_is_active(WALLET_CHAIN) else 0  # TODO use the framework for this
         self.items = item_defaults()
-        self.weapon_dict = weapon_defaults()
-        self.current_weapon = self.weapon_dict[BARE_HANDS]
+        self.weapon_dict = build_weapon_defaults(self.build)
+        current_weapon = next(w.name for w in build_weapon_defaults(self.build).values())
+        self.current_weapon = self.weapon_dict[current_weapon]
         self.hp = self.max_hp
         self.xp = 0
         self.blind = False

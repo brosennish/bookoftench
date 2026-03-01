@@ -32,6 +32,7 @@ from .encounters import PostKillEncounters
 from .menu import OverviewMenu
 from .registry import register_component, get_registered_component
 from ..data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE
+from ..data.weapons import BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF
 from ..event_base import EventType
 from ..model.build import Build
 from ..model.player import PlayerWeapon
@@ -70,6 +71,8 @@ class BuildComponent(LabeledSelectionComponent):
                 player.illness_death_lvl = 1 + build.illness.levels_until_death
             player.items = dict((it.name, it) for it in build.items)
             player.weapon_dict = {it.name: PlayerWeapon.from_weapon(it) for it in build.weapons}
+            player.current_weapon = next(i for i in player.weapon_dict.values()
+                                         if i.name in [BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF])
             for p in build.perks:
                 activate_perk(p.name)
 
