@@ -423,7 +423,7 @@ Weapons = [
     # =====================================================
     #                NOT OBTAINABLE BY PLAYER
     # =====================================================
-    {'name': CLAWS, 'damage': 22, 'uses': -1, 'accuracy': 0.86, 'var': 4, 'crit': 0.10,
+    {'name': CLAWS, 'damage': 22, 'uses': -1, 'accuracy': 0.86, 'var': 3, 'crit': 0.10,
      'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'tier': 0, 'sound': audio.PUNCH,
      'areas': NA},
 
