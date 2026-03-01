@@ -19,6 +19,7 @@ class Build:
     weapons: List[Weapon]
     perks: List[Perk]
 
+
     def __repr__(self) -> str:
         header = f"{self.name}"
 

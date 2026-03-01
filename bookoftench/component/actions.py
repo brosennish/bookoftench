@@ -21,10 +21,10 @@ from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE
 from bookoftench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent, DiscoveryEvent
 from bookoftench.model.game_state import GameState
 from bookoftench.model.item import load_items
-from bookoftench.model.perk import load_perks, Perk, perk_is_active
+from bookoftench.model.perk import load_perks, Perk, perk_is_active, activate_perk
 from bookoftench.model.util import get_battle_status_view, display_player_achievements, \
     display_game_stats, calculate_flee, display_active_perks, display_battle_info
-from bookoftench.model.weapon import load_discoverable_weapons
+from bookoftench.model.weapon import load_discoverable_weapons, load_weapons
 from bookoftench.ui import green, purple, yellow, dim, red, cyan, blue
 from bookoftench.util import print_and_sleep
 from .base import LabeledSelectionComponent, SelectionBinding
@@ -34,6 +34,7 @@ from .registry import register_component, get_registered_component
 from ..data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE
 from ..event_base import EventType
 from ..model.build import Build
+from ..model.player import PlayerWeapon
 
 
 @register_component(BUILD)
@@ -63,6 +64,15 @@ class BuildComponent(LabeledSelectionComponent):
         def selection_component(game_state: GameState):
             player = game_state.player
             player.build = build
+            player.hp = build.hp
+            player.strength = build.str
+            player.acc = build.acc
+            player.coins = build.coins
+            player.items = dict((it.name, it) for it in load_items([i.name for i in build.items]))
+            player.weapons = dict((it.name, PlayerWeapon.from_weapon(it)) for
+                                  it in load_weapons([w.name for w in build.weapons]))
+            for p in build.perks:
+                activate_perk(p.name)
 
             print_and_sleep(f"You selected {build.name}."), 2
 
