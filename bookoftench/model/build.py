@@ -22,12 +22,14 @@ class Build:
     perks: List[Perk]
 
     def __repr__(self) -> str:
-        header = f"{orange(self.name)}"
+        spacing = " " if self.hp < 100 else ""
+
+        header = f"{orange(self.name)}\n"
         values = dim(' | ').join([
-            f"{'HP:':<4}{green(self.hp):<3}",
+            f"HP: {green(self.hp)}{spacing}",
             f"Strength: {yellow(f'{self.str:<3}')}",
             f"Accuracy: {yellow(f'{self.acc:<3}')}",
-            f"Coins: {green(f'{self.coins:<3}')}"
+            f"Coins: {green(f'{self.coins:<3}')}\n"
         ])
 
         items = dim(', ').join(f"{green(p.name)}" for p in self.items)
@@ -39,19 +41,19 @@ class Build:
                 header,
                 values,
                 f"{cyan('Illness')} {dim('|')} {yellow(self.illness.name)}",
-                f"  {cyan('Items')} {dim('|')} {items}",
+                f"{cyan('Items')}   {dim('|')} {items}",
                 f"{cyan('Weapons')} {dim('|')} {weapons}",
-                f"  {cyan('Perks')} {dim('|')} {perks_str}",
-                f"  {cyan('Notes')} {dim('|')} {self.notes}",
+                f"{cyan('Perks')}   {dim('|')} {perks_str}",
+                f"{cyan('Notes')}   {dim('|')} {self.notes}",
                 "\n",
             ])
         else:
             return "\n".join([
                 header,
                 values,
-                f"  {cyan('Items')} {dim('|')} {items}",
+                f"{cyan('Items')}   {dim('|')} {items}",
                 f"{cyan('Weapons')} {dim('|')} {weapons}",
-                f"  {cyan('Perks')} {dim('|')} {perks_str}",
-                f"  {cyan('Notes')} {dim('|')} {self.notes}",
+                f"{cyan('Perks')}   {dim('|')} {perks_str}",
+                f"{cyan('Notes')}   {dim('|')} {self.notes}",
                 "\n",
             ])

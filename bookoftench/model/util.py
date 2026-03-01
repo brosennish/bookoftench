@@ -195,9 +195,6 @@ def display_game_stats(game_state: GameState) -> None:
     display_stat("Bosses Defeated", sum(1 for a in game_state.areas if a.boss_defeated), cyan)
 
     display_stat("Coffees Purchased", event_logger.get_count(EventType.COFFEE_EVENT), green)
-    display_stat("Occultist Used", event_logger.get_count(EventType.PAY_OCCULTIST), purple)
-    display_stat("Shaman Used", event_logger.get_count(EventType.PAY_SHAMAN), purple)
-    display_stat("Wizard Used", event_logger.get_count(EventType.PAY_WIZARD), purple)
 
     display_stat("Common Finds", event_logger.get_count(EventType.DISCOVERY_COMMON), yellow)
     display_stat("Uncommon Finds", event_logger.get_count(EventType.DISCOVERY_UNCOMMON), green)
