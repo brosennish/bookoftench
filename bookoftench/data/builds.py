@@ -5,11 +5,12 @@ from bookoftench.data.perks import USED_SNEAKERS, NEW_SNEAKERS, TENCH_EYES, TENC
     BROWN_FRIDAY, LUCKY_TENCHS_FIN, DOCTOR_FISH, TENCH_THE_BOUNTY_HUNTER, SHERLOCK_TENCH, CATFISH_BURGLAR, \
     RICKETY_PICKPOCKET, BROWNMAIL, DEATH_CAN_WAIT, SOLOMON_TRAIN
 from bookoftench.data.weapons import BARE_HANDS, KNIFE, REVOLVER, CROWBAR, TENCH_CANNON, POCKET_KNIFE, HARDCOVER_BOOK, \
-    CLAWS
+    CLAWS, LASER_BEAMS
 
 # Constants
 CAT_BURGLAR = "Cat Burglar"
 COWARD = "Coward"
+CYBORG = "Cyborg"
 DENNY = "Denny"
 DOG_MAN = "Dog Man"
 MAKE_A_FISH = "Make a Fish"
@@ -30,6 +31,12 @@ Builds = [
      'perks': [USED_SNEAKERS, NEW_SNEAKERS],
      'illness': None,
      'notes': "Would rather run than fight... like a little bozo baby coward."},
+    {'name': CYBORG, 'hp': 110, 'str': 1.10, 'acc': 1.10, 'coins': 0,
+     'items': [WORMHOLE],
+     'weapons': [LASER_BEAMS],
+     'perks': [],
+     'illness': None,
+     'notes': "Moral deficiencies of man, physical capacities of robot. What could go wrong?"},
     {'name': DENNY, 'hp': 100, 'str': 1, 'acc': 1, 'coins': 25,
      'items': [TENCH_FILET, IOU],
      'weapons': [BARE_HANDS, KNIFE],
