@@ -8,6 +8,7 @@ from bookoftench.model.weapon import Weapon
 
 @dataclass
 class Build:
+    notes: str | None
     name: str
     hp: int
     str: float
