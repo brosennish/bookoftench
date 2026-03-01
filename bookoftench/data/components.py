@@ -5,6 +5,7 @@ from bookoftench.ui import purple
 ACHIEVEMENTS = "Achievements"
 AREA_BOSS_FIGHT = "Fight Boss"
 BANK = "Bank"
+BUILD = "Build"
 CASINO = "Casino"
 COFFEE_SHOP = "Coffee Shop"
 CRYPTO_EXCHANGE = "Crypto Exchange (Experimental)"

@@ -18,6 +18,7 @@ from bookoftench.model.illness import Illness
 from bookoftench.ui import yellow, dim, green, cyan, purple, red
 from bookoftench.util import print_and_sleep
 from .base import Combatant, Buyable
+from .build import Build
 from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent, LevelUpEvent, \
     SwapWeaponEvent, WeaponBrokeEvent, HitEvent, PlayerDeathEvent, StealItemEvent, StealWeaponEvent, StealPerkEvent, \
     GenericStealEvent
@@ -70,6 +71,7 @@ def weapon_defaults() -> Dict[str, PlayerWeapon]:
 @dataclass
 class Player(Combatant):
     name: str = ''
+    build: Build = None
     lives: int = 3
     lvl: int = 1
     hp: int = 100
