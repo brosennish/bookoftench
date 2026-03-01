@@ -15,6 +15,7 @@ from bookoftench.util import print_and_sleep
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
 from .bank import Bank
+from .build import Build
 from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
 from .events import TravelEvent, BountyCollectedEvent, LevelUpEvent
@@ -23,6 +24,7 @@ from .perk import attach_perk, Perk, set_perk_cache
 from .player import Player
 from .shop import Shop
 from .weapon import Weapon
+from ..data.builds import Builds
 
 
 @dataclass
@@ -48,6 +50,12 @@ class GameState:
     achievement_cache: Dict[str, Achievement] = field(default_factory=dict)
     settings: Settings = field(default_factory=Settings.defaults)
     crypto_market_state: CryptoMarketState = field(default_factory=CryptoMarketState.defaults)
+
+    _all_builds: List[Build] = field(init=False)
+
+    @property
+    def build_inventory(self) -> List[Build]:
+        return [Build(**d) for d in Builds]
 
     @property
     def shop(self) -> Shop:

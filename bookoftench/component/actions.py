@@ -6,12 +6,12 @@ from bookoftench import event_logger
 from bookoftench.audio import play_music, play_sound, stop_music
 from bookoftench.component.base import TextDisplayingComponent, functional_component, Component, \
     ColoredNameSelectionBinding, BinarySelectionComponent, \
-    NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent
+    NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent, ReprBinding
 from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
-    OVERVIEW, INFO
+    OVERVIEW, INFO, BUILD
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from bookoftench.data.items import TENCH_FILET
 from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT
@@ -33,6 +33,40 @@ from .menu import OverviewMenu
 from .registry import register_component, get_registered_component
 from ..data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE
 from ..event_base import EventType
+from ..model.build import Build
+
+
+@register_component(BUILD)
+class BuildComponent(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState):
+        build_bindings = [ReprBinding(str(i + 1), build.name, self._make_selection_component(build), build) for
+                         i, build in enumerate(game_state.build_inventory)]
+        super().__init__(game_state, refresh_menu=True,
+                         bindings=[*build_bindings])
+        self.selection_components = [
+            LabeledSelectionComponent(game_state, build_bindings, lambda gs: gs.player.display_item_count()),
+        ]
+        self.can_exit = False
+
+    def can_exit(self) -> bool:
+        return self.game_state.player.build
+
+    def display_options(self) -> None:
+        print_and_sleep("What be your build?")
+
+        for component in self.selection_components:
+            component.display_options()
+
+    @staticmethod
+    def _make_selection_component(build: Build) -> type[Component]:
+        @functional_component(state_dependent=True)
+        def selection_component(game_state: GameState):
+            player = game_state.player
+            player.build = build
+
+            print_and_sleep(f"You selected {build.name}."), 2
+
+        return selection_component
 
 
 @register_component(SEARCH)
