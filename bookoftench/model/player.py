@@ -12,20 +12,20 @@ from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GR
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM, TENCH_GENES, \
     WrapperIndices
-from bookoftench.data.weapons import BARE_HANDS, KNIFE, MELEE, RANGED, MACHETE, FIRE_AXE, AXE, MEAT_CLEAVER, \
-    OBSIDIAN_KNIFE, POCKET_KNIFE, SURVIVAL_KNIFE, SWITCHBLADE, TROWEL, BONE_SAW, BROKEN_BOTTLE, CHAINSAW, CHISEL, \
-    HATCHET, SCYTHE, SHIV, SICKLE
+from bookoftench.data.weapons import BARE_HANDS, KNIFE, MELEE, RANGED, BLADED, LASER_BEAMS, VOODOO_STAFF, CLAWS
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.illness import Illness
 from bookoftench.ui import yellow, dim, green, cyan, purple, red
 from bookoftench.util import print_and_sleep
 from .base import Combatant, Buyable
+from .build import Build
 from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent, LevelUpEvent, \
     SwapWeaponEvent, WeaponBrokeEvent, HitEvent, PlayerDeathEvent, StealItemEvent, StealWeaponEvent, StealPerkEvent, \
     GenericStealEvent
 from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
 from .weapon import load_weapons, Weapon
+from ..data.builds import DENNY
 
 
 @dataclass
@@ -33,9 +33,7 @@ class PlayerWeapon(Weapon):
 
     # todo - maybe add subtype field to weapons for this purpose
     def _is_bladed(self) -> bool:
-        return self.name in (AXE, BONE_SAW, BROKEN_BOTTLE, CHAINSAW, CHISEL, FIRE_AXE, HATCHET,
-                             KNIFE, MACHETE, MEAT_CLEAVER, OBSIDIAN_KNIFE, POCKET_KNIFE,
-                             SCYTHE, SHIV, SICKLE, SURVIVAL_KNIFE, SWITCHBLADE, TROWEL)
+        return self.name in BLADED
 
     def calculate_base_damage(self) -> int:
         base_damage = self.calculate_base_damage_no_perk()
@@ -65,16 +63,21 @@ class PlayerWeapon(Weapon):
 
 
 def item_defaults() -> Dict[str, Item]:
-    return dict((it.name, it) for it in load_items([TENCH_FILET, IOU]))
+    return dict((it.name, it) for it in load_items([TENCH_FILET]))
 
 
 def weapon_defaults() -> Dict[str, PlayerWeapon]:
-    return dict((it.name, PlayerWeapon.from_weapon(it)) for it in load_weapons([BARE_HANDS, KNIFE]))
+        return dict((it.name, PlayerWeapon.from_weapon(it)) for it in load_weapons([BARE_HANDS]))
+
+def build_weapon_defaults(build: Build | None) -> Dict[str, PlayerWeapon]:
+    weapons = [i.name for i in build.weapons if i.name in [BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF]]
+    return dict((it.name, PlayerWeapon.from_weapon(it)) for it in load_weapons(weapons))
 
 
 @dataclass
 class Player(Combatant):
     name: str = ''
+    build: Build = None
     lives: int = 3
     lvl: int = 1
     hp: int = 100
@@ -88,7 +91,7 @@ class Player(Combatant):
 
     can_flee: bool = False
 
-    coins: int = 25
+    coins: int = 0
     casino_won: int = 0
     casino_lost: int = 0
     games_played: int = 0
@@ -368,11 +371,11 @@ class Player(Combatant):
                 self.illness_death_lvl = None
 
     def apply_death_penalties(self) -> None:
-        self.coins = max(25, int(self.coins * 0.25)) if perk_is_active(
-            WALLET_CHAIN) else 25  # TODO use the framework for this
+        self.coins = round(self.coins * 0.25) if perk_is_active(WALLET_CHAIN) else 0  # TODO use the framework for this
         self.items = item_defaults()
-        self.weapon_dict = weapon_defaults()
-        self.current_weapon = self.weapon_dict[BARE_HANDS]
+        self.weapon_dict = build_weapon_defaults(self.build)
+        current_weapon = next(w.name for w in build_weapon_defaults(self.build).values())
+        self.current_weapon = self.weapon_dict[current_weapon]
         self.hp = self.max_hp
         self.xp = 0
         self.blind = False

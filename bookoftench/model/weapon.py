@@ -53,12 +53,12 @@ class Weapon(WeaponBase, Buyable):
     def __repr__(self) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
-            f"Cost: {orange(self.cost):<17}",
-            f"{dim("Dmg:")} {red(f"{self.damage:<3}")}",
-            f"{dim("Acc:")} {yellow(f"{self.accuracy:<4}")}",
-            f"{dim("Crit:")} {yellow(f"{self.crit:<4}")}",
-            f"{dim("Var:")} {f"{blue(f"{self.var}")}"}",
-            f"{dim("Uses:")} {self.format_uses()}",
+            f"Cost: {orange(self.cost):<18}",
+            f"{"Dmg:"} {red(f"{self.damage:<3}")}",
+            f"{"Acc:"} {yellow(f"{self.accuracy:<4}")}",
+            f"{"Crit:"} {yellow(f"{self.crit:<4}")}",
+            f"{"Var:"} {f"{blue(f"{self.var}")}"}",
+            f"{"Uses:"} {self.format_uses()}",
         ])
 
 @dataclass

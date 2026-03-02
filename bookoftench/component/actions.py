@@ -6,12 +6,12 @@ from bookoftench import event_logger
 from bookoftench.audio import play_music, play_sound, stop_music
 from bookoftench.component.base import TextDisplayingComponent, functional_component, Component, \
     ColoredNameSelectionBinding, BinarySelectionComponent, \
-    NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent
+    NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent, ReprBinding
 from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
-    OVERVIEW, INFO
+    OVERVIEW, INFO, BUILD
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from bookoftench.data.items import TENCH_FILET
 from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT
@@ -21,10 +21,10 @@ from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE
 from bookoftench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent, DiscoveryEvent
 from bookoftench.model.game_state import GameState
 from bookoftench.model.item import load_items
-from bookoftench.model.perk import load_perks, Perk, perk_is_active
+from bookoftench.model.perk import load_perks, Perk, perk_is_active, activate_perk
 from bookoftench.model.util import get_battle_status_view, display_player_achievements, \
     display_game_stats, calculate_flee, display_active_perks, display_battle_info
-from bookoftench.model.weapon import load_discoverable_weapons
+from bookoftench.model.weapon import load_discoverable_weapons, load_weapons
 from bookoftench.ui import green, purple, yellow, dim, red, cyan, blue
 from bookoftench.util import print_and_sleep
 from .base import LabeledSelectionComponent, SelectionBinding
@@ -32,7 +32,53 @@ from .encounters import PostKillEncounters
 from .menu import OverviewMenu
 from .registry import register_component, get_registered_component
 from ..data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE
+from ..data.weapons import BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF
 from ..event_base import EventType
+from ..model.build import Build
+from ..model.player import PlayerWeapon
+
+
+@register_component(BUILD)
+class BuildComponent(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState):
+        build_bindings = [ReprBinding(str(i + 1), build.name, self._make_selection_component(build), build) for
+                         i, build in enumerate(game_state.build_inventory)]
+        super().__init__(game_state, refresh_menu=True,
+                         bindings=[*build_bindings])
+        self.selection_components = [
+            LabeledSelectionComponent(game_state, build_bindings),
+        ]
+
+    def display_options(self) -> None:
+        print_and_sleep("What be your build?", 2)
+
+        for component in self.selection_components:
+            component.display_options()
+
+    @staticmethod
+    def _make_selection_component(build: Build) -> type[Component]:
+        @functional_component(state_dependent=True)
+        def selection_component(game_state: GameState):
+            player = game_state.player
+            player.build = build
+            player.hp = build.hp
+            player.max_hp = build.hp
+            player.strength = build.str
+            player.acc = build.acc
+            player.coins = build.coins
+            if build.illness:
+                player.illness = build.illness
+                player.illness_death_lvl = 1 + build.illness.levels_until_death
+            player.items = dict((it.name, it) for it in build.items)
+            player.weapon_dict = {it.name: PlayerWeapon.from_weapon(it) for it in build.weapons}
+            player.current_weapon = next(i for i in player.weapon_dict.values()
+                                         if i.name in [BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF])
+            for p in build.perks:
+                activate_perk(p.name)
+
+            print_and_sleep(f"You selected {cyan(build.name)}", 2)
+
+        return selection_component
 
 
 @register_component(SEARCH)

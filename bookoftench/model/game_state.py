@@ -15,14 +15,18 @@ from bookoftench.util import print_and_sleep
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
 from .bank import Bank
+from .build import Build
 from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
 from .events import TravelEvent, BountyCollectedEvent, LevelUpEvent
-from .item import Item
-from .perk import attach_perk, Perk, set_perk_cache
+from .illness import load_illnesses, load_illness
+from .item import Item, load_items
+from .perk import attach_perk, Perk, set_perk_cache, load_perk
 from .player import Player
 from .shop import Shop
-from .weapon import Weapon
+from .weapon import Weapon, load_weapons
+from ..data.builds import Builds
+from ..data.illnesses import Illnesses
 
 
 @dataclass
@@ -48,6 +52,39 @@ class GameState:
     achievement_cache: Dict[str, Achievement] = field(default_factory=dict)
     settings: Settings = field(default_factory=Settings.defaults)
     crypto_market_state: CryptoMarketState = field(default_factory=CryptoMarketState.defaults)
+
+    _all_builds: List[Build] = field(init=False)
+
+    @property
+    def build_inventory(self) -> List[Build]:
+        builds_list = []
+        for d in Builds:
+            items = load_items([i_name for i_name in d["items"]])
+            weapons = load_weapons([w_name for w_name in d["weapons"]])
+            perks = []
+            for i in d["perks"]:
+                p = load_perk(i)
+                perks.append(p)
+            if d['illness']:
+                illness_dict = next(b for b in Illnesses if b['name'] == d["illness"])
+                illness = load_illness(illness_dict)
+            else:
+                illness = None
+
+            build_obj = Build(
+                name=d["name"],
+                notes=d.get("notes"),
+                hp=d["hp"],
+                str=d["str"],
+                acc=d["acc"],
+                coins=d["coins"],
+                illness=illness,
+                items=items,
+                weapons=weapons,
+                perks=perks,
+            )
+            builds_list.append(build_obj)
+        return builds_list
 
     @property
     def shop(self) -> Shop:

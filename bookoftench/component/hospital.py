@@ -70,7 +70,7 @@ def treatment_component(game_state: GameState) -> None:
         event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_SUCCESS))
     else:
         print_and_sleep(blue(
-            f"Shit didn't take. You still owe me {illness.cost} of coin. Also - you into crypto?"),
+            f"Shit didn't take. You owe me {illness.cost} of coin. Also - you into crypto?"),
             2)
         event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_FAIL))
 
