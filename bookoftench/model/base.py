@@ -240,6 +240,7 @@ class Combatant(ABC):
         if self.current_weapon.type == MELEE:
             damage_inflicted = round(self.strength * damage_inflicted)  # mult damage by strength value
 
+        self.handle_crit(crit)
         if isinstance(other, NPC):
             print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
@@ -248,7 +249,6 @@ class Combatant(ABC):
             print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
 
-        self.handle_crit(crit)
         other.take_damage(damage_inflicted, self)
         self.handle_blinding(other)
         if self.current_weapon.is_broken():
