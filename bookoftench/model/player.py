@@ -31,6 +31,7 @@ from ..data.builds import DENNY
 @dataclass
 class PlayerWeapon(Weapon):
 
+    # todo - maybe add subtype field to weapons for this purpose
     def _is_bladed(self) -> bool:
         return self.name in BLADED
 

@@ -4,7 +4,8 @@ Terminal-based roguelite RPG built in Python.
 
 ## Core Systems
 
-- Turn-based combat orchestration  
+- Turn-based combat
+- Deep and diverse economy  
 - Event-driven reactions using a listener pattern  
 - State-driven player and enemy domain models  
 - Modular component → service → model layering  
