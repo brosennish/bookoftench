@@ -391,7 +391,7 @@ class Player(Combatant):
 
     def take_damage(self, damage: int, other: Combatant) -> int:
         if damage >= self.hp:
-            if perk_is_active(SOLOMON_TRAIN) and random.random() < 0.10:
+            if perk_is_active(SOLOMON_TRAIN) and random.random() < 0.15:
                 play_sound(RIFLE)
                 print_and_sleep(purple("You were saved by Solomon Train!"), 1)
                 return other.take_damage(other.hp, other)

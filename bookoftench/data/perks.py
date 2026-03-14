@@ -295,7 +295,7 @@ Perks = [
     {
         'name': SOLOMON_TRAIN,
         'cost': 250,
-        'description': "10% chance to negate a fatal blow and instantly kill the enemy instead",
+        'description': "15% chance to negate a fatal blow and instantly kill the enemy instead",
     },
     {
         'name': WENCH_LOCATION,
