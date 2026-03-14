@@ -144,7 +144,7 @@ def get_battle_status_view(game_state: GameState) -> str:
                 f"{red(f' (blinded {int(cmbt.blind_effect * 100)}% for {blind_turns})') if cmbt.blind else ''}"
                 f"{orange(' (wanted)') if game_state.is_wanted(cmbt) else ''} {dim('-')} "
                 f"{p_color(cmbt.hp, cmbt.max_hp)(f"{cmbt.hp} HP")}"
-                f"\n{cmbt.current_weapon.get_complete_format()}")
+                f"\n{cmbt.current_weapon.get_complete_format(cmbt.strength, cmbt.acc)}")
 
     return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, purple)}\n"
 
@@ -225,7 +225,7 @@ def display_active_perks(game_state: GameState) -> None:
             print_and_sleep(f'Wench Location: {blue(game_state.wench_area.name)}')
 
         for perk in sorted(active_perks, key=lambda a: a.name):
-            print_and_sleep(purple(f"{perk.name} | {perk.description}"))
+            print_and_sleep(purple(perk.name) + dim(" | ") + purple(perk.description))
 
 
 def get_battle_info_view(game_state: GameState) -> str:
@@ -253,7 +253,7 @@ def display_battle_info(game_state: GameState) -> None:
             print_and_sleep(f'Wench Location: {blue(game_state.wench_area.name)}')
 
         for perk in sorted(active_perks, key=lambda a: a.name):
-            print_and_sleep(purple(f"{perk.name} | {perk.description}"))
+            print_and_sleep(purple(perk.name) + dim(" | ") + purple(perk.description))
 
 
 def display_active_perk_count() -> None:

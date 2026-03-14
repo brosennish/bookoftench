@@ -1,13 +1,15 @@
 from enum import Enum
 
 # Constants
-AP_TENCH_STUDIES = "AP Tench Studies"
+AMBERJACKED = "Amberjacked"
 AMBROSE_BLADE = "Ambrose Blade"
+AP_TENCH_STUDIES = "AP Tench Studies"
 BARTER_SAUCE = "Barter Sauce"
 BEER_GOGGLES = "Beer Goggles"
-BROWN_FRIDAY = "Brown Friday"
 BROWNMAIL = "Brownmail"
+BROWN_FRIDAY = "Brown Friday"
 BULLETPROOF = "Bulletproof"
+CASTING_RANGE = "Casting Range"
 CATFISH_BURGLAR = "Catfish Burglar"
 CROWS_NEST = "Crow's Nest"
 DEATH_CAN_WAIT = "Death Can Wait"
@@ -64,6 +66,18 @@ class WrapperIndices:
 
 Perks = [
     {
+        'name': AMBERJACKED,
+        'cost': 55,
+        'description': "+3% strength each level up",
+    },
+    {
+        'name': AMBROSE_BLADE,
+        'cost': 130,
+        'description': "Bladed weapons do +3 damage",
+        'wrapper_type': WrapperType.INT_CHANGE,
+        'wrapper_config': {'change': 3}
+    },
+    {
         'name': AP_TENCH_STUDIES,
         'cost': 200,
         'description': "+10% XP from battles and +1 XP from all other sources",
@@ -71,26 +85,25 @@ Perks = [
             {'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT, 'wrapper_config': {'change': 10}},
             {'wrapper_type': WrapperType.INT_CHANGE, 'wrapper_config': {'change': 1}}
         ]
-
     },
     {
-        'name': INTRO_TO_TENCH,
-        'cost': 95,
-        'description': "+5% XP gained from winning battles",
+        'name': BARTER_SAUCE,
+        'cost': 100,
+        'description': "Shop prices are 5% lower",
         'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
-        'wrapper_config': {'change': 5}
-    },
-    {
-        'name': KARATE_LESSONS,
-        'cost': 55,
-        'description': "Bare Hands +2 damage",
-        'wrapper_type': WrapperType.INT_CHANGE,
-        'wrapper_config': {'change': 2}
+        'wrapper_config': {'change': -5}
     },
     {
         'name': BEER_GOGGLES,
         'cost': 100,
         'description': "Prevents blindness",
+        'wrapper_type': WrapperType.BOOLEAN_OVERRIDE,
+        'wrapper_config': {'override': False}
+    },
+    {
+        'name': BROWNMAIL,
+        'cost': 120,
+        'description': "Gets Officer Hohkken off your back",
         'wrapper_type': WrapperType.BOOLEAN_OVERRIDE,
         'wrapper_config': {'override': False}
     },
@@ -102,46 +115,16 @@ Perks = [
         'wrapper_config': {'change': 1}
     },
     {
-        'name': SLEDGE_FUND,
-        'cost': 180,
-        'description': "Bank interest rate +8%",
+        'name': BULLETPROOF,
+        'cost': 140,
+        'description': "Take 10% less damage from guns",
         'wrapper_type': WrapperType.PERCENT_CHANGE,
-        'wrapper_config': {'change': 8}
+        'wrapper_config': {'change': -10}
     },
     {
-        'name': LUCKY_TENCHS_FIN,
-        'cost': 111,
-        'description': "Crit chance +5%",
-        'wrapper_type': WrapperType.PERCENT_CHANGE,
-        'wrapper_config': {'change': 5}
-    },
-    {
-        'name': DOCTOR_FISH,
-        'cost': 120,
-        'description': "Healing items restore +2 additional HP",
-        'wrapper_type': WrapperType.INT_CHANGE,
-        'wrapper_config': {'change': 2}
-    },
-    {
-        'name': VAGABONDAGE,
-        'cost': 130,
-        'description': "Carry +1 weapon and item",
-        'wrapper_type': WrapperType.INT_CHANGE,
-        'wrapper_config': {'change': 1}
-    },
-    {
-        'name': NOMADS_LAND,
-        'cost': 130,
-        'description': "Carry +1 weapon and item",
-        'wrapper_type': WrapperType.INT_CHANGE,
-        'wrapper_config': {'change': 1}
-    },
-    {
-        'name': RICKETY_PICKPOCKET,
-        'cost': 130,
-        'description': "Steal an extra 10-25 coins from every enemy you defeat",
-        'wrapper_type': WrapperType.BOUNDED_RANDOM,
-        'wrapper_config': {'lower_bound': 10, 'upper_bound': 25}
+        'name': CASTING_RANGE,
+        'cost': 55,
+        'description': "+1.5% accuracy each level up",
     },
     {
         'name': CATFISH_BURGLAR,
@@ -151,72 +134,21 @@ Perks = [
         'wrapper_config': {'change': 10}
     },
     {
-        'name': MARTIAL_ARTS_TRAINING,
-        'cost': 85,
-        'description': "Bare Hands +3 damage",
-        'wrapper_type': WrapperType.INT_CHANGE,
-        'wrapper_config': {'change': 3}
+        'name': CROWS_NEST,
+        'cost': 200,
+        'description': "View enemies remaining in each area",
     },
     {
-        'name': USED_SNEAKERS,
-        'cost': 40,
-        'description': "Flee chance +5%",
-        'wrapper_type': WrapperType.PERCENT_CHANGE,
-        'wrapper_config': {'change': 5}
+        'name': DEATH_CAN_WAIT,
+        'cost': 200,
+        'description': "Once per battle, a fatal blow leaves you at 1 HP",
     },
     {
-        'name': LEATHER_SKIN,
-        'cost': 165,
-        'description': "Take 10% less damage from attacks",
-        'wrapper_type': WrapperType.PERCENT_CHANGE,
-        'wrapper_config': {'change': -10}
-    },
-    {
-        'name': HEALTH_NUT,
-        'cost': 110,
-        'description': "Gain +10% health from items",
-        'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
-        'wrapper_config': {'change': 10}
-    },
-    {
-        'name': ROSETTI_THE_GYM_RAT,
-        'cost': 145,
-        'description': "Melee weapons do +8% damage",
-        'wrapper_type': WrapperType.PERCENT_CHANGE,
-        'wrapper_config': {'change': 8}
-    },
-    {
-        'name': AMBROSE_BLADE,
-        'cost': 130,
-        'description': "Bladed weapons do +3 damage",
-        'wrapper_type': WrapperType.INT_CHANGE,
-        'wrapper_config': {'change': 3}
-    },
-    {
-        'name': BROWNMAIL,
+        'name': DOCTOR_FISH,
         'cost': 120,
-        'description': "Gets Officer Hohkken off your back",
-        'wrapper_type': WrapperType.BOOLEAN_OVERRIDE,
-        'wrapper_config': {'override': False}
-    },
-    {
-        'name': NEW_SNEAKERS,
-        'cost': 99,
-        'description': "Flee chance +10%",
-        'wrapper_type': WrapperType.PERCENT_CHANGE,
-        'wrapper_config': {'change': 10}
-    },
-    {
-        'name': BULLETPROOF,
-        'cost': 140,
-        'description': "Take 10% less damage from guns",
-        'wrapper_type': WrapperType.PERCENT_CHANGE,
-        'wrapper_config': {'change': -10}
-    },
-    {
-        'name': WALLET_CHAIN,
-        'cost': 100,
-        'description': 'Save 25% of your coins upon death',
+        'description': "Healing items restore +2 additional HP",
+        'wrapper_type': WrapperType.INT_CHANGE,
+        'wrapper_config': {'change': 2}
     },
     {
         'name': GRAMBLIN_MAN,
@@ -233,12 +165,76 @@ Perks = [
             {'wrapper_type': WrapperType.INT_CHANGE, 'wrapper_config': {'change': 5}},
             {'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT, 'wrapper_config': {'change': 5}}
         ]
-
     },
     {
-        'name': VAMPIRIC_SPERM,
-        'cost': 220,
-        'description': 'Heal 3 HP each time you land a melee attack',
+        'name': HEALTH_NUT,
+        'cost': 110,
+        'description': "Gain +10% health from items",
+        'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
+        'wrapper_config': {'change': 10}
+    },
+    {
+        'name': INTRO_TO_TENCH,
+        'cost': 95,
+        'description': "+5% XP gained from winning battles",
+        'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
+        'wrapper_config': {'change': 5}
+    },
+    {
+        'name': KARATE_LESSONS,
+        'cost': 55,
+        'description': "Bare Hands +2 damage",
+        'wrapper_type': WrapperType.INT_CHANGE,
+        'wrapper_config': {'change': 2}
+    },
+    {
+        'name': LEATHER_SKIN,
+        'cost': 165,
+        'description': "Take 10% less damage from attacks",
+        'wrapper_type': WrapperType.PERCENT_CHANGE,
+        'wrapper_config': {'change': -10}
+    },
+    {
+        'name': LUCKY_TENCHS_FIN,
+        'cost': 111,
+        'description': "Crit chance +5%",
+        'wrapper_type': WrapperType.PERCENT_CHANGE,
+        'wrapper_config': {'change': 5}
+    },
+    {
+        'name': MARTIAL_ARTS_TRAINING,
+        'cost': 85,
+        'description': "Bare Hands +3 damage",
+        'wrapper_type': WrapperType.INT_CHANGE,
+        'wrapper_config': {'change': 3}
+    },
+    {
+        'name': NEW_SNEAKERS,
+        'cost': 99,
+        'description': "Flee chance +10%",
+        'wrapper_type': WrapperType.PERCENT_CHANGE,
+        'wrapper_config': {'change': 10}
+    },
+    {
+        'name': NOMADS_LAND,
+        'cost': 130,
+        'description': "Carry +1 weapon and item",
+        'wrapper_type': WrapperType.INT_CHANGE,
+        'wrapper_config': {'change': 1}
+    },
+    {
+        'name': RICKETY_PICKPOCKET,
+        'cost': 130,
+        'description': "Steal an extra 10-25 coins from every enemy you defeat",
+        'wrapper_type': WrapperType.BOUNDED_RANDOM,
+        'wrapper_config': {'lower_bound': 10, 'upper_bound': 25}
+    },
+    {
+        'name': ROSETTI_THE_GYM_RAT,
+        'cost': 145,
+        'description': "Melee weapons do +8% damage",
+        'wrapper_type': WrapperType.PERCENT_CHANGE,
+        'wrapper_config': {'change': 8}
     },
     {
         'name': SHERLOCK_TENCH,
@@ -246,11 +242,16 @@ Perks = [
         'description': "+15% chance to find the wanted enemy when searching their area",
     },
     {
-        'name': TENCH_THE_BOUNTY_HUNTER,
-        'cost': 100,
-        'description': "Earn +25 coins from each bounty enemy",
-        'wrapper_type': WrapperType.INT_CHANGE,
-        'wrapper_config': {'change': 25}
+        'name': SLEDGE_FUND,
+        'cost': 180,
+        'description': "Bank interest rate +8%",
+        'wrapper_type': WrapperType.PERCENT_CHANGE,
+        'wrapper_config': {'change': 8}
+    },
+    {
+        'name': SOLOMON_TRAIN,
+        'cost': 250,
+        'description': "15% chance to negate a fatal blow and instantly kill the enemy instead",
     },
     {
         'name': TENCH_EYES,
@@ -269,16 +270,11 @@ Perks = [
         ]
     },
     {
-        'name': DEATH_CAN_WAIT,
-        'cost': 200,
-        'description': "Once per battle, a fatal blow leaves you at 1 HP",
-    },
-    {
-        'name': BARTER_SAUCE,
+        'name': TENCH_THE_BOUNTY_HUNTER,
         'cost': 100,
-        'description': "Shop prices are 5% lower",
-        'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
-        'wrapper_config': {'change': -5}
+        'description': "Earn +25 coins from each bounty enemy",
+        'wrapper_type': WrapperType.INT_CHANGE,
+        'wrapper_config': {'change': 25}
     },
     {
         'name': TRADE_SHIP,
@@ -288,14 +284,28 @@ Perks = [
         'wrapper_config': {'change': -10}
     },
     {
-        'name': CROWS_NEST,
-        'cost': 200,
-        'description': "View enemies remaining in each area",
+        'name': USED_SNEAKERS,
+        'cost': 40,
+        'description': "Flee chance +5%",
+        'wrapper_type': WrapperType.PERCENT_CHANGE,
+        'wrapper_config': {'change': 5}
     },
     {
-        'name': SOLOMON_TRAIN,
-        'cost': 250,
-        'description': "10% chance to negate a fatal blow and instantly kill the enemy instead",
+        'name': VAGABONDAGE,
+        'cost': 130,
+        'description': "Carry +1 weapon and item",
+        'wrapper_type': WrapperType.INT_CHANGE,
+        'wrapper_config': {'change': 1}
+    },
+    {
+        'name': VAMPIRIC_SPERM,
+        'cost': 220,
+        'description': 'Heal 3 HP each time you land a melee attack',
+    },
+    {
+        'name': WALLET_CHAIN,
+        'cost': 100,
+        'description': 'Save 25% of your coins upon death',
     },
     {
         'name': WENCH_LOCATION,

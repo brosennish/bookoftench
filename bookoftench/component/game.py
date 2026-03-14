@@ -135,7 +135,7 @@ class Intro(TextDisplayingComponent):
         super().__init__(game_state,
                          next_component=ActionMenu,
                          display_callback=lambda _: print_and_sleep(red("""
-You wash ashore on a deserted beach on the outskirts of Shebokken.
+You wash ashore on a deserted beach outside of Shebokken.
 The champion has informed you that his mother, Chula, was taken in the night.
 It is up to you to locate her and return her to the champion...
 before her life runs dry.

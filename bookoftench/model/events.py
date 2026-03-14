@@ -132,21 +132,19 @@ class BankDepositEvent(Event):
 class BankWithdrawalEvent(Event):
     def __init__(self, amount: int):
         super().__init__(EventType.WITHDRAW, lambda:
-        print_and_sleep(f"You withdrew {green(amount)} of coin from the bank.", 1))
+        print_and_sleep(f"You withdrew {green(amount)} of coin (before any applicable fees) from the bank.", 1.5))
 
 
 class LevelUpEvent(Event):
-    def __init__(self, level: int, old_max_hp: int, new_max_hp: int, item_reward: Optional[str], cash_reward: int):
+    def __init__(self, level: int, old_max_hp: int, new_max_hp: int, cash_reward: int):
         super().__init__(EventType.LEVEL_UP,
-                         lambda: self._display(level, old_max_hp, new_max_hp, item_reward, cash_reward))
+                         lambda: self._display(level, old_max_hp, new_max_hp, cash_reward))
 
     @staticmethod
-    def _display(level, old_max_hp, new_max_hp, item_reward, cash_reward):
+    def _display(level, old_max_hp, new_max_hp, cash_reward):
         play_sound(GREAT_JOB)
         print_and_sleep(green(f"You have reached level {level}!\n"), 2)
         print(green(f"MAX HP: {old_max_hp} -> {new_max_hp}"))
-        if item_reward is not None:
-            print(cyan(f"\nReward: {item_reward.name}"))
         print_and_sleep(green(f"You were awarded {cash_reward} of coin."), 2)
 
 

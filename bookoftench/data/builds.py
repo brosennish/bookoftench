@@ -19,6 +19,12 @@ SHOPAHOLIC = "Shopaholic"
 TENCH = "Tench"
 
 Builds = [
+    {'name': DENNY, 'hp': 100, 'str': 1, 'acc': 1, 'coins': 25,
+     'items': [TENCH_FILET],
+     'weapons': [BARE_HANDS, KNIFE],
+     'perks': [],
+     'illness': None,
+     'notes': 'Denny, Jeffrey, Jasper. Son of Mayor - The Chosen Spawn.'},
     {'name': CAT_BURGLAR, 'hp': 100, 'str': 1, 'acc': 1, 'coins': 0,
      'items': [SMOKE_BOMB],
      'weapons': [BARE_HANDS, CROWBAR],
@@ -37,12 +43,6 @@ Builds = [
      'perks': [],
      'illness': None,
      'notes': "Moral deficiencies of man, physical capacities of robot. What could go wrong?"},
-    {'name': DENNY, 'hp': 100, 'str': 1, 'acc': 1, 'coins': 25,
-     'items': [TENCH_FILET],
-     'weapons': [BARE_HANDS, KNIFE],
-     'perks': [],
-     'illness': None,
-     'notes': 'Denny, Jeffrey, Jasper. Son of Mayor - The Chosen Spawn.'},
     {'name': DOG_MAN, 'hp': 100, 'str': 1.11, 'acc': 0.77, 'coins': 10,
      'items': [MYSTERY_MEAT],
      'weapons': [CLAWS],

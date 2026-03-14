@@ -11,7 +11,7 @@ from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, IOU
 from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM, TENCH_GENES, \
-    WrapperIndices
+    WrapperIndices, AMBERJACKED, CASTING_RANGE
 from bookoftench.data.weapons import BARE_HANDS, KNIFE, MELEE, RANGED, BLADED, LASER_BEAMS, VOODOO_STAFF, CLAWS
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.illness import Illness
@@ -25,7 +25,6 @@ from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, 
 from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
 from .weapon import load_weapons, Weapon
-from ..data.builds import DENNY
 
 
 @dataclass
@@ -303,6 +302,14 @@ class Player(Combatant):
         self.coins += amount
         print_and_sleep(green(f"You gained {amount} of coin!"), 1)
 
+    def gain_strength(self, amount: float) -> None:
+        self.strength += round(amount, 2)
+        print_and_sleep(cyan(f"Your strength increased by {amount}!"), 1)
+
+    def gain_accuracy(self, amount: float) -> None:
+        self.acc += round(amount, 2)
+        print_and_sleep(cyan(f"Your accuracy increased by {amount}!"), 1)
+
     @staticmethod
     @attach_perk(INTRO_TO_TENCH, value_description="xp gained")
     @attach_perk(AP_TENCH_STUDIES, WrapperIndices.ApTenchStudies.BATTLE_XP, value_description="xp gained")
@@ -334,28 +341,27 @@ class Player(Combatant):
         return 0.0
 
     def level_up(self) -> None:
-        # ---- core level-up effects live here ----
+        # ---- core level-up effects ----
         self.xp -= self.xp_needed
         self.lvl += 1
         cash_reward = max(50, (100 - (10 * (self.lvl - 2))))
         self.coins += cash_reward
-        self.strength = min(self.strength + 0.02, 1.25)
-        self.acc = min(self.acc + 0.02, 1.25)
         self.games_played = 0
+
+        if perk_is_active(AMBERJACKED):
+            if self.strength < 1.25:
+                self.gain_strength(self.strength * 0.03)
+
+        if perk_is_active(CASTING_RANGE):
+            if self.acc < 1.15:
+                self.gain_accuracy(self.acc * 0.015)
 
         old_max = self.max_hp
         if self.max_hp < 150:
             self.max_hp += 5
         self.hp = self.max_hp
 
-        item_reward = None
-        if len(self.items) < self.max_items:
-            filtered: List[Item] = [item for item in load_items() if item.name not in self.items]
-            if filtered:
-                item_reward = random.choice(filtered)
-                self.items[item_reward.name] = item_reward
-
-        event_logger.log_event(LevelUpEvent(self.lvl, old_max, self.max_hp, item_reward, cash_reward))
+        event_logger.log_event(LevelUpEvent(self.lvl, old_max, self.max_hp, cash_reward))
 
         # check for illness death level match
         if self.lvl == self.illness_death_lvl:
@@ -391,7 +397,7 @@ class Player(Combatant):
 
     def take_damage(self, damage: int, other: Combatant) -> int:
         if damage >= self.hp:
-            if perk_is_active(SOLOMON_TRAIN) and random.random() < 0.10:
+            if perk_is_active(SOLOMON_TRAIN) and random.random() < 0.15:
                 play_sound(RIFLE)
                 print_and_sleep(purple("You were saved by Solomon Train!"), 1)
                 return other.take_damage(other.hp, other)
