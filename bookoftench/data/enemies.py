@@ -97,7 +97,7 @@ Enemies = [
     {'name': PARTY_ANIMAL, 'hp': 95, 'weapons': [w.BROKEN_BOTTLE, w.POOL_CUE],
      'bounty': 170, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1, 'areas': [CITY]},
     {'name': SENTIENT_ROBOT, 'hp': 110, 'weapons': [w.LASER_BEAMS],
-     'bounty': 220, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 1.15, 'acc': 1.15, 'areas': [CITY]},
+     'bounty': 220, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 1.11, 'acc': 1.11, 'areas': [CITY]},
     {'name': SLEEPWALKER, 'hp': 95, 'weapons': [w.PILLOW, w.SHOTGUN],
      'bounty': 130, 'coins': 20, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 0.75, 'areas': [CITY]},
 
@@ -122,7 +122,7 @@ Enemies = [
     {'name': BIRDER, 'hp': 75, 'weapons': [w.TRIPOD, w.BINOCULARS, w.PEPPER_SPRAY],
      'bounty': 125, 'coins': 30, 'type': NORMAL, 'flee': 1, 'strength': 0.70, 'acc': 0.75, 'areas': [FOREST]},
     {'name': DOOMSDAY_PREPPER, 'hp': 95, 'weapons': [w.KNIFE, w.PISTOL],
-     'bounty': 180, 'coins': 55, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1.15, 'areas': [FOREST]},
+     'bounty': 180, 'coins': 55, 'type': NORMAL, 'flee': 1, 'strength': 1.1, 'acc': 1.13, 'areas': [FOREST]},
     {'name': FERAL_PHILOSOPHER, 'hp': 85, 'weapons': [w.CANE, w.PISTOL, w.SCYTHE, w.HARDCOVER_BOOK],
      'bounty': 155, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 0.9, 'acc': 1, 'areas': [FOREST]},
     {'name': FORAGER, 'hp': 90, 'weapons': [w.KNIFE, w.SICKLE, w.BEAR_SPRAY],
@@ -130,23 +130,23 @@ Enemies = [
     {'name': MUSHROOM_HUNTER, 'hp': 100, 'weapons': [w.KNIFE, w.SICKLE, w.BEAR_SPRAY],
      'bounty': 145, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [FOREST]},
     {'name': SURVIVALIST, 'hp': 100, 'weapons': [w.SURVIVAL_KNIFE, w.LONGBOW, w.BRANCH_SPEAR],
-     'bounty': 170, 'coins': 20, 'type': NORMAL, 'flee': 1, 'strength': 1.15, 'acc': 1.1, 'areas': [FOREST]},
+     'bounty': 170, 'coins': 20, 'type': NORMAL, 'flee': 1, 'strength': 1.13, 'acc': 1.1, 'areas': [FOREST]},
     {'name': TELEPATHIC_MUTE, 'hp': 90, 'weapons': [w.SCYTHE, w.SLINGSHOT, w.CHILI_POWDER],
      'bounty': 170, 'coins': 40, 'type': NORMAL, 'flee': 1, 'strength': 0.85, 'acc': 1.05, 'areas': [FOREST]},
 
     # --- original ---
     {'name': BIGFOOT_IMPERSONATOR, 'hp': 110, 'weapons': [w.WOODEN_CLUB, w.BRANCH_SPEAR, w.CLAWS, w.BEAR_SPRAY],
-     'bounty': 190, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.15, 'acc': 1, 'areas': [FOREST]},
+     'bounty': 190, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.14, 'acc': 1, 'areas': [FOREST]},
     {'name': DISGRACED_EXILE, 'hp': 85, 'weapons': [w.KNIFE, w.HATCHET, w.SHOVEL, w.TROWEL],
      'bounty': 150, 'coins': 25, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [CAVE, FOREST, SWAMP]},
     {'name': HIKER, 'hp': 90, 'weapons': [w.TREKKING_POLE, w.SURVIVAL_KNIFE, w.BEAR_SPRAY],
      'bounty': 115, 'coins': 30, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1, 'areas': [FOREST]},
     {'name': HUNTER, 'hp': 100, 'weapons': [w.KNIFE, w.RIFLE, w.BEAR_SPRAY, w.LONGBOW],
-     'bounty': 175, 'coins': 45, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.15, 'areas': [FOREST]},
+     'bounty': 175, 'coins': 45, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.13, 'areas': [FOREST]},
     {'name': PARK_RANGER, 'hp': 95, 'weapons': [w.FLARE_GUN, w.KNIFE, w.BEAR_SPRAY, w.MACHETE, w.LONGBOW],
-     'bounty': 165, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.15, 'areas': [FOREST]},
+     'bounty': 165, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.12, 'areas': [FOREST]},
     {'name': POACHER, 'hp': 95, 'weapons': [w.CROSSBOW, w.MACHETE, w.KNIFE, w.COMPOUND_BOW],
-     'bounty': 210, 'coins': 55, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.15, 'areas': [FOREST]},
+     'bounty': 210, 'coins': 55, 'type': NORMAL, 'flee': 1, 'strength': 1, 'acc': 1.13, 'areas': [FOREST]},
 
     # ========================
     #        CAVE ENEMIES
@@ -167,7 +167,7 @@ Enemies = [
     {'name': ANCIENT_MAN, 'hp': 85, 'weapons': [w.TORCH_CLUB, w.STONE_SPEAR, w.OBSIDIAN_KNIFE],
      'bounty': 150, 'coins': 25, 'type': NORMAL, 'flee': 1, 'strength': 0.85, 'acc': 0.9, 'areas': [CAVE]},
     {'name': HUMANOID_CAVE_CREATURE, 'hp': 110, 'weapons': [w.CLAWS, w.SCYTHE, w.BONE_CLUB],
-     'bounty': 215, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 1.15, 'acc': 1, 'areas': [CAVE]},
+     'bounty': 215, 'coins': 0, 'type': NORMAL, 'flee': 1, 'strength': 1.14, 'acc': 1, 'areas': [CAVE]},
     {'name': MINER, 'hp': 90, 'weapons': [w.FLASHLIGHT, w.KNIFE, w.PICKAXE],
      'bounty': 115, 'coins': 35, 'type': NORMAL, 'flee': 1, 'strength': 1.05, 'acc': 1, 'areas': [CAVE]},
     {'name': MOLE_PERSON, 'hp': 105, 'weapons': [w.CLAWS, w.PICKAXE, w.BONE_CLUB],
@@ -184,7 +184,7 @@ Enemies = [
     {'name': FORTUNE_TELLER, 'hp': 80, 'weapons': [w.KNIFE, w.PEPPER_SPRAY, w.PISTOL],
      'bounty': 140, 'coins': 60, 'type': NORMAL, 'flee': 1, 'strength': 0.80, 'acc': 0.9, 'areas': [SWAMP]},
     {'name': GATOR_WRESTLER, 'hp': 110, 'weapons': [w.FROG_GIG, w.SHOTGUN, w.SURVIVAL_KNIFE],
-     'bounty': 195, 'coins': 50, 'type': NORMAL, 'flee': 1, 'strength': 1.15, 'acc': 1, 'areas': [SWAMP]},
+     'bounty': 195, 'coins': 50, 'type': NORMAL, 'flee': 1, 'strength': 1.14, 'acc': 1, 'areas': [SWAMP]},
     {'name': MOONSHINER, 'hp': 85, 'weapons': [w.SWITCHBLADE, w.SHOTGUN, w.NAIL_GUN],
      'bounty': 170, 'coins': 70, 'type': NORMAL, 'flee': 1, 'strength': 0.95, 'acc': 1.1, 'areas': [SWAMP]},
     {'name': SMUGGLER, 'hp': 90, 'weapons': [w.KNIFE, w.INJECTION_NEEDLE, w.POCKET_SAND, w.PISTOL],
@@ -266,7 +266,7 @@ Well, let's have at it then."""
 Final_Boss = {
     'name': DENNY_BILTMORE,
     'hp': 325, 'weapons': [w.BRASS_KNUCKLES, w.REVOLVER, w.SHOTGUN, w.CANE],
-    'bounty': 0, 'type': FINAL_BOSS, 'flee': 1, 'strength': 1.2, 'acc': 1.2, 'theme': audio.FINAL_BOSS_THEME,
+    'bounty': 0, 'type': FINAL_BOSS, 'flee': 1, 'strength': 1.2, 'acc': 1.15, 'theme': audio.FINAL_BOSS_THEME,
     'preamble': [{'text': text, 'color': Colors.RED, 'sleep': 4}
                                                   for text in _biltmore_preamble_lines.split('\n')],
     'random_dialogue': [{
