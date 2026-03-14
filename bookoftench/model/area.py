@@ -97,6 +97,8 @@ class Area:
         enemy.strength = enemy.strength + random.uniform(-0.03, 0.03)
         enemy.acc = enemy.acc + random.uniform(-0.03, 0.03)
         enemy.coins = max(0, enemy.coins + random.randint(-5, 5))
+        if random.random() < 0.20:
+            enemy.coins += round(enemy.coins * random.uniform(0.05, 0.25))
         enemy_lines = enemy.get_enemy_encounter_line() #  get the line before mutating enemy.name
         elite_chance = min(0.15, max(0.0, (player_level - 1) * 0.03))
 
