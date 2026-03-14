@@ -50,7 +50,7 @@ class BuildComponent(LabeledSelectionComponent):
         ]
 
     def display_options(self) -> None:
-        print_and_sleep("What be your build?", 2)
+        print_and_sleep("What be your build?", 1.5)
 
         for component in self.selection_components:
             component.display_options()
