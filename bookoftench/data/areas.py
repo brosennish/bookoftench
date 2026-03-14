@@ -2,7 +2,7 @@ from enum import Enum
 
 from . import audio, enemies
 from bookoftench.data.enemies import Enemies
-from .components import ActionMenuDefaults, COFFEE_SHOP, HOSPITAL, OFFICER, OCCULTIST, SHAMAN, WIZARD
+from .components import ActionMenuDefaults, COFFEE_SHOP, HOSPITAL, OFFICER, OCCULTIST, SHAMAN, WIZARD, CASINO, BANK
 
 # Constants
 CAVE = "Cave"
@@ -24,7 +24,7 @@ Areas = [
     {'name': CITY,
      'enemies': [i['name'] for i in Enemies if CITY in i['areas']],
      'boss_name': enemies.THE_MAYOR, 'theme': audio.CITY_THEME,
-     'actions_menu': {'pages': [ActionMenuDefaults.page_one, [*ActionMenuDefaults.page_two, COFFEE_SHOP, HOSPITAL]]},
+     'actions_menu': {'pages': [ActionMenuDefaults.page_one, [*ActionMenuDefaults.page_two, BANK, CASINO, COFFEE_SHOP, HOSPITAL]]},
      'encounters': [{'type': EncounterType.POST_KILL, 'component': OFFICER}]},
     {'name': FOREST,
      'enemies': [i['name'] for i in Enemies if FOREST in i['areas']],

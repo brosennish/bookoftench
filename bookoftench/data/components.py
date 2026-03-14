@@ -43,7 +43,7 @@ class StartGameMenuDefaults:
 
 class ActionMenuDefaults:
     page_one: List[str] = [SEARCH, USE_ITEM, EQUIP_WEAPON, SHOP, TRAVEL]
-    page_two: List[str] = [BANK, CASINO, OVERVIEW]
+    page_two: List[str] = [OVERVIEW]
 
 
 class OverviewMenuDefaults:
