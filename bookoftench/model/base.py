@@ -79,8 +79,8 @@ class WeaponBase(ABC):
         return f"{cyan(self.name)}\n{dim(' | ').join([
             f"{dim("Dmg:")} {red(f"{self.damage:<2}")}",
             f"{dim("Acc:")} {yellow(f"{self.accuracy:<4}")}",
+            f"{dim("Var:")} {f"{red(f"{self.var}")}"}",
             f"{dim("Crit:")} {yellow(f"{self.crit:<4}")}",
-            f"{dim("Var:")} {f"{blue(f"{self.var}")}"}",
             f"{dim("Uses:")} {self.format_uses()}",
         ])}"
 
