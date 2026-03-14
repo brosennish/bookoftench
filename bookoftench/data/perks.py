@@ -9,6 +9,7 @@ BEER_GOGGLES = "Beer Goggles"
 BROWNMAIL = "Brownmail"
 BROWN_FRIDAY = "Brown Friday"
 BULLETPROOF = "Bulletproof"
+CASTING_RANGE = "Casting Range"
 CATFISH_BURGLAR = "Catfish Burglar"
 CROWS_NEST = "Crow's Nest"
 DEATH_CAN_WAIT = "Death Can Wait"
@@ -119,6 +120,11 @@ Perks = [
         'description': "Take 10% less damage from guns",
         'wrapper_type': WrapperType.PERCENT_CHANGE,
         'wrapper_config': {'change': -10}
+    },
+    {
+        'name': CASTING_RANGE,
+        'cost': 55,
+        'description': "+1.5% accuracy each level up",
     },
     {
         'name': CATFISH_BURGLAR,
