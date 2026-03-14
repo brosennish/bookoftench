@@ -132,7 +132,7 @@ class BankDepositEvent(Event):
 class BankWithdrawalEvent(Event):
     def __init__(self, amount: int):
         super().__init__(EventType.WITHDRAW, lambda:
-        print_and_sleep(f"You withdrew {green(amount)} of coin from the bank.", 1))
+        print_and_sleep(f"You withdrew {green(amount)} of coin (before any applicable fees) from the bank.", 1.5))
 
 
 class LevelUpEvent(Event):
