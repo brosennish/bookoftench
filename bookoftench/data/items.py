@@ -4,6 +4,7 @@ from .areas import CITY, CAVE, FOREST, SWAMP
 ABANDONED_EYEBALLS = "Abandoned Eyeballs"
 ALIEN_REMAINS = "Alien Remains"
 ANTS_ON_A_LOG = "Ants On A Log"
+ASHWAGANDHA_GUMMIES = "Ashwagandha Gummies"
 BAT_MATTER ="Bat Matter"
 BERRIES = "Berries"
 BONE_MEAL = "Bone Meal"
@@ -16,6 +17,8 @@ CRAY = "Cray"
 EAGLE_EGG = "Eagle Egg"
 EGG_ON_EGGS = "Egg on Eggs"
 EGGS_ON_EGG = "Eggs on Egg"
+ENERGY_CRYSTAL = "Energy Crystal"
+FERMENTED_CELERY_MILK = "Fermented Celery Milk"
 FROZEN_WAFFLE = "Frozen Waffle"
 GATOR_TESTICLES = "Gator Testicles"
 GIANT_TENTACLE = "Giant Tentacle"
@@ -34,6 +37,7 @@ MYSTICAL_MUSHROOMS = "Mystical Mushrooms"
 OCEAN_MAN_LUNCH_BOX = "Ocean Man Lunch Box"
 ORGANIC_SLUDGE = "Organic Sludge"
 OWL_EGG = "Owl Egg"
+OXYGENATED_BIOFILM = "Oxygenated Biofilm"
 PANTHER_LOINS = "Panther Loins"
 SMOKE_BOMB = "Smoke Bomb"
 SOMEWHAT_SPICY_NOODLES = "Somewhat Spicy Noodles"
@@ -109,4 +113,10 @@ Items = [
     {'name': PANTHER_LOINS, 'type': NORMAL, 'hp': 37, 'cost': 38, 'sell_value': 16, 'areas': [FOREST, SWAMP], 'desc': None},
     {'name': SUSPICIOUS_GUMBO, 'type': NORMAL, 'hp': 39, 'cost': 41, 'sell_value': 16, 'areas': [FOREST, SWAMP], 'desc': None},
     {'name': TENCH_FILET, 'type': NORMAL, 'hp': 40, 'cost': 41, 'sell_value': 17, 'areas': [CITY], 'desc': None},
+
+    # --- Tier 6 (50 HP) ---
+    {'name': ASHWAGANDHA_GUMMIES, 'type': NORMAL, 'hp': 50, 'cost': 52, 'sell_value': 23, 'areas': [CITY, FOREST, SWAMP], 'desc': None},
+    {'name': ENERGY_CRYSTAL, 'type': NORMAL, 'hp': 50, 'cost': 53, 'sell_value': 24, 'areas': [CAVE, CITY, SWAMP], 'desc': None},
+    {'name': FERMENTED_CELERY_MILK, 'type': NORMAL, 'hp': 50, 'cost': 51, 'sell_value': 22, 'areas': [CITY, FOREST, SWAMP], 'desc': None},
+    {'name': OXYGENATED_BIOFILM, 'type': NORMAL, 'hp': 50, 'cost': 52, 'sell_value': 23, 'areas': [CAVE], 'desc': None},
 ]

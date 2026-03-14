@@ -361,14 +361,7 @@ class Player(Combatant):
             self.max_hp += 5
         self.hp = self.max_hp
 
-        item_reward = None
-        if len(self.items) < self.max_items:
-            filtered: List[Item] = [item for item in load_items() if item.name not in self.items]
-            if filtered:
-                item_reward = random.choice(filtered)
-                self.items[item_reward.name] = item_reward
-
-        event_logger.log_event(LevelUpEvent(self.lvl, old_max, self.max_hp, item_reward, cash_reward))
+        event_logger.log_event(LevelUpEvent(self.lvl, old_max, self.max_hp, cash_reward))
 
         # check for illness death level match
         if self.lvl == self.illness_death_lvl:
