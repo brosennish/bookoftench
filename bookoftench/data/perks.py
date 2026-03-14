@@ -66,9 +66,8 @@ class WrapperIndices:
 Perks = [
     {
         'name': AMBERJACKED,
-        'cost': 69,
-        'description': "+5% strength each level up",
-        'wrapper_type': WrapperType.PERCENT_CHANGE, 'wrapper_config': {'change': 5},
+        'cost': 55,
+        'description': "+3% strength each level up",
     },
     {
         'name': AMBROSE_BLADE,
