@@ -75,10 +75,10 @@ class WeaponBase(ABC):
         else:
             return f"{self.uses}"
 
-    def get_complete_format(self) -> str:
+    def get_complete_format(self, strength: float | None, acc: float | None) -> str:
         return f"{cyan(self.name)}\n{dim(' | ').join([
-            f"{dim("Dmg:")} {red(f"{self.damage:<2}")}",
-            f"{dim("Acc:")} {yellow(f"{self.accuracy:<4}")}",
+            f"{dim("Dmg:")} {red(f"{round(self.damage * strength if strength else self.damage):<2}")}",
+            f"{dim("Acc:")} {yellow(f"{round(self.accuracy * acc if acc else self.accuracy):<4}")}",
             f"{dim("Var:")} {f"{red(f"{self.var}")}"}",
             f"{dim("Crit:")} {yellow(f"{self.crit:<4}")}",
             f"{dim("Uses:")} {self.format_uses()}",
