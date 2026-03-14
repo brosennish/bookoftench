@@ -11,7 +11,7 @@ from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, IOU
 from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM, TENCH_GENES, \
-    WrapperIndices, AMBERJACKED
+    WrapperIndices, AMBERJACKED, CASTING_RANGE
 from bookoftench.data.weapons import BARE_HANDS, KNIFE, MELEE, RANGED, BLADED, LASER_BEAMS, VOODOO_STAFF, CLAWS
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.illness import Illness
@@ -306,6 +306,10 @@ class Player(Combatant):
         self.strength += round(amount, 2)
         print_and_sleep(cyan(f"Your strength increased by {amount}!"), 1)
 
+    def gain_accuracy(self, amount: float) -> None:
+        self.acc += round(amount, 2)
+        print_and_sleep(cyan(f"Your accuracy increased by {amount}!"), 1)
+
     @staticmethod
     @attach_perk(INTRO_TO_TENCH, value_description="xp gained")
     @attach_perk(AP_TENCH_STUDIES, WrapperIndices.ApTenchStudies.BATTLE_XP, value_description="xp gained")
@@ -347,6 +351,10 @@ class Player(Combatant):
         if perk_is_active(AMBERJACKED):
             if self.strength < 1.25:
                 self.gain_strength(self.strength * 0.03)
+
+        if perk_is_active(CASTING_RANGE):
+            if self.acc < 1.15:
+                self.gain_accuracy(self.acc * 0.015)
 
         old_max = self.max_hp
         if self.max_hp < 150:
