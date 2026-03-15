@@ -13,7 +13,7 @@ from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABL
 from bookoftench.data.enemies import Enemy_Adjectives
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
-from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss, load_enemies
+from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
 from .perk import perk_is_active
 from .shop import Shop
 from ..data.perks import SHERLOCK_TENCH
@@ -58,6 +58,7 @@ class Area:
 
     shop: Shop = field(default_factory=Shop)
     search_probabilities: Dict[str, int] = field(default_factory=lambda: _search_defaults)
+    event_probabilities: Dict[str, int] = field(default_factory=lambda: _event_defaults)
     actions_menu: AreaActions = field(default_factory=AreaActions.defaults)
     encounters: List[AreaEncounter] = field(default_factory=list)
 

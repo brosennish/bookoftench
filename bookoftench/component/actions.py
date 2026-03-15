@@ -11,7 +11,7 @@ from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
-    OVERVIEW, INFO, BUILD
+    OVERVIEW, INFO, BUILD, DISCOVER_SPECIAL
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from bookoftench.data.items import TENCH_FILET
 from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT
@@ -27,6 +27,7 @@ from bookoftench.model.util import get_battle_status_view, display_player_achiev
 from bookoftench.model.weapon import load_discoverable_weapons, load_weapons
 from bookoftench.ui import green, purple, yellow, dim, red, cyan, blue
 from bookoftench.util import print_and_sleep
+from . import SpecialEvents
 from .base import LabeledSelectionComponent, SelectionBinding
 from .encounters import PostKillEncounters
 from .menu import OverviewMenu
@@ -91,8 +92,8 @@ class Search(RandomChoiceComponent):
     @staticmethod
     @register_component(DISCOVER_SPECIAL)
     @functional_component(state_dependent=True)
-    def _discover_discoverable(game_state: GameState):
-        player = game_state.player
+    def _discover_special(game_state: GameState):
+        SpecialEvents(RandomChoiceComponent(game_state)).run()
 
     @staticmethod
     @register_component(DISCOVER_DISCOVERABLE)

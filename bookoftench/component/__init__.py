@@ -12,6 +12,7 @@ from .officer import *
 from .settings import *
 from .shaman import *
 from .shop import *
+from .special_events import *
 from .storage import *
 from .wizard import *
 
