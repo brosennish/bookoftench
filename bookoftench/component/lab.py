@@ -64,7 +64,7 @@ def conduct_experiment(player: Player):
 
     if random.random() < 0.33:
         original = player.max_hp
-        amount = random.randint(-3, 3)
+        amount = random.randint(-1, 1)
         player.max_hp += amount
         if player.hp > player.max_hp:
             player.hp = player.max_hp
@@ -77,7 +77,7 @@ def conduct_experiment(player: Player):
 
     if random.random() < 0.27:
         original = player.strength
-        amount = random.uniform(-0.03, 0.03)
+        amount = random.uniform(-0.01, 0.01)
         if amount != 0:
             player.strength = round(player.strength + amount, 2)
             if amount > 0:
@@ -89,7 +89,7 @@ def conduct_experiment(player: Player):
 
     if random.random() < 0.27:
         original = player.acc
-        amount = random.uniform(-0.03, 0.03)
+        amount = random.uniform(-0.01, 0.01)
         if amount != 0:
             player.acc = round(player.acc + amount, 2)
             if amount > 0:
@@ -99,7 +99,7 @@ def conduct_experiment(player: Player):
                 print_and_sleep(yellow(f"Accuracy: {original} -> {player.acc}"), 1)
                 mutation = True
 
-    if random.random() < 0.16:
+    if random.random() < 0.06:
         original = player.lvl
         amount = random.randint(-1, 1)
         player.lvl += amount
@@ -113,7 +113,7 @@ def conduct_experiment(player: Player):
                 print_and_sleep(cyan(f"Level: {original} -> {player.lvl}"), 1)
                 mutation = True
 
-    if random.random() < 0.06:
+    if random.random() < 0.03:
         original = player.lives
         amount = 1
         if random.random() < 0.5:

@@ -89,6 +89,12 @@ class Search(RandomChoiceComponent):
                                                for name, prob in ep.items()])
 
     @staticmethod
+    @register_component(DISCOVER_SPECIAL)
+    @functional_component(state_dependent=True)
+    def _discover_discoverable(game_state: GameState):
+        player = game_state.player
+
+    @staticmethod
     @register_component(DISCOVER_DISCOVERABLE)
     @functional_component(state_dependent=True)
     def _discover_discoverable(game_state: GameState):
