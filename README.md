@@ -10,7 +10,7 @@ Terminal-based roguelite RPG built in Python.
 - State-driven player and enemy domain models  
 - Modular component → service → model layering  
 - Persistence (save/load) system  
-- Audio integration and curses-based terminal UI  
+- Audio integration and terminal UI  
 
 Gameplay flow, state mutation, and side-effects are separated to maintain architectural control as the project grows.
 
