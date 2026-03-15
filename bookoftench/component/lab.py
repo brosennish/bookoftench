@@ -26,7 +26,7 @@ class LabComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, bindings=[
             SelectionBinding('Y', "Yes", functional_component()(lambda: conduct_experiment(game_state.player))),
-            SelectionBinding('R', "Risks", ExperimentRisks),
+            SelectionBinding('R', "Risks?", ExperimentRisks),
             SelectionBinding('N', "No thanks", functional_component()(lambda: self._return())),
         ])
         self.leave = False
@@ -64,7 +64,7 @@ def conduct_experiment(player: Player):
 
     if random.random() < 0.33:
         original = player.max_hp
-        amount = random.randint(-8, 6)
+        amount = random.randint(-6, 5)
         player.max_hp += amount
         if player.hp > player.max_hp:
             player.hp = player.max_hp
@@ -77,25 +77,27 @@ def conduct_experiment(player: Player):
 
     if random.random() < 0.25:
         original = player.strength
-        amount = random.uniform(-0.08, 0.06)
-        player.strength = round(player.strength + amount, 2)
-        if amount > 0:
-            print_and_sleep(green(f"Strength: {original} -> {player.strength}"), 1)
-            mutation = True
-        elif amount < 0:
-            print_and_sleep(yellow(f"Strength: {original} -> {player.strength}"), 1)
-            mutation = True
+        amount = random.uniform(-0.06, 0.05)
+        if amount != 0:
+            player.strength = round(player.strength + amount, 2)
+            if amount > 0:
+                print_and_sleep(green(f"Strength: {original} -> {player.strength}"), 1)
+                mutation = True
+            elif amount < 0:
+                print_and_sleep(yellow(f"Strength: {original} -> {player.strength}"), 1)
+                mutation = True
 
     if random.random() < 0.25:
         original = player.acc
-        amount = random.uniform(-0.08, 0.06)
-        player.acc = round(player.acc + amount, 2)
-        if amount > 0:
-            print_and_sleep(green(f"Accuracy: {original} -> {player.acc}"), 1)
-            mutation = True
-        elif amount < 0:
-            print_and_sleep(yellow(f"Accuracy: {original} -> {player.acc}"), 1)
-            mutation = True
+        amount = random.uniform(-0.06, 0.05)
+        if amount != 0:
+            player.acc = round(player.acc + amount, 2)
+            if amount > 0:
+                print_and_sleep(green(f"Accuracy: {original} -> {player.acc}"), 1)
+                mutation = True
+            elif amount < 0:
+                print_and_sleep(yellow(f"Accuracy: {original} -> {player.acc}"), 1)
+                mutation = True
 
     if random.random() < 0.18:
         original = player.lvl
