@@ -18,6 +18,7 @@ EQUIP_WEAPON = "Equip Weapon"
 FINAL_BOSS_FIGHT = purple("BATTLE DENNY BILTMORE")
 HOSPITAL = "Hospital"
 INFO = "Info"
+LAB = "Lab"
 LOAD_GAME = "Load Game"
 NEW_GAME = "New Game"
 OCCULTIST = "Occultist"

@@ -37,6 +37,13 @@ class GameState:
     areas: List[Area] = field(default_factory=load_areas)
     current_area: Area = None
 
+    casino_active: bool = field(default=True)
+    coffee_active: bool = field(default=True)
+    lab_active: bool = field(default=True)
+    occultist_active: bool = field(default=True)
+    shaman_active: bool = field(default=True)
+    wizard_active: bool = field(default=True)
+
     wench_area: Area = None
 
     found_item: Item = None
