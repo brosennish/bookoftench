@@ -1,7 +1,7 @@
 import random
 
 from bookoftench.model.game_state import GameState
-from bookoftench.ui import blue, cyan, green, yellow, red
+from bookoftench.ui import blue, cyan, green, yellow, red, dim
 from bookoftench.util import print_and_sleep
 from .base import LabeledSelectionComponent, SelectionBinding, \
     GatekeepingComponent, functional_component, TextDisplayingComponent
@@ -130,4 +130,4 @@ def conduct_experiment(player: Player):
             event_logger.log_event(PlayerDeathEvent(player.lives))
 
     if not mutation and player.lives > 0:
-        print_and_sleep(blue("Experiment was a bust."), 1)
+        print_and_sleep(dim("No mutations occurred."), 1)

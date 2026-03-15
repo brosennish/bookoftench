@@ -19,7 +19,7 @@ class DiscoverSpecial(RandomChoiceComponent):
     @staticmethod
     @register_component(THREE_HOLES)
     @functional_component(state_dependent=True)
-    def _discover_discoverable(game_state: GameState):
+    def _three_holes(game_state: GameState):
         player = game_state.player
         area = game_state.current_area
         good_hole = random.choice([i for i in Items if game_state.current_area in i.areas])
