@@ -64,7 +64,7 @@ def conduct_experiment(player: Player):
 
     if random.random() < 0.33:
         original = player.max_hp
-        amount = random.randint(-6, 5)
+        amount = random.randint(-3, 3)
         player.max_hp += amount
         if player.hp > player.max_hp:
             player.hp = player.max_hp
@@ -75,9 +75,9 @@ def conduct_experiment(player: Player):
             print_and_sleep(yellow(f"Max HP: {original} -> {player.max_hp}"), 1)
             mutation = True
 
-    if random.random() < 0.25:
+    if random.random() < 0.27:
         original = player.strength
-        amount = random.uniform(-0.06, 0.05)
+        amount = random.uniform(-0.03, 0.03)
         if amount != 0:
             player.strength = round(player.strength + amount, 2)
             if amount > 0:
@@ -87,9 +87,9 @@ def conduct_experiment(player: Player):
                 print_and_sleep(yellow(f"Strength: {original} -> {player.strength}"), 1)
                 mutation = True
 
-    if random.random() < 0.25:
+    if random.random() < 0.27:
         original = player.acc
-        amount = random.uniform(-0.06, 0.05)
+        amount = random.uniform(-0.03, 0.03)
         if amount != 0:
             player.acc = round(player.acc + amount, 2)
             if amount > 0:
@@ -99,9 +99,9 @@ def conduct_experiment(player: Player):
                 print_and_sleep(yellow(f"Accuracy: {original} -> {player.acc}"), 1)
                 mutation = True
 
-    if random.random() < 0.18:
+    if random.random() < 0.16:
         original = player.lvl
-        amount = random.randint(-1, 2)
+        amount = random.randint(-1, 1)
         player.lvl += amount
         if player.lvl <= 0:
             player.lvl = 1
@@ -113,10 +113,10 @@ def conduct_experiment(player: Player):
                 print_and_sleep(cyan(f"Level: {original} -> {player.lvl}"), 1)
                 mutation = True
 
-    if random.random() < 0.08:
+    if random.random() < 0.06:
         original = player.lives
         amount = 1
-        if random.random() < 0.55:
+        if random.random() < 0.5:
             amount = -1
         player.lives += amount
         if player.lives >= 1:
