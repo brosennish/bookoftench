@@ -27,7 +27,6 @@ from bookoftench.model.util import get_battle_status_view, display_player_achiev
 from bookoftench.model.weapon import load_discoverable_weapons, load_weapons
 from bookoftench.ui import green, purple, yellow, dim, red, cyan, blue
 from bookoftench.util import print_and_sleep
-from . import SpecialEvents
 from .base import LabeledSelectionComponent, SelectionBinding
 from .encounters import PostKillEncounters
 from .menu import OverviewMenu

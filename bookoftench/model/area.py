@@ -9,7 +9,7 @@ from bookoftench.data import Areas
 from bookoftench.data.areas import EncounterType
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
-    SPAWN_ENEMY, DISCOVER_SPECIAL
+    SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES
 from bookoftench.data.enemies import Enemy_Adjectives
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
@@ -28,9 +28,7 @@ _search_defaults = {
 }
 
 _event_defaults = {
-    EVENT_1: 30,
-    EVENT_2: 30,
-    EVENT_3: 40,
+    THREE_HOLES: 100,
 }
 
 @dataclass
