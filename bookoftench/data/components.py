@@ -13,6 +13,7 @@ CRYPTO_EXCHANGE = "Crypto Exchange (Experimental)"
 DISCOVER_DISCOVERABLE = "Discover Discoverable"
 DISCOVER_ITEM = "Discover Item"
 DISCOVER_PERK = "Discover Perk"
+DISCOVER_SPECIAL = "Discover Special"
 DISCOVER_WEAPON = "Discover Weapon"
 EQUIP_WEAPON = "Equip Weapon"
 FINAL_BOSS_FIGHT = purple("BATTLE DENNY BILTMORE")
