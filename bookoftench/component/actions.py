@@ -89,11 +89,6 @@ class Search(RandomChoiceComponent):
         super().__init__(game_state, bindings=[ProbabilityBinding(prob, get_registered_component(name))
                                                for name, prob in ep.items()])
 
-    @staticmethod
-    @register_component(DISCOVER_SPECIAL)
-    @functional_component(state_dependent=True)
-    def _discover_special(game_state: GameState):
-        SpecialEvents(RandomChoiceComponent(game_state)).run()
 
     @staticmethod
     @register_component(DISCOVER_DISCOVERABLE)
