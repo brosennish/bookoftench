@@ -2,12 +2,13 @@ import random
 
 from bookoftench import event_logger
 from bookoftench.component import RandomChoiceComponent, register_component, ProbabilityBinding, \
-    get_registered_component, functional_component
+    get_registered_component, functional_component, SwapFoundItemYN
 from bookoftench.data import Items
 from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES
 from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent
-from bookoftench.ui import yellow, dim, purple, red
+from bookoftench.model.item import load_items
+from bookoftench.ui import yellow, dim, purple, red, cyan
 from bookoftench.util import print_and_sleep
 
 
@@ -30,9 +31,9 @@ class DiscoverSpecial(RandomChoiceComponent):
         hole_3 = holes[2]
 
         print_and_sleep(purple("""You come upon three holes in the ground.
-        They are far too deep, and too dark, to see what they are hiding.
-        A ghastly man whispers to you that you may only reach into one of the holes.
-        Choose wisely."""), 2)
+They are far too deep, and too dark, to see what they are hiding.
+A ghastly man whispers to you that you may only reach into one of the holes.
+Choose wisely.\n"""), 3)
 
         while True:
             choice = input("[1] Hole 1\n[2] Hole 2\n[3] Hole 3\n\nPlease enter a selection (r to return)\n> ").strip().lower()
@@ -40,32 +41,41 @@ class DiscoverSpecial(RandomChoiceComponent):
                 break
             elif choice == "r":
                 print_and_sleep(purple("You decide against your better judgement."), 1)
-                return
+                return None
             else:
                 print_and_sleep(yellow("Invalid choice."), 1)
                 continue
 
 
-        if choice == 1:
+        if choice == "1":
             choice = hole_1
-        elif choice == 2:
+        elif choice == "2":
             choice = hole_2
-        elif choice == 3:
+        elif choice == "3":
             choice = hole_3
 
         if choice == "good":
-            item = random.choice([i for i in Items if game_state.current_area in i.areas])
-            player.add_item(item)
+            item = random.choice([i for i in load_items() if game_state.current_area.name in i.areas])
+            print_and_sleep(cyan(f"You found {item.name}!"), 1)
+
+            if player.add_item(item):
+                print_and_sleep(cyan(f"{item.name} added to sack."), 1)
+                return None
+            else:
+                return SwapFoundItemYN(game_state).run()
+
         elif choice == "bad":
             original = player.hp
             damage = min(random.randint(1, 15), original)
             player.hp -= damage
-            print_and_sleep(red(f"You were ravaged by an unnatural creature causing {damage} damage."), 1)
+            print_and_sleep(red(f"You were ravaged by an unnatural creature and lost {damage} hp."), 2)
             if player.hp == 0:
                 player.lives -= 1
                 event_logger.log_event(PlayerDeathEvent(player.lives))
+            return None
 
         else:
             print_and_sleep(yellow(dim("You came up dry.")), 1)
+            return None
 
 

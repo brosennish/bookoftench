@@ -19,12 +19,12 @@ from .shop import Shop
 from ..data.perks import SHERLOCK_TENCH
 
 _search_defaults = {
-    DISCOVER_PERK: 1,
-    DISCOVER_ITEM: 2,
-    DISCOVER_WEAPON: 2,
-    DISCOVER_DISCOVERABLE: 48,
-    DISCOVER_SPECIAL: 8,
-    SPAWN_ENEMY: 30
+    DISCOVER_PERK: 0,
+    DISCOVER_ITEM: 0,
+    DISCOVER_WEAPON: 0,
+    DISCOVER_DISCOVERABLE: 0,
+    DISCOVER_SPECIAL: 100,
+    SPAWN_ENEMY: 0
 }
 
 _event_defaults = {

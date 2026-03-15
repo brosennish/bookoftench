@@ -51,20 +51,20 @@ class ExperimentRisks(TextDisplayingComponent):
         super().__init__(game_state,
                          next_component=LabComponent,
                          display_callback=lambda _: print_and_sleep(yellow(f"""Risk of Mutation:
-Max HP   : 29%
-Strength : 27%
-Accuracy : 27%
-Level    : 6%
-Lives    : 3%\n""")))
+Max HP   : 27%
+Strength : 29%
+Accuracy : 29%
+Level    : 8%
+Lives    : 4%\n""")))
 
 
 def conduct_experiment(player: Player):
     player.coins += 1
     mutation = False
 
-    if random.random() < 0.29:
+    if random.random() < 0.27:
         original = player.max_hp
-        amount = random.randint(-2, 2)
+        amount = random.randint(-3, 2)
         player.max_hp += amount
         if player.hp > player.max_hp:
             player.hp = player.max_hp
@@ -75,9 +75,9 @@ def conduct_experiment(player: Player):
             print_and_sleep(yellow(f"Max HP: {original} -> {player.max_hp}"), 1)
             mutation = True
 
-    if random.random() < 0.27:
+    if random.random() < 0.29:
         original = player.strength
-        amount = random.uniform(-0.02, 0.02)
+        amount = random.uniform(-0.03, 0.02)
         player.strength = round(player.strength + amount, 2)
         if original != player.strength:
             if amount > 0:
@@ -87,9 +87,9 @@ def conduct_experiment(player: Player):
                 print_and_sleep(yellow(f"Strength: {original} -> {player.strength}"), 1)
                 mutation = True
 
-    if random.random() < 0.27:
+    if random.random() < 0.29:
         original = player.acc
-        amount = random.uniform(-0.02, 0.02)
+        amount = random.uniform(-0.03, 0.02)
         player.acc = round(player.acc + amount, 2)
         if original != player.acc:
             if amount > 0:
@@ -99,7 +99,7 @@ def conduct_experiment(player: Player):
                 print_and_sleep(yellow(f"Accuracy: {original} -> {player.acc}"), 1)
                 mutation = True
 
-    if random.random() < 0.06:
+    if random.random() < 0.08:
         original = player.lvl
         amount = random.randint(-1, 1)
         player.lvl += amount
@@ -112,11 +112,14 @@ def conduct_experiment(player: Player):
             elif amount < 0:
                 print_and_sleep(cyan(f"Level: {original} -> {player.lvl}"), 1)
                 mutation = True
+        if player.lvl == player.illness_death_lvl:
+            player.lives -= 1
+            event_logger.log_event(PlayerDeathEvent(player.lives))
 
-    if random.random() < 0.03:
+    if random.random() < 0.04:
         original = player.lives
         amount = 1
-        if random.random() < 0.5:
+        if random.random() < 0.51:
             amount = -1
         player.lives += amount
         if player.lives >= 1:
