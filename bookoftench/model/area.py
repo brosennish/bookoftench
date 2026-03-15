@@ -27,6 +27,11 @@ _search_defaults = {
     SPAWN_ENEMY: 30
 }
 
+_event_defaults = {
+    EVENT_1: 30,
+    EVENT_2: 30,
+    EVENT_3: 40,
+}
 
 @dataclass
 class AreaActions:
