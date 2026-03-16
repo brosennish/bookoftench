@@ -30,9 +30,9 @@ class DiscoverSpecial(RandomChoiceComponent):
         hole_3 = holes[2]
 
         print_and_sleep(purple("""You come upon three holes in the ground.
-They are far too deep, and too dark, to see what they are hiding.
-A ghastly man whispers to you that you may only reach into one of the holes.
-Choose wisely.\n"""), 3)
+They are far too deep, and too dark, to see what's inside.
+A ghastly man whispers that you may only reach into one of the holes.
+Choose wisely.\n\n"""), 3)
 
         while True:
             choice = input("[1] Hole 1\n[2] Hole 2\n[3] Hole 3\n\nPlease enter a selection (r to return)\n> ").strip().lower()
@@ -65,16 +65,16 @@ Choose wisely.\n"""), 3)
 
         elif choice == "bad":
             original = player.hp
-            damage = min(random.randint(1, 15), original)
+            damage = min(random.randint(1, 20), original)
             player.hp -= damage
-            print_and_sleep(red(f"You were ravaged by an unnatural creature and lost {damage} hp."), 2)
+            print_and_sleep(red(f"You were ravaged by an unseen creature and lost {damage} hp."), 2)
             if player.hp == 0:
                 player.lives -= 1
                 event_logger.log_event(PlayerDeathEvent(player.lives))
             return None
 
         else:
-            print_and_sleep(yellow(dim("You came up dry.")), 1)
+            print_and_sleep(dim("You came up dry."), 1)
             return None
 
 
