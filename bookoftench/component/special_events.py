@@ -26,11 +26,10 @@ class DiscoverSpecial(RandomChoiceComponent):
     def _three_holes(game_state: GameState):
         player = game_state.player
 
-        print_and_sleep(purple("""A man approaches you wielding a rusty revolver.
-He looks you up and down, and then again.
-May I interest you in a good, old-fashioned game of Shebokken Roulette?
-Six chambers, one bullet. We shoot each other, eyes closed.
-Winner takes the coin, loser takes the bullet.\n\n"""), 6)
+        print_and_sleep(purple("A man approaches with a revolver...\n"), 2)
+
+        print_and_sleep(purple("""He looks you up and down, and then again.
+May I interest you in a good, old-fashioned game of Shebokken Roulette?\n\n"""), 3)
 
         wager = 0
         while True:
@@ -86,7 +85,7 @@ Winner takes the coin, loser takes the bullet.\n\n"""), 6)
             if chamber[chamber_index] == 1:
                 if shooter == player:
                     play_sound(PISTOL)
-                    print_and_sleep(purple(f"You shot the man and collected {wager} coins!"), 2)
+                    print_and_sleep(cyan(f"You shot the man and collected {wager} coins!"), 2)
                     player.gain_coins(wager)
                     player.gain_xp_other(min(wager, 20))
                     return None
@@ -95,7 +94,7 @@ Winner takes the coin, loser takes the bullet.\n\n"""), 6)
                     player.hp -= min(damage, player.hp)
                     play_sound(PISTOL)
                     print_and_sleep(red(f"The man shot you for {damage} damage!"), 2)
-                    print_and_sleep(yellow(f"You lost your wager of {wager} coins!"), 2)
+                    print_and_sleep(yellow(f"You lost your wager of {wager} coins."), 2)
                     player.coins -= wager
                     if player.hp == 0:
                         player.lives -= 1
@@ -103,33 +102,15 @@ Winner takes the coin, loser takes the bullet.\n\n"""), 6)
                     return None
             else:
                 if shooter == player:
-                    print_and_sleep(purple(f"You shot but the chamber was empty!"), 2)
+                    print_and_sleep(purple(f"You shot but the chamber was empty."), 2)
                 else:
-                    print_and_sleep(purple(f"The man shot but the chamber was empty!"), 2)
+                    print_and_sleep(purple(f"The man shot but the chamber was empty."), 2)
 
             chamber_index += 1
             if shooter == player_2:
                 shooter = player_1
             elif shooter == player_1:
                 shooter = player_2
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     @staticmethod
     @register_component(THREE_HOLES)
@@ -142,8 +123,9 @@ Winner takes the coin, loser takes the bullet.\n\n"""), 6)
         hole_2 = holes[1]
         hole_3 = holes[2]
 
-        print_and_sleep(purple("""You come upon three holes in the ground.
-They are far too deep, and too dark, to see what's inside.
+        print_and_sleep(purple("You come upon three holes in the ground...\n"), 2)
+
+        print_and_sleep(purple("""They are far too deep, and too dark, to see what's inside.
 A ghastly man whispers that you may only reach into one of the holes.
 Choose wisely.\n\n"""), 3)
 
@@ -196,9 +178,10 @@ Choose wisely.\n\n"""), 3)
     def _three_holes(game_state: GameState):
         player = game_state.player
 
-        print_and_sleep(purple("""A boy approaches you, dad's wallet in hand.
-He triple-tench-dares you to stare at the sun.
-He offers to pay 5 of coin per second.
+        print_and_sleep(purple("A boy approaches you, dad's wallet in hand...\n"), 2)
+
+        print_and_sleep(purple("""He triple-tench-dares you to stare at the sun.
+For every second, he will give you 5 of coin.
 What do you say?\n\n"""), 3)
 
         seconds = 0
