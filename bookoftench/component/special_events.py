@@ -3,7 +3,7 @@ import random
 from bookoftench import event_logger
 from bookoftench.component import RandomChoiceComponent, register_component, ProbabilityBinding, \
     get_registered_component, functional_component, SwapFoundItemYN
-from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES
+from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE
 from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent
 from bookoftench.model.item import load_items
@@ -77,4 +77,45 @@ Choose wisely.\n\n"""), 3)
             print_and_sleep(dim("You came up dry."), 1)
             return None
 
+    @staticmethod
+    @register_component(TRIPLE_TENCH_DARE)
+    @functional_component(state_dependent=True)
+    def _three_holes(game_state: GameState):
+        player = game_state.player
 
+        print_and_sleep(purple("""A boy approaches you, dad's wallet in hand.
+He triple-tench-dares you to stare at the sun.
+He offers to pay 5 of coin per second.
+What do you say?\n\n"""), 3)
+
+        seconds = 0
+        while True:
+            choice = input(
+                "[#] Yes (enter # of seconds)\n[M] Maybe next time\n\nPlease enter a selection (r to return)\n> ").strip().lower()
+            if choice.isdigit():
+               seconds = abs(int(choice))
+               break
+            elif choice == "m":
+                print_and_sleep(purple("You decide against your better judgement."), 1)
+                return None
+            else:
+                print_and_sleep(yellow("Invalid choice."), 1)
+                continue
+
+        sun_effect = random.uniform(0.33, 0.66)
+        if player.blind:
+            player.blind_turns += seconds
+            player.blind_effect = sun_effect if sun_effect > player.blind_effect else player.blind_effect
+        else:
+            player.blind_turns = seconds
+            player.blind_effect = sun_effect
+
+
+        print_and_sleep(
+            purple(
+                f"You have been blinded by the Sun. Accuracy down {player.blind_effect}% for "
+                f"{player.blind_turns} turns"), 1)
+
+        payment = seconds * 5
+        player.gain_coins(payment)
+        return None

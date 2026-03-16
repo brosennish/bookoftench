@@ -36,6 +36,7 @@ SHOP = "Shop"
 SPAWN_ENEMY = "Spawn Enemy"
 THREE_HOLES = "Three Holes"
 TRAVEL = "Travel"
+TRIPLE_TENCH_DARE = "Triple Tench Dare"
 USE_ITEM = "Use Item"
 WIZARD = "Wizard"
 
