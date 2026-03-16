@@ -379,7 +379,7 @@ Search_Discoverables = [
     {"pre": "were", "name": "Dragged Down", "value": 0, "hp": -11, "rarity": RARE,
      "areas": [CAVE, SWAMP]},
     {"pre": None, "name": "Fell Down a Manhole", "value": 0, "hp": -8, "rarity": RARE,
-     "areas": [CAVE, SWAMP]},
+     "areas": [CITY]},
     {"pre": "were", "name": "Mauled by a Panther", "value": 0, "hp": -21, "rarity": RARE,
      "areas": [FOREST, SWAMP]},
     {"pre": "were", "name": "Mauled by the Feral Lads", "value": 0, "hp": -18, "rarity": RARE,
