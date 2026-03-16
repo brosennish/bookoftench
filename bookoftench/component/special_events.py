@@ -42,7 +42,7 @@ Choose wisely.\n\n"""), 3)
                 print_and_sleep(purple("You decide against your better judgement."), 1)
                 return None
             else:
-                print_and_sleep(yellow("Invalid choice."), 1)
+                print_and_sleep(yellow("Invalid choice.\n"), 1)
                 continue
 
 
@@ -93,27 +93,31 @@ What do you say?\n\n"""), 3)
             choice = input(
                 "[#] Yes (enter # of seconds)\n[M] Maybe next time\n\nPlease enter a selection (r to return)\n> ").strip().lower()
             if choice.isdigit():
-               seconds = abs(int(choice))
-               break
+               if int(choice) > 100 or int(choice) < 1:
+                   print_and_sleep(yellow("Please enter a value between 1-100.\n"), 1)
+               else:
+                   seconds = int(choice)
+                   break
             elif choice == "m":
                 print_and_sleep(purple("You decide against your better judgement."), 1)
                 return None
             else:
-                print_and_sleep(yellow("Invalid choice."), 1)
+                print_and_sleep(yellow("Invalid choice.\n"), 1)
                 continue
 
-        sun_effect = random.uniform(0.33, 0.66)
+        sun_effect = random.uniform(0.25, 0.75)
         if player.blind:
             player.blind_turns += seconds
             player.blind_effect = sun_effect if sun_effect > player.blind_effect else player.blind_effect
         else:
+            player.blind = True
             player.blind_turns = seconds
             player.blind_effect = sun_effect
 
 
         print_and_sleep(
             purple(
-                f"You have been blinded by the Sun. Accuracy down {player.blind_effect}% for "
+                f"You have been blinded by the Sun. Accuracy down {round(player.blind_effect * 100)}% for "
                 f"{player.blind_turns} turns"), 1)
 
         payment = seconds * 5
