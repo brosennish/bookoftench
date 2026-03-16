@@ -3,7 +3,6 @@ import random
 from bookoftench import event_logger
 from bookoftench.component import RandomChoiceComponent, register_component, ProbabilityBinding, \
     get_registered_component, functional_component, SwapFoundItemYN
-from bookoftench.data import Items
 from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES
 from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent

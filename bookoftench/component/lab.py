@@ -51,9 +51,9 @@ class ExperimentRisks(TextDisplayingComponent):
         super().__init__(game_state,
                          next_component=LabComponent,
                          display_callback=lambda _: print_and_sleep(yellow(f"""Risk of Mutation:
-Max HP   : 27%
-Strength : 29%
-Accuracy : 29%
+Strength : 27%
+Accuracy : 27%
+Max HP   : 25%
 Level    : 8%
 Lives    : 4%\n""")))
 
@@ -62,22 +62,11 @@ def conduct_experiment(player: Player):
     player.coins += 1
     mutation = False
 
-    if random.random() < 0.27:
-        original = player.max_hp
-        amount = random.randint(-3, 2)
-        player.max_hp += amount
-        if player.hp > player.max_hp:
-            player.hp = player.max_hp
-        if amount > 0:
-            print_and_sleep(green(f"Max HP: {original} -> {player.max_hp}"), 1)
-            mutation = True
-        elif amount < 0:
-            print_and_sleep(yellow(f"Max HP: {original} -> {player.max_hp}"), 1)
-            mutation = True
+    # minor mutations allowing for more experiments with ever-present risk of losing a life or gaining level
 
-    if random.random() < 0.29:
+    if random.random() < 0.27:
         original = player.strength
-        amount = random.uniform(-0.03, 0.02)
+        amount = random.uniform(-0.01, 0.01)
         player.strength = round(player.strength + amount, 2)
         if original != player.strength:
             if amount > 0:
@@ -87,9 +76,9 @@ def conduct_experiment(player: Player):
                 print_and_sleep(yellow(f"Strength: {original} -> {player.strength}"), 1)
                 mutation = True
 
-    if random.random() < 0.29:
+    if random.random() < 0.27:
         original = player.acc
-        amount = random.uniform(-0.03, 0.02)
+        amount = random.uniform(-0.01, 0.01)
         player.acc = round(player.acc + amount, 2)
         if original != player.acc:
             if amount > 0:
@@ -98,6 +87,19 @@ def conduct_experiment(player: Player):
             elif amount < 0:
                 print_and_sleep(yellow(f"Accuracy: {original} -> {player.acc}"), 1)
                 mutation = True
+
+    if random.random() < 0.25:
+        original = player.max_hp
+        amount = random.randint(-1, 1)
+        player.max_hp += amount
+        if player.hp > player.max_hp:
+            player.hp = player.max_hp
+        if amount > 0:
+            print_and_sleep(green(f"Max HP: {original} -> {player.max_hp}"), 1)
+            mutation = True
+        elif amount < 0:
+            print_and_sleep(yellow(f"Max HP: {original} -> {player.max_hp}"), 1)
+            mutation = True
 
     if random.random() < 0.08:
         original = player.lvl
@@ -119,7 +121,7 @@ def conduct_experiment(player: Player):
     if random.random() < 0.04:
         original = player.lives
         amount = 1
-        if random.random() < 0.51:
+        if random.random() < 0.51:  # slightly higher odds to lose a life
             amount = -1
         player.lives += amount
         if player.lives >= 1:
