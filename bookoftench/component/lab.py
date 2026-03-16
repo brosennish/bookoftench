@@ -31,7 +31,8 @@ class LabComponent(LabeledSelectionComponent):
         ])
         self.leave = False
         print_and_sleep(blue("""Welcome! My name is Dr. Smarsh. 
-I can offer you 1 of coin for each experiment I conduct upon you.
+Would you like to participate in an experiment?
+I will pay you one of coin.
 What do you say?\n"""))
 
     def _return(self):
@@ -39,7 +40,7 @@ What do you say?\n"""))
         print_and_sleep(f"{blue('Is 1 of coin not enough?')}", 1)
 
     def can_exit(self) -> bool:
-        return self.leave
+        return self.leave or not self.game_state.player.is_alive()
 
     def play_theme(self) -> None:
         pass
