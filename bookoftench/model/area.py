@@ -9,21 +9,28 @@ from bookoftench.data import Areas
 from bookoftench.data.areas import EncounterType
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
-    SPAWN_ENEMY
+    SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE
 from bookoftench.data.enemies import Enemy_Adjectives
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
-from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss, load_enemies
+from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
 from .perk import perk_is_active
 from .shop import Shop
 from ..data.perks import SHERLOCK_TENCH
 
 _search_defaults = {
     DISCOVER_PERK: 1,
-    DISCOVER_ITEM: 3,
-    DISCOVER_WEAPON: 3,
-    DISCOVER_DISCOVERABLE: 50,
+    DISCOVER_ITEM: 2,
+    DISCOVER_WEAPON: 2,
+    DISCOVER_DISCOVERABLE: 48,
+    DISCOVER_SPECIAL: 10,
     SPAWN_ENEMY: 30
+}
+
+_event_defaults = {
+    SHEBOKKEN_ROULETTE: 30,
+    THREE_HOLES: 60,
+    TRIPLE_TENCH_DARE: 10,
 }
 
 
@@ -57,6 +64,7 @@ class Area:
 
     shop: Shop = field(default_factory=Shop)
     search_probabilities: Dict[str, int] = field(default_factory=lambda: _search_defaults)
+    event_probabilities: Dict[str, int] = field(default_factory=lambda: _event_defaults)
     actions_menu: AreaActions = field(default_factory=AreaActions.defaults)
     encounters: List[AreaEncounter] = field(default_factory=list)
 
@@ -92,14 +100,14 @@ class Area:
         enemy = load_enemy(enemy_name)  # convert selected enemy to Enemy
         self.enemies_seen.add(enemy_name)  # add selected enemy to enemies_seen
 
-        enemy.hp += random.randint(-2, 2) #  apply hp spread first
-        enemy.hp += round((enemy.hp * 0.03) * max(player_level - 1, 0)) #  then apply hp scaling
+        enemy.hp += random.randint(-2, 2)  # apply hp spread first
+        enemy.hp += round((enemy.hp * 0.03) * max(player_level - 1, 0))  # then apply hp scaling
         enemy.strength = enemy.strength + random.uniform(-0.03, 0.03)
         enemy.acc = enemy.acc + random.uniform(-0.03, 0.03)
         enemy.coins = max(0, enemy.coins + random.randint(-5, 5))
         if random.random() < 0.20:
             enemy.coins += round(enemy.coins * random.uniform(0.05, 0.25))
-        enemy_lines = enemy.get_enemy_encounter_line() #  get the line before mutating enemy.name
+        enemy_lines = enemy.get_enemy_encounter_line()  # get the line before mutating enemy.name
         elite_chance = min(0.15, max(0.0, (player_level - 1) * 0.03))
 
         if random.random() < elite_chance:

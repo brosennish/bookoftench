@@ -1,5 +1,3 @@
-from typing import Optional
-
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import PURCHASE, GREAT_JOB
 from bookoftench.event_base import Event, EventType
@@ -143,7 +141,7 @@ class LevelUpEvent(Event):
     @staticmethod
     def _display(level, old_max_hp, new_max_hp, cash_reward):
         play_sound(GREAT_JOB)
-        print_and_sleep(green(f"You have reached level {level}!\n"), 2)
+        print_and_sleep(cyan(f"You have reached level {level}!\n"), 2)
         print(green(f"MAX HP: {old_max_hp} -> {new_max_hp}"))
         print_and_sleep(green(f"You were awarded {cash_reward} of coin."), 2)
 

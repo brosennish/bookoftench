@@ -11,7 +11,7 @@ from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
-    OVERVIEW, INFO, BUILD
+    OVERVIEW, INFO, BUILD, DISCOVER_SPECIAL
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
 from bookoftench.data.items import TENCH_FILET
 from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT
@@ -87,6 +87,7 @@ class Search(RandomChoiceComponent):
         ep = game_state.current_area.search_probabilities
         super().__init__(game_state, bindings=[ProbabilityBinding(prob, get_registered_component(name))
                                                for name, prob in ep.items()])
+
 
     @staticmethod
     @register_component(DISCOVER_DISCOVERABLE)
