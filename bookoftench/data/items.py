@@ -47,6 +47,7 @@ SOUR_MILK = "Sour Milk"
 STALE_GREENS = "Stale Greens"
 SUSPICIOUS_GUMBO = "Suspicious Gumbo"
 TENCH_FILET = "Tench Filet"
+TENCHTOSTERONE = "Tenchtosterone"
 TOAD_STOOL = "Toad Stool"
 UNIDENTIFIED_MUSHROOMS = "Unidentified Mushrooms"
 UNWANTED_PROTEIN = "Unwanted Protein"
@@ -54,6 +55,7 @@ VERY_SPICY_NOODLES = "Very Spicy Noodles"
 WORMHOLE = "Wormhole"
 
 # --- types ---
+DMG = "dmg"
 FLEE = "flee"
 NORMAL = "normal"
 STAT = "stat"
@@ -70,6 +72,8 @@ Items = [
      'desc': 'Increase strength by 0.03'},
     {'name': ACCURACY_SEARUM, 'type': STAT, 'hp': 0, 'cost': 120, 'sell_value': 40, 'areas': [CAVE, CITY, FOREST, SWAMP],
      'desc': 'Increase accuracy by 0.03'},
+    {'name': TENCHTOSTERONE, 'type': DMG, 'hp': 0, 'cost': 50, 'sell_value': 18, 'areas': [CAVE, CITY, FOREST, SWAMP],
+     'desc': 'Double the damage of your next melee attack'},
 
     # --- Tier 1 (10 HP) ---
     {'name': ANTS_ON_A_LOG, 'type': NORMAL, 'hp': 10, 'cost': 11, 'sell_value': 4, 'areas': [FOREST, SWAMP], 'desc': None},
