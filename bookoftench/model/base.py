@@ -151,6 +151,8 @@ class Combatant(ABC):
     max_hp: int
     current_weapon: WeaponBase
 
+    double_damage_active: bool = False
+
     blind: bool = False
     blinded_by: str = ''
     blind_effect: float = 0.0
@@ -242,6 +244,11 @@ class Combatant(ABC):
 
         self.handle_crit(crit)
         if isinstance(other, NPC):
+            if self.current_weapon.type == MELEE and self.double_damage_active == True:
+                damage_inflicted *= 2
+                self.double_damage_active = False
+                play_sound(MELEE)
+                print_and_sleep(red("*** Double damage ***"), 1)
             print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
             event_logger.log_event(HitEvent(self.current_weapon.type))
