@@ -66,9 +66,9 @@ Items = [
      'desc': 'Use to escape from battle'},
     {'name': WORMHOLE, 'type': FLEE, 'hp': 0, 'cost': 30, 'sell_value': 11, 'areas': [CAVE, CITY, FOREST, SWAMP],
      'desc': 'Use to escape from battle'},
-    {'name': HTH, 'type': STAT, 'hp': 0, 'cost': 120, 'sell_value': 33, 'areas': [CAVE, CITY, FOREST, SWAMP],
+    {'name': HTH, 'type': STAT, 'hp': 0, 'cost': 120, 'sell_value': 40, 'areas': [CAVE, CITY, FOREST, SWAMP],
      'desc': 'Increase strength by 0.03'},
-    {'name': ACCURACY_SEARUM, 'type': STAT, 'hp': 0, 'cost': 120, 'sell_value': 33, 'areas': [CAVE, CITY, FOREST, SWAMP],
+    {'name': ACCURACY_SEARUM, 'type': STAT, 'hp': 0, 'cost': 120, 'sell_value': 40, 'areas': [CAVE, CITY, FOREST, SWAMP],
      'desc': 'Increase accuracy by 0.03'},
 
     # --- Tier 1 (10 HP) ---
