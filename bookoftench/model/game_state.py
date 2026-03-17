@@ -6,7 +6,7 @@ from typing import List, Dict
 import bookoftench.service.crypto_service as crypto_service
 from bookoftench import event_logger
 from bookoftench.audio import play_music
-from bookoftench.data.perks import TENCH_THE_BOUNTY_HUNTER
+from bookoftench.data.perks import TENCH_THE_BOUNTY_HUNTER, NEPTUNE
 from bookoftench.event_base import EventType, Event
 from bookoftench.event_logger import subscribe_function
 from bookoftench.settings import Settings, set_settings
@@ -137,9 +137,9 @@ class GameState:
             if area.name == area_name:
                 self.current_area = area
                 event_logger.log_event(TravelEvent(area_name))
-                if not perk_is_active() and random.random() < 0.05:
+                if not perk_is_active(NEPTUNE) and random.random() < 0.05:
                     death = False
-                    damage = min(random.randint(1, 25), self.player.hp)
+                    damage = min(random.randint(1, self.player.lvl * 10), self.player.hp)
                     if damage == self.player.hp:
                         death = True
                     event_logger.log_event(HohkkenEvent(damage, death))
