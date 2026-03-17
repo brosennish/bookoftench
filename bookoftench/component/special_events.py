@@ -150,7 +150,7 @@ Choose wisely.\n\n"""), 3)
 
         if choice == "good":
             item = random.choice([i for i in load_items() if game_state.current_area.name in i.areas
-                                  and i not in player.items])
+                                  and i.name not in player.items])
             print_and_sleep(cyan(f"You found {item.name}!"), 1)
 
             if player.add_item(item):

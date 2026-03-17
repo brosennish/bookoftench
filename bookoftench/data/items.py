@@ -15,6 +15,7 @@ CARP_FILET = "Carp Filet"
 CATFISH_FILET = "Catfish Filet"
 CRABS_ON_RYE = "Crabs on Rye"
 CRAY = "Cray"
+CRITICAL_BASS = "Critical Bass"
 EAGLE_EGG = "Eagle Egg"
 EGG_ON_EGGS = "Egg on Eggs"
 EGGS_ON_EGG = "Eggs on Egg"
@@ -55,6 +56,7 @@ VERY_SPICY_NOODLES = "Very Spicy Noodles"
 WORMHOLE = "Wormhole"
 
 # --- types ---
+CRIT = "crit"
 DMG = "dmg"
 FLEE = "flee"
 NORMAL = "normal"
@@ -74,6 +76,8 @@ Items = [
      'desc': 'Increase accuracy by 0.03'},
     {'name': TENCHTOSTERONE, 'type': DMG, 'hp': 0, 'cost': 50, 'sell_value': 18, 'areas': [CAVE, CITY, FOREST, SWAMP],
      'desc': 'Double the damage of your next melee attack'},
+    {'name': CRITICAL_BASS, 'type': CRIT, 'hp': 0, 'cost': 25, 'sell_value': 11, 'areas': [CAVE, CITY, FOREST, SWAMP],
+     'desc': 'Make your next attack a critical hit'},
 
     # --- Tier 1 (10 HP) ---
     {'name': ANTS_ON_A_LOG, 'type': NORMAL, 'hp': 10, 'cost': 11, 'sell_value': 4, 'areas': [FOREST, SWAMP], 'desc': None},

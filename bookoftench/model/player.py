@@ -7,7 +7,7 @@ from typing import Dict, List, Optional
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import RIFLE
-from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, IOU, STAT, HTH, ACCURACY_SEARUM, DMG
+from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, IOU, STAT, HTH, ACCURACY_SEARUM, DMG, CRIT
 from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM, TENCH_GENES, \
@@ -90,6 +90,7 @@ class Player(Combatant):
 
     can_flee: bool = False
     double_damage_active: bool = False
+    crit_active: bool = False
 
     coins: int = 0
     casino_won: int = 0
@@ -187,6 +188,8 @@ class Player(Combatant):
                 self.acc += 0.03
         elif item.type == DMG:
             self.double_damage_active = True
+        elif item.type == CRIT:
+            self.crit_active = True
 
         # Remove from actual inventory
         del self.items[item.name]
