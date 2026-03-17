@@ -1,5 +1,5 @@
 from bookoftench.event_base import Listener
-from bookoftench.model.events import ItemUsedEvent, TravelEvent
+from bookoftench.model.events import ItemUsedEvent, TravelEvent, HohkkenEvent
 from bookoftench.ui import yellow, cyan, dim
 from .audio import play_music
 from .data.audio import TRAVEL_THEME
@@ -28,3 +28,10 @@ class TravelListener(Listener):
     def handle_event(event: TravelEvent):
         play_music(TRAVEL_THEME)
         print_and_sleep(cyan(f'Traveling by six-by-eight to the {event.area_name}...'), 5)
+
+
+@subscribe_listener(HohkkenEvent)
+class HohkkenListener(Listener):
+    @staticmethod
+    def handle_event(event: TravelEvent):
+        play_music(HOHKKEN_THEME)

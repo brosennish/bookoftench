@@ -29,6 +29,7 @@ class EventType(Enum):
     FAILED_FLEE = "failed_flee"
     FLEE = "flee"
     HIT = "hit"
+    HOHKKEN = "hohkken"
     KILL = "kill"
     LEVEL_UP = "level_up"
     MISS = "miss"

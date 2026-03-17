@@ -18,10 +18,10 @@ from .bank import Bank
 from .build import Build
 from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
-from .events import TravelEvent, BountyCollectedEvent, LevelUpEvent
+from .events import TravelEvent, BountyCollectedEvent, LevelUpEvent, HohkkenEvent, PlayerDeathEvent
 from .illness import load_illnesses, load_illness
 from .item import Item, load_items
-from .perk import attach_perk, Perk, set_perk_cache, load_perk
+from .perk import attach_perk, Perk, set_perk_cache, load_perk, perk_is_active
 from .player import Player
 from .shop import Shop
 from .weapon import Weapon, load_weapons
@@ -137,6 +137,15 @@ class GameState:
             if area.name == area_name:
                 self.current_area = area
                 event_logger.log_event(TravelEvent(area_name))
+                if not perk_is_active() and random.random() < 0.05:
+                    death = False
+                    damage = min(random.randint(1, 25), self.player.hp)
+                    if damage == self.player.hp:
+                        death = True
+                    event_logger.log_event(HohkkenEvent(damage, death))
+                    if death:
+                        self.player.lives -= 1
+                        event_logger.log_event(PlayerDeathEvent(self.player.lives))
                 return
         raise KeyError(f"Area '{area_name}' not found")
 

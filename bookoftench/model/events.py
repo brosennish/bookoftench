@@ -100,6 +100,14 @@ class TravelEvent(Event):
         self.area_name = area_name
 
 
+class HohkkenEvent(Event):
+    def __init__(self, damage: int, death: bool):
+        super().__init__(EventType.HOHKKEN,
+                         lambda: print_and_sleep(red(f"You were attacked by the Hohkken and lost {damage} hp.\n"
+                                                     if death else
+                                                     f"You were dragged down by the Hohkken."), 2))
+
+
 class CritEvent(Event):
     def __init__(self):
         super().__init__(EventType.CRIT)
