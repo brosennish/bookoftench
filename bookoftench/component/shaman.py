@@ -1,9 +1,11 @@
 import random
 
 from bookoftench import event_logger
+from bookoftench.audio import play_music
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
+from bookoftench.data.audio import SHAMAN_THEME
 from bookoftench.data.components import SHAMAN
 from bookoftench.data.rites import Shaman_Lines
 from bookoftench.model import GameState
@@ -46,6 +48,9 @@ class ShamanComponent(LabeledSelectionComponent):
             ),
         ]
         self.leave = False
+
+    def play_theme(self) -> None:
+        play_music(SHAMAN_THEME)
 
     def _return(self):
         self.leave = True

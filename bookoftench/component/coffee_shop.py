@@ -5,7 +5,7 @@ from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
     functional_component, GatekeepingComponent, Component
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import SHOP_THEME, PURCHASE
+from bookoftench.data.audio import SHOP_THEME, PURCHASE, DRINKING
 from bookoftench.data.components import COFFEE_SHOP
 from bookoftench.model import GameState
 from bookoftench.model.coffee_item import CoffeeItem
@@ -50,7 +50,7 @@ class CoffeeShopComponent(LabeledSelectionComponent):
         self.exit_shop = False
 
     def play_theme(self) -> None:
-        play_music(SHOP_THEME)
+        play_music(COFFEE_THEME)
 
     def _return(self):
         self.exit_shop = True
@@ -82,8 +82,9 @@ class CoffeeShopComponent(LabeledSelectionComponent):
             if player.coins < coffee_item.cost:
                 print_and_sleep(yellow(f"Need more coin"), 1)
             else:
-                player.coins -= coffee_item.cost
                 play_sound(PURCHASE)
+                player.coins -= coffee_item.cost
+                play_sound(DRINKING)
                 apply_coffee_effect(coffee_item, player)
 
         return purchase_component

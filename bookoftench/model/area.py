@@ -28,9 +28,9 @@ _search_defaults = {
 }
 
 _event_defaults = {
-    SHEBOKKEN_ROULETTE: 30,
-    THREE_HOLES: 60,
-    TRIPLE_TENCH_DARE: 10,
+    SHEBOKKEN_ROULETTE: 36,
+    THREE_HOLES: 40,
+    TRIPLE_TENCH_DARE: 24,
 }
 
 

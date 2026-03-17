@@ -7,7 +7,7 @@ from bookoftench.component.base import GatekeepingComponent, TextDisplayingCompo
 from bookoftench.component.menu import ActionMenu
 from bookoftench.component.menu import StartMenu
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import DEVIL_THUNDER, GREAT_JOB, INTRO_THEME
+from bookoftench.data.audio import DEVIL_THUNDER, GREAT_JOB, INTRO_THEME, VICTORY_THEME, START_THEME
 from bookoftench.data.components import QUIT_GAME, NEW_GAME, BUILD_SELECTION
 from bookoftench.model import GameState
 from bookoftench.ui import red, green
@@ -54,7 +54,8 @@ class VictoryHandler(TextDisplayingComponent):
     def _display(_: GameState):
         print_and_sleep(f"You defeated the evil Denny Biltmore and rescued Chula!\n", 1)
         play_sound(GREAT_JOB)
-        print_and_sleep(green("You win!"), 3)
+        print_and_sleep(green("You win!"), 10)
+        play_sound(VICTORY_THEME)
 
 
 class DeathHandler(GatekeepingComponent):
@@ -79,6 +80,9 @@ class NewGame(LinearComponent):
 class BuildSelect(LinearComponent):
     def __init__(self, _: GameState):
         super().__init__(GameState(), TutorialDecision)
+
+    def play_theme(self) -> None:
+        play_music(START_THEME)
 
     def execute_current(self) -> None:
         stop_all_sounds()

@@ -1,10 +1,10 @@
 import random
 
 from bookoftench import event_logger
-from bookoftench.audio import play_sound
+from bookoftench.audio import play_sound, play_music
 from bookoftench.component import RandomChoiceComponent, register_component, ProbabilityBinding, \
     get_registered_component, functional_component, SwapFoundItemYN
-from bookoftench.data.audio import PISTOL
+from bookoftench.data.audio import PISTOL, ROULETTE_THEME
 from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE
 from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent
@@ -23,7 +23,8 @@ class DiscoverSpecial(RandomChoiceComponent):
     @staticmethod
     @register_component(SHEBOKKEN_ROULETTE)
     @functional_component(state_dependent=True)
-    def _three_holes(game_state: GameState):
+    def _shebokken_roulette(game_state: GameState):
+        play_music(ROULETTE_THEME)
         player = game_state.player
 
         print_and_sleep(purple("A man approaches with a revolver...\n"), 2)
@@ -175,7 +176,7 @@ Choose wisely.\n\n"""), 3)
     @staticmethod
     @register_component(TRIPLE_TENCH_DARE)
     @functional_component(state_dependent=True)
-    def _three_holes(game_state: GameState):
+    def _triple_tench_dare(game_state: GameState):
         player = game_state.player
 
         print_and_sleep(purple("A boy approaches you, dad's wallet in hand...\n"), 2)
