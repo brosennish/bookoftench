@@ -7,6 +7,8 @@ from .base import LabeledSelectionComponent, SelectionBinding, \
     GatekeepingComponent, functional_component, TextDisplayingComponent
 from .registry import register_component
 from .. import event_logger
+from ..audio import play_music
+from ..data.audio import LAB_THEME
 from ..data.components import LAB
 from ..model.events import PlayerDeathEvent
 from ..model.player import Player
@@ -25,15 +27,17 @@ class LabWorldState(GatekeepingComponent):
 class LabComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, bindings=[
-            SelectionBinding('Y', "Yes please", functional_component()(lambda: conduct_experiment(game_state.player))),
+            SelectionBinding('Y', "Yes", functional_component()(lambda: conduct_experiment(game_state.player))),
             SelectionBinding('R', "Risks?", ExperimentRisks),
             SelectionBinding('N', "No thanks", functional_component()(lambda: self._return())),
         ])
         self.leave = False
         print_and_sleep(blue("""Welcome! My name is Dr. Smarsh. 
-Would you like to participate in an experiment?
-I will pay you one of coin.
-What do you say?\n"""))
+I am currently conducting experiments on human beings.
+Would you like to participate? I pay one of coin per experiment.\n"""))
+
+    def play_theme(self) -> None:
+        play_music(LAB_THEME)
 
     def _return(self):
         self.leave = True
@@ -41,9 +45,6 @@ What do you say?\n"""))
 
     def can_exit(self) -> bool:
         return self.leave or not self.game_state.player.is_alive()
-
-    def play_theme(self) -> None:
-        pass
 
 # --- Risks info ---
 
@@ -122,7 +123,7 @@ def conduct_experiment(player: Player):
     if random.random() < 0.04:
         original = player.lives
         amount = 1
-        if random.random() < 0.51:  # slightly higher odds to lose a life
+        if random.random() < 0.55:  # slightly higher odds to lose a life since you're getting paid
             amount = -1
         player.lives += amount
         if player.lives >= 1:

@@ -22,6 +22,7 @@ KARATE_LESSONS = "Karate Lessons"
 LEATHER_SKIN = "Leather Skin"
 LUCKY_TENCHS_FIN = "Lucky Tench's Fin"
 MARTIAL_ARTS_TRAINING = "Martial Arts Training"
+NEPTUNE = "Neptune"
 NEW_SNEAKERS = "New Sneakers"
 NOMADS_LAND = "Nomad's Land"
 RICKETY_PICKPOCKET = "Rickety Pickpocket"
@@ -165,6 +166,11 @@ Perks = [
             {'wrapper_type': WrapperType.INT_CHANGE, 'wrapper_config': {'change': 5}},
             {'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT, 'wrapper_config': {'change': 5}}
         ]
+    },
+    {
+        'name': NEPTUNE,
+        'cost': 100,
+        'description': "Prevent Hohkken attacks",
     },
     {
         'name': HEALTH_NUT,

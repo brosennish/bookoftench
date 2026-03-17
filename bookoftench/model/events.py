@@ -1,5 +1,5 @@
 from bookoftench.audio import play_sound
-from bookoftench.data.audio import PURCHASE, GREAT_JOB
+from bookoftench.data.audio import PURCHASE, GREAT_JOB, HOHKKEN
 from bookoftench.event_base import Event, EventType
 from bookoftench.model.illness import Illness
 from bookoftench.ui import green, cyan, red, yellow, dim, blue
@@ -98,6 +98,15 @@ class TravelEvent(Event):
     def __init__(self, area_name: str):
         super().__init__(EventType.TRAVEL)
         self.area_name = area_name
+
+
+class HohkkenEvent(Event):
+    def __init__(self, damage: int, death: bool):
+        super().__init__(EventType.HOHKKEN,
+                         lambda: print_and_sleep(red(f"Hohkken!"), 3))
+        print_and_sleep(red(f"You were dragged down by the Hohkken.\n"
+                            if death else
+                            f"You were attacked for {damage} damage.\n"), 2)
 
 
 class CritEvent(Event):

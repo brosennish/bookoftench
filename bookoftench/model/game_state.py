@@ -6,7 +6,7 @@ from typing import List, Dict
 import bookoftench.service.crypto_service as crypto_service
 from bookoftench import event_logger
 from bookoftench.audio import play_music
-from bookoftench.data.perks import TENCH_THE_BOUNTY_HUNTER
+from bookoftench.data.perks import TENCH_THE_BOUNTY_HUNTER, NEPTUNE
 from bookoftench.event_base import EventType, Event
 from bookoftench.event_logger import subscribe_function
 from bookoftench.settings import Settings, set_settings
@@ -18,10 +18,10 @@ from .bank import Bank
 from .build import Build
 from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
-from .events import TravelEvent, BountyCollectedEvent, LevelUpEvent
+from .events import TravelEvent, BountyCollectedEvent, LevelUpEvent, HohkkenEvent, PlayerDeathEvent
 from .illness import load_illnesses, load_illness
 from .item import Item, load_items
-from .perk import attach_perk, Perk, set_perk_cache, load_perk
+from .perk import attach_perk, Perk, set_perk_cache, load_perk, perk_is_active
 from .player import Player
 from .shop import Shop
 from .weapon import Weapon, load_weapons
@@ -137,6 +137,15 @@ class GameState:
             if area.name == area_name:
                 self.current_area = area
                 event_logger.log_event(TravelEvent(area_name))
+                if not perk_is_active(NEPTUNE) and random.random() < 0.05:
+                    death = False
+                    damage = min(random.randint(1, self.player.lvl * 10), self.player.hp)
+                    if damage == self.player.hp:
+                        death = True
+                    event_logger.log_event(HohkkenEvent(damage, death))
+                    if death:
+                        self.player.lives -= 1
+                        event_logger.log_event(PlayerDeathEvent(self.player.lives))
                 return
         raise KeyError(f"Area '{area_name}' not found")
 

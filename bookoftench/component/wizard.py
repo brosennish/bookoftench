@@ -1,9 +1,11 @@
 import random
 
 from bookoftench import event_logger
+from bookoftench.audio import play_music
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
+from bookoftench.data.audio import WIZARD_THEME
 from bookoftench.data.components import WIZARD
 from bookoftench.data.spells import Wizard_Lines, WEAPON, ITEM
 from bookoftench.model import GameState
@@ -45,6 +47,9 @@ class WizardComponent(LabeledSelectionComponent):
             ),
         ]
         self.leave = False
+
+    def play_theme(self) -> None:
+        play_music(WIZARD_THEME)
 
     def _return(self):
         self.leave = True
