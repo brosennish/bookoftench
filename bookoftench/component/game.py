@@ -81,11 +81,9 @@ class BuildSelect(LinearComponent):
     def __init__(self, _: GameState):
         super().__init__(GameState(), TutorialDecision)
 
-    def play_theme(self) -> None:
-        play_music(START_THEME)
-
     def execute_current(self) -> None:
         stop_all_sounds()
+        play_music(START_THEME)
         player = self.game_state.player
         while not player.name:
             player.name = safe_input("What be your name?")

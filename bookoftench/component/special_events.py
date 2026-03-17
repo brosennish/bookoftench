@@ -45,10 +45,10 @@ May I interest you in a good, old-fashioned game of Shebokken Roulette?\n\n"""),
                     continue
                 else:
                     wager = int(choice)
-                    print_and_sleep(green(f"You wagered {wager} coins.\n"), 1)
+                    print_and_sleep(green(f"You wagered {wager} coins.\n"), 2)
                     break
             elif choice == "n":
-                print_and_sleep(purple("You decide against your better judgement."), 1)
+                print_and_sleep(purple("You decide against your better judgement."), 2)
                 return None
             else:
                 print_and_sleep(yellow("Invalid choice.\n"), 1)
@@ -71,11 +71,11 @@ May I interest you in a good, old-fashioned game of Shebokken Roulette?\n\n"""),
         if result == pick:
             player_1 = player
             player_2 = "The man"
-            print_and_sleep(purple("You go first!"), 1)
+            print_and_sleep(purple("You go first!"), 2)
         else:
             player_1 = "The man"
             player_2 = player
-            print_and_sleep(purple("You go second..."), 1)
+            print_and_sleep(purple("You go second..."), 2)
 
         chamber = [0, 0, 0, 0, 0, 1]
         random.shuffle(chamber)
@@ -86,7 +86,7 @@ May I interest you in a good, old-fashioned game of Shebokken Roulette?\n\n"""),
             if chamber[chamber_index] == 1:
                 if shooter == player:
                     play_sound(PISTOL)
-                    print_and_sleep(cyan(f"You shot the man and collected {wager} coins!"), 2)
+                    print_and_sleep(cyan(f"You shot the man and collected {wager} coins!"), 3)
                     player.gain_coins(wager)
                     player.gain_xp_other(min(wager, 20))
                     return None
@@ -94,7 +94,7 @@ May I interest you in a good, old-fashioned game of Shebokken Roulette?\n\n"""),
                     damage = random.randint(5, 50)
                     player.hp -= min(damage, player.hp)
                     play_sound(PISTOL)
-                    print_and_sleep(red(f"The man shot you for {damage} damage!"), 2)
+                    print_and_sleep(red(f"The man shot you for {damage} damage!"), 3)
                     print_and_sleep(yellow(f"You lost your wager of {wager} coins."), 2)
                     player.coins -= wager
                     if player.hp == 0:
@@ -103,9 +103,9 @@ May I interest you in a good, old-fashioned game of Shebokken Roulette?\n\n"""),
                     return None
             else:
                 if shooter == player:
-                    print_and_sleep(purple(f"You shot but the chamber was empty."), 2)
+                    print_and_sleep(purple(f"You shot but the chamber was empty."), 2.5)
                 else:
-                    print_and_sleep(purple(f"The man shot but the chamber was empty."), 2)
+                    print_and_sleep(purple(f"The man shot but the chamber was empty."), 2.5)
 
             chamber_index += 1
             if shooter == player_2:
@@ -135,7 +135,7 @@ Choose wisely.\n\n"""), 3)
             if choice in ["1", "2", "3"]:
                 break
             elif choice == "r":
-                print_and_sleep(purple("You decide against your better judgement."), 1)
+                print_and_sleep(purple("You decide against your better judgement."), 2)
                 return None
             else:
                 print_and_sleep(yellow("Invalid choice.\n"), 1)
@@ -196,7 +196,7 @@ What do you say?\n\n"""), 3)
                    seconds = int(choice)
                    break
             elif choice == "m":
-                print_and_sleep(purple("You decide against your better judgement."), 1)
+                print_and_sleep(purple("You decide against your better judgement."), 2)
                 return None
             else:
                 print_and_sleep(yellow("Invalid choice.\n"), 1)
@@ -217,7 +217,7 @@ What do you say?\n\n"""), 3)
         print_and_sleep(
             purple(
                 f"You have been blinded by the Sun. Accuracy down {round(player.blind_effect * 100)}% for "
-                f"{player.blind_turns} turns"), 1)
+                f"{player.blind_turns} turns"), 3)
 
         payment = seconds * 5
         player.gain_coins(payment)
