@@ -20,7 +20,7 @@ TENCH = "Tench"
 
 Builds = [
     {'name': DENNY, 'hp': 100, 'str': 1, 'acc': 1, 'coins': 25,
-     'items': [TENCH_FILET, TENCHTOSTERONE, CRITICAL_BASS],
+     'items': [TENCH_FILET],
      'weapons': [BARE_HANDS, KNIFE],
      'perks': [],
      'illness': None,
