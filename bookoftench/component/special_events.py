@@ -6,11 +6,11 @@ from bookoftench.component import RandomChoiceComponent, register_component, Pro
     get_registered_component, functional_component, SwapFoundItemYN, OfficerEncounter, BinarySelectionComponent
 from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH, PURCHASE
 from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, \
-    GREEDY_BASTARD, ZONKED
+    ZONKED, GREEDY_BASTARD
 from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent
 from bookoftench.model.item import load_items
-from bookoftench.ui import yellow, dim, purple, red, cyan, green
+from bookoftench.ui import yellow, dim, purple, red, cyan, green, blue
 from bookoftench.util import print_and_sleep
 
 
@@ -20,6 +20,73 @@ class DiscoverSpecial(RandomChoiceComponent):
         evp = game_state.current_area.event_probabilities
         super().__init__(game_state, bindings=[ProbabilityBinding(prob, get_registered_component(name))
                                                for name, prob in evp.items()])
+
+    @staticmethod
+    @register_component(GREEDY_BASTARD)
+    @functional_component(state_dependent=True)
+    def _greedy_bastard(game_state: GameState):
+        player = game_state.player
+        print_and_sleep(purple("A woman approaches you, waving her hands in the air...\n"), 3)
+        print_and_sleep(blue("Hey, you there! I have coin. Do you want some?\n\n"), 3)
+
+        while True:
+            if player.coins >= 1:
+                choice = input(
+                    "[Y] Say yes\n[O] Offer coins\n\nPlease enter a selection (r to return)\n> ").strip().lower()
+            else:
+                choice = input(
+                    "[Y] Say yes\n\nPlease enter a selection (r to return)\n> ").strip().lower()
+            if choice in ["y", "o"]:
+                break
+            elif choice == "r":
+                print_and_sleep(purple("You tell the woman to buzz off."), 2)
+                return None
+            else:
+                print_and_sleep(yellow("Invalid choice.\n"), 1)
+                continue
+
+        if choice == "y":
+            woman_coins = random.randint(1, 50)
+            while True:
+                request = input(
+                    "[#] Request coins\n> ").strip().lower()
+                if choice.isdigit():
+                    if int(request) > 50 or int(request) < 1:
+                        print_and_sleep(yellow(f"Please enter a value between 1-50.\n"), 1)
+                        continue
+                    else:
+                        request = int(choice)
+                        print_and_sleep(purple(f"You requested {request} coins...\n"), 3)
+                        break
+                else:
+                    print_and_sleep(yellow("Invalid choice.\n"), 1)
+                    continue
+
+            if request < woman_coins:
+                print_and_sleep(purple(f"You're not a greedy bastard. Good for you.\n"), 3)
+                player.gain_coins(woman_coins)
+                player.gain_xp_other(woman_coins - request)
+            elif request == woman_coins:
+                print_and_sleep(purple(f"Wow, that's exactly what I have to offer. Kudos.\n"), 3)
+                player.gain_coins(woman_coins)
+            elif request > woman_coins:
+                damage = min(request - woman_coins, player.hp)
+                player.hp -= damage
+                play_sound(PUNCH)
+                print_and_sleep(red(f"The woman slapped you for {damage} damage!"), 2)
+                print_and_sleep(purple(f"That's for being a greedy bastard!\n"), 3)
+                if player.hp == 0:
+                    player.lives -= 1
+                    event_logger.log_event(PlayerDeathEvent(player.lives))
+            return None
+
+        elif choice == "o":
+            # amount desired by woman = randint(1, player.coins)
+            # Enter number of coins to offer 1-player.coins
+            # if number < amount, she takes number and slaps you for being stingy causing dmg worth the diff
+            # if number == amount, she takes the number
+            # if number > amount, she takes the number, and you receive the diff in xp
+            pass
 
     @staticmethod
     @register_component(SHEBOKKEN_ROULETTE)

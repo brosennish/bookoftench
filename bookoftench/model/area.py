@@ -9,7 +9,7 @@ from bookoftench.data import Areas
 from bookoftench.data.areas import EncounterType
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
-    SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREED
+    SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD
 from bookoftench.data.enemies import Enemy_Adjectives
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
@@ -28,10 +28,10 @@ _search_defaults = {
 }
 
 _event_defaults = {
-    GREED: 25,
+    GREEDY_BASTARD: 25,
     SHEBOKKEN_ROULETTE: 25,
-    THREE_HOLES: 30,
-    TRIPLE_TENCH_DARE: 10,
+    THREE_HOLES: 28,
+    TRIPLE_TENCH_DARE: 12,
     ZONKED: 20
 }
 
