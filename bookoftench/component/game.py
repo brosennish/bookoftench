@@ -157,7 +157,7 @@ class ContinueGame(TextDisplayingComponent):
     @staticmethod
     def _display_and_reset(game_state: GameState):
         print_and_sleep(red("""
-You awaken in a dumpster behind Showgirls 3.
+You awaken in a dumpster behind a Showgirls 3.
 You're buried beneath a pile of detritus and covered in slime...
 There are parts of another man or men scattered around you."""), 3)
         game_state.player.apply_death_penalties()

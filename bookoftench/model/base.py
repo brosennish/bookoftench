@@ -151,6 +151,9 @@ class Combatant(ABC):
     max_hp: int
     current_weapon: WeaponBase
 
+    double_damage_active: bool = False
+    crit_active: bool = False
+
     blind: bool = False
     blinded_by: str = ''
     blind_effect: float = 0.0
@@ -202,7 +205,10 @@ class Combatant(ABC):
 
     def handle_crit(self, is_crit: bool) -> None:
         if not is_crit:
-            return
+            if self.crit_active:
+                self.crit_active = False
+            else:
+                return
         self.current_weapon.play_sound()
         print_and_sleep(red("*** Critical hit ***"), 1)
         if not isinstance(self, NPC):
@@ -235,13 +241,18 @@ class Combatant(ABC):
         if not self.is_alive():  # solomon train
             return
         base_damage = self.current_weapon.calculate_base_damage()
-        crit = random.random() < self.get_crit_chance()
-        damage_inflicted = round(base_damage * 1.5) if crit else base_damage  # 1.5x damage if crit
         if self.current_weapon.type == MELEE:
-            damage_inflicted = round(self.strength * damage_inflicted)  # mult damage by strength value
-
+            base_damage = round(base_damage * self.strength)
+        crit = random.random() < self.get_crit_chance()
         self.handle_crit(crit)
+
+        damage_inflicted = round(base_damage * 1.5) if crit else base_damage  # 1.5x damage if crit
+
         if isinstance(other, NPC):
+            if self.current_weapon.type == MELEE and self.double_damage_active == True:
+                damage_inflicted *= 2
+                self.double_damage_active = False
+                print_and_sleep(red("*** Double damage ***"), 1)
             print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
             event_logger.log_event(HitEvent(self.current_weapon.type))

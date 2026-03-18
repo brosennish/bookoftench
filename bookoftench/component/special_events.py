@@ -149,7 +149,8 @@ Choose wisely.\n\n"""), 3)
             choice = hole_3
 
         if choice == "good":
-            item = random.choice([i for i in load_items() if game_state.current_area.name in i.areas])
+            item = random.choice([i for i in load_items() if game_state.current_area.name in i.areas
+                                  and i.name not in player.items])
             print_and_sleep(cyan(f"You found {item.name}!"), 1)
 
             if player.add_item(item):
@@ -160,7 +161,7 @@ Choose wisely.\n\n"""), 3)
 
         elif choice == "bad":
             original = player.hp
-            damage = min(random.randint(1, 20), original)
+            damage = min(random.randint(1, min(player.lvl * 10, 50)), original)
             player.hp -= damage
             print_and_sleep(red(f"You were ravaged by an unseen creature and lost {damage} hp."), 2)
             if player.hp == 0:

@@ -2,6 +2,7 @@ from .areas import CITY, CAVE, FOREST, SWAMP
 
 # --- items ---
 ABANDONED_EYEBALLS = "Abandoned Eyeballs"
+ACCURACY_SEARUM = "Accuracy Searum"
 ALIEN_REMAINS = "Alien Remains"
 ANTS_ON_A_LOG = "Ants On A Log"
 ASHWAGANDHA_GUMMIES = "Ashwagandha Gummies"
@@ -14,6 +15,7 @@ CARP_FILET = "Carp Filet"
 CATFISH_FILET = "Catfish Filet"
 CRABS_ON_RYE = "Crabs on Rye"
 CRAY = "Cray"
+CRITICAL_BASS = "Critical Bass"
 EAGLE_EGG = "Eagle Egg"
 EGG_ON_EGGS = "Egg on Eggs"
 EGGS_ON_EGG = "Eggs on Egg"
@@ -25,6 +27,7 @@ GIANT_TENTACLE = "Giant Tentacle"
 GIZZARDS_AND_LIVERS = "Gizzards and Livers"
 GOBY = "Goby"
 HOG_LOINS = "Hog Loins"
+HTH = "HTH"
 IOU = "IOU"
 KRILL = "Krill"
 LACED_HONEY = "Laced Honey"
@@ -45,6 +48,7 @@ SOUR_MILK = "Sour Milk"
 STALE_GREENS = "Stale Greens"
 SUSPICIOUS_GUMBO = "Suspicious Gumbo"
 TENCH_FILET = "Tench Filet"
+TENCHTOSTERONE = "Tenchtosterone"
 TOAD_STOOL = "Toad Stool"
 UNIDENTIFIED_MUSHROOMS = "Unidentified Mushrooms"
 UNWANTED_PROTEIN = "Unwanted Protein"
@@ -52,15 +56,28 @@ VERY_SPICY_NOODLES = "Very Spicy Noodles"
 WORMHOLE = "Wormhole"
 
 # --- types ---
-FLEE = "Flee"
-NORMAL = "Normal"
+CRIT = "crit"
+DMG = "dmg"
+FLEE = "flee"
+NORMAL = "normal"
+STAT = "stat"
 
 Items = [
     # --- SPECIAL ---
-    {'name': IOU, 'type': FLEE, 'hp': 0, 'cost': 10, 'sell_value': 3, 'areas': [CAVE, CITY, FOREST, SWAMP], 'desc': 'Use to escape from battle'},
-    {'name': SMOKE_BOMB, 'type': FLEE, 'hp': 0, 'cost': 20, 'sell_value': 7, 'areas': [CAVE, CITY, FOREST, SWAMP], 'desc': 'Use to escape from battle'},
+    {'name': IOU, 'type': FLEE, 'hp': 0, 'cost': 10, 'sell_value': 3, 'areas': [CAVE, CITY, FOREST, SWAMP],
+     'desc': 'Use to escape from battle'},
+    {'name': SMOKE_BOMB, 'type': FLEE, 'hp': 0, 'cost': 20, 'sell_value': 7, 'areas': [CAVE, CITY, FOREST, SWAMP],
+     'desc': 'Use to escape from battle'},
     {'name': WORMHOLE, 'type': FLEE, 'hp': 0, 'cost': 30, 'sell_value': 11, 'areas': [CAVE, CITY, FOREST, SWAMP],
      'desc': 'Use to escape from battle'},
+    {'name': HTH, 'type': STAT, 'hp': 0, 'cost': 120, 'sell_value': 40, 'areas': [CAVE, CITY, FOREST, SWAMP],
+     'desc': 'Increase strength by 0.03'},
+    {'name': ACCURACY_SEARUM, 'type': STAT, 'hp': 0, 'cost': 120, 'sell_value': 40, 'areas': [CAVE, CITY, FOREST, SWAMP],
+     'desc': 'Increase accuracy by 0.03'},
+    {'name': TENCHTOSTERONE, 'type': DMG, 'hp': 0, 'cost': 50, 'sell_value': 18, 'areas': [CAVE, CITY, FOREST, SWAMP],
+     'desc': 'Double the damage of your next melee attack'},
+    {'name': CRITICAL_BASS, 'type': CRIT, 'hp': 0, 'cost': 25, 'sell_value': 11, 'areas': [CAVE, CITY, FOREST, SWAMP],
+     'desc': 'Make your next attack a critical hit'},
 
     # --- Tier 1 (10 HP) ---
     {'name': ANTS_ON_A_LOG, 'type': NORMAL, 'hp': 10, 'cost': 11, 'sell_value': 4, 'areas': [FOREST, SWAMP], 'desc': None},
