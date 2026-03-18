@@ -184,8 +184,11 @@ class Player(Combatant):
         elif item.type == STAT:
             if item.name == HTH:
                 self.strength += 0.03
+                print_and_sleep(green(f"Strength: {self.strength - 0.03} -> {self.strength}"), 1)
             elif item.name == ACCURACY_SEARUM:
                 self.acc += 0.03
+                self.strength += 0.03
+                print_and_sleep(green(f"Accuracy: {self.acc - 0.03} -> {self.acc}"), 1)
         elif item.type == DMG:
             self.double_damage_active = True
         elif item.type == CRIT:
