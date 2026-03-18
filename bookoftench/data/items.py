@@ -64,19 +64,19 @@ STAT = "stat"
 
 Items = [
     # --- SPECIAL ---
-    {'name': IOU, 'type': FLEE, 'hp': 0, 'cost': 10, 'sell_value': 3, 'areas': [CAVE, CITY, FOREST, SWAMP],
+    {'name': IOU, 'type': FLEE, 'hp': 0, 'cost': 10, 'sell_value': 3, 'areas': [CITY],
      'desc': 'Use to escape from battle'},
-    {'name': SMOKE_BOMB, 'type': FLEE, 'hp': 0, 'cost': 20, 'sell_value': 7, 'areas': [CAVE, CITY, FOREST, SWAMP],
+    {'name': SMOKE_BOMB, 'type': FLEE, 'hp': 0, 'cost': 20, 'sell_value': 7, 'areas': [FOREST, SWAMP],
      'desc': 'Use to escape from battle'},
-    {'name': WORMHOLE, 'type': FLEE, 'hp': 0, 'cost': 30, 'sell_value': 11, 'areas': [CAVE, CITY, FOREST, SWAMP],
+    {'name': WORMHOLE, 'type': FLEE, 'hp': 0, 'cost': 30, 'sell_value': 11, 'areas': [CAVE],
      'desc': 'Use to escape from battle'},
-    {'name': HTH, 'type': STAT, 'hp': 0, 'cost': 120, 'sell_value': 40, 'areas': [CAVE, CITY, FOREST, SWAMP],
+    {'name': HTH, 'type': STAT, 'hp': 0, 'cost': 100, 'sell_value': 32, 'areas': [CITY, SWAMP],
      'desc': 'Increase strength by 0.03'},
-    {'name': ACCURACY_SEARUM, 'type': STAT, 'hp': 0, 'cost': 120, 'sell_value': 40, 'areas': [CAVE, CITY, FOREST, SWAMP],
+    {'name': ACCURACY_SEARUM, 'type': STAT, 'hp': 0, 'cost': 100, 'sell_value': 32, 'areas': [CAVE, FOREST],
      'desc': 'Increase accuracy by 0.03'},
-    {'name': TENCHTOSTERONE, 'type': DMG, 'hp': 0, 'cost': 50, 'sell_value': 18, 'areas': [CAVE, CITY, FOREST, SWAMP],
+    {'name': TENCHTOSTERONE, 'type': DMG, 'hp': 0, 'cost': 50, 'sell_value': 18, 'areas': [CITY, SWAMP],
      'desc': 'Double the damage of your next melee attack'},
-    {'name': CRITICAL_BASS, 'type': CRIT, 'hp': 0, 'cost': 25, 'sell_value': 11, 'areas': [CAVE, CITY, FOREST, SWAMP],
+    {'name': CRITICAL_BASS, 'type': CRIT, 'hp': 0, 'cost': 25, 'sell_value': 11, 'areas': [CAVE, FOREST],
      'desc': 'Make your next attack a critical hit'},
 
     # --- Tier 1 (10 HP) ---
