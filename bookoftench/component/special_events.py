@@ -191,8 +191,8 @@ What do you say?\n\n"""), 3)
             choice = input(
                 "[#] Yes (enter # of seconds)\n[M] Maybe next time\n\nPlease enter a selection (r to return)\n> ").strip().lower()
             if choice.isdigit():
-               if int(choice) > 100 or int(choice) < 1:
-                   print_and_sleep(yellow("Please enter a value between 1-100.\n"), 1)
+               if int(choice) > 20 or int(choice) < 1:
+                   print_and_sleep(yellow("Please enter a value between 1-20.\n"), 1)
                else:
                    seconds = int(choice)
                    break
