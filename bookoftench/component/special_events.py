@@ -3,9 +3,10 @@ import random
 from bookoftench import event_logger
 from bookoftench.audio import play_sound, play_music
 from bookoftench.component import RandomChoiceComponent, register_component, ProbabilityBinding, \
-    get_registered_component, functional_component, SwapFoundItemYN
-from bookoftench.data.audio import PISTOL, ROULETTE_THEME
-from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE
+    get_registered_component, functional_component, SwapFoundItemYN, OfficerEncounter, BinarySelectionComponent
+from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH, PURCHASE
+from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, \
+    GREEDY_BASTARD, ZONKED
 from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent
 from bookoftench.model.item import load_items
@@ -92,7 +93,8 @@ May I interest you in a good, old-fashioned game of Shebokken Roulette?\n\n"""),
                     return None
                 else:
                     damage = random.randint(5, 50)
-                    player.hp -= min(damage, player.hp)
+                    original = player.hp
+                    player.hp -= min(damage, original)
                     play_sound(PISTOL)
                     print_and_sleep(red(f"The man shot you for {damage} damage!"), 3)
                     print_and_sleep(yellow(f"You lost your wager of {wager} coins."), 2)
@@ -222,4 +224,47 @@ What do you say?\n\n"""), 3)
 
         payment = seconds * 5
         player.gain_coins(payment)
+        return None
+
+    @staticmethod
+    @register_component(ZONKED)
+    @functional_component(state_dependent=True)
+    def _zonked(game_state: GameState):
+        player = game_state.player
+        print_and_sleep(purple("You come across a man who is totally zonked...\n"), 2)
+        print_and_sleep(purple("""What do you do?\n\n"""), 3)
+
+        while True:
+            choice = input(
+                "[W] Wake him up\n[B] Bury him alive\n\nPlease enter a selection (r to return)\n> ").strip().lower()
+            if choice in ["w", "b"]:
+                break
+            elif choice == "r":
+                print_and_sleep(purple("You leave the zonked man as he was."), 2)
+                return None
+            else:
+                print_and_sleep(yellow("Invalid choice.\n"), 1)
+                continue
+
+        amount = random.randint(1, 25)
+        if choice == "w":
+            if random.random() < 0.5:
+                play_sound(PUNCH)
+                print_and_sleep(red(f"You startled the man and he punched you for {amount} damage!"), 3)
+                original = player.hp
+                player.hp -= min(amount, original)
+                if player.hp == 0:
+                    player.lives -= 1
+                    event_logger.log_event(PlayerDeathEvent(player.lives))
+            else:
+                print_and_sleep(purple(f"""Thanks for waking me up, man.
+I would've slept through my appointment today.
+I'm scheduled to be buried alive at 6... or was it 8?"""), 3)
+                print_and_sleep(green(f"He pays you {amount} of coin and immediately zonks back out."), 3)
+                player.gain_coins(amount)
+        elif choice == "b":
+            print_and_sleep(purple(f"You bury the man alive."), 3)
+            player.gain_xp_other(amount)
+            if random.random() < 0.25:
+                OfficerEncounter(game_state).run()
         return None

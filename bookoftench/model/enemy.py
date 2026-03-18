@@ -42,7 +42,7 @@ class Enemy(Combatant, NPC):
 
     def __post_init__(self):
         self.weapon_dict = dict((w.name, w) for w in load_weapons(self.weapons))
-        self.current_weapon = random.choice(list(self.weapon_dict.values()))
+        self.current_weapon = random.choice(list(i for i in self.weapon_dict.values() if i.type != BLIND))
         self.max_hp = self.hp
 
     def drop_weapon(self) -> Optional[Weapon]:
