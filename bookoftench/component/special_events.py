@@ -7,9 +7,11 @@ from bookoftench.component import RandomChoiceComponent, register_component, Pro
 from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH
 from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, \
     ZONKED, GREEDY_BASTARD
+from bookoftench.data.perks import BEER_GOGGLES
 from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent
 from bookoftench.model.item import load_items
+from bookoftench.model.perk import perk_is_active
 from bookoftench.ui import yellow, dim, purple, red, cyan, green, blue
 from bookoftench.util import print_and_sleep
 
@@ -37,6 +39,7 @@ class DiscoverSpecial(RandomChoiceComponent):
                 choice = input(
                     "[Y] Say yes\n\nPlease enter a selection (r to return)\n> ").strip().lower()
             if choice in ["y", "o"]:
+                print()
                 break
             elif choice == "r":
                 print_and_sleep(purple("You tell the woman to buzz off."), 2)
@@ -50,12 +53,12 @@ class DiscoverSpecial(RandomChoiceComponent):
             while True:
                 request = input(
                     "[#] Request coins\n> ").strip().lower()
-                if choice.isdigit():
+                if request.isdigit():
                     if int(request) > 50 or int(request) < 1:
                         print_and_sleep(yellow(f"Please enter a value between 1-50.\n"), 1)
                         continue
                     else:
-                        request = int(choice)
+                        request = int(request)
                         print_and_sleep(purple(f"You requested {request} coins...\n"), 3)
                         break
                 else:
@@ -81,15 +84,11 @@ class DiscoverSpecial(RandomChoiceComponent):
             return None
 
         elif choice == "o":
-            # Enter number of coins to offer 1-player.coins
-            # if number < amount, she takes number and slaps you for being stingy causing dmg worth the diff
-            # if number == amount, she takes the number
-            # if number > amount, she takes the number, and you receive the diff in xp
             woman_desired = random.randint(1, 50)
             while True:
                 offer = input(
-                    "[#] Offer coins\n> ").strip().lower()
-                if choice.isdigit():
+                    "\n[#] Offer coins\n> ").strip().lower()
+                if offer.isdigit():
                     if int(offer) > player.coins:
                         print_and_sleep(yellow(f"You only have {player.coins} coins.\n"), 1)
                         continue
@@ -97,7 +96,7 @@ class DiscoverSpecial(RandomChoiceComponent):
                         print_and_sleep(yellow(f"Please enter a value between 1-50.\n"), 1)
                         continue
                     else:
-                        offer = int(choice)
+                        offer = int(offer)
                         print_and_sleep(purple(f"You offered {offer} coins...\n"), 3)
                         break
                 else:
@@ -282,6 +281,8 @@ Choose wisely.\n\n"""), 3)
     @functional_component(state_dependent=True)
     def _triple_tench_dare(game_state: GameState):
         player = game_state.player
+        if perk_is_active(BEER_GOGGLES):
+            return None
 
         print_and_sleep(purple("A boy approaches you, dad's wallet in hand...\n"), 2)
 
@@ -332,8 +333,8 @@ What do you say?\n\n"""), 3)
     @functional_component(state_dependent=True)
     def _zonked(game_state: GameState):
         player = game_state.player
-        print_and_sleep(purple("You come across a man who is totally zonked...\n"), 2)
-        print_and_sleep(purple("""What do you do?\n\n"""), 3)
+        print_and_sleep(purple("You come across a man who is totally zonked...\n"), 3)
+        print_and_sleep(purple("""What do you do?\n\n"""), 2)
 
         while True:
             choice = input(
