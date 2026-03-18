@@ -74,9 +74,9 @@ Items = [
      'desc': 'Increase strength by 0.03'},
     {'name': ACCURACY_SEARUM, 'type': STAT, 'hp': 0, 'cost': 100, 'sell_value': 32, 'areas': [CAVE, FOREST],
      'desc': 'Increase accuracy by 0.03'},
-    {'name': TENCHTOSTERONE, 'type': DMG, 'hp': 0, 'cost': 50, 'sell_value': 18, 'areas': [CITY, SWAMP],
+    {'name': TENCHTOSTERONE, 'type': DMG, 'hp': 0, 'cost': 60, 'sell_value': 22, 'areas': [CITY, SWAMP],
      'desc': 'Double the damage of your next melee attack'},
-    {'name': CRITICAL_BASS, 'type': CRIT, 'hp': 0, 'cost': 25, 'sell_value': 11, 'areas': [CAVE, FOREST],
+    {'name': CRITICAL_BASS, 'type': CRIT, 'hp': 0, 'cost': 40, 'sell_value': 14, 'areas': [CAVE, FOREST],
      'desc': 'Make your next attack a critical hit'},
 
     # --- Tier 1 (10 HP) ---
