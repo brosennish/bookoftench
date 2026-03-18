@@ -225,6 +225,9 @@ class Combatant(ABC):
         self.blind_turns = blind_turns
 
     def handle_blinding(self, other: "Combatant") -> None:
+        if other.blind:
+            print_and_sleep(yellow(f"{other.name} is already blinded!"), 1)
+            return
         blind_effect = self.current_weapon.get_blind_effect()
         if blind_effect > 0:
             blind_turns = self.current_weapon.get_blind_turns()

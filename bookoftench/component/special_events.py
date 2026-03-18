@@ -3,13 +3,16 @@ import random
 from bookoftench import event_logger
 from bookoftench.audio import play_sound, play_music
 from bookoftench.component import RandomChoiceComponent, register_component, ProbabilityBinding, \
-    get_registered_component, functional_component, SwapFoundItemYN
-from bookoftench.data.audio import PISTOL, ROULETTE_THEME
-from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE
+    get_registered_component, functional_component, SwapFoundItemYN, OfficerEncounter, BinarySelectionComponent
+from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH
+from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, \
+    ZONKED, GREEDY_BASTARD
+from bookoftench.data.perks import BEER_GOGGLES
 from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent
 from bookoftench.model.item import load_items
-from bookoftench.ui import yellow, dim, purple, red, cyan, green
+from bookoftench.model.perk import perk_is_active
+from bookoftench.ui import yellow, dim, purple, red, cyan, green, blue
 from bookoftench.util import print_and_sleep
 
 
@@ -19,6 +22,104 @@ class DiscoverSpecial(RandomChoiceComponent):
         evp = game_state.current_area.event_probabilities
         super().__init__(game_state, bindings=[ProbabilityBinding(prob, get_registered_component(name))
                                                for name, prob in evp.items()])
+
+    @staticmethod
+    @register_component(GREEDY_BASTARD)
+    @functional_component(state_dependent=True)
+    def _greedy_bastard(game_state: GameState):
+        player = game_state.player
+        print_and_sleep(purple("A woman approaches you, waving her hands in the air...\n"), 3)
+        print_and_sleep(blue("Hey, you there! I have coin. Do you want some?\n\n"), 3)
+
+        while True:
+            if player.coins >= 1:
+                choice = input(
+                    "[Y] Say yes\n[O] Offer coins\n\nPlease enter a selection (r to return)\n> ").strip().lower()
+            else:
+                choice = input(
+                    "[Y] Say yes\n\nPlease enter a selection (r to return)\n> ").strip().lower()
+            if choice in ["y", "o"]:
+                print()
+                break
+            elif choice == "r":
+                print_and_sleep(purple("You tell the woman to buzz off."), 2)
+                return None
+            else:
+                print_and_sleep(yellow("Invalid choice.\n"), 1)
+                continue
+
+        if choice == "y":
+            woman_coins = random.randint(1, 50)
+            while True:
+                request = input(
+                    "[#] Request coins\n> ").strip().lower()
+                if request.isdigit():
+                    if int(request) > 50 or int(request) < 1:
+                        print_and_sleep(yellow(f"Please enter a value between 1-50.\n"), 1)
+                        continue
+                    else:
+                        request = int(request)
+                        print_and_sleep(purple(f"You requested {request} coins...\n"), 3)
+                        break
+                else:
+                    print_and_sleep(yellow("Invalid choice.\n"), 1)
+                    continue
+
+            if request < woman_coins:
+                print_and_sleep(purple(f"You're not a greedy bastard. Good for you.\n"), 3)
+                player.gain_coins(woman_coins)
+                player.gain_xp_other(woman_coins - request)
+            elif request == woman_coins:
+                print_and_sleep(purple(f"Wow, that's exactly what I have to offer. Kudos.\n"), 3)
+                player.gain_coins(woman_coins)
+            elif request > woman_coins:
+                damage = min(request - woman_coins, player.hp)
+                player.hp -= damage
+                play_sound(PUNCH)
+                print_and_sleep(red(f"The woman slapped you for {damage} damage!"), 2)
+                print_and_sleep(purple(f"That's for being a greedy bastard!\n"), 3)
+                if player.hp == 0:
+                    player.lives -= 1
+                    event_logger.log_event(PlayerDeathEvent(player.lives))
+            return None
+
+        elif choice == "o":
+            woman_desired = random.randint(1, 50)
+            while True:
+                offer = input(
+                    "\n[#] Offer coins\n> ").strip().lower()
+                if offer.isdigit():
+                    if int(offer) > player.coins:
+                        print_and_sleep(yellow(f"You only have {player.coins} coins.\n"), 1)
+                        continue
+                    elif int(offer) > 50 or int(offer) < 1:
+                        print_and_sleep(yellow(f"Please enter a value between 1-50.\n"), 1)
+                        continue
+                    else:
+                        offer = int(offer)
+                        print_and_sleep(purple(f"You offered {offer} coins...\n"), 3)
+                        break
+                else:
+                    print_and_sleep(yellow("Invalid choice.\n"), 1)
+                    continue
+
+            if offer < woman_desired:
+                damage = min(woman_desired - offer, player.hp)
+                player.hp -= damage
+                play_sound(PUNCH)
+                print_and_sleep(red(f"The woman slapped you for {damage} damage!"), 2)
+                print_and_sleep(purple(f"That's for being a stingy bastard!\n"), 3)
+                if player.hp == 0:
+                    player.lives -= 1
+                    event_logger.log_event(PlayerDeathEvent(player.lives))
+            elif offer == woman_desired:
+                print_and_sleep(purple(f"Wow, that's exactly what I was hoping for. Thanks a lot!\n"), 3)
+                player.coins -= offer
+            elif offer > woman_desired:
+                print_and_sleep(purple(f"You're not a stingy bastard. Keep the coin. Good for you.\n"), 3)
+                player.gain_xp_other(offer - woman_desired)
+            return None
+        return None
 
     @staticmethod
     @register_component(SHEBOKKEN_ROULETTE)
@@ -92,7 +193,8 @@ May I interest you in a good, old-fashioned game of Shebokken Roulette?\n\n"""),
                     return None
                 else:
                     damage = random.randint(5, 50)
-                    player.hp -= min(damage, player.hp)
+                    original = player.hp
+                    player.hp -= min(damage, original)
                     play_sound(PISTOL)
                     print_and_sleep(red(f"The man shot you for {damage} damage!"), 3)
                     print_and_sleep(yellow(f"You lost your wager of {wager} coins."), 2)
@@ -179,6 +281,8 @@ Choose wisely.\n\n"""), 3)
     @functional_component(state_dependent=True)
     def _triple_tench_dare(game_state: GameState):
         player = game_state.player
+        if perk_is_active(BEER_GOGGLES):
+            return None
 
         print_and_sleep(purple("A boy approaches you, dad's wallet in hand...\n"), 2)
 
@@ -191,8 +295,8 @@ What do you say?\n\n"""), 3)
             choice = input(
                 "[#] Yes (enter # of seconds)\n[M] Maybe next time\n\nPlease enter a selection (r to return)\n> ").strip().lower()
             if choice.isdigit():
-               if int(choice) > 100 or int(choice) < 1:
-                   print_and_sleep(yellow("Please enter a value between 1-100.\n"), 1)
+               if int(choice) > 20 or int(choice) < 1:
+                   print_and_sleep(yellow("Please enter a value between 1-20.\n"), 1)
                else:
                    seconds = int(choice)
                    break
@@ -222,4 +326,47 @@ What do you say?\n\n"""), 3)
 
         payment = seconds * 5
         player.gain_coins(payment)
+        return None
+
+    @staticmethod
+    @register_component(ZONKED)
+    @functional_component(state_dependent=True)
+    def _zonked(game_state: GameState):
+        player = game_state.player
+        print_and_sleep(purple("You come across a man who is totally zonked...\n"), 3)
+        print_and_sleep(purple("""What do you do?\n\n"""), 2)
+
+        while True:
+            choice = input(
+                "[W] Wake him up\n[B] Bury him alive\n\nPlease enter a selection (r to return)\n> ").strip().lower()
+            if choice in ["w", "b"]:
+                break
+            elif choice == "r":
+                print_and_sleep(purple("You leave the zonked man as he was."), 2)
+                return None
+            else:
+                print_and_sleep(yellow("Invalid choice.\n"), 1)
+                continue
+
+        amount = random.randint(1, 25)
+        if choice == "w":
+            if random.random() < 0.5:
+                play_sound(PUNCH)
+                print_and_sleep(red(f"You startled the man and he punched you for {amount} damage!"), 3)
+                original = player.hp
+                player.hp -= min(amount, original)
+                if player.hp == 0:
+                    player.lives -= 1
+                    event_logger.log_event(PlayerDeathEvent(player.lives))
+            else:
+                print_and_sleep(purple(f"""Thanks for waking me up, man.
+I would've slept through my appointment today.
+I'm scheduled to be buried alive at 6... or was it 8?"""), 3)
+                print_and_sleep(green(f"He pays you {amount} of coin and immediately zonks back out."), 3)
+                player.gain_coins(amount)
+        elif choice == "b":
+            print_and_sleep(purple(f"You bury the man alive."), 3)
+            player.gain_xp_other(amount)
+            if random.random() < 0.25:
+                OfficerEncounter(game_state).run()
         return None

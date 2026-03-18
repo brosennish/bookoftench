@@ -17,6 +17,7 @@ DISCOVER_SPECIAL = "Discover Special"
 DISCOVER_WEAPON = "Discover Weapon"
 EQUIP_WEAPON = "Equip Weapon"
 FINAL_BOSS_FIGHT = purple("BATTLE DENNY BILTMORE")
+GREEDY_BASTARD = "Greedy Bastard"
 HOSPITAL = "Hospital"
 INFO = "Info"
 LAB = "Lab"
@@ -40,6 +41,7 @@ TRAVEL = "Travel"
 TRIPLE_TENCH_DARE = "Triple Tench Dare"
 USE_ITEM = "Use Item"
 WIZARD = "Wizard"
+ZONKED = "Zonked"
 
 
 class StartGameMenuDefaults:

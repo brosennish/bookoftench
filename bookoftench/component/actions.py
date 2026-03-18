@@ -369,7 +369,7 @@ class Attack(Component):
         if enemy.is_alive():
             enemy.attack(player)
             if player.is_alive() and random.random() < ENEMY_SWITCH_WEAPON_CHANCE:
-                enemy.current_weapon = enemy.enemy_switch_weapon()
+                enemy.current_weapon = enemy.enemy_switch_weapon(player.blind)
         if not enemy.is_alive():
             self.handle_enemy_death(player, enemy)
         if not player.is_alive():

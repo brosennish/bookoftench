@@ -9,7 +9,7 @@ from bookoftench.data import Areas
 from bookoftench.data.areas import EncounterType
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
-    SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE
+    SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD
 from bookoftench.data.enemies import Enemy_Adjectives
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
@@ -20,17 +20,19 @@ from ..data.perks import SHERLOCK_TENCH
 
 _search_defaults = {
     DISCOVER_PERK: 1,
-    DISCOVER_ITEM: 2,
-    DISCOVER_WEAPON: 2,
-    DISCOVER_DISCOVERABLE: 48,
+    DISCOVER_ITEM: 1,
+    DISCOVER_WEAPON: 1,
+    DISCOVER_DISCOVERABLE: 45,
     DISCOVER_SPECIAL: 10,
     SPAWN_ENEMY: 30
 }
 
 _event_defaults = {
-    SHEBOKKEN_ROULETTE: 36,
-    THREE_HOLES: 40,
-    TRIPLE_TENCH_DARE: 24,
+    GREEDY_BASTARD: 25,
+    SHEBOKKEN_ROULETTE: 25,
+    THREE_HOLES: 28,
+    TRIPLE_TENCH_DARE: 12,
+    ZONKED: 20
 }
 
 

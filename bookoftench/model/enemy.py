@@ -10,7 +10,7 @@ from bookoftench.data import Enemies
 from bookoftench.data.audio import AREA_BOSS_THEME, GATOR
 from bookoftench.data.enemies import Bosses, Final_Boss, BAYOU_BILL, Enemy_Lines
 from bookoftench.data.perks import RICKETY_PICKPOCKET
-from bookoftench.data.weapons import BARE_HANDS
+from bookoftench.data.weapons import BARE_HANDS, BLIND
 from bookoftench.ui import purple, cyan
 from bookoftench.util import print_and_sleep
 from .base import Combatant, NPC, DisplayableText
@@ -42,7 +42,7 @@ class Enemy(Combatant, NPC):
 
     def __post_init__(self):
         self.weapon_dict = dict((w.name, w) for w in load_weapons(self.weapons))
-        self.current_weapon = random.choice(list(self.weapon_dict.values()))
+        self.current_weapon = random.choice(list(i for i in self.weapon_dict.values() if i.type != BLIND))
         self.max_hp = self.hp
 
     def drop_weapon(self) -> Optional[Weapon]:
@@ -60,10 +60,13 @@ class Enemy(Combatant, NPC):
             self.weapon_dict[BARE_HANDS] = load_weapon(BARE_HANDS)
         self.current_weapon = random.choice(list(self.weapon_dict.values()))
 
-    def enemy_switch_weapon(self) -> Weapon:
+    def enemy_switch_weapon(self, player_is_blind: bool) -> Weapon:
         current_weapon = self.current_weapon
         options = [i for i in self.weapon_dict if i != current_weapon.name
                    and i != BARE_HANDS]
+        if player_is_blind:
+            options = [i for i in self.weapon_dict.values() if i.name not in [current_weapon.name, BARE_HANDS]
+                       and i.type != BLIND]
         if options:
             selection = random.choice(options)
             self.current_weapon = load_weapon(selection)
