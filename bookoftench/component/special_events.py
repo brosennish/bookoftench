@@ -4,7 +4,7 @@ from bookoftench import event_logger
 from bookoftench.audio import play_sound, play_music
 from bookoftench.component import RandomChoiceComponent, register_component, ProbabilityBinding, \
     get_registered_component, functional_component, SwapFoundItemYN, OfficerEncounter, BinarySelectionComponent
-from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH, PURCHASE
+from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH
 from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, \
     ZONKED, GREEDY_BASTARD
 from bookoftench.model import GameState
@@ -81,12 +81,46 @@ class DiscoverSpecial(RandomChoiceComponent):
             return None
 
         elif choice == "o":
-            # amount desired by woman = randint(1, player.coins)
             # Enter number of coins to offer 1-player.coins
             # if number < amount, she takes number and slaps you for being stingy causing dmg worth the diff
             # if number == amount, she takes the number
             # if number > amount, she takes the number, and you receive the diff in xp
-            pass
+            woman_desired = random.randint(1, 50)
+            while True:
+                offer = input(
+                    "[#] Offer coins\n> ").strip().lower()
+                if choice.isdigit():
+                    if int(offer) > player.coins:
+                        print_and_sleep(yellow(f"You only have {player.coins} coins.\n"), 1)
+                        continue
+                    elif int(offer) > 50 or int(offer) < 1:
+                        print_and_sleep(yellow(f"Please enter a value between 1-50.\n"), 1)
+                        continue
+                    else:
+                        offer = int(choice)
+                        print_and_sleep(purple(f"You offered {offer} coins...\n"), 3)
+                        break
+                else:
+                    print_and_sleep(yellow("Invalid choice.\n"), 1)
+                    continue
+
+            if offer < woman_desired:
+                damage = min(woman_desired - offer, player.hp)
+                player.hp -= damage
+                play_sound(PUNCH)
+                print_and_sleep(red(f"The woman slapped you for {damage} damage!"), 2)
+                print_and_sleep(purple(f"That's for being a stingy bastard!\n"), 3)
+                if player.hp == 0:
+                    player.lives -= 1
+                    event_logger.log_event(PlayerDeathEvent(player.lives))
+            elif offer == woman_desired:
+                print_and_sleep(purple(f"Wow, that's exactly what I was hoping for. Thanks a lot!\n"), 3)
+                player.coins -= offer
+            elif offer > woman_desired:
+                print_and_sleep(purple(f"You're not a stingy bastard. Keep the coin. Good for you.\n"), 3)
+                player.gain_xp_other(offer - woman_desired)
+            return None
+        return None
 
     @staticmethod
     @register_component(SHEBOKKEN_ROULETTE)
