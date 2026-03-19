@@ -3,7 +3,7 @@ import random
 from bookoftench import event_logger
 from bookoftench.audio import play_sound, play_music
 from bookoftench.component import RandomChoiceComponent, register_component, ProbabilityBinding, \
-    get_registered_component, functional_component, SwapFoundItemYN, OfficerEncounter, BinarySelectionComponent
+    get_registered_component, functional_component, SwapFoundItemYN, OfficerEncounter
 from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH
 from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, \
     ZONKED, GREEDY_BASTARD
@@ -27,15 +27,19 @@ class DiscoverSpecial(RandomChoiceComponent):
     @register_component(GREEDY_BASTARD)
     @functional_component(state_dependent=True)
     def _greedy_bastard(game_state: GameState):
+        # Request or offer coins
+        # Depending on if > or < you may or may not be deemed a greedy or stingy bastard
+        # Varying rewards and penalties for how generous, greedy or stingy you are
+
         player = game_state.player
         print_and_sleep(purple("A woman approaches you, waving her hands in the air...\n"), 3)
         print_and_sleep(blue("Hey, you there! I have coin. Do you want some?\n\n"), 3)
 
         while True:
-            if player.coins >= 1:
+            if player.coins >= 1:  # Can only offer coins if you have 1+
                 choice = input(
                     "[Y] Say yes\n[O] Offer coins\n\nPlease enter a selection (r to return)\n> ").strip().lower()
-            else:
+            else:  # Else only option is to request
                 choice = input(
                     "[Y] Say yes\n\nPlease enter a selection (r to return)\n> ").strip().lower()
             if choice in ["y", "o"]:
@@ -53,7 +57,7 @@ class DiscoverSpecial(RandomChoiceComponent):
             while True:
                 request = input(
                     "[#] Request coins\n> ").strip().lower()
-                if request.isdigit():
+                if request.isdigit():  # Can only request 1-50 coins
                     if int(request) > 50 or int(request) < 1:
                         print_and_sleep(yellow(f"Please enter a value between 1-50.\n"), 1)
                         continue
@@ -65,14 +69,14 @@ class DiscoverSpecial(RandomChoiceComponent):
                     print_and_sleep(yellow("Invalid choice.\n"), 1)
                     continue
 
-            if request < woman_coins:
+            if request < woman_coins:  # You request less than the woman has to offer
                 print_and_sleep(purple(f"You're not a greedy bastard. Good for you.\n"), 3)
                 player.gain_coins(woman_coins)
                 player.gain_xp_other(woman_coins - request)
-            elif request == woman_coins:
+            elif request == woman_coins:  # You request what the woman has to offer
                 print_and_sleep(purple(f"Wow, that's exactly what I have to offer. Kudos.\n"), 3)
                 player.gain_coins(woman_coins)
-            elif request > woman_coins:
+            elif request > woman_coins:  # You request more than the woman has to offer
                 damage = min(request - woman_coins, player.hp)
                 player.hp -= damage
                 play_sound(PUNCH)
@@ -88,11 +92,11 @@ class DiscoverSpecial(RandomChoiceComponent):
             while True:
                 offer = input(
                     "\n[#] Offer coins\n> ").strip().lower()
-                if offer.isdigit():
+                if offer.isdigit():  # You can only offer up to what you have
                     if int(offer) > player.coins:
                         print_and_sleep(yellow(f"You only have {player.coins} coins.\n"), 1)
                         continue
-                    elif int(offer) > 50 or int(offer) < 1:
+                    elif int(offer) > 50 or int(offer) < 1:  # You can only offer 1-50
                         print_and_sleep(yellow(f"Please enter a value between 1-50.\n"), 1)
                         continue
                     else:
@@ -103,7 +107,7 @@ class DiscoverSpecial(RandomChoiceComponent):
                     print_and_sleep(yellow("Invalid choice.\n"), 1)
                     continue
 
-            if offer < woman_desired:
+            if offer < woman_desired:  # Your offer is less than what the woman wants
                 damage = min(woman_desired - offer, player.hp)
                 player.hp -= damage
                 play_sound(PUNCH)
@@ -112,10 +116,10 @@ class DiscoverSpecial(RandomChoiceComponent):
                 if player.hp == 0:
                     player.lives -= 1
                     event_logger.log_event(PlayerDeathEvent(player.lives))
-            elif offer == woman_desired:
+            elif offer == woman_desired:  # You offer what the woman wants
                 print_and_sleep(purple(f"Wow, that's exactly what I was hoping for. Thanks a lot!\n"), 3)
                 player.coins -= offer
-            elif offer > woman_desired:
+            elif offer > woman_desired:  # You offer more than what the woman wants
                 print_and_sleep(purple(f"You're not a stingy bastard. Keep the coin. Good for you.\n"), 3)
                 player.gain_xp_other(offer - woman_desired)
             return None
@@ -134,7 +138,7 @@ class DiscoverSpecial(RandomChoiceComponent):
 May I interest you in a good, old-fashioned game of Shebokken Roulette?\n\n"""), 3)
 
         wager = 0
-        while True:
+        while True:  # Place a wager of 1-100 that is matched by the man
             choice = input(
                 "[#] Yes (enter wager)\n[N] Not this time\n\nPlease enter a selection (r to return)\n> ").strip().lower()
             if choice.isdigit():
@@ -155,7 +159,7 @@ May I interest you in a good, old-fashioned game of Shebokken Roulette?\n\n"""),
                 print_and_sleep(yellow("Invalid choice.\n"), 1)
                 continue
 
-        while True:
+        while True:  # Heads or Tails to see who goes first
             pick = input(
                 "[H] Heads\n[T] Tails\n\nPlease enter a selection (r to return)\n> ").strip().lower()
             if pick == "h":
@@ -183,15 +187,15 @@ May I interest you in a good, old-fashioned game of Shebokken Roulette?\n\n"""),
 
         chamber_index = 0
         shooter = player_1
-        while True:
-            if chamber[chamber_index] == 1:
-                if shooter == player:
+        while True:  # Takes turns shooting at each other up to 6 times
+            if chamber[chamber_index] == 1:  # The bullet is fired
+                if shooter == player:  # You collect the man's wager and xp worth the lower of 20 or wager
                     play_sound(PISTOL)
                     print_and_sleep(cyan(f"You shot the man and collected {wager} coins!"), 3)
                     player.gain_coins(wager)
                     player.gain_xp_other(min(wager, 20))
                     return None
-                else:
+                else:  # You suffer 5, 50 damage and lose your wager (death if applicable)
                     damage = random.randint(5, 50)
                     original = player.hp
                     player.hp -= min(damage, original)
@@ -203,7 +207,7 @@ May I interest you in a good, old-fashioned game of Shebokken Roulette?\n\n"""),
                         player.lives -= 1
                         event_logger.log_event(PlayerDeathEvent(player.lives))
                     return None
-            else:
+            else:  # Bullet wasn't in the chamber
                 if shooter == player:
                     print_and_sleep(purple(f"You shot but the chamber was empty."), 2.5)
                 else:
@@ -250,7 +254,7 @@ Choose wisely.\n\n"""), 3)
         elif choice == "3":
             choice = hole_3
 
-        if choice == "good":
+        if choice == "good":  # Find a random item from area and not in your items
             item = random.choice([i for i in load_items() if game_state.current_area.name in i.areas
                                   and i.name not in player.items])
             print_and_sleep(cyan(f"You found {item.name}!"), 1)
@@ -258,10 +262,10 @@ Choose wisely.\n\n"""), 3)
             if player.add_item(item):
                 print_and_sleep(cyan(f"{item.name} added to sack."), 1)
                 return None
-            else:
+            else:  # Swap item option if in inventory
                 return SwapFoundItemYN(game_state).run()
 
-        elif choice == "bad":
+        elif choice == "bad":  # Attacked by something in the hole losing 1, calculated damage
             original = player.hp
             damage = min(random.randint(1, min(player.lvl * 10, 50)), original)
             player.hp -= damage
@@ -271,7 +275,7 @@ Choose wisely.\n\n"""), 3)
                 event_logger.log_event(PlayerDeathEvent(player.lives))
             return None
 
-        else:
+        else:  # Hole is empty
             print_and_sleep(dim("You came up dry."), 1)
             return None
 
@@ -291,9 +295,9 @@ For every second, he will give you 5 of coin.
 What do you say?\n\n"""), 3)
 
         seconds = 0
-        while True:
+        while True:  # Choose 1,20 seconds to stare at the sun or leave
             choice = input(
-                "[#] Yes (enter # of seconds)\n[M] Maybe next time\n\nPlease enter a selection (r to return)\n> ").strip().lower()
+                "[#] Yes (enter # of seconds)\n[M] Maybe next time\n\nPlease enter a selection\n> ").strip().lower()
             if choice.isdigit():
                if int(choice) > 20 or int(choice) < 1:
                    print_and_sleep(yellow("Please enter a value between 1-20.\n"), 1)
@@ -307,14 +311,15 @@ What do you say?\n\n"""), 3)
                 print_and_sleep(yellow("Invalid choice.\n"), 1)
                 continue
 
-        print_and_sleep(yellow("..."), seconds)
+        print_and_sleep(yellow("..."), seconds)  # time.sleep for the number of seconds entered
 
-        sun_effect = random.uniform(0.25, 0.75)
+        sun_effect = random.uniform(0.25, 0.75)  # Sun blind effect between 0.25, 0.75
         if player.blind:
-            player.blind_turns += seconds
+            player.blind_turns += seconds  # Add to current turns
             player.blind_effect = sun_effect if sun_effect > player.blind_effect else player.blind_effect
+            # Update to sun blind effect if > current
         else:
-            player.blind = True
+            player.blind = True  # Set player blind to True
             player.blind_turns = seconds
             player.blind_effect = sun_effect
 
@@ -332,6 +337,10 @@ What do you say?\n\n"""), 3)
     @register_component(ZONKED)
     @functional_component(state_dependent=True)
     def _zonked(game_state: GameState):
+        # A man is zonked and may miss his appointment to be buried alive
+        # If you wake him, you may startle him (he punches you) or he will pay you to say thanks
+        # Another option is to bury him alive yourself, but there's a 1 in 4 chance Officer catches you
+
         player = game_state.player
         print_and_sleep(purple("You come across a man who is totally zonked...\n"), 3)
         print_and_sleep(purple("""What do you do?\n\n"""), 2)
@@ -349,8 +358,8 @@ What do you say?\n\n"""), 3)
                 continue
 
         amount = random.randint(1, 25)
-        if choice == "w":
-            if random.random() < 0.5:
+        if choice == "w":  # You wake him up
+            if random.random() < 0.5:  # You startle him and he punches you
                 play_sound(PUNCH)
                 print_and_sleep(red(f"You startled the man and he punched you for {amount} damage!"), 3)
                 original = player.hp
@@ -358,15 +367,15 @@ What do you say?\n\n"""), 3)
                 if player.hp == 0:
                     player.lives -= 1
                     event_logger.log_event(PlayerDeathEvent(player.lives))
-            else:
+            else:  # He is grateful
                 print_and_sleep(purple(f"""Thanks for waking me up, man.
 I would've slept through my appointment today.
 I'm scheduled to be buried alive at 6... or was it 8?"""), 3)
                 print_and_sleep(green(f"He pays you {amount} of coin and immediately zonks back out."), 3)
                 player.gain_coins(amount)
-        elif choice == "b":
+        elif choice == "b":  # You bury him alive
             print_and_sleep(purple(f"You bury the man alive."), 3)
-            player.gain_xp_other(amount)
-            if random.random() < 0.25:
+            player.gain_xp_other(amount)  # Gain xp for helping him
+            if random.random() < 0.25:  # Chance Officer Hohkken busts you
                 OfficerEncounter(game_state).run()
         return None
