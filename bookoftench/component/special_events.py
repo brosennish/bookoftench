@@ -13,7 +13,7 @@ from bookoftench.model.events import PlayerDeathEvent
 from bookoftench.model.item import load_items
 from bookoftench.model.perk import perk_is_active
 from bookoftench.ui import yellow, dim, purple, red, cyan, green, blue
-from bookoftench.util import print_and_sleep
+from bookoftench.util import print_and_sleep, carrot
 
 
 @register_component(DISCOVER_SPECIAL)
@@ -37,11 +37,14 @@ class DiscoverSpecial(RandomChoiceComponent):
 
         while True:
             if player.coins >= 1:  # Can only offer coins if you have 1+
+                veg = carrot(green)
                 choice = input(
-                    "[Y] Say yes\n[O] Offer coins\n\nPlease enter a selection (r to return)\n> ").strip().lower()
+                    f"[Y] Say yes\n[O] Offer coins"
+                    f"\n\nPlease enter a selection (r to return){veg}").strip().lower()
             else:  # Else only option is to request
+                veg = carrot(green)
                 choice = input(
-                    "[Y] Say yes\n\nPlease enter a selection (r to return)\n> ").strip().lower()
+                    f"[Y] Say yes\n\nPlease enter a selection (r to return){veg}").strip().lower()
             if choice in ["y", "o"]:
                 print()
                 break
@@ -55,15 +58,17 @@ class DiscoverSpecial(RandomChoiceComponent):
         if choice == "y":
             woman_coins = random.randint(1, 50)
             while True:
+                veg = carrot(green)
                 request = input(
-                    "[#] Request coins\n> ").strip().lower()
+                    f"[#] Request coins{veg}").strip().lower()
                 if request.isdigit():  # Can only request 1-50 coins
                     if int(request) > 50 or int(request) < 1:
                         print_and_sleep(yellow(f"Please enter a value between 1-50.\n"), 1)
                         continue
                     else:
+                        print_and_sleep(purple(f"You requested {int(request)} "
+                                               f"{'coin' if int(request) == 1 else 'coins'}...\n"), 3)
                         request = int(request)
-                        print_and_sleep(purple(f"You requested {request} coins...\n"), 3)
                         break
                 else:
                     print_and_sleep(yellow("Invalid choice.\n"), 1)
@@ -71,7 +76,7 @@ class DiscoverSpecial(RandomChoiceComponent):
 
             if request < woman_coins:  # You request less than the woman has to offer
                 print_and_sleep(purple(f"You're not a greedy bastard. Good for you.\n"), 3)
-                player.gain_coins(woman_coins)
+                player.gain_coins(request)
                 player.gain_xp_other(woman_coins - request)
             elif request == woman_coins:  # You request what the woman has to offer
                 print_and_sleep(purple(f"Wow, that's exactly what I have to offer. Kudos.\n"), 3)
@@ -89,9 +94,10 @@ class DiscoverSpecial(RandomChoiceComponent):
 
         elif choice == "o":
             woman_desired = random.randint(1, 50)
+            veg = carrot(green)
             while True:
                 offer = input(
-                    "\n[#] Offer coins\n> ").strip().lower()
+                    f"\n[#] Offer coins{veg}").strip().lower()
                 if offer.isdigit():  # You can only offer up to what you have
                     if int(offer) > player.coins:
                         print_and_sleep(yellow(f"You only have {player.coins} coins.\n"), 1)
@@ -101,7 +107,8 @@ class DiscoverSpecial(RandomChoiceComponent):
                         continue
                     else:
                         offer = int(offer)
-                        print_and_sleep(purple(f"You offered {offer} coins...\n"), 3)
+                        print_and_sleep(purple(f"You offered {offer} "
+                                               f"{'coin' if offer == 1 else 'coins'}...\n"), 3)
                         break
                 else:
                     print_and_sleep(yellow("Invalid choice.\n"), 1)
@@ -139,8 +146,9 @@ May I interest you in a good, old-fashioned game of Shebokken Roulette?\n\n"""),
 
         wager = 0
         while True:  # Place a wager of 1-100 that is matched by the man
+            veg = carrot(red)
             choice = input(
-                "[#] Yes (enter wager)\n[N] Not this time\n\nPlease enter a selection (r to return)\n> ").strip().lower()
+                f"[#] Yes (enter wager)\n[N] Not this time\n\nPlease enter a selection (r to return){veg}").strip().lower()
             if choice.isdigit():
                 if int(choice) > 100 or int(choice) < 1:
                     print_and_sleep(yellow("Please enter a value between 1-100.\n"), 1)
@@ -160,8 +168,9 @@ May I interest you in a good, old-fashioned game of Shebokken Roulette?\n\n"""),
                 continue
 
         while True:  # Heads or Tails to see who goes first
+            veg = carrot(red)
             pick = input(
-                "[H] Heads\n[T] Tails\n\nPlease enter a selection (r to return)\n> ").strip().lower()
+                f"[H] Heads\n[T] Tails\n\nPlease enter a selection (r to return){veg}").strip().lower()
             if pick == "h":
                 print_and_sleep(purple("You chose heads."), 2)
                 break
@@ -237,7 +246,9 @@ A ghastly man whispers that you may only reach into one of the holes.
 Choose wisely.\n\n"""), 3)
 
         while True:
-            choice = input("[1] Hole 1\n[2] Hole 2\n[3] Hole 3\n\nPlease enter a selection (r to return)\n> ").strip().lower()
+            veg = carrot(purple)
+            choice = input(f"[1] Hole 1\n[2] Hole 2\n[3] Hole 3\n\n"
+                           f"Please enter a selection (r to return){veg}").strip().lower()
             if choice in ["1", "2", "3"]:
                 break
             elif choice == "r":
@@ -286,6 +297,7 @@ Choose wisely.\n\n"""), 3)
     def _triple_tench_dare(game_state: GameState):
         player = game_state.player
         if perk_is_active(BEER_GOGGLES):
+            print_and_sleep(dim(f"You came up dry."), 1)
             return None
 
         print_and_sleep(purple("A boy approaches you, dad's wallet in hand...\n"), 2)
@@ -296,8 +308,10 @@ What do you say?\n\n"""), 3)
 
         seconds = 0
         while True:  # Choose 1,20 seconds to stare at the sun or leave
+            veg = carrot(yellow)
             choice = input(
-                "[#] Yes (enter # of seconds)\n[M] Maybe next time\n\nPlease enter a selection\n> ").strip().lower()
+                f"[#] Yes (enter # of seconds)\n[M] Maybe next time"
+                f"\n\nPlease enter a selection (r to return){veg}").strip().lower()
             if choice.isdigit():
                if int(choice) > 20 or int(choice) < 1:
                    print_and_sleep(yellow("Please enter a value between 1-20.\n"), 1)
@@ -346,8 +360,10 @@ What do you say?\n\n"""), 3)
         print_and_sleep(purple("""What do you do?\n\n"""), 2)
 
         while True:
+            veg = carrot(purple)
             choice = input(
-                "[W] Wake him up\n[B] Bury him alive\n\nPlease enter a selection (r to return)\n> ").strip().lower()
+                f"[W] Wake him up\n[B] Bury him alive"
+                f"\n\nPlease enter a selection (r to return){veg}").strip().lower()
             if choice in ["w", "b"]:
                 break
             elif choice == "r":
@@ -374,7 +390,7 @@ I'm scheduled to be buried alive at 6... or was it 8?"""), 3)
                 print_and_sleep(green(f"He pays you {amount} of coin and immediately zonks back out."), 3)
                 player.gain_coins(amount)
         elif choice == "b":  # You bury him alive
-            print_and_sleep(purple(f"You bury the man alive."), 3)
+            print_and_sleep(purple(f"You bury the man alive..."), 3)
             player.gain_xp_other(amount)  # Gain xp for helping him
             if random.random() < 0.25:  # Chance Officer Hohkken busts you
                 OfficerEncounter(game_state).run()
