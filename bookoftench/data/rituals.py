@@ -14,7 +14,7 @@ Occultist_Lines = [
     "Hell has great coastlines. Sure, they're along lakes of fire.",
     "Did you know Satan is part Tench?",
     "Performing rituals is tiresome. Having your eyes fall out of your head and all.",
-    "My rituals almost never go wrong... well, they sometimes go wrong.",
+    "My rituals never go wrong... well, they sometimes go wrong.",
     "Pay the price for something nice or to pay a difference price... nice.",
     "Oh... Satan would LOVE you.",
     "Tench proliferate within the endless fiery lakes that border Hell's idyllic coastline.",

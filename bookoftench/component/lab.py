@@ -56,8 +56,8 @@ class ExperimentRisks(TextDisplayingComponent):
 Strength : 27%
 Accuracy : 27%
 Max HP   : 25%
-Level    : 8%
-Lives    : 4%\n""")))
+Level    : 12%
+Lives    : 8%\n""")))
 
 
 def conduct_experiment(player: Player):
@@ -103,9 +103,11 @@ def conduct_experiment(player: Player):
             print_and_sleep(yellow(f"Max HP: {original} -> {player.max_hp}"), 1)
             mutation = True
 
-    if random.random() < 0.08:
+    if random.random() < 0.12:
         original = player.lvl
-        amount = random.randint(-1, 1)
+        amount = -1
+        if random.random() < 0.55:  # higher odds to increase level (bad for player)
+            amount = 1
         player.lvl += amount
         if player.lvl <= 0:
             player.lvl = 1
@@ -120,10 +122,10 @@ def conduct_experiment(player: Player):
             player.lives -= 1
             event_logger.log_event(PlayerDeathEvent(player.lives))
 
-    if random.random() < 0.04:
+    if random.random() < 0.08:
         original = player.lives
         amount = 1
-        if random.random() < 0.55:  # slightly higher odds to lose a life since you're getting paid
+        if random.random() < 0.55:  # higher odds to lose a life since you're getting paid
             amount = -1
         player.lives += amount
         if player.lives >= 1:
