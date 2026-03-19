@@ -5,7 +5,7 @@ from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
     functional_component, GatekeepingComponent, Component
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import SHOP_THEME, PURCHASE, DRINKING
+from bookoftench.data.audio import SHOP_THEME, PURCHASE, DRINKING, COFFEE_THEME
 from bookoftench.data.components import COFFEE_SHOP
 from bookoftench.model import GameState
 from bookoftench.model.coffee_item import CoffeeItem

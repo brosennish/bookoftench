@@ -28,11 +28,11 @@ _search_defaults = {
 }
 
 _event_defaults = {
-    GREEDY_BASTARD: 27,
-    SHEBOKKEN_ROULETTE: 26,
-    THREE_HOLES: 27,
+    GREEDY_BASTARD: 25,
+    SHEBOKKEN_ROULETTE: 25,
+    THREE_HOLES: 25,
     TRIPLE_TENCH_DARE: 10,
-    ZONKED: 20
+    ZONKED: 15
 }
 
 

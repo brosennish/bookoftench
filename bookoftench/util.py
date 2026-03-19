@@ -27,6 +27,12 @@ def print_and_sleep(text: str, seconds: float = 0, newline_prefix: bool = True):
     skippable_sleep(seconds)
 
 
+def carrot(color) -> str:
+    if not color:
+        color = blue
+    return color(f"\n> ")
+
+
 def safe_input(prompt=""):
     flush_input()
     return input(f"{f"\n{prompt}\n" if len(prompt) > 0 else ''}{blue(">")} ")
