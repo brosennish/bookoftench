@@ -5,7 +5,7 @@ from bookoftench.model.illness import Illness
 from bookoftench.model.item import Item
 from bookoftench.model.perk import Perk
 from bookoftench.model.weapon import Weapon
-from bookoftench.ui import dim, green, yellow, red, cyan, orange, purple
+from bookoftench.ui import dim, green, yellow, red, cyan, orange, purple, blue
 
 
 @dataclass
@@ -13,6 +13,7 @@ class Build:
     notes: str | None
     illness: Illness | None
     name: str
+    lives: int
     hp: int
     str: float
     acc: float
@@ -26,6 +27,7 @@ class Build:
 
         header = f"{orange(self.name)}\n"
         values = dim(' | ').join([
+            f"Lives: {cyan(self.lives)}",
             f"HP: {green(self.hp)}{spacing}",
             f"Strength: {yellow(f'{self.str:<3}')}",
             f"Accuracy: {yellow(f'{self.acc:<3}')}",
@@ -40,20 +42,20 @@ class Build:
             return "\n".join([
                 header,
                 values,
-                f"{cyan('Illness')} {dim('|')} {yellow(self.illness.name)}",
-                f"{cyan('Items')}   {dim('|')} {items}",
-                f"{cyan('Weapons')} {dim('|')} {weapons}",
-                f"{cyan('Perks')}   {dim('|')} {perks_str}",
-                f"{cyan('Notes')}   {dim('|')} {self.notes}",
+                f"{'Illness'}  {dim('|')} {yellow(self.illness.name)}",
+                f"{'Items'}    {dim('|')} {items}",
+                f"{'Weapons'}  {dim('|')} {weapons}",
+                f"{'Perks'}    {dim('|')} {perks_str}",
+                f"{'Notes'}    {dim('|')} {blue(f"{self.notes}")}",
                 "\n",
             ])
         else:
             return "\n".join([
                 header,
                 values,
-                f"{cyan('Items')}   {dim('|')} {items}",
-                f"{cyan('Weapons')} {dim('|')} {weapons}",
-                f"{cyan('Perks')}   {dim('|')} {perks_str}",
-                f"{cyan('Notes')}   {dim('|')} {self.notes}",
+                f"{'Items'}    {dim('|')} {items}",
+                f"{'Weapons'}  {dim('|')} {weapons}",
+                f"{'Perks'}    {dim('|')} {perks_str}",
+                f"{'Notes'}    {dim('|')} {blue(f"{self.notes}")}",
                 "\n",
             ])

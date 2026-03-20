@@ -51,8 +51,8 @@ class Enemy(Combatant, NPC):
         return None
 
     @attach_perk(RICKETY_PICKPOCKET, value_description="coins dropped")
-    def drop_coins(self) -> int:
-        return self.coins
+    def drop_coins(self, enemy) -> int:
+        return enemy.coins
 
     def handle_broken_weapon(self) -> None:
         del self.weapon_dict[self.current_weapon.name]
@@ -60,13 +60,10 @@ class Enemy(Combatant, NPC):
             self.weapon_dict[BARE_HANDS] = load_weapon(BARE_HANDS)
         self.current_weapon = random.choice(list(self.weapon_dict.values()))
 
-    def enemy_switch_weapon(self, player_is_blind: bool) -> Weapon:
+    def enemy_switch_weapon(self) -> Weapon:
         current_weapon = self.current_weapon
         options = [i for i in self.weapon_dict if i != current_weapon.name
                    and i != BARE_HANDS]
-        if player_is_blind:
-            options = [i for i in self.weapon_dict.values() if i.name not in [current_weapon.name, BARE_HANDS]
-                       and i.type != BLIND]
         if options:
             selection = random.choice(options)
             self.current_weapon = load_weapon(selection)

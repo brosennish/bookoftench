@@ -167,6 +167,7 @@ def display_game_stats(game_state: GameState) -> None:
     def display_stat(title: str, value: Any, value_color: Callable[[str], str]) -> None:
         print(f"{title:<{width}} {(white(dim('|')))} {value_color(value)}")
 
+    display_stat("Name", str(player.name), cyan)
     display_stat("Build", str(player_build.name), orange)
     display_stat("Current Level", player.lvl, cyan)
     display_stat("Current HP", player.hp, player_color)
@@ -187,14 +188,15 @@ def display_game_stats(game_state: GameState) -> None:
     display_stat("Successful Flees", event_logger.get_count(EventType.FLEE), cyan)
     display_stat("Failed Flees", event_logger.get_count(EventType.FAILED_FLEE), yellow)
 
-    display_stat("Enemies Killed", event_logger.get_count(EventType.KILL), cyan)
+    display_stat("Enemies Killed", event_logger.get_count(EventType.KILL), red)
     display_stat("Bounties Claimed", event_logger.get_count(EventType.BOUNTY_COLLECTED), purple)
     display_stat("Shoplifts", event_logger.get_count(EventType.STEAL), cyan)
     display_stat("Bribes Paid", event_logger.get_count(EventType.OFFICER_PAID), green)
     display_stat("Police Brutalities", event_logger.get_count(EventType.OFFICER_UNPAID), red)
+    display_stat("Hohkken Attacks", event_logger.get_count(EventType.HOHKKEN), red)
 
     display_stat("Areas Cleared", sum(1 for a in game_state.areas if a.enemies_remaining == 0), blue)
-    display_stat("Bosses Defeated", sum(1 for a in game_state.areas if a.boss_defeated), cyan)
+    display_stat("Bosses Defeated", sum(1 for a in game_state.areas if a.boss_defeated), red)
 
     display_stat("Coffees Purchased", event_logger.get_count(EventType.COFFEE_EVENT), green)
 

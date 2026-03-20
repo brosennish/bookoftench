@@ -27,11 +27,4 @@ class TravelListener(Listener):
     @staticmethod
     def handle_event(event: TravelEvent):
         play_music(TRAVEL_THEME)
-        print_and_sleep(cyan(f'Traveling by six-by-eight to the {event.area_name}...'), 5)
-
-
-@subscribe_listener(HohkkenEvent)
-class HohkkenListener(Listener):
-    @staticmethod
-    def handle_event(event: TravelEvent):
-        play_sound(HOHKKEN)
+        print_and_sleep(cyan(f'Traveling by six-by-eight to the {event.area_name}...'), 4)

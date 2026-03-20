@@ -10,6 +10,7 @@ from bookoftench.component.registry import register_component
 from bookoftench.data.audio import DEVIL_THUNDER, GREAT_JOB, INTRO_THEME, VICTORY_THEME, START_THEME
 from bookoftench.data.components import QUIT_GAME, NEW_GAME, BUILD_SELECTION
 from bookoftench.model import GameState
+from bookoftench.model.util import display_game_stats
 from bookoftench.ui import red, green
 from bookoftench.util import print_and_sleep, safe_input
 
@@ -167,13 +168,30 @@ class GameOver(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
                          display_callback=self._display,
-                         next_component=PlayAgainDecision)
+                         next_component=ViewStatsDecision)
 
     @staticmethod
     def _display(_: GameState):
         play_sound(DEVIL_THUNDER)
         print_and_sleep(red("\nGame Over."), 3)
         print_and_sleep(red("\nYou are now in Hell."), 3)
+
+
+class ViewStatsDecision(BinarySelectionComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state,
+                         query="Would you like to view your stats?",
+                         yes_component=EndGameViewStats,
+                         no_component=PlayAgainDecision)
+
+
+class EndGameViewStats(LinearComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state,
+                         next_component=PlayAgainDecision)
+
+    def execute_current(self):
+        display_game_stats(self.game_state)
 
 
 class PlayAgainDecision(BinarySelectionComponent):
