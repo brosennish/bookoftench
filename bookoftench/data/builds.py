@@ -5,7 +5,7 @@ from bookoftench.data.perks import USED_SNEAKERS, NEW_SNEAKERS, TENCH_EYES, TENC
     BROWN_FRIDAY, LUCKY_TENCHS_FIN, DOCTOR_FISH, TENCH_THE_BOUNTY_HUNTER, SHERLOCK_TENCH, CATFISH_BURGLAR, \
     RICKETY_PICKPOCKET, BROWNMAIL, DEATH_CAN_WAIT, SOLOMON_TRAIN
 from bookoftench.data.weapons import BARE_HANDS, KNIFE, REVOLVER, CROWBAR, TENCH_CANNON, HARDCOVER_BOOK, \
-    CLAWS, LASER_BEAMS, INJECTION_NEEDLE
+    CLAWS, LASER_BEAMS, INJECTION_NEEDLE, PEPPER_SPRAY
 
 # Constants (9)
 CAT_BURGLAR = "Cat Burglar"
@@ -43,7 +43,7 @@ Builds = [
      'perks': [],
      'illness': None,
      'notes': "Moral deficiencies of man, physical capacities of robot. What could go wrong?"},
-    {'name': DOG_MAN, 'hp': 100, 'str': 1.11, 'acc': 0.77, 'coins': 10,
+    {'name': DOG_MAN, 'hp': 100, 'str': 1.07, 'acc': 0.77, 'coins': 10,
      'items': [MYSTERY_MEAT],
      'weapons': [CLAWS],
      'perks': [],
@@ -61,13 +61,13 @@ Builds = [
      'perks': [TENCH_THE_BOUNTY_HUNTER, SHERLOCK_TENCH],
      'illness': None,
      'notes': 'Enjoys collecting bounties... but mostly killing.'},
-    {'name': SHOPAHOLIC, 'hp': 100, 'str': 0.85, 'acc': 0.85, 'coins': 100,
+    {'name': SHOPAHOLIC, 'hp': 95, 'str': 0.85, 'acc': 0.85, 'coins': 200,
      'items': [IOU],
-     'weapons': [BARE_HANDS],
+     'weapons': [BARE_HANDS, PEPPER_SPRAY, KNIFE],
      'perks': [BROWN_FRIDAY, BARTER_SAUCE, TRADE_SHIP],
      'illness': None,
      'notes': "Has a shirt that says I'd rather be at the Shebokken Mall."},
-    {'name': TENCH, 'hp': 110, 'str': 1.1, 'acc': 0.75, 'coins': 0,
+    {'name': TENCH, 'hp': 111, 'str': 1.11, 'acc': 0.77, 'coins': 0,
      'items': [KRILL, CRAY],
      'weapons': [BARE_HANDS, TENCH_CANNON],
      'perks': [TENCH_EYES, TENCH_GENES, LUCKY_TENCHS_FIN, DOCTOR_FISH],
