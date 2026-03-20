@@ -18,7 +18,8 @@ from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.discoverable import load_discoverables, search_discoverable_rarity, rarity_color
 from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE
-from bookoftench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent, DiscoveryEvent
+from bookoftench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent, DiscoveryEvent, \
+    FailedFleeEvent
 from bookoftench.model.game_state import GameState
 from bookoftench.model.item import load_items
 from bookoftench.model.perk import load_perks, Perk, perk_is_active, activate_perk
@@ -353,7 +354,7 @@ class Attack(Component):
         if enemy_weapon is not None:
             player.obtain_enemy_weapon(enemy_weapon)
 
-        coins = enemy.drop_coins()
+        coins = enemy.drop_coins(enemy)
         coins *= min(1.25, 1 + ((player.lvl - 1) * 0.025))
         player.gain_coins(round(coins))
         player.gain_xp_from_enemy(enemy)
@@ -368,8 +369,9 @@ class Attack(Component):
             player.attack(enemy)
         if enemy.is_alive():
             enemy.attack(player)
-            if player.is_alive() and random.random() < ENEMY_SWITCH_WEAPON_CHANCE:
-                enemy.current_weapon = enemy.enemy_switch_weapon(player.blind)
+            if player.is_alive():
+                if random.random() < ENEMY_SWITCH_WEAPON_CHANCE or player.blind:
+                    enemy.current_weapon = enemy.enemy_switch_weapon()
         if not enemy.is_alive():
             self.handle_enemy_death(player, enemy)
         if not player.is_alive():
@@ -385,6 +387,7 @@ class FailedFlee(Attack):
 
     def run(self) -> GameState:
         print_and_sleep(yellow("Couldn't escape!"), 0.5)
+        event_logger.log_event(FailedFleeEvent())
         return super().run()
 
 

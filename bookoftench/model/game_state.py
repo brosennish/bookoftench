@@ -19,7 +19,7 @@ from .build import Build
 from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
 from .events import TravelEvent, BountyCollectedEvent, LevelUpEvent, HohkkenEvent, PlayerDeathEvent
-from .illness import load_illnesses, load_illness
+from .illness import load_illness
 from .item import Item, load_items
 from .perk import attach_perk, Perk, set_perk_cache, load_perk, perk_is_active
 from .player import Player
@@ -167,6 +167,7 @@ class GameState:
         def trigger_level_up_events(_: LevelUpEvent):
             event_logger.log_event(BankVisitDecisionTriggerEvent(self))
             event_logger.log_event(SaveGameDecisionTriggerEvent(self))
+            self.refresh_bounty()
 
     def is_final_boss_available(self) -> bool:
         return self.current_area.boss_defeated and (self.wench_area == self.current_area) and not self.victory
