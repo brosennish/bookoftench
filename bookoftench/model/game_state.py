@@ -81,6 +81,7 @@ class GameState:
             build_obj = Build(
                 name=d["name"],
                 notes=d.get("notes"),
+                lives=d["lives"],
                 hp=d["hp"],
                 str=d["str"],
                 acc=d["acc"],

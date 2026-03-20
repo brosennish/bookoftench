@@ -62,6 +62,7 @@ class BuildComponent(LabeledSelectionComponent):
         def selection_component(game_state: GameState):
             player = game_state.player
             player.build = build
+            player.lives = build.lives
             player.hp = build.hp
             player.max_hp = build.hp
             player.strength = build.str
