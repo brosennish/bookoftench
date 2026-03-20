@@ -8,8 +8,7 @@ from bookoftench.data.audio import BANK_THEME
 from bookoftench.data.components import BANK
 from bookoftench.event_base import Listener
 from bookoftench.event_logger import subscribe_listener
-from bookoftench.model.enemy import load_enemy
-from bookoftench.model.game_state import GameState, BankVisitDecisionTriggerEvent, RefreshBountyTriggerEvent
+from bookoftench.model.game_state import GameState, BankVisitDecisionTriggerEvent
 from bookoftench.model.util import display_bank_balance
 from bookoftench.ui import blue, yellow
 from bookoftench.util import print_and_sleep, safe_input
