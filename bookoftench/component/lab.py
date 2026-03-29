@@ -68,7 +68,7 @@ def conduct_experiment(player: Player):
 
     if random.random() < 0.27:
         original = player.strength
-        amount = random.uniform(-0.01, 0.01)
+        amount = random.uniform(-0.02, 0.02)
         player.strength = round(player.strength + amount, 2)
         if original != player.strength:
             if amount > 0:
@@ -80,7 +80,7 @@ def conduct_experiment(player: Player):
 
     if random.random() < 0.27:
         original = player.acc
-        amount = random.uniform(-0.01, 0.01)
+        amount = random.uniform(-0.02, 0.02)
         player.acc = round(player.acc + amount, 2)
         if original != player.acc:
             if amount > 0:
@@ -92,7 +92,7 @@ def conduct_experiment(player: Player):
 
     if random.random() < 0.25:
         original = player.max_hp
-        amount = random.randint(-1, 1)
+        amount = random.randint(-2, 2)
         player.max_hp += amount
         if player.hp > player.max_hp:
             player.hp = player.max_hp
