@@ -79,5 +79,5 @@ Builds = [
      'weapons': [],
      'perks': [],
      'illness': None,
-     'notes': 'Randomizes fields and values.'},
+     'notes': 'Randomize your build'},
 ]

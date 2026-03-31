@@ -13,8 +13,8 @@ from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEM
     DISCOVER_PERK, \
     OVERVIEW, INFO, BUILD, DISCOVER_SPECIAL
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
-from bookoftench.data.items import TENCH_FILET
-from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT
+from bookoftench.data.items import TENCH_FILET, Items
+from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT, Perks
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.discoverable import load_discoverables, search_discoverable_rarity, rarity_color
 from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE
@@ -32,10 +32,13 @@ from .base import LabeledSelectionComponent, SelectionBinding
 from .encounters import PostKillEncounters
 from .menu import OverviewMenu
 from .registry import register_component, get_registered_component
+from ..data.builds import RANDOM
 from ..data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE
-from ..data.weapons import BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF
+from ..data.illnesses import Illnesses, LATE_ONSET_SIDS
+from ..data.weapons import BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF, Weapons
 from ..event_base import EventType
 from ..model.build import Build
+from ..model.illness import load_illnesses
 from ..model.player import PlayerWeapon
 
 
@@ -62,23 +65,78 @@ class BuildComponent(LabeledSelectionComponent):
         def selection_component(game_state: GameState):
             player = game_state.player
             player.build = build
-            player.lives = build.lives
-            player.hp = build.hp
-            player.max_hp = build.hp
-            player.strength = build.str
-            player.acc = build.acc
-            player.coins = build.coins
-            if build.illness:
-                player.illness = build.illness
-                player.illness_death_lvl = 1 + build.illness.levels_until_death
-            player.items = dict((it.name, it) for it in build.items)
-            player.weapon_dict = {it.name: PlayerWeapon.from_weapon(it) for it in build.weapons}
-            player.current_weapon = next(i for i in player.weapon_dict.values()
-                                         if i.name in [BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF])
-            for p in build.perks:
-                activate_perk(p.name)
 
-            print_and_sleep(f"You selected {cyan(build.name)}", 1.3)
+            print_and_sleep(f"You selected {cyan(build.name)}", 1.5)
+
+            if build.name == RANDOM:
+                player.lives = random.randint(1, 5)
+                player.max_hp = random.randint(60, 140)
+                player.hp = player.max_hp
+                player.strength = round(random.uniform(0.8, 1.2), 2)
+                player.acc = round(random.uniform(0.9, 1.1), 2)
+                player.coins = random.randint(0, 500)
+                if random.random() < 0.5:
+                    list1 = [i['name'] for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
+                    options = load_illnesses(list1)
+                    player.illness = random.choice(options)
+                    player.illness_death_lvl = 1 + player.illness.levels_until_death
+
+                    # --- items ---
+                    items_count = random.randint(0, 5)
+                    if items_count >= 1:
+                        items = [i['name'] for i in Items]
+                        item_options = load_items(items)
+                        selections = []
+                        for i in range(items_count):
+                            item = random.choice(item_options)
+                            selections.append(item)
+                            item_options.remove(item)
+                        player.items = dict((it.name, it) for it in selections)
+
+                    # --- weapons ---
+                    # add Bare Hands
+                    hands = [i['name'] for i in Weapons if i['name'] in [BARE_HANDS]]
+                    hands_options = load_weapons(hands)
+                    player.weapon_dict = {it.name: PlayerWeapon.from_weapon(it) for it in hands_options}
+                    player.current_weapon = next(i for i in player.weapon_dict.values())
+                    # additional weapons to be added
+                    weapons_count = random.randint(0, 3)
+                    if weapons_count >= 1:
+                        weapons = [i['name'] for i in Weapons if i['name'] not in [BARE_HANDS]]
+                        weapon_options = load_weapons(weapons)
+                        selections = []
+                        for i in range(weapons_count):
+                            weapon = random.choice(weapon_options)
+                            selections.append(weapon)
+                            weapon_options.remove(weapon)
+                            player.weapon_dict.update({weapon.name: PlayerWeapon.from_weapon(weapon)})
+
+                    # --- perks ---
+                    perks_count = random.randint(0, 4)
+                    if perks_count >= 1:
+                        perks = [i['name'] for i in Perks]
+                        for i in range(perks_count):
+                            perk = random.choice(perks)
+                            activate_perk(perk)
+                            perks.remove(perk)
+
+            else:
+                player.lives = build.lives
+                player.max_hp = build.hp
+                player.hp = build.hp
+                player.strength = build.str
+                player.acc = build.acc
+                player.coins = build.coins
+                if build.illness:
+                    player.illness = build.illness
+                    player.illness_death_lvl = 1 + build.illness.levels_until_death
+
+                    player.items = dict((it.name, it) for it in build.items)
+                    player.weapon_dict = {it.name: PlayerWeapon.from_weapon(it) for it in build.weapons}
+                    player.current_weapon = next(i for i in player.weapon_dict.values()
+                                                 if i.name in [BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF])
+                for p in build.perks:
+                    activate_perk(p.name)
 
         return selection_component
 
