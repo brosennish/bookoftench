@@ -1,7 +1,7 @@
 import sys
 
 from bookoftench.audio import play_sound, stop_all_sounds, play_music
-from bookoftench.component import BuildComponent
+from bookoftench.component import BuildTypeSelection
 from bookoftench.component.base import GatekeepingComponent, TextDisplayingComponent, BinarySelectionComponent, \
     LinearComponent, Component
 from bookoftench.component.menu import ActionMenu
@@ -88,7 +88,7 @@ class BuildSelect(LinearComponent):
         player = self.game_state.player
         while not player.name:
             player.name = safe_input("What be your name?")
-        BuildComponent(self.game_state).run()
+        BuildTypeSelection(self.game_state).run()
         return self.game_state
 
 
