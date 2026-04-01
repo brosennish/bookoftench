@@ -180,6 +180,7 @@ class BuildIllnessSelection(LinearComponent):
         for i in illnesses_sorted:
             print_and_sleep(yellow(i['name']))
 
+
         while True:
             illness = safe_input(f"Add an illness or c to continue:")
             if illness == "c":

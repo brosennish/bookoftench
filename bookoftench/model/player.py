@@ -420,7 +420,14 @@ class Player(Combatant):
     def handle_broken_weapon(self) -> None:
         event_logger.log_event(WeaponBrokeEvent())
         del self.weapon_dict[self.current_weapon.name]
-        self.current_weapon = self.weapon_dict[BARE_HANDS]
+        if self.weapon_dict: # if player has other weapons
+            current = next(w for w in self.weapon_dict)
+            self.current_weapon = self.weapon_dict[current]
+        else: # add and assign bare hands if not
+            hands = load_weapons([BARE_HANDS])
+            for w in hands:
+                self.weapon_dict.update({w.name: PlayerWeapon.from_weapon(w)})
+                self.current_weapon = self.weapon_dict[w.name]
 
     def take_damage(self, damage: int, other: Combatant) -> int:
         if damage >= self.hp:
