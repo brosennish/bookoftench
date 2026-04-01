@@ -174,15 +174,17 @@ class BuildIllnessSelection(LinearComponent):
 
     def execute_current(self) -> None:
         player = self.game_state.player
-        illnesses = [i['name'] for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
-        for i in illnesses:
-            print_and_sleep(yellow(i))
+        illnesses = [i for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
+        illness_names = [i['name'] for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
+        illnesses_sorted = sorted(illnesses, key=lambda i: i['name'])
+        for i in illnesses_sorted:
+            print_and_sleep(yellow(i['name']))
 
         while True:
             illness = safe_input(f"Add an illness or c to continue:")
             if illness == "c":
                 return self.game_state
-            elif illness not in illnesses: # if it's not an illness
+            elif illness not in illness_names: # if it's not an illness
                 print_and_sleep(yellow("Illness not found - Please try again."))
             else:
                 sickness = load_illnesses([illness])
@@ -241,9 +243,9 @@ class BuildItemsSelection(LinearComponent):
         items = [i for i in Items]
         for i in items:
             if i['type'] == NORMAL:
-                print_and_sleep(cyan(f"{i['name']:<24} {dim('|')} HP: +{green(i['hp'])}"))
+                print_and_sleep(cyan(f"{i['name']:<24}") + (dim(' | ')) + "HP: +" + (green(i['hp'])))
             else:
-                print_and_sleep(cyan(f"{i['name']:<24} {dim('|')} {i['desc']}"))
+                print_and_sleep(cyan(f"{i['name']:<24}") + (dim(' | ')) + (i['desc']))
 
         selections = []
         while True:
@@ -274,7 +276,8 @@ class BuildWeaponsSelection(LinearComponent):
         player.weapon_dict.clear()
         weapons = [w['name'] for w in Weapons]
         weapon_options = load_weapons(weapons)
-        for w in weapon_options:
+        weapons_sorted = sorted(weapon_options, key=lambda w: w.damage)
+        for w in weapons_sorted:
             print_and_sleep(w.get_complete_format(None, None))
 
         selections = []
@@ -309,7 +312,8 @@ class BuildPerksSelection(LinearComponent):
 
     def execute_current(self) -> None:
         perks = [p for p in Perks]
-        for p in perks:
+        perks_sorted = sorted(perks, key=lambda p: p['name'])
+        for p in perks_sorted:
             print_and_sleep(purple(p['name']) + dim(" | ") + purple(p['description']))
 
         selections = []
