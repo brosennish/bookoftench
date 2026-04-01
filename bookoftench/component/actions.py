@@ -30,7 +30,6 @@ from bookoftench.ui import green, purple, yellow, dim, red, cyan, blue
 from bookoftench.util import print_and_sleep, safe_input
 from .base import LabeledSelectionComponent, SelectionBinding
 from .encounters import PostKillEncounters
-from .game import TutorialDecision
 from .menu import OverviewMenu
 from .registry import register_component, get_registered_component
 from ..data.builds import RANDOM, DENNY
@@ -53,22 +52,24 @@ class BuildTypeSelection(BinarySelectionComponent):
 
 # --- custom build path ---
 class BuildNameSelection(LinearComponent):
-    def __init__(self, _: GameState):
-        super().__init__(GameState(), BuildLevelSelection)
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildLevelSelection)
 
     def execute_current(self) -> None:
         preset = load_builds([DENNY])
         player = self.game_state.player
         player.build = next(i for i in preset)
         build = player.build
+        build.name = ""
         while True:
             build.name = safe_input("Build Name:")
-            break
+            if build.name:
+                break
         return self.game_state
 
 class BuildLevelSelection(LinearComponent):
-    def __init__(self, _: GameState):
-        super().__init__(GameState(), BuildLivesSelection)
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildLivesSelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
@@ -83,8 +84,8 @@ class BuildLevelSelection(LinearComponent):
                 return self.game_state
 
 class BuildLivesSelection(LinearComponent):
-    def __init__(self, _: GameState):
-        super().__init__(GameState(), BuildHPSelection)
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildHPSelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
@@ -99,8 +100,8 @@ class BuildLivesSelection(LinearComponent):
                 return self.game_state
 
 class BuildHPSelection(LinearComponent):
-    def __init__(self, _: GameState):
-        super().__init__(GameState(), BuildStrengthSelection)
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildStrengthSelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
@@ -116,8 +117,8 @@ class BuildHPSelection(LinearComponent):
                 return self.game_state
 
 class BuildStrengthSelection(LinearComponent):
-    def __init__(self, _: GameState):
-        super().__init__(GameState(), BuildAccuracySelection)
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildAccuracySelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
@@ -134,8 +135,8 @@ class BuildStrengthSelection(LinearComponent):
                 return self.game_state
 
 class BuildAccuracySelection(LinearComponent):
-    def __init__(self, _: GameState):
-        super().__init__(GameState(), BuildCoinsSelection)
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildCoinsSelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
@@ -152,8 +153,8 @@ class BuildAccuracySelection(LinearComponent):
                 return self.game_state
 
 class BuildCoinsSelection(LinearComponent):
-    def __init__(self, _: GameState):
-        super().__init__(GameState(), BuildIllnessSelection)
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildIllnessSelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
@@ -168,8 +169,8 @@ class BuildCoinsSelection(LinearComponent):
                 return self.game_state
 
 class BuildIllnessSelection(LinearComponent):
-    def __init__(self, _: GameState):
-        super().__init__(GameState(), BuildItemsSelection)
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildBlindSelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
@@ -189,12 +190,54 @@ class BuildIllnessSelection(LinearComponent):
                 player.illness_death_lvl = 1 + player.illness.levels_until_death
                 return self.game_state
 
-class BuildItemsSelection(LinearComponent):
-    def __init__(self, _: GameState):
-        super().__init__(GameState(), BuildWeaponsSelection)
+class BuildBlindSelection(BinarySelectionComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state,
+                         query="Are you blind",
+                         yes_component=BuildBlindEffectSelection,
+                         no_component=BuildItemsSelection)
+
+class BuildBlindEffectSelection(LinearComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildBlindTurnsSelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
+        player.blind = True
+        while True:
+            effect = safe_input("How blind are you (1-100)")
+            if not effect.isdigit():
+                print_and_sleep(yellow("Effect must be an integer."))
+            elif int(effect) < 1 or int(effect) > 100:
+                print_and_sleep(yellow("Effect must be between 1 and 100."))
+            else:
+                player.blind_effect = int(effect) * 0.1
+                return self.game_state
+
+class BuildBlindTurnsSelection(LinearComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildItemsSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        player.blind = True
+        while True:
+            turns = safe_input("How many turns")
+            if not turns.isdigit():
+                print_and_sleep(yellow("Turns must be an integer."))
+            elif int(turns) < 1:
+                print_and_sleep(yellow("Turns must be a positive integer."))
+            else:
+                player.blind_turns = int(turns)
+                return self.game_state
+
+class BuildItemsSelection(LinearComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildWeaponsSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        player.items.clear()
         items = [i for i in Items]
         for i in items:
             if i['type'] == NORMAL:
@@ -207,7 +250,8 @@ class BuildItemsSelection(LinearComponent):
             item = safe_input(f"Add an item ({len(selections)}/4 selected) or c to continue:")
             if item == "c":
                 if selections:
-                    player.items = dict((it.name, it) for it in selections)
+                    final_picks = load_items(selections)
+                    player.items = dict((it.name, it) for it in final_picks)
                 return self.game_state
             elif item in selections:
                 print_and_sleep(yellow(f"You already have {item}."))
@@ -222,11 +266,12 @@ class BuildItemsSelection(LinearComponent):
 
 
 class BuildWeaponsSelection(LinearComponent):
-    def __init__(self, _: GameState):
-        super().__init__(GameState(), BuildPerksSelection)
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildPerksSelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
+        player.weapon_dict.clear()
         weapons = [w['name'] for w in Weapons]
         weapon_options = load_weapons(weapons)
         for w in weapon_options:
@@ -243,6 +288,7 @@ class BuildWeaponsSelection(LinearComponent):
                     final_picks = load_weapons(selections) # convert selections to Weapon objects
                     for w in final_picks: # add each one to player weapon dict
                         player.weapon_dict.update({w.name: PlayerWeapon.from_weapon(w)})
+                        player.current_weapon = next(i for i in player.weapon_dict.values())
                 return self.game_state
             elif weapon in selections: # if it's already been selected
                 print_and_sleep(yellow(f"You already have {weapon}."))
@@ -250,17 +296,16 @@ class BuildWeaponsSelection(LinearComponent):
                 print_and_sleep(yellow("Weapon not found - Please try again."))
             else:
                 selections.append(weapon) # add to list for counting
-                if len(selections) == 1:
-                    player.current_weapon = next(i for i in player.weapon_dict.values())
                 if len(selections) == 4: # if max reached
                     final_picks = load_weapons(selections) # convert selections to Weapon objects
                     for w in final_picks: # add each one to player weapon dict
-                        player.weapon_dict.update({w.name: PlayerWeapon.from_weapon(w)})  # add to dict
+                        player.weapon_dict.update({w.name: PlayerWeapon.from_weapon(w)})
+                        player.current_weapon = next(i for i in player.weapon_dict.values())                        # add to dict
                     return self.game_state
 
 class BuildPerksSelection(LinearComponent):
-    def __init__(self, _: GameState):
-        super().__init__(GameState(), BuildDescriptionSelection)
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, NoOpComponent)
 
     def execute_current(self) -> None:
         perks = [p for p in Perks]
@@ -275,7 +320,7 @@ class BuildPerksSelection(LinearComponent):
             elif perk == "a":
                 for p in perks:
                     if p not in selections:
-                        activate_perk(p)
+                        activate_perk(p['name'])
                 return self.game_state
             elif perk in selections: # if it's already been selected
                 print_and_sleep(yellow(f"You already have {perk}."))
@@ -286,18 +331,6 @@ class BuildPerksSelection(LinearComponent):
                 activate_perk(perk) # add to list for counting
                 if len(selections) == len(perks):
                     return self.game_state
-
-class BuildDescriptionSelection(LinearComponent):
-    def __init__(self, _: GameState):
-        super().__init__(GameState(), TutorialDecision)
-
-    def execute_current(self) -> None:
-        player = self.game_state.player.build
-        build = player.build
-        while True:
-            build.name = safe_input("Build Description:")
-            break
-        return self.game_state
 
 
 # --- standard build path ---
