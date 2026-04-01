@@ -85,7 +85,7 @@ class BuildLevelSelection(LinearComponent):
 
 class BuildLivesSelection(LinearComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, BuildHPSelection)
+        super().__init__(game_state, BuildMaxHPSelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
@@ -99,9 +99,9 @@ class BuildLivesSelection(LinearComponent):
                 player.lives = int(lives)
                 return self.game_state
 
-class BuildHPSelection(LinearComponent):
+class BuildMaxHPSelection(LinearComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, BuildStrengthSelection)
+        super().__init__(game_state, BuildHPSelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
@@ -113,7 +113,22 @@ class BuildHPSelection(LinearComponent):
                 print_and_sleep(yellow("Max HP must be greater than 0."))
             else:
                 player.max_hp = int(max_hp)
-                player.hp = player.max_hp
+                return self.game_state
+
+class BuildHPSelection(LinearComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildStrengthSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        while True:
+            hp = safe_input(f"HP:")
+            if not hp.isdigit():
+                print_and_sleep(yellow("HP must be an integer."))
+            elif int(hp) < 1 or int(hp) > player.max_hp:
+                print_and_sleep(yellow(f"HP must be between 1 and {player.max_hp}."))
+            else:
+                player.hp = int(hp)
                 return self.game_state
 
 class BuildStrengthSelection(LinearComponent):
@@ -131,7 +146,7 @@ class BuildStrengthSelection(LinearComponent):
             elif int(strength) > 125:
                 print_and_sleep(yellow("Strength must be between 1 and 125."))
             else:
-                player.strength = round(int(strength) * 0.1, 2)
+                player.strength = round(int(strength) * 0.01, 2)
                 return self.game_state
 
 class BuildAccuracySelection(LinearComponent):
@@ -149,7 +164,7 @@ class BuildAccuracySelection(LinearComponent):
             elif int(accuracy) > 110:
                 print_and_sleep(yellow("Accuracy must be between 1 and 110."))
             else:
-                player.acc = round(int(accuracy) * 0.1, 2)
+                player.acc = round(int(accuracy) * 0.01, 2)
                 return self.game_state
 
 class BuildCoinsSelection(LinearComponent):
@@ -174,16 +189,18 @@ class BuildIllnessSelection(LinearComponent):
 
     def execute_current(self) -> None:
         player = self.game_state.player
-        illnesses = [i['name'] for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
-        for i in illnesses:
-            print_and_sleep(yellow(i))
+        illnesses = [i for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
+        illness_names = [i['name'] for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
+        illnesses_sorted = sorted(illnesses, key=lambda i: i['name'])
+        for i in illnesses_sorted:
+            print_and_sleep(yellow(i['name']))
 
         while True:
             illness = safe_input(f"Add an illness or c to continue:")
             if illness == "c":
                 return self.game_state
-            elif illness not in illnesses: # if it's not an illness
-                print_and_sleep(yellow("Illness not found - Please try again."))
+            elif illness not in illness_names: # if it's not an illness
+                print_and_sleep(yellow("Illness not found - Please try again (case-sensitive)."))
             else:
                 sickness = load_illnesses([illness])
                 player.illness = next(i for i in sickness)
@@ -211,7 +228,7 @@ class BuildBlindEffectSelection(LinearComponent):
             elif int(effect) < 1 or int(effect) > 100:
                 print_and_sleep(yellow("Effect must be between 1 and 100."))
             else:
-                player.blind_effect = int(effect) * 0.1
+                player.blind_effect = int(effect) * 0.01
                 return self.game_state
 
 class BuildBlindTurnsSelection(LinearComponent):
@@ -241,9 +258,9 @@ class BuildItemsSelection(LinearComponent):
         items = [i for i in Items]
         for i in items:
             if i['type'] == NORMAL:
-                print_and_sleep(cyan(f"{i['name']:<24} {dim('|')} HP: +{green(i['hp'])}"))
+                print_and_sleep(cyan(f"{i['name']:<24}") + (dim(' | ')) + "HP: +" + (green(i['hp'])))
             else:
-                print_and_sleep(cyan(f"{i['name']:<24} {dim('|')} {i['desc']}"))
+                print_and_sleep(cyan(f"{i['name']:<24}") + (dim(' | ')) + (i['desc']))
 
         selections = []
         while True:
@@ -256,7 +273,7 @@ class BuildItemsSelection(LinearComponent):
             elif item in selections:
                 print_and_sleep(yellow(f"You already have {item}."))
             elif item not in [i['name'] for i in items]:
-                print_and_sleep(yellow("Item not found - Please try again."))
+                print_and_sleep(yellow("Item not found - Please try again (case-sensitive)."))
             else:
                 selections.append(item)
                 if len(selections) == 4:
@@ -274,7 +291,8 @@ class BuildWeaponsSelection(LinearComponent):
         player.weapon_dict.clear()
         weapons = [w['name'] for w in Weapons]
         weapon_options = load_weapons(weapons)
-        for w in weapon_options:
+        weapons_sorted = sorted(weapon_options, key=lambda w: w.damage)
+        for w in weapons_sorted:
             print_and_sleep(w.get_complete_format(None, None))
 
         selections = []
@@ -282,7 +300,7 @@ class BuildWeaponsSelection(LinearComponent):
             weapon = safe_input(f"Add a weapon ({len(selections)}/4 selected) or c to continue:")
             if weapon == "c":
                 if not selections:
-                    print_and_sleep(yellow("Please select at least one weapon."))
+                    print_and_sleep(yellow("Please select at least one weapon (case-sensitive)."))
                     continue
                 else:
                     final_picks = load_weapons(selections) # convert selections to Weapon objects
@@ -293,7 +311,7 @@ class BuildWeaponsSelection(LinearComponent):
             elif weapon in selections: # if it's already been selected
                 print_and_sleep(yellow(f"You already have {weapon}."))
             elif weapon not in weapons: # if it's not a weapon
-                print_and_sleep(yellow("Weapon not found - Please try again."))
+                print_and_sleep(yellow("Weapon not found - Please try again (case-sensitive)."))
             else:
                 selections.append(weapon) # add to list for counting
                 if len(selections) == 4: # if max reached
@@ -309,7 +327,8 @@ class BuildPerksSelection(LinearComponent):
 
     def execute_current(self) -> None:
         perks = [p for p in Perks]
-        for p in perks:
+        perks_sorted = sorted(perks, key=lambda p: p['name'])
+        for p in perks_sorted:
             print_and_sleep(purple(p['name']) + dim(" | ") + purple(p['description']))
 
         selections = []
@@ -325,7 +344,7 @@ class BuildPerksSelection(LinearComponent):
             elif perk in selections: # if it's already been selected
                 print_and_sleep(yellow(f"You already have {perk}."))
             elif perk not in [p['name'] for p in perks]: # if it's not a perk
-                print_and_sleep(yellow("Perk not found - Please try again."))
+                print_and_sleep(yellow("Perk not found - Please try again (case-sensitive)."))
             else:
                 selections.append(perk)
                 activate_perk(perk) # add to list for counting
