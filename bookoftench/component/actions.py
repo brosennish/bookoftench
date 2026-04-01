@@ -85,7 +85,7 @@ class BuildLevelSelection(LinearComponent):
 
 class BuildLivesSelection(LinearComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, BuildHPSelection)
+        super().__init__(game_state, BuildMaxHPSelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
@@ -99,9 +99,9 @@ class BuildLivesSelection(LinearComponent):
                 player.lives = int(lives)
                 return self.game_state
 
-class BuildHPSelection(LinearComponent):
+class BuildMaxHPSelection(LinearComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, BuildStrengthSelection)
+        super().__init__(game_state, BuildHPSelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
@@ -113,7 +113,22 @@ class BuildHPSelection(LinearComponent):
                 print_and_sleep(yellow("Max HP must be greater than 0."))
             else:
                 player.max_hp = int(max_hp)
-                player.hp = player.max_hp
+                return self.game_state
+
+class BuildHPSelection(LinearComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildStrengthSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        while True:
+            hp = safe_input(f"HP:")
+            if not hp.isdigit():
+                print_and_sleep(yellow("HP must be an integer."))
+            elif int(hp) < 1 or int(hp) > player.max_hp:
+                print_and_sleep(yellow(f"HP must be between 1 and {player.max_hp}."))
+            else:
+                player.hp = int(hp)
                 return self.game_state
 
 class BuildStrengthSelection(LinearComponent):
