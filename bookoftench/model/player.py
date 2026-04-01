@@ -7,12 +7,12 @@ from typing import Dict, List, Optional
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import RIFLE
-from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, STAT, HTH, ACCURACY_SEARUM, DMG, CRIT
+from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, STAT, HTH, ACCURACY_SEARUM, DMG, CRIT, HEALTH, nPnG
 from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM, TENCH_GENES, \
     WrapperIndices, AMBERJACKED, CASTING_RANGE
-from bookoftench.data.weapons import BARE_HANDS, MELEE, RANGED, BLADED, LASER_BEAMS, VOODOO_STAFF, CLAWS
+from bookoftench.data.weapons import BARE_HANDS, MELEE, RANGED, BLADED, LASER_BEAMS, VOODOO_STAFF, CLAWS, KNIFE
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.illness import Illness
 from bookoftench.ui import yellow, dim, green, cyan, purple, red
@@ -66,7 +66,7 @@ def item_defaults() -> Dict[str, Item]:
 
 
 def weapon_defaults() -> Dict[str, PlayerWeapon]:
-        return dict((it.name, PlayerWeapon.from_weapon(it)) for it in load_weapons([BARE_HANDS]))
+        return dict((it.name, PlayerWeapon.from_weapon(it)) for it in load_weapons([BARE_HANDS, KNIFE]))
 
 def build_weapon_defaults(build: Build | None) -> Dict[str, PlayerWeapon]:
     weapons = [i.name for i in build.weapons if i.name in [BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF]]
@@ -193,6 +193,18 @@ class Player(Combatant):
             self.double_damage_active = True
         elif item.type == CRIT:
             self.crit_active = True
+        elif item.type == HEALTH:
+            if item.name == nPnG:
+                amount = random.randint(1, 5)
+                original_max = self.max_hp
+                self.max_hp += amount
+                print_and_sleep(green(f"Max HP: {original_max} -> {self.max_hp}"), 1)
+                original_hp = self.hp
+                self.hp -= min(self.hp, original_hp)
+                print_and_sleep(red(f"You lost {original_hp - self.hp} HP."), 1)
+                if self.hp <= 0:
+                    self.lives -= 1
+                    event_logger.log_event(PlayerDeathEvent(self.lives))
 
         # Remove from actual inventory
         del self.items[item.name]
