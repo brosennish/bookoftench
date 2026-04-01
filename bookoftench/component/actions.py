@@ -180,13 +180,12 @@ class BuildIllnessSelection(LinearComponent):
         for i in illnesses_sorted:
             print_and_sleep(yellow(i['name']))
 
-
         while True:
             illness = safe_input(f"Add an illness or c to continue:")
             if illness == "c":
                 return self.game_state
             elif illness not in illness_names: # if it's not an illness
-                print_and_sleep(yellow("Illness not found - Please try again."))
+                print_and_sleep(yellow("Illness not found - Please try again (case-sensitive)."))
             else:
                 sickness = load_illnesses([illness])
                 player.illness = next(i for i in sickness)
@@ -259,7 +258,7 @@ class BuildItemsSelection(LinearComponent):
             elif item in selections:
                 print_and_sleep(yellow(f"You already have {item}."))
             elif item not in [i['name'] for i in items]:
-                print_and_sleep(yellow("Item not found - Please try again."))
+                print_and_sleep(yellow("Item not found - Please try again (case-sensitive)."))
             else:
                 selections.append(item)
                 if len(selections) == 4:
@@ -286,7 +285,7 @@ class BuildWeaponsSelection(LinearComponent):
             weapon = safe_input(f"Add a weapon ({len(selections)}/4 selected) or c to continue:")
             if weapon == "c":
                 if not selections:
-                    print_and_sleep(yellow("Please select at least one weapon."))
+                    print_and_sleep(yellow("Please select at least one weapon (case-sensitive)."))
                     continue
                 else:
                     final_picks = load_weapons(selections) # convert selections to Weapon objects
@@ -297,7 +296,7 @@ class BuildWeaponsSelection(LinearComponent):
             elif weapon in selections: # if it's already been selected
                 print_and_sleep(yellow(f"You already have {weapon}."))
             elif weapon not in weapons: # if it's not a weapon
-                print_and_sleep(yellow("Weapon not found - Please try again."))
+                print_and_sleep(yellow("Weapon not found - Please try again (case-sensitive)."))
             else:
                 selections.append(weapon) # add to list for counting
                 if len(selections) == 4: # if max reached
@@ -330,7 +329,7 @@ class BuildPerksSelection(LinearComponent):
             elif perk in selections: # if it's already been selected
                 print_and_sleep(yellow(f"You already have {perk}."))
             elif perk not in [p['name'] for p in perks]: # if it's not a perk
-                print_and_sleep(yellow("Perk not found - Please try again."))
+                print_and_sleep(yellow("Perk not found - Please try again (case-sensitive)."))
             else:
                 selections.append(perk)
                 activate_perk(perk) # add to list for counting
