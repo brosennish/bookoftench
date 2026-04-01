@@ -131,7 +131,7 @@ class BuildStrengthSelection(LinearComponent):
             elif int(strength) > 125:
                 print_and_sleep(yellow("Strength must be between 1 and 125."))
             else:
-                player.strength = round(int(strength) * 0.1, 2)
+                player.strength = round(int(strength) * 0.01, 2)
                 return self.game_state
 
 class BuildAccuracySelection(LinearComponent):
@@ -149,7 +149,7 @@ class BuildAccuracySelection(LinearComponent):
             elif int(accuracy) > 110:
                 print_and_sleep(yellow("Accuracy must be between 1 and 110."))
             else:
-                player.acc = round(int(accuracy) * 0.1, 2)
+                player.acc = round(int(accuracy) * 0.01, 2)
                 return self.game_state
 
 class BuildCoinsSelection(LinearComponent):
@@ -211,7 +211,7 @@ class BuildBlindEffectSelection(LinearComponent):
             elif int(effect) < 1 or int(effect) > 100:
                 print_and_sleep(yellow("Effect must be between 1 and 100."))
             else:
-                player.blind_effect = int(effect) * 0.1
+                player.blind_effect = int(effect) * 0.01
                 return self.game_state
 
 class BuildBlindTurnsSelection(LinearComponent):
