@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
+from bookoftench.data.builds import Builds
 from bookoftench.model.illness import Illness
 from bookoftench.model.item import Item
 from bookoftench.model.perk import Perk
@@ -59,3 +60,6 @@ class Build:
                 f"{'Notes'}    {dim('|')} {blue(f"{self.notes}")}",
                 "\n",
             ])
+
+def load_builds(restriction: List[str] = None):
+    return [Build(**d) for d in Builds if restriction is None or d['name'] in restriction]

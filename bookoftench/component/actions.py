@@ -11,9 +11,9 @@ from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
-    OVERVIEW, INFO, BUILD, DISCOVER_SPECIAL
+    OVERVIEW, INFO, BUILD
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS
-from bookoftench.data.items import TENCH_FILET, Items
+from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT, Perks
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.discoverable import load_discoverables, search_discoverable_rarity, rarity_color
@@ -27,22 +27,281 @@ from bookoftench.model.util import get_battle_status_view, display_player_achiev
     display_game_stats, calculate_flee, display_active_perks, display_battle_info
 from bookoftench.model.weapon import load_discoverable_weapons, load_weapons
 from bookoftench.ui import green, purple, yellow, dim, red, cyan, blue
-from bookoftench.util import print_and_sleep
+from bookoftench.util import print_and_sleep, safe_input
 from .base import LabeledSelectionComponent, SelectionBinding
 from .encounters import PostKillEncounters
+from .game import TutorialDecision
 from .menu import OverviewMenu
 from .registry import register_component, get_registered_component
-from ..data.builds import RANDOM
+from ..data.builds import RANDOM, DENNY
 from ..data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE
 from ..data.illnesses import Illnesses, LATE_ONSET_SIDS
 from ..data.weapons import BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF, Weapons
 from ..event_base import EventType
-from ..model.build import Build
+from ..model.build import Build, load_builds
 from ..model.illness import load_illnesses
 from ..model.player import PlayerWeapon
 
 
 @register_component(BUILD)
+class BuildTypeSelection(BinarySelectionComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state,
+                         query="Create a custom build",
+                         yes_component=BuildNameSelection,
+                         no_component=BuildComponent)
+
+# --- custom build path ---
+class BuildNameSelection(LinearComponent):
+    def __init__(self, _: GameState):
+        super().__init__(GameState(), BuildLevelSelection)
+
+    def execute_current(self) -> None:
+        preset = load_builds([DENNY])
+        player = self.game_state.player
+        player.build = next(i for i in preset)
+        build = player.build
+        while True:
+            build.name = safe_input("Build Name:")
+            break
+        return self.game_state
+
+class BuildLevelSelection(LinearComponent):
+    def __init__(self, _: GameState):
+        super().__init__(GameState(), BuildLivesSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        while True:
+            level = safe_input("Level:")
+            if not level.isdigit():
+                print_and_sleep(yellow("Level must be an integer."))
+            elif int(level) < 1:
+                print_and_sleep(yellow("Level must be greater than 0."))
+            else:
+                player.lvl = int(level)
+                return self.game_state
+
+class BuildLivesSelection(LinearComponent):
+    def __init__(self, _: GameState):
+        super().__init__(GameState(), BuildHPSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        while True:
+            lives = safe_input("Lives:")
+            if not lives.isdigit():
+                print_and_sleep(yellow("Lives must be an integer."))
+            elif int(lives) < 1:
+                print_and_sleep(yellow("Lives must be greater than 0."))
+            else:
+                player.lives = int(lives)
+                return self.game_state
+
+class BuildHPSelection(LinearComponent):
+    def __init__(self, _: GameState):
+        super().__init__(GameState(), BuildStrengthSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        while True:
+            max_hp = safe_input("Max HP:")
+            if not max_hp.isdigit():
+                print_and_sleep(yellow("Max HP must be an integer."))
+            elif int(max_hp) < 1:
+                print_and_sleep(yellow("Max HP must be greater than 0."))
+            else:
+                player.max_hp = int(max_hp)
+                player.hp = player.max_hp
+                return self.game_state
+
+class BuildStrengthSelection(LinearComponent):
+    def __init__(self, _: GameState):
+        super().__init__(GameState(), BuildAccuracySelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        while True:
+            strength = safe_input("Strength [1-125]:")
+            if not strength.isdigit():
+                print_and_sleep(yellow("Strength must be an integer."))
+            elif int(strength) < 1:
+                print_and_sleep(yellow("Strength must be between 1 and 125."))
+            elif int(strength) > 125:
+                print_and_sleep(yellow("Strength must be between 1 and 125."))
+            else:
+                player.strength = round(int(strength) * 0.1, 2)
+                return self.game_state
+
+class BuildAccuracySelection(LinearComponent):
+    def __init__(self, _: GameState):
+        super().__init__(GameState(), BuildCoinsSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        while True:
+            accuracy = safe_input("Accuracy [1-110]:")
+            if not accuracy.isdigit():
+                print_and_sleep(yellow("Accuracy must be an integer."))
+            elif int(accuracy) < 1:
+                print_and_sleep(yellow("Accuracy must be between 1 and 110."))
+            elif int(accuracy) > 110:
+                print_and_sleep(yellow("Accuracy must be between 1 and 110."))
+            else:
+                player.acc = round(int(accuracy) * 0.1, 2)
+                return self.game_state
+
+class BuildCoinsSelection(LinearComponent):
+    def __init__(self, _: GameState):
+        super().__init__(GameState(), BuildIllnessSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        while True:
+            coins = safe_input("Coins:")
+            if not coins.isdigit():
+                print_and_sleep(yellow("Coins must be an integer."))
+            elif int(coins) < 1:
+                print_and_sleep(yellow("Coins must be a positive integer."))
+            else:
+                player.coins = int(coins)
+                return self.game_state
+
+class BuildIllnessSelection(LinearComponent):
+    def __init__(self, _: GameState):
+        super().__init__(GameState(), BuildItemsSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        illnesses = [i['name'] for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
+        for i in illnesses:
+            print_and_sleep(yellow(i))
+
+        while True:
+            illness = safe_input(f"Add an illness or c to continue:")
+            if illness == "c":
+                return self.game_state
+            elif illness not in illnesses: # if it's not an illness
+                print_and_sleep(yellow("Illness not found - Please try again."))
+            else:
+                sickness = load_illnesses([illness])
+                player.illness = next(i for i in sickness)
+                player.illness_death_lvl = 1 + player.illness.levels_until_death
+                return self.game_state
+
+class BuildItemsSelection(LinearComponent):
+    def __init__(self, _: GameState):
+        super().__init__(GameState(), BuildWeaponsSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        items = [i for i in Items]
+        for i in items:
+            if i['type'] == NORMAL:
+                print_and_sleep(cyan(f"{i['name']:<24} {dim('|')} HP: +{green(i['hp'])}"))
+            else:
+                print_and_sleep(cyan(f"{i['name']:<24} {dim('|')} {i['desc']}"))
+
+        selections = []
+        while True:
+            item = safe_input(f"Add an item ({len(selections)}/4 selected) or c to continue:")
+            if item == "c":
+                if selections:
+                    player.items = dict((it.name, it) for it in selections)
+                return self.game_state
+            elif item in selections:
+                print_and_sleep(yellow(f"You already have {item}."))
+            elif item not in [i['name'] for i in items]:
+                print_and_sleep(yellow("Item not found - Please try again."))
+            else:
+                selections.append(item)
+                if len(selections) == 4:
+                    final_picks = load_items(selections)
+                    player.items = dict((it.name, it) for it in final_picks)
+                    return self.game_state
+
+
+class BuildWeaponsSelection(LinearComponent):
+    def __init__(self, _: GameState):
+        super().__init__(GameState(), BuildPerksSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        weapons = [w['name'] for w in Weapons]
+        weapon_options = load_weapons(weapons)
+        for w in weapon_options:
+            print_and_sleep(w.get_complete_format(None, None))
+
+        selections = []
+        while True:
+            weapon = safe_input(f"Add a weapon ({len(selections)}/4 selected) or c to continue:")
+            if weapon == "c":
+                if not selections:
+                    print_and_sleep(yellow("Please select at least one weapon."))
+                    continue
+                else:
+                    final_picks = load_weapons(selections) # convert selections to Weapon objects
+                    for w in final_picks: # add each one to player weapon dict
+                        player.weapon_dict.update({w.name: PlayerWeapon.from_weapon(w)})
+                return self.game_state
+            elif weapon in selections: # if it's already been selected
+                print_and_sleep(yellow(f"You already have {weapon}."))
+            elif weapon not in weapons: # if it's not a weapon
+                print_and_sleep(yellow("Weapon not found - Please try again."))
+            else:
+                selections.append(weapon) # add to list for counting
+                if len(selections) == 1:
+                    player.current_weapon = next(i for i in player.weapon_dict.values())
+                if len(selections) == 4: # if max reached
+                    final_picks = load_weapons(selections) # convert selections to Weapon objects
+                    for w in final_picks: # add each one to player weapon dict
+                        player.weapon_dict.update({w.name: PlayerWeapon.from_weapon(w)})  # add to dict
+                    return self.game_state
+
+class BuildPerksSelection(LinearComponent):
+    def __init__(self, _: GameState):
+        super().__init__(GameState(), BuildDescriptionSelection)
+
+    def execute_current(self) -> None:
+        perks = [p for p in Perks]
+        for p in perks:
+            print_and_sleep(purple(p['name']) + dim(" | ") + purple(p['description']))
+
+        selections = []
+        while True:
+            perk = safe_input(f"Add a perk (a to add all) or c to continue:")
+            if perk == "c":
+                return self.game_state
+            elif perk == "a":
+                for p in perks:
+                    if p not in selections:
+                        activate_perk(p)
+                return self.game_state
+            elif perk in selections: # if it's already been selected
+                print_and_sleep(yellow(f"You already have {perk}."))
+            elif perk not in [p['name'] for p in perks]: # if it's not a perk
+                print_and_sleep(yellow("Perk not found - Please try again."))
+            else:
+                selections.append(perk)
+                activate_perk(perk) # add to list for counting
+                if len(selections) == len(perks):
+                    return self.game_state
+
+class BuildDescriptionSelection(LinearComponent):
+    def __init__(self, _: GameState):
+        super().__init__(GameState(), TutorialDecision)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player.build
+        build = player.build
+        while True:
+            build.name = safe_input("Build Description:")
+            break
+        return self.game_state
+
+
+# --- standard build path ---
+
 class BuildComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         build_bindings = [ReprBinding(str(i + 1), build.name, self._make_selection_component(build), build) for
