@@ -10,7 +10,7 @@ from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE
 from bookoftench.data.enemies import SLEDGE_HAMMOND
-from bookoftench.data.weapons import MELEE, RANGED
+from bookoftench.data.weapons import MELEE, RANGED, BLIND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
 from bookoftench.ui import red, yellow, color_text, purple, cyan, dim, blue
 from bookoftench.util import print_and_sleep
@@ -264,7 +264,8 @@ class Combatant(ABC):
                             f"{red(damage_inflicted)} damage!", 1)
 
         other.take_damage(damage_inflicted, self)
-        self.handle_blinding(other)
+        if self.current_weapon.type == BLIND:
+            self.handle_blinding(other)
         if self.current_weapon.is_broken():
             play_sound(WEAPON_BROKE)
             print_and_sleep(yellow(f"{self.current_weapon.name} broke!"), 1)

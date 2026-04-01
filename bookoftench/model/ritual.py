@@ -30,7 +30,7 @@ class Ritual(Buyable):
             print_and_sleep(f"{cyan(f'Praise be to the superior Tench. Lives: {player.lives}')}", 2)
         elif self.name == CARP_SACRIFICE:
             if random.random() < 0.5:
-                player.lives += 1
+                player.lives += 1 if player.lives < 5 else 0
                 print_and_sleep(f"{cyan(f'Praise be to the inferior Carp. Lives: {player.lives}')}", 2)
             else:
                 player.lives -= 1

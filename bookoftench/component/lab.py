@@ -127,6 +127,9 @@ def conduct_experiment(player: Player):
         amount = 1
         if random.random() < 0.55:  # higher odds to lose a life since you're getting paid
             amount = -1
+        else:
+            if player.lives == 5:
+                amount = 0
         player.lives += amount
         if player.lives >= 1:
             if amount > 0:

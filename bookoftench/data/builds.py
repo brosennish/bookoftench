@@ -15,6 +15,7 @@ DENNY = "Denny"
 DOG_MAN = "Dog Man"
 MAKE_A_FISH = "Make a Fish"
 MERCENARY = "Mercenary"
+RANDOM = "Random"
 SHOPAHOLIC = "Shopaholic"
 TENCH = "Tench"
 
@@ -73,4 +74,10 @@ Builds = [
      'perks': [TENCH_EYES, TENCH_GENES, LUCKY_TENCHS_FIN, DOCTOR_FISH],
      'illness': None,
      'notes': "Half man - half tench. Can you imagine a more ideal being?"},
+    {'name': RANDOM, 'lives': 0, 'hp': 0, 'str': 0, 'acc': 0, 'coins': 0,
+     'items': [],
+     'weapons': [],
+     'perks': [],
+     'illness': None,
+     'notes': 'Randomize your build'},
 ]

@@ -37,6 +37,7 @@ MOREL = "Morel"
 MUSKRAT_SKEWER = "Muskrat Skewer"
 MYSTERY_MEAT = "Mystery Meat"
 MYSTICAL_MUSHROOMS = "Mystical Mushrooms"
+nPnG = "nPnG"
 OCEAN_MAN_LUNCH_BOX = "Ocean Man Lunch Box"
 ORGANIC_SLUDGE = "Organic Sludge"
 OWL_EGG = "Owl Egg"
@@ -59,6 +60,7 @@ WORMHOLE = "Wormhole"
 CRIT = "crit"
 DMG = "dmg"
 FLEE = "flee"
+HEALTH = "health"
 NORMAL = "normal"
 STAT = "stat"
 
@@ -78,6 +80,8 @@ Items = [
      'desc': 'Double the damage of your next melee attack'},
     {'name': CRITICAL_BASS, 'type': CRIT, 'hp': 0, 'cost': 40, 'sell_value': 14, 'areas': [CAVE, FOREST],
      'desc': 'Make your next attack a critical hit'},
+    {'name': nPnG, 'type': HEALTH, 'hp': 0, 'cost': 80, 'sell_value': 14, 'areas': [CAVE, CITY],
+     'desc': 'Lose X HP and increase max HP by X'},
 
     # --- Tier 1 (10 HP) ---
     {'name': ANTS_ON_A_LOG, 'type': NORMAL, 'hp': 10, 'cost': 11, 'sell_value': 4, 'areas': [FOREST, SWAMP], 'desc': None},
