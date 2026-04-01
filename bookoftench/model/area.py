@@ -22,9 +22,9 @@ _search_defaults = {
     DISCOVER_PERK: 1,
     DISCOVER_ITEM: 2,
     DISCOVER_WEAPON: 2,
-    DISCOVER_DISCOVERABLE: 42,
+    DISCOVER_DISCOVERABLE: 43,
     DISCOVER_SPECIAL: 6,
-    SPAWN_ENEMY: 28
+    SPAWN_ENEMY: 29
 }
 
 _event_defaults = {
@@ -57,7 +57,7 @@ class Area:
     enemies: list[str]
     boss_name: str
     theme: str
-    enemy_count: int = field(default_factory=lambda: random.randint(10, 12))
+    enemy_count: int = field(default_factory=lambda: random.randint(10, 15))
     enemies_killed: int = 0
     enemies_seen: Set[str] = field(default_factory=set)
     boss_defeated: bool = False
