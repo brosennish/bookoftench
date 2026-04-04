@@ -9,6 +9,7 @@ ASHWAGANDHA_GUMMIES = "Ashwagandha Gummies"
 BAT_MATTER ="Bat Matter"
 BERRIES = "Berries"
 BONE_MEAL = "Bone Meal"
+BOOMERANG = "Boomerang"
 CAMPBELLS_GOOP = "Campbell's Goop"
 CANNED_HORSE = "Canned Horse"
 CARP_FILET = "Carp Filet"
@@ -59,6 +60,7 @@ WORMHOLE = "Wormhole"
 # --- types ---
 CRIT = "crit"
 DMG = "dmg"
+ENEMY = "enemy"
 FLEE = "flee"
 HEALTH = "health"
 NORMAL = "normal"
@@ -82,6 +84,8 @@ Items = [
      'desc': 'Make your next attack a critical hit'},
     {'name': nPnG, 'type': HEALTH, 'hp': 0, 'cost': 80, 'sell_value': 14, 'areas': [CAVE, CITY],
      'desc': 'Lose X HP and increase max HP by X'},
+    {'name': BOOMERANG, 'type': ENEMY, 'hp': 0, 'cost': 60, 'sell_value': 11, 'areas': [CITY, FOREST, SWAMP],
+     'desc': 'Do 20 damage and lose 20 HP'},
 
     # --- Tier 1 (10 HP) ---
     {'name': ANTS_ON_A_LOG, 'type': NORMAL, 'hp': 10, 'cost': 11, 'sell_value': 4, 'areas': [FOREST, SWAMP], 'desc': None},

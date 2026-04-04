@@ -607,6 +607,7 @@ class UseItem(GatekeepingComponent):
 class ItemSelectionComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         self.length = 0
+        enemy = game_state.current_area.current_enemy
         for i in game_state.player.items.keys():
             if len(i) > self.length:
                 self.length = len(i) + 1
@@ -615,7 +616,8 @@ class ItemSelectionComponent(LabeledSelectionComponent):
                          bindings=[SelectionBinding(key=str(i),
                                                     name=item.get_simple_format(self.length),
                                                     component=functional_component()(
-                                                        partial(game_state.player.use_item, item.name)))
+                                                        partial(game_state.player.use_item, item.name,
+                                                                enemy if enemy else None)))
                                    for (i, item) in enumerate(game_state.player.get_items(), 1)],
                          top_level_prompt_callback=lambda gs: gs.player.display_item_count(), quittable=True)
 
@@ -737,12 +739,12 @@ class Attack(Component):
         player, enemy = self.game_state.player, self.game_state.current_area.current_enemy
         if not self.failed_flee:
             player.attack(enemy)
-        if enemy.is_alive():
+        if enemy.is_alive() and enemy.hp > 0:
             enemy.attack(player)
             if player.is_alive():
                 if random.random() < ENEMY_SWITCH_WEAPON_CHANCE or player.blind:
                     enemy.current_weapon = enemy.enemy_switch_weapon()
-        if not enemy.is_alive():
+        if not enemy.is_alive() or enemy.hp <= 0:
             self.handle_enemy_death(player, enemy)
         if not player.is_alive():
             player.lives -= 1

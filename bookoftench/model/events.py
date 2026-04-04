@@ -1,4 +1,4 @@
-from bookoftench.audio import play_sound
+from bookoftench.audio import play_sound, stop_music
 from bookoftench.data.audio import PURCHASE, GREAT_JOB, HOHKKEN
 from bookoftench.event_base import Event, EventType
 from bookoftench.model.illness import Illness
@@ -107,6 +107,7 @@ class HohkkenEvent(Event):
                             if death else
                             f"You were attacked for {damage} damage.\n"), 2))
 
+        stop_music()
         play_sound(HOHKKEN)
         print_and_sleep(red(f"Hohkken!"), 3)
 

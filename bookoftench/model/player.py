@@ -7,7 +7,8 @@ from typing import Dict, List, Optional
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import RIFLE
-from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, STAT, HTH, ACCURACY_SEARUM, DMG, CRIT, HEALTH, nPnG
+from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, STAT, HTH, ACCURACY_SEARUM, DMG, CRIT, HEALTH, nPnG, \
+    ENEMY, BOOMERANG
 from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM, TENCH_GENES, \
@@ -19,6 +20,7 @@ from bookoftench.ui import yellow, dim, green, cyan, purple, red
 from bookoftench.util import print_and_sleep
 from .base import Combatant, Buyable
 from .build import Build
+from .enemy import Enemy
 from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent, LevelUpEvent, \
     SwapWeaponEvent, WeaponBrokeEvent, HitEvent, PlayerDeathEvent, StealItemEvent, StealWeaponEvent, StealPerkEvent, \
     GenericStealEvent
@@ -174,7 +176,7 @@ class Player(Combatant):
     def _apply_hp_bonus(base: int) -> int:
         return base
 
-    def use_item(self, name: str) -> None:
+    def use_item(self, name: str, enemy: Enemy | None) -> None:
         item = self.items[name]
         gain = 0
         if item.type == NORMAL:
@@ -206,6 +208,14 @@ class Player(Combatant):
                 if self.hp <= 0:
                     self.lives -= 1
                     event_logger.log_event(PlayerDeathEvent(self.lives))
+        elif item.type == ENEMY:
+            if enemy:
+                if item.name == BOOMERANG:
+                    print_and_sleep("You missed, bozo.")
+                    if self.hp <= 0:
+                        self.lives -= 1
+                        event_logger.log_event(PlayerDeathEvent(self.lives))
+
 
         # Remove from actual inventory
         del self.items[item.name]
@@ -288,7 +298,7 @@ class Player(Combatant):
 
     def swap_found_item(self, old_name: str, found_item: Item) -> None:
         if self.hp < self.max_hp:
-            self.use_item(old_name)
+            self.use_item(old_name, None)
             print_and_sleep(cyan(f"{found_item.name} added to sack."), 1)
         else:
             del self.items[old_name]
