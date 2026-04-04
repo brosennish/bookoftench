@@ -86,11 +86,11 @@ FINAL_BOSS = "final_boss"
 
 Traits = [
     {'name': ACHILLES, 'desc': 'Equips a Tench Cannon when HP falls below 25'}, # DONE
-    {'name': BUTTERFINGERS, 'desc': 'Loses coins each turn'}, # DONE
+    {'name': BUTTERFINGERS, 'desc': 'Drops coins each turn'}, # DONE
     {'name': CONTAGIOUS, 'desc': 'Chance to spread illness to player'},
-    {'name': COWARD, 'desc': 'May run away at any time'},
+    {'name': COWARD, 'desc': 'May run away at any time'}, # DONE
     {'name': INVESTOR, 'desc': 'Value of coins fluctuates during battle'}, # DONE
-    {'name': JUNKIE, 'desc': 'Gains strength when HP falls below 50%'},
+    {'name': JUNKIE, 'desc': 'Gains strength when HP falls below 50%'}, # DONE
     {'name': ORACLE, 'desc': 'Gains strength and accuracy when blind'},
     {'name': PLANT, 'desc': 'Restores HP each turn'}, # DONE
     {'name': PREPARED, 'desc': 'Has a health item'}, # DONE
