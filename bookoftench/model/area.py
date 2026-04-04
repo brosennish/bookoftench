@@ -108,6 +108,8 @@ class Area:
 
         # --- traits and illness ---
         valid = [i['name'] for i in Traits]
+        if time == NIGHTTIME:
+            valid = [i['name'] for i in Traits if i['name'] != PLANT]
         traits = load_traits(valid)
         enemy.trait = random.choice(traits)
         if enemy.trait == CONTAGIOUS:  # only illness if contagious trait
