@@ -748,7 +748,7 @@ class Attack(Component):
                 if enemy.trait.name == ACHILLES and enemy.current_weapon.name != TENCH_CANNON and enemy.hp < 25:
                     enemy.current_weapon = enemy.enemy_switch_weapon(TENCH_CANNON)
                 elif random.random() < ENEMY_SWITCH_WEAPON_CHANCE or player.blind:
-                    enemy.current_weapon = enemy.enemy_switch_weapon()
+                    enemy.current_weapon = enemy.enemy_switch_weapon(None)
         if not enemy.is_alive() or enemy.hp <= 0:
             self.handle_enemy_death(player, enemy)
         if not player.is_alive():

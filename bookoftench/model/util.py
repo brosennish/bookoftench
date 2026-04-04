@@ -254,14 +254,16 @@ def get_battle_info_view(game_state: GameState) -> str:
                     f"\n{dim('Accuracy |')} {yellow(round(cmbt.acc, 2))}"
                     f"\n{dim('Coins    |')} {green(cmbt.coins)}"
                     f"\n{dim('Illness  |')} {yellow(cmbt.illness.name)}"
-                    f"\n{purple(cmbt.trait.name)} : {purple(cmbt.trait.desc)}"
+                    f"\n{dim('Trait    |')} {purple(cmbt.trait.name)}"
+                    f"\n{dim('Ability  |')} {purple(cmbt.trait.desc)}"
                     )
         else:
             return (f"\n{name_color(cmbt.name)}"
                     f"\n{dim('Strength |')} {red(round(cmbt.strength, 2))}"
                     f"\n{dim('Accuracy |')} {yellow(round(cmbt.acc, 2))}"
                     f"\n{dim('Coins    |')} {green(cmbt.coins)}"
-                    f"\n{purple(cmbt.trait.name)} : {purple(cmbt.trait.desc)}"
+                    f"\n{dim('Trait    |')} {purple(cmbt.trait.name)}"
+                    f"\n{dim('Ability  |')} {purple(cmbt.trait.desc)}"
                     )
 
     return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, purple)}\n"

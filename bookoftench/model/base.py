@@ -9,7 +9,7 @@ from typing import Dict, List, Self
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE
-from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT
+from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, STARFISH
 from bookoftench.data.weapons import MELEE, RANGED, BLIND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
 from bookoftench.model.illness import Illness
@@ -272,18 +272,19 @@ class Combatant(ABC):
                     dropped = min(self.coins, random.randint(0,10))
                     if dropped > 0:
                         self.coins -= dropped
+                        print_and_sleep(yellow(f"{self.name} dropped {dropped} of coin."), 1)
                 elif self.trait.name == INVESTOR:
                     change = random.randint(-10, 10)
                     if change != 0:
                         if self.coins < abs(change):
                             change = self.coins * -1
                         self.coins += change
-                elif self.trait.name == PLANT:
-                    amount = random.randint(1, 6)
+                elif self.trait.name == STARFISH:
+                    amount = random.randint(1, 5)
                     if (self.max_hp - self.hp) < amount:
                         amount = self.max_hp - self.hp
                     self.hp += amount
-                    print_and_sleep(green(f"{self.name} restored {amount} HP using the Sun's energy."), 1)
+                    print_and_sleep(green(f"{self.name} regenerated {amount} HP."), 1)
 
         other.take_damage(damage_inflicted, self)
         if self.current_weapon.type == BLIND:

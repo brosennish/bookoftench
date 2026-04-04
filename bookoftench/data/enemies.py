@@ -74,7 +74,7 @@ COWARD = "Coward"
 INVESTOR = "Investor"
 JUNKIE = "Junkie"
 ORACLE = "Oracle"
-PLANT = "Plant"
+STARFISH = "Starfish"
 PREPARED = "Prepared"
 WEREWOLF = "Werewolf"
 
@@ -92,7 +92,7 @@ Traits = [
     {'name': INVESTOR, 'desc': 'Value of coins fluctuates during battle'}, # DONE
     {'name': JUNKIE, 'desc': 'Gains strength when HP falls below 50%'},
     {'name': ORACLE, 'desc': 'Gains strength and accuracy when blind'},
-    {'name': PLANT, 'desc': 'Restores HP each turn'}, # DONE
+    {'name': STARFISH, 'desc': 'Restores HP each turn'}, # DONE
     {'name': PREPARED, 'desc': 'Has a health item'},
     {'name': WEREWOLF, 'desc': 'Transforms under a full moon'},
 ]
