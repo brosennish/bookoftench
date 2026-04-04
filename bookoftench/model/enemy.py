@@ -14,6 +14,7 @@ from bookoftench.data.weapons import BARE_HANDS, BLIND
 from bookoftench.ui import purple, cyan
 from bookoftench.util import print_and_sleep
 from .base import Combatant, NPC, DisplayableText
+from .illness import Illness
 from .perk import attach_perk
 from .weapon import Weapon, load_weapon, load_weapons
 
@@ -25,6 +26,7 @@ ENEMY_SWITCH_WEAPON_CHANCE = 0.2
 class Enemy(Combatant, NPC):
     name: str = ''
     trait: str = ''
+    illness: Illness = None
     hp: int = 0
     weapons: List[str] = field(default_factory=list)
     bounty: int = 0

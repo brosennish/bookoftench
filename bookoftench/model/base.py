@@ -12,6 +12,8 @@ from bookoftench.data.audio import WEAPON_BROKE
 from bookoftench.data.enemies import SLEDGE_HAMMOND
 from bookoftench.data.weapons import MELEE, RANGED, BLIND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
+from bookoftench.model.illness import Illness
+from bookoftench.model.trait import Trait
 from bookoftench.ui import red, yellow, color_text, purple, cyan, dim, blue
 from bookoftench.util import print_and_sleep
 
@@ -147,7 +149,8 @@ class NPC:
 class Combatant(ABC):
     weapon_dict: Dict[str, WeaponBase]
     name: str
-    trait: str
+    trait: Trait
+    illness: Illness
     hp: int
     max_hp: int
     current_weapon: WeaponBase

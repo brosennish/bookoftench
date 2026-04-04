@@ -26,6 +26,7 @@ from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, 
     GenericStealEvent
 from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
+from .trait import Trait
 from .weapon import load_weapons, Weapon
 from ..data.builds import DENNY
 
@@ -79,7 +80,7 @@ def build_weapon_defaults(build: Build | None) -> Dict[str, PlayerWeapon]:
 @dataclass
 class Player(Combatant):
     name: str = ''
-    trait: str = None
+    trait: Trait = None
     build: Build = None
     lives: int = 3
     lvl: int = 1
