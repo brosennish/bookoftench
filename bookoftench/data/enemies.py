@@ -85,16 +85,16 @@ FINAL_BOSS = "final_boss"
 
 
 Traits = [
-    ACHILLES,
-    BUTTERFINGERS,
-    CONTAGIOUS,
-    COWARD,
-    INVESTOR,
-    JUNKIE,
-    ORACLE,
-    PLANT,
-    PREPARED,
-    WEREWOLF,
+    {'name': ACHILLES, 'desc': 'Equips a Tench Cannon when HP falls below 20%'},
+    {'name': BUTTERFINGERS, 'desc': 'Loses coins each turn'},
+    {'name': CONTAGIOUS, 'desc': 'Chance to spread illness to player'},
+    {'name': COWARD, 'desc': 'May run away at any time'},
+    {'name': INVESTOR, 'desc': 'Value of coins fluctuates during battle'},
+    {'name': JUNKIE, 'desc': 'Gains strength when HP falls below 50%'},
+    {'name': ORACLE, 'desc': 'Gains strength and accuracy when blind'},
+    {'name': PLANT, 'desc': 'Restores HP each turn'},
+    {'name': PREPARED, 'desc': 'Has a health item'},
+    {'name': WEREWOLF, 'desc': 'Transforms under a full moon'},
 ]
 
 Enemies = [
