@@ -9,7 +9,7 @@ from typing import Dict, List, Self
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE
-from bookoftench.data.enemies import SLEDGE_HAMMOND
+from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS
 from bookoftench.data.weapons import MELEE, RANGED, BLIND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
 from bookoftench.model.illness import Illness
@@ -153,6 +153,7 @@ class Combatant(ABC):
     illness: Illness
     hp: int
     max_hp: int
+    coins: int
     current_weapon: WeaponBase
 
     double_damage_active: bool = False
@@ -247,17 +248,17 @@ class Combatant(ABC):
         self.current_weapon.use()
         if not self.is_alive():  # solomon train
             return
-        base_damage = self.current_weapon.calculate_base_damage()
+        base_damage = self.current_weapon.calculate_base_damage()  # calculate base damage
         if self.current_weapon.type == MELEE:
-            base_damage = round(base_damage * self.strength)
-        crit = random.random() < self.get_crit_chance()
+            base_damage = round(base_damage * self.strength)  # apply strength to melee
+        crit = random.random() < self.get_crit_chance()  # get calculated crit chance
         self.handle_crit(crit)
 
         damage_inflicted = round(base_damage * 1.5) if crit else base_damage  # 1.5x damage if crit
 
         if isinstance(other, NPC):
             if self.current_weapon.type == MELEE and self.double_damage_active == True:
-                damage_inflicted *= 2
+                damage_inflicted *= 2  # double damage if item used
                 self.double_damage_active = False
                 print_and_sleep(red("*** Double damage ***"), 1)
             print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
@@ -266,6 +267,8 @@ class Combatant(ABC):
         else:
             print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
+            if self.trait.name == BUTTERFINGERS and other.is_alive():  # butterfingers trait
+                self.coins -= min(self.coins, random.randint(0,10))  # drop 0 to 10 coins after each attack
 
         other.take_damage(damage_inflicted, self)
         if self.current_weapon.type == BLIND:

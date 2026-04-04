@@ -8,7 +8,7 @@ from bookoftench.model.base import Combatant
 from bookoftench.model.enemy import Enemy
 from bookoftench.model.perk import load_perks, perk_is_active, attach_perks
 from bookoftench.model.player import Player
-from bookoftench.ui import blue, cyan, green, orange, purple, red, yellow, dim, white, _format
+from bookoftench.ui import blue, cyan, green, orange, purple, red, yellow, dim, white
 from bookoftench.util import print_and_sleep
 from .game_state import GameState
 from ..data.enemies import CONTAGIOUS

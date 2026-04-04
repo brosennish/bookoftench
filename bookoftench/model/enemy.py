@@ -63,14 +63,17 @@ class Enemy(Combatant, NPC):
             self.weapon_dict[BARE_HANDS] = load_weapon(BARE_HANDS)
         self.current_weapon = random.choice(list(self.weapon_dict.values()))
 
-    def enemy_switch_weapon(self) -> Weapon:
+    def enemy_switch_weapon(self, weapon: str | None) -> Weapon:
         current_weapon = self.current_weapon
-        options = [i for i in self.weapon_dict if i != current_weapon.name
-                   and i != BARE_HANDS]
-        if options:
-            selection = random.choice(options)
-            self.current_weapon = load_weapon(selection)
-            print_and_sleep(cyan(f"{self.name} equipped {self.current_weapon.name}."), 1)
+        if weapon:
+            self.current_weapon = load_weapon(weapon)
+        else:
+            options = [i for i in self.weapon_dict if i != current_weapon.name
+                       and i != BARE_HANDS]
+            if options:
+                selection = random.choice(options)
+                self.current_weapon = load_weapon(selection)
+        print_and_sleep(cyan(f"{self.name} equipped {self.current_weapon.name}."), 1)
         return self.current_weapon
 
     def get_enemy_encounter_line(self) -> str | None:
