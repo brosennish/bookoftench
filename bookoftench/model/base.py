@@ -9,7 +9,7 @@ from typing import Dict, List, Self
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE
-from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT
+from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT, PREPARED, JUNKIE
 from bookoftench.data.weapons import MELEE, RANGED, BLIND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
 from bookoftench.model.illness import Illness
@@ -159,6 +159,9 @@ class Combatant(ABC):
     double_damage_active: bool = False
     crit_active: bool = False
 
+    junkie_active: bool = True
+    prepared_active: bool = True
+
     blind: bool = False
     blinded_by: str = ''
     blind_effect: float = 0.0
@@ -279,12 +282,26 @@ class Combatant(ABC):
                         if self.coins < abs(change):
                             change = self.coins * -1
                         self.coins += change
+                elif self.trait.name == JUNKIE:
+                    if self.hp < 50 and self.junkie_active:
+                        amount = round(random.uniform(0.1, 0.25), 2)
+                        self.strength += amount
+                        print_and_sleep(green(f"{self.name} got yoked and increased strength by {amount}."), 1)
+                        self.junkie_active = False
                 elif self.trait.name == PLANT:
                     amount = random.randint(1, 5)
                     if (self.max_hp - self.hp) < amount:
                         amount = self.max_hp - self.hp
                     self.hp += amount
                     print_and_sleep(green(f"{self.name} regenerated {amount} HP."), 1)
+                elif self.trait.name == PREPARED:
+                    if self.hp < (self.max_hp * 0.5) and self.prepared_active:
+                        original = self.hp
+                        amount = random.randint(30,50)
+                        self.hp += min(amount, self.max_hp - self.hp)
+                        print_and_sleep(green(f"{self.name} used an item and restored {self.hp - original} HP."), 1)
+                        self.prepared_active = False
+
 
         other.take_damage(damage_inflicted, self)
         if self.current_weapon.type == BLIND:

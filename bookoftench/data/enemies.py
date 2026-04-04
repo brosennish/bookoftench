@@ -93,8 +93,8 @@ Traits = [
     {'name': JUNKIE, 'desc': 'Gains strength when HP falls below 50%'},
     {'name': ORACLE, 'desc': 'Gains strength and accuracy when blind'},
     {'name': PLANT, 'desc': 'Restores HP each turn'}, # DONE
-    {'name': PREPARED, 'desc': 'Has a health item'},
-    {'name': WEREWOLF, 'desc': 'Transforms under a full moon'},
+    {'name': PREPARED, 'desc': 'Has a health item'}, # DONE
+    {'name': WEREWOLF, 'desc': 'Transforms under a full moon'}, # DONE
 ]
 
 Enemies = [
