@@ -10,17 +10,18 @@ from .. import event_logger
 from ..audio import play_music
 from ..data.audio import LAB_THEME
 from ..data.components import LAB
+from ..data.enviroment import NIGHTTIME
 from ..model.events import PlayerDeathEvent
 from ..model.player import Player
 
 
 @register_component(LAB)
-class LabWorldState(GatekeepingComponent):
+class LabBounder(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: game_state.lab_active,
+        super().__init__(game_state, decision_function=lambda: game_state.time_of_day == NIGHTTIME,
                          accept_component=LabComponent,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("The laboratory is closed for decontamination.\n"), 1.5)))
+                             blue("The laboratory is closed during the day to be less conspicuous.\n"), 1.5)))
 
 # --- Casino menu ---
 

@@ -11,6 +11,7 @@ from bookoftench.model.player import Player
 from bookoftench.ui import blue, cyan, green, orange, purple, red, yellow, dim, white, _format
 from bookoftench.util import print_and_sleep
 from .game_state import GameState
+from ..data.enviroment import DAYTIME
 
 
 # --- HP COLOR CODING ---
@@ -104,15 +105,19 @@ def display_shop_header(game_state: GameState):
 def get_player_status_view(game_state: GameState) -> str:
     player = game_state.player
     player_color = p_color(player.hp, player.max_hp)
+    tod = game_state.time_of_day
+    moon = game_state.moon
     killed_remaining = [f"Killed: {red(f"{game_state.current_area.enemies_killed}")}"]
     if perk_is_active(CROWS_NEST):
         killed_remaining.append(f"Remaining: {yellow(f"{game_state.current_area.enemies_remaining}")}")
 
     player_status = (f"{dim(' | ').join([
-        f"Area: {blue(game_state.current_area.name)}",
+        f"{blue(game_state.current_area.name)}",
         *killed_remaining,
+        f"{yellow(tod) if tod == DAYTIME else purple(tod)}",
+        f"{moon} Moon",
         f"Wanted: {purple(game_state.wanted)}",
-        f"Bounty: {purple(f"{game_state.bounty} coins")}"])}"
+        f"Bounty: {purple(f"{game_state.bounty}")}"])}"
                      f"\n{dim(' | ').join([
                          f"\n{orange(player.name)} {dim('-')} Level: {cyan(f"{player.lvl}")}",
                          f"XP: {cyan(f"{player.xp}/{player.xp_needed}")}",

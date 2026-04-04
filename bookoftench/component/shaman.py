@@ -7,6 +7,7 @@ from bookoftench.component.base import LabeledSelectionComponent, SelectionBindi
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import SHAMAN_THEME
 from bookoftench.data.components import SHAMAN
+from bookoftench.data.enviroment import DAYTIME
 from bookoftench.data.rites import Shaman_Lines
 from bookoftench.model import GameState
 from bookoftench.model.events import ShamanEvent, TreatmentEvent
@@ -22,9 +23,17 @@ class ShamanBouncer(GatekeepingComponent):
         player = game_state.player
         super().__init__(game_state, decision_function=lambda: player.illness or player.blind
                                                                or player.hp != player.max_hp,
-                         accept_component=ShamanComponent,
+                         accept_component=ShamanSleeping,
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("There is nothing the Shaman can do you for you at this time.\n"), 1.5)))
+
+
+class ShamanSleeping(GatekeepingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, decision_function=lambda: game_state.time_of_day == DAYTIME,
+                         accept_component=ShamanComponent,
+                         deny_component=functional_component()(lambda: print_and_sleep(
+                             blue("The Shaman sleeps at night.\n"), 1.5)))
 
 
 class ShamanComponent(LabeledSelectionComponent):
