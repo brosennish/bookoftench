@@ -795,7 +795,9 @@ class SpawnEnemy(LinearComponent):
 
     def execute_current(self) -> GameState:
         wanted = self.game_state.wanted
-        self.game_state.current_area.spawn_enemy(wanted, self.game_state.player.lvl)
+        time = self.game_state.time_of_day
+        moon = self.game_state.moon
+        self.game_state.current_area.spawn_enemy(wanted, self.game_state.player.lvl, time, moon)
         return self.game_state
 
 

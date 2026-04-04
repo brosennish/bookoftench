@@ -16,6 +16,7 @@ from bookoftench.util import print_and_sleep
 from .base import Combatant, NPC, DisplayableText
 from .illness import Illness
 from .perk import attach_perk
+from .trait import Trait
 from .weapon import Weapon, load_weapon, load_weapons
 
 # Constants
@@ -25,7 +26,7 @@ ENEMY_SWITCH_WEAPON_CHANCE = 0.2
 @dataclass
 class Enemy(Combatant, NPC):
     name: str = ''
-    trait: str = ''
+    trait: Trait = None
     illness: Illness = None
     hp: int = 0
     weapons: List[str] = field(default_factory=list)

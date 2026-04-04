@@ -9,7 +9,7 @@ from typing import Dict, List, Self
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE
-from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, STARFISH
+from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT
 from bookoftench.data.weapons import MELEE, RANGED, BLIND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
 from bookoftench.model.illness import Illness
@@ -279,7 +279,7 @@ class Combatant(ABC):
                         if self.coins < abs(change):
                             change = self.coins * -1
                         self.coins += change
-                elif self.trait.name == STARFISH:
+                elif self.trait.name == PLANT:
                     amount = random.randint(1, 5)
                     if (self.max_hp - self.hp) < amount:
                         amount = self.max_hp - self.hp
