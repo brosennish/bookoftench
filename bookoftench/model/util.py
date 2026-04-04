@@ -242,10 +242,18 @@ def get_battle_info_view(game_state: GameState) -> str:
     enemy: Enemy = game_state.current_area.current_enemy
 
     def format_combatant_data(cmbt: Player | Enemy, name_color) -> str:
-        return (f"\n{name_color(cmbt.name)}"
-                f"\n{dim('Strength: ')} {red(round(cmbt.strength, 2))}"
-                f"\n{dim('Accuracy: ')} {yellow(round(cmbt.acc, 2))}"
-                f"\n{dim('Coins:    ')} {green(cmbt.coins)}")
+        if cmbt.trait not in ['', None]:
+            return (f"\n{name_color(cmbt.name)}"
+                    f"\n{dim('Strength ')} {red(round(cmbt.strength, 2))}"
+                    f"\n{dim('Accuracy ')} {yellow(round(cmbt.acc, 2))}"
+                    f"\n{dim('Coins    ')} {green(cmbt.coins)}")
+        else:
+            return (f"\n{name_color(cmbt.name)}"
+                    f"\n{dim('Trait    ')} {purple(cmbt.trait) if cmbt.trait else ''}"
+                    f"\n{dim('Desc     ')} {purple(cmbt.trait.desc)}"
+                    f"\n{dim('Strength ')} {red(round(cmbt.strength, 2))}"
+                    f"\n{dim('Accuracy ')} {yellow(round(cmbt.acc, 2))}"
+                    f"\n{dim('Coins    ')} {green(cmbt.coins)}")
 
     return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, purple)}\n"
 

@@ -10,7 +10,7 @@ from bookoftench.data.areas import EncounterType
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
     SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD
-from bookoftench.data.enemies import Enemy_Adjectives
+from bookoftench.data.enemies import Enemy_Adjectives, Traits
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
@@ -102,6 +102,7 @@ class Area:
         enemy = load_enemy(enemy_name)  # convert selected enemy to Enemy
         self.enemies_seen.add(enemy_name)  # add selected enemy to enemies_seen
 
+        enemy.trait = random.choice(Traits)
         enemy.hp += random.randint(-2, 2)  # apply hp spread first
         enemy.hp += round((enemy.hp * 0.03) * max(player_level - 1, 0))  # then apply hp scaling
         enemy.strength = enemy.strength + random.uniform(-0.03, 0.03)

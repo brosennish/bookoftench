@@ -79,6 +79,7 @@ def build_weapon_defaults(build: Build | None) -> Dict[str, PlayerWeapon]:
 @dataclass
 class Player(Combatant):
     name: str = ''
+    trait: str = None
     build: Build = None
     lives: int = 3
     lvl: int = 1

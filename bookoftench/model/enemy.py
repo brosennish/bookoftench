@@ -24,6 +24,7 @@ ENEMY_SWITCH_WEAPON_CHANCE = 0.2
 @dataclass
 class Enemy(Combatant, NPC):
     name: str = ''
+    trait: str = ''
     hp: int = 0
     weapons: List[str] = field(default_factory=list)
     bounty: int = 0

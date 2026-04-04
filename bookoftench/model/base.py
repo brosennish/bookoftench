@@ -147,6 +147,7 @@ class NPC:
 class Combatant(ABC):
     weapon_dict: Dict[str, WeaponBase]
     name: str
+    trait: str
     hp: int
     max_hp: int
     current_weapon: WeaponBase
