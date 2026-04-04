@@ -66,6 +66,18 @@ TRACKER = "Tracker"
 THIEF = "Thief"
 VOODOO_PRIESTESS = "Voodoo Priestess"
 
+# Traits
+ACHILLES = "Achilles"
+BUTTERFINGERS = "Butterfingers"
+CONTAGIOUS = "Contagious"
+COWARD = "Coward"
+INVESTOR = "Investor"
+JUNKIE = "Junkie"
+ORACLE = "Oracle"
+PLANT = "Plant"
+PREPARED = "Prepared"
+WEREWOLF = "Werewolf"
+
 # Types
 NORMAL = "normal"
 BOSS = "boss"
