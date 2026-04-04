@@ -9,7 +9,8 @@ from typing import Dict, List, Self
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE
-from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT, PREPARED, JUNKIE, COWARD
+from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT, PREPARED, JUNKIE, COWARD, \
+    CONTAGIOUS, ORACLE
 from bookoftench.data.weapons import MELEE, RANGED, BLIND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
 from bookoftench.model.illness import Illness
@@ -160,6 +161,7 @@ class Combatant(ABC):
     crit_active: bool = False
 
     junkie_active: bool = True
+    oracle_active: bool = True
     prepared_active: bool = True
 
     blind: bool = False
@@ -276,9 +278,10 @@ class Combatant(ABC):
                     if dropped > 0:
                         self.coins -= dropped
                         print_and_sleep(yellow(f"{self.name} dropped {dropped} of coin."), 1)
-                elif self.trait.name == COWARD:
-                    if random.random() < 0.10:
-                        self.hp = 0
+                elif self.trait.name == CONTAGIOUS:
+                    if random.random() < 0.20:
+                        if not other.illness:
+                            other.illness = self.illness
                         print_and_sleep(yellow(f"{self.name} ran for the hills..."), 1)
                 elif self.trait.name == INVESTOR:
                     change = random.randint(-10, 10)
@@ -310,6 +313,11 @@ class Combatant(ABC):
         other.take_damage(damage_inflicted, self)
         if self.current_weapon.type == BLIND:
             self.handle_blinding(other)
+            if other.oracle_active:
+                other.strength += round(random.uniform(0.05, 0.15), 2)
+                other.acc += round(random.uniform(0.05, 0.15), 2)
+                print_and_sleep(green(f"{self.name}'s oracle ability has been activated."), 1)
+                other.oracle_active = False
         if self.current_weapon.is_broken():
             play_sound(WEAPON_BROKE)
             print_and_sleep(yellow(f"{self.current_weapon.name} broke!"), 1)
