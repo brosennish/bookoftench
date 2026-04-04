@@ -147,6 +147,8 @@ class GameState:
                     if death:
                         self.player.lives -= 1
                         event_logger.log_event(PlayerDeathEvent(self.player.lives))
+                    else:
+                        self.player.hp -= damage
                 return
         raise KeyError(f"Area '{area_name}' not found")
 
