@@ -732,7 +732,10 @@ class Attack(Component):
         player.gain_xp_from_enemy(enemy)
 
         event_logger.log_event(KillEvent())
-        self.game_state.current_area.kill_current_enemy()
+        if event_logger.get_count(EventType.KILL) % 2 == 0:
+            self.game_state.update_time_of_day()
+        if event_logger.get_count(EventType.KILL) % 4 == 0:
+            self.game_state.update_moon()
         PostKillEncounters(self.game_state).run()
 
     def run(self) -> GameState:
