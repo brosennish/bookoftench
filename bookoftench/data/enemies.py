@@ -89,7 +89,7 @@ Traits = [
     {'name': COWARD, 'desc': 'May run away at any time'}, # DONE
     {'name': INVESTOR, 'desc': 'Value of coins fluctuates during battle'}, # DONE
     {'name': JUNKIE, 'desc': 'Gains strength when HP falls below 50%'}, # DONE
-    {'name': ORACLE, 'desc': 'Gains strength and accuracy when blind'},
+    {'name': ORACLE, 'desc': 'Gains strength and accuracy when blind'}, # DONE
     {'name': PLANT, 'desc': 'Restores HP each turn'}, # DONE
     {'name': PREPARED, 'desc': 'Has a health item'}, # DONE
     {'name': WEREWOLF, 'desc': 'Transforms under a full moon'}, # DONE

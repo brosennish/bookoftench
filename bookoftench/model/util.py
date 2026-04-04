@@ -11,7 +11,6 @@ from bookoftench.model.player import Player
 from bookoftench.ui import blue, cyan, green, orange, purple, red, yellow, dim, white
 from bookoftench.util import print_and_sleep
 from .game_state import GameState
-from ..data.enemies import CONTAGIOUS
 from ..data.enviroment import DAYTIME
 
 
@@ -248,15 +247,6 @@ def get_battle_info_view(game_state: GameState) -> str:
                     f"\n{dim('Strength |')} {red(round(cmbt.strength, 2))}"
                     f"\n{dim('Accuracy |')} {yellow(round(cmbt.acc, 2))}"
                     f"\n{dim('Coins    |')} {green(cmbt.coins)}")
-        elif cmbt.trait == CONTAGIOUS:
-            return (f"\n{name_color(cmbt.name)}"
-                    f"\n{dim('Strength |')} {red(round(cmbt.strength, 2))}"
-                    f"\n{dim('Accuracy |')} {yellow(round(cmbt.acc, 2))}"
-                    f"\n{dim('Coins    |')} {green(cmbt.coins)}"
-                    f"\n{dim('Illness  |')} {yellow(cmbt.illness.name)}"
-                    f"\n{dim('Trait    |')} {purple(cmbt.trait.name)}"
-                    f"\n{dim('Ability  |')} {purple(cmbt.trait.desc)}"
-                    )
         else:
             return (f"\n{name_color(cmbt.name)}"
                     f"\n{dim('Strength |')} {red(round(cmbt.strength, 2))}"

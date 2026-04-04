@@ -9,8 +9,7 @@ from typing import Dict, List, Self
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE
-from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT, PREPARED, JUNKIE, COWARD, \
-    CONTAGIOUS, ORACLE
+from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT, PREPARED, JUNKIE
 from bookoftench.data.weapons import MELEE, RANGED, BLIND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
 from bookoftench.model.illness import Illness
@@ -278,11 +277,6 @@ class Combatant(ABC):
                     if dropped > 0:
                         self.coins -= dropped
                         print_and_sleep(yellow(f"{self.name} dropped {dropped} of coin."), 1)
-                elif self.trait.name == CONTAGIOUS:
-                    if random.random() < 0.20:
-                        if not other.illness:
-                            other.illness = self.illness
-                        print_and_sleep(yellow(f"{self.name} ran for the hills..."), 1)
                 elif self.trait.name == INVESTOR:
                     change = random.randint(-10, 10)
                     if change != 0:

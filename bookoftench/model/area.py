@@ -10,7 +10,7 @@ from bookoftench.data.areas import EncounterType
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
     SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD
-from bookoftench.data.enemies import Enemy_Adjectives, Traits, CONTAGIOUS, PLANT, WEREWOLF, COWARD
+from bookoftench.data.enemies import Enemy_Adjectives, Traits, PLANT, WEREWOLF, COWARD
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
@@ -19,7 +19,7 @@ from .perk import perk_is_active
 from .shop import Shop
 from .trait import load_traits
 from .weapon import load_weapon
-from ..data.enviroment import NIGHTTIME, DAYTIME, FULL
+from ..data.enviroment import NIGHTTIME, FULL
 from ..data.illnesses import Illnesses, LATE_ONSET_SIDS
 from ..data.perks import SHERLOCK_TENCH
 from ..data.weapons import CLAWS
@@ -114,10 +114,6 @@ class Area:
             valid = [i['name'] for i in Traits if i['name'] not in [PLANT, COWARD]]
         traits = load_traits(valid)
         enemy.trait = random.choice(traits)
-        if enemy.trait == CONTAGIOUS:  # only illness if contagious trait
-            valid = [i['name'] for i in Illnesses if i['name'] != LATE_ONSET_SIDS]
-            illnesses = load_illnesses(valid)
-            enemy.illness = random.choice(illnesses)
 
         enemy.hp += random.randint(-2, 2)  # apply hp spread first
         enemy.hp += round((enemy.hp * 0.03) * max(player_level - 1, 0))  # then apply hp scaling
