@@ -9,12 +9,12 @@ from typing import Dict, List, Self
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE
-from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS
+from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT
 from bookoftench.data.weapons import MELEE, RANGED, BLIND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
 from bookoftench.model.illness import Illness
 from bookoftench.model.trait import Trait
-from bookoftench.ui import red, yellow, color_text, purple, cyan, dim, blue
+from bookoftench.ui import red, yellow, color_text, purple, cyan, dim, blue, green
 from bookoftench.util import print_and_sleep
 
 
@@ -267,8 +267,23 @@ class Combatant(ABC):
         else:
             print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
-            if self.trait.name == BUTTERFINGERS and other.is_alive():  # butterfingers trait
-                self.coins -= min(self.coins, random.randint(0,10))  # drop 0 to 10 coins after each attack
+            if other.is_alive():
+                if self.trait.name == BUTTERFINGERS:
+                    dropped = min(self.coins, random.randint(0,10))
+                    if dropped > 0:
+                        self.coins -= dropped
+                elif self.trait.name == INVESTOR:
+                    change = random.randint(-10, 10)
+                    if change != 0:
+                        if self.coins < abs(change):
+                            change = self.coins * -1
+                        self.coins += change
+                elif self.trait.name == PLANT:
+                    amount = random.randint(1, 6)
+                    if (self.max_hp - self.hp) < amount:
+                        amount = self.max_hp - self.hp
+                    self.hp += amount
+                    print_and_sleep(green(f"{self.name} restored {amount} HP using the Sun's energy."), 1)
 
         other.take_damage(damage_inflicted, self)
         if self.current_weapon.type == BLIND:
