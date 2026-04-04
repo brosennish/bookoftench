@@ -10,7 +10,7 @@ from bookoftench.data.areas import EncounterType
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
     SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD
-from bookoftench.data.enemies import Enemy_Adjectives, Traits, CONTAGIOUS, PLANT, WEREWOLF
+from bookoftench.data.enemies import Enemy_Adjectives, Traits, CONTAGIOUS, PLANT, WEREWOLF, COWARD
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
@@ -18,9 +18,11 @@ from .illness import load_illnesses
 from .perk import perk_is_active
 from .shop import Shop
 from .trait import load_traits
+from .weapon import load_weapon
 from ..data.enviroment import NIGHTTIME, DAYTIME, FULL
 from ..data.illnesses import Illnesses, LATE_ONSET_SIDS
 from ..data.perks import SHERLOCK_TENCH
+from ..data.weapons import CLAWS
 
 _search_defaults = {
     DISCOVER_PERK: 1,
@@ -109,7 +111,7 @@ class Area:
         # --- traits and illness ---
         valid = [i['name'] for i in Traits]
         if time == NIGHTTIME:
-            valid = [i['name'] for i in Traits if i['name'] != PLANT]
+            valid = [i['name'] for i in Traits if i['name'] not in [PLANT, COWARD]]
         traits = load_traits(valid)
         enemy.trait = random.choice(traits)
         if enemy.trait == CONTAGIOUS:  # only illness if contagious trait
@@ -151,6 +153,8 @@ class Area:
         enemy.name = f"{adj} {enemy.name}"
 
         self.current_enemy = enemy
+        if self.current_enemy.trait.name == WEREWOLF:
+            self.current_enemy.current_weapon = load_weapon(CLAWS)
         return self.current_enemy
 
     def summon_boss(self) -> Boss:

@@ -12,7 +12,7 @@ from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEM
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
     OVERVIEW, INFO, BUILD
-from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES
+from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, WEREWOLF
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT, Perks
 from bookoftench.event_logger import subscribe_function

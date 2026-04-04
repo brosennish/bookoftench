@@ -8,7 +8,7 @@ from typing import List, Optional, Dict, Self
 from bookoftench.audio import play_sound
 from bookoftench.data import Enemies
 from bookoftench.data.audio import AREA_BOSS_THEME, GATOR
-from bookoftench.data.enemies import Bosses, Final_Boss, BAYOU_BILL, Enemy_Lines
+from bookoftench.data.enemies import Bosses, Final_Boss, BAYOU_BILL, Enemy_Lines, WEREWOLF
 from bookoftench.data.perks import RICKETY_PICKPOCKET
 from bookoftench.data.weapons import BARE_HANDS, BLIND
 from bookoftench.ui import purple, cyan
@@ -66,6 +66,8 @@ class Enemy(Combatant, NPC):
 
     def enemy_switch_weapon(self, weapon: str | None) -> Weapon:
         current_weapon = self.current_weapon
+        if self.trait.name == WEREWOLF: # werewolf just uses claws
+            return self.current_weapon
         if weapon:
             self.current_weapon = load_weapon(weapon)
         else:
