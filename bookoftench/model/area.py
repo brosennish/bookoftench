@@ -63,7 +63,7 @@ class Area:
     enemies: list[str]
     boss_name: str
     theme: str
-    enemy_count: int = field(default_factory=lambda: random.randint(1, 1))
+    enemy_count: int = field(default_factory=lambda: random.randint(10, 15))
     enemies_killed: int = 0
     enemies_seen: Set[str] = field(default_factory=set)
     boss_defeated: bool = False

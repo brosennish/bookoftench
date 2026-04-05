@@ -113,9 +113,9 @@ class Boss(Enemy):
     def handle_hit(self, other: "Combatant") -> None:
         super().handle_hit(other)
         if self.name == BAYOU_BILL:
-            gator = random.random() < 0.10
+            gator = random.random() < 0.20
             if gator:
-                bite = random.randint(5, 10)
+                bite = random.randint(1, 10)
                 play_sound(GATOR)
                 print_and_sleep(purple(f"Mama Gator attacked you for {bite} damage!"), 2)
                 other.take_damage(bite, self)

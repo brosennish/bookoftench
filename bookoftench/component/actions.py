@@ -751,7 +751,7 @@ class Attack(Component):
                 if random.random() < ENEMY_SWITCH_WEAPON_CHANCE and enemy.current_weapon.name != TENCH_CANNON:
                     enemy.current_weapon = enemy.enemy_switch_weapon(None)
         if not enemy.is_alive() or enemy.hp <= 0:
-            self.game_state.current_area.enemies_killed += 1
+            self.game_state.current_area.kill_current_enemy()
             self.handle_enemy_death(player, enemy)
         if not player.is_alive():
             player.lives -= 1
