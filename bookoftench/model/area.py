@@ -128,13 +128,13 @@ class Area:
         # --- werewolf logic ---
         if enemy.trait.name == WEREWOLF and time == NIGHTTIME and moon == FULL:
             enemy.name = "Werewolf"
-            enemy.hp += random.randint(10, 20)
+            enemy.hp += random.randint(10, 25)
             enemy.strength = 1.25
             enemy.acc = 0
             enemy.coins = 0
 
         if random.random() < elite_chance:
-            enemy.name = "Elite Werewolf" if enemy.trait.name == WEREWOLF else f"Elite {enemy.name}"
+            enemy.name = f"Elite {enemy.name}"
             enemy.hp = int(enemy.hp * 1.5)
             enemy.max_hp = int(enemy.max_hp * 1.5)
             enemy.strength += 0.1

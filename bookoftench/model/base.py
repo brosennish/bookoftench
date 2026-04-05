@@ -273,14 +273,15 @@ class Combatant(ABC):
                             f"{red(damage_inflicted)} damage!", 1)
             if other.is_alive() and self.trait:
                 if self.trait.name == BUTTERFINGERS:
-                    dropped = min(self.coins, random.randint(0,10))
+                    dropped = min(self.coins, random.randint(1,10))
+                    self.coins -= dropped
+                    word = 'coin' if dropped == 1 else 'coins'
                     if dropped > 0:
-                        self.coins -= dropped
-                        print_and_sleep(yellow(f"{self.name} dropped {dropped} of coin."), 1)
+                        print_and_sleep(yellow(f"{self.name} dropped {dropped} {word}."), 1)
                 elif self.trait.name == INVESTOR:
                     change = random.randint(-10, 10)
                     if change != 0:
-                        if self.coins < abs(change):
+                        if change < 0 and self.coins < abs(change):
                             change = self.coins * -1
                         self.coins += change
                 elif self.trait.name == JUNKIE:
@@ -290,12 +291,12 @@ class Combatant(ABC):
                         print_and_sleep(green(f"{self.name} got yoked and increased strength by {amount}."), 1)
                         self.junkie_active = False
                 elif other.current_weapon.type == BLIND and self.trait.name == ORACLE and self.oracle_active:
-                    self.strength += round(random.uniform(0.05, 0.15), 2)
-                    self.acc += round(random.uniform(0.05, 0.15), 2)
+                    self.strength += round(random.uniform(0.03, 0.12), 2)
+                    self.acc += round(random.uniform(0.03, 0.12), 2)
                     print_and_sleep(green(f"{self.name}'s strength and accuracy increased."), 1)
                     other.oracle_active = False
                 elif self.trait.name == PLANT:
-                    amount = random.randint(1, 5)
+                    amount = random.randint(1, 10)
                     if (self.max_hp - self.hp) < amount:
                         amount = self.max_hp - self.hp
                     self.hp += amount
