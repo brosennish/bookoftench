@@ -343,11 +343,11 @@ class Player(Combatant):
 
     def gain_strength(self, amount: float) -> None:
         self.strength += round(amount, 2)
-        print_and_sleep(cyan(f"Your strength increased by {amount}!"), 1)
+        print_and_sleep(cyan(f"Your strength increased by {round(amount, 2)}!"), 1)
 
     def gain_accuracy(self, amount: float) -> None:
         self.acc += round(amount, 2)
-        print_and_sleep(cyan(f"Your accuracy increased by {amount}!"), 1)
+        print_and_sleep(cyan(f"Your accuracy increased by {round(amount, 2)}!"), 1)
 
     @staticmethod
     @attach_perk(INTRO_TO_TENCH, value_description="xp gained")
@@ -419,7 +419,10 @@ class Player(Combatant):
         self.coins = round(self.coins * 0.25) if perk_is_active(WALLET_CHAIN) else 0  # TODO use the framework for this
         self.items = item_defaults()
         self.weapon_dict = build_weapon_defaults(self.build)
-        current_weapon = next(w.name for w in build_weapon_defaults(self.build).values())
+        if self.weapon_dict:
+            current_weapon = next(w.name for w in build_weapon_defaults(self.build).values())
+        else:
+            current_weapon = BARE_HANDS
         self.current_weapon = self.weapon_dict[current_weapon]
         self.hp = self.max_hp
         self.xp = 0

@@ -66,7 +66,7 @@ class Enemy(Combatant, NPC):
 
     def enemy_switch_weapon(self, weapon: str | None) -> Weapon:
         current_weapon = self.current_weapon
-        if self.trait.name == WEREWOLF: # werewolf just uses claws
+        if self.trait and self.trait.name == WEREWOLF: # werewolf just uses claws
             return self.current_weapon
         if weapon:
             self.current_weapon = load_weapon(weapon)
@@ -115,7 +115,7 @@ class Boss(Enemy):
         if self.name == BAYOU_BILL:
             gator = random.random() < 0.10
             if gator:
-                bite = random.randint(3, 5)
+                bite = random.randint(5, 10)
                 play_sound(GATOR)
                 print_and_sleep(purple(f"Mama Gator attacked you for {bite} damage!"), 2)
                 other.take_damage(bite, self)

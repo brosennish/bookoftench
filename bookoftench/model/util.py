@@ -232,7 +232,6 @@ def display_active_perks(game_state: GameState) -> None:
         print_and_sleep(f"Your Perks:")
         if perk_is_active(WENCH_LOCATION):
             print_and_sleep(f'Wench Location: {blue(game_state.wench_area.name)}')
-
         for perk in sorted(active_perks, key=lambda a: a.name):
             print_and_sleep(purple(perk.name) + dim(" | ") + purple(perk.description))
 

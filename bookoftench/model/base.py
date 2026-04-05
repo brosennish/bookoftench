@@ -9,7 +9,7 @@ from typing import Dict, List, Self
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE
-from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT, PREPARED, JUNKIE
+from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT, PREPARED, JUNKIE, ORACLE
 from bookoftench.data.weapons import MELEE, RANGED, BLIND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
 from bookoftench.model.illness import Illness
@@ -271,7 +271,7 @@ class Combatant(ABC):
         else:
             print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
-            if other.is_alive():
+            if other.is_alive() and self.trait:
                 if self.trait.name == BUTTERFINGERS:
                     dropped = min(self.coins, random.randint(0,10))
                     if dropped > 0:
@@ -289,6 +289,11 @@ class Combatant(ABC):
                         self.strength += amount
                         print_and_sleep(green(f"{self.name} got yoked and increased strength by {amount}."), 1)
                         self.junkie_active = False
+                elif other.current_weapon.type == BLIND and self.trait.name == ORACLE and self.oracle_active:
+                    self.strength += round(random.uniform(0.05, 0.15), 2)
+                    self.acc += round(random.uniform(0.05, 0.15), 2)
+                    print_and_sleep(green(f"{self.name}'s strength and accuracy increased."), 1)
+                    other.oracle_active = False
                 elif self.trait.name == PLANT:
                     amount = random.randint(1, 5)
                     if (self.max_hp - self.hp) < amount:
@@ -298,7 +303,7 @@ class Combatant(ABC):
                 elif self.trait.name == PREPARED:
                     if self.hp < (self.max_hp * 0.5) and self.prepared_active:
                         original = self.hp
-                        amount = random.randint(30,50)
+                        amount = random.randint(25,50)
                         self.hp += min(amount, self.max_hp - self.hp)
                         print_and_sleep(green(f"{self.name} used an item and restored {self.hp - original} HP."), 1)
                         self.prepared_active = False
@@ -307,11 +312,6 @@ class Combatant(ABC):
         other.take_damage(damage_inflicted, self)
         if self.current_weapon.type == BLIND:
             self.handle_blinding(other)
-            if other.oracle_active:
-                other.strength += round(random.uniform(0.05, 0.15), 2)
-                other.acc += round(random.uniform(0.05, 0.15), 2)
-                print_and_sleep(green(f"{self.name}'s oracle ability has been activated."), 1)
-                other.oracle_active = False
         if self.current_weapon.is_broken():
             play_sound(WEAPON_BROKE)
             print_and_sleep(yellow(f"{self.current_weapon.name} broke!"), 1)

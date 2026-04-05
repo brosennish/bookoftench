@@ -63,7 +63,7 @@ class Area:
     enemies: list[str]
     boss_name: str
     theme: str
-    enemy_count: int = field(default_factory=lambda: random.randint(10, 15))
+    enemy_count: int = field(default_factory=lambda: random.randint(1, 1))
     enemies_killed: int = 0
     enemies_seen: Set[str] = field(default_factory=set)
     boss_defeated: bool = False
@@ -127,6 +127,7 @@ class Area:
 
         # --- werewolf logic ---
         if enemy.trait.name == WEREWOLF and time == NIGHTTIME and moon == FULL:
+            enemy.name = "Werewolf"
             enemy.hp += random.randint(10, 20)
             enemy.strength = 1.25
             enemy.acc = 0

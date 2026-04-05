@@ -89,7 +89,7 @@ Traits = [
     {'name': COWARD, 'desc': 'May run away at any time'}, # DONE
     {'name': INVESTOR, 'desc': 'Value of coins fluctuates during battle'}, # DONE
     {'name': JUNKIE, 'desc': 'Gains strength when HP falls below 50%'}, # DONE
-    {'name': ORACLE, 'desc': 'Gains strength and accuracy when blind'}, # DONE
+    {'name': ORACLE, 'desc': 'Gains strength and accuracy when blinded'}, # DONE
     {'name': PLANT, 'desc': 'Restores HP each turn'}, # DONE
     {'name': PREPARED, 'desc': 'Has a health item'}, # DONE
     {'name': WEREWOLF, 'desc': 'Transforms under a full moon'}, # DONE
@@ -270,7 +270,7 @@ Bosses = [
     {'name': CAPTAIN_HOLE, 'hp': 250,
      'weapons': [w.RIFLE, w.HARPOON, w.KNIFE, w.PISTOL, w.MACHETE],
      'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1.15, 'acc': 1.15, 'preamble': [
-        {'text': "Captain Hole has offered to shoot himself in the jines in exchange for your Tench Filet",
+        {'text': "Captain Hole has offered to shoot himself in the jines in exchange for your Tench Filet.",
          'sleep': 4}
     ]}
 ]
