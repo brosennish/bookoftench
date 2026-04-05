@@ -74,8 +74,10 @@ def weapon_defaults() -> Dict[str, PlayerWeapon]:
         return dict((it.name, PlayerWeapon.from_weapon(it)) for it in load_weapons([BARE_HANDS, KNIFE]))
 
 def build_weapon_defaults(build: Build | None) -> Dict[str, PlayerWeapon]:
-    weapons = [i.name for i in build.weapons if i.name in [BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF]]
-    return dict((it.name, PlayerWeapon.from_weapon(it)) for it in load_weapons(weapons))
+    weapons = [i for i in build.weapons if i.name in [BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF]]
+    if not weapons:
+        weapons = load_weapons([BARE_HANDS])
+    return dict((it.name, PlayerWeapon.from_weapon(it)) for it in weapons)
 
 
 @dataclass
@@ -207,9 +209,6 @@ class Player(Combatant):
                 original_hp = self.hp
                 self.hp -= min(self.hp, original_hp)
                 print_and_sleep(red(f"You lost {original_hp - self.hp} HP."), 1)
-                if self.hp <= 0:
-                    self.lives -= 1
-                    event_logger.log_event(PlayerDeathEvent(self.lives))
             elif item.name == PHOTOSYNTHOPHYL:
                 if time == DAYTIME:
                     amount = self.max_hp - self.hp
@@ -218,10 +217,10 @@ class Player(Combatant):
         elif item.type == ENEMY:
             if enemy:
                 if item.name == BOOMERANG:
-                    print_and_sleep("You missed, bozo.")
-                    if self.hp <= 0:
-                        self.lives -= 1
-                        event_logger.log_event(PlayerDeathEvent(self.lives))
+                    damage = random.randint(10, 30)
+                    print_and_sleep(f"Boomerang did {damage} damage and you lost {damage} HP!")
+                    self.hp -= min(self.hp, damage)
+                    enemy.hp -= min(enemy.hp, damage)
                 elif item.name == FLACCID_ACID:
                     original = enemy.strength
                     decrement = round(enemy.strength * 0.25, 2)
@@ -235,7 +234,7 @@ class Player(Combatant):
                         damage = 50
                     elif moon == FULL:
                         damage = 100
-                    enemy.hp -= 0 # add damage when solved
+                    enemy.hp -= min(enemy.hp, damage) # add damage when solved
                     print_and_sleep(purple(f"Moon Rune did {damage} damage!"), 1)
 
         # Remove from actual inventory
