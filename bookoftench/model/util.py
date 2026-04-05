@@ -259,17 +259,6 @@ def get_battle_info_view(game_state: GameState) -> str:
 
 
 def display_battle_info(game_state: GameState) -> None:
-    active_perks = [p for p in load_perks() if p.active]
-    if len(active_perks) == 0:
-        print_and_sleep(yellow("Your perks are dry."))
-    else:
-        print_and_sleep(f"Your Perks:")
-        if perk_is_active(WENCH_LOCATION):
-            print_and_sleep(f'Wench Location: {blue(game_state.wench_area.name)}')
-
-        for perk in sorted(active_perks, key=lambda a: a.name):
-            print_and_sleep(purple(perk.name) + dim(" | ") + purple(perk.description))
-
     print_and_sleep(get_battle_info_view(game_state))
 
 

@@ -188,11 +188,10 @@ class Player(Combatant):
             self.can_flee = True
         elif item.type == STAT:
             if item.name == HTH:
-                self.strength += 0.03
+                self.strength += 0.02
                 print_and_sleep(green(f"Strength: {self.strength - 0.03} -> {self.strength}"), 1)
             elif item.name == ACCURACY_SEARUM:
-                self.acc += 0.03
-                self.strength += 0.03
+                self.acc += 0.02
                 print_and_sleep(green(f"Accuracy: {self.acc - 0.03} -> {self.acc}"), 1)
         elif item.type == DMG:
             self.double_damage_active = True
