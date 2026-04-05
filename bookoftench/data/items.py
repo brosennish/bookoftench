@@ -84,7 +84,7 @@ Items = [
      'desc': 'Make your next attack a critical hit'},
     {'name': nPnG, 'type': HEALTH, 'hp': 0, 'cost': 80, 'sell_value': 14, 'areas': [CAVE, CITY],
      'desc': 'Lose X HP and increase max HP by X'},
-    {'name': BOOMERANG, 'type': ENEMY, 'hp': 0, 'cost': 70, 'sell_value': 11, 'areas': [CITY, FOREST, SWAMP],
+    {'name': BOOMERANG, 'type': ENEMY, 'hp': 0, 'cost': 0, 'sell_value': 0, 'areas': [CITY, FOREST, SWAMP],
      'desc': 'Do 20 damage and lose 20 HP'},
 
     # --- Tier 1 (10 HP) ---
