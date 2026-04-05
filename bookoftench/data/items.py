@@ -22,6 +22,7 @@ EGG_ON_EGGS = "Egg on Eggs"
 EGGS_ON_EGG = "Eggs on Egg"
 ENERGY_CRYSTAL = "Energy Crystal"
 FERMENTED_CELERY_MILK = "Fermented Celery Milk"
+FLACCID_ACID = "Flaccid Acid"
 FROZEN_WAFFLE = "Frozen Waffle"
 GATOR_TESTICLES = "Gator Testicles"
 GIANT_TENTACLE = "Giant Tentacle"
@@ -33,6 +34,7 @@ IOU = "IOU"
 KRILL = "Krill"
 LACED_HONEY = "Laced Honey"
 LOST_SAUCE = "Lost Sauce"
+MOON_RUNE = "Moon Rune"
 MOONSHINE = "Moonshine"
 MOREL = "Morel"
 MUSKRAT_SKEWER = "Muskrat Skewer"
@@ -44,6 +46,7 @@ ORGANIC_SLUDGE = "Organic Sludge"
 OWL_EGG = "Owl Egg"
 OXYGENATED_BIOFILM = "Oxygenated Biofilm"
 PANTHER_LOINS = "Panther Loins"
+PHOTOSYNTHOPHYL = "Photosynthophyl"
 SMOKE_BOMB = "Smoke Bomb"
 SOMEWHAT_SPICY_NOODLES = "Somewhat Spicy Noodles"
 SOUR_MILK = "Sour Milk"
@@ -58,34 +61,40 @@ VERY_SPICY_NOODLES = "Very Spicy Noodles"
 WORMHOLE = "Wormhole"
 
 # --- types ---
-CRIT = "crit"
-DMG = "dmg"
-ENEMY = "enemy"
-FLEE = "flee"
-HEALTH = "health"
-NORMAL = "normal"
-STAT = "stat"
+CRIT = "crit"      # affects player attack critical hit odds
+DMG = "dmg"        # affects player attack damage
+ENEMY = "enemy"    # used against enemy
+FLEE = "flee"      # used to escape from battle
+HEALTH = "health"  # non-normal item used to restore HP
+NORMAL = "normal"  # normal item used to restore HP
+STAT = "stat"      # used to mutate one or more player stats
 
 Items = [
     # --- SPECIAL ---
-    {'name': IOU, 'type': FLEE, 'hp': 0, 'cost': 10, 'sell_value': 3, 'areas': [CITY],
-     'desc': 'Use to escape from battle'},
-    {'name': SMOKE_BOMB, 'type': FLEE, 'hp': 0, 'cost': 20, 'sell_value': 7, 'areas': [FOREST, SWAMP],
-     'desc': 'Use to escape from battle'},
-    {'name': WORMHOLE, 'type': FLEE, 'hp': 0, 'cost': 30, 'sell_value': 11, 'areas': [CAVE],
-     'desc': 'Use to escape from battle'},
-    {'name': HTH, 'type': STAT, 'hp': 0, 'cost': 100, 'sell_value': 32, 'areas': [CITY, SWAMP],
-     'desc': 'Increase strength by 0.02'},
     {'name': ACCURACY_SEARUM, 'type': STAT, 'hp': 0, 'cost': 100, 'sell_value': 32, 'areas': [CAVE, FOREST],
      'desc': 'Increase accuracy by 0.02'},
-    {'name': TENCHTOSTERONE, 'type': DMG, 'hp': 0, 'cost': 60, 'sell_value': 22, 'areas': [CITY, SWAMP],
-     'desc': 'Double the damage of your next melee attack'},
+    {'name': BOOMERANG, 'type': ENEMY, 'hp': 0, 'cost': 0, 'sell_value': 0, 'areas': [CITY, FOREST, SWAMP],
+     'desc': 'Do X damage to enemy and lose X HP'},
     {'name': CRITICAL_BASS, 'type': CRIT, 'hp': 0, 'cost': 40, 'sell_value': 14, 'areas': [CAVE, FOREST],
      'desc': 'Make your next attack a critical hit'},
-    {'name': nPnG, 'type': HEALTH, 'hp': 0, 'cost': 80, 'sell_value': 14, 'areas': [CAVE, CITY],
+    {'name': FLACCID_ACID, 'type': ENEMY, 'hp': 0, 'cost': 65, 'sell_value': 11, 'areas': [CAVE, CITY, SWAMP],
+     'desc': 'Lower enemy strength by 25%'},
+    {'name': HTH, 'type': STAT, 'hp': 0, 'cost': 100, 'sell_value': 32, 'areas': [CITY, SWAMP],
+     'desc': 'Increase strength by 0.02'},
+    {'name': IOU, 'type': FLEE, 'hp': 0, 'cost': 10, 'sell_value': 3, 'areas': [CITY],
+     'desc': 'Use to escape from battle'},
+    {'name': MOON_RUNE, 'type': ENEMY, 'hp': 0, 'cost': 69, 'sell_value': 12, 'areas': [CAVE, FOREST],
+     'desc': 'Do damage to enemy based on the Moon (only works at night)'},
+    {'name': PHOTOSYNTHOPHYL, 'type': HEALTH, 'hp': 0, 'cost': 100, 'sell_value': 17, 'areas': [FOREST, SWAMP],
+     'desc': 'Fully restore HP (does not work at night)'},
+    {'name': SMOKE_BOMB, 'type': FLEE, 'hp': 0, 'cost': 20, 'sell_value': 7, 'areas': [FOREST, SWAMP],
+     'desc': 'Use to escape from battle'},
+    {'name': TENCHTOSTERONE, 'type': DMG, 'hp': 0, 'cost': 60, 'sell_value': 22, 'areas': [CITY, SWAMP],
+     'desc': 'Double the damage of your next melee attack'},
+    {'name': WORMHOLE, 'type': FLEE, 'hp': 0, 'cost': 30, 'sell_value': 11, 'areas': [CAVE],
+     'desc': 'Use to escape from battle'},
+    {'name': nPnG, 'type': HEALTH, 'hp': 0, 'cost': 95, 'sell_value': 17, 'areas': [CAVE, CITY],
      'desc': 'Lose X HP and increase max HP by X'},
-    {'name': BOOMERANG, 'type': ENEMY, 'hp': 0, 'cost': 0, 'sell_value': 0, 'areas': [CITY, FOREST, SWAMP],
-     'desc': 'Do 20 damage and lose 20 HP'},
 
     # --- Tier 1 (10 HP) ---
     {'name': ANTS_ON_A_LOG, 'type': NORMAL, 'hp': 10, 'cost': 11, 'sell_value': 4, 'areas': [FOREST, SWAMP], 'desc': None},

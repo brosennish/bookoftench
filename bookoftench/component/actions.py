@@ -608,6 +608,8 @@ class ItemSelectionComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         self.length = 0
         enemy = game_state.current_area.current_enemy
+        time = game_state.time_of_day
+        moon = game_state.moon
         for i in game_state.player.items.keys():
             if len(i) > self.length:
                 self.length = len(i) + 1
@@ -617,7 +619,7 @@ class ItemSelectionComponent(LabeledSelectionComponent):
                                                     name=item.get_simple_format(self.length),
                                                     component=functional_component()(
                                                         partial(game_state.player.use_item, item.name,
-                                                                enemy if enemy else None)))
+                                                                enemy if enemy else None, time, moon)))
                                    for (i, item) in enumerate(game_state.player.get_items(), 1)],
                          top_level_prompt_callback=lambda gs: gs.player.display_item_count(), quittable=True)
 

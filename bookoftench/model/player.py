@@ -8,7 +8,7 @@ from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import RIFLE
 from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, STAT, HTH, ACCURACY_SEARUM, DMG, CRIT, HEALTH, nPnG, \
-    ENEMY, BOOMERANG
+    ENEMY, BOOMERANG, FLACCID_ACID, PHOTOSYNTHOPHYL, MOON_RUNE
 from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
     VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
     ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM, TENCH_GENES, \
@@ -29,6 +29,7 @@ from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
 from .trait import Trait
 from .weapon import load_weapons, Weapon
 from ..data.builds import DENNY
+from ..data.enviroment import DAYTIME, NIGHTTIME, FULL, DRY, WETTING, DRYING
 
 
 @dataclass
@@ -178,7 +179,7 @@ class Player(Combatant):
     def _apply_hp_bonus(base: int) -> int:
         return base
 
-    def use_item(self, name: str, enemy: Enemy | None) -> None:
+    def use_item(self, name: str, enemy: Enemy | None, time: str, moon: str) -> None:
         item = self.items[name]
         gain = 0
         if item.type == NORMAL:
@@ -187,12 +188,12 @@ class Player(Combatant):
         elif item.type == FLEE:
             self.can_flee = True
         elif item.type == STAT:
-            if item.name == HTH:
-                self.strength += 0.02
-                print_and_sleep(green(f"Strength: {self.strength - 0.03} -> {self.strength}"), 1)
-            elif item.name == ACCURACY_SEARUM:
+            if item.name == ACCURACY_SEARUM:
                 self.acc += 0.02
                 print_and_sleep(green(f"Accuracy: {self.acc - 0.03} -> {self.acc}"), 1)
+            elif item.name == HTH:
+                self.strength += 0.02
+                print_and_sleep(green(f"Strength: {self.strength - 0.03} -> {self.strength}"), 1)
         elif item.type == DMG:
             self.double_damage_active = True
         elif item.type == CRIT:
@@ -209,6 +210,11 @@ class Player(Combatant):
                 if self.hp <= 0:
                     self.lives -= 1
                     event_logger.log_event(PlayerDeathEvent(self.lives))
+            elif item.name == PHOTOSYNTHOPHYL:
+                if time == DAYTIME:
+                    amount = self.max_hp - self.hp
+                    self.hp = self.max_hp
+                    print_and_sleep(green(f"You use Photosynthophyl to restore {amount} HP!"), 1)
         elif item.type == ENEMY:
             if enemy:
                 if item.name == BOOMERANG:
@@ -216,7 +222,21 @@ class Player(Combatant):
                     if self.hp <= 0:
                         self.lives -= 1
                         event_logger.log_event(PlayerDeathEvent(self.lives))
-
+                elif item.name == FLACCID_ACID:
+                    original = enemy.strength
+                    decrement = round(enemy.strength * 0.25, 2)
+                    enemy.strength -= decrement
+                    print_and_sleep(purple(f"Enemy Strength: {original} -> {enemy.strength}"), 1)
+                elif item.name == MOON_RUNE and time == NIGHTTIME:
+                    damage = 10 # dry moon
+                    if moon == DRYING:
+                        damage = 25
+                    elif moon == WETTING:
+                        damage = 50
+                    elif moon == FULL:
+                        damage = 100
+                    enemy.hp -= 0 # add damage when solved
+                    print_and_sleep(purple(f"Moon Rune did {damage} damage!"), 1)
 
         # Remove from actual inventory
         del self.items[item.name]
