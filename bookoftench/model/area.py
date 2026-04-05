@@ -14,13 +14,11 @@ from bookoftench.data.enemies import Enemy_Adjectives, Traits, PLANT, WEREWOLF, 
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
-from .illness import load_illnesses
 from .perk import perk_is_active
 from .shop import Shop
 from .trait import load_traits
 from .weapon import load_weapon
 from ..data.enviroment import NIGHTTIME, FULL
-from ..data.illnesses import Illnesses, LATE_ONSET_SIDS
 from ..data.perks import SHERLOCK_TENCH
 from ..data.weapons import CLAWS
 

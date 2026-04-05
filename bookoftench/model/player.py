@@ -74,10 +74,17 @@ def weapon_defaults() -> Dict[str, PlayerWeapon]:
         return dict((it.name, PlayerWeapon.from_weapon(it)) for it in load_weapons([BARE_HANDS, KNIFE]))
 
 def build_weapon_defaults(build: Build | None) -> Dict[str, PlayerWeapon]:
-    weapons = [i for i in build.weapons if i.name in [BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF]]
-    if not weapons:
-        weapons = load_weapons([BARE_HANDS])
-    return dict((it.name, PlayerWeapon.from_weapon(it)) for it in weapons)
+    # Clean out bad data first (temporary safety net)
+    build.weapons = [w for w in build.weapons if hasattr(w, "name")]
+
+    filtered = [i.name for i in build.weapons if i.name in [BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF]]
+
+    if filtered:
+        build.weapons.extend(load_weapons(filtered))
+    else:
+        build.weapons = load_weapons([BARE_HANDS])
+
+    return {it.name: PlayerWeapon.from_weapon(it) for it in build.weapons}
 
 
 @dataclass
@@ -240,6 +247,7 @@ class Player(Combatant):
         # Remove from actual inventory
         del self.items[item.name]
         event_logger.log_event(ItemUsedEvent(item.name, item.type, len(self.items), self.hp, self.max_hp, gain))
+
 
     def make_purchase(self, buyable: Buyable) -> bool:
         if self.coins < buyable.cost:

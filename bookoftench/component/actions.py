@@ -12,7 +12,7 @@ from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEM
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
     OVERVIEW, INFO, BUILD
-from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, WEREWOLF
+from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, WEREWOLF, COWARD
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT, Perks
 from bookoftench.event_logger import subscribe_function
@@ -307,6 +307,7 @@ class BuildWeaponsSelection(LinearComponent):
                     for w in final_picks: # add each one to player weapon dict
                         player.weapon_dict.update({w.name: PlayerWeapon.from_weapon(w)})
                         player.current_weapon = next(i for i in player.weapon_dict.values())
+                        player.build.weapons.extend(final_picks)  # add to build weapons
                 return self.game_state
             elif weapon in selections: # if it's already been selected
                 print_and_sleep(yellow(f"You already have {weapon}."))
@@ -318,7 +319,8 @@ class BuildWeaponsSelection(LinearComponent):
                     final_picks = load_weapons(selections) # convert selections to Weapon objects
                     for w in final_picks: # add each one to player weapon dict
                         player.weapon_dict.update({w.name: PlayerWeapon.from_weapon(w)})
-                        player.current_weapon = next(i for i in player.weapon_dict.values())                        # add to dict
+                        player.current_weapon = next(i for i in player.weapon_dict.values())
+                    player.build.weapons.extend(final_picks) # add to build weapons
                     return self.game_state
 
 class BuildPerksSelection(LinearComponent):
@@ -743,16 +745,19 @@ class Attack(Component):
     def run(self) -> GameState:
         player, enemy = self.game_state.player, self.game_state.current_area.current_enemy
         if not self.failed_flee:
-            player.attack(enemy)
-        if enemy.is_alive() and enemy.hp > 0:
+            if player.is_alive() and enemy.is_alive():
+                player.attack(enemy)
+        if player.is_alive() and enemy.is_alive():
             enemy.attack(player)
             if player.is_alive():
                 if enemy.trait:
+                    if enemy.trait.name == COWARD and random.random() < 0.15:
+                        player.can_flee = True
                     if enemy.trait.name == ACHILLES and enemy.current_weapon.name != TENCH_CANNON and enemy.hp < 25:
                         enemy.current_weapon = enemy.enemy_switch_weapon(TENCH_CANNON)
                 if random.random() < ENEMY_SWITCH_WEAPON_CHANCE and enemy.current_weapon.name != TENCH_CANNON:
                     enemy.current_weapon = enemy.enemy_switch_weapon(None)
-        if not enemy.is_alive() or enemy.hp <= 0:
+        if not enemy.is_alive():
             self.game_state.current_area.kill_current_enemy()
             self.handle_enemy_death(player, enemy)
         if not player.is_alive():
