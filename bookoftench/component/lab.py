@@ -107,7 +107,7 @@ def conduct_experiment(player: Player):
     if random.random() < 0.08: # LEVEL
         original = player.lvl
         amount = -1
-        if random.random() < 0.55:  # higher odds to increase level (bad for player)
+        if random.random() < 0.60:  # higher odds to increase level (bad for player)
             amount = 1
         player.lvl += amount
         if player.lvl <= 0:
