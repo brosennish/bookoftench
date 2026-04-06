@@ -10,19 +10,19 @@ from bookoftench.data.areas import EncounterType
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
     SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD
-from bookoftench.data.enemies import Enemy_Adjectives, Traits, PLANT, WEREWOLF, COWARD, CONTAGIOUS, NIGHT_OWL
+from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, COWARD, CONTAGIOUS, NIGHT_OWL
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
-from .illness import load_illness, load_illnesses
+from .illness import load_illnesses
 from .perk import perk_is_active
 from .shop import Shop
 from .trait import load_traits
 from .weapon import load_weapon
-from ..data.enviroment import NIGHTTIME, FULL
-from ..data.illnesses import Illnesses, LATE_ONSET_SIDS
-from ..data.perks import SHERLOCK_TENCH
-from ..data.weapons import CLAWS
+from bookoftench.data.enviroment import NIGHTTIME, FULL
+from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
+from bookoftench.data.perks import SHERLOCK_TENCH
+from bookoftench.data.weapons import CLAWS
 
 _search_defaults = {
     DISCOVER_PERK: 1,
