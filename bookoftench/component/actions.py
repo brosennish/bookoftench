@@ -1,4 +1,3 @@
-import functools
 import random
 from functools import partial
 from typing import List
@@ -13,7 +12,7 @@ from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEM
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
     OVERVIEW, INFO, BUILD
-from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, WEREWOLF, COWARD
+from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT, Perks
 from bookoftench.event_logger import subscribe_function
@@ -33,14 +32,14 @@ from .base import LabeledSelectionComponent, SelectionBinding
 from .encounters import PostKillEncounters
 from .menu import OverviewMenu
 from .registry import register_component, get_registered_component
-from ..data.builds import RANDOM, DENNY
-from ..data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE
-from ..data.illnesses import Illnesses, LATE_ONSET_SIDS
-from ..data.weapons import BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF, Weapons, TENCH_CANNON
-from ..event_base import EventType
-from ..model.build import Build, load_builds
-from ..model.illness import load_illnesses
-from ..model.player import PlayerWeapon
+from bookoftench.data.builds import RANDOM, DENNY
+from bookoftench.data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE
+from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
+from bookoftench.data.weapons import BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF, Weapons, TENCH_CANNON
+from bookoftench.event_base import EventType
+from bookoftench.model.build import Build, load_builds
+from bookoftench.model.illness import load_illnesses
+from bookoftench.model.player import PlayerWeapon
 
 
 @register_component(BUILD)
@@ -646,6 +645,7 @@ class ItemSelectionComponent(LabeledSelectionComponent):
             enemy if enemy else None,
             time,
             moon,
+            self.game_state,
         )
 
         player = self.game_state.player

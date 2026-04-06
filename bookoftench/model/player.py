@@ -29,6 +29,7 @@ from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
 from .trait import Trait
 from .weapon import load_weapons, Weapon
 from bookoftench.data.enviroment import DAYTIME, NIGHTTIME, FULL, WETTING, DRYING
+from bookoftench.data.areas import CAVE
 
 
 @dataclass
@@ -187,7 +188,7 @@ class Player(Combatant):
     def _apply_hp_bonus(base: int) -> int:
         return base
 
-    def use_item(self, name: str, enemy: Enemy | None, time: str, moon: str) -> None:
+    def use_item(self, name: str, enemy: Enemy | None, time: str, moon: str, game_state) -> None:
         item = self.items[name]
         gain = 0
 
@@ -217,10 +218,10 @@ class Player(Combatant):
                 self.hp -= min(self.hp, original_hp)
                 print_and_sleep(red(f"You lost {original_hp - self.hp} HP."), 1)
             elif item.name == PHOTOSYNTHOPHYL:
-                if time == DAYTIME:
+                if time == DAYTIME and game_state.current_area.name != CAVE:
                     amount = self.max_hp - self.hp
                     self.hp = self.max_hp
-                    print_and_sleep(green(f"You use Photosynthophyl to restore {amount} HP!"), 1)
+                    print_and_sleep(green(f"You used Photosynthophyl to restore {amount} HP!"), 1)
         elif item.type == ENEMY:
             if enemy:
                 if item.name == BOOMERANG:
@@ -233,7 +234,7 @@ class Player(Combatant):
                     decrement = round(enemy.strength * 0.25, 2)
                     enemy.strength -= decrement
                     print_and_sleep(purple(f"Enemy Strength: {original} -> {enemy.strength}"), 1)
-                elif item.name == MOON_RUNE and time == NIGHTTIME:
+                elif item.name == MOON_RUNE and time == NIGHTTIME and game_state.current_area.name != CAVE:
                     damage = 10 # dry moon
                     if moon == DRYING:
                         damage = 25
