@@ -580,7 +580,7 @@ class Search(RandomChoiceComponent):
             print_and_sleep(purple(f"He's gifted you the {reward.name} perk!\n{reward.description}"), 2)
             reward.activate()
         else:
-            print_and_sleep(yellow(dim("You came up dry.")), 1)
+            print_and_sleep(dim("You came up dry."), 1)
 
 
 @register_component(TRAVEL)
