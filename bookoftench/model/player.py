@@ -28,8 +28,7 @@ from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
 from .trait import Trait
 from .weapon import load_weapons, Weapon
-from ..data.builds import DENNY
-from ..data.enviroment import DAYTIME, NIGHTTIME, FULL, DRY, WETTING, DRYING
+from bookoftench.data.enviroment import DAYTIME, NIGHTTIME, FULL, WETTING, DRYING
 
 
 @dataclass
@@ -191,6 +190,7 @@ class Player(Combatant):
     def use_item(self, name: str, enemy: Enemy | None, time: str, moon: str) -> None:
         item = self.items[name]
         gain = 0
+
         if item.type == NORMAL:
             gain = int(min(self.max_hp - self.hp, self._apply_hp_bonus(item.hp)))
             self.gain_hp(gain)
@@ -225,7 +225,7 @@ class Player(Combatant):
             if enemy:
                 if item.name == BOOMERANG:
                     damage = random.randint(10, 30)
-                    print_and_sleep(f"Boomerang did {damage} damage and you lost {damage} HP!")
+                    print_and_sleep(purple(f"Boomerang did {damage} damage and you lost {damage} HP!"))
                     self.hp -= min(self.hp, damage)
                     enemy.hp -= min(enemy.hp, damage)
                 elif item.name == FLACCID_ACID:

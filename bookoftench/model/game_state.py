@@ -191,6 +191,7 @@ class GameState:
     def is_wanted(self, combatant):
         return self.wanted in combatant.name
 
+
     # for loading from save file
     def __setstate__(self, state):
         self.__dict__.update(state)

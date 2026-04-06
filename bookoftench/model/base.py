@@ -309,7 +309,6 @@ class Combatant(ABC):
                         print_and_sleep(green(f"{self.name} used an item and restored {self.hp - original} HP."), 1)
                         self.prepared_active = False
 
-
         other.take_damage(damage_inflicted, self)
         if self.current_weapon.type == BLIND:
             self.handle_blinding(other)

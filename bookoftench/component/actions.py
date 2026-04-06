@@ -1,3 +1,4 @@
+import functools
 import random
 from functools import partial
 from typing import List
@@ -612,19 +613,47 @@ class ItemSelectionComponent(LabeledSelectionComponent):
         enemy = game_state.current_area.current_enemy
         time = game_state.time_of_day
         moon = game_state.moon
+
         for i in game_state.player.items.keys():
             if len(i) > self.length:
                 self.length = len(i) + 1
 
-        super().__init__(game_state,
-                         bindings=[SelectionBinding(key=str(i),
-                                                    name=item.get_simple_format(self.length),
-                                                    component=functional_component()(
-                                                        partial(game_state.player.use_item, item.name,
-                                                                enemy if enemy else None, time, moon)))
-                                   for (i, item) in enumerate(game_state.player.get_items(), 1)],
-                         top_level_prompt_callback=lambda gs: gs.player.display_item_count(), quittable=True)
+        super().__init__(
+            game_state,
+            bindings=[
+                SelectionBinding(
+                    key=str(i),
+                    name=item.get_simple_format(self.length),
+                    component=functional_component()(
+                        lambda item=item: self._use_item_and_check(
+                            item,
+                            enemy,
+                            time,
+                            moon,
+                        )
+                    )
+                )
+                for (i, item) in enumerate(game_state.player.get_items(), 1)
+            ],
+            top_level_prompt_callback=lambda gs: gs.player.display_item_count(),
+            quittable=True
+        )
 
+    def _use_item_and_check(self, item, enemy, time, moon):
+        # Apply item
+        self.game_state.player.use_item(
+            item.name,
+            enemy if enemy else None,
+            time,
+            moon,
+        )
+
+        player = self.game_state.player
+        current_enemy = self.game_state.current_area.current_enemy
+
+        # Check battle end
+        if not player.is_alive() or not current_enemy.is_alive():
+            BattleEnd(self.game_state).run()
 
 @register_component(EQUIP_WEAPON)
 class EquipWeapon(LabeledSelectionComponent):
@@ -716,32 +745,6 @@ class Attack(Component):
         super().__init__(game_state)
         self.failed_flee = False
 
-    def handle_enemy_death(self, player, enemy) -> None:
-        if enemy.type == FINAL_BOSS:
-            self.game_state.victory = True
-            return
-        # TODO maybe put the next 3 lines in an event callback
-        stop_music()
-        play_sound(DEVIL_THUNDER)
-        print_and_sleep(red(f"{enemy.name} is now in Hell."), 2)
-        if self.game_state.is_wanted(enemy):
-            event_logger.log_event(BountyCollectedEvent(enemy.name))
-        enemy_weapon = enemy.drop_weapon()
-        if enemy_weapon is not None:
-            player.obtain_enemy_weapon(enemy_weapon)
-
-        coins = enemy.drop_coins(enemy)
-        coins *= min(1.25, 1 + ((player.lvl - 1) * 0.025))
-        player.gain_coins(round(coins))
-        player.gain_xp_from_enemy(enemy)
-
-        event_logger.log_event(KillEvent())
-        if event_logger.get_count(EventType.KILL) % 2 == 0:
-            self.game_state.update_time_of_day()
-        if event_logger.get_count(EventType.KILL) % 4 == 0:
-            self.game_state.update_moon()
-        PostKillEncounters(self.game_state).run()
-
     def run(self) -> GameState:
         player, enemy = self.game_state.player, self.game_state.current_area.current_enemy
         if not self.failed_flee:
@@ -749,7 +752,7 @@ class Attack(Component):
                 player.attack(enemy)
         if player.is_alive() and enemy.is_alive():
             enemy.attack(player)
-            if player.is_alive():
+            if player.is_alive() and enemy.is_alive():
                 if enemy.trait:
                     if enemy.trait.name == COWARD and random.random() < 0.15:
                         player.can_flee = True
@@ -757,14 +760,9 @@ class Attack(Component):
                         enemy.current_weapon = enemy.enemy_switch_weapon(TENCH_CANNON)
                 if random.random() < ENEMY_SWITCH_WEAPON_CHANCE and enemy.current_weapon.name != TENCH_CANNON:
                     enemy.current_weapon = enemy.enemy_switch_weapon(None)
-        if not enemy.is_alive():
-            self.game_state.current_area.kill_current_enemy()
-            self.handle_enemy_death(player, enemy)
-        if not player.is_alive():
-            player.lives -= 1
-            event_logger.log_event(PlayerDeathEvent(player.lives))
+        if not player.is_alive() or not enemy.is_alive():
+            BattleEnd(self.game_state).run()
         return self.game_state
-
 
 class FailedFlee(Attack):
     def __init__(self, game_state: GameState):
@@ -838,6 +836,51 @@ class Battle(LabeledSelectionComponent):
         @subscribe_function(FleeEvent)
         def handle_flee(_: FleeEvent):
             self.fled = True
+
+class BattleEnd(NoOpComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state)
+
+    def run(self):
+        return self.check_battle_end()
+
+    def check_battle_end(self):
+        player = self.game_state.player
+        enemy = self.game_state.current_area.current_enemy
+
+        if not enemy.is_alive():
+            self.game_state.current_area.kill_current_enemy()
+            self.handle_enemy_death(player, enemy)
+        if not player.is_alive():
+            player.lives -= 1
+            event_logger.log_event(PlayerDeathEvent(player.lives))
+        return self.game_state
+
+    def handle_enemy_death(self, player, enemy) -> None:
+        if enemy.type == FINAL_BOSS:
+            self.game_state.victory = True
+            return
+        # TODO maybe put the next 3 lines in an event callback
+        stop_music()
+        play_sound(DEVIL_THUNDER)
+        print_and_sleep(red(f"{enemy.name} is now in Hell."), 2)
+        if self.game_state.is_wanted(enemy):
+            event_logger.log_event(BountyCollectedEvent(enemy.name))
+        enemy_weapon = enemy.drop_weapon()
+        if enemy_weapon is not None:
+            player.obtain_enemy_weapon(enemy_weapon)
+
+        coins = enemy.drop_coins(enemy)
+        coins *= min(1.25, 1 + ((player.lvl - 1) * 0.025))
+        player.gain_coins(round(coins))
+        player.gain_xp_from_enemy(enemy)
+
+        event_logger.log_event(KillEvent())
+        if event_logger.get_count(EventType.KILL) % 2 == 0:
+            self.game_state.update_time_of_day()
+        if event_logger.get_count(EventType.KILL) % 4 == 0:
+            self.game_state.update_moon()
+        PostKillEncounters(self.game_state).run()
 
 
 @register_component(AREA_BOSS_FIGHT)
