@@ -131,7 +131,7 @@ Items = [
     # --- SPECIAL ---
     {'name': ACCURACY_SEARUM, 'type': STAT, 'hp': 0, 'cost': 100, 'sell_value': 32, 'areas': [CAVE, FOREST],
      'desc': 'Increase accuracy by 0.02'},
-    {'name': BOOMERANG, 'type': ENEMY, 'hp': 0, 'cost': 0, 'sell_value': 0, 'areas': [CITY, FOREST, SWAMP],
+    {'name': BOOMERANG, 'type': ENEMY, 'hp': 0, 'cost': 40, 'sell_value': 0, 'areas': [CITY, FOREST, SWAMP],
      'desc': 'Do X damage to enemy and lose X HP'},
     {'name': CRITICAL_BASS, 'type': CRIT, 'hp': 0, 'cost': 40, 'sell_value': 14, 'areas': [CAVE, FOREST],
      'desc': 'Make your next attack a critical hit'},
@@ -147,7 +147,7 @@ Items = [
      'desc': 'Fully restore HP (requires sunlight)'},
     {'name': SMOKE_BOMB, 'type': FLEE, 'hp': 0, 'cost': 20, 'sell_value': 7, 'areas': [FOREST, SWAMP],
      'desc': 'Use to escape from battle'},
-    {'name': TENCHTOSTERONE, 'type': DMG, 'hp': 0, 'cost': 60, 'sell_value': 22, 'areas': [CITY, SWAMP],
+    {'name': TENCHTOSTERONE, 'type': DMG, 'hp': 0, 'cost': 80, 'sell_value': 22, 'areas': [CITY, SWAMP],
      'desc': 'Double the damage of your next melee attack'},
     {'name': WORMHOLE, 'type': FLEE, 'hp': 0, 'cost': 30, 'sell_value': 11, 'areas': [CAVE],
      'desc': 'Use to escape from battle'},
