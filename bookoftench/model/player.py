@@ -225,7 +225,7 @@ class Player(Combatant):
         elif item.type == ENEMY:
             if enemy:
                 if item.name == BOOMERANG:
-                    damage = random.randint(10, 30)
+                    damage = random.randint(5, 25)
                     print_and_sleep(purple(f"Boomerang did {damage} damage and you lost {damage} HP!"))
                     self.hp -= min(self.hp, damage)
                     enemy.hp -= min(enemy.hp, damage)
