@@ -68,6 +68,7 @@ VOODOO_PRIESTESS = "Voodoo Priestess"
 
 # Traits
 ACHILLES = "Achilles"
+BULLETPROOF = "Bulletproof"
 BUTTERFINGERS = "Butterfingers"
 CONTAGIOUS = "Contagious"
 COWARD = "Coward"
@@ -86,6 +87,7 @@ FINAL_BOSS = "final_boss"
 
 Traits = [
     {'name': ACHILLES, 'desc': 'Equips a Tench Cannon when HP falls below 25'}, # DONE
+    {'name': BULLETPROOF, 'desc': 'Takes 25% less damage from guns'}, # DONE
     {'name': BUTTERFINGERS, 'desc': 'Drops coins each turn'}, # DONE
     {'name': CONTAGIOUS, 'desc': 'Has an illness and is contagious'}, # DONE
     {'name': COWARD, 'desc': 'May run away at any time'}, # DONE

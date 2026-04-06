@@ -342,6 +342,8 @@ Search_Discoverables = [
      "areas": [CAVE]},
     {"pre": "a", "name": "Pirate Hat", "value": 27, "hp": 0, "rarity": RARE,
      "areas": [CAVE]},
+    {"pre": "a worn copy of", "name": "Pupper's Last Supper", "value": 23, "hp": 0, "rarity": RARE,
+     "areas": [CITY]},
     {"pre": "a", "name": "Ransom Funeral Home Paperweight", "value": 5, "hp": 0, "rarity": RARE,
      "areas": [CITY]},
     {"pre": "a", "name": "Real Gold Chain", "value": 100, "hp": 0, "rarity": RARE,
