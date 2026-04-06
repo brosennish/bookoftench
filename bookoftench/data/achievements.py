@@ -66,7 +66,7 @@ Achievements = [
     {
         'id': DRY_FIVE,
         'name': "Dry Five",
-        'description': "Reach level 5",
+        'description': "Level up 5 times",
         'reward_type': RewardType.PERK,
         'event_type': EventType.LEVEL_UP,
         'event_threshold': 5
@@ -74,7 +74,7 @@ Achievements = [
     {
         'id': LEVEL_TENCH,
         'name': "Level Tench",
-        'description': "Reach level 10",
+        'description': "Level up 10 times",
         'reward_type': RewardType.PERK,
         'event_type': EventType.LEVEL_UP,
         'event_threshold': 10
@@ -82,7 +82,7 @@ Achievements = [
     {
         'id': MASTER_OF_TENCH,
         'name': "Master of Tench",
-        'description': "Reach level 15",
+        'description': "Level up 15 times",
         'reward_type': RewardType.PERK,
         'event_type': EventType.LEVEL_UP,
         'event_threshold': 15
@@ -90,7 +90,7 @@ Achievements = [
     {
         'id': GOLDEN_TENCH,
         'name': "Golden Tench",
-        'description': "Reach level 20",
+        'description': "Level up 20 times",
         'reward_type': RewardType.PERK,
         'event_type': EventType.LEVEL_UP,
         'event_threshold': 20
