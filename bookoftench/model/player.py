@@ -30,6 +30,7 @@ from .trait import Trait
 from .weapon import load_weapons, Weapon
 from bookoftench.data.enviroment import DAYTIME, NIGHTTIME, FULL, WETTING, DRYING
 from bookoftench.data.areas import CAVE
+from ..data.enemies import EMPATH
 
 
 @dataclass
@@ -190,28 +191,45 @@ class Player(Combatant):
 
     def use_item(self, name: str, enemy: Enemy | None, time: str, moon: str, game_state) -> None:
         item = self.items[name]
-        gain = 0
 
         if item.type == NORMAL:
             gain = int(min(self.max_hp - self.hp, self._apply_hp_bonus(item.hp)))
             self.gain_hp(gain)
-        elif item.type == FLEE:
+            if enemy and enemy.trait and enemy.trait.name == EMPATH:
+                heal = min(gain, enemy.max_hp - enemy.hp)
+                enemy.hp += heal
+                print_and_sleep(green(f"The empathic {enemy.name} gained {heal} HP."))
+        else:
+            gain = self.handle_special_item(item, enemy, time, moon, game_state)
+
+        # Remove from actual inventory
+        del self.items[item.name]
+        event_logger.log_event(ItemUsedEvent(item.name, item.type, len(self.items), self.hp, self.max_hp, gain))
+
+    def handle_special_item(self, item, enemy, time, moon, game_state) -> int:
+        if item.type == FLEE:
             self.can_flee = True
+
         elif item.type == STAT:
             if item.name == ACCURACY_SEARUM:
+                old = self.acc
                 self.acc += 0.02
-                print_and_sleep(green(f"Accuracy: {self.acc - 0.03} -> {self.acc}"), 1)
+                print_and_sleep(green(f"Accuracy: {old} -> {self.acc}"), 1)
             elif item.name == HTH:
+                old = self.strength
                 self.strength += 0.02
-                print_and_sleep(green(f"Strength: {self.strength - 0.03} -> {self.strength}"), 1)
+                print_and_sleep(green(f"Strength: {old} -> {self.strength}"), 1)
+
         elif item.type == DMG:
             self.double_damage_active = True
+
         elif item.type == CRIT:
             self.crit_active = True
+
         elif item.type == HEALTH:
             if item.name == nPnG:
-                amount = random.randint(1, 5)
                 original_max = self.max_hp
+                amount = random.randint(1, 5)
                 self.max_hp += amount
                 print_and_sleep(green(f"Max HP: {original_max} -> {self.max_hp}"), 1)
                 original_hp = self.hp
@@ -222,33 +240,32 @@ class Player(Combatant):
                     amount = self.max_hp - self.hp
                     self.hp = self.max_hp
                     print_and_sleep(green(f"You used Photosynthophyl to restore {amount} HP!"), 1)
+                    return amount
+
         elif item.type == ENEMY:
-            if enemy:
-                if item.name == BOOMERANG:
-                    damage = random.randint(5, 25)
-                    print_and_sleep(purple(f"Boomerang did {damage} damage and you lost {damage} HP!"))
-                    self.hp -= min(self.hp, damage)
-                    enemy.hp -= min(enemy.hp, damage)
-                elif item.name == FLACCID_ACID:
-                    original = enemy.strength
-                    decrement = round(enemy.strength * 0.25, 2)
-                    enemy.strength -= decrement
-                    print_and_sleep(purple(f"You doused {enemy.name} with Flaccid Acid! Strength: {original} -> {enemy.strength}"), 1)
-                elif item.name == MOON_RUNE and time == NIGHTTIME and game_state.current_area.name != CAVE:
-                    damage = 10 # dry moon
-                    if moon == DRYING:
-                        damage = 25
-                    elif moon == WETTING:
-                        damage = 50
-                    elif moon == FULL:
-                        damage = 100
-                    enemy.hp -= min(enemy.hp, damage) # add damage when solved
-                    print_and_sleep(purple(f"Moon Rune did {damage} damage!"), 1)
-
-        # Remove from actual inventory
-        del self.items[item.name]
-        event_logger.log_event(ItemUsedEvent(item.name, item.type, len(self.items), self.hp, self.max_hp, gain))
-
+            if not enemy:
+                return 0
+            if item.name == BOOMERANG:
+                damage = random.randint(5, 25)
+                self.hp -= min(self.hp, damage)
+                enemy.hp -= min(enemy.hp, damage)
+                print_and_sleep(purple(f"Boomerang did {damage} damage and you lost {damage} HP!"))
+            elif item.name == FLACCID_ACID:
+                original = enemy.strength
+                decrement = round(enemy.strength * 0.25, 2)
+                enemy.strength -= decrement
+                print_and_sleep(purple(f"You doused {enemy.name} with Flaccid Acid! Strength: {original} -> {enemy.strength}"), 1)
+            elif item.name == MOON_RUNE and time == NIGHTTIME and game_state.current_area.name != CAVE:
+                damage = 10 # dry moon
+                if moon == DRYING:
+                    damage = 25
+                elif moon == WETTING:
+                    damage = 50
+                elif moon == FULL:
+                    damage = 100
+                enemy.hp -= min(enemy.hp, damage) # add damage when solved
+                print_and_sleep(purple(f"Moon Rune did {damage} damage!"), 1)
+        return 0
 
     def make_purchase(self, buyable: Buyable) -> bool:
         if self.coins < buyable.cost:
