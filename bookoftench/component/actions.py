@@ -754,8 +754,7 @@ class Attack(Component):
         if player.is_alive() and enemy.is_alive():
             enemy.attack(player)
             if player.is_alive() and enemy.is_alive():
-                if enemy.trait:
-                   self.handle_trait_checks(player, enemy)
+                self.handle_trait_checks(player, enemy)
 
         if not player.is_alive() or not enemy.is_alive():
             BattleEnd(self.game_state).run()
@@ -763,19 +762,21 @@ class Attack(Component):
         return self.game_state
 
     def handle_trait_checks(self, player, enemy):
-        trait_name = enemy.trait.name
-
-        if trait_name == CHEATER:
-            enemy.attack(player)
-            if not player.is_alive() or not enemy.is_alive():
+        if enemy.trait:
+            trait_name = enemy.trait.name
+            if trait_name == CHEATER:
+                enemy.attack(player)
+                if not player.is_alive() or not enemy.is_alive():
+                    return
+            if trait_name == CONTAGIOUS and random.random() < 0.20:
+                EnemyInfect(self.game_state).run()
+            if trait_name == COWARD and random.random() < 0.15:
+                player.can_flee = True
                 return
-        if trait_name == CONTAGIOUS and random.random() < 0.20:
-            EnemyInfect(self.game_state).run()
-        if trait_name == COWARD and random.random() < 0.15:
-            player.can_flee = True
-        if (trait_name == ACHILLES and enemy.current_weapon.name != TENCH_CANNON
-                and enemy.hp < 25):
-            enemy.current_weapon = enemy.enemy_switch_weapon(TENCH_CANNON)
+            if (trait_name == ACHILLES and enemy.current_weapon.name != TENCH_CANNON
+                    and enemy.hp < 25):
+                enemy.current_weapon = enemy.enemy_switch_weapon(TENCH_CANNON)
+
         if random.random() < ENEMY_SWITCH_WEAPON_CHANCE and enemy.current_weapon.name != TENCH_CANNON:
             enemy.current_weapon = enemy.enemy_switch_weapon(None)
 
