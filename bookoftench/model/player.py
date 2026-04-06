@@ -253,10 +253,11 @@ class Player(Combatant):
                 enemy.hp -= min(enemy.hp, damage)
                 print_and_sleep(purple(f"Boomerang did {damage} damage and you lost {damage} HP!"))
             elif item.name == FLACCID_ACID:
-                original = enemy.strength
+                original = round(enemy.strength, 2)
                 decrement = round(enemy.strength * 0.25, 2)
-                enemy.strength -= decrement
-                print_and_sleep(purple(f"You doused {enemy.name} with Flaccid Acid! Strength: {original} -> {enemy.strength}"), 1)
+                enemy.strength = round(original - decrement, 2)
+                print_and_sleep(purple(f"You doused {enemy.name} with Flaccid Acid! Strength: "
+                                       f"{original} -> {enemy.strength}"), 1)
             elif item.name == MOON_RUNE and time == NIGHTTIME and game_state.current_area.name != CAVE:
                 damage = 10 # dry moon
                 if moon == DRYING:
