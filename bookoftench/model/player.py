@@ -215,7 +215,7 @@ class Player(Combatant):
                 self.max_hp += amount
                 print_and_sleep(green(f"Max HP: {original_max} -> {self.max_hp}"), 1)
                 original_hp = self.hp
-                self.hp -= min(self.hp, original_hp)
+                self.hp -= min(amount, original_hp)
                 print_and_sleep(red(f"You lost {original_hp - self.hp} HP."), 1)
             elif item.name == PHOTOSYNTHOPHYL:
                 if time == DAYTIME and game_state.current_area.name != CAVE:
