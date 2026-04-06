@@ -135,14 +135,14 @@ class Area:
         if enemy.trait.name == NIGHT_OWL and time == NIGHTTIME:
             enemy.max_hp += random.randint(5, 10)
             enemy.hp = enemy.max_hp
-            enemy.strength += round(random.uniform(0.05, 0.15), 2)
-            enemy.acc += round(random.uniform(0.05, 0.1), 2)
+            enemy.strength += round(random.uniform(0.01, 0.1), 2)
+            enemy.acc += round(random.uniform(0.01, 0.1), 2)
 
         # --- werewolf logic ---
         if enemy.trait.name == WEREWOLF and time == NIGHTTIME and moon == FULL:
             enemy.name = "Werewolf"
             enemy.hp += random.randint(10, 25)
-            enemy.strength = 1.25
+            enemy.strength = 1.50
             enemy.acc = 0
             enemy.coins = 0
 
