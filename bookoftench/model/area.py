@@ -10,7 +10,7 @@ from bookoftench.data.areas import EncounterType
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
     SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD
-from bookoftench.data.enemies import Enemy_Adjectives, Traits, PLANT, WEREWOLF, COWARD, CONTAGIOUS
+from bookoftench.data.enemies import Enemy_Adjectives, Traits, PLANT, WEREWOLF, COWARD, CONTAGIOUS, NIGHT_OWL
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
@@ -130,6 +130,11 @@ class Area:
             enemy.coins += round(enemy.coins * random.uniform(0.05, 0.25))
         enemy_lines = enemy.get_enemy_encounter_line()  # get the line before mutating enemy.name
         elite_chance = min(0.15, max(0.0, (player_level - 1) * 0.03))
+
+        # --- night owl logic ---
+        if enemy.trait.name == NIGHT_OWL and time == NIGHTTIME:
+            enemy.strength += round(random.uniform(0.05, 0.15), 2)
+            enemy.acc += round(random.uniform(0.05, 0.1), 2)
 
         # --- werewolf logic ---
         if enemy.trait.name == WEREWOLF and time == NIGHTTIME and moon == FULL:

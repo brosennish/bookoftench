@@ -92,7 +92,7 @@ Traits = [
     {'name': COWARD, 'desc': 'May run away at any time'}, 
     {'name': INVESTOR, 'desc': 'Value of coins fluctuates during battle'}, 
     {'name': JUNKIE, 'desc': 'Gains strength when HP falls below 50%'},
-    {'name': NIGHT_OWL, 'desc': 'Gains strength and accuracy at night'}, 
+    {'name': NIGHT_OWL, 'desc': 'Gains strength and accuracy at night'},
     {'name': ORACLE, 'desc': 'Gains strength and accuracy when blinded'}, 
     {'name': PLANT, 'desc': 'Restores HP each turn'}, 
     {'name': PREPARED, 'desc': 'Has a health item'}, 
