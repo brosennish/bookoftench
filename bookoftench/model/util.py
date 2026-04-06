@@ -265,7 +265,7 @@ def get_battle_info_view(game_state: GameState) -> str:
                     f"\n{dim('Ability  |')} {purple(cmbt.trait.desc)}"
                     )
 
-    return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, purple)}\n"
+    return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, purple)}"
 
 
 def display_battle_info(game_state: GameState) -> None:
