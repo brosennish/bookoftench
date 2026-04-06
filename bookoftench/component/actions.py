@@ -12,7 +12,7 @@ from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEM
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
     OVERVIEW, INFO, BUILD
-from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS
+from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT, Perks
 from bookoftench.event_logger import subscribe_function
@@ -747,6 +747,7 @@ class Attack(Component):
 
     def run(self) -> GameState:
         player, enemy = self.game_state.player, self.game_state.current_area.current_enemy
+
         if not self.failed_flee:
             if player.is_alive() and enemy.is_alive():
                 player.attack(enemy)
@@ -754,17 +755,30 @@ class Attack(Component):
             enemy.attack(player)
             if player.is_alive() and enemy.is_alive():
                 if enemy.trait:
-                    if enemy.trait.name == CONTAGIOUS and random.random() < 0.20:
-                        EnemyInfect(self.game_state).run()
-                    if enemy.trait.name == COWARD and random.random() < 0.15:
-                        player.can_flee = True
-                    if enemy.trait.name == ACHILLES and enemy.current_weapon.name != TENCH_CANNON and enemy.hp < 25:
-                        enemy.current_weapon = enemy.enemy_switch_weapon(TENCH_CANNON)
-                if random.random() < ENEMY_SWITCH_WEAPON_CHANCE and enemy.current_weapon.name != TENCH_CANNON:
-                    enemy.current_weapon = enemy.enemy_switch_weapon(None)
+                   self.handle_trait_checks(player, enemy)
+
         if not player.is_alive() or not enemy.is_alive():
             BattleEnd(self.game_state).run()
+
         return self.game_state
+
+    def handle_trait_checks(self, player, enemy):
+        trait_name = enemy.trait.name
+
+        if trait_name == CHEATER:
+            enemy.attack(player)
+            if not player.is_alive() or not enemy.is_alive():
+                return
+        if trait_name == CONTAGIOUS and random.random() < 0.20:
+            EnemyInfect(self.game_state).run()
+        if trait_name == COWARD and random.random() < 0.15:
+            player.can_flee = True
+        if (trait_name == ACHILLES and enemy.current_weapon.name != TENCH_CANNON
+                and enemy.hp < 25):
+            enemy.current_weapon = enemy.enemy_switch_weapon(TENCH_CANNON)
+        if random.random() < ENEMY_SWITCH_WEAPON_CHANCE and enemy.current_weapon.name != TENCH_CANNON:
+            enemy.current_weapon = enemy.enemy_switch_weapon(None)
+
 
 class FailedFlee(Attack):
     def __init__(self, game_state: GameState):
