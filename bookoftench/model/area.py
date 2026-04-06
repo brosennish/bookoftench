@@ -14,7 +14,7 @@ from bookoftench.data.enemies import Enemy_Adjectives, Traits, PLANT, WEREWOLF, 
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
-from .illness import load_illness
+from .illness import load_illness, load_illnesses
 from .perk import perk_is_active
 from .shop import Shop
 from .trait import load_traits
@@ -117,8 +117,9 @@ class Area:
 
         if enemy.trait.name == CONTAGIOUS:
             valid = [i['name'] for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
-            illness = random.choice(valid)
-            enemy.illness = load_illness(illness)
+            illness_name = random.choice(valid)
+            illness_list = load_illnesses([illness_name])
+            enemy.illness = next(i for i in illness_list)
 
         enemy.hp += random.randint(-2, 2)  # apply hp spread first
         enemy.hp += round((enemy.hp * 0.03) * max(player_level - 1, 0))  # then apply hp scaling
