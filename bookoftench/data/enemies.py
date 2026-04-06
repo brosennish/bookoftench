@@ -69,6 +69,7 @@ VOODOO_PRIESTESS = "Voodoo Priestess"
 # Traits
 ACHILLES = "Achilles"
 BUTTERFINGERS = "Butterfingers"
+CHEATER = "Cheater"
 CONTAGIOUS = "Contagious"
 COWARD = "Coward"
 INVESTOR = "Investor"
@@ -87,12 +88,13 @@ FINAL_BOSS = "final_boss"
 
 Traits = [
     {'name': ACHILLES, 'desc': 'Equips a Tench Cannon when HP falls below 25'}, 
-    {'name': BUTTERFINGERS, 'desc': 'Drops coins each turn'}, 
+    {'name': BUTTERFINGERS, 'desc': 'Drops coins each turn'},
+    {'name': CHEATER, 'desc': 'May attack twice in one turn'}, 
     {'name': CONTAGIOUS, 'desc': 'Can get you sick'}, 
     {'name': COWARD, 'desc': 'May run away at any time'}, 
     {'name': INVESTOR, 'desc': 'Value of coins fluctuates during battle'}, 
     {'name': JUNKIE, 'desc': 'Gains strength when HP falls below 50%'},
-    {'name': NIGHT_OWL, 'desc': 'Gains strength and accuracy at night'},
+    {'name': NIGHT_OWL, 'desc': 'Becomes more formidable at night'},
     {'name': ORACLE, 'desc': 'Gains strength and accuracy when blinded'}, 
     {'name': PLANT, 'desc': 'Restores HP each turn'}, 
     {'name': PREPARED, 'desc': 'Has a health item'}, 
