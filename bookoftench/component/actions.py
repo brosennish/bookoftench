@@ -778,13 +778,20 @@ class FailedFlee(Attack):
 
 
 class FleeSelectionBinding(SelectionBinding):
+    def __init__(self, key: str, name: str, component, game_state: GameState):
+        self.game_state = game_state
+        super().__init__(key, name, component)
+
     def format(self) -> str:
-        return f"Flee ({int(calculate_flee() * 100)}%)"
+        enemy = self.game_state.current_area.current_enemy
+        calculation = int(round(calculate_flee() * enemy.flee, 2) * 100)
+        return f"Flee ({calculation}%)"
 
 
 class TryFlee(RandomChoiceComponent):
     def __init__(self, game_state: GameState):
-        self.flee_chance = int(calculate_flee() * 100)
+        enemy = game_state.current_area.current_enemy
+        self.flee_chance = int(round(calculate_flee() * enemy.flee, 2) * 100)
         super().__init__(game_state, bindings=[
             ProbabilityBinding(self.flee_chance, self._flee_success),
             ProbabilityBinding(100 - self.flee_chance, FailedFlee)
@@ -812,12 +819,14 @@ class SpawnEnemy(LinearComponent):
 
 class Battle(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
+        enemy = game_state.current_area.current_enemy
+        chance = int(round(calculate_flee() * enemy.flee, 2) * 100)
         super().__init__(game_state, top_level_prompt_callback=lambda gs: print_and_sleep(get_battle_status_view(gs)),
                          bindings=[
                              SelectionBinding('A', "Attack", Attack),
                              SelectionBinding('I', "Use Item", UseItem),
                              SelectionBinding('S', "Switch Weapon", EquipWeapon),
-                             FleeSelectionBinding('F', "Flee (50%)", TryFlee),
+                             SelectionBinding('F', f"Flee ({chance}%)", TryFlee),
                              SelectionBinding('V', "View", DisplayInfo)
                          ])
         self.player = self.game_state.player
