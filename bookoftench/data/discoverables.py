@@ -118,6 +118,8 @@ Search_Discoverables = [
      "areas": [FOREST, SWAMP]},
     {"pre": "were", "name": "Swarmed by Mosquitos", "value": 0, "hp": -3, "rarity": COMMON,
      "areas": [FOREST, SWAMP]},
+    {"pre": None, "name": "Tagged by a Bat", "value": 0, "hp": -3, "rarity": COMMON,
+     "areas": [CAVE]},
     {"pre": None, "name": "Tripped On the Curb", "value": 0, "hp": -2, "rarity": COMMON,
      "areas": [CITY]},
     {"pre": None, "name": "Tripped Over a Log", "value": 0, "hp": -3, "rarity": COMMON,
@@ -421,11 +423,15 @@ Search_Discoverables = [
     {"pre": "a copy of Roger Mundry's", "name": "You Don't Wanna End Up Like Me", "value": 0, "hp": 0, "rarity": RARE,
      "areas": [CITY]},
 
-    # === LEGENDARY == p
+    # === LEGENDARY == p only
 
     # --- legendary/Positive ---
     {"pre": "an", "name": "Alien Fugitive", "value": 350, "hp": 0, "rarity": LEGENDARY,
      "areas": [CAVE]},
+    {"pre": None, "name": "Captain Hole's Unused Sheepskin", "value": 100, "hp": 0, "rarity": LEGENDARY,
+     "areas": [CAVE]},
+    {"pre": None, "name": "Chula's Naval Ring", "value": 150, "hp": 0, "rarity": LEGENDARY,
+     "areas": [FOREST]},
     {"pre": "a", "name": "Handwritten Draft of Santa's Unreleased Memoirs", "value": 277, "hp": 0, "rarity": LEGENDARY,
      "areas": [CITY]},
     {"pre": "a", "name": "Fossilized Hohkken", "value": 404, "hp": 0, "rarity": LEGENDARY,

@@ -17,7 +17,7 @@ from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT, Perks
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.discoverable import load_discoverables, search_discoverable_rarity, rarity_color
-from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE
+from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE, Enemy
 from bookoftench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent, DiscoveryEvent, \
     FailedFleeEvent
 from bookoftench.model.game_state import GameState
@@ -626,7 +626,7 @@ class ItemSelectionComponent(LabeledSelectionComponent):
                     component=functional_component()(
                         lambda item=item: self._use_item_and_check(
                             item,
-                            enemy,
+                            enemy if enemy else None,
                             time,
                             moon,
                         )
@@ -638,11 +638,11 @@ class ItemSelectionComponent(LabeledSelectionComponent):
             quittable=True
         )
 
-    def _use_item_and_check(self, item, enemy, time, moon):
+    def _use_item_and_check(self, item, enemy: Enemy | None, time, moon):
         # Apply item
         self.game_state.player.use_item(
             item.name,
-            enemy if enemy else None,
+            enemy,
             time,
             moon,
             self.game_state,
@@ -652,7 +652,7 @@ class ItemSelectionComponent(LabeledSelectionComponent):
         current_enemy = self.game_state.current_area.current_enemy
 
         # Check battle end
-        if not player.is_alive() or not current_enemy.is_alive():
+        if not player.is_alive() or (current_enemy and not current_enemy.is_alive()):
             BattleEnd(self.game_state).run()
 
 @register_component(EQUIP_WEAPON)
