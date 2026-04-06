@@ -12,7 +12,7 @@ from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEM
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
     OVERVIEW, INFO, BUILD
-from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD
+from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT, Perks
 from bookoftench.event_logger import subscribe_function
@@ -754,6 +754,8 @@ class Attack(Component):
             enemy.attack(player)
             if player.is_alive() and enemy.is_alive():
                 if enemy.trait:
+                    if enemy.trait.name == CONTAGIOUS and random.random() < 0.20:
+                        EnemyInfect(self.game_state).run()
                     if enemy.trait.name == COWARD and random.random() < 0.15:
                         player.can_flee = True
                     if enemy.trait.name == ACHILLES and enemy.current_weapon.name != TENCH_CANNON and enemy.hp < 25:
@@ -836,6 +838,22 @@ class Battle(LabeledSelectionComponent):
         @subscribe_function(FleeEvent)
         def handle_flee(_: FleeEvent):
             self.fled = True
+
+
+class EnemyInfect(NoOpComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state)
+
+    def execute(self):
+        player = self.game_state.player
+        enemy = self.game_state.current_area.current_enemy
+
+        if not player.illness:
+            player.illness = enemy.illness
+            player.illness_death_lvl = player.lvl + player.illness.levels_until_death
+            print_and_sleep(yellow(f"You caught {player.illness.name} from {enemy.name}!"), 2)
+        return self.game_state
+
 
 class BattleEnd(NoOpComponent):
     def __init__(self, game_state: GameState):
