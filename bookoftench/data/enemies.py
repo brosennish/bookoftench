@@ -72,6 +72,7 @@ BUTTERFINGERS = "Butterfingers"
 CHEATER = "Cheater"
 CONTAGIOUS = "Contagious"
 COWARD = "Coward"
+EMPATH = "Empath"
 INVESTOR = "Investor"
 JUNKIE = "Junkie"
 NIGHT_OWL = "Night Owl"
@@ -91,12 +92,13 @@ Traits = [
     {'name': BUTTERFINGERS, 'desc': 'Drops coins each turn'},
     {'name': CHEATER, 'desc': 'May attack twice in one turn'}, 
     {'name': CONTAGIOUS, 'desc': 'Can get you sick'}, 
-    {'name': COWARD, 'desc': 'May run away at any time'}, 
-    {'name': INVESTOR, 'desc': 'Value of coins fluctuates during battle'}, 
+    {'name': COWARD, 'desc': 'May run away at any time'},
+    {'name': EMPATH, 'desc': 'Heals when you use a normal item'},
+    {'name': INVESTOR, 'desc': 'Coin value fluctuates during battle'},
     {'name': JUNKIE, 'desc': 'Gains strength when HP falls below 50%'},
     {'name': NIGHT_OWL, 'desc': 'Becomes more formidable at night'},
     {'name': ORACLE, 'desc': 'Gains strength and accuracy when blinded'}, 
-    {'name': PLANT, 'desc': 'Restores HP each turn'}, 
+    {'name': PLANT, 'desc': 'Heals after every turn'},
     {'name': PREPARED, 'desc': 'Has a health item'}, 
     {'name': WEREWOLF, 'desc': 'Transforms under a full moon'}, 
 ]
