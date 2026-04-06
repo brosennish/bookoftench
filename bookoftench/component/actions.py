@@ -764,7 +764,7 @@ class Attack(Component):
     def handle_trait_checks(self, player, enemy):
         if enemy.trait:
             trait_name = enemy.trait.name
-            if trait_name == CHEATER:
+            if trait_name == CHEATER and enemy.current_weapon.uses > 0 and random.random() < 0.15:
                 enemy.attack(player)
                 if not player.is_alive() or not enemy.is_alive():
                     return

@@ -195,16 +195,19 @@ class Player(Combatant):
         if item.type == NORMAL:
             gain = int(min(self.max_hp - self.hp, self._apply_hp_bonus(item.hp)))
             self.gain_hp(gain)
-            if enemy and enemy.trait and enemy.trait.name == EMPATH:
-                heal = min(gain, enemy.max_hp - enemy.hp)
-                enemy.hp += heal
-                print_and_sleep(green(f"The empathic {enemy.name} gained {heal} HP."))
         else:
             gain = self.handle_special_item(item, enemy, time, moon, game_state)
 
         # Remove from actual inventory
         del self.items[item.name]
         event_logger.log_event(ItemUsedEvent(item.name, item.type, len(self.items), self.hp, self.max_hp, gain))
+
+        # Empath trait application post-log
+        if item.type == NORMAL and enemy and enemy.trait and enemy.trait.name == EMPATH:
+            heal = min(gain, enemy.max_hp - enemy.hp)
+            if heal > 0:
+                enemy.hp += heal
+                print_and_sleep(green(f"The empathic {enemy.name} gained {heal} HP."))
 
     def handle_special_item(self, item, enemy, time, moon, game_state) -> int:
         if item.type == FLEE:
