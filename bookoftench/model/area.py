@@ -133,6 +133,8 @@ class Area:
 
         # --- night owl logic ---
         if enemy.trait.name == NIGHT_OWL and time == NIGHTTIME:
+            enemy.max_hp += random.randint(5, 10)
+            enemy.hp = enemy.max_hp
             enemy.strength += round(random.uniform(0.05, 0.15), 2)
             enemy.acc += round(random.uniform(0.05, 0.1), 2)
 
