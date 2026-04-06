@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from typing import List, TypeVar
 
 from bookoftench.data.perks import BROWN_FRIDAY, BARTER_SAUCE, TRADE_SHIP
-from bookoftench.event_base import Event
+from bookoftench.event_base import Event, EventType
 from bookoftench.event_logger import subscribe_function
 from bookoftench.ui import red, green
 from bookoftench.util import print_and_sleep
@@ -12,6 +12,7 @@ from .events import LevelUpEvent, PlayerDeathEvent
 from .item import Item, load_items
 from .perk import Perk, load_perks, attach_perk, attach_perks, perk_is_active
 from .weapon import Weapon, load_discoverable_weapons
+from .. import event_logger
 
 # TODO maybe read these from config
 _MAX_ITEMS: int = 3
@@ -99,9 +100,12 @@ class Shop:
     B = TypeVar("B", bound=Buyable)
 
     def apply_discounts(self, buyables: List[B]) -> List[B]:
+        count = event_logger.get_count(EventType.LEVEL_UP)
         for buyable in buyables:
             # noinspection PyTypeChecker
-            buyable.cost = self._discounted_cost(buyable.original_cost)
+            original_cost = buyable.cost
+            multiplier = 1 + min(0.5, 0.02 * count)
+            buyable.cost = round(self._discounted_cost(original_cost) * multiplier)
         return buyables
 
     def remove_listing(self, buyable: Buyable) -> None:

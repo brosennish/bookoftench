@@ -214,12 +214,12 @@ class Player(Combatant):
 
         elif item.type == STAT:
             if item.name == ACCURACY_SEARUM:
-                old = self.acc
-                self.acc += 0.02
+                old = round(self.acc, 2)
+                self.acc = round(self.acc + 0.03, 2)
                 print_and_sleep(green(f"Accuracy: {old} -> {self.acc}"), 1)
             elif item.name == HTH:
-                old = self.strength
-                self.strength += 0.02
+                old = round(self.strength, 2)
+                self.strength = round(self.strength + 0.03, 2)
                 print_and_sleep(green(f"Strength: {old} -> {self.strength}"), 1)
 
         elif item.type == DMG:
