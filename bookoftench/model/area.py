@@ -28,9 +28,9 @@ _search_defaults = {
     DISCOVER_PERK: 1,
     DISCOVER_ITEM: 1,
     DISCOVER_WEAPON: 1,
-    DISCOVER_DISCOVERABLE: 40,
+    DISCOVER_DISCOVERABLE: 45,
     DISCOVER_SPECIAL: 7,
-    SPAWN_ENEMY: 30
+    SPAWN_ENEMY: 33
 }
 
 _event_defaults = {
