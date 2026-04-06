@@ -233,7 +233,7 @@ class Player(Combatant):
                     original = enemy.strength
                     decrement = round(enemy.strength * 0.25, 2)
                     enemy.strength -= decrement
-                    print_and_sleep(purple(f"Enemy Strength: {original} -> {enemy.strength}"), 1)
+                    print_and_sleep(purple(f"You doused {enemy.name} with Flaccid Acid! Strength: {original} -> {enemy.strength}"), 1)
                 elif item.name == MOON_RUNE and time == NIGHTTIME and game_state.current_area.name != CAVE:
                     damage = 10 # dry moon
                     if moon == DRYING:
