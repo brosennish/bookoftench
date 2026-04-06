@@ -73,6 +73,7 @@ CONTAGIOUS = "Contagious"
 COWARD = "Coward"
 INVESTOR = "Investor"
 JUNKIE = "Junkie"
+NIGHT_OWL = "Night Owl"
 ORACLE = "Oracle"
 PLANT = "Plant"
 PREPARED = "Prepared"
@@ -85,16 +86,17 @@ FINAL_BOSS = "final_boss"
 
 
 Traits = [
-    {'name': ACHILLES, 'desc': 'Equips a Tench Cannon when HP falls below 25'}, # DONE
-    {'name': BUTTERFINGERS, 'desc': 'Drops coins each turn'}, # DONE
-    {'name': CONTAGIOUS, 'desc': 'Can get you sick'}, # DONE
-    {'name': COWARD, 'desc': 'May run away at any time'}, # DONE
-    {'name': INVESTOR, 'desc': 'Value of coins fluctuates during battle'}, # DONE
-    {'name': JUNKIE, 'desc': 'Gains strength when HP falls below 50%'}, # DONE
-    {'name': ORACLE, 'desc': 'Gains strength and accuracy when blinded'}, # DONE
-    {'name': PLANT, 'desc': 'Restores HP each turn'}, # DONE
-    {'name': PREPARED, 'desc': 'Has a health item'}, # DONE
-    {'name': WEREWOLF, 'desc': 'Transforms under a full moon'}, # DONE
+    {'name': ACHILLES, 'desc': 'Equips a Tench Cannon when HP falls below 25'}, 
+    {'name': BUTTERFINGERS, 'desc': 'Drops coins each turn'}, 
+    {'name': CONTAGIOUS, 'desc': 'Can get you sick'}, 
+    {'name': COWARD, 'desc': 'May run away at any time'}, 
+    {'name': INVESTOR, 'desc': 'Value of coins fluctuates during battle'}, 
+    {'name': JUNKIE, 'desc': 'Gains strength when HP falls below 50%'},
+    {'name': NIGHT_OWL, 'desc': 'Gains strength and accuracy at night'}, 
+    {'name': ORACLE, 'desc': 'Gains strength and accuracy when blinded'}, 
+    {'name': PLANT, 'desc': 'Restores HP each turn'}, 
+    {'name': PREPARED, 'desc': 'Has a health item'}, 
+    {'name': WEREWOLF, 'desc': 'Transforms under a full moon'}, 
 ]
 
 Enemies = [
