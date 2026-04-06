@@ -130,7 +130,7 @@ Items = [
 
     # --- SPECIAL ---
     {'name': ACCURACY_SEARUM, 'type': STAT, 'hp': 0, 'cost': 110, 'sell_value': 35, 'areas': [CAVE, FOREST],
-     'desc': 'Increase accuracy by 0.02'},
+     'desc': 'Increase accuracy by 0.03'},
     {'name': BOOMERANG, 'type': ENEMY, 'hp': 0, 'cost': 45, 'sell_value': 0, 'areas': [CITY, FOREST, SWAMP],
      'desc': 'Do X damage to enemy and lose X HP'},
     {'name': CRITICAL_BASS, 'type': CRIT, 'hp': 0, 'cost': 55, 'sell_value': 18, 'areas': [CAVE, FOREST],
@@ -138,7 +138,7 @@ Items = [
     {'name': FLACCID_ACID, 'type': ENEMY, 'hp': 0, 'cost': 75, 'sell_value': 22, 'areas': [CAVE, CITY, SWAMP],
      'desc': 'Lower enemy strength by 25%'},
     {'name': HTH, 'type': STAT, 'hp': 0, 'cost': 110, 'sell_value': 35, 'areas': [CITY, SWAMP],
-     'desc': 'Increase strength by 0.02'},
+     'desc': 'Increase strength by 0.03'},
     {'name': IOU, 'type': FLEE, 'hp': 0, 'cost': 10, 'sell_value': 3, 'areas': [CITY],
      'desc': 'Use to escape from battle'},
     {'name': MOON_RUNE, 'type': ENEMY, 'hp': 0, 'cost': 80, 'sell_value': 24, 'areas': [CAVE, FOREST],
