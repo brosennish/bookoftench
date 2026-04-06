@@ -8,13 +8,15 @@ from typing import List, Optional, Dict, Self
 from bookoftench.audio import play_sound
 from bookoftench.data import Enemies
 from bookoftench.data.audio import AREA_BOSS_THEME, GATOR
-from bookoftench.data.enemies import Bosses, Final_Boss, BAYOU_BILL, Enemy_Lines
+from bookoftench.data.enemies import Bosses, Final_Boss, BAYOU_BILL, Enemy_Lines, WEREWOLF
 from bookoftench.data.perks import RICKETY_PICKPOCKET
 from bookoftench.data.weapons import BARE_HANDS, BLIND
 from bookoftench.ui import purple, cyan
 from bookoftench.util import print_and_sleep
 from .base import Combatant, NPC, DisplayableText
+from .illness import Illness
 from .perk import attach_perk
+from .trait import Trait
 from .weapon import Weapon, load_weapon, load_weapons
 
 # Constants
@@ -24,6 +26,8 @@ ENEMY_SWITCH_WEAPON_CHANCE = 0.2
 @dataclass
 class Enemy(Combatant, NPC):
     name: str = ''
+    trait: Trait = None
+    illness: Illness = None
     hp: int = 0
     weapons: List[str] = field(default_factory=list)
     bounty: int = 0
@@ -60,14 +64,19 @@ class Enemy(Combatant, NPC):
             self.weapon_dict[BARE_HANDS] = load_weapon(BARE_HANDS)
         self.current_weapon = random.choice(list(self.weapon_dict.values()))
 
-    def enemy_switch_weapon(self) -> Weapon:
+    def enemy_switch_weapon(self, weapon: str | None) -> Weapon:
         current_weapon = self.current_weapon
-        options = [i for i in self.weapon_dict if i != current_weapon.name
-                   and i != BARE_HANDS]
-        if options:
-            selection = random.choice(options)
-            self.current_weapon = load_weapon(selection)
-            print_and_sleep(cyan(f"{self.name} equipped {self.current_weapon.name}."), 1)
+        if self.trait and self.trait.name == WEREWOLF: # werewolf just uses claws
+            return self.current_weapon
+        if weapon:
+            self.current_weapon = load_weapon(weapon)
+        else:
+            options = [i for i in self.weapon_dict if i != current_weapon.name
+                       and i != BARE_HANDS]
+            if options:
+                selection = random.choice(options)
+                self.current_weapon = load_weapon(selection)
+        print_and_sleep(cyan(f"{self.name} equipped {self.current_weapon.name}."), 1)
         return self.current_weapon
 
     def get_enemy_encounter_line(self) -> str | None:
@@ -104,9 +113,9 @@ class Boss(Enemy):
     def handle_hit(self, other: "Combatant") -> None:
         super().handle_hit(other)
         if self.name == BAYOU_BILL:
-            gator = random.random() < 0.10
+            gator = random.random() < 0.20
             if gator:
-                bite = random.randint(3, 5)
+                bite = random.randint(1, 10)
                 play_sound(GATOR)
                 print_and_sleep(purple(f"Mama Gator attacked you for {bite} damage!"), 2)
                 other.take_damage(bite, self)

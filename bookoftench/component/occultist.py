@@ -3,10 +3,11 @@ import random
 from bookoftench import event_logger
 from bookoftench.audio import play_music
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
-    functional_component
+    functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import OCCULTIST_THEME
 from bookoftench.data.components import OCCULTIST
+from bookoftench.data.enviroment import FULL, NIGHTTIME
 from bookoftench.data.rituals import Occultist_Lines
 from bookoftench.model import GameState
 from bookoftench.model.events import OccultistEvent
@@ -17,6 +18,13 @@ from bookoftench.util import print_and_sleep
 
 
 @register_component(OCCULTIST)
+class OccultistBouncer(GatekeepingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, decision_function=lambda: game_state.moon == FULL,
+                         accept_component=OccultistComponent,
+                         deny_component=functional_component()(lambda: print_and_sleep(
+                             blue("The Occultist requires a Full Moon to perform rituals."), 1.5)))
+
 class OccultistComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         ritual_options = load_rituals()

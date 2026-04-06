@@ -10,17 +10,18 @@ from .. import event_logger
 from ..audio import play_music
 from ..data.audio import LAB_THEME
 from ..data.components import LAB
+from ..data.enviroment import NIGHTTIME
 from ..model.events import PlayerDeathEvent
 from ..model.player import Player
 
 
 @register_component(LAB)
-class LabWorldState(GatekeepingComponent):
+class LabBounder(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: game_state.lab_active,
+        super().__init__(game_state, decision_function=lambda: game_state.time_of_day == NIGHTTIME,
                          accept_component=LabComponent,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("The laboratory is closed for decontamination.\n"), 1.5)))
+                             blue("The laboratory is closed during the day to be less conspicuous.\n"), 1.5)))
 
 # --- Casino menu ---
 
@@ -53,11 +54,11 @@ class ExperimentRisks(TextDisplayingComponent):
         super().__init__(game_state,
                          next_component=LabComponent,
                          display_callback=lambda _: print_and_sleep(yellow(f"""Risk of Mutation:
-Strength : 27%
-Accuracy : 27%
-Max HP   : 25%
-Level    : 12%
-Lives    : 8%\n""")))
+Strength : 23%
+Accuracy : 23%
+Max HP   : 21%
+Level    : 8%
+Lives    : 6%\n""")))
 
 
 def conduct_experiment(player: Player):
@@ -66,7 +67,7 @@ def conduct_experiment(player: Player):
 
     # minor mutations allowing for more experiments with ever-present risk of losing a life or gaining level
 
-    if random.random() < 0.27:
+    if random.random() < 0.23: # STRENGTH
         original = player.strength
         amount = random.uniform(-0.02, 0.02)
         player.strength = round(player.strength + amount, 2)
@@ -78,7 +79,7 @@ def conduct_experiment(player: Player):
                 print_and_sleep(yellow(f"Strength: {original} -> {player.strength}"), 1)
                 mutation = True
 
-    if random.random() < 0.27:
+    if random.random() < 0.23: # ACCURACY
         original = player.acc
         amount = random.uniform(-0.02, 0.02)
         player.acc = round(player.acc + amount, 2)
@@ -90,7 +91,7 @@ def conduct_experiment(player: Player):
                 print_and_sleep(yellow(f"Accuracy: {original} -> {player.acc}"), 1)
                 mutation = True
 
-    if random.random() < 0.25:
+    if random.random() < 0.21: # HP
         original = player.max_hp
         amount = random.randint(-2, 2)
         player.max_hp += amount
@@ -103,10 +104,10 @@ def conduct_experiment(player: Player):
             print_and_sleep(yellow(f"Max HP: {original} -> {player.max_hp}"), 1)
             mutation = True
 
-    if random.random() < 0.12:
+    if random.random() < 0.08: # LEVEL
         original = player.lvl
         amount = -1
-        if random.random() < 0.55:  # higher odds to increase level (bad for player)
+        if random.random() < 0.60:  # higher odds to increase level (bad for player)
             amount = 1
         player.lvl += amount
         if player.lvl <= 0:
@@ -122,10 +123,10 @@ def conduct_experiment(player: Player):
             player.lives -= 1
             event_logger.log_event(PlayerDeathEvent(player.lives))
 
-    if random.random() < 0.08:
+    if random.random() < 0.06: # LIVES
         original = player.lives
         amount = 1
-        if random.random() < 0.55:  # higher odds to lose a life since you're getting paid
+        if random.random() < 0.60:  # higher odds to lose a life since you're getting paid
             amount = -1
         else:
             if player.lives == 5:

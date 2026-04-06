@@ -7,6 +7,7 @@ from bookoftench.component.base import LabeledSelectionComponent, ReprBinding, S
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import SHOP_THEME, PURCHASE, DRINKING, COFFEE_THEME
 from bookoftench.data.components import COFFEE_SHOP
+from bookoftench.data.enviroment import DAYTIME
 from bookoftench.model import GameState
 from bookoftench.model.coffee_item import CoffeeItem
 from bookoftench.model.coffee_shop import CoffeeShop
@@ -22,9 +23,18 @@ from bookoftench.util import print_and_sleep
 class CoffeeBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, decision_function=lambda: game_state.player.illness is None,
-                         accept_component=CoffeeShopComponent,
+                         accept_component=CoffeeSleeping,
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue(f"Get {yellow('*cough cough*')} {blue('lost. No sickos allowed.')}\n"), 1.5)))
+
+
+class CoffeeSleeping(GatekeepingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, decision_function=lambda: game_state.time_of_day == DAYTIME,
+                         accept_component=CoffeeShopComponent,
+                         deny_component=functional_component()(lambda: print_and_sleep(
+                             blue(f"Coughy is trying to sleep off whatever it is that he has.\n"), 1.5)))
+
 
 class CoffeeShopComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):

@@ -9,10 +9,12 @@ from typing import Dict, List, Self
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE
-from bookoftench.data.enemies import SLEDGE_HAMMOND
+from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT, PREPARED, JUNKIE, ORACLE, COWARD
 from bookoftench.data.weapons import MELEE, RANGED, BLIND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
-from bookoftench.ui import red, yellow, color_text, purple, cyan, dim, blue
+from bookoftench.model.illness import Illness
+from bookoftench.model.trait import Trait
+from bookoftench.ui import red, yellow, color_text, purple, cyan, dim, blue, green
 from bookoftench.util import print_and_sleep
 
 
@@ -147,12 +149,19 @@ class NPC:
 class Combatant(ABC):
     weapon_dict: Dict[str, WeaponBase]
     name: str
+    trait: Trait
+    illness: Illness
     hp: int
     max_hp: int
+    coins: int
     current_weapon: WeaponBase
 
     double_damage_active: bool = False
     crit_active: bool = False
+
+    junkie_active: bool = True
+    oracle_active: bool = True
+    prepared_active: bool = True
 
     blind: bool = False
     blinded_by: str = ''
@@ -243,17 +252,17 @@ class Combatant(ABC):
         self.current_weapon.use()
         if not self.is_alive():  # solomon train
             return
-        base_damage = self.current_weapon.calculate_base_damage()
+        base_damage = self.current_weapon.calculate_base_damage()  # calculate base damage
         if self.current_weapon.type == MELEE:
-            base_damage = round(base_damage * self.strength)
-        crit = random.random() < self.get_crit_chance()
+            base_damage = round(base_damage * self.strength)  # apply strength to melee
+        crit = random.random() < self.get_crit_chance()  # get calculated crit chance
         self.handle_crit(crit)
 
         damage_inflicted = round(base_damage * 1.5) if crit else base_damage  # 1.5x damage if crit
 
         if isinstance(other, NPC):
             if self.current_weapon.type == MELEE and self.double_damage_active == True:
-                damage_inflicted *= 2
+                damage_inflicted *= 2  # double damage if item used
                 self.double_damage_active = False
                 print_and_sleep(red("*** Double damage ***"), 1)
             print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
@@ -262,6 +271,43 @@ class Combatant(ABC):
         else:
             print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
+            if other.is_alive() and self.trait:
+                if self.trait.name == BUTTERFINGERS:
+                    dropped = min(self.coins, random.randint(1,10))
+                    self.coins -= dropped
+                    word = 'coin' if dropped == 1 else 'coins'
+                    if dropped > 0:
+                        print_and_sleep(yellow(f"{self.name} dropped {dropped} {word}."), 1)
+                elif self.trait.name == INVESTOR:
+                    change = random.randint(-10, 10)
+                    if change != 0:
+                        if change < 0 and self.coins < abs(change):
+                            change = self.coins * -1
+                        self.coins += change
+                elif self.trait.name == JUNKIE:
+                    if self.hp < 50 and self.junkie_active:
+                        amount = round(random.uniform(0.1, 0.25), 2)
+                        self.strength += amount
+                        print_and_sleep(green(f"{self.name} got yoked and increased strength by {amount}."), 1)
+                        self.junkie_active = False
+                elif other.current_weapon.type == BLIND and self.trait.name == ORACLE and self.oracle_active:
+                    self.strength += round(random.uniform(0.03, 0.12), 2)
+                    self.acc += round(random.uniform(0.03, 0.12), 2)
+                    print_and_sleep(green(f"{self.name}'s strength and accuracy increased."), 1)
+                    other.oracle_active = False
+                elif self.trait.name == PLANT:
+                    amount = random.randint(1, 10)
+                    if (self.max_hp - self.hp) < amount:
+                        amount = self.max_hp - self.hp
+                    self.hp += amount
+                    print_and_sleep(green(f"{self.name} regenerated {amount} HP."), 1)
+                elif self.trait.name == PREPARED:
+                    if self.hp < (self.max_hp * 0.5) and self.prepared_active:
+                        original = self.hp
+                        amount = random.randint(25,50)
+                        self.hp += min(amount, self.max_hp - self.hp)
+                        print_and_sleep(green(f"{self.name} used an item and restored {self.hp - original} HP."), 1)
+                        self.prepared_active = False
 
         other.take_damage(damage_inflicted, self)
         if self.current_weapon.type == BLIND:

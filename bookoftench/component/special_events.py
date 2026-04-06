@@ -32,7 +32,7 @@ class DiscoverSpecial(RandomChoiceComponent):
         # Varying rewards and penalties for how generous, greedy or stingy you are
 
         player = game_state.player
-        print_and_sleep(purple("A woman approaches you, waving her hands in the air...\n"), 3)
+        print_and_sleep(purple("An old woman approaches you, waving her hands in the air...\n"), 3)
         print_and_sleep(blue("Hey, you there! I have coin. Do you want some?\n\n"), 3)
 
         while True:
@@ -49,7 +49,7 @@ class DiscoverSpecial(RandomChoiceComponent):
                 print()
                 break
             elif choice == "r":
-                print_and_sleep(purple("You tell the woman to buzz off."), 2)
+                print_and_sleep(purple("You tell the old woman to buzz off."), 2)
                 return None
             else:
                 print_and_sleep(yellow("Invalid choice.\n"), 1)
@@ -311,7 +311,7 @@ What do you say?\n\n"""), 3)
             veg = carrot(yellow)
             choice = input(
                 f"[#] Yes (enter # of seconds)\n[M] Maybe next time"
-                f"\n\nPlease enter a selection (r to return){veg}").strip().lower()
+                f"\n\nPlease enter a selection{veg}").strip().lower()
             if choice.isdigit():
                if int(choice) > 20 or int(choice) < 1:
                    print_and_sleep(yellow("Please enter a value between 1-20.\n"), 1)

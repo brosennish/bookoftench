@@ -8,9 +8,10 @@ from bookoftench.model.base import Combatant
 from bookoftench.model.enemy import Enemy
 from bookoftench.model.perk import load_perks, perk_is_active, attach_perks
 from bookoftench.model.player import Player
-from bookoftench.ui import blue, cyan, green, orange, purple, red, yellow, dim, white, _format
+from bookoftench.ui import blue, cyan, green, orange, purple, red, yellow, dim, white
 from bookoftench.util import print_and_sleep
 from .game_state import GameState
+from ..data.enviroment import DAYTIME
 
 
 # --- HP COLOR CODING ---
@@ -104,15 +105,19 @@ def display_shop_header(game_state: GameState):
 def get_player_status_view(game_state: GameState) -> str:
     player = game_state.player
     player_color = p_color(player.hp, player.max_hp)
+    tod = game_state.time_of_day
+    moon = game_state.moon
     killed_remaining = [f"Killed: {red(f"{game_state.current_area.enemies_killed}")}"]
     if perk_is_active(CROWS_NEST):
         killed_remaining.append(f"Remaining: {yellow(f"{game_state.current_area.enemies_remaining}")}")
 
     player_status = (f"{dim(' | ').join([
-        f"Area: {blue(game_state.current_area.name)}",
+        f"{blue(game_state.current_area.name)}",
         *killed_remaining,
+        f"{yellow(tod) if tod == DAYTIME else purple(tod)}",
+        f"{moon} Moon",
         f"Wanted: {purple(game_state.wanted)}",
-        f"Bounty: {purple(f"{game_state.bounty} coins")}"])}"
+        f"Bounty: {purple(f"{game_state.bounty}")}"])}"
                      f"\n{dim(' | ').join([
                          f"\n{orange(player.name)} {dim('-')} Level: {cyan(f"{player.lvl}")}",
                          f"XP: {cyan(f"{player.xp}/{player.xp_needed}")}",
@@ -227,7 +232,6 @@ def display_active_perks(game_state: GameState) -> None:
         print_and_sleep(f"Your Perks:")
         if perk_is_active(WENCH_LOCATION):
             print_and_sleep(f'Wench Location: {blue(game_state.wench_area.name)}')
-
         for perk in sorted(active_perks, key=lambda a: a.name):
             print_and_sleep(purple(perk.name) + dim(" | ") + purple(perk.description))
 
@@ -237,26 +241,24 @@ def get_battle_info_view(game_state: GameState) -> str:
     enemy: Enemy = game_state.current_area.current_enemy
 
     def format_combatant_data(cmbt: Player | Enemy, name_color) -> str:
-        return (f"\n{name_color(cmbt.name)}"
-                f"\n{dim('Strength: ')} {red(round(cmbt.strength, 2))}"
-                f"\n{dim('Accuracy: ')} {yellow(round(cmbt.acc, 2))}"
-                f"\n{dim('Coins:    ')} {green(cmbt.coins)}")
+        if cmbt.trait in ['', None]:
+            return (f"\n{name_color(cmbt.name)}"
+                    f"\n{dim('Strength |')} {red(round(cmbt.strength, 2))}"
+                    f"\n{dim('Accuracy |')} {yellow(round(cmbt.acc, 2))}"
+                    f"\n{dim('Coins    |')} {green(cmbt.coins)}")
+        else:
+            return (f"\n{name_color(cmbt.name)}"
+                    f"\n{dim('Strength |')} {red(round(cmbt.strength, 2))}"
+                    f"\n{dim('Accuracy |')} {yellow(round(cmbt.acc, 2))}"
+                    f"\n{dim('Coins    |')} {green(cmbt.coins)}"
+                    f"\n{dim('Trait    |')} {purple(cmbt.trait.name)}"
+                    f"\n{dim('Ability  |')} {purple(cmbt.trait.desc)}"
+                    )
 
     return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, purple)}\n"
 
 
 def display_battle_info(game_state: GameState) -> None:
-    active_perks = [p for p in load_perks() if p.active]
-    if len(active_perks) == 0:
-        print_and_sleep(yellow("Your perks are dry."))
-    else:
-        print_and_sleep(f"Your Perks:")
-        if perk_is_active(WENCH_LOCATION):
-            print_and_sleep(f'Wench Location: {blue(game_state.wench_area.name)}')
-
-        for perk in sorted(active_perks, key=lambda a: a.name):
-            print_and_sleep(purple(perk.name) + dim(" | ") + purple(perk.description))
-
     print_and_sleep(get_battle_info_view(game_state))
 
 

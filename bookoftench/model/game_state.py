@@ -27,6 +27,7 @@ from .shop import Shop
 from .weapon import Weapon, load_weapons
 from ..data.builds import Builds
 from ..data.illnesses import Illnesses
+from ..data.enviroment import DRY, DAYTIME, NIGHTTIME, WETTING, FULL, DRYING
 
 
 @dataclass
@@ -37,12 +38,8 @@ class GameState:
     areas: List[Area] = field(default_factory=load_areas)
     current_area: Area = None
 
-    casino_active: bool = field(default=True)
-    coffee_active: bool = field(default=True)
-    lab_active: bool = field(default=True)
-    occultist_active: bool = field(default=True)
-    shaman_active: bool = field(default=True)
-    wizard_active: bool = field(default=True)
+    time_of_day: str = field(default=DAYTIME)
+    moon: str = field(default=DRY)
 
     wench_area: Area = None
 
@@ -123,6 +120,22 @@ class GameState:
         crypto_service.start()
         self._subscribe_listeners()
 
+    def update_time_of_day(self) -> None:
+        if self.time_of_day == DAYTIME:
+            self.time_of_day = NIGHTTIME
+        elif self.time_of_day == NIGHTTIME:
+            self.time_of_day = DAYTIME
+
+    def update_moon(self) -> None:
+        if self.moon == DRY:
+            self.moon = WETTING
+        elif self.moon == WETTING:
+            self.moon = FULL
+        elif self.moon == FULL:
+            self.moon = DRYING
+        elif self.moon == DRYING:
+            self.moon = DRY
+
     def refresh_bounty(self) -> None:
         valid_areas = [i for i in self.areas if i.enemies_remaining > 0]
         if valid_areas:
@@ -177,6 +190,7 @@ class GameState:
 
     def is_wanted(self, combatant):
         return self.wanted in combatant.name
+
 
     # for loading from save file
     def __setstate__(self, state):

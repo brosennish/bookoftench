@@ -10,13 +10,17 @@ from bookoftench.data.areas import EncounterType
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
     SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD
-from bookoftench.data.enemies import Enemy_Adjectives
+from bookoftench.data.enemies import Enemy_Adjectives, Traits, PLANT, WEREWOLF, COWARD
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
 from .perk import perk_is_active
 from .shop import Shop
+from .trait import load_traits
+from .weapon import load_weapon
+from ..data.enviroment import NIGHTTIME, FULL
 from ..data.perks import SHERLOCK_TENCH
+from ..data.weapons import CLAWS
 
 _search_defaults = {
     DISCOVER_PERK: 1,
@@ -81,7 +85,7 @@ class Area:
     def enemies_remaining(self) -> int:
         return max(self.enemy_count - self.enemies_killed, 0)
 
-    def spawn_enemy(self, wanted: str, player_level: int) -> Enemy:
+    def spawn_enemy(self, wanted: str, player_level: int, time: str, moon: str) -> Enemy:
         wanted = load_enemy(wanted)
         available = [i for i in self.enemies if i not in self.enemies_seen]
 
@@ -102,6 +106,13 @@ class Area:
         enemy = load_enemy(enemy_name)  # convert selected enemy to Enemy
         self.enemies_seen.add(enemy_name)  # add selected enemy to enemies_seen
 
+        # --- traits and illness ---
+        valid = [i['name'] for i in Traits]
+        if time == NIGHTTIME:
+            valid = [i['name'] for i in Traits if i['name'] not in [PLANT, COWARD]]
+        traits = load_traits(valid)
+        enemy.trait = random.choice(traits)
+
         enemy.hp += random.randint(-2, 2)  # apply hp spread first
         enemy.hp += round((enemy.hp * 0.03) * max(player_level - 1, 0))  # then apply hp scaling
         enemy.strength = enemy.strength + random.uniform(-0.03, 0.03)
@@ -112,12 +123,20 @@ class Area:
         enemy_lines = enemy.get_enemy_encounter_line()  # get the line before mutating enemy.name
         elite_chance = min(0.15, max(0.0, (player_level - 1) * 0.03))
 
+        # --- werewolf logic ---
+        if enemy.trait.name == WEREWOLF and time == NIGHTTIME and moon == FULL:
+            enemy.name = "Werewolf"
+            enemy.hp += random.randint(10, 25)
+            enemy.strength = 1.25
+            enemy.acc = 0
+            enemy.coins = 0
+
         if random.random() < elite_chance:
             enemy.name = f"Elite {enemy.name}"
             enemy.hp = int(enemy.hp * 1.5)
             enemy.max_hp = int(enemy.max_hp * 1.5)
             enemy.strength += 0.1
-            enemy.acc += 0.1
+            enemy.acc += 0 if enemy.trait.name == WEREWOLF else 0.1
             enemy.coins = int(enemy.coins * 1.5)
             print_and_sleep(f"{yellow("An enemy appears!")} {purple("(Elite enemy!)")}", 1)
         else:
@@ -129,6 +148,8 @@ class Area:
         enemy.name = f"{adj} {enemy.name}"
 
         self.current_enemy = enemy
+        if self.current_enemy.trait.name == WEREWOLF:
+            self.current_enemy.current_weapon = load_weapon(CLAWS)
         return self.current_enemy
 
     def summon_boss(self) -> Boss:
