@@ -173,11 +173,13 @@ class Area:
 
     def summon_boss(self) -> Boss:
         self.current_enemy = self.boss
+        self.current_enemy.current_weapon = make_elite_weapon(self.current_enemy.current_weapon)
         return self.current_enemy
 
     def summon_final_boss(self) -> Boss:
         final_boss: Boss = load_final_boss()
         self.current_enemy = final_boss
+        self.current_enemy.current_weapon = make_elite_weapon(self.current_enemy.current_weapon)
         return self.current_enemy
 
     def kill_current_enemy(self) -> None:
