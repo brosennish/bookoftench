@@ -36,17 +36,13 @@ from ..data.enemies import EMPATH
 @dataclass
 class PlayerWeapon(Weapon):
 
-    # todo - maybe add subtype field to weapons for this purpose
-    def _is_bladed(self) -> bool:
-        return self.name in BLADED
-
     def calculate_base_damage(self) -> int:
         base_damage = self.calculate_base_damage_no_perk()
 
         @attach_perk(ROSETTI_THE_GYM_RAT, value_description="melee damage",
                      condition=lambda: self.type == MELEE)
         @attach_perk(AMBROSE_BLADE, value_description="blade damage",
-                     condition=lambda: self._is_bladed())
+                     condition=lambda: self.subtype == BLADED)
         @attach_perks(KARATE_LESSONS, MARTIAL_ARTS_TRAINING, value_description="bare hands damage",
                       condition=lambda: self.name == BARE_HANDS)
         def apply_perks():
@@ -65,6 +61,16 @@ class PlayerWeapon(Weapon):
     @classmethod
     def from_weapon(cls, weapon: Weapon) -> PlayerWeapon:
         return cls.from_dict(asdict(weapon))
+
+    def __repr__(self) -> str:
+        return dim(' | ').join([
+            cyan(f"{self.name:<24}"),
+            f"{"Dmg:"} {red(f"{self.damage:<3}")}",
+            f"{"Acc:"} {yellow(f"{self.accuracy:<4}")}",
+            f"{"Var:"} {f"{red(f"{self.var}")}"}",
+            f"{"Crit:"} {yellow(f"{self.crit:<4}")}",
+            f"{"Uses:"} {self.format_uses()}",
+        ])
 
 
 def item_defaults() -> Dict[str, Item]:
@@ -86,6 +92,7 @@ def build_weapon_defaults(build: Build | None) -> Dict[str, PlayerWeapon]:
         build.weapons = load_weapons([BARE_HANDS])
 
     return {it.name: PlayerWeapon.from_weapon(it) for it in build.weapons}
+
 
 
 @dataclass

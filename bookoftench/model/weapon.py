@@ -115,26 +115,26 @@ def make_elite_weapon(weapon: Weapon) -> Weapon:
     weapon.name = f"Elite {name}"
 
     # damage
-    weapon.damage += random.randint(1, 10)
+    weapon.damage += random.randint(5, 10)
 
     # accuracy
     og_accuracy = weapon.accuracy
-    accuracy_gain = random.uniform(0.01, 0.10)
+    accuracy_gain = random.uniform(0.03, 0.10)
     weapon.accuracy = round(min(accuracy_gain + og_accuracy, 1), 2)
 
     # crit
     og_crit = weapon.crit
-    crit_gain = random.uniform(0.01, 0.10)
+    crit_gain = random.uniform(0.05, 0.15)
     weapon.crit = round(og_crit + crit_gain, 2)
 
     # uses
-    weapon.uses += random.randint(1, 5)
+    weapon.uses += random.randint(3, 6)
 
     # cost
-    increase = round(weapon.cost * 0.10)
+    increase = round(weapon.cost * 0.12)
     weapon.cost += increase
 
     # sell value
-    increase = round(weapon.sell_value * 0.10)
+    increase = round(weapon.sell_value * 0.12)
     weapon.sell_value += increase
     return weapon

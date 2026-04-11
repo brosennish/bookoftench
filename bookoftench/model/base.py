@@ -46,6 +46,7 @@ class WeaponBase(ABC):
     crit: float
     sound: str
     type: str
+    subtype: str = MELEE
     areas: list[str] | None = None
 
     def calculate_base_damage(self) -> int:

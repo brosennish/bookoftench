@@ -198,6 +198,9 @@ class DiscoveryEvent(Event):
     def __init__(self, event_type: EventType):
         super().__init__(event_type)
 
+class BlacksmithEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.PAY_BLACKSMITH)
 
 class OccultistEvent(Event):
     def __init__(self):

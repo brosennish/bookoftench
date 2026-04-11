@@ -104,7 +104,7 @@ class Shop:
         for buyable in buyables:
             # noinspection PyTypeChecker
             original_cost = buyable.cost
-            multiplier = 1 + min(0.5, 0.02 * count)
+            multiplier = 1 + min(0.5, 0.01 * count)
             buyable.cost = round(self._discounted_cost(original_cost) * multiplier)
         return buyables
 
