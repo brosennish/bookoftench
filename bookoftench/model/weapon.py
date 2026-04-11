@@ -107,3 +107,34 @@ def load_weapons(restriction: List[str] = None):
 
 def load_discoverable_weapons():
     return [w for w in load_weapons() if w.uses > 0]
+
+
+def make_elite_weapon(weapon: Weapon) -> Weapon:
+    # name
+    name = weapon.name
+    weapon.name = f"Elite {name}"
+
+    # damage
+    weapon.damage += random.randint(1, 10)
+
+    # accuracy
+    og_accuracy = weapon.accuracy
+    accuracy_gain = random.uniform(0.01, 0.10)
+    weapon.accuracy = round(min(accuracy_gain + og_accuracy, 1), 2)
+
+    # crit
+    og_crit = weapon.crit
+    crit_gain = random.uniform(0.01, 0.10)
+    weapon.crit = round(og_crit + crit_gain, 2)
+
+    # uses
+    weapon.uses += random.randint(1, 5)
+
+    # cost
+    increase = round(weapon.cost * 0.10)
+    weapon.cost += increase
+
+    # sell value
+    increase = round(weapon.sell_value * 0.10)
+    weapon.sell_value += increase
+    return weapon

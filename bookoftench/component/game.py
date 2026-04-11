@@ -140,8 +140,8 @@ class Intro(TextDisplayingComponent):
                          display_callback=lambda _: print_and_sleep(red("""
 You wash ashore on a deserted beach outside of Shebokken.
 The champion has informed you that his mother, Chula, was taken in the night.
-It is up to you to locate her and return her to the champion...
-before her life runs dry.
+The prophecy has foretold that you shall find and return her to the champion.
+Fulfill the prophecy, before her life runs dry...
 """)))
 
     def play_theme(self) -> None:
