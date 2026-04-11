@@ -124,7 +124,7 @@ Weapons = [
     #                       DEFAULT
     # =====================================================
     {'name': BARE_HANDS, 'damage': 10, 'uses': -1, 'accuracy': 0.90, 'var': 2, 'crit': 0.08,
-     'cost': 0, 'sell_value': 0, 'type': MELEE, 'tier': 1, 'sound': audio.PUNCH,
+     'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'tier': 1, 'sound': audio.PUNCH,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
     # =====================================================

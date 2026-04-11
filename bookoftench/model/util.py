@@ -44,6 +44,9 @@ def display_blacksmith_header(game_state: GameState) -> None:
 
     print_and_sleep(f"{dim(' | ').join([
         f"Coins: {green(f"{player.coins}")}",
+        f"Melee: {orange(f"125")}",
+        f"Ranged: {orange(f"150")}",
+        f"Special: {orange(f"400 (∞)")}\n",
     ])}\n")
 
 
@@ -52,7 +55,7 @@ def display_occultist_header(game_state: GameState) -> None:
 
     print_and_sleep(f"{dim(' | ').join([
         f"Coins: {green(f"{player.coins}")}",
-        f"Lives: {yellow(f"{player.lives}")}\n"
+        f"Lives: {yellow(f"{player.lives}")}\n",
     ])}")
 
 

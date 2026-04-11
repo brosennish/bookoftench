@@ -9,8 +9,9 @@ from bookoftench.data.audio import PURCHASE, WIZARD_THEME
 from bookoftench.data.blacksmith import Blacksmith_Lines
 from bookoftench.data.components import BLACKSMITH
 from bookoftench.data.enviroment import DAYTIME
-from bookoftench.data.weapons import BLIND, SPECIAL
+from bookoftench.data.weapons import BLIND, SPECIAL, BARE_HANDS, MELEE, RANGED
 from bookoftench.model import GameState
+from bookoftench.model.events import BlacksmithEvent
 from bookoftench.model.player import PlayerWeapon
 from bookoftench.model.util import display_blacksmith_header
 from bookoftench.model.weapon import make_elite_weapon, load_weapon
@@ -22,7 +23,7 @@ from bookoftench.util import print_and_sleep
 class BlacksmithBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
-        super().__init__(game_state, decision_function=lambda: player.coins >= 120,
+        super().__init__(game_state, decision_function=lambda: player.coins >= 150,
                          accept_component=BlacksmithSleeping,
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("Come back when you have 120 of coin.\nHTH isn't cheap."), 1.5)))
@@ -38,7 +39,8 @@ class BlacksmithSleeping(GatekeepingComponent):
 class BlacksmithComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
-        valid = [i for i in player.weapon_dict.values() if i.type not in [BLIND, SPECIAL]]
+        valid = [i for i in player.weapon_dict.values() if i.type not in [BLIND] and
+                 "Elite" not in i.name]
         if not valid:
             print_and_sleep(yellow("Sledge Jr. does not work on special or blind-type weapons."))
 
@@ -86,13 +88,30 @@ class BlacksmithComponent(LabeledSelectionComponent):
         @functional_component(state_dependent=True)
         def purchase_component(game_state: GameState):
             player = game_state.player
-            if player.coins < 120:
-                print_and_sleep(yellow(f"Need more coin"), 2)
+            cost = 0
+
+            if "Elite" in weapon.name:
+                print_and_sleep(yellow(f"Weapon is already Elite."), 2)
                 return
 
-            player.coins -= 120
+            if weapon.type == MELEE:
+                if player.coins < 125:
+                    print_and_sleep(yellow(f"Need more coin"), 2)
+                    return
+                cost = 125
+            elif weapon.type == RANGED:
+                if player.coins < 150:
+                    print_and_sleep(yellow(f"Need more coin"), 2)
+                    return
+                cost = 150
+            elif weapon.type == SPECIAL:
+                if player.coins < 375:
+                    print_and_sleep(yellow(f"Need more coin"), 2)
+                    return
+
+            player.coins -= cost
             play_sound(PURCHASE)
-            event_logger.log_event(BlacksmithEvent()) # TODO - add event
+            event_logger.log_event(BlacksmithEvent())
             forge_weapon(weapon, game_state)
 
         return purchase_component
@@ -102,7 +121,7 @@ def forge_weapon(weapon: PlayerWeapon, game_state) -> None:
     player = game_state.player
     name = weapon.name # log name
     og_uses = weapon.uses # log uses
-    player.weapon_dict.pop([name, weapon]) # remove weapon
+    del player.weapon_dict[name] # remove weapon
     base = load_weapon(name) # recreate Weapon object
     base.uses = og_uses # restore uses
     elite = make_elite_weapon(base) # convert to elite weapon

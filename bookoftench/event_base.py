@@ -35,6 +35,7 @@ class EventType(Enum):
     MISS = "miss"
     OFFICER_PAID = "officer_paid"
     OFFICER_UNPAID = "officer_unpaid"
+    PAY_BLACKSMITH = "pay_blacksmith"
     PAY_OCCULTIST = "pay_occultist"
     PAY_SHAMAN = "pay_shaman"
     PAY_WIZARD = "pay_wizard"
