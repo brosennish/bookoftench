@@ -1,7 +1,7 @@
 # -- ensure components are registered
 from .actions import *
 from .bank import *
-from .actions import *
+from .blacksmith import *
 from .casino import *
 from .coffee_shop import *
 from .crypto import *

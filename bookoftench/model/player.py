@@ -66,6 +66,16 @@ class PlayerWeapon(Weapon):
     def from_weapon(cls, weapon: Weapon) -> PlayerWeapon:
         return cls.from_dict(asdict(weapon))
 
+    def __repr__(self) -> str:
+        return dim(' | ').join([
+            cyan(f"{self.name:<24}"),
+            f"{"Dmg:"} {red(f"{self.damage:<3}")}",
+            f"{"Acc:"} {yellow(f"{self.accuracy:<4}")}",
+            f"{"Var:"} {f"{red(f"{self.var}")}"}",
+            f"{"Crit:"} {yellow(f"{self.crit:<4}")}",
+            f"{"Uses:"} {self.format_uses()}",
+        ])
+
 
 def item_defaults() -> Dict[str, Item]:
     return dict((it.name, it) for it in load_items([TENCH_FILET]))
@@ -86,6 +96,7 @@ def build_weapon_defaults(build: Build | None) -> Dict[str, PlayerWeapon]:
         build.weapons = load_weapons([BARE_HANDS])
 
     return {it.name: PlayerWeapon.from_weapon(it) for it in build.weapons}
+
 
 
 @dataclass
