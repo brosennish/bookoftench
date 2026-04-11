@@ -25,7 +25,7 @@ from bookoftench.model.item import load_items
 from bookoftench.model.perk import load_perks, Perk, perk_is_active, activate_perk
 from bookoftench.model.util import get_battle_status_view, display_player_achievements, \
     display_game_stats, calculate_flee, display_active_perks, display_battle_info
-from bookoftench.model.weapon import load_discoverable_weapons, load_weapons
+from bookoftench.model.weapon import load_discoverable_weapons, load_weapons, make_elite_weapon
 from bookoftench.ui import green, purple, yellow, dim, red, cyan, blue
 from bookoftench.util import print_and_sleep, safe_input
 from .base import LabeledSelectionComponent, SelectionBinding
@@ -35,7 +35,7 @@ from .registry import register_component, get_registered_component
 from bookoftench.data.builds import RANDOM, DENNY
 from bookoftench.data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE
 from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
-from bookoftench.data.weapons import BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF, Weapons, TENCH_CANNON
+from bookoftench.data.weapons import BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF, Weapons, TENCH_CANNON, SPECIAL, BLIND
 from bookoftench.event_base import EventType
 from bookoftench.model.build import Build, load_builds
 from bookoftench.model.illness import load_illnesses
@@ -559,6 +559,10 @@ class Search(RandomChoiceComponent):
             available = load_discoverable_weapons()
         weapon = random.choice(available)
         game_state.found_weapon = weapon
+
+        if weapon.type not in [BLIND, SPECIAL] and random.random() < 0.15:
+            weapon = make_elite_weapon(weapon)
+
         print_and_sleep(cyan(f"You found {'an' if weapon.name[0].lower() in 'aeiou' else 'a'} {weapon.name}!"),
                         1)
 

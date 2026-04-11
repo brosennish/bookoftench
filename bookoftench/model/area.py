@@ -18,11 +18,11 @@ from .illness import load_illnesses
 from .perk import perk_is_active
 from .shop import Shop
 from .trait import load_traits
-from .weapon import load_weapon
+from .weapon import load_weapon, make_elite_weapon
 from bookoftench.data.enviroment import NIGHTTIME, FULL
 from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
 from bookoftench.data.perks import SHERLOCK_TENCH
-from bookoftench.data.weapons import CLAWS
+from bookoftench.data.weapons import CLAWS, BLIND, SPECIAL
 
 _search_defaults = {
     DISCOVER_PERK: 1,
@@ -163,8 +163,12 @@ class Area:
         enemy.name = f"{adj} {enemy.name}"
 
         self.current_enemy = enemy
+
         if self.current_enemy.trait.name == WEREWOLF:
             self.current_enemy.current_weapon = load_weapon(CLAWS)
+        if self.current_enemy.current_weapon.type not in [BLIND, SPECIAL] and random.random() < 0.15:
+            base = self.current_enemy.current_weapon
+            self.current_enemy.current_weapon = make_elite_weapon(base)
         return self.current_enemy
 
     def summon_boss(self) -> Boss:

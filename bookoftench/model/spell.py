@@ -3,10 +3,11 @@ from dataclasses import dataclass
 from typing import List
 
 from bookoftench.data.spells import ITEM_MAGIC, WEAPON_MAGIC, Spells
+from bookoftench.data.weapons import SPECIAL, BLIND
 from bookoftench.model.base import Buyable
 from bookoftench.model.item import load_items
 from bookoftench.model.player import Player
-from bookoftench.model.weapon import load_weapons
+from bookoftench.model.weapon import load_weapons, make_elite_weapon
 from bookoftench.ui import cyan, orange, dim, purple
 from bookoftench.util import print_and_sleep
 
@@ -42,6 +43,9 @@ class Spell(Buyable):
             low = min(5, weapon.uses)
             high = min(8, weapon.uses)
             weapon.uses = random.randint(low, high)
+
+            if weapon.type not in [BLIND, SPECIAL] and random.random() < 0.15:
+                weapon = make_elite_weapon(weapon)
 
             player.add_weapon(weapon)
             print_and_sleep(f"{cyan(f'{weapon.name} magically added to sack.')}", 2)
