@@ -5,11 +5,11 @@ from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import PURCHASE, WIZARD_THEME
+from bookoftench.data.audio import PURCHASE, BLACKSMITH_THEME
 from bookoftench.data.blacksmith import Blacksmith_Lines
 from bookoftench.data.components import BLACKSMITH
 from bookoftench.data.enviroment import DAYTIME
-from bookoftench.data.weapons import BLIND, SPECIAL, MELEE, RANGED
+from bookoftench.data.weapons import BLIND, MELEE, RANGED
 from bookoftench.model import GameState
 from bookoftench.model.events import BlacksmithEvent
 from bookoftench.model.player import PlayerWeapon
@@ -23,17 +23,17 @@ from bookoftench.util import print_and_sleep
 class BlacksmithBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
-        super().__init__(game_state, decision_function=lambda: player.coins >= 150,
+        super().__init__(game_state, decision_function=lambda: player.coins >= 125,
                          accept_component=BlacksmithSleeping,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("Come back when you have 120 of coin.\nHTH isn't cheap."), 1.5)))
+                             blue("Come back when you have 125 of coin.\nHTH isn't cheap."), 1.5)))
 
 class BlacksmithSleeping(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, decision_function=lambda: game_state.time_of_day == DAYTIME,
                          accept_component=BlacksmithComponent,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("Sledge Jr. is resting his fishy muscles."), 1.5)))
+                             blue("Sledge Jr. is resting his scaly muscles."), 1.5)))
 
 
 class BlacksmithComponent(LabeledSelectionComponent):
@@ -65,7 +65,7 @@ class BlacksmithComponent(LabeledSelectionComponent):
         self.leave = False
 
     def play_theme(self) -> None:
-        play_music(WIZARD_THEME) # TODO - add theme
+        play_music(BLACKSMITH_THEME)
 
     def _return(self):
         self.leave = True
@@ -109,7 +109,6 @@ class BlacksmithComponent(LabeledSelectionComponent):
                     return
 
             player.coins -= cost
-            play_sound(PURCHASE)
             event_logger.log_event(BlacksmithEvent())
             forge_weapon(weapon, game_state)
 

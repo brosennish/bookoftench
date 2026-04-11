@@ -67,7 +67,6 @@ def is_track_playing(file_name: str, volume: float) -> bool:
 
 
 def play_music(file_name: str) -> None:
-    """Stop current music (if any) and start a new looping track."""
     global _current_music
 
     # OPTIONAL: don't restart if same track is already playing

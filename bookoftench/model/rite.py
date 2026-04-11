@@ -3,6 +3,8 @@ from dataclasses import dataclass
 from typing import List
 
 from bookoftench import event_logger
+from bookoftench.audio import play_sound
+from bookoftench.data.audio import DRINKING
 from bookoftench.data.rites import Rites, TOAD_JUICE, HERBAL_TEA, SHAMANS_CIGAR
 from bookoftench.event_base import EventType
 from bookoftench.model.base import Buyable
@@ -38,6 +40,7 @@ class Rite(Buyable):
 
     def perform(self, player: Player):
         if self.name == TOAD_JUICE:
+            play_sound(DRINKING)
             if not player.blind:
                 print_and_sleep(f"{cyan('Your vision remains unimpaired.')}", 2)
             else:
@@ -46,6 +49,7 @@ class Rite(Buyable):
                 player.blind_turns = 0
 
         elif self.name == HERBAL_TEA:
+            play_sound(DRINKING)
             if not player.illness:
                 print_and_sleep(f"{cyan(f'You remain free of contamination.')}", 2)
             else:

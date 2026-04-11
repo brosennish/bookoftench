@@ -8,6 +8,6 @@ Blacksmith_Lines = [
     "My dad is straight, he just prefers sleeping with monstrosities.",
     "I started taking steroids in the womb.",
     "My dad had to pull me out of my mother's mouth after I was born.",
-    "I was born in a slimy egg.",
+    "I was born in a veiny egg.",
     "I hope I can find a nice tench woman when I grow up.",
 ]

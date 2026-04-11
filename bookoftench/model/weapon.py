@@ -128,13 +128,15 @@ def make_elite_weapon(weapon: Weapon) -> Weapon:
     weapon.crit = round(og_crit + crit_gain, 2)
 
     # uses
-    weapon.uses += random.randint(3, 6)
+    if weapon.uses > 0:
+        weapon.uses += random.randint(3, 6)
 
     # cost
     increase = round(weapon.cost * 0.12)
     weapon.cost += increase
 
     # sell value
-    increase = round(weapon.sell_value * 0.12)
-    weapon.sell_value += increase
+    if weapon.sell_value > 0:
+        increase = round(weapon.sell_value * 0.12)
+        weapon.sell_value += increase
     return weapon

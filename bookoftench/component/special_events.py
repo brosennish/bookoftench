@@ -4,7 +4,7 @@ from bookoftench import event_logger
 from bookoftench.audio import play_sound, play_music
 from bookoftench.component import RandomChoiceComponent, register_component, ProbabilityBinding, \
     get_registered_component, functional_component, SwapFoundItemYN, OfficerEncounter
-from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH
+from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH, POSITIVE
 from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, \
     ZONKED, GREEDY_BASTARD
 from bookoftench.data.perks import BEER_GOGGLES
