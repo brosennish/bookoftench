@@ -39,6 +39,14 @@ def display_coffee_header(game_state: GameState) -> None:
     ])}")
 
 
+def display_blacksmith_header(game_state: GameState) -> None:
+    player = game_state.player
+
+    print_and_sleep(f"{dim(' | ').join([
+        f"Coins: {green(f"{player.coins}")}",
+    ])}\n")
+
+
 def display_occultist_header(game_state: GameState) -> None:
     player = game_state.player
 

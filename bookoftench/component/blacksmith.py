@@ -5,16 +5,15 @@ from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import PURCHASE
-from bookoftench.data.components import WIZARD, BLACKSMITH
+from bookoftench.data.audio import PURCHASE, WIZARD_THEME
+from bookoftench.data.blacksmith import Blacksmith_Lines
+from bookoftench.data.components import BLACKSMITH
 from bookoftench.data.enviroment import DAYTIME
 from bookoftench.data.weapons import BLIND, SPECIAL
 from bookoftench.model import GameState
-from bookoftench.model.events import WizardEvent
 from bookoftench.model.player import PlayerWeapon
-from bookoftench.model.spell import load_spells, Spell
-from bookoftench.model.util import display_wizard_header
-from bookoftench.model.weapon import load_weapons, make_elite_weapon, load_weapon
+from bookoftench.model.util import display_blacksmith_header
+from bookoftench.model.weapon import make_elite_weapon, load_weapon
 from bookoftench.ui import blue, yellow, cyan
 from bookoftench.util import print_and_sleep
 
@@ -54,7 +53,7 @@ class BlacksmithComponent(LabeledSelectionComponent):
             LabeledSelectionComponent(
                 game_state,
                 weapon_bindings,
-                top_level_prompt_callback=display_blacksmith_header, # TODO - add header
+                top_level_prompt_callback=display_blacksmith_header,
             ),
             LabeledSelectionComponent(
                 game_state,
@@ -64,7 +63,7 @@ class BlacksmithComponent(LabeledSelectionComponent):
         self.leave = False
 
     def play_theme(self) -> None:
-        play_music(BLACKSMITH_THEME) # TODO - add theme
+        play_music(WIZARD_THEME) # TODO - add theme
 
     def _return(self):
         self.leave = True
@@ -74,7 +73,7 @@ class BlacksmithComponent(LabeledSelectionComponent):
         return self.leave or not self.game_state.player.is_alive()
 
     def display_options(self) -> None:
-        message = random.choice(Blacksmith_Lines) # TODO - add lines
+        message = random.choice(Blacksmith_Lines)
         print_and_sleep(
             f"{blue(message)}", 1.5
         )
@@ -110,5 +109,5 @@ def forge_weapon(weapon: PlayerWeapon, game_state) -> None:
     player.weapon_dict.update({elite.name: PlayerWeapon.from_weapon(elite)}) # add to weapon_dict
     player.current_weapon = next(i for i in player.weapon_dict.values() if i.name == elite.name) # set current
 
-    print_and_sleep(cyan(f"{name} has been upgraded."), 1.5)
+    print_and_sleep(cyan(f"{name} has been upgraded to Elite."), 1.5)
 
