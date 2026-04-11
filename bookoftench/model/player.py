@@ -36,17 +36,13 @@ from ..data.enemies import EMPATH
 @dataclass
 class PlayerWeapon(Weapon):
 
-    # todo - maybe add subtype field to weapons for this purpose
-    def _is_bladed(self) -> bool:
-        return self.name in BLADED
-
     def calculate_base_damage(self) -> int:
         base_damage = self.calculate_base_damage_no_perk()
 
         @attach_perk(ROSETTI_THE_GYM_RAT, value_description="melee damage",
                      condition=lambda: self.type == MELEE)
         @attach_perk(AMBROSE_BLADE, value_description="blade damage",
-                     condition=lambda: self._is_bladed())
+                     condition=lambda: self.subtype == BLADED)
         @attach_perks(KARATE_LESSONS, MARTIAL_ARTS_TRAINING, value_description="bare hands damage",
                       condition=lambda: self.name == BARE_HANDS)
         def apply_perks():

@@ -9,7 +9,7 @@ from bookoftench.data.audio import PURCHASE, WIZARD_THEME
 from bookoftench.data.blacksmith import Blacksmith_Lines
 from bookoftench.data.components import BLACKSMITH
 from bookoftench.data.enviroment import DAYTIME
-from bookoftench.data.weapons import BLIND, SPECIAL, BARE_HANDS, MELEE, RANGED
+from bookoftench.data.weapons import BLIND, SPECIAL, MELEE, RANGED
 from bookoftench.model import GameState
 from bookoftench.model.events import BlacksmithEvent
 from bookoftench.model.player import PlayerWeapon
@@ -35,14 +35,14 @@ class BlacksmithSleeping(GatekeepingComponent):
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("Sledge Jr. is resting his fishy muscles."), 1.5)))
 
-# TODO - build component
+
 class BlacksmithComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
         valid = [i for i in player.weapon_dict.values() if i.type not in [BLIND] and
                  "Elite" not in i.name]
         if not valid:
-            print_and_sleep(yellow("Sledge Jr. does not work on special or blind-type weapons."))
+            print_and_sleep(yellow("Sledge Jr. does not work on blind-type weapons."))
 
         weapon_bindings = [ReprBinding(str(i + 1), weapon.name, self._make_purchase_component(weapon), weapon) for
                           i, weapon in enumerate(valid)]
@@ -82,7 +82,6 @@ class BlacksmithComponent(LabeledSelectionComponent):
         for component in self.selection_components:
             component.display_options()
 
-    # TODO - add conversion logic
     @staticmethod
     def _make_purchase_component(weapon: PlayerWeapon) -> type[Component]:
         @functional_component(state_dependent=True)
@@ -104,7 +103,7 @@ class BlacksmithComponent(LabeledSelectionComponent):
                     print_and_sleep(yellow(f"Need more coin"), 2)
                     return
                 cost = 150
-            elif weapon.type == SPECIAL:
+            elif weapon.uses == -1:
                 if player.coins < 375:
                     print_and_sleep(yellow(f"Need more coin"), 2)
                     return
