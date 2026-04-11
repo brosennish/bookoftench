@@ -7,7 +7,7 @@ from bookoftench.audio import play_music, play_sound, stop_music
 from bookoftench.component.base import TextDisplayingComponent, functional_component, Component, \
     ColoredNameSelectionBinding, BinarySelectionComponent, \
     NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent, ReprBinding
-from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL
+from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL, MENSCH_THEME, POSITIVE
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
@@ -540,6 +540,7 @@ class Search(RandomChoiceComponent):
             item = random.choice(all_unowned_items)
 
         game_state.found_item = item
+        play_sound(POSITIVE)
         print_and_sleep(cyan(f"You found {item.name}!"), 1)
 
         if game_state.player.add_item(item):
@@ -563,6 +564,7 @@ class Search(RandomChoiceComponent):
         if weapon.type not in [BLIND, SPECIAL] and random.random() < 0.15:
             weapon = make_elite_weapon(weapon)
 
+        play_sound(POSITIVE)
         print_and_sleep(cyan(f"You found {'an' if weapon.name[0].lower() in 'aeiou' else 'a'} {weapon.name}!"),
                         1)
 
@@ -578,6 +580,7 @@ class Search(RandomChoiceComponent):
     def _discover_perk():
         filtered: List[Perk] = load_perks(lambda p: not (p.active or p.name == WENCH_LOCATION))
         if len(filtered) > 0:
+            play_music(MENSCH_THEME)
             reward = random.choice(filtered)
             print_and_sleep(purple("You sense a noble presence..."), 2)
             print_and_sleep(purple("It's a mensch!"), 2)

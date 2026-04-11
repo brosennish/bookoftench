@@ -5,11 +5,11 @@ from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import PURCHASE, WIZARD_THEME
+from bookoftench.data.audio import PURCHASE, BLACKSMITH_THEME
 from bookoftench.data.blacksmith import Blacksmith_Lines
 from bookoftench.data.components import BLACKSMITH
 from bookoftench.data.enviroment import DAYTIME
-from bookoftench.data.weapons import BLIND, SPECIAL, MELEE, RANGED
+from bookoftench.data.weapons import BLIND, MELEE, RANGED
 from bookoftench.model import GameState
 from bookoftench.model.events import BlacksmithEvent
 from bookoftench.model.player import PlayerWeapon
@@ -65,7 +65,7 @@ class BlacksmithComponent(LabeledSelectionComponent):
         self.leave = False
 
     def play_theme(self) -> None:
-        play_music(WIZARD_THEME) # TODO - add theme
+        play_music(BLACKSMITH_THEME)
 
     def _return(self):
         self.leave = True

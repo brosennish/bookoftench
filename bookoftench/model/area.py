@@ -23,6 +23,8 @@ from bookoftench.data.enviroment import NIGHTTIME, FULL
 from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
 from bookoftench.data.perks import SHERLOCK_TENCH
 from bookoftench.data.weapons import CLAWS, BLIND, SPECIAL
+from ..audio import play_sound
+from ..data.audio import ENEMY_APPEARS
 
 _search_defaults = {
     DISCOVER_PERK: 1,
@@ -155,7 +157,8 @@ class Area:
             enemy.coins = int(enemy.coins * 1.5)
             print_and_sleep(f"{yellow("An enemy appears!")} {purple("(Elite enemy!)")}", 1)
         else:
-            print_and_sleep(yellow("An enemy appears!"), 1)
+            play_sound(ENEMY_APPEARS)
+            print_and_sleep(yellow("An enemy appears!"), 1.5)
 
         if enemy_lines:
             print_and_sleep(f"{blue(f'{enemy_lines}')}", 3)

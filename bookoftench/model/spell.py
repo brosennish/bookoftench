@@ -2,6 +2,8 @@ import random
 from dataclasses import dataclass
 from typing import List
 
+from bookoftench.audio import play_sound
+from bookoftench.data.audio import MAGIC
 from bookoftench.data.spells import ITEM_MAGIC, WEAPON_MAGIC, Spells
 from bookoftench.data.weapons import SPECIAL, BLIND
 from bookoftench.model.base import Buyable
@@ -31,7 +33,7 @@ class Spell(Buyable):
             filtered = [i for i in load_items() if i.name not in player.items]
             item = random.choice(filtered)
             player.add_item(item)
-
+            play_sound(MAGIC)
             print_and_sleep(f"{cyan(f'{item.name} magically added to sack.')}", 2)
 
         elif self.name == WEAPON_MAGIC:
@@ -48,6 +50,7 @@ class Spell(Buyable):
                 weapon = make_elite_weapon(weapon)
 
             player.add_weapon(weapon)
+            play_sound(MAGIC)
             print_and_sleep(f"{cyan(f'{weapon.name} magically added to sack.')}", 2)
 
 
