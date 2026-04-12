@@ -1,11 +1,11 @@
 import random
 
 from bookoftench import event_logger
-from bookoftench.audio import play_music
+from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import WIZARD_THEME
+from bookoftench.data.audio import WIZARD_THEME, PURCHASE
 from bookoftench.data.components import WIZARD
 from bookoftench.data.enviroment import DAYTIME
 from bookoftench.data.spells import Wizard_Lines, WEAPON, ITEM
@@ -92,6 +92,7 @@ class WizardComponent(LabeledSelectionComponent):
                     print_and_sleep(yellow(f"No room in sack"), 2)
                     return
 
+            play_sound(PURCHASE)
             player.coins -= spell.cost
             event_logger.log_event(WizardEvent())
             spell.cast(player)

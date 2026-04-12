@@ -1,11 +1,11 @@
 import random
 
 from bookoftench import event_logger
-from bookoftench.audio import play_music
+from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import SHAMAN_THEME
+from bookoftench.data.audio import SHAMAN_THEME, PURCHASE
 from bookoftench.data.components import SHAMAN
 from bookoftench.data.enviroment import DAYTIME
 from bookoftench.data.rites import Shaman_Lines
@@ -85,6 +85,7 @@ class ShamanComponent(LabeledSelectionComponent):
             if player.coins < rite.cost:
                 print_and_sleep(yellow(f"Need more coin"), 1)
             else:
+                play_sound(PURCHASE)
                 player.coins -= rite.cost
                 event_logger.log_event(ShamanEvent())
                 rite.perform(player)
