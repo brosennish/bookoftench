@@ -140,3 +140,13 @@ def make_elite_weapon(weapon: Weapon) -> Weapon:
         increase = round(weapon.sell_value * 0.12)
         weapon.sell_value += increase
     return weapon
+
+def make_autographed_weapon(weapon: Weapon) -> Weapon:
+    # name
+    name = weapon.name
+    weapon.name = f"Autographed {name}"
+
+    # sell value
+    if weapon.sell_value > 0:
+        weapon.sell_value *= 4
+    return weapon

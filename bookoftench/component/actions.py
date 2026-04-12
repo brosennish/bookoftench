@@ -25,7 +25,7 @@ from bookoftench.model.item import load_items
 from bookoftench.model.perk import load_perks, Perk, perk_is_active, activate_perk
 from bookoftench.model.util import get_battle_status_view, display_player_achievements, \
     display_game_stats, calculate_flee, display_active_perks, display_battle_info
-from bookoftench.model.weapon import load_discoverable_weapons, load_weapons, make_elite_weapon
+from bookoftench.model.weapon import load_discoverable_weapons, load_weapons, make_elite_weapon, make_autographed_weapon
 from bookoftench.ui import green, purple, yellow, dim, red, cyan, blue
 from bookoftench.util import print_and_sleep, safe_input
 from .base import LabeledSelectionComponent, SelectionBinding
@@ -38,7 +38,7 @@ from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
 from bookoftench.data.weapons import BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF, Weapons, TENCH_CANNON, SPECIAL, BLIND
 from bookoftench.event_base import EventType
 from bookoftench.model.build import Build, load_builds
-from bookoftench.model.illness import load_illnesses
+from bookoftench.model.illness import load_illnesses, load_illness
 from bookoftench.model.player import PlayerWeapon
 
 
@@ -473,6 +473,7 @@ class Search(RandomChoiceComponent):
                      in d.areas and d.rarity == rarity]
 
         find = random.choice(available)
+        rarity = find.rarity
 
         # log event for stats
         if rarity == COMMON:
@@ -561,8 +562,11 @@ class Search(RandomChoiceComponent):
         weapon = random.choice(available)
         game_state.found_weapon = weapon
 
-        if weapon.type not in [BLIND, SPECIAL] and random.random() < 0.15:
-            weapon = make_elite_weapon(weapon)
+        if weapon.type not in [BLIND, SPECIAL]:
+            if random.random() < 0.10:
+                weapon = make_elite_weapon(weapon)
+            if random.random() < 0.05:
+                weapon = make_autographed_weapon(weapon)
 
         play_sound(POSITIVE)
         print_and_sleep(cyan(f"You found {'an' if weapon.name[0].lower() in 'aeiou' else 'a'} {weapon.name}!"),
@@ -775,7 +779,7 @@ class Attack(Component):
                 enemy.attack(player)
                 if not player.is_alive() or not enemy.is_alive():
                     return
-            if trait_name == CONTAGIOUS and random.random() < 0.20:
+            if trait_name == CONTAGIOUS and random.random() < 0.15:
                 EnemyInfect(self.game_state).run()
             if trait_name == COWARD and random.random() < 0.15:
                 player.can_flee = True
@@ -875,12 +879,17 @@ class EnemyInfect(NoOpComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
 
+    def run(self):
+        self.execute()
+
     def execute(self):
         player = self.game_state.player
         enemy = self.game_state.current_area.current_enemy
 
         if not player.illness:
-            player.illness = enemy.illness
+            illness_name = enemy.illness.name
+            illness_dict = next(i for i in Illnesses if i['name'] == illness_name)
+            player.illness = load_illness(illness_dict)
             player.illness_death_lvl = player.lvl + player.illness.levels_until_death
             print_and_sleep(yellow(f"You caught {player.illness.name} from {enemy.name}!"), 2)
         return self.game_state

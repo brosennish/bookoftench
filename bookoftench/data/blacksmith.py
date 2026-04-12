@@ -5,7 +5,7 @@ Blacksmith_Lines = [
     "I haven't seen my mom in a while. Her - its - name is Chula.",
     "My dad has mentioned you before.",
     "My dad is 600 lbs of pure muscle.",
-    "My dad is straight, he just prefers sleeping with monstrosities.",
+    "My dad is straight, he just prefers to sleep with monstrosities.",
     "I started taking steroids in the womb.",
     "My dad had to pull me out of my mother's mouth after I was born.",
     "I was born in a veiny egg.",

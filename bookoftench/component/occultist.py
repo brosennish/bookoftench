@@ -5,7 +5,7 @@ from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import OCCULTIST_THEME, RITUAL
+from bookoftench.data.audio import OCCULTIST_THEME, RITUAL, PURCHASE
 from bookoftench.data.components import OCCULTIST
 from bookoftench.data.enviroment import FULL, NIGHTTIME
 from bookoftench.data.rituals import Occultist_Lines
@@ -73,6 +73,7 @@ class OccultistComponent(LabeledSelectionComponent):
             if player.coins < ritual.cost:
                 print_and_sleep(yellow(f"Need more coin"), 1)
             else:
+                play_sound(PURCHASE)
                 player.coins -= ritual.cost
                 event_logger.log_event(OccultistEvent())
                 play_sound(RITUAL)

@@ -17,6 +17,14 @@ from bookoftench.util import print_and_sleep
 
 
 @register_component(HOSPITAL)
+class HospitalOpen(GatekeepingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, decision_function=lambda: game_state.hospital_is_open,
+                         accept_component=HospitalBouncer,
+                         deny_component=functional_component()(lambda: print_and_sleep(
+                             blue("The hospital is closed due to pending litigation.\n"), 1.5)))
+
+
 class HospitalBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, decision_function=lambda: game_state.player.illness is not None,

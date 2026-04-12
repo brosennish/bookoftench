@@ -10,7 +10,7 @@ from bookoftench.data.perks import TENCH_THE_BOUNTY_HUNTER, NEPTUNE
 from bookoftench.event_base import EventType, Event
 from bookoftench.event_logger import subscribe_function
 from bookoftench.settings import Settings, set_settings
-from bookoftench.ui import green
+from bookoftench.ui import green, blue
 from bookoftench.util import print_and_sleep
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
@@ -37,6 +37,10 @@ class GameState:
     bank: Bank = field(default_factory=Bank)
     areas: List[Area] = field(default_factory=load_areas)
     current_area: Area = None
+
+    casino_is_open: bool = True
+    coffee_is_open: bool = True
+    hospital_is_open: bool = True
 
     time_of_day: str = field(default=DAYTIME)
     moon: str = field(default=DRY)
@@ -184,6 +188,38 @@ class GameState:
             event_logger.log_event(BankVisitDecisionTriggerEvent(self))
             event_logger.log_event(SaveGameDecisionTriggerEvent(self))
             self.refresh_bounty()
+            self.handle_component_statuses()
+
+    def handle_component_statuses(self):
+        # casino
+        if self.casino_is_open:
+            if random.random() < 0.10:
+                self.casino_is_open = False
+                print_and_sleep(blue(f"The casino has closed pending investigation."))
+        elif not self.casino_is_open:
+            if random.random() < 0.50:
+                self.casino_is_open = True
+                print_and_sleep(green(f"The casino has reopened following a substantial bribe."))
+
+        # coffee
+        if self.coffee_is_open:
+            if random.random() < 0.10:
+                self.coffee_is_open = False
+                print_and_sleep(blue(f"Coughy has died."))
+        elif not self.coffee_is_open:
+            if random.random() < 0.50:
+                self.coffee_is_open = True
+                print_and_sleep(green(f"Coughy's Coffee has reopened following his resurrection."))
+
+        # hospital
+        if self.hospital_is_open:
+            if random.random() < 0.10:
+                self.hospital_is_open = False
+                print_and_sleep(blue(f"The hospital has closed due to pending litigation."))
+        elif not self.hospital_is_open:
+            if random.random() < 0.50:
+                self.hospital_is_open = True
+                print_and_sleep(green(f"The hospital has reopened following a substantial bribe."))
 
     def is_final_boss_available(self) -> bool:
         return self.current_area.boss_defeated and (self.wench_area == self.current_area) and not self.victory

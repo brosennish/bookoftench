@@ -108,6 +108,7 @@ class BlacksmithComponent(LabeledSelectionComponent):
                     print_and_sleep(yellow(f"Need more coin"), 2)
                     return
 
+            play_sound(PURCHASE)
             player.coins -= cost
             event_logger.log_event(BlacksmithEvent())
             forge_weapon(weapon, game_state)
