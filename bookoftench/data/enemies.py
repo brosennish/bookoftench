@@ -336,7 +336,10 @@ Enemy_Lines = {
         "Enough clowning around.",
         "Art is afraid of me.",
         "I can turn my head all the way around.",
-        "My car isn't a clown car. Well, technically it is. You know what I mean."
+        "My car isn't a clown car. Well, technically it is. You know what I mean.",
+        "My nose is real. I was born like this.",
+        "My natural hair color is rainbow.",
+        "I scare little kids and make their parents uncomfortable for a living.",
     ],
 
     FROGGER: [
@@ -352,6 +355,9 @@ Enemy_Lines = {
         "Hey, you were on that wanted poster! Hold on, can we take a selfie before I kill you?",
         "Will you take some pictures of me killing you for my profile?",
         "Will you follow me when you're in Hell?",
+        "I'm insecure, but I pretend like I'm not.",
+        "Nothing beats vacationing with your manager and a bunch of shallow strangers.",
+        "I'm a content creator. You know who else is a content creator? 6 billion other people.",
     ],
 
     LIFE_COACH: [
@@ -359,6 +365,9 @@ Enemy_Lines = {
         "The secret to having a great life is to buy all of my books.",
         "God himself hired me to be his life coach. So, what do you say?",
         "I have no real qualifications whatsoever. That being said, my hourly rate is 100 coins.",
+        "I flunked out of high school.",
+        "I'm not allowed within one mile of any school.",
+        "My alma mater redacted me from the yearbooks.",
     ],
 
     MAGICIAN: [
