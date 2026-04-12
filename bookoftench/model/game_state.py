@@ -40,6 +40,7 @@ class GameState:
 
     casino_is_open: bool = True
     coffee_is_open: bool = True
+    hospital_is_open: bool = True
 
     time_of_day: str = field(default=DAYTIME)
     moon: str = field(default=DRY)
@@ -209,6 +210,16 @@ class GameState:
             if random.random() < 0.50:
                 self.coffee_is_open = True
                 print_and_sleep(green(f"Coughy's Coffee has reopened following his resurrection."))
+
+        # hospital
+        if self.hospital_is_open:
+            if random.random() < 0.10:
+                self.hospital_is_open = False
+                print_and_sleep(blue(f"The hospital has closed due to pending litigation."))
+        elif not self.hospital_is_open:
+            if random.random() < 0.50:
+                self.hospital_is_open = True
+                print_and_sleep(green(f"The hospital has reopened following a substantial bribe."))
 
     def is_final_boss_available(self) -> bool:
         return self.current_area.boss_defeated and (self.wench_area == self.current_area) and not self.victory

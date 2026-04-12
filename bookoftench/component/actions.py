@@ -38,7 +38,7 @@ from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
 from bookoftench.data.weapons import BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF, Weapons, TENCH_CANNON, SPECIAL, BLIND
 from bookoftench.event_base import EventType
 from bookoftench.model.build import Build, load_builds
-from bookoftench.model.illness import load_illnesses
+from bookoftench.model.illness import load_illnesses, load_illness
 from bookoftench.model.player import PlayerWeapon
 
 
@@ -473,6 +473,7 @@ class Search(RandomChoiceComponent):
                      in d.areas and d.rarity == rarity]
 
         find = random.choice(available)
+        rarity = find.rarity
 
         # log event for stats
         if rarity == COMMON:
@@ -778,7 +779,7 @@ class Attack(Component):
                 enemy.attack(player)
                 if not player.is_alive() or not enemy.is_alive():
                     return
-            if trait_name == CONTAGIOUS and random.random() < 0.20:
+            if trait_name == CONTAGIOUS and random.random() < 0.15:
                 EnemyInfect(self.game_state).run()
             if trait_name == COWARD and random.random() < 0.15:
                 player.can_flee = True
@@ -878,12 +879,17 @@ class EnemyInfect(NoOpComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
 
+    def run(self):
+        self.execute()
+
     def execute(self):
         player = self.game_state.player
         enemy = self.game_state.current_area.current_enemy
 
         if not player.illness:
-            player.illness = enemy.illness
+            illness_name = enemy.illness.name
+            illness_dict = next(i for i in Illnesses if i['name'] == illness_name)
+            player.illness = load_illness(illness_dict)
             player.illness_death_lvl = player.lvl + player.illness.levels_until_death
             print_and_sleep(yellow(f"You caught {player.illness.name} from {enemy.name}!"), 2)
         return self.game_state
