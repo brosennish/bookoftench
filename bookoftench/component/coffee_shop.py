@@ -5,7 +5,7 @@ from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
     functional_component, GatekeepingComponent, Component
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import SHOP_THEME, PURCHASE, DRINKING, COFFEE_THEME
+from bookoftench.data.audio import PURCHASE, DRINKING, COFFEE_THEME
 from bookoftench.data.components import COFFEE_SHOP
 from bookoftench.data.enviroment import DAYTIME
 from bookoftench.model import GameState
@@ -20,20 +20,29 @@ from bookoftench.util import print_and_sleep
 
 
 @register_component(COFFEE_SHOP)
-class CoffeeBouncer(GatekeepingComponent):
+class CoffeeOpen(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: game_state.player.illness is None,
+        super().__init__(game_state, decision_function=lambda: game_state.coffee_is_open,
                          accept_component=CoffeeSleeping,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             blue(f"Get {yellow('*cough cough*')} {blue('lost. No sickos allowed.')}\n"), 1.5)))
+                             blue("Coughy is dead.\n"), 1.5)))
 
 
 class CoffeeSleeping(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, decision_function=lambda: game_state.time_of_day == DAYTIME,
-                         accept_component=CoffeeShopComponent,
+                         accept_component=CoffeeBouncer,
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue(f"Coughy is trying to sleep off whatever it is that he has.\n"), 1.5)))
+
+
+class CoffeeBouncer(GatekeepingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, decision_function=lambda: game_state.player.illness is None,
+                         accept_component=CoffeeShopComponent,
+                         deny_component=functional_component()(lambda: print_and_sleep(
+                             blue(f"Get {yellow('*cough cough*')} {blue('lost. No sickos allowed.')}\n"), 1.5)))
+
 
 
 class CoffeeShopComponent(LabeledSelectionComponent):

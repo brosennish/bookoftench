@@ -38,6 +38,9 @@ class GameState:
     areas: List[Area] = field(default_factory=load_areas)
     current_area: Area = None
 
+    casino_is_open: bool = True
+    coffee_is_open: bool = True
+
     time_of_day: str = field(default=DAYTIME)
     moon: str = field(default=DRY)
 
@@ -184,6 +187,28 @@ class GameState:
             event_logger.log_event(BankVisitDecisionTriggerEvent(self))
             event_logger.log_event(SaveGameDecisionTriggerEvent(self))
             self.refresh_bounty()
+            self.handle_component_statuses()
+
+    def handle_component_statuses(self):
+        # casino
+        if self.casino_is_open:
+            if random.random() < 0.10:
+                self.casino_is_open = False
+                print_and_sleep(f"The casino has closed pending investigation.")
+        elif not self.casino_is_open:
+            if random.random() < 0.50:
+                self.casino_is_open = True
+                print_and_sleep(f"The casino has reopened following a substantial bribe.")
+
+        # coffee
+        if self.coffee_is_open:
+            if random.random() < 0.10:
+                self.casino_is_open = False
+                print_and_sleep(f"Coughy has died.")
+        elif not self.coffee_is_open:
+            if random.random() < 0.50:
+                self.casino_is_open = True
+                print_and_sleep(f"Coughy's Coffee has reopened following his resurrection.")
 
     def is_final_boss_available(self) -> bool:
         return self.current_area.boss_defeated and (self.wench_area == self.current_area) and not self.victory

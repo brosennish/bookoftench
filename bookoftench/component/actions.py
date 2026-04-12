@@ -562,10 +562,9 @@ class Search(RandomChoiceComponent):
         game_state.found_weapon = weapon
 
         if weapon.type not in [BLIND, SPECIAL]:
-            roll = random.random()
-            if roll < 0.10:
+            if random.random() < 0.10:
                 weapon = make_elite_weapon(weapon)
-            if roll < 0.05:
+            if random.random() < 0.05:
                 weapon = make_autographed_weapon(weapon)
 
         play_sound(POSITIVE)

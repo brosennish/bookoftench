@@ -17,6 +17,13 @@ from .registry import register_component
 
 
 @register_component(CASINO)
+class CasinoClosed(GatekeepingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, decision_function=lambda: game_state.casino_is_open,
+                         accept_component=CasinoBouncer,
+                         deny_component=functional_component()(lambda: print_and_sleep(
+                             blue("The casino is closed pending investigation.\n"), 1.5)))
+
 class CasinoBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, decision_function=lambda: game_state.player.coins >= 5,
