@@ -49,7 +49,6 @@ WEAPON_BROKE = "weapon_broke.wav"
 WHIFF = "whiff.wav"
 
 # Misc Sounds
-AGONY = "agony.wav" # TODO
 COINS = "coins.wav"
 DEVIL_THUNDER = "devil_thunder.wav"
 DRINKING = "drinking.wav"
@@ -60,6 +59,7 @@ GREAT_JOB = "great_job.wav"
 HEALING = "healing.wav" # TODO
 HOHKKEN = "hohkken.wav"
 KIDS_CHEER = "kids_cheer.wav"
+NEGATIVE = "negative.wav" # TODO
 POSITIVE = "positive.wav"
 PURCHASE = "purchase.wav"
 RITUAL = "ritual.wav"
