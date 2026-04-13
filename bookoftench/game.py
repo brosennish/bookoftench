@@ -38,7 +38,7 @@ class SaveTheWenchGame:
             player.hp = player.max_hp
             player.xp = 99
             for weapon in load_discoverable_weapons():
-                player.weapon_dict[weapon.name] = PlayerWeapon.from_weapon(weapon)
+                player.weapon_dict[weapon.base_name] = PlayerWeapon.from_weapon(weapon)
             for area in game_state.areas:
                 if area.name == "City":
                     area.actions_menu.pages[-1].append(CRYPTO_EXCHANGE)
