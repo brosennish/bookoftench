@@ -141,8 +141,9 @@ class DiscoverSpecial(RandomChoiceComponent):
 
         print_and_sleep(purple("A man approaches with a revolver...\n"), 2)
 
-        print_and_sleep(purple("""He looks you up and down, and then again.
-May I interest you in a good, old-fashioned game of Shebokken Roulette?\n\n"""), 3)
+        print_and_sleep(purple("He looks you up and down, and then again.\n"), 3)
+
+        print_and_sleep(purple("May I interest you in a good, old-fashioned game of Shebokken Roulette?\n\n"), 3)
 
         wager = 0
         while True:  # Place a wager of 1-100 that is matched by the man

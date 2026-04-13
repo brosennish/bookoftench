@@ -586,9 +586,9 @@ class Search(RandomChoiceComponent):
         if len(filtered) > 0:
             play_music(MENSCH_THEME)
             reward = random.choice(filtered)
-            print_and_sleep(purple("You sense a noble presence..."), 2)
-            print_and_sleep(purple("It's a mensch!"), 2)
-            print_and_sleep(purple(f"He's gifted you the {reward.name} perk!\n{reward.description}"), 2)
+            print_and_sleep(purple("You sense a noble presence..."), 3)
+            print_and_sleep(purple("It's a mensch!"), 3)
+            print_and_sleep(purple(f"He's gifted you the {reward.name} perk!\n{reward.description}"), 4)
             reward.activate()
         else:
             print_and_sleep(dim("You came up dry."), 1)
