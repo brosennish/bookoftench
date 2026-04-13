@@ -272,8 +272,6 @@ class Combatant(ABC):
         else:
             print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
-            if other.is_alive() and self.trait:
-                self.handle_traits(other)
 
         other.take_damage(damage_inflicted, self)
         if self.current_weapon.type == BLIND:
@@ -288,6 +286,11 @@ class Combatant(ABC):
             self.handle_miss()
         else:
             self.handle_hit(other)
+
+        # trait handling after enemy turn
+        if not isinstance(other, NPC):
+            if self.is_alive() and self.trait:
+                self.handle_traits(other)
 
     def handle_traits(self, other: "Combatant") -> None:
         if self.trait.name == BUTTERFINGERS:

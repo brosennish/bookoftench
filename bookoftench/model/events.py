@@ -1,5 +1,5 @@
 from bookoftench.audio import play_sound, stop_music
-from bookoftench.data.audio import PURCHASE, GREAT_JOB, HOHKKEN
+from bookoftench.data.audio import PURCHASE, GREAT_JOB, HOHKKEN, POSITIVE
 from bookoftench.event_base import Event, EventType
 from bookoftench.model.illness import Illness
 from bookoftench.ui import green, cyan, red, yellow, dim, blue
@@ -152,6 +152,7 @@ class LevelUpEvent(Event):
 
     @staticmethod
     def _display(level, old_max_hp, new_max_hp, cash_reward):
+        play_sound(POSITIVE)
         play_sound(GREAT_JOB)
         print_and_sleep(cyan(f"You have reached level {level}!\n"), 2)
         print(green(f"MAX HP: {old_max_hp} -> {new_max_hp}"))
