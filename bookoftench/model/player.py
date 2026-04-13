@@ -121,7 +121,7 @@ class Player(Combatant):
     games_played: int = 0
 
     _max_plays: int = 10
-    _max_items: int = 4
+    _max_items: int = 5
     _max_weapons: int = 4
 
     _blind = False
