@@ -422,7 +422,7 @@ class BuildComponent(LabeledSelectionComponent):
                             weapon = random.choice(weapon_options)
                             selections.append(weapon)
                             weapon_options.remove(weapon)
-                            player.weapon_dict.update({weapon.name: PlayerWeapon.from_weapon(weapon)})
+                            player.weapon_dict.update({weapon.base_name: PlayerWeapon.from_weapon(weapon)})
 
                     # --- perks ---
                     perks_count = random.randint(0, 4)
@@ -542,7 +542,7 @@ class Search(RandomChoiceComponent):
 
         game_state.found_item = item
         play_sound(POSITIVE)
-        print_and_sleep(cyan(f"You found {item.name}!"), 1)
+        print_and_sleep(cyan(f"You found {'an' if item.name[0].lower() in 'aeiou' else 'a'} {item.name}!"), 2)
 
         if game_state.player.add_item(item):
             print_and_sleep(cyan(f"{item.name} added to sack."), 1)
@@ -570,7 +570,7 @@ class Search(RandomChoiceComponent):
 
         play_sound(POSITIVE)
         print_and_sleep(cyan(f"You found {'an' if weapon.name[0].lower() in 'aeiou' else 'a'} {weapon.name}!"),
-                        1)
+                        2)
 
         if game_state.player.add_weapon(weapon):
             print_and_sleep(cyan(f"{weapon.name} added to sack."), 1)
@@ -674,7 +674,7 @@ class EquipWeapon(LabeledSelectionComponent):
                              key=str(i),
                              name=weapon.get_complete_format(None, None),
                              component=functional_component()(
-                                 partial(game_state.player.equip_weapon, weapon.name)))
+                                 partial(game_state.player.equip_weapon, weapon.base_name)))
                              for (i, weapon) in enumerate(game_state.player.get_weapons(), 1)],
                          top_level_prompt_callback=lambda gs: gs.player.display_equip_header(), quittable=True)
 
@@ -739,7 +739,7 @@ class SwapFoundWeaponMenu(LabeledSelectionComponent):
                     key=str(i),
                     name=weapon.get_complete_format(None, None),
                     component=functional_component()(
-                        partial(game_state.player.swap_found_weapon, weapon.name, found)
+                        partial(game_state.player.swap_found_weapon, weapon.base_name, found)
                     )
                 )
                 for i, weapon in enumerate(valid, 1)
@@ -784,11 +784,11 @@ class Attack(Component):
             if trait_name == COWARD and random.random() < 0.15:
                 player.can_flee = True
                 return
-            if (trait_name == ACHILLES and enemy.current_weapon.name != TENCH_CANNON
+            if (trait_name == ACHILLES and enemy.current_weapon.base_name != TENCH_CANNON
                     and enemy.hp < 25):
                 enemy.current_weapon = enemy.enemy_switch_weapon(TENCH_CANNON)
 
-        if random.random() < ENEMY_SWITCH_WEAPON_CHANCE and enemy.current_weapon.name != TENCH_CANNON:
+        if random.random() < ENEMY_SWITCH_WEAPON_CHANCE and enemy.current_weapon.base_name != TENCH_CANNON:
             enemy.current_weapon = enemy.enemy_switch_weapon(None)
 
 
