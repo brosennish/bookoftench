@@ -3,19 +3,19 @@ from __future__ import annotations
 import random
 from functools import partial
 
-from bookoftench.audio import play_music
+from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
-    functional_component, Component, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent
+    functional_component, Component, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent, NoOpComponent
 from bookoftench.component.officer import OfficerEncounter
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import SHOP_THEME
+from bookoftench.data.audio import SHOP_THEME, PURCHASE
 from bookoftench.data.components import SHOP
 from bookoftench.data.perks import CATFISH_BURGLAR
 from bookoftench.model import GameState
 from bookoftench.model.base import Buyable
 from bookoftench.model.perk import attach_perk
 from bookoftench.model.util import display_active_perk_count, display_shop_header
-from bookoftench.ui import blue
+from bookoftench.ui import blue, yellow
 from bookoftench.util import print_and_sleep
 
 _max_steal_chance = 75
@@ -44,16 +44,23 @@ class ShopComponent(LabeledSelectionComponent):
                          i, perk in
                          enumerate(game_state.shop.perk_inventory, len(item_bindings) + len(weapon_bindings))]
         sell_binding = SelectionBinding('S', "Sell", SellItem)
+        refresh_binding = SelectionBinding('U', f"{self._refresh_cost(game_state)}",
+                                           functional_component()(lambda: self._refresh()))
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
         super().__init__(game_state, refresh_menu=True,
-                         bindings=[*item_bindings, *weapon_bindings, *perk_bindings, sell_binding, return_binding])
+                         bindings=[*item_bindings, *weapon_bindings, *perk_bindings,
+                                   sell_binding, refresh_binding, return_binding])
         self.selection_components = [
             LabeledSelectionComponent(game_state, item_bindings, lambda gs: gs.player.display_item_count()),
             LabeledSelectionComponent(game_state, weapon_bindings, lambda gs: gs.player.display_weapon_count()),
             LabeledSelectionComponent(game_state, perk_bindings, lambda _: display_active_perk_count()),
-            LabeledSelectionComponent(game_state, [sell_binding, return_binding]),
+            LabeledSelectionComponent(game_state, [sell_binding, refresh_binding, return_binding]),
         ]
         self.exit_shop = False
+
+    def _refresh_cost(self, game_state) -> str:
+        cost = min(5 * game_state.player.lvl, 20)
+        return f"Refresh ({cost})"
 
     def play_theme(self) -> None:
         play_music(SHOP_THEME)
@@ -75,6 +82,17 @@ class ShopComponent(LabeledSelectionComponent):
         for component in self.selection_components:
             component.display_options()
 
+    def _refresh(self):
+        player = self.game_state.player
+        cost = min(5 * player.lvl, 20)
+
+        if player.coins >= cost:
+            play_sound(PURCHASE)
+            player.coins -= cost
+            self.game_state.current_area.shop.reset_inventory()
+        else:
+            print_and_sleep(yellow("Need more coin"), 2)
+
     @staticmethod
     def _make_buy_or_steal_component(buyable: Buyable):
         @functional_component(state_dependent=True)
@@ -88,7 +106,7 @@ class BuyOrStealDecision(LabeledSelectionComponent):
     def __init__(self, game_state: GameState, buyable: Buyable):
         success_chance = self.calculate_success_chance(buyable)
         super().__init__(game_state, bindings=[
-            SelectionBinding('B', f"Buy ({buyable.cost} of coin)", self._make_purchase_component(buyable)),
+            SelectionBinding('B', f"Buy ({buyable.cost})", self._make_purchase_component(buyable)),
             SelectionBinding('S', f"Steal ({success_chance}% chance)",
                              self._make_steal_component(buyable, success_chance))
         ], quittable=True)
@@ -156,3 +174,4 @@ class SellItem(LabeledSelectionComponent):
         super().__init__(game_state,
                          bindings=[*item_bindings, *weapon_bindings],
                          top_level_prompt_callback=lambda gs: print("\nYour Inventory (Sell Menu):"), quittable=True)
+
