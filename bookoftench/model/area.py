@@ -40,7 +40,7 @@ _event_defaults = {
     SHEBOKKEN_ROULETTE: 24,
     THREE_HOLES: 29,
     TRIPLE_TENCH_DARE: 8,
-    ZONKED: 14
+    ZONKED: 12
 }
 
 

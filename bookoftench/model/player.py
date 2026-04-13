@@ -348,9 +348,13 @@ class Player(Combatant):
         event_logger.log_event(ItemSoldEvent(sellable_weapon.name, sellable_weapon.sell_value))
 
     def equip_weapon(self, name: str) -> None:
+        print("CHECKING MATCH")
         if name != self.current_weapon.base_name:
+            print("NOT A MATCH")
             event_logger.log_event(SwapWeaponEvent())
+            print("LOG EVENT")
             self.current_weapon = self.weapon_dict[name]
+            print("CURRENT WEAPON UPDATED")
             print_and_sleep(cyan(f"{name} equipped."), 1)
 
     def swap_found_item(self, old_name: str, found_item: Item) -> None:
