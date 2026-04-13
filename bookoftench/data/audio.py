@@ -46,6 +46,7 @@ SHOTGUN = "shotgun.wav"
 SPRAY = "spray.wav"
 SQUEAK = "squeak.wav"
 WEAPON_BROKE = "weapon_broke.wav"
+WHIFF = "whiff.wav"
 
 # Misc Sounds
 AGONY = "agony.wav" # TODO

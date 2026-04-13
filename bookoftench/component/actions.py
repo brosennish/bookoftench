@@ -473,6 +473,8 @@ class Search(RandomChoiceComponent):
                      in d.areas and d.rarity == rarity]
 
         find = random.choice(available)
+        time = 2 if rarity in [COMMON, UNCOMMON] else 3
+
 
         # log event for stats
         if rarity == COMMON:
@@ -480,10 +482,13 @@ class Search(RandomChoiceComponent):
         elif rarity == UNCOMMON:
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_UNCOMMON))
         elif rarity == RARE:
+            play_sound(POSITIVE)
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_RARE))
         elif rarity == LEGENDARY:
+            play_sound(POSITIVE)
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_LEGENDARY))
         else:
+            play_sound(POSITIVE)
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_MYTHIC))
 
         # take damage if find.hp < 0
@@ -493,7 +498,7 @@ class Search(RandomChoiceComponent):
             print_and_sleep(
                 f"You{f' {find.pre} ' if find.pre else ' '}{yellow(find.name)} "
                 f"{color(f"({find.rarity})")} and lost {red(original_hp - player.hp)} hp.",
-                2)
+                time)
             if player.hp == 0:
                 player.lives -= 1
                 event_logger.log_event(PlayerDeathEvent(player.lives))
@@ -507,7 +512,7 @@ class Search(RandomChoiceComponent):
                 print_and_sleep(
                     f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
                     f"{color(f"({find.rarity})")} and restored {green(player.hp - original_hp)} hp.",
-                    2)
+                    time)
                 return
 
         # gain coin if value greater than 0
@@ -515,14 +520,14 @@ class Search(RandomChoiceComponent):
             print_and_sleep(
                 f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
                 f"{color(f'({find.rarity})')} worth {green(find.value)} of coin.",
-                2)
+                time)
             player.gain_coins(find.value)
             return
 
         # print found message if neutral
         print_and_sleep(
             f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
-            f"{color(f'({find.rarity})')}!", 2)
+            f"{color(f'({find.rarity})')}!", time)
         return
 
     @staticmethod
