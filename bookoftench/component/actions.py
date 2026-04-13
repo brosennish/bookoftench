@@ -473,7 +473,6 @@ class Search(RandomChoiceComponent):
                      in d.areas and d.rarity == rarity]
 
         find = random.choice(available)
-        rarity = find.rarity
 
         # log event for stats
         if rarity == COMMON:

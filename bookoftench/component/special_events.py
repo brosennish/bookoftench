@@ -75,12 +75,12 @@ class DiscoverSpecial(RandomChoiceComponent):
                     continue
 
             if request < woman_coins:  # You request less than the woman has to offer
-                play_sound(GOLF_CLAP)
+                play_sound(POSITIVE)
                 print_and_sleep(purple(f"You're not a greedy bastard. Good for you.\n"), 3)
                 player.gain_coins(request)
                 player.gain_xp_other(woman_coins - request)
             elif request == woman_coins:  # You request what the woman has to offer
-                play_sound(GOLF_CLAP)
+                play_sound(POSITIVE)
                 print_and_sleep(purple(f"Wow, that's exactly what I have to offer. Kudos.\n"), 3)
                 player.gain_coins(woman_coins)
             elif request > woman_coins:  # You request more than the woman has to offer
@@ -126,11 +126,11 @@ class DiscoverSpecial(RandomChoiceComponent):
                     player.lives -= 1
                     event_logger.log_event(PlayerDeathEvent(player.lives))
             elif offer == woman_desired:  # You offer what the woman wants
-                play_sound(GOLF_CLAP)
+                play_sound(POSITIVE)
                 print_and_sleep(purple(f"Wow, that's exactly what I was hoping for. Thanks a lot!\n"), 3)
                 player.coins -= offer
             elif offer > woman_desired:  # You offer more than what the woman wants
-                play_sound(GOLF_CLAP)
+                play_sound(POSITIVE)
                 print_and_sleep(purple(f"You're not a stingy bastard. Keep the coin. Good for you.\n"), 3)
                 player.gain_xp_other(offer - woman_desired)
             return None

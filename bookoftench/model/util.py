@@ -192,8 +192,8 @@ def display_game_stats(game_state: GameState) -> None:
 
     display_stat("Coins", player.coins, green)
     display_stat("Bank Balance", game_state.bank.balance, green)
-    display_stat("Deposited", event_logger.get_count(EventType.DEPOSIT), green)
-    display_stat("Withdrawn", event_logger.get_count(EventType.WITHDRAW), green)
+    display_stat("Deposits", event_logger.get_count(EventType.DEPOSIT), green)
+    display_stat("Withdrawals", event_logger.get_count(EventType.WITHDRAW), green)
     display_stat("Interest Earned", game_state.bank.interest, green)
 
     display_stat("Casino Won", player.casino_won, green)
