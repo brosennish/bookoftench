@@ -125,6 +125,7 @@ class Area:
 
         enemy.hp += random.randint(-2, 2)  # apply hp spread first
         enemy.hp += round((enemy.hp * 0.03) * max(player_level - 1, 0))  # then apply hp scaling
+        enemy.max_hp = enemy.hp
         enemy.strength = enemy.strength + random.uniform(-0.03, 0.03)
         enemy.acc = enemy.acc + random.uniform(-0.03, 0.03)
         enemy.coins = max(0, enemy.coins + random.randint(-5, 5))
