@@ -44,7 +44,8 @@ class BlacksmithComponent(LabeledSelectionComponent):
         if not valid:
             print_and_sleep(yellow("Sledge Jr. does not work on blind-type weapons."))
 
-        weapon_bindings = [ReprBinding(str(i + 1), weapon.name, self._make_purchase_component(weapon), weapon) for
+        weapon_bindings = [ReprBinding(str(i + 1), weapon.base_name,
+                                       self._make_purchase_component(weapon), weapon) for
                           i, weapon in enumerate(valid)]
 
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
@@ -118,13 +119,13 @@ class BlacksmithComponent(LabeledSelectionComponent):
 
 def forge_weapon(weapon: PlayerWeapon, game_state) -> None:
     player = game_state.player
-    name = weapon.name # log name
+    name = weapon.base_name # log name
     og_uses = weapon.uses # log uses
     del player.weapon_dict[name] # remove weapon
-    base = load_weapon(name) # recreate Weapon object
+    base = load_weapon(name) # recreate Weapon object w/ base name
     base.uses = og_uses # restore uses
     elite = make_elite_weapon(base) # convert to elite weapon
-    player.weapon_dict.update({elite.name: PlayerWeapon.from_weapon(elite)}) # add to weapon_dict
+    player.weapon_dict.update({elite.base_name: PlayerWeapon.from_weapon(elite)}) # add to weapon_dict
     player.current_weapon = next(i for i in player.weapon_dict.values() if i.name == elite.name) # set current
 
     print_and_sleep(cyan(f"{name} has been upgraded to Elite."), 1.5)

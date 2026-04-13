@@ -38,7 +38,7 @@ class ShopComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         item_bindings = [ReprBinding(str(i + 1), item.name, self._make_buy_or_steal_component(item), item) for
                          i, item in enumerate(game_state.shop.item_inventory)]
-        weapon_bindings = [ReprBinding(str(i + 1), weapon.name, self._make_buy_or_steal_component(weapon), weapon) for
+        weapon_bindings = [ReprBinding(str(i + 1), weapon.base_name, self._make_buy_or_steal_component(weapon), weapon) for
                            i, weapon in enumerate(game_state.shop.weapon_inventory, len(item_bindings))]
         perk_bindings = [ReprBinding(str(i + 1), perk.name, self._make_buy_or_steal_component(perk), perk) for
                          i, perk in
@@ -147,8 +147,9 @@ class SellItem(LabeledSelectionComponent):
                                      functional_component()(partial(game_state.player.sell_item, item.name)),
                                      item.to_sellable_item()) for
                          i, item in enumerate(game_state.player.items.values())]
-        weapon_bindings = [ReprBinding(str(i), weapon.name,
-                                       functional_component()(partial(game_state.player.sell_weapon, weapon.name)),
+        weapon_bindings = [ReprBinding(str(i), weapon.base_name,
+                                       functional_component()(partial(game_state.player.sell_weapon,
+                                                                      weapon.base_name)),
                                        weapon.to_sellable_weapon()) for
                            i, weapon in enumerate(
                 [w for w in game_state.player.weapon_dict.values() if w.sell_value > 0], len(item_bindings))]

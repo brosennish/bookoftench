@@ -4,7 +4,7 @@ from bookoftench import event_logger
 from bookoftench.audio import play_sound, play_music
 from bookoftench.component import RandomChoiceComponent, register_component, ProbabilityBinding, \
     get_registered_component, functional_component, SwapFoundItemYN, OfficerEncounter
-from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH, POSITIVE
+from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH, POSITIVE, GOLF_CLAP
 from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, \
     ZONKED, GREEDY_BASTARD
 from bookoftench.data.perks import BEER_GOGGLES
@@ -33,13 +33,13 @@ class DiscoverSpecial(RandomChoiceComponent):
 
         player = game_state.player
         print_and_sleep(purple("An old woman approaches you, waving her hands in the air...\n"), 3)
-        print_and_sleep(blue("Hey, you there! I have coin. Do you want some?\n\n"), 3)
+        print_and_sleep(blue("Hey! You there! I have coin. Do you want some?\n\n"), 3)
 
         while True:
             if player.coins >= 1:  # Can only offer coins if you have 1+
                 veg = carrot(green)
                 choice = input(
-                    f"[Y] Say yes\n[O] Offer coins"
+                    f"[Y] Say yes\n[O] Offer coin"
                     f"\n\nPlease enter a selection (r to return){veg}").strip().lower()
             else:  # Else only option is to request
                 veg = carrot(green)
@@ -67,7 +67,7 @@ class DiscoverSpecial(RandomChoiceComponent):
                         continue
                     else:
                         print_and_sleep(purple(f"You requested {int(request)} "
-                                               f"{'coin' if int(request) == 1 else 'coins'}...\n"), 3)
+                                               f"{'coin' if int(request) == 1 else 'of coin'}...\n"), 3)
                         request = int(request)
                         break
                 else:
@@ -75,10 +75,12 @@ class DiscoverSpecial(RandomChoiceComponent):
                     continue
 
             if request < woman_coins:  # You request less than the woman has to offer
+                play_sound(GOLF_CLAP)
                 print_and_sleep(purple(f"You're not a greedy bastard. Good for you.\n"), 3)
                 player.gain_coins(request)
                 player.gain_xp_other(woman_coins - request)
             elif request == woman_coins:  # You request what the woman has to offer
+                play_sound(GOLF_CLAP)
                 print_and_sleep(purple(f"Wow, that's exactly what I have to offer. Kudos.\n"), 3)
                 player.gain_coins(woman_coins)
             elif request > woman_coins:  # You request more than the woman has to offer
@@ -97,10 +99,10 @@ class DiscoverSpecial(RandomChoiceComponent):
             veg = carrot(green)
             while True:
                 offer = input(
-                    f"\n[#] Offer coins{veg}").strip().lower()
+                    f"\n[#] Offer coin{veg}").strip().lower()
                 if offer.isdigit():  # You can only offer up to what you have
                     if int(offer) > player.coins:
-                        print_and_sleep(yellow(f"You only have {player.coins} coins.\n"), 1)
+                        print_and_sleep(yellow(f"You only have {player.coins} of coin.\n"), 1)
                         continue
                     elif int(offer) > 50 or int(offer) < 1:  # You can only offer 1-50
                         print_and_sleep(yellow(f"Please enter a value between 1-50.\n"), 1)
@@ -124,9 +126,11 @@ class DiscoverSpecial(RandomChoiceComponent):
                     player.lives -= 1
                     event_logger.log_event(PlayerDeathEvent(player.lives))
             elif offer == woman_desired:  # You offer what the woman wants
+                play_sound(GOLF_CLAP)
                 print_and_sleep(purple(f"Wow, that's exactly what I was hoping for. Thanks a lot!\n"), 3)
                 player.coins -= offer
             elif offer > woman_desired:  # You offer more than what the woman wants
+                play_sound(GOLF_CLAP)
                 print_and_sleep(purple(f"You're not a stingy bastard. Keep the coin. Good for you.\n"), 3)
                 player.gain_xp_other(offer - woman_desired)
             return None
@@ -269,7 +273,8 @@ Choose wisely.\n\n"""), 3)
         if choice == "good":  # Find a random item from area and not in your items
             item = random.choice([i for i in load_items() if game_state.current_area.name in i.areas
                                   and i.name not in player.items])
-            print_and_sleep(cyan(f"You found {item.name}!"), 1)
+            play_sound(POSITIVE)
+            print_and_sleep(cyan(f"You found {'an' if item.name[0].lower() in 'aeiou' else 'a'} {item.name}!"), 1)
 
             if player.add_item(item):
                 print_and_sleep(cyan(f"{item.name} added to sack."), 1)
