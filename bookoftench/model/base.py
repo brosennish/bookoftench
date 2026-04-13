@@ -9,7 +9,8 @@ from typing import Dict, List, Self
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE, WHIFF
-from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT, PREPARED, JUNKIE, ORACLE, COWARD
+from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT, PREPARED, JUNKIE, ORACLE, COWARD, \
+    WEREWOLF
 from bookoftench.data.weapons import MELEE, RANGED, BLIND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
 from bookoftench.model.illness import Illness
@@ -189,8 +190,8 @@ class Combatant(ABC):
         # TODO generalize, get specific logic out of components
         if self.name == SLEDGE_HAMMOND:
             if self.hp > 0:
-                self.hp += 3
-                print_and_sleep(purple("Sledge Hammond took steroids and restored 3 HP!"), 1)
+                self.hp += 5
+                print_and_sleep(purple("Sledge Hammond took steroids and restored 5 HP!"), 1)
         return damage
 
     def reset_blindness(self) -> None:
@@ -336,3 +337,7 @@ class Combatant(ABC):
                 self.hp += min(amount, self.max_hp - self.hp)
                 print_and_sleep(green(f"{self.name} used an item and restored {self.hp - original} HP."), 1)
                 self.prepared_active = False
+        elif self.trait.name == WEREWOLF:
+            if random.random() < 0.20:
+                play_sound(WEREWOLF)
+

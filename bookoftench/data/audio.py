@@ -63,6 +63,7 @@ POSITIVE = "positive.wav"
 PURCHASE = "purchase.wav"
 RITUAL = "ritual.wav"
 WELCOME_TO_HELL = "welcome_to_hell.wav"
+WEREWOLF = "werewolf.wav"
 
 
 # TODO make sure this works regardless of cwd
