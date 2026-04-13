@@ -39,6 +39,7 @@ class Buyable:
 @dataclass
 class WeaponBase(ABC):
     name: str
+    name: str
     damage: int
     uses: int
     accuracy: float
@@ -46,8 +47,13 @@ class WeaponBase(ABC):
     crit: float
     sound: str
     type: str
+    base_name: str = None
     subtype: str = MELEE
     areas: list[str] | None = None
+
+    def __post_init__(self):
+        if self.base_name is None:
+            self.base_name = self.name
 
     def calculate_base_damage(self) -> int:
         base = self.damage + random.randint(-self.var, self.var)
@@ -241,7 +247,7 @@ class Combatant(ABC):
         blind_effect = self.current_weapon.get_blind_effect()
         if blind_effect > 0:
             blind_turns = self.current_weapon.get_blind_turns()
-            other.set_blind_effect(self.current_weapon.name, blind_effect, blind_turns)
+            other.set_blind_effect(self.current_weapon.base_name, blind_effect, blind_turns)
             if other.blind:  # skip if beer goggles prevents blindness
                 prefix = f"{other.name} has been" if isinstance(other, NPC) else "You have been"
                 print_and_sleep(

@@ -70,7 +70,7 @@ class SellableWeapon(Weapon):
 
     @property
     def sell_value(self) -> int:
-        max_uses = load_weapon(self.name).uses  # TODO optimize out object construction overhead
+        max_uses = load_weapon(self.base_name).uses  # TODO optimize out object construction overhead
         if max_uses == -1:
             return self._sell_value
 
@@ -85,7 +85,7 @@ class SellableWeapon(Weapon):
     def __repr__(self) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
-            f"Value: {orange(self.sell_value):<17}",
+            f"Value: {orange(self.sell_value):<18}",
             f"{dim("Dmg:")} {red(f"{self.damage:<3}")}",
             f"{dim("Acc:")} {yellow(f"{self.accuracy:<4}")}",
             f"{dim("Var:")} {f"{red(f"{self.var}")}"}",
@@ -148,5 +148,5 @@ def make_autographed_weapon(weapon: Weapon) -> Weapon:
 
     # sell value
     if weapon.sell_value > 0:
-        weapon.sell_value *= 4
+        weapon.sell_value *= random.randint(3, 6)
     return weapon

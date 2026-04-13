@@ -327,27 +327,27 @@ class Player(Combatant):
         return list(self.weapon_dict.values())
 
     def add_weapon(self, weapon: Weapon) -> bool:
-        if weapon.name in self.weapon_dict:
+        if weapon.base_name in self.weapon_dict:
             print_and_sleep(yellow(dim("You already have this weapon.")), 1)
             return False
         elif len(self.weapon_dict) >= self.max_weapons:
             print_and_sleep(yellow("Your weapon sack is full."), 1)
             return False
         else:
-            self.weapon_dict[weapon.name] = PlayerWeapon.from_weapon(weapon)
+            self.weapon_dict[weapon.base_name] = PlayerWeapon.from_weapon(weapon)
             return True
 
     def sell_weapon(self, name: str) -> None:
         sellable_weapon = self.weapon_dict[name].to_sellable_weapon()
         self.coins += sellable_weapon.sell_value
         del self.weapon_dict[name]
-        if name == self.current_weapon.name:
+        if name == self.current_weapon.base_name:
             selection = next((w for w in self.weapon_dict.values()))
             self.current_weapon = PlayerWeapon.from_weapon(selection)
         event_logger.log_event(ItemSoldEvent(sellable_weapon.name, sellable_weapon.sell_value))
 
     def equip_weapon(self, name: str) -> None:
-        if name != self.current_weapon.name:
+        if name != self.current_weapon.base_name:
             event_logger.log_event(SwapWeaponEvent())
             self.current_weapon = self.weapon_dict[name]
             print_and_sleep(cyan(f"{name} equipped."), 1)
@@ -363,17 +363,17 @@ class Player(Combatant):
 
     def swap_found_weapon(self, old_name: str, found_weapon: Weapon) -> None:
         del self.weapon_dict[old_name]
-        self.weapon_dict[found_weapon.name] = PlayerWeapon.from_weapon(found_weapon)
-        self.current_weapon = self.weapon_dict[found_weapon.name]
+        self.weapon_dict[found_weapon.base_name] = PlayerWeapon.from_weapon(found_weapon)
+        self.current_weapon = self.weapon_dict[found_weapon.base_name]
         print_and_sleep(cyan(f"{old_name} discarded. {found_weapon.name} equipped."), 1)
 
     def obtain_enemy_weapon(self, enemy_weapon: Weapon) -> None:
         match = next((w for w in self.weapon_dict.values()
-                      if w.name == enemy_weapon.name), None)
+                      if w.name == enemy_weapon.base_name), None)
         if match:
             if match.uses < enemy_weapon.uses:
-                self.weapon_dict[enemy_weapon.name] = PlayerWeapon.from_weapon(enemy_weapon)
-                self.current_weapon = self.weapon_dict[enemy_weapon.name]
+                self.weapon_dict[enemy_weapon.base_name] = PlayerWeapon.from_weapon(enemy_weapon)
+                self.current_weapon = self.weapon_dict[enemy_weapon.base_name]
                 print_and_sleep(cyan(f"{enemy_weapon.name} added to sack."), 1)
         else:
             if self.add_weapon(enemy_weapon):
@@ -488,7 +488,7 @@ class Player(Combatant):
 
     def handle_broken_weapon(self) -> None:
         event_logger.log_event(WeaponBrokeEvent())
-        del self.weapon_dict[self.current_weapon.name]
+        del self.weapon_dict[self.current_weapon.base_name]
         if self.weapon_dict: # if player has other weapons
             current = next(w for w in self.weapon_dict)
             self.current_weapon = self.weapon_dict[current]

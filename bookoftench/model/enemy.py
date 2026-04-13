@@ -59,7 +59,7 @@ class Enemy(Combatant, NPC):
         return enemy.coins
 
     def handle_broken_weapon(self) -> None:
-        del self.weapon_dict[self.current_weapon.name]
+        del self.weapon_dict[self.current_weapon.base_name]
         if len(self.weapon_dict) == 0:
             self.weapon_dict[BARE_HANDS] = load_weapon(BARE_HANDS)
         self.current_weapon = random.choice(list(self.weapon_dict.values()))
@@ -71,7 +71,7 @@ class Enemy(Combatant, NPC):
         if weapon:
             self.current_weapon = load_weapon(weapon)
         else:
-            options = [i for i in self.weapon_dict if i != current_weapon.name
+            options = [i for i in self.weapon_dict if i != current_weapon.base_name
                        and i != BARE_HANDS]
             if options:
                 selection = random.choice(options)
