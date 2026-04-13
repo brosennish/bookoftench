@@ -4,7 +4,7 @@ from functools import partial
 from typing import Callable
 
 from bookoftench.audio import play_music, play_sound
-from bookoftench.data.audio import GOLF_CLAP, CASINO_THEME
+from bookoftench.data.audio import GOLF_CLAP, CASINO_THEME, COINS
 from bookoftench.data.components import CASINO
 from bookoftench.data.perks import GRAMBLING_ADDICT, WrapperIndices
 from bookoftench.model.game_state import GameState
@@ -149,6 +149,7 @@ class KrillOrCray(CasinoGame):
         pick = self.get_pick(wager)
         if pick == winner:
             payout = int(self.get_payout(wager))
+            play_sound(COINS)
             player.coins += payout
             player.casino_won += payout
             print_and_sleep(green(f"Lucky guess, bozo! You won {payout} coins."), 0.5)

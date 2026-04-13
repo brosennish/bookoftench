@@ -6,7 +6,7 @@ from typing import Dict, List, Optional
 
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
-from bookoftench.data.audio import RIFLE
+from bookoftench.data.audio import RIFLE, COINS
 from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, STAT, HTH, ACCURACY_SEARUM, DMG, CRIT, HEALTH, nPnG, \
     ENEMY, BOOMERANG, FLACCID_ACID, PHOTOSYNTHOPHYL, MOON_RUNE
 from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
@@ -306,6 +306,7 @@ class Player(Combatant):
 
     def sell_item(self, name: str) -> None:
         item = self.items[name]
+        play_sound(COINS)
         self.coins += item.sell_value
         del self.items[name]
         event_logger.log_event(ItemSoldEvent(item.name, item.sell_value))
@@ -392,6 +393,7 @@ class Player(Combatant):
         return True
 
     def gain_coins(self, amount: int) -> None:
+        play_sound(COINS)
         self.coins += amount
         print_and_sleep(green(f"You gained {amount} of coin!"), 1)
 

@@ -50,6 +50,7 @@ WHIFF = "whiff.wav"
 
 # Misc Sounds
 AGONY = "agony.wav" # TODO
+COINS = "coins.wav"
 DEVIL_THUNDER = "devil_thunder.wav"
 DRINKING = "drinking.wav"
 ENEMY_APPEARS = "enemy_appears.wav"

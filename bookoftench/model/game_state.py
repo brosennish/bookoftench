@@ -5,7 +5,7 @@ from typing import List, Dict
 
 import bookoftench.service.crypto_service as crypto_service
 from bookoftench import event_logger
-from bookoftench.audio import play_music
+from bookoftench.audio import play_music, play_sound
 from bookoftench.data.perks import TENCH_THE_BOUNTY_HUNTER, NEPTUNE
 from bookoftench.event_base import EventType, Event
 from bookoftench.event_logger import subscribe_function
@@ -25,6 +25,7 @@ from .perk import attach_perk, Perk, set_perk_cache, load_perk, perk_is_active
 from .player import Player
 from .shop import Shop
 from .weapon import Weapon, load_weapons
+from ..data.audio import COINS
 from ..data.builds import Builds
 from ..data.illnesses import Illnesses
 from ..data.enviroment import DRY, DAYTIME, NIGHTTIME, WETTING, FULL, DRYING
@@ -176,6 +177,7 @@ class GameState:
         @subscribe_function(BountyCollectedEvent)
         def handle_bounty_collected_event(event: BountyCollectedEvent):
             print_and_sleep(green(f"You killed {event.enemy_name} and collected a bounty of {self.bounty} coins!"), 1)
+            play_sound(COINS)
             self.player.coins += self.bounty
             self.refresh_bounty()
 
