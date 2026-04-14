@@ -98,7 +98,7 @@ Traits = [
     {'name': EMPATH, 'desc': 'Heals when you use a normal item'},
     {'name': INVESTOR, 'desc': 'Coin value fluctuates during battle'},
     {'name': JUNKIE, 'desc': 'Gains strength when HP falls below 50%'},
-    {'name': NIGHT_OWL, 'desc': 'Becomes more formidable at night'},
+    {'name': NIGHT_OWL, 'desc': 'More formidable at night'},
     {'name': ORACLE, 'desc': 'Gains strength and accuracy when blinded'}, 
     {'name': PLANT, 'desc': 'Heals after every turn'},
     {'name': PREPARED, 'desc': 'Has a health item'}, 
