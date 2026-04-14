@@ -69,6 +69,7 @@ VOODOO_PRIESTESS = "Voodoo Priestess"
 # Traits
 ACHILLES = "Achilles"
 BUTTERFINGERS = "Butterfingers"
+CARP = "Carp"
 CHEATER = "Cheater"
 CONTAGIOUS = "Contagious"
 COWARD = "Coward"
@@ -90,6 +91,7 @@ FINAL_BOSS = "final_boss"
 Traits = [
     {'name': ACHILLES, 'desc': 'Equips a Tench Cannon when HP falls below 25'}, 
     {'name': BUTTERFINGERS, 'desc': 'Drops coins each turn'},
+    {'name': CARP, 'desc': 'Nothing special'},
     {'name': CHEATER, 'desc': 'May attack twice in one turn'},
     {'name': CONTAGIOUS, 'desc': 'Can get you sick'}, 
     {'name': COWARD, 'desc': 'May run away at any time'},
