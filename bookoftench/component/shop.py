@@ -44,7 +44,7 @@ class ShopComponent(LabeledSelectionComponent):
                          i, perk in
                          enumerate(game_state.shop.perk_inventory, len(item_bindings) + len(weapon_bindings))]
         sell_binding = SelectionBinding('S', "Sell", SellItem)
-        refresh_binding = SelectionBinding('U', f"{self._refresh_cost(game_state)}",
+        refresh_binding = SelectionBinding('U', f"{refresh_cost(game_state)}",
                                            functional_component()(lambda: self._refresh()))
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
         super().__init__(game_state, refresh_menu=True,
@@ -57,10 +57,6 @@ class ShopComponent(LabeledSelectionComponent):
             LabeledSelectionComponent(game_state, [sell_binding, refresh_binding, return_binding]),
         ]
         self.exit_shop = False
-
-    def _refresh_cost(self, game_state) -> str:
-        cost = min(5 * game_state.player.lvl, 20)
-        return f"Refresh ({cost})"
 
     def play_theme(self) -> None:
         play_music(SHOP_THEME)
@@ -84,7 +80,7 @@ class ShopComponent(LabeledSelectionComponent):
 
     def _refresh(self):
         player = self.game_state.player
-        cost = min(5 * player.lvl, 20)
+        cost = min(4 + (1 * player.lvl), 10)
 
         if player.coins >= cost:
             play_sound(PURCHASE)
@@ -100,6 +96,11 @@ class ShopComponent(LabeledSelectionComponent):
             BuyOrStealDecision(game_state, buyable).run()
 
         return buy_or_steal_component
+
+def refresh_cost(game_state) -> str:
+    player = game_state.player
+    cost = min(4 + (1 * player.lvl), 10)
+    return f"Refresh ({cost})"
 
 
 class BuyOrStealDecision(LabeledSelectionComponent):
