@@ -17,6 +17,7 @@ class Item(Buyable):
     sell_value: int
     areas: List[str]
     desc: str | None
+    sound: str
 
     def get_simple_format(self, length: int) -> str:
         return dim(' | ').join([

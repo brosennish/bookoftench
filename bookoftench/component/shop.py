@@ -83,7 +83,7 @@ class ShopComponent(LabeledSelectionComponent):
         cost = min(4 + (1 * player.lvl), 10)
 
         if player.coins >= cost:
-            play_sound(PURCHASE)
+            # TODO - play new sound
             player.coins -= cost
             self.game_state.current_area.shop.reset_inventory()
         else:
