@@ -6,7 +6,7 @@ from typing import Dict, List, Optional
 
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
-from bookoftench.data.audio import RIFLE, COINS
+from bookoftench.data.audio import RIFLE, COINS, POSITIVE, XP
 from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, STAT, HTH, ACCURACY_SEARUM, DMG, CRIT, HEALTH, nPnG, \
     ENEMY, BOOMERANG, FLACCID_ACID, PHOTOSYNTHOPHYL, MOON_RUNE
 from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
@@ -198,8 +198,10 @@ class Player(Combatant):
 
     def use_item(self, name: str, enemy: Enemy | None, time: str, moon: str, game_state) -> None:
         item = self.items[name]
+        sfx = item.sound
 
         if item.type == NORMAL:
+            play_sound(sfx)
             gain = int(min(self.max_hp - self.hp, self._apply_hp_bonus(item.hp)))
             self.gain_hp(gain)
             if enemy and enemy.trait and enemy.trait.name == EMPATH:
@@ -216,6 +218,9 @@ class Player(Combatant):
 
 
     def handle_special_item(self, item, enemy, time, moon, game_state) -> int:
+        sfx = item.sound
+        play_sound(sfx)
+
         if item.type == FLEE:
             self.can_flee = True
 
@@ -258,7 +263,8 @@ class Player(Combatant):
                 damage = random.randint(5, 25)
                 self.hp -= min(self.hp, damage)
                 enemy.hp -= min(enemy.hp, damage)
-                print_and_sleep(purple(f"Boomerang did {damage} damage and you lost {damage} HP!"))
+                print_and_sleep(purple("..."), 2)
+                print_and_sleep(purple(f"Boomerang did {damage} damage and you lost {damage} HP!"), 1)
             elif item.name == FLACCID_ACID:
                 original = round(enemy.strength, 2)
                 decrement = round(enemy.strength * 0.25, 2)
@@ -347,14 +353,10 @@ class Player(Combatant):
             self.current_weapon = PlayerWeapon.from_weapon(selection)
         event_logger.log_event(ItemSoldEvent(sellable_weapon.name, sellable_weapon.sell_value))
 
-    def equip_weapon(self, name: str) -> None:
-        print("CHECKING MATCH")
-        if name != self.current_weapon.base_name:
-            print("NOT A MATCH")
+    def equip_weapon(self, name: str, base_name: str) -> None:
+        if base_name != self.current_weapon.base_name:
             event_logger.log_event(SwapWeaponEvent())
-            print("LOG EVENT")
             self.current_weapon = self.weapon_dict[name]
-            print("CURRENT WEAPON UPDATED")
             print_and_sleep(cyan(f"{name} equipped."), 1)
 
     def swap_found_item(self, old_name: str, found_item: Item) -> None:
@@ -428,6 +430,7 @@ class Player(Combatant):
         self._gain_xp(amount)
 
     def _gain_xp(self, amount: int) -> None:
+        play_sound(XP)
         self.xp += amount
         print_and_sleep(cyan(f"You gained {amount} XP!"), 1)
 

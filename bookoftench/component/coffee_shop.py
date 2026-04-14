@@ -5,7 +5,7 @@ from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
     functional_component, GatekeepingComponent, Component
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import PURCHASE, DRINKING, COFFEE_THEME
+from bookoftench.data.audio import PURCHASE, DRINK, COFFEE_THEME
 from bookoftench.data.components import COFFEE_SHOP
 from bookoftench.data.enviroment import DAYTIME
 from bookoftench.model import GameState
@@ -25,7 +25,7 @@ class CoffeeOpen(GatekeepingComponent):
         super().__init__(game_state, decision_function=lambda: game_state.coffee_is_open,
                          accept_component=CoffeeSleeping,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("Coughy is dead.\n"), 1.5)))
+                             red("Coughy is dead.\n"), 1.5)))
 
 
 class CoffeeSleeping(GatekeepingComponent):
@@ -33,7 +33,7 @@ class CoffeeSleeping(GatekeepingComponent):
         super().__init__(game_state, decision_function=lambda: game_state.time_of_day == DAYTIME,
                          accept_component=CoffeeBouncer,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             blue(f"Coughy is trying to sleep off whatever it is that he has.\n"), 1.5)))
+                             blue(f"Coughy is trying to rest and recover.\n"), 1.5)))
 
 
 class CoffeeBouncer(GatekeepingComponent):
@@ -103,7 +103,7 @@ class CoffeeShopComponent(LabeledSelectionComponent):
             else:
                 play_sound(PURCHASE)
                 player.coins -= coffee_item.cost
-                play_sound(DRINKING)
+                play_sound(DRINK)
                 apply_coffee_effect(coffee_item, player)
 
         return purchase_component

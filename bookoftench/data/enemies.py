@@ -222,7 +222,7 @@ Enemies = [
     {'name': MOONSHINER, 'trait': '', 'illness': None, 'hp': 85, 'weapons': [w.SWITCHBLADE, w.SHOTGUN, w.NAIL_GUN],
      'bounty': 175, 'coins': 70, 'type': NORMAL, 'flee': 0.85, 'strength': 0.95, 'acc': 1.04, 'areas': [SWAMP]},
     {'name': SMUGGLER, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.KNIFE, w.INJECTION_NEEDLE, w.POCKET_SAND, w.PISTOL],
-     'bounty': 205, 'coins': 100, 'type': NORMAL, 'flee': 0.55, 'strength': 1, 'acc': 1.5, 'areas': [SWAMP]},
+     'bounty': 205, 'coins': 100, 'type': NORMAL, 'flee': 0.55, 'strength': 1, 'acc': 1.05, 'areas': [SWAMP]},
     {'name': TRACKER, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.FLASHLIGHT, w.KNIFE, w.RIFLE],
      'bounty': 165, 'coins': 30, 'type': NORMAL, 'flee': 0.70, 'strength': 1.05, 'acc': 1.06, 'areas': [SWAMP]},
 
@@ -468,6 +468,15 @@ Enemy_Lines = {
     ],
 
     # ===== FOREST =====
+    BIGFOOT_IMPERSONATOR: [
+        "What's a bigfoot?",
+        "Who's bigfoot?",
+        "I'm the real bigfoot impersonating a human impersonating myself.",
+        "I go ape on the saxophone.",
+        "Do you have any ice packs?",
+        "Why does the park ranger keep shooting arrows at me?",
+    ],
+
     BIRDER: [
         "I just saw the rarest bird in the world. Where is it, you ask? Oh, it flew away.",
         "I can communicate with birds. They tell me I can fly - that my wings are inside of my arms.",

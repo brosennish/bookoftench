@@ -128,7 +128,7 @@ class Area:
         enemy.max_hp = enemy.hp
         enemy.strength = enemy.strength + random.uniform(-0.03, 0.03)
         enemy.acc = enemy.acc + random.uniform(-0.03, 0.03)
-        enemy.coins = max(0, enemy.coins + random.randint(-5, 5))
+        enemy.coins = max(0, enemy.coins + random.randint(-10, 20))
         if random.random() < 0.20:
             enemy.coins += round(enemy.coins * random.uniform(0.05, 0.25))
         enemy_lines = enemy.get_enemy_encounter_line()  # get the line before mutating enemy.name
@@ -146,7 +146,7 @@ class Area:
             enemy.name = "Werewolf"
             enemy.hp += random.randint(10, 25)
             enemy.strength = 1.50
-            enemy.acc = 0
+            enemy.acc = 1.25
             enemy.coins = 0
 
         if random.random() < elite_chance:
@@ -168,7 +168,7 @@ class Area:
 
         self.current_enemy = enemy
 
-        if self.current_enemy.trait.name == WEREWOLF:
+        if WEREWOLF in self.current_enemy.name:
             self.current_enemy.current_weapon = load_weapon(CLAWS)
         if self.current_enemy.current_weapon.type not in [BLIND, SPECIAL] and random.random() < 0.15:
             base = self.current_enemy.current_weapon

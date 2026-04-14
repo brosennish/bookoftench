@@ -8,7 +8,7 @@ from bookoftench.component.base import LabeledSelectionComponent, ReprBinding, S
     functional_component, Component, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent, NoOpComponent
 from bookoftench.component.officer import OfficerEncounter
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import SHOP_THEME, PURCHASE
+from bookoftench.data.audio import SHOP_THEME, PURCHASE, XP
 from bookoftench.data.components import SHOP
 from bookoftench.data.perks import CATFISH_BURGLAR
 from bookoftench.model import GameState

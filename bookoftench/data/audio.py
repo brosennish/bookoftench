@@ -16,7 +16,7 @@ FOREST_THEME = "forest_theme.mp3"
 HOSPITAL_THEME = "hospital_theme.mp3"
 INTRO_THEME = "intro_theme.mp3"
 LAB_THEME = "lab_theme.mp3"
-MENSCH_THEME = "mensch_theme.mp3"
+MENSCH_THEME = "mensch_theme.wav"
 OCCULTIST_THEME = "occultist_theme.mp3"
 OFFICER_THEME = "officer_theme.mp3"
 ROULETTE_THEME = "roulette_theme.mp3"
@@ -45,22 +45,24 @@ WEAPON_BROKE = "weapon_broke.wav"
 WHIFF = "whiff.wav"
 
 # Misc Sounds
+ACHIEVEMENT = "achievement.mp3"
 COINS = "coins.wav"
 DEVIL_THUNDER = "devil_thunder.wav"
-DRINKING = "drinking.wav"
+DRINK = "drink.mp3"
+EAT = "eat.mp3"
 ENEMY_APPEARS = "enemy_appears.wav"
 GATOR = "gator.wav"
 GOLF_CLAP = "golf_clap.wav"
 GREAT_JOB = "great_job.wav"
-HEALING = "healing.wav" # TODO
 HOHKKEN = "hohkken.wav"
 KIDS_CHEER = "kids_cheer.wav"
-NEGATIVE = "negative.wav" # TODO
 POSITIVE = "positive.wav"
 PURCHASE = "purchase.wav"
 RITUAL = "ritual.wav"
+TELEPORT = "teleport.mp3"
 WELCOME_TO_HELL = "welcome_to_hell.wav"
 WEREWOLF = "werewolf.wav"
+XP = "xp.mp3"
 
 
 # TODO make sure this works regardless of cwd

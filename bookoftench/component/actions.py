@@ -473,7 +473,12 @@ class Search(RandomChoiceComponent):
                      in d.areas and d.rarity == rarity]
 
         find = random.choice(available)
-        time = 2 if rarity in [COMMON, UNCOMMON] else 3
+        if rarity == COMMON:
+            time = 1
+        elif rarity == UNCOMMON:
+            time = 1.5
+        else:
+            time = 2
 
 
         # log event for stats
@@ -678,7 +683,8 @@ class EquipWeapon(LabeledSelectionComponent):
                              key=str(i),
                              name=weapon.get_complete_format(None, None),
                              component=functional_component()(
-                                 partial(game_state.player.equip_weapon, weapon.base_name)))
+                                 partial(game_state.player.equip_weapon,
+                                         weapon.name, weapon.base_name)))
                              for (i, weapon) in enumerate(game_state.player.get_weapons(), 1)],
                          top_level_prompt_callback=lambda gs: gs.player.display_equip_header(), quittable=True)
 

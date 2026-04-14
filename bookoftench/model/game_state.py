@@ -10,7 +10,7 @@ from bookoftench.data.perks import TENCH_THE_BOUNTY_HUNTER, NEPTUNE
 from bookoftench.event_base import EventType, Event
 from bookoftench.event_logger import subscribe_function
 from bookoftench.settings import Settings, set_settings
-from bookoftench.ui import green, blue
+from bookoftench.ui import green, blue, red
 from bookoftench.util import print_and_sleep
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
@@ -207,7 +207,7 @@ class GameState:
         if self.coffee_is_open:
             if random.random() < 0.10:
                 self.coffee_is_open = False
-                print_and_sleep(blue(f"Coughy has died."))
+                print_and_sleep(red(f"Coughy has died."))
         elif not self.coffee_is_open:
             if random.random() < 0.50:
                 self.coffee_is_open = True

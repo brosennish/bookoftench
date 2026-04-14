@@ -33,7 +33,7 @@ class DiscoverSpecial(RandomChoiceComponent):
 
         player = game_state.player
         print_and_sleep(purple("An old woman approaches you, waving her hands in the air...\n"), 3)
-        print_and_sleep(blue("Hey! You there! I have coin. Do you want some?\n\n"), 3)
+        print_and_sleep(blue("Hey there! I have coin. Want some?\n\n"), 3)
 
         while True:
             if player.coins >= 1:  # Can only offer coins if you have 1+
@@ -76,19 +76,19 @@ class DiscoverSpecial(RandomChoiceComponent):
 
             if request < woman_coins:  # You request less than the woman has to offer
                 play_sound(POSITIVE)
-                print_and_sleep(purple(f"You're not a greedy bastard. Good for you.\n"), 3)
+                print_and_sleep(purple(f"You're not a greedy bastard. Good for you.\n"), 2)
                 player.gain_coins(request)
                 player.gain_xp_other(woman_coins - request)
             elif request == woman_coins:  # You request what the woman has to offer
                 play_sound(POSITIVE)
-                print_and_sleep(purple(f"Wow, that's exactly what I have to offer. Kudos.\n"), 3)
+                print_and_sleep(purple(f"Wow, that's exactly what I have to offer. Kudos.\n"), 2)
                 player.gain_coins(woman_coins)
             elif request > woman_coins:  # You request more than the woman has to offer
                 damage = min(request - woman_coins, player.hp)
                 player.hp -= damage
                 play_sound(PUNCH)
-                print_and_sleep(red(f"The woman slapped you for {damage} damage!"), 2)
-                print_and_sleep(purple(f"That's for being a greedy bastard!\n"), 3)
+                print_and_sleep(red(f"The woman slapped you for {damage} damage!"), 1)
+                print_and_sleep(purple(f"That's for being a greedy bastard!\n"), 2)
                 if player.hp == 0:
                     player.lives -= 1
                     event_logger.log_event(PlayerDeathEvent(player.lives))
@@ -120,18 +120,18 @@ class DiscoverSpecial(RandomChoiceComponent):
                 damage = min(woman_desired - offer, player.hp)
                 player.hp -= damage
                 play_sound(PUNCH)
-                print_and_sleep(red(f"The woman slapped you for {damage} damage!"), 2)
-                print_and_sleep(purple(f"That's for being a stingy bastard!\n"), 3)
+                print_and_sleep(red(f"The woman slapped you for {damage} damage!"), 1)
+                print_and_sleep(purple(f"That's for being a stingy bastard!\n"), 2)
                 if player.hp == 0:
                     player.lives -= 1
                     event_logger.log_event(PlayerDeathEvent(player.lives))
             elif offer == woman_desired:  # You offer what the woman wants
                 play_sound(POSITIVE)
-                print_and_sleep(purple(f"Wow, that's exactly what I was hoping for. Thanks a lot!\n"), 3)
+                print_and_sleep(purple(f"Wow, that's exactly what I was hoping for. Thanks a lot!\n"), 2)
                 player.coins -= offer
             elif offer > woman_desired:  # You offer more than what the woman wants
                 play_sound(POSITIVE)
-                print_and_sleep(purple(f"You're not a stingy bastard. Keep the coin. Good for you.\n"), 3)
+                print_and_sleep(purple(f"You're not a stingy bastard. Keep the coin. Good for you.\n"), 2)
                 player.gain_xp_other(offer - woman_desired)
             return None
         return None
