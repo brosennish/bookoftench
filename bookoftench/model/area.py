@@ -28,11 +28,11 @@ from ..data.audio import ENEMY_APPEARS
 
 _search_defaults = {
     DISCOVER_PERK: 1,
-    DISCOVER_ITEM: 1,
-    DISCOVER_WEAPON: 1,
+    DISCOVER_ITEM: 3,
+    DISCOVER_WEAPON: 2,
     DISCOVER_DISCOVERABLE: 45,
     DISCOVER_SPECIAL: 8,
-    SPAWN_ENEMY: 33
+    SPAWN_ENEMY: 30
 }
 
 _event_defaults = {
