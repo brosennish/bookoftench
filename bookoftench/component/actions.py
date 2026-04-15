@@ -647,8 +647,6 @@ class ItemSelectionComponent(LabeledSelectionComponent):
                         lambda item=item: self._use_item_and_check(
                             item,
                             enemy if enemy else None,
-                            time,
-                            moon,
                         )
                     )
                 )
@@ -658,13 +656,11 @@ class ItemSelectionComponent(LabeledSelectionComponent):
             quittable=True
         )
 
-    def _use_item_and_check(self, item, enemy: Enemy | None, time, moon):
+    def _use_item_and_check(self, item, enemy: Enemy | None):
         # Apply item
         self.game_state.player.use_item(
             item.name,
             enemy,
-            time,
-            moon,
             self.game_state,
         )
 
@@ -718,7 +714,7 @@ class SwapFoundItemMenu(LabeledSelectionComponent):
                     name=item.get_simple_format(length),
                     component=functional_component()(
                         partial(game_state.player.swap_found_item,
-                                item.name, found, time, game_state, moon)
+                                item.name, found, game_state)
                     )
                 )
                 for i, item in enumerate(valid, 1)

@@ -196,9 +196,11 @@ class Player(Combatant):
     def _apply_hp_bonus(base: int) -> int:
         return base
 
-    def use_item(self, name: str, enemy: Enemy | None, time: str, moon: str, game_state) -> None:
+    def use_item(self, name: str, enemy: Enemy | None, game_state) -> None:
         item = self.items[name]
         sfx = item.sound
+        time = game_state.time_of_day
+        moon = game_state.moon
 
         if item.type == NORMAL:
             play_sound(sfx)
@@ -360,9 +362,9 @@ class Player(Combatant):
             play_sound(EQUIP_WEAPON)
             print_and_sleep(cyan(f"{name} equipped."), 1)
 
-    def swap_found_item(self, old_name: str, found_item: Item, time, game_state, moon) -> None:
+    def swap_found_item(self, old_name: str, found_item: Item, game_state) -> None:
         if self.hp < self.max_hp:
-            self.use_item(old_name, None, time, game_state, moon)
+            self.use_item(old_name, None, game_state)
             print_and_sleep(cyan(f"{found_item.name} added to sack."), 1)
         else:
             del self.items[old_name]
