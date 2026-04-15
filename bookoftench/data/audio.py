@@ -59,6 +59,7 @@ KIDS_CHEER = "kids_cheer.wav"
 POSITIVE = "positive.wav"
 PURCHASE = "purchase.wav"
 RITUAL = "ritual.wav"
+ROLL_DIE = "roll_die.mp3" # TODO - add to code
 TELEPORT = "teleport.mp3"
 WELCOME_TO_HELL = "welcome_to_hell.wav"
 WEREWOLF = "werewolf.wav"
