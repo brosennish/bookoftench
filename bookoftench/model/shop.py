@@ -100,11 +100,12 @@ class Shop:
     B = TypeVar("B", bound=Buyable)
 
     def apply_discounts(self, buyables: List[B]) -> List[B]:
+        # Inflation disabled for now
         count = event_logger.get_count(EventType.LEVEL_UP)
         for buyable in buyables:
             # noinspection PyTypeChecker
             original_cost = buyable.cost
-            multiplier = 1 + min(0.5, 0.01 * count)
+            multiplier = 1 + min(0, 0 * count)
             buyable.cost = round(self._discounted_cost(original_cost) * multiplier)
         return buyables
 

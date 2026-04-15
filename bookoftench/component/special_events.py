@@ -4,7 +4,7 @@ from bookoftench import event_logger
 from bookoftench.audio import play_sound, play_music
 from bookoftench.component import RandomChoiceComponent, register_component, ProbabilityBinding, \
     get_registered_component, functional_component, SwapFoundItemYN, OfficerEncounter
-from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH, POSITIVE, GOLF_CLAP
+from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH, POSITIVE, GOLF_CLAP, MONSTER_ATTACK
 from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, \
     ZONKED, GREEDY_BASTARD
 from bookoftench.data.perks import BEER_GOGGLES
@@ -32,8 +32,8 @@ class DiscoverSpecial(RandomChoiceComponent):
         # Varying rewards and penalties for how generous, greedy or stingy you are
 
         player = game_state.player
-        print_and_sleep(purple("An old woman approaches you, waving her hands in the air...\n"), 3)
-        print_and_sleep(blue("Hey there! I have coin. Want some?\n\n"), 3)
+        print_and_sleep(purple("An old woman approaches you, waving her hands in the air...\n"), 2)
+        print_and_sleep(blue("Hey, you there! I have coin. Want some?\n\n"), 2)
 
         while True:
             if player.coins >= 1:  # Can only offer coins if you have 1+
@@ -286,6 +286,7 @@ Choose wisely.\n\n"""), 3)
             original = player.hp
             damage = min(random.randint(1, min(player.lvl * 10, 50)), original)
             player.hp -= damage
+            play_sound(MONSTER_ATTACK)
             print_and_sleep(red(f"You were ravaged by an unseen creature and lost {damage} hp."), 2)
             if player.hp == 0:
                 player.lives -= 1
