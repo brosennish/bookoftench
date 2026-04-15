@@ -6,7 +6,7 @@ from typing import Dict, List, Optional
 
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
-from bookoftench.data.audio import RIFLE, COINS, POSITIVE, XP
+from bookoftench.data.audio import RIFLE, COINS, POSITIVE, XP, EQUIP_WEAPON
 from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, STAT, HTH, ACCURACY_SEARUM, DMG, CRIT, HEALTH, nPnG, \
     ENEMY, BOOMERANG, FLACCID_ACID, PHOTOSYNTHOPHYL, MOON_RUNE
 from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
@@ -357,11 +357,12 @@ class Player(Combatant):
         if base_name != self.current_weapon.base_name:
             event_logger.log_event(SwapWeaponEvent())
             self.current_weapon = self.weapon_dict[name]
+            play_sound(EQUIP_WEAPON)
             print_and_sleep(cyan(f"{name} equipped."), 1)
 
-    def swap_found_item(self, old_name: str, found_item: Item) -> None:
+    def swap_found_item(self, old_name: str, found_item: Item, time, game_state, moon) -> None:
         if self.hp < self.max_hp:
-            self.use_item(old_name, None)
+            self.use_item(old_name, None, time, game_state, moon)
             print_and_sleep(cyan(f"{found_item.name} added to sack."), 1)
         else:
             del self.items[old_name]

@@ -701,6 +701,9 @@ class SwapFoundItemYN(BinarySelectionComponent):
 class SwapFoundItemMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         found = game_state.found_item
+        time = game_state.time_of_day
+        moon = game_state.moon
+
         valid = list(i for i in game_state.player.items.values())
         length = 0
         for i in game_state.player.items.keys():
@@ -714,7 +717,8 @@ class SwapFoundItemMenu(LabeledSelectionComponent):
                     key=str(i),
                     name=item.get_simple_format(length),
                     component=functional_component()(
-                        partial(game_state.player.swap_found_item, item.name, found)
+                        partial(game_state.player.swap_found_item,
+                                item.name, found, time, game_state, moon)
                     )
                 )
                 for i, item in enumerate(valid, 1)
