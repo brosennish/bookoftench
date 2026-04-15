@@ -5,6 +5,7 @@ from bookoftench.ui import blue, cyan, green, yellow, red, dim
 from bookoftench.util import print_and_sleep
 from .base import LabeledSelectionComponent, SelectionBinding, \
     GatekeepingComponent, functional_component, TextDisplayingComponent
+from .game import ContinueGame, DeathHandler
 from .registry import register_component
 from .. import event_logger
 from ..audio import play_music
@@ -12,7 +13,6 @@ from ..data.audio import LAB_THEME
 from ..data.components import LAB
 from ..data.enviroment import NIGHTTIME
 from ..model.events import PlayerDeathEvent
-from ..model.player import Player
 
 
 @register_component(LAB)
@@ -21,21 +21,21 @@ class LabBounder(GatekeepingComponent):
         super().__init__(game_state, decision_function=lambda: game_state.time_of_day == NIGHTTIME,
                          accept_component=LabComponent,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("The laboratory is closed during the day to be less conspicuous.\n"), 1.5)))
+                             blue("The laboratory is closed during the day.\n"), 1.5)))
 
 # --- Casino menu ---
 
 class LabComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, bindings=[
-            SelectionBinding('Y', "Yes", functional_component()(lambda: conduct_experiment(game_state.player))),
+            SelectionBinding('E', "Experiment", functional_component()(lambda: conduct_experiment(self.game_state))),
             SelectionBinding('R', "Risks?", ExperimentRisks),
             SelectionBinding('N', "No thanks", functional_component()(lambda: self._return())),
         ])
         self.leave = False
         print_and_sleep(blue("""Welcome! My name is Dr. Smarsh. 
-I am currently conducting experiments on human beings.
-Would you like to participate? I pay one of coin per experiment.\n"""))
+I conduct experiments on human beings.
+Interested? I pay one of coin per trial.\n"""))
 
     def play_theme(self) -> None:
         play_music(LAB_THEME)
@@ -61,7 +61,8 @@ Level    : 8%
 Lives    : 6%\n""")))
 
 
-def conduct_experiment(player: Player):
+def conduct_experiment(game_state):
+    player = game_state.player
     player.coins += 1
     mutation = False
 
@@ -122,6 +123,10 @@ def conduct_experiment(player: Player):
         if player.lvl == player.illness_death_lvl:
             player.lives -= 1
             event_logger.log_event(PlayerDeathEvent(player.lives))
+            if player.lives > 0:
+                ContinueGame.run(game_state)
+            else:
+                DeathHandler.run(game_state)
 
     if random.random() < 0.06: # LIVES
         original = player.lives
@@ -133,14 +138,13 @@ def conduct_experiment(player: Player):
                 amount = 0
         player.lives += amount
         if player.lives >= 1:
-            if amount > 0:
+            if amount != 0:
                 print_and_sleep(cyan(f"Lives: {original} -> {player.lives}"), 1)
-                mutation = True
-            elif amount < 0:
-                print_and_sleep(red(f"Lives: {original} -> {player.lives}"), 1)
                 mutation = True
         if player.lives <= 0:
             event_logger.log_event(PlayerDeathEvent(player.lives))
+            DeathHandler.run(game_state)
+
 
     if not mutation and player.lives > 0:
         print_and_sleep(dim("No mutations occurred."), 1)

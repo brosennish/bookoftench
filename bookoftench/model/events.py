@@ -1,5 +1,5 @@
 from bookoftench.audio import play_sound, stop_music
-from bookoftench.data.audio import PURCHASE, GREAT_JOB, HOHKKEN, POSITIVE
+from bookoftench.data.audio import PURCHASE, GREAT_JOB, HOHKKEN, POSITIVE, COINS
 from bookoftench.event_base import Event, EventType
 from bookoftench.model.illness import Illness
 from bookoftench.ui import green, cyan, red, yellow, dim, blue
@@ -62,7 +62,7 @@ class StealEventBase(Event):
 
     @staticmethod
     def _callback(name, amount):
-        # TODO - sound effect
+        play_sound(POSITIVE)
         print_and_sleep(green(f"You successfully stole {name}."), 1)
         print_and_sleep(yellow(f"Saved yourself {amount} of coin there."), 1)
         print_and_sleep(red(f"But you are now destined for Hell."), 2)
@@ -155,7 +155,8 @@ class LevelUpEvent(Event):
         play_sound(POSITIVE)
         play_sound(GREAT_JOB)
         print_and_sleep(cyan(f"You have reached level {level}!\n"), 2)
-        print(green(f"MAX HP: {old_max_hp} -> {new_max_hp}"))
+        print(green(f"MAX HP: {old_max_hp} -> {new_max_hp}"), 1)
+        play_sound(COINS)
         print_and_sleep(green(f"You were awarded {cash_reward} of coin."), 2)
 
 

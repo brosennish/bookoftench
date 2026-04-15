@@ -40,7 +40,6 @@ class Buyable:
 @dataclass
 class WeaponBase(ABC):
     name: str
-    name: str
     damage: int
     uses: int
     accuracy: float
@@ -51,6 +50,7 @@ class WeaponBase(ABC):
     base_name: str = None
     subtype: str = MELEE
     areas: list[str] | None = None
+    is_elite: bool = False
 
     def __post_init__(self):
         if self.base_name is None:
@@ -301,12 +301,13 @@ class Combatant(ABC):
                 self.handle_traits(other)
 
     def handle_traits(self, other: "Combatant") -> None:
+        time = 1.5
         if self.trait.name == BUTTERFINGERS:
             dropped = min(self.coins, random.randint(1, 10))
             self.coins -= dropped
             word = 'coin' if dropped == 1 else 'coins'
             if dropped > 0:
-                print_and_sleep(yellow(f"{self.name} dropped {dropped} {word}."), 1)
+                print_and_sleep(yellow(f"{self.name} dropped {dropped} {word}."), time)
         elif self.trait.name == INVESTOR:
             change = random.randint(-10, 10)
             if change != 0:
@@ -317,30 +318,24 @@ class Combatant(ABC):
             if self.hp < 50 and self.junkie_active:
                 amount = round(random.uniform(0.1, 0.25), 2)
                 self.strength += amount
-                print_and_sleep(green(f"{self.name} got yoked and increased strength by {amount}."), 1)
+                print_and_sleep(green(f"{self.name} got yoked and increased strength by {amount}."), time)
                 self.junkie_active = False
         elif other.current_weapon.type == BLIND and self.trait.name == ORACLE and self.oracle_active:
             self.strength += round(random.uniform(0.03, 0.12), 2)
             self.acc += round(random.uniform(0.03, 0.12), 2)
-            print_and_sleep(green(f"{self.name}'s strength and accuracy increased."), 1)
+            print_and_sleep(green(f"{self.name}'s strength and accuracy increased."), time)
             other.oracle_active = False
         elif self.trait.name == PLANT:
             amount = random.randint(1, 10)
             if (self.max_hp - self.hp) < amount:
                 amount = self.max_hp - self.hp
             self.hp += amount
-            print_and_sleep(green(f"{self.name} regenerated {amount} HP."), 1)
+            print_and_sleep(green(f"{self.name} regenerated {amount} HP."), time)
         elif self.trait.name == PREPARED:
-            if self.hp < (self.max_hp * 0.5) and self.prepared_active:
+            threshold = random.uniform(0.1, 0.5)
+            if self.hp < (self.max_hp * threshold) and self.prepared_active:
                 original = self.hp
                 amount = random.randint(25, 50)
                 self.hp += min(amount, self.max_hp - self.hp)
-                print_and_sleep(green(f"{self.name} used an item and restored {self.hp - original} HP."), 1)
+                print_and_sleep(green(f"{self.name} used an item and restored {self.hp - original} HP."), time)
                 self.prepared_active = False
-        elif self.trait.name == NIGHT_OWL:
-            if random.random() < 0.20:
-                play_sound(OWL)
-        elif self.trait.name == WEREWOLF:
-            if random.random() < 0.20:
-                play_sound(WEREWOLF)
-

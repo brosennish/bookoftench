@@ -139,6 +139,8 @@ def make_elite_weapon(weapon: Weapon) -> Weapon:
     if weapon.sell_value > 0:
         increase = round(weapon.sell_value * 0.12)
         weapon.sell_value += increase
+
+    weapon.is_elite = True
     return weapon
 
 def make_autographed_weapon(weapon: Weapon) -> Weapon:
