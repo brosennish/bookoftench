@@ -10,7 +10,7 @@ from bookoftench.data.perks import TENCH_THE_BOUNTY_HUNTER, NEPTUNE
 from bookoftench.event_base import EventType, Event
 from bookoftench.event_logger import subscribe_function
 from bookoftench.settings import Settings, set_settings
-from bookoftench.ui import green, blue, red
+from bookoftench.ui import green, blue, red, yellow
 from bookoftench.util import print_and_sleep
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
@@ -197,11 +197,11 @@ class GameState:
         if self.casino_is_open:
             if random.random() < 0.10:
                 self.casino_is_open = False
-                print_and_sleep(blue(f"The casino has closed pending investigation."))
+                print_and_sleep(yellow(f"The casino has closed pending investigation."))
         elif not self.casino_is_open:
             if random.random() < 0.50:
                 self.casino_is_open = True
-                print_and_sleep(green(f"The casino has reopened following a substantial bribe."))
+                print_and_sleep(green(f"The casino has reopened after a substantial bribe."))
 
         # coffee
         if self.coffee_is_open:
@@ -217,11 +217,11 @@ class GameState:
         if self.hospital_is_open:
             if random.random() < 0.10:
                 self.hospital_is_open = False
-                print_and_sleep(blue(f"The hospital has closed due to pending litigation."))
+                print_and_sleep(yellow(f"The hospital has closed due to pending litigation."))
         elif not self.hospital_is_open:
             if random.random() < 0.50:
                 self.hospital_is_open = True
-                print_and_sleep(green(f"The hospital has reopened following a substantial bribe."))
+                print_and_sleep(green(f"The hospital has reopened after a substantial bribe."))
 
     def is_final_boss_available(self) -> bool:
         return self.current_area.boss_defeated and (self.wench_area == self.current_area) and not self.victory

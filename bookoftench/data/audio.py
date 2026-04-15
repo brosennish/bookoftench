@@ -42,7 +42,7 @@ SHOTGUN = "shotgun.wav"
 SPRAY = "spray.wav"
 SQUEAK = "squeak.wav"
 WEAPON_BROKE = "weapon_broke.wav"
-WHIFF = "whiff.wav"
+WHIFF = "whiff.mp3"
 
 # Misc Sounds
 ACHIEVEMENT = "achievement.mp3"
