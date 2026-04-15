@@ -1,6 +1,6 @@
 # Book of Tench
 
-Save Chula before it's too late, mang. Fulfill the prophecy.
+Save Chula. Fulfill the prophecy.
 
 ## Run
 
