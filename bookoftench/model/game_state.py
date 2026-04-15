@@ -44,8 +44,6 @@ class GameState:
     hospital_is_open: bool = True
 
     time_of_day: str = field(default=DAYTIME)
-    is_day: bool = field(default=True)
-    is_night: bool = field(default=False)
     moon: str = field(default=DRY)
 
     wench_area: Area = None
@@ -130,13 +128,8 @@ class GameState:
     def update_time_of_day(self) -> None:
         if self.time_of_day == DAYTIME:
             self.time_of_day = NIGHTTIME
-            self.is_day = False
-            self.is_night = True
-
         elif self.time_of_day == NIGHTTIME:
             self.time_of_day = DAYTIME
-            self.is_night = False
-            self.is_day = True
 
     def update_moon(self) -> None:
         if self.moon == DRY:
