@@ -74,7 +74,6 @@ def conduct_experiment(game_state):
         player.strength = round(player.strength + amount, 2)
         if original != player.strength:
             if amount > 0:
-                play_sound(POSITIVE)
                 print_and_sleep(green(f"Strength: {original} -> {player.strength}"), 1)
                 mutation = True
             elif amount < 0:
@@ -87,7 +86,6 @@ def conduct_experiment(game_state):
         player.acc = round(player.acc + amount, 2)
         if original != player.acc:
             if amount > 0:
-                play_sound(POSITIVE)
                 print_and_sleep(green(f"Accuracy: {original} -> {player.acc}"), 1)
                 mutation = True
             elif amount < 0:
@@ -101,7 +99,6 @@ def conduct_experiment(game_state):
         if player.hp > player.max_hp:
             player.hp = player.max_hp
         if amount > 0:
-            play_sound(POSITIVE)
             print_and_sleep(green(f"Max HP: {original} -> {player.max_hp}"), 1)
             mutation = True
         elif amount < 0:
@@ -121,7 +118,6 @@ def conduct_experiment(game_state):
                 print_and_sleep(cyan(f"Level: {original} -> {player.lvl}"), 1)
                 mutation = True
             elif amount < 0:
-                play_sound(POSITIVE)
                 print_and_sleep(cyan(f"Level: {original} -> {player.lvl}"), 1)
                 mutation = True
         if player.lvl == player.illness_death_lvl:
