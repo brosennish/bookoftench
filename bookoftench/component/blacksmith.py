@@ -19,15 +19,9 @@ from bookoftench.ui import blue, yellow, cyan
 from bookoftench.util import print_and_sleep
 
 
-@register_component(BLACKSMITH)
-class BlacksmithBouncer(GatekeepingComponent):
-    def __init__(self, game_state: GameState):
-        player = game_state.player
-        super().__init__(game_state, decision_function=lambda: player.coins >= 125,
-                         accept_component=BlacksmithSleeping,
-                         deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("Come back when you have 125 of coin.\nHTH isn't cheap."), 1.5)))
+ELITE = "Elite"
 
+@register_component(BLACKSMITH)
 class BlacksmithSleeping(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, decision_function=lambda: game_state.time_of_day == DAYTIME,
@@ -40,7 +34,7 @@ class BlacksmithComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
         valid = [i for i in player.weapon_dict.values() if i.type not in [BLIND] and
-                 "Elite" not in i.name]
+                 not i.is_elite]
         if not valid:
             print_and_sleep(yellow("Sledge Jr. does not work on blind-type weapons."))
 
@@ -88,13 +82,16 @@ class BlacksmithComponent(LabeledSelectionComponent):
         @functional_component(state_dependent=True)
         def purchase_component(game_state: GameState):
             player = game_state.player
-            cost = 0
 
-            if "Elite" in weapon.name:
+            if weapon.is_elite:
                 print_and_sleep(yellow(f"Weapon is already Elite."), 2)
                 return
-
-            if weapon.type == MELEE:
+            if weapon.uses == -1:
+                if player.coins < 400:
+                    print_and_sleep(yellow(f"Need more coin"), 2)
+                    return
+                cost = 400
+            elif weapon.type == MELEE:
                 if player.coins < 125:
                     print_and_sleep(yellow(f"Need more coin"), 2)
                     return
@@ -104,10 +101,9 @@ class BlacksmithComponent(LabeledSelectionComponent):
                     print_and_sleep(yellow(f"Need more coin"), 2)
                     return
                 cost = 150
-            elif weapon.uses == -1:
-                if player.coins < 375:
-                    print_and_sleep(yellow(f"Need more coin"), 2)
-                    return
+            else:
+                print_and_sleep(yellow("Not happening."), 2)
+                return
 
             play_sound(PURCHASE)
             player.coins -= cost
@@ -121,12 +117,15 @@ def forge_weapon(weapon: PlayerWeapon, game_state) -> None:
     player = game_state.player
     name = weapon.base_name # log name
     og_uses = weapon.uses # log uses
-    del player.weapon_dict[name] # remove weapon
+    player.weapon_dict.pop(name, None) # remove weapon
+
+    # del player.weapon_dict[name] (original removal line)
+
     base = load_weapon(name) # recreate Weapon object w/ base name
     base.uses = og_uses # restore uses
     elite = make_elite_weapon(base) # convert to elite weapon
     player.weapon_dict.update({elite.base_name: PlayerWeapon.from_weapon(elite)}) # add to weapon_dict
-    player.current_weapon = next(i for i in player.weapon_dict.values() if i.name == elite.name) # set current
+    player.current_weapon = player.weapon_dict[elite.base_name] # set current
 
     print_and_sleep(cyan(f"{name} has been upgraded to Elite."), 1.5)
 

@@ -89,7 +89,7 @@ Perks = [
     },
     {
         'name': BARTER_SAUCE,
-        'cost': 100,
+        'cost': 110,
         'description': "Shop prices are 5% lower",
         'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
         'wrapper_config': {'change': -5}
@@ -117,7 +117,7 @@ Perks = [
     },
     {
         'name': BULLETPROOF,
-        'cost': 140,
+        'cost': 120,
         'description': "Take 10% less damage from guns",
         'wrapper_type': WrapperType.PERCENT_CHANGE,
         'wrapper_config': {'change': -10}
@@ -136,17 +136,17 @@ Perks = [
     },
     {
         'name': CROWS_NEST,
-        'cost': 200,
-        'description': "View enemies remaining in each area",
+        'cost': 160,
+        'description': "View the total enemies left in each area",
     },
     {
         'name': DEATH_CAN_WAIT,
-        'cost': 200,
+        'cost': 220,
         'description': "Once per battle, a fatal blow leaves you at 1 HP",
     },
     {
         'name': DOCTOR_FISH,
-        'cost': 120,
+        'cost': 150,
         'description': "Healing items restore +2 additional HP",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 2}
@@ -188,7 +188,7 @@ Perks = [
     },
     {
         'name': KARATE_LESSONS,
-        'cost': 55,
+        'cost': 50,
         'description': "Bare Hands +2 damage",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 2}
@@ -209,28 +209,28 @@ Perks = [
     },
     {
         'name': MARTIAL_ARTS_TRAINING,
-        'cost': 85,
+        'cost': 95,
         'description': "Bare Hands +3 damage",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 3}
     },
     {
         'name': NEW_SNEAKERS,
-        'cost': 99,
+        'cost': 110,
         'description': "Flee chance +10%",
         'wrapper_type': WrapperType.PERCENT_CHANGE,
         'wrapper_config': {'change': 10}
     },
     {
         'name': NOMADS_LAND,
-        'cost': 130,
+        'cost': 125,
         'description': "Carry +1 weapon and item",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 1}
     },
     {
         'name': RICKETY_PICKPOCKET,
-        'cost': 130,
+        'cost': 160,
         'description': "Steal an extra 10-25 coins from every enemy you defeat",
         'wrapper_type': WrapperType.BOUNDED_RANDOM,
         'wrapper_config': {'lower_bound': 10, 'upper_bound': 25}
@@ -244,12 +244,12 @@ Perks = [
     },
     {
         'name': SHERLOCK_TENCH,
-        'cost': 120,
+        'cost': 100,
         'description': "+15% chance to find the wanted enemy when searching their area",
     },
     {
         'name': SLEDGE_FUND,
-        'cost': 180,
+        'cost': 150,
         'description': "Bank interest rate +8%",
         'wrapper_type': WrapperType.PERCENT_CHANGE,
         'wrapper_config': {'change': 8}
@@ -277,35 +277,35 @@ Perks = [
     },
     {
         'name': TENCH_THE_BOUNTY_HUNTER,
-        'cost': 100,
+        'cost': 120,
         'description': "Earn +25 coins from each bounty enemy",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 25}
     },
     {
         'name': TRADE_SHIP,
-        'cost': 160,
+        'cost': 200,
         'description': "Shop prices are 10% lower",
         'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
         'wrapper_config': {'change': -10}
     },
     {
         'name': USED_SNEAKERS,
-        'cost': 40,
+        'cost': 45,
         'description': "Flee chance +5%",
         'wrapper_type': WrapperType.PERCENT_CHANGE,
         'wrapper_config': {'change': 5}
     },
     {
         'name': VAGABONDAGE,
-        'cost': 130,
+        'cost': 125,
         'description': "Carry +1 weapon and item",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 1}
     },
     {
         'name': VAMPIRIC_SPERM,
-        'cost': 220,
+        'cost': 240,
         'description': 'Heal 3 HP each time you land a melee attack',
     },
     {

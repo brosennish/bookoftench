@@ -7,7 +7,7 @@ from typing import List, Optional, Dict, Self
 
 from bookoftench.audio import play_sound
 from bookoftench.data import Enemies
-from bookoftench.data.audio import AREA_BOSS_THEME, GATOR
+from bookoftench.data.audio import AREA_BOSS_THEME, GATOR, EQUIP_WEAPON
 from bookoftench.data.enemies import Bosses, Final_Boss, BAYOU_BILL, Enemy_Lines, WEREWOLF
 from bookoftench.data.perks import RICKETY_PICKPOCKET
 from bookoftench.data.weapons import BARE_HANDS, BLIND
@@ -76,6 +76,7 @@ class Enemy(Combatant, NPC):
             if options:
                 selection = random.choice(options)
                 self.current_weapon = load_weapon(selection)
+        play_sound(EQUIP_WEAPON)
         print_and_sleep(cyan(f"{self.name} equipped {self.current_weapon.name}."), 1)
         return self.current_weapon
 

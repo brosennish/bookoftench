@@ -110,19 +110,10 @@ class Area:
         enemy = load_enemy(enemy_name)  # convert selected enemy to Enemy
         self.enemies_seen.add(enemy_name)  # add selected enemy to enemies_seen
 
-        # --- traits and illness ---
-        valid = [i['name'] for i in Traits]
-        if time == NIGHTTIME:
-            valid = [i['name'] for i in Traits if i['name'] not in [COWARD]]
-        traits = load_traits(valid)
-        enemy.trait = random.choice(traits)
+        # --- trait and illness ---
+        enemy = handle_trait_and_illness(enemy, time)
 
-        if enemy.trait.name == CONTAGIOUS:
-            valid = [i['name'] for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
-            illness_name = random.choice(valid)
-            illness_list = load_illnesses([illness_name])
-            enemy.illness = next(i for i in illness_list)
-
+        # --- standard stat adjustments ---
         enemy.hp += random.randint(-2, 2)  # apply hp spread first
         enemy.hp += round((enemy.hp * 0.03) * max(player_level - 1, 0))  # then apply hp scaling
         enemy.max_hp = enemy.hp
@@ -134,21 +125,13 @@ class Area:
         enemy_lines = enemy.get_enemy_encounter_line()  # get the line before mutating enemy.name
         elite_chance = min(0.15, max(0.0, (player_level - 1) * 0.03))
 
-        # --- night owl logic ---
+        # --- night owl & werewolf logic ---
         if enemy.trait.name == NIGHT_OWL and time == NIGHTTIME:
-            enemy.max_hp += random.randint(5, 10)
-            enemy.hp = enemy.max_hp
-            enemy.strength += round(random.uniform(0.01, 0.1), 2)
-            enemy.acc += round(random.uniform(0.01, 0.1), 2)
-
-        # --- werewolf logic ---
+            enemy = create_night_owl(enemy)
         if enemy.trait.name == WEREWOLF and time == NIGHTTIME and moon == FULL:
-            enemy.name = "Werewolf"
-            enemy.hp += random.randint(10, 25)
-            enemy.strength = 1.50
-            enemy.acc = 1.25
-            enemy.coins = 0
+            enemy = create_werewolf(enemy)
 
+        # --- elite logic ---
         if random.random() < elite_chance:
             enemy.name = f"Elite {enemy.name}"
             enemy.hp = int(enemy.hp * 1.5)
@@ -168,11 +151,18 @@ class Area:
 
         self.current_enemy = enemy
 
+        # --- werewolf and night owl final initialization ---
         if WEREWOLF in self.current_enemy.name:
             self.current_enemy.current_weapon = load_weapon(CLAWS)
+            play_sound(WEREWOLF)
+        elif self.current_enemy.trait.name == NIGHT_OWL and time == NIGHTTIME:
+            play_sound(NIGHT_OWL)
+
+        # --- elite weapon logic ---
         if self.current_enemy.current_weapon.type not in [BLIND, SPECIAL] and random.random() < 0.15:
             base = self.current_enemy.current_weapon
             self.current_enemy.current_weapon = make_elite_weapon(base)
+
         return self.current_enemy
 
     def summon_boss(self) -> Boss:
@@ -195,6 +185,35 @@ class Area:
     def __hash__(self) -> int:
         return hash((self.name, self.enemy_count, self.enemies_killed, self.boss_defeated, self.current_enemy))
 
+def create_night_owl(enemy) -> Enemy:
+    enemy.max_hp += random.randint(5, 10)
+    enemy.hp = enemy.max_hp
+    enemy.strength += round(random.uniform(0.01, 0.1), 2)
+    enemy.acc += round(random.uniform(0.01, 0.1), 2)
+    return enemy
+
+def create_werewolf(enemy) -> Enemy:
+    enemy.name = WEREWOLF
+    enemy.hp += random.randint(10, 25)
+    enemy.max_hp = enemy.hp
+    enemy.strength = 1.50
+    enemy.acc = 1.25
+    enemy.coins = 0
+    return enemy
+
+def handle_trait_and_illness(enemy, time) -> Enemy:
+    valid = [i['name'] for i in Traits]
+    if time == NIGHTTIME:
+        valid = [i['name'] for i in Traits if i['name'] not in [COWARD]]
+    traits = load_traits(valid)
+    enemy.trait = random.choice(traits)
+
+    if enemy.trait.name == CONTAGIOUS:
+        valid = [i['name'] for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
+        illness_name = random.choice(valid)
+        illness_list = load_illnesses([illness_name])
+        enemy.illness = next(i for i in illness_list)
+    return enemy
 
 def load_areas() -> List[Area]:
     res = []

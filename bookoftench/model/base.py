@@ -40,7 +40,6 @@ class Buyable:
 @dataclass
 class WeaponBase(ABC):
     name: str
-    name: str
     damage: int
     uses: int
     accuracy: float
@@ -51,6 +50,7 @@ class WeaponBase(ABC):
     base_name: str = None
     subtype: str = MELEE
     areas: list[str] | None = None
+    is_elite: bool = False
 
     def __post_init__(self):
         if self.base_name is None:
@@ -339,10 +339,3 @@ class Combatant(ABC):
                 self.hp += min(amount, self.max_hp - self.hp)
                 print_and_sleep(green(f"{self.name} used an item and restored {self.hp - original} HP."), time)
                 self.prepared_active = False
-        elif self.trait.name == NIGHT_OWL:
-            if random.random() < 0.20:
-                play_sound(OWL)
-        elif self.trait.name == WEREWOLF:
-            if random.random() < 0.20:
-                play_sound(WEREWOLF)
-

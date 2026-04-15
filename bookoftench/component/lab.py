@@ -8,8 +8,8 @@ from .base import LabeledSelectionComponent, SelectionBinding, \
 from .game import ContinueGame, DeathHandler
 from .registry import register_component
 from .. import event_logger
-from ..audio import play_music, play_sound
-from ..data.audio import LAB_THEME, POSITIVE
+from ..audio import play_music
+from ..data.audio import LAB_THEME
 from ..data.components import LAB
 from ..data.enviroment import NIGHTTIME
 from ..model.events import PlayerDeathEvent
@@ -74,11 +74,9 @@ def conduct_experiment(game_state):
         player.strength = round(player.strength + amount, 2)
         if original != player.strength:
             if amount > 0:
-                play_music(POSITIVE)
                 print_and_sleep(green(f"Strength: {original} -> {player.strength}"), 1)
                 mutation = True
             elif amount < 0:
-                # TODO
                 print_and_sleep(yellow(f"Strength: {original} -> {player.strength}"), 1)
                 mutation = True
 
@@ -88,11 +86,9 @@ def conduct_experiment(game_state):
         player.acc = round(player.acc + amount, 2)
         if original != player.acc:
             if amount > 0:
-                play_music(POSITIVE)
                 print_and_sleep(green(f"Accuracy: {original} -> {player.acc}"), 1)
                 mutation = True
             elif amount < 0:
-                # TODO
                 print_and_sleep(yellow(f"Accuracy: {original} -> {player.acc}"), 1)
                 mutation = True
 
@@ -103,11 +99,9 @@ def conduct_experiment(game_state):
         if player.hp > player.max_hp:
             player.hp = player.max_hp
         if amount > 0:
-            play_music(POSITIVE)
             print_and_sleep(green(f"Max HP: {original} -> {player.max_hp}"), 1)
             mutation = True
         elif amount < 0:
-            # TODO
             print_and_sleep(yellow(f"Max HP: {original} -> {player.max_hp}"), 1)
             mutation = True
 
@@ -121,11 +115,9 @@ def conduct_experiment(game_state):
             player.lvl = 1
         if original != player.lvl:
             if amount > 0:
-                # TODO
                 print_and_sleep(cyan(f"Level: {original} -> {player.lvl}"), 1)
                 mutation = True
             elif amount < 0:
-                play_music(POSITIVE)
                 print_and_sleep(cyan(f"Level: {original} -> {player.lvl}"), 1)
                 mutation = True
         if player.lvl == player.illness_death_lvl:
@@ -146,12 +138,9 @@ def conduct_experiment(game_state):
                 amount = 0
         player.lives += amount
         if player.lives >= 1:
-            if amount > 0:
-                play_music(POSITIVE)
-            elif amount < 0:
-                pass
-            print_and_sleep(cyan(f"Lives: {original} -> {player.lives}"), 1)
-            mutation = True
+            if amount != 0:
+                print_and_sleep(cyan(f"Lives: {original} -> {player.lives}"), 1)
+                mutation = True
         if player.lives <= 0:
             event_logger.log_event(PlayerDeathEvent(player.lives))
             DeathHandler.run(game_state)
