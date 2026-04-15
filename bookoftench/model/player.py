@@ -210,7 +210,7 @@ class Player(Combatant):
                 heal = min(gain, enemy.max_hp - enemy.hp)
                 if heal > 0:
                     enemy.hp += heal
-                    print_and_sleep(green(f"The empathic {enemy.name} gained {heal} HP."))
+                    print_and_sleep(green(f"The empathic {enemy.name} gained {heal} HP."), 1.5)
         else:
             gain = self.handle_special_item(item, enemy, time, moon, game_state)
 
