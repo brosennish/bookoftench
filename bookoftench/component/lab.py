@@ -149,7 +149,7 @@ def conduct_experiment(game_state):
             if amount > 0:
                 play_music(POSITIVE)
             elif amount < 0:
-                # TODO
+                pass
             print_and_sleep(cyan(f"Lives: {original} -> {player.lives}"), 1)
             mutation = True
         if player.lives <= 0:
