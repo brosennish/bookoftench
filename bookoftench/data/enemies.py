@@ -69,6 +69,7 @@ VOODOO_PRIESTESS = "Voodoo Priestess"
 # Traits
 ACHILLES = "Achilles"
 BUTTERFINGERS = "Butterfingers"
+CARP = "Carp"
 CHEATER = "Cheater"
 CONTAGIOUS = "Contagious"
 COWARD = "Coward"
@@ -90,13 +91,14 @@ FINAL_BOSS = "final_boss"
 Traits = [
     {'name': ACHILLES, 'desc': 'Equips a Tench Cannon when HP falls below 25'}, 
     {'name': BUTTERFINGERS, 'desc': 'Drops coins each turn'},
+    {'name': CARP, 'desc': 'Nothing special'},
     {'name': CHEATER, 'desc': 'May attack twice in one turn'},
     {'name': CONTAGIOUS, 'desc': 'Can get you sick'}, 
     {'name': COWARD, 'desc': 'May run away at any time'},
     {'name': EMPATH, 'desc': 'Heals when you use a normal item'},
     {'name': INVESTOR, 'desc': 'Coin value fluctuates during battle'},
     {'name': JUNKIE, 'desc': 'Gains strength when HP falls below 50%'},
-    {'name': NIGHT_OWL, 'desc': 'Becomes more formidable at night'},
+    {'name': NIGHT_OWL, 'desc': 'More formidable at night'},
     {'name': ORACLE, 'desc': 'Gains strength and accuracy when blinded'}, 
     {'name': PLANT, 'desc': 'Heals after every turn'},
     {'name': PREPARED, 'desc': 'Has a health item'}, 
@@ -117,11 +119,11 @@ Enemies = [
     {'name': FROGGER, 'trait': '', 'illness': None, 'hp': 100, 'weapons': [w.FROG_GIG, w.PILLOW, w.PISTOL],
      'bounty': 150, 'coins': 40, 'type': NORMAL, 'flee': 0.90, 'strength': 1, 'acc': 1, 'areas': [CITY]},
     {'name': INFLUENCER, 'trait': '', 'illness': None, 'hp': 75, 'weapons': [w.POCKET_KNIFE, w.SELFIE_STICK, w.PEPPER_SPRAY],
-     'bounty': 120, 'coins': 65, 'type': NORMAL, 'flee': 1.35, 'strength': 0.75, 'acc': 0.75, 'areas': [CITY]},
+     'bounty': 120, 'coins': 65, 'type': NORMAL, 'flee': 1.50, 'strength': 0.75, 'acc': 0.75, 'areas': [CITY]},
     {'name': LIFE_COACH, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.KNIFE, w.BASEBALL_BAT, w.FIRE_AXE],
-     'bounty': 130, 'coins': 40, 'type': NORMAL, 'flee': 0.85, 'strength': 1.05, 'acc': 1, 'areas': [CITY]},
+     'bounty': 130, 'coins': 40, 'type': NORMAL, 'flee': 0.95, 'strength': 1.05, 'acc': 1, 'areas': [CITY]},
     {'name': MAGICIAN, 'trait': '', 'illness': None, 'hp': 85, 'weapons': [w.SWITCHBLADE, w.SUITCASE, w.PISTOL],
-     'bounty': 140, 'coins': 35, 'type': NORMAL, 'flee': 0.95, 'strength': .9, 'acc': 1.05, 'areas': [CITY]},
+     'bounty': 140, 'coins': 35, 'type': NORMAL, 'flee': 1.00, 'strength': .9, 'acc': 1.05, 'areas': [CITY]},
     {'name': MASCOT, 'trait': '', 'illness': None, 'hp': 100, 'weapons': [w.T_SHIRT_CANNON, w.FOAM_FINGER, w.BROKEN_BOTTLE],
      'bounty': 135, 'coins': 30, 'type': NORMAL, 'flee': 0.95, 'strength': 1.1, 'acc': 1, 'areas': [CITY]},
     {'name': MIME, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.SLINGSHOT, w.CANE, w.SUITCASE],
@@ -129,32 +131,32 @@ Enemies = [
     {'name': PARTY_ANIMAL, 'trait': '', 'illness': None, 'hp': 95, 'weapons': [w.BROKEN_BOTTLE, w.POOL_CUE],
      'bounty': 175, 'coins': 35, 'type': NORMAL, 'flee': 0.90, 'strength': 1.1, 'acc': 1, 'areas': [CITY]},
     {'name': SENTIENT_ROBOT, 'trait': '', 'illness': None, 'hp': 110, 'weapons': [w.LASER_BEAMS],
-     'bounty': 220, 'coins': 0, 'type': NORMAL, 'flee': 0.60, 'strength': 1.11, 'acc': 1.11, 'areas': [CITY]},
+     'bounty': 220, 'coins': 0, 'type': NORMAL, 'flee': 0.70, 'strength': 1.11, 'acc': 1.11, 'areas': [CITY]},
     {'name': SLEEPWALKER, 'trait': '', 'illness': None, 'hp': 95, 'weapons': [w.PILLOW, w.SHOTGUN],
      'bounty': 135, 'coins': 20, 'type': NORMAL, 'flee': 1.20, 'strength': 1, 'acc': 0.75, 'areas': [CITY]},
 
     # --- original ---
     {'name': BODY_BUILDER, 'trait': '', 'illness': None, 'hp': 110, 'weapons': [w.BASEBALL_BAT, w.INJECTION_NEEDLE, w.DUMBBELL],
-     'bounty': 180, 'coins': 35, 'type': NORMAL, 'flee': 0.75, 'strength': 1.2, 'acc': 0.9, 'areas': [CITY]},
+     'bounty': 180, 'coins': 35, 'type': NORMAL, 'flee': 0.90, 'strength': 1.2, 'acc': 0.9, 'areas': [CITY]},
     {'name': GOON, 'trait': '', 'illness': None, 'hp': 105, 'weapons': [w.BASEBALL_BAT, w.SHOTGUN, w.BRASS_KNUCKLES],
-     'bounty': 175, 'coins': 40, 'type': NORMAL, 'flee': 0.70, 'strength': 1.1, 'acc': 1.05, 'areas': [CITY]},
+     'bounty': 175, 'coins': 40, 'type': NORMAL, 'flee': 0.90, 'strength': 1.1, 'acc': 1.05, 'areas': [CITY]},
     {'name': HOBO, 'trait': '', 'illness': None, 'hp': 85, 'weapons': [w.BROKEN_BOTTLE, w.KNIFE, w.POCKET_SAND, w.BRICK],
-     'bounty': 120, 'coins': 0, 'type': NORMAL, 'flee': 1.15, 'strength': 1.02, 'acc': 0.98, 'areas': [CITY]},
+     'bounty': 120, 'coins': 0, 'type': NORMAL, 'flee': 1.05, 'strength': 1.02, 'acc': 0.98, 'areas': [CITY]},
     {'name': PIMP, 'trait': '', 'illness': None, 'hp': 95, 'weapons': [w.CANE, w.BRASS_KNUCKLES, w.REVOLVER, w.SWITCHBLADE],
-     'bounty': 200, 'coins': 85, 'type': NORMAL, 'flee': 0.65, 'strength': 1.01, 'acc': 1.04, 'areas': [CITY]},
+     'bounty': 200, 'coins': 85, 'type': NORMAL, 'flee': 0.95, 'strength': 1.01, 'acc': 1.04, 'areas': [CITY]},
     {'name': SERIAL_KILLER, 'trait': '', 'illness': None, 'hp': 105, 'weapons': [w.BONE_SAW, w.KNIFE, w.MEAT_CLEAVER],
-     'bounty': 240, 'coins': 45, 'type': NORMAL, 'flee': 0.60, 'strength': 1.1, 'acc': 1.04, 'areas': [CITY, FOREST]},
+     'bounty': 240, 'coins': 45, 'type': NORMAL, 'flee': 0.75, 'strength': 1.1, 'acc': 1.04, 'areas': [CITY, FOREST]},
     {'name': THIEF, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.KNIFE, w.CROWBAR, w.PISTOL],
-     'bounty': 165, 'coins': 80, 'type': NORMAL, 'flee': 1.10, 'strength': 0.95, 'acc': 1.03, 'areas': [CITY]},
+     'bounty': 165, 'coins': 80, 'type': NORMAL, 'flee': 1.05, 'strength': 0.95, 'acc': 1.03, 'areas': [CITY]},
 
     # ========================
     #       FOREST ENEMIES
     # ========================
     # --- new ---
     {'name': BIRDER, 'trait': '', 'illness': None, 'hp': 75, 'weapons': [w.TRIPOD, w.BINOCULARS, w.PEPPER_SPRAY],
-     'bounty': 110, 'coins': 30, 'type': NORMAL, 'flee': 1.40, 'strength': 0.70, 'acc': 0.75, 'areas': [FOREST]},
+     'bounty': 110, 'coins': 30, 'type': NORMAL, 'flee': 1.50, 'strength': 0.70, 'acc': 0.75, 'areas': [FOREST]},
     {'name': DOOMSDAY_PREPPER, 'trait': '', 'illness': None, 'hp': 95, 'weapons': [w.KNIFE, w.PISTOL],
-     'bounty': 180, 'coins': 55, 'type': NORMAL, 'flee': 0.70, 'strength': 1.1, 'acc': 1.09, 'areas': [FOREST]},
+     'bounty': 180, 'coins': 55, 'type': NORMAL, 'flee': 0.80, 'strength': 1.1, 'acc': 1.09, 'areas': [FOREST]},
     {'name': FERAL_PHILOSOPHER, 'trait': '', 'illness': None, 'hp': 85, 'weapons': [w.CANE, w.PISTOL, w.SCYTHE, w.HARDCOVER_BOOK],
      'bounty': 155, 'coins': 0, 'type': NORMAL, 'flee': 1.05, 'strength': 0.9, 'acc': 1, 'areas': [FOREST]},
     {'name': FORAGER, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.KNIFE, w.SICKLE, w.BEAR_SPRAY],
@@ -162,23 +164,23 @@ Enemies = [
     {'name': MUSHROOM_HUNTER, 'trait': '', 'illness': None, 'hp': 100, 'weapons': [w.KNIFE, w.SICKLE, w.BEAR_SPRAY],
      'bounty': 135, 'coins': 35, 'type': NORMAL, 'flee': 1.05, 'strength': 1, 'acc': 1, 'areas': [FOREST]},
     {'name': SURVIVALIST, 'trait': '', 'illness': None, 'hp': 100, 'weapons': [w.SURVIVAL_KNIFE, w.LONGBOW, w.BRANCH_SPEAR],
-     'bounty': 165, 'coins': 20, 'type': NORMAL, 'flee': 0.75, 'strength': 1.13, 'acc': 1.08, 'areas': [FOREST]},
+     'bounty': 165, 'coins': 20, 'type': NORMAL, 'flee': 0.85, 'strength': 1.13, 'acc': 1.08, 'areas': [FOREST]},
     {'name': TELEPATHIC_MUTE, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.SCYTHE, w.SLINGSHOT, w.CHILI_POWDER],
      'bounty': 180, 'coins': 40, 'type': NORMAL, 'flee': 0.95, 'strength': 0.85, 'acc': 1.05, 'areas': [FOREST]},
 
     # --- original ---
     {'name': BIGFOOT_IMPERSONATOR, 'trait': '', 'illness': None, 'hp': 110, 'weapons': [w.WOODEN_CLUB, w.BRANCH_SPEAR, w.CLAWS, w.BEAR_SPRAY],
-     'bounty': 185, 'coins': 35, 'type': NORMAL, 'flee': 0.80, 'strength': 1.14, 'acc': 1, 'areas': [FOREST]},
+     'bounty': 185, 'coins': 35, 'type': NORMAL, 'flee': 0.85, 'strength': 1.14, 'acc': 1, 'areas': [FOREST]},
     {'name': DISGRACED_EXILE, 'trait': '', 'illness': None, 'hp': 85, 'weapons': [w.KNIFE, w.HATCHET, w.SHOVEL, w.TROWEL],
      'bounty': 160, 'coins': 25, 'type': NORMAL, 'flee': 1.00, 'strength': 1, 'acc': 1, 'areas': [CAVE, FOREST, SWAMP]},
     {'name': HIKER, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.TREKKING_POLE, w.SURVIVAL_KNIFE, w.BEAR_SPRAY],
-     'bounty': 130, 'coins': 30, 'type': NORMAL, 'flee': 1.15, 'strength': 1, 'acc': 1, 'areas': [FOREST]},
+     'bounty': 130, 'coins': 30, 'type': NORMAL, 'flee': 1.05, 'strength': 1, 'acc': 1, 'areas': [FOREST]},
     {'name': HUNTER, 'trait': '', 'illness': None, 'hp': 100, 'weapons': [w.KNIFE, w.RIFLE, w.BEAR_SPRAY, w.LONGBOW],
-     'bounty': 165, 'coins': 45, 'type': NORMAL, 'flee': 0.65, 'strength': 1, 'acc': 1.07, 'areas': [FOREST]},
+     'bounty': 165, 'coins': 45, 'type': NORMAL, 'flee': 0.90, 'strength': 1, 'acc': 1.07, 'areas': [FOREST]},
     {'name': PARK_RANGER, 'trait': '', 'illness': None, 'hp': 95, 'weapons': [w.FLARE_GUN, w.KNIFE, w.BEAR_SPRAY, w.MACHETE, w.LONGBOW],
-     'bounty': 155, 'coins': 35, 'type': NORMAL, 'flee': 0.60, 'strength': 1, 'acc': 1.09, 'areas': [FOREST]},
+     'bounty': 155, 'coins': 35, 'type': NORMAL, 'flee': 0.90, 'strength': 1, 'acc': 1.09, 'areas': [FOREST]},
     {'name': POACHER, 'trait': '', 'illness': None, 'hp': 95, 'weapons': [w.CROSSBOW, w.MACHETE, w.KNIFE, w.COMPOUND_BOW],
-     'bounty': 195, 'coins': 55, 'type': NORMAL, 'flee': 0.55, 'strength': 1, 'acc': 1.07, 'areas': [FOREST]},
+     'bounty': 195, 'coins': 55, 'type': NORMAL, 'flee': 0.85, 'strength': 1, 'acc': 1.07, 'areas': [FOREST]},
 
     # ========================
     #        CAVE ENEMIES
@@ -189,52 +191,52 @@ Enemies = [
     {'name': EXPLORER, 'trait': '', 'illness': None, 'hp': 100, 'weapons': [w.BINOCULARS, w.TREKKING_POLE, w.LONGBOW, w.SURVIVAL_KNIFE],
      'bounty': 140, 'coins': 35, 'type': NORMAL, 'flee': 1.00, 'strength': 1.1, 'acc': 1.05, 'areas': [CAVE]},
     {'name': FUGITIVE, 'trait': '', 'illness': None, 'hp': 95, 'weapons': [w.SHIV, w.INJECTION_NEEDLE, w.PISTOL, w.POCKET_SAND],
-     'bounty': 200, 'coins': 20, 'type': NORMAL, 'flee': 0.65, 'strength': 1.05, 'acc': 1.06, 'areas': [CAVE, FOREST, SWAMP]},
+     'bounty': 200, 'coins': 20, 'type': NORMAL, 'flee': 0.95, 'strength': 1.05, 'acc': 1.06, 'areas': [CAVE, FOREST, SWAMP]},
     {'name': PROSPECTOR, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.FLASHLIGHT, w.PICKAXE, w.CHISEL],
-     'bounty': 130, 'coins': 45, 'type': NORMAL, 'flee': 1.10, 'strength': 1, 'acc': 1, 'areas': [CAVE]},
+     'bounty': 130, 'coins': 45, 'type': NORMAL, 'flee': 1.15, 'strength': 1, 'acc': 1, 'areas': [CAVE]},
     {'name': SURVIVOR, 'trait': '', 'illness': None, 'hp': 100, 'weapons': [w.FLARE_GUN, w.SURVIVAL_KNIFE, w.POCKET_SAND],
-     'bounty': 145, 'coins': 20, 'type': NORMAL, 'flee': 0.85, 'strength': 1.1, 'acc': 1.05, 'areas': [CAVE]},
+     'bounty': 145, 'coins': 20, 'type': NORMAL, 'flee': 1.00, 'strength': 1.1, 'acc': 1.05, 'areas': [CAVE]},
 
     # --- original ---
     {'name': ANCIENT_MAN, 'trait': '', 'illness': None, 'hp': 85, 'weapons': [w.TORCH_CLUB, w.STONE_SPEAR, w.OBSIDIAN_KNIFE],
-     'bounty': 155, 'coins': 25, 'type': NORMAL, 'flee': 1.15, 'strength': 0.85, 'acc': 0.9, 'areas': [CAVE]},
+     'bounty': 155, 'coins': 25, 'type': NORMAL, 'flee': 1.20, 'strength': 0.85, 'acc': 0.9, 'areas': [CAVE]},
     {'name': HUMANOID_CAVE_CREATURE, 'trait': '', 'illness': None, 'hp': 110, 'weapons': [w.CLAWS, w.SCYTHE, w.BONE_CLUB],
-     'bounty': 205, 'coins': 0, 'type': NORMAL, 'flee': 0.70, 'strength': 1.14, 'acc': 1, 'areas': [CAVE]},
+     'bounty': 205, 'coins': 0, 'type': NORMAL, 'flee': 0.75, 'strength': 1.14, 'acc': 1, 'areas': [CAVE]},
     {'name': MINER, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.FLASHLIGHT, w.KNIFE, w.PICKAXE],
      'bounty': 135, 'coins': 35, 'type': NORMAL, 'flee': 1.00, 'strength': 1.05, 'acc': 1, 'areas': [CAVE]},
     {'name': MOLE_PERSON, 'trait': '', 'illness': None, 'hp': 105, 'weapons': [w.CLAWS, w.PICKAXE, w.BONE_CLUB],
-     'bounty': 195, 'coins': 55, 'type': NORMAL, 'flee': 0.80, 'strength': 1.1, 'acc': 1, 'areas': [CAVE]},
+     'bounty': 195, 'coins': 55, 'type': NORMAL, 'flee': 0.85, 'strength': 1.1, 'acc': 1, 'areas': [CAVE]},
     {'name': SPELUNKER, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.FLASHLIGHT, w.PICKAXE, w.FLARE_GUN],
-     'bounty': 125, 'coins': 40, 'type': NORMAL, 'flee': 1.05, 'strength': 1, 'acc': 1, 'areas': [CAVE]},
+     'bounty': 125, 'coins': 40, 'type': NORMAL, 'flee': 1.10, 'strength': 1, 'acc': 1, 'areas': [CAVE]},
 
     # ========================
     #        SWAMP ENEMIES
     # ========================
     # --- new ---
     {'name': BONE_COLLECTOR, 'trait': '', 'illness': None, 'hp': 105, 'weapons': [w.BONE_SAW, w.BONE_CLUB, w.MEAT_CLEAVER],
-     'bounty': 205, 'coins': 20, 'type': NORMAL, 'flee': 0.70, 'strength': 1.1, 'acc': 1, 'areas': [SWAMP]},
+     'bounty': 205, 'coins': 20, 'type': NORMAL, 'flee': 0.90, 'strength': 1.1, 'acc': 1, 'areas': [SWAMP]},
     {'name': FORTUNE_TELLER, 'trait': '', 'illness': None, 'hp': 80, 'weapons': [w.KNIFE, w.PEPPER_SPRAY, w.PISTOL],
      'bounty': 140, 'coins': 60, 'type': NORMAL, 'flee': 1.25, 'strength': 0.80, 'acc': 0.9, 'areas': [SWAMP]},
     {'name': GATOR_WRESTLER, 'trait': '', 'illness': None, 'hp': 110, 'weapons': [w.FROG_GIG, w.SHOTGUN, w.SURVIVAL_KNIFE],
-     'bounty': 180, 'coins': 50, 'type': NORMAL, 'flee': 0.75, 'strength': 1.14, 'acc': 1, 'areas': [SWAMP]},
+     'bounty': 180, 'coins': 50, 'type': NORMAL, 'flee': 0.90, 'strength': 1.14, 'acc': 1, 'areas': [SWAMP]},
     {'name': MOONSHINER, 'trait': '', 'illness': None, 'hp': 85, 'weapons': [w.SWITCHBLADE, w.SHOTGUN, w.NAIL_GUN],
-     'bounty': 175, 'coins': 70, 'type': NORMAL, 'flee': 0.85, 'strength': 0.95, 'acc': 1.04, 'areas': [SWAMP]},
+     'bounty': 175, 'coins': 70, 'type': NORMAL, 'flee': 1.00, 'strength': 0.95, 'acc': 1.04, 'areas': [SWAMP]},
     {'name': SMUGGLER, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.KNIFE, w.INJECTION_NEEDLE, w.POCKET_SAND, w.PISTOL],
-     'bounty': 205, 'coins': 100, 'type': NORMAL, 'flee': 0.55, 'strength': 1, 'acc': 1.5, 'areas': [SWAMP]},
+     'bounty': 205, 'coins': 100, 'type': NORMAL, 'flee': 1.00, 'strength': 1, 'acc': 1.05, 'areas': [SWAMP]},
     {'name': TRACKER, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.FLASHLIGHT, w.KNIFE, w.RIFLE],
-     'bounty': 165, 'coins': 30, 'type': NORMAL, 'flee': 0.70, 'strength': 1.05, 'acc': 1.06, 'areas': [SWAMP]},
+     'bounty': 165, 'coins': 30, 'type': NORMAL, 'flee': 0.75, 'strength': 1.05, 'acc': 1.06, 'areas': [SWAMP]},
 
     # --- original ---
     {'name': BAYOU_MAN, 'trait': '', 'illness': None, 'hp': 105, 'weapons': [w.FROG_GIG, w.GAFF_HOOK, w.SHOTGUN],
-     'bounty': 180, 'coins': 35, 'type': NORMAL, 'flee': 0.80, 'strength': 1.1, 'acc': 1.05, 'areas': [SWAMP]},
+     'bounty': 180, 'coins': 35, 'type': NORMAL, 'flee': 0.90, 'strength': 1.1, 'acc': 1.05, 'areas': [SWAMP]},
     {'name': GRAVE_ROBBER, 'trait': '', 'illness': None, 'hp': 95, 'weapons': [w.POCKET_KNIFE, w.SHOVEL, w.CROWBAR, w.POCKET_SAND],
      'bounty': 155, 'coins': 40, 'type': NORMAL, 'flee': 1.00, 'strength': 1, 'acc': 1, 'areas': [SWAMP]},
     {'name': HAND_FISHERMAN, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.KNIFE, w.FISHING_SPEAR, w.GAFF_HOOK, w.FROG_GIG],
-     'bounty': 145, 'coins': 30, 'type': NORMAL, 'flee': 0.90, 'strength': 1.1, 'acc': 1, 'areas': [SWAMP]},
+     'bounty': 145, 'coins': 30, 'type': NORMAL, 'flee': 1.05, 'strength': 1.1, 'acc': 1, 'areas': [SWAMP]},
     {'name': SKIN_COLLECTOR, 'trait': '', 'illness': None, 'hp': 105, 'weapons': [w.KNIFE, w.MEAT_CLEAVER, w.CHAINSAW, w.MACHETE],
-     'bounty': 190, 'coins': 25, 'type': NORMAL, 'flee': 0.60, 'strength': 1.05, 'acc': 1.05, 'areas': [SWAMP]},
+     'bounty': 190, 'coins': 25, 'type': NORMAL, 'flee': 0.90, 'strength': 1.05, 'acc': 1.05, 'areas': [SWAMP]},
     {'name': VOODOO_PRIESTESS, 'trait': '', 'illness': None, 'hp': 80, 'weapons': [w.VOODOO_STAFF, w.CHILI_POWDER],
-     'bounty': 160, 'coins': 45, 'type': NORMAL, 'flee': 1.10, 'strength': 0.85, 'acc': 1.08, 'areas': [SWAMP]},
+     'bounty': 160, 'coins': 45, 'type': NORMAL, 'flee': 1.15, 'strength': 0.85, 'acc': 1.08, 'areas': [SWAMP]},
 ]
 
 
@@ -466,6 +468,15 @@ Enemy_Lines = {
     ],
 
     # ===== FOREST =====
+    BIGFOOT_IMPERSONATOR: [
+        "What's a bigfoot?",
+        "Who's bigfoot?",
+        "I'm the real bigfoot impersonating a human impersonating myself.",
+        "I go ape on the saxophone.",
+        "Do you have any ice packs?",
+        "Why does the park ranger keep shooting arrows at me?",
+    ],
+
     BIRDER: [
         "I just saw the rarest bird in the world. Where is it, you ask? Oh, it flew away.",
         "I can communicate with birds. They tell me I can fly - that my wings are inside of my arms.",

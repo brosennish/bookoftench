@@ -3,8 +3,10 @@ from dataclasses import dataclass
 from typing import Optional, List, Dict
 
 from bookoftench import event_logger
+from bookoftench.audio import play_sound
 from bookoftench.data import Achievements
 from bookoftench.data.achievements import RewardType
+from bookoftench.data.audio import ACHIEVEMENT
 from bookoftench.data.perks import WENCH_LOCATION
 from bookoftench.event_base import EventType, Event
 from bookoftench.event_logger import subscribe_function
@@ -48,6 +50,7 @@ class Achievement:
                     reward_str = f"{reward.name} | {reward.description}"
             case _:
                 raise NotImplementedError(f"No reward type: {self.reward_type}")
+        play_sound(ACHIEVEMENT)
         print_and_sleep(orange(f"ACHIEVEMENT UNLOCKED: {self.name} ({self.description})"
                                f"{f"\nReward: {reward_str}" if len(reward_str) > 0 else ''}"), 2)
         reward_callback()

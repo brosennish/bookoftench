@@ -4,6 +4,7 @@ from bookoftench.ui import purple
 
 ACHIEVEMENTS = "Achievements"
 AREA_BOSS_FIGHT = "Fight Boss"
+ATTRIBUTES = "Attributes"
 BANK = "Bank"
 BLACKSMITH = "Blacksmith"
 BUILD = "Build"
@@ -28,7 +29,6 @@ OCCULTIST = "Occultist"
 OFFICER = "Officer"
 OVERVIEW = "Overview"
 SEARCH = "Search"
-STATS = "Stats"
 PERKS = "Perks"
 QUIT_GAME = "Quit"
 SAVE_GAME = "Save Game"
@@ -37,6 +37,7 @@ SHAMAN = "Shaman"
 SHEBOKKEN_ROULETTE = "Shebokken Roulette"
 SHOP = "Shop"
 SPAWN_ENEMY = "Spawn Enemy"
+STATS = "Stats"
 THREE_HOLES = "Three Holes"
 TRAVEL = "Travel"
 TRIPLE_TENCH_DARE = "Triple Tench Dare"
@@ -55,7 +56,7 @@ class ActionMenuDefaults:
 
 
 class OverviewMenuDefaults:
-    page_one: List[str] = [ACHIEVEMENTS, PERKS, STATS]
+    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, PERKS, STATS]
 
 
 class InGameMenuDefaults:

@@ -11,7 +11,7 @@ from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL, MENSCH_T
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
-    OVERVIEW, INFO, BUILD
+    OVERVIEW, INFO, BUILD, ATTRIBUTES
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT, Perks
@@ -24,7 +24,7 @@ from bookoftench.model.game_state import GameState
 from bookoftench.model.item import load_items
 from bookoftench.model.perk import load_perks, Perk, perk_is_active, activate_perk
 from bookoftench.model.util import get_battle_status_view, display_player_achievements, \
-    display_game_stats, calculate_flee, display_active_perks, display_battle_info
+    display_game_stats, calculate_flee, display_active_perks, display_battle_info, display_player_attributes
 from bookoftench.model.weapon import load_discoverable_weapons, load_weapons, make_elite_weapon, make_autographed_weapon
 from bookoftench.ui import green, purple, yellow, dim, red, cyan, blue
 from bookoftench.util import print_and_sleep, safe_input
@@ -473,6 +473,13 @@ class Search(RandomChoiceComponent):
                      in d.areas and d.rarity == rarity]
 
         find = random.choice(available)
+        if rarity == COMMON:
+            time = 1
+        elif rarity == UNCOMMON:
+            time = 1.5
+        else:
+            time = 2
+
 
         # log event for stats
         if rarity == COMMON:
@@ -480,10 +487,13 @@ class Search(RandomChoiceComponent):
         elif rarity == UNCOMMON:
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_UNCOMMON))
         elif rarity == RARE:
+            play_sound(POSITIVE)
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_RARE))
         elif rarity == LEGENDARY:
+            play_sound(POSITIVE)
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_LEGENDARY))
         else:
+            play_sound(POSITIVE)
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_MYTHIC))
 
         # take damage if find.hp < 0
@@ -493,7 +503,7 @@ class Search(RandomChoiceComponent):
             print_and_sleep(
                 f"You{f' {find.pre} ' if find.pre else ' '}{yellow(find.name)} "
                 f"{color(f"({find.rarity})")} and lost {red(original_hp - player.hp)} hp.",
-                2)
+                time)
             if player.hp == 0:
                 player.lives -= 1
                 event_logger.log_event(PlayerDeathEvent(player.lives))
@@ -507,7 +517,7 @@ class Search(RandomChoiceComponent):
                 print_and_sleep(
                     f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
                     f"{color(f"({find.rarity})")} and restored {green(player.hp - original_hp)} hp.",
-                    2)
+                    time)
                 return
 
         # gain coin if value greater than 0
@@ -515,14 +525,14 @@ class Search(RandomChoiceComponent):
             print_and_sleep(
                 f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
                 f"{color(f'({find.rarity})')} worth {green(find.value)} of coin.",
-                2)
+                time)
             player.gain_coins(find.value)
             return
 
         # print found message if neutral
         print_and_sleep(
             f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
-            f"{color(f'({find.rarity})')}!", 2)
+            f"{color(f'({find.rarity})')}!", time)
         return
 
     @staticmethod
@@ -637,8 +647,6 @@ class ItemSelectionComponent(LabeledSelectionComponent):
                         lambda item=item: self._use_item_and_check(
                             item,
                             enemy if enemy else None,
-                            time,
-                            moon,
                         )
                     )
                 )
@@ -648,13 +656,11 @@ class ItemSelectionComponent(LabeledSelectionComponent):
             quittable=True
         )
 
-    def _use_item_and_check(self, item, enemy: Enemy | None, time, moon):
+    def _use_item_and_check(self, item, enemy: Enemy | None):
         # Apply item
         self.game_state.player.use_item(
             item.name,
             enemy,
-            time,
-            moon,
             self.game_state,
         )
 
@@ -673,7 +679,8 @@ class EquipWeapon(LabeledSelectionComponent):
                              key=str(i),
                              name=weapon.get_complete_format(None, None),
                              component=functional_component()(
-                                 partial(game_state.player.equip_weapon, weapon.base_name)))
+                                 partial(game_state.player.equip_weapon,
+                                         weapon.name, weapon.base_name)))
                              for (i, weapon) in enumerate(game_state.player.get_weapons(), 1)],
                          top_level_prompt_callback=lambda gs: gs.player.display_equip_header(), quittable=True)
 
@@ -690,6 +697,9 @@ class SwapFoundItemYN(BinarySelectionComponent):
 class SwapFoundItemMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         found = game_state.found_item
+        time = game_state.time_of_day
+        moon = game_state.moon
+
         valid = list(i for i in game_state.player.items.values())
         length = 0
         for i in game_state.player.items.keys():
@@ -703,7 +713,8 @@ class SwapFoundItemMenu(LabeledSelectionComponent):
                     key=str(i),
                     name=item.get_simple_format(length),
                     component=functional_component()(
-                        partial(game_state.player.swap_found_item, item.name, found)
+                        partial(game_state.player.swap_found_item,
+                                item.name, found, game_state)
                     )
                 )
                 for i, item in enumerate(valid, 1)
@@ -1005,6 +1016,12 @@ class DisplayInfo(TextDisplayingComponent):
 class Stats(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, display_callback=display_game_stats)
+
+
+@register_component(ATTRIBUTES)
+class Attributes(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_player_attributes)
 
 
 @register_component(OVERVIEW)

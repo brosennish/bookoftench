@@ -5,12 +5,12 @@ from typing import List, Dict
 
 import bookoftench.service.crypto_service as crypto_service
 from bookoftench import event_logger
-from bookoftench.audio import play_music
+from bookoftench.audio import play_music, play_sound
 from bookoftench.data.perks import TENCH_THE_BOUNTY_HUNTER, NEPTUNE
 from bookoftench.event_base import EventType, Event
 from bookoftench.event_logger import subscribe_function
 from bookoftench.settings import Settings, set_settings
-from bookoftench.ui import green, blue
+from bookoftench.ui import green, blue, red, yellow
 from bookoftench.util import print_and_sleep
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
@@ -25,6 +25,7 @@ from .perk import attach_perk, Perk, set_perk_cache, load_perk, perk_is_active
 from .player import Player
 from .shop import Shop
 from .weapon import Weapon, load_weapons
+from ..data.audio import COINS
 from ..data.builds import Builds
 from ..data.illnesses import Illnesses
 from ..data.enviroment import DRY, DAYTIME, NIGHTTIME, WETTING, FULL, DRYING
@@ -176,6 +177,7 @@ class GameState:
         @subscribe_function(BountyCollectedEvent)
         def handle_bounty_collected_event(event: BountyCollectedEvent):
             print_and_sleep(green(f"You killed {event.enemy_name} and collected a bounty of {self.bounty} coins!"), 1)
+            play_sound(COINS)
             self.player.coins += self.bounty
             self.refresh_bounty()
 
@@ -195,17 +197,17 @@ class GameState:
         if self.casino_is_open:
             if random.random() < 0.10:
                 self.casino_is_open = False
-                print_and_sleep(blue(f"The casino has closed pending investigation."))
+                print_and_sleep(yellow(f"The casino has closed pending investigation."))
         elif not self.casino_is_open:
             if random.random() < 0.50:
                 self.casino_is_open = True
-                print_and_sleep(green(f"The casino has reopened following a substantial bribe."))
+                print_and_sleep(green(f"The casino has reopened after a substantial bribe."))
 
         # coffee
         if self.coffee_is_open:
             if random.random() < 0.10:
                 self.coffee_is_open = False
-                print_and_sleep(blue(f"Coughy has died."))
+                print_and_sleep(red(f"Coughy has died."))
         elif not self.coffee_is_open:
             if random.random() < 0.50:
                 self.coffee_is_open = True
@@ -215,11 +217,11 @@ class GameState:
         if self.hospital_is_open:
             if random.random() < 0.10:
                 self.hospital_is_open = False
-                print_and_sleep(blue(f"The hospital has closed due to pending litigation."))
+                print_and_sleep(yellow(f"The hospital has closed due to pending litigation."))
         elif not self.hospital_is_open:
             if random.random() < 0.50:
                 self.hospital_is_open = True
-                print_and_sleep(green(f"The hospital has reopened following a substantial bribe."))
+                print_and_sleep(green(f"The hospital has reopened after a substantial bribe."))
 
     def is_final_boss_available(self) -> bool:
         return self.current_area.boss_defeated and (self.wench_area == self.current_area) and not self.victory

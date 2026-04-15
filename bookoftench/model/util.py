@@ -174,6 +174,13 @@ def display_bank_balance(game_state: GameState) -> None:
         f"Bank: {green(f"{game_state.bank.balance}")}"])}\n")
 
 
+def display_player_attributes(game_state: GameState) -> None:
+    player: Player = game_state.player
+
+    print_and_sleep(f"\n{dim('Strength |')} {red(round(player.strength, 2))}"
+        f"\n{dim('Accuracy |')} {yellow(round(player.acc, 2))}\n")
+
+
 def display_game_stats(game_state: GameState) -> None:
     player = game_state.player
     player_color = p_color(player.hp, player.max_hp)
