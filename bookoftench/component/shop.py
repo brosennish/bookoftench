@@ -8,7 +8,7 @@ from bookoftench.component.base import LabeledSelectionComponent, ReprBinding, S
     functional_component, Component, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent, NoOpComponent
 from bookoftench.component.officer import OfficerEncounter
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import SHOP_THEME, PURCHASE, XP
+from bookoftench.data.audio import SHOP_THEME, PURCHASE, XP, WHIFF
 from bookoftench.data.components import SHOP
 from bookoftench.data.perks import CATFISH_BURGLAR
 from bookoftench.model import GameState
@@ -83,8 +83,8 @@ class ShopComponent(LabeledSelectionComponent):
         cost = min(4 + (1 * player.lvl), 10)
 
         if player.coins >= cost:
-            # TODO - play new sound
             player.coins -= cost
+            play_sound(WHIFF)
             self.game_state.current_area.shop.reset_inventory()
         else:
             print_and_sleep(yellow("Need more coin"), 2)

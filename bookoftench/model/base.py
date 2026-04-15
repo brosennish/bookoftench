@@ -331,7 +331,8 @@ class Combatant(ABC):
             self.hp += amount
             print_and_sleep(green(f"{self.name} regenerated {amount} HP."), 1)
         elif self.trait.name == PREPARED:
-            if self.hp < (self.max_hp * 0.5) and self.prepared_active:
+            threshold = random.uniform(0.1, 0.5)
+            if self.hp < (self.max_hp * threshold) and self.prepared_active:
                 original = self.hp
                 amount = random.randint(25, 50)
                 self.hp += min(amount, self.max_hp - self.hp)

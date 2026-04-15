@@ -47,7 +47,7 @@ class SellableItem(Item):
     def __repr__(self):
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
-            f"Value: {orange(self.sell_value):<17}",
+            f"Value: {orange(self.sell_value):<18}",
             (f"HP: +{green(self.hp)}" if self.hp > 0 else f"{self.desc}"),
         ])
 

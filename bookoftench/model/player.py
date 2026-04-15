@@ -353,12 +353,13 @@ class Player(Combatant):
         if name == self.current_weapon.base_name:
             selection = next((w for w in self.weapon_dict.values()))
             self.current_weapon = PlayerWeapon.from_weapon(selection)
+        play_sound(COINS)
         event_logger.log_event(ItemSoldEvent(sellable_weapon.name, sellable_weapon.sell_value))
 
     def equip_weapon(self, name: str, base_name: str) -> None:
         if base_name != self.current_weapon.base_name:
             event_logger.log_event(SwapWeaponEvent())
-            self.current_weapon = self.weapon_dict[name]
+            self.current_weapon = self.weapon_dict[base_name]
             play_sound(EQUIP_WEAPON)
             print_and_sleep(cyan(f"{name} equipped."), 1)
 

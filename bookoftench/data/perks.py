@@ -169,7 +169,7 @@ Perks = [
     },
     {
         'name': NEPTUNE,
-        'cost': 100,
+        'cost': 85,
         'description': "Prevent Hohkken attacks",
     },
     {
