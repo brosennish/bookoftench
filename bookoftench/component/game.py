@@ -205,10 +205,8 @@ class PlayAgainDecision(BinarySelectionComponent):
 class NewGameReset(LinearComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
-                         next_component=Intro)
+                         next_component=BuildTypeSelection)
 
     def execute_current(self) -> GameState:
-        name = self.game_state.player.name
         new_game_state = GameState()
-        new_game_state.player.name = name
         return new_game_state
