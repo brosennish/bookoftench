@@ -116,6 +116,8 @@ class GameState:
             self.wench_area = random.choice(self.areas)
         if len(self.wanted) == 0:
             self.refresh_bounty()
+        self.set_moon()
+        self.set_time_of_day()
         event_logger.set_counter(self.event_counter)
         set_achievement_cache(self.achievement_cache)
         set_perk_cache(self.perk_cache)
@@ -125,11 +127,17 @@ class GameState:
         crypto_service.start()
         self._subscribe_listeners()
 
+    def set_time_of_day(self):
+        self.time_of_day = random.choice([DAYTIME, NIGHTTIME])
+
     def update_time_of_day(self) -> None:
         if self.time_of_day == DAYTIME:
             self.time_of_day = NIGHTTIME
         elif self.time_of_day == NIGHTTIME:
             self.time_of_day = DAYTIME
+
+    def set_moon(self):
+        self.moon = random.choice([DRY, DRYING, WETTING, FULL])
 
     def update_moon(self) -> None:
         if self.moon == DRY:
