@@ -53,7 +53,7 @@ class Metadata:
                 f"{cyan(f"Level: {self.player_level}")}" " | "
                 f"{blue(f"Area: {self.player_area}")}" " | "
                 f"{yellow(f"Lives: {self.player_lives}")}" " | "
-                f"{green(f"Last Save: {save}")}" " | ")
+                f"{green(f"Last Save: {save}")}")
 
 
 @dataclass
