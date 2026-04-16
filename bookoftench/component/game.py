@@ -87,7 +87,7 @@ class BuildSelect(LinearComponent):
         play_music(START_THEME)
         player = self.game_state.player
         while not player.name:
-            player.name = safe_input("What be your name?")
+            player.name = safe_input("What is your name?")
         BuildTypeSelection(self.game_state).run()
         return self.game_state
 

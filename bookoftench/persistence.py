@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import List, Optional
 
 from bookoftench.model import GameState
-from bookoftench.ui import cyan, red
+from bookoftench.ui import cyan, red, orange, blue, yellow, green
 from bookoftench.util import print_and_sleep
 
 _SAVE_DIR = ".saves"  # TODO don't just save straight to a directory in the repo
@@ -48,11 +48,12 @@ class Metadata:
             json.dump(asdict(self), f)
 
     def format(self) -> str:
-        return (f"{self.player_name} | "
-                f"Level {self.player_level} | "
-                f"Area: {self.player_area} | "
-                f"Lives: {self.player_lives} | "
-                f"Last Save: {datetime.fromtimestamp(self.save_time).strftime("%Y-%m-%d %H:%M:%S")}")
+        save = datetime.fromtimestamp(self.save_time).strftime("%Y-%m-%d %H:%M:%S")
+        return (f"{orange(f"{self.player_name}")}" " | "
+                f"{cyan(f"Level: {self.player_level}")}" " | "
+                f"{blue(f"Area: {self.player_area}")}" " | "
+                f"{yellow(f"Lives: {self.player_lives}")}" " | "
+                f"{green(f"Last Save: {save}")}" " | ")
 
 
 @dataclass
