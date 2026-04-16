@@ -15,7 +15,7 @@ from bookoftench.model import GameState
 from bookoftench.model.base import Buyable
 from bookoftench.model.perk import attach_perk
 from bookoftench.model.util import display_active_perk_count, display_shop_header
-from bookoftench.ui import blue, yellow
+from bookoftench.ui import blue, yellow, orange
 from bookoftench.util import print_and_sleep
 
 _max_steal_chance = 75

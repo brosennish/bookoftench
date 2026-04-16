@@ -118,22 +118,25 @@ def get_player_status_view(game_state: GameState) -> str:
     player = game_state.player
     player_color = p_color(player.hp, player.max_hp)
     tod = game_state.time_of_day
+    tod_display = "Day" if tod == DAYTIME else "Night"
     moon = game_state.moon
     killed_remaining = [f"Killed: {red(f"{game_state.current_area.enemies_killed}")}"]
     if perk_is_active(CROWS_NEST):
         killed_remaining.append(f"Left: {yellow(f"{game_state.current_area.enemies_remaining}")}")
 
+    hp_display = f"HP: {player_color(f"{player.hp}/{player.max_hp}" if player.hp != player.max_hp else
+                                     f"{player.hp}")}"
     player_status = (f"{dim(' | ').join([
         f"{blue(game_state.current_area.name)}",
         *killed_remaining,
-        f"{yellow(tod) if tod == DAYTIME else purple(tod)}",
+        f"{yellow(tod_display) if tod == DAYTIME else purple(tod_display)}",
         f"{moon} Moon",
         f"Wanted: {purple(game_state.wanted)}",
         f"Bounty: {purple(f"{game_state.bounty}")}"])}"
                      f"\n{dim(' | ').join([
                          f"\n{orange(player.name)} {dim('-')} Level: {cyan(f"{player.lvl}")}",
                          f"XP: {cyan(f"{player.xp}/{player.xp_needed}")}",
-                         f"HP: {player_color(f"{player.hp}/{player.max_hp}")}",
+                         f"{hp_display}",
                          f"Coins: {green(f"{player.coins}")}",
                          f"Lives: {yellow(f"{player.lives}")}"])}")
 
@@ -199,8 +202,6 @@ def display_game_stats(game_state: GameState) -> None:
 
     display_stat("Coins", player.coins, green)
     display_stat("Bank Balance", game_state.bank.balance, green)
-    display_stat("Deposits", event_logger.get_count(EventType.DEPOSIT), green)
-    display_stat("Withdrawals", event_logger.get_count(EventType.WITHDRAW), green)
     display_stat("Interest Earned", game_state.bank.interest, green)
 
     display_stat("Casino Won", player.casino_won, green)
@@ -209,7 +210,7 @@ def display_game_stats(game_state: GameState) -> None:
     display_stat("Hits", event_logger.get_count(EventType.HIT), red)
     display_stat("Misses", event_logger.get_count(EventType.MISS), blue)
     display_stat("Critical Hits", event_logger.get_count(EventType.CRIT), red)
-    display_stat("Successful Flees", event_logger.get_count(EventType.FLEE), cyan)
+    display_stat("Flees", event_logger.get_count(EventType.FLEE), cyan)
     display_stat("Failed Flees", event_logger.get_count(EventType.FAILED_FLEE), yellow)
 
     display_stat("Enemies Killed", event_logger.get_count(EventType.KILL), red)
