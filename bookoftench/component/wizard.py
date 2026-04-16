@@ -81,15 +81,15 @@ class WizardComponent(LabeledSelectionComponent):
         def purchase_component(game_state: GameState):
             player = game_state.player
             if player.coins < spell.cost:
-                print_and_sleep(yellow(f"Need more coin"), 2)
+                print_and_sleep(yellow(f"Need more coin"), 1)
                 return
             if spell.type == WEAPON:
                 if len(player.get_weapons()) == player.max_weapons:
-                    print_and_sleep(yellow(f"No room in sack"), 2)
+                    print_and_sleep(yellow(f"No room in sack"), 1)
                     return
             if spell.type == ITEM:
                 if len(player.items) == player.max_items:
-                    print_and_sleep(yellow(f"No room in sack"), 2)
+                    print_and_sleep(yellow(f"No room in sack"), 1)
                     return
 
             play_sound(PURCHASE)

@@ -35,8 +35,6 @@ class BlacksmithComponent(LabeledSelectionComponent):
         player = game_state.player
         valid = [i for i in player.weapon_dict.values() if i.type not in [BLIND] and
                  not i.is_elite]
-        if not valid:
-            print_and_sleep(yellow("Sledge Jr. does not work on blind-type weapons."))
 
         weapon_bindings = [ReprBinding(str(i + 1), weapon.base_name,
                                        self._make_purchase_component(weapon), weapon) for
