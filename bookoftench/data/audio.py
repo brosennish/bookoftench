@@ -47,13 +47,11 @@ WHIFF = "whiff.mp3"
 
 # Misc Sounds
 ACHIEVEMENT = "achievement.mp3"
+CLICK = "click.mp3"
 COINS = "coins.wav"
 DEVIL_THUNDER = "devil_thunder.wav"
-DISCOVERABLE_COMMON = "discoverable_common.mp3" # TODO
-DISCOVERABLE_UNCOMMON = "discoverable_uncommon.mp3" # TODO
-DISCOVERABLE_RARE = "discoverable_rare.mp3" # TODO
-DISCOVERABLE_LEGENDARY = "discoverable_legendary.mp3" # TODO
-DISCOVERABLE_MYTHIC = "discoverable_mythic.mp3" # TODO
+DISCOVERABLE = "discoverable.mp3"
+DISCOVERABLE_2 = "discoverable_2.mp3"
 DRINK = "drink.mp3"
 EAT = "eat.mp3"
 ENEMY_APPEARS = "enemy_appears.wav"

@@ -8,14 +8,13 @@ from typing import Dict, List, Self
 
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
-from bookoftench.data.audio import WEAPON_BROKE, WHIFF, OWL
-from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT, PREPARED, JUNKIE, ORACLE, COWARD, \
-    WEREWOLF, NIGHT_OWL
+from bookoftench.data.audio import WEAPON_BROKE, WHIFF
+from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT, PREPARED, JUNKIE, ORACLE
 from bookoftench.data.weapons import MELEE, RANGED, BLIND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
 from bookoftench.model.illness import Illness
 from bookoftench.model.trait import Trait
-from bookoftench.ui import red, yellow, color_text, purple, cyan, dim, blue, green
+from bookoftench.ui import red, yellow, color_text, purple, cyan, dim, green
 from bookoftench.util import print_and_sleep
 
 

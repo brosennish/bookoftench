@@ -387,7 +387,7 @@ Search_Discoverables = [
     {"pre": "were", "name": "Attacked by the Black Eyed Children", "value": 0, "hp": -17, "rarity": RARE,
      "areas": [CAVE]},
     {"pre": "got", "name": "Caught in a Rusty Trap", "value": 0, "hp": -8, "rarity": RARE,
-     "areas": [CITY, FOREST, SWAMP]},
+     "areas": [FOREST, SWAMP]},
     {"pre": None, "name": "Caught on Fire", "value": 0, "hp": -13, "rarity": RARE,
      "areas": [CITY, FOREST, SWAMP]},
     {"pre": "were", "name": "Crushed by a Boulder", "value": 0, "hp": -15, "rarity": RARE,
