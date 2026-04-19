@@ -165,10 +165,15 @@ class Area:
 
         return self.current_enemy
 
-    def summon_boss(self) -> Boss:
+    def summon_other_boss(self) -> Boss:
         self.current_enemy = self.boss
         if self.boss.name != HOHKKEN:
             self.current_enemy.current_weapon = make_elite_weapon(self.current_enemy.current_weapon)
+        return self.current_enemy
+
+    def summon_boss(self) -> Boss:
+        self.current_enemy = self.boss
+        self.current_enemy.current_weapon = make_elite_weapon(self.current_enemy.current_weapon)
         return self.current_enemy
 
     def summon_final_boss(self) -> Boss:

@@ -18,6 +18,7 @@ DISCOVER_PERK = "Discover Perk"
 DISCOVER_SPECIAL = "Discover Special"
 DISCOVER_WEAPON = "Discover Weapon"
 EQUIP_WEAPON = "Equip Weapon"
+FIGHT_BOSS_OTHER = "Fight Boss Other"
 FINAL_BOSS_FIGHT = purple("BATTLE DENNY BILTMORE")
 GREEDY_BASTARD = "Greedy Bastard"
 HOSPITAL = "Hospital"

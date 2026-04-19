@@ -12,7 +12,7 @@ from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL, MENSCH_T
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
-    OVERVIEW, INFO, BUILD, ATTRIBUTES
+    OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT, Perks
@@ -954,7 +954,19 @@ class BattleEnd(NoOpComponent):
         PostKillEncounters(self.game_state).run()
 
 
+@register_component(FIGHT_BOSS_OTHER)
+class FightBossOther(Battle):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state)
+        self.enemy = self.game_state.current_area.summon_other_boss()
 
+    def play_theme(self) -> None:
+        play_music(self.enemy.theme)
+
+    def run(self) -> GameState:
+        self.play_theme()
+        self.enemy.do_preamble()
+        return self.game_state
 
 
 @register_component(AREA_BOSS_FIGHT)
