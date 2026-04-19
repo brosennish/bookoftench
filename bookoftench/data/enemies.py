@@ -89,6 +89,7 @@ NORMAL = "normal"
 BOSS = "boss"
 FINAL_BOSS = "final_boss"
 
+It_Its = [HOHKKEN, SENTIENT_ROBOT]
 
 Traits = [
     {'name': ACHILLES, 'desc': 'Equips a Tench Cannon when HP falls below 25'}, 
@@ -287,8 +288,8 @@ Bosses = [
     ]},
 
     {'name': HOHKKEN, 'hp': 300,
-     'weapons': [BEAK, TENTACLES],
-     'bounty': 0, 'type': BOSS, 'flee': 0.95, 'strength': 1, 'acc': 1,
+     'weapons': [TENTACLES, BEAK],
+     'bounty': 0, 'type': BOSS, 'flee': 0.90, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
     }
 ]
 

@@ -170,9 +170,9 @@ class GameState:
                 self.current_area = area
                 event_logger.log_event(TravelEvent(area_name))
                 if not perk_is_active(NEPTUNE) and self.hohkken_is_alive:
-                    if self.time_of_day == DAYTIME and random.random() < 1:
+                    if self.time_of_day == DAYTIME and random.random() < 0.04:
                         event_logger.log_event(HohkkenEvent())
-                    elif self.time_of_day == NIGHTTIME and random.random() < 1:
+                    elif self.time_of_day == NIGHTTIME and random.random() < 0.08:
                         event_logger.log_event(HohkkenEvent())
                 return
 

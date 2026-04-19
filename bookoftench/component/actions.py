@@ -13,9 +13,9 @@ from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEM
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
     OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER
-from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER
+from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER, HOHKKEN
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
-from bookoftench.data.perks import DEATH_CAN_WAIT, Perks
+from bookoftench.data.perks import DEATH_CAN_WAIT, Perks, NEPTUNE
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.discoverable import load_discoverables, search_discoverable_rarity, rarity_color
 from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE, Enemy
@@ -609,14 +609,39 @@ class Search(RandomChoiceComponent):
 @register_component(TRAVEL)
 class Travel(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state,
-                         bindings=[
-                             ColoredNameSelectionBinding(key=str(i), name=area.name, color=blue,
-                                                         component=functional_component()(
-                                                             partial(game_state.update_current_area, area.name)))
-                             for i, area in enumerate(
-                                 sorted([a for a in game_state.areas if a.name != game_state.current_area.name],
-                                        key=lambda a: a.name), 1)], quittable=True)
+        super().__init__(
+            game_state,
+            bindings=[
+                ColoredNameSelectionBinding(
+                    key=str(i),
+                    name=area.name,
+                    color=blue,
+                    component=self._make_travel_component(area.name)
+                )
+                for i, area in enumerate(
+                    sorted(
+                        [a for a in game_state.areas if a.name != game_state.current_area.name],
+                        key=lambda a: a.name
+                    ),
+                    1
+                )
+            ],
+            quittable=True
+        )
+
+    @staticmethod
+    def _make_travel_component(area_name: str):
+        @functional_component(state_dependent=True)
+        def travel_component(game_state: GameState):
+            game_state.update_current_area(area_name)
+
+            if getattr(game_state, "pending_boss", False):
+                game_state.pending_boss = False
+                return FightBossOther(game_state).run()
+
+            return game_state
+
+        return travel_component
 
 
 @register_component(USE_ITEM)
@@ -927,10 +952,19 @@ class BattleEnd(NoOpComponent):
         if enemy.type == FINAL_BOSS:
             self.game_state.victory = True
             return
+
+        if self.game_state.pending_boss:
+            self.game_state.pending_boss = False
+
         # TODO maybe put the next 3 lines in an event callback
         stop_music()
         play_sound(DEVIL_THUNDER)
         print_and_sleep(red(f"{enemy.name} is now in Hell."), 2)
+
+        if enemy.name == HOHKKEN:
+            activate_perk(NEPTUNE)
+            self.game_state.hohkken = False
+
         if self.game_state.is_wanted(enemy):
             event_logger.log_event(BountyCollectedEvent(enemy.name))
         enemy_weapon = enemy.drop_weapon()

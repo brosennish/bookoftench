@@ -9,7 +9,7 @@ from typing import Dict, List, Self
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import WEAPON_BROKE, WHIFF
-from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT, PREPARED, JUNKIE, ORACLE
+from bookoftench.data.enemies import SLEDGE_HAMMOND, BUTTERFINGERS, INVESTOR, PLANT, PREPARED, JUNKIE, ORACLE, It_Its
 from bookoftench.data.weapons import MELEE, RANGED, BLIND
 from bookoftench.model.events import HitEvent, CritEvent, MissEvent
 from bookoftench.model.illness import Illness
@@ -277,7 +277,8 @@ class Combatant(ABC):
                             f"{red(damage_inflicted)} damage!", 1)
             event_logger.log_event(HitEvent(self.current_weapon.type))
         else:
-            print_and_sleep(f"{self.name} attacked you with their {self.current_weapon.name} for "
+            pronoun = "its" if self.name in It_Its else "their"
+            print_and_sleep(f"{self.name} attacked you with {pronoun} {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
 
         other.take_damage(damage_inflicted, self)

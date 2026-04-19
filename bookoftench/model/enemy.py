@@ -10,7 +10,7 @@ from bookoftench.data import Enemies
 from bookoftench.data.audio import AREA_BOSS_THEME, GATOR, EQUIP_WEAPON
 from bookoftench.data.enemies import Bosses, Final_Boss, BAYOU_BILL, Enemy_Lines, WEREWOLF
 from bookoftench.data.perks import RICKETY_PICKPOCKET
-from bookoftench.data.weapons import BARE_HANDS, BLIND
+from bookoftench.data.weapons import BARE_HANDS, BLIND, SPECIAL
 from bookoftench.ui import purple, cyan
 from bookoftench.util import print_and_sleep
 from .base import Combatant, NPC, DisplayableText
@@ -50,7 +50,7 @@ class Enemy(Combatant, NPC):
         self.max_hp = self.hp
 
     def drop_weapon(self) -> Optional[Weapon]:
-        if self.current_weapon.sell_value > 0:
+        if self.current_weapon.sell_value > 0 and self.current_weapon.type != SPECIAL:
             return self.current_weapon
         return None
 
