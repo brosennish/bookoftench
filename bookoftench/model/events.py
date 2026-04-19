@@ -101,12 +101,8 @@ class TravelEvent(Event):
 
 
 class HohkkenEvent(Event):
-    def __init__(self, damage: int, death: bool):
-        super().__init__(EventType.HOHKKEN,
-                         lambda: print_and_sleep(red(f"You were dragged down by the Hohkken.\n"
-                            if death else
-                            f"You were attacked for {damage} damage.\n"), 2))
-
+    def __init__(self):
+        super().__init__(EventType.HOHKKEN)
         stop_music()
         play_sound(HOHKKEN)
         print_and_sleep(red(f"Hohkken!"), 3)

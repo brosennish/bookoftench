@@ -166,18 +166,13 @@ class GameState:
             if area.name == area_name:
                 self.current_area = area
                 event_logger.log_event(TravelEvent(area_name))
-                if not perk_is_active(NEPTUNE) and random.random() < 0.05:
-                    death = False
-                    damage = min(random.randint(1, self.player.lvl * 10), self.player.hp)
-                    if damage == self.player.hp:
-                        death = True
-                    event_logger.log_event(HohkkenEvent(damage, death))
-                    if death:
-                        self.player.lives -= 1
-                        event_logger.log_event(PlayerDeathEvent(self.player.lives))
-                    else:
-                        self.player.hp -= damage
+                if not perk_is_active(NEPTUNE):
+                    if self.time_of_day == DAYTIME and random.random() < 0.04:
+                        event_logger.log_event(HohkkenEvent())
+                    elif self.time_of_day == NIGHTTIME and random.random() < 0.08:
+                        event_logger.log_event(HohkkenEvent())
                 return
+
         raise KeyError(f"Area '{area_name}' not found")
 
     def play_current_area_theme(self) -> None:
