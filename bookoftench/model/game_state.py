@@ -18,7 +18,7 @@ from .bank import Bank
 from .build import Build
 from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
-from .events import TravelEvent, BountyCollectedEvent, LevelUpEvent, HohkkenEvent, PlayerDeathEvent
+from .events import TravelEvent, BountyCollectedEvent, LevelUpEvent, HohkkenEvent
 from .illness import load_illness
 from .item import Item, load_items
 from .perk import attach_perk, Perk, set_perk_cache, load_perk, perk_is_active
@@ -27,6 +27,7 @@ from .shop import Shop
 from .weapon import Weapon, load_weapons
 from ..data.audio import COINS
 from ..data.builds import Builds
+from ..data.enemies import HOHKKEN
 from ..data.illnesses import Illnesses
 from ..data.enviroment import DRY, DAYTIME, NIGHTTIME, WETTING, FULL, DRYING
 
@@ -39,9 +40,13 @@ class GameState:
     areas: List[Area] = field(default_factory=load_areas)
     current_area: Area = None
 
+    pending_boss: bool = False
+
     casino_is_open: bool = True
     coffee_is_open: bool = True
     hospital_is_open: bool = True
+
+    hohkken_is_alive: bool = True
 
     time_of_day: str = field(default=DAYTIME)
     moon: str = field(default=DRY)
@@ -164,18 +169,13 @@ class GameState:
             if area.name == area_name:
                 self.current_area = area
                 event_logger.log_event(TravelEvent(area_name))
-                if not perk_is_active(NEPTUNE) and random.random() < 0.05:
-                    death = False
-                    damage = min(random.randint(1, self.player.lvl * 10), self.player.hp)
-                    if damage == self.player.hp:
-                        death = True
-                    event_logger.log_event(HohkkenEvent(damage, death))
-                    if death:
-                        self.player.lives -= 1
-                        event_logger.log_event(PlayerDeathEvent(self.player.lives))
-                    else:
-                        self.player.hp -= damage
+                if not perk_is_active(NEPTUNE) and self.hohkken_is_alive:
+                    if self.time_of_day == DAYTIME and random.random() < 0.04:
+                        event_logger.log_event(HohkkenEvent())
+                    elif self.time_of_day == NIGHTTIME and random.random() < 0.08:
+                        event_logger.log_event(HohkkenEvent())
                 return
+
         raise KeyError(f"Area '{area_name}' not found")
 
     def play_current_area_theme(self) -> None:
@@ -192,6 +192,11 @@ class GameState:
         @subscribe_function(AchievementEvent)
         def handle_achievement_event(event: AchievementEvent):
             event.activate(self.player)
+
+        @subscribe_function(HohkkenEvent)
+        def handle_hohkken_event(event: HohkkenEvent):
+            self.current_area.set_boss_to_current_enemy(HOHKKEN)
+            self.pending_boss = True
 
         @subscribe_function(LevelUpEvent)
         def trigger_level_up_events(_: LevelUpEvent):

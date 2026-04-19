@@ -178,8 +178,8 @@ Items = [
     # --- SPECIAL ---
     {'name': ACCURACY_SEARUM, 'type': STAT, 'hp': 0, 'cost': 110, 'sell_value': 55, 'areas': [CAVE, FOREST],
      'desc': 'Increase accuracy by 0.03', 'sound': DRINK},
-    {'name': BOOMERANG, 'type': ENEMY, 'hp': 0, 'cost': 45, 'sell_value': 0, 'areas': [CITY, FOREST, SWAMP],
-     'desc': 'Do X damage to enemy and lose X HP', 'sound': BOOMERANG},
+    {'name': BOOMERANG, 'type': ENEMY, 'hp': 0, 'cost': 45, 'sell_value': 14, 'areas': [CITY, FOREST, SWAMP],
+     'desc': 'Do X damage to enemy and lose X/2 HP', 'sound': BOOMERANG},
     {'name': CRITICAL_BASS, 'type': CRIT, 'hp': 0, 'cost': 55, 'sell_value': 18, 'areas': [CAVE, FOREST],
      'desc': 'Make your next attack a critical hit', 'sound': EAT},
     {'name': FLACCID_ACID, 'type': ENEMY, 'hp': 0, 'cost': 75, 'sell_value': 22, 'areas': [CAVE, CITY, SWAMP],

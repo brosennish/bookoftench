@@ -1,5 +1,6 @@
 from bookoftench.ui import Colors
 from . import audio, weapons as w
+from .weapons import TENTACLES, BEAK
 
 # Areas
 CAVE = "Cave"
@@ -35,6 +36,7 @@ GRAVE_ROBBER = "Grave Robber"
 HAND_FISHERMAN = "Hand Fisherman"
 HIKER = "Hiker"
 HOBO = "Hobo"
+HOHKKEN = "Hohkken"
 HUMANOID_CAVE_CREATURE = "Humanoid Cave Creature"
 HUNTER = "Hunter"
 INFLUENCER = "Influencer"
@@ -87,6 +89,7 @@ NORMAL = "normal"
 BOSS = "boss"
 FINAL_BOSS = "final_boss"
 
+It_Its = [HOHKKEN, SENTIENT_ROBOT]
 
 Traits = [
     {'name': ACHILLES, 'desc': 'Equips a Tench Cannon when HP falls below 25'}, 
@@ -282,7 +285,12 @@ Bosses = [
      'bounty': 0, 'type': BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1.05, 'preamble': [
         {'text': "Captain Hole has offered to shoot himself in the jines in exchange for a Tench Filet.",
          'sleep': 4}
-    ]}
+    ]},
+
+    {'name': HOHKKEN, 'hp': 300,
+     'weapons': [TENTACLES, BEAK],
+     'bounty': 0, 'type': BOSS, 'flee': 0.90, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    }
 ]
 
 # ========================

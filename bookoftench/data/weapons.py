@@ -14,6 +14,7 @@ NA = "NA" # Not applicable / can't be found or purchased
 AXE = "Axe"
 BARE_HANDS = "Bare Hands"
 BASEBALL_BAT = "Baseball Bat"
+BEAK = "Beak"
 BINOCULARS = "Binoculars"
 BEAR_SPRAY = "Bear Spray"
 BONE_CLUB = "Bone Club"
@@ -74,6 +75,7 @@ SUITCASE = "Suitcase"
 SURVIVAL_KNIFE = "Survival Knife"
 SWITCHBLADE = "Switchblade"
 TENCH_CANNON = "Tench Cannon"
+TENTACLES = "Tentacles"
 TIRE_IRON = "Tire Iron"
 TORCH_CLUB = "Torch Club"
 TREKKING_POLE = "Trekking Pole"
@@ -402,12 +404,20 @@ Weapons = [
     # =====================================================
     #                NOT OBTAINABLE BY PLAYER
     # =====================================================
+    {'name': BEAK, 'damage': 40, 'uses': -1, 'accuracy': 0.66, 'var': 5, 'crit': 0.20,
+     'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'subtype': MELEE, 'tier': 0, 'sound': audio.EAT,
+     'areas': NA},
+
     {'name': CLAWS, 'damage': 22, 'uses': -1, 'accuracy': 0.86, 'var': 3, 'crit': 0.10,
      'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'subtype': MELEE, 'tier': 0, 'sound': audio.PUNCH,
      'areas': NA},
 
     {'name': LASER_BEAMS, 'damage': 30, 'uses': -1, 'accuracy': 0.74, 'var': 3, 'crit': 0.12,
      'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'subtype': RANGED, 'tier': 0, 'sound': audio.MAGIC,
+     'areas': NA},
+
+    {'name': TENTACLES, 'damage': 30, 'uses': -1, 'accuracy': 0.90, 'var': 2, 'crit': 0.1,
+     'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'subtype': MELEE, 'tier': 0, 'sound': audio.PUNCH,
      'areas': NA},
 
     {'name': VOODOO_STAFF, 'damage': 28, 'uses': -1, 'accuracy': 0.76, 'var': 4, 'crit': 0.09,

@@ -10,7 +10,7 @@ from bookoftench.data.areas import EncounterType
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
     SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD
-from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, COWARD, CONTAGIOUS, NIGHT_OWL
+from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, COWARD, CONTAGIOUS, NIGHT_OWL, HOHKKEN, BOSS
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
@@ -165,6 +165,12 @@ class Area:
 
         return self.current_enemy
 
+    def set_boss_to_current_enemy(self, name: str):
+        self.current_enemy = load_boss(name)
+        if self.current_enemy.name != HOHKKEN:
+            self.current_enemy.current_weapon = make_elite_weapon(self.current_enemy.current_weapon)
+        return self.current_enemy
+
     def summon_boss(self) -> Boss:
         self.current_enemy = self.boss
         self.current_enemy.current_weapon = make_elite_weapon(self.current_enemy.current_weapon)
@@ -177,7 +183,8 @@ class Area:
         return self.current_enemy
 
     def kill_current_enemy(self) -> None:
-        self.enemies_killed += 1
+        if self.current_enemy.type != BOSS:
+            self.enemies_killed += 1
         if self.current_enemy == self.boss:
             self.boss_defeated = True
         self.current_enemy = None

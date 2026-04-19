@@ -123,7 +123,7 @@ BOOK OF TENCH - OVERVIEW
     MISSION
     - Your mission is to find and rescue Chula
     - She is being held in one of four areas and is guarded by
-      a number of enemies and multiple bosses
+      a number of enemies and bosses
     - Find Chula and defeat everyone who stands in your way
       to fulfill the prophecy and win the game
       
@@ -135,16 +135,17 @@ BOOK OF TENCH - OVERVIEW
       special events, and enemies
     - Shop to buy/sell items and weapons or purchase perks;
       shoplifting is also an option
+    - Respect Officer Hohkken
       
     CITY
     - The Casino offers two games where you can take a chance
       and push your luck
-    - Visit the Coffee Shop for a quick HP boost at the risk
+    - Visit the Coffee Shop for a cheap HP boost at the risk
       of catching what the owner has
     - You may visit the Hospital when sick to purchase 
       treatments of questionable efficacy
-    - The Bank offers a safe place for your coins to grow
-      without risk of being lost
+    - The Bank provides a safe place for your coins to grow
+      without the risk of being lost
     
     FOREST
     - Visit the Blacksmith to upgrade your weapons
@@ -160,11 +161,11 @@ BOOK OF TENCH - OVERVIEW
       to your benefit
 
     ELEMENTS
-    - HP is the player's health
-    - If the player runs out of HP, they die and lose
+    - HP represents your health
+    - If you run out of HP, they die and lose
       a Life
-    - If the player runs out of Lives, the game is over
-    - The player levels up as XP (experience) is gained 
+    - If you run out of Lives, the game is over
+    - You level up as XP (experience) is gained 
     - Coins are the game's currency
     - Weapons are used to battle enemies
     - Items are either used to heal, become stronger,
@@ -173,30 +174,26 @@ BOOK OF TENCH - OVERVIEW
     
     WEAPON
     - Dmg represents the base weapon damage 
-    - In battle, dmg reflects base damage multiplied by
-      the player or enemy's strength value
     - Acc represents the base weapon accuracy
-    - In battle, acc reflects base accuracy multiplied by
-      the player or enemy's accuracy value
     - Var represents the weapon's variance or spread
       Ex. Dmg: 10, Var: 5 - Damage will be between 5-15
     - Crit represents the weapon's odds for delivering a 
       critical hit (1.5x damage)
     - Uses represents the number of attacks the weapon is
-      able to deliver
+      able to deliver (misses don't count)
     - When no uses remain, the weapon breaks and is removed
       from your inventory
       
     BATTLE
-    - The player and enemy take turns attacking during battle
-    - The player always goes first in the turn
-    - Each turn, the player has the option to either: 
-      Attack, Use an Item, Switch their Weapon, Flee,
+    - You and the enemy take turns attacking during battle
+    - You always go first in the turn
+    - Each turn, you have the option to either: 
+      Attack, Use an Item, Switch your Weapon, Flee,
       or View player and enemy info
-    - If the player wins, they are awarded coins and xp,
-      and they may receive the enemy's weapon
-    - Battles may be affected by the enemy Traits, which
-      can be viewed in View during battle
+    - If you win, you are awarded coins and xp,
+      and you may receive the enemy's weapon
+    - Battles may be affected by enemy Traits, which
+      can be seen in View during battle
     
     MAIN MENU
     - Save your game, load your game, and adjust sound and sfx
@@ -208,10 +205,10 @@ class Intro(TextDisplayingComponent):
         super().__init__(game_state,
                          next_component=ActionMenu,
                          display_callback=lambda _: print_and_sleep(red("""
-You wash ashore on a deserted beach outside of Shebokken.
-The champion has informed you that his mother, Chula, was taken in the night.
-The prophecy has foretold that you shall find and return her to the champion.
-Fulfill the prophecy, before her life runs dry...
+You wash up on a deserted beach outside of Shebokken.
+The champion tells you that his mother, Chula, was taken in the night.
+He consecrates you as the chosen spawn who will rescue his Tench maiden.
+Fulfill the prophecy, lest Chula's life run dry...
 """)))
 
     def play_theme(self) -> None:
