@@ -30,13 +30,13 @@ class Build:
         values = dim(' | ').join([
             f"Lives: {cyan(self.lives)}",
             f"HP: {green(self.hp)}{spacing}",
-            f"Strength: {yellow(f'{self.str:<3}')}",
+            f"Strength: {red(f'{self.str:<3}')}",
             f"Accuracy: {yellow(f'{self.acc:<3}')}",
             f"Coins: {green(f'{self.coins:<3}')}\n"
         ])
 
-        items = dim(', ').join(f"{green(p.name)}" for p in self.items)
-        weapons = dim(', ').join(f"{red(p.name)}" for p in self.weapons)
+        items = dim(', ').join(f"{cyan(p.name)}" for p in self.items)
+        weapons = dim(', ').join(f"{cyan(p.name)}" for p in self.weapons)
         perks_str = dim(', ').join(f"{purple(p.name)}" for p in self.perks)
 
         if self.illness:

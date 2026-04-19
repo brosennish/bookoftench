@@ -7,7 +7,8 @@ from bookoftench.audio import play_music, play_sound, stop_music
 from bookoftench.component.base import TextDisplayingComponent, functional_component, Component, \
     ColoredNameSelectionBinding, BinarySelectionComponent, \
     NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent, ReprBinding
-from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL, MENSCH_THEME, POSITIVE
+from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL, MENSCH_THEME, POSITIVE, DISCOVERABLE, \
+    DISCOVERABLE_2
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
@@ -367,7 +368,7 @@ class BuildComponent(LabeledSelectionComponent):
         ]
 
     def display_options(self) -> None:
-        print_and_sleep("What be your build?", 2)
+        print_and_sleep("What is your build?", 2)
 
         for component in self.selection_components:
             component.display_options()
@@ -483,17 +484,19 @@ class Search(RandomChoiceComponent):
 
         # log event for stats
         if rarity == COMMON:
+            play_sound(DISCOVERABLE)
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_COMMON))
         elif rarity == UNCOMMON:
+            play_sound(DISCOVERABLE)
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_UNCOMMON))
         elif rarity == RARE:
-            play_sound(POSITIVE)
+            play_sound(DISCOVERABLE)
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_RARE))
         elif rarity == LEGENDARY:
-            play_sound(POSITIVE)
+            play_sound(DISCOVERABLE_2)
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_LEGENDARY))
         else:
-            play_sound(POSITIVE)
+            play_sound(DISCOVERABLE_2)
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_MYTHIC))
 
         # take damage if find.hp < 0
@@ -591,7 +594,7 @@ class Search(RandomChoiceComponent):
     @register_component(DISCOVER_PERK)
     @functional_component()
     def _discover_perk():
-        filtered: List[Perk] = load_perks(lambda p: not (p.active or p.name == WENCH_LOCATION))
+        filtered: List[Perk] = load_perks(lambda p: not p.active)
         if len(filtered) > 0:
             play_music(MENSCH_THEME)
             reward = random.choice(filtered)
