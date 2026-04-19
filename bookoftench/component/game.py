@@ -118,18 +118,88 @@ class Tutorial(TextDisplayingComponent):
         super().__init__(game_state,
                          next_component=Intro,
                          display_callback=lambda _: print_and_sleep("""
-BOOK OF TENCH - HOW TO PLAY
+BOOK OF TENCH - OVERVIEW
 
-    1. Search areas to find discoverables and encounter enemies
-    2. Fight enemies in turn-based combat to earn XP and coins
-    3. Buy and sell items, weapons and perks in the shop
-    4. Use items freely during your turn or between battles
-    5. Gain perks that permanently affect combat, coins, or luck
-    6. Play casino games to risk coins for big rewards
-    7. Store coins in the bank to protect wealth and earn interest 
-    8. Each area has a boss and a hidden number of enemies
-    9. Clear the wench’s area to unlock the final showdown
-    10. Defeat the final boss to save the wench and win the game
+    MISSION
+    - Your mission is to find and rescue Chula
+    - She is being held in one of four areas and is guarded by
+      a number of enemies and multiple bosses
+    - Find Chula and defeat everyone who stands in your way
+      to fulfill the prophecy and win the game
+      
+    GAMEPLAY
+    - Travel between areas as needed
+    - You may encounter the Hohkken while traveling,
+      especially at night
+    - Search to find discoverables, items, weapons, perks,
+      special events, and enemies
+    - Shop to buy/sell items and weapons or purchase perks;
+      shoplifting is also an option
+      
+    CITY
+    - The Casino offers two games where you can take a chance
+      and push your luck
+    - Visit the Coffee Shop for a quick HP boost at the risk
+      of catching what the owner has
+    - You may visit the Hospital when sick to purchase 
+      treatments of questionable efficacy
+    - The Bank offers a safe place for your coins to grow
+      without risk of being lost
+    
+    FOREST
+    - Visit the Blacksmith to upgrade your weapons
+    - Pay the Wizard to conjure a random item or weapon
+    
+    SWAMP
+    - The Shaman offers special items to heal HP, 
+      blindness, and illness 
+      
+    CAVE
+    - Earn coins at the Lab for participating in experiments 
+    - The Occultist can perform ritual sacrifices, potentially 
+      to your benefit
+
+    ELEMENTS
+    - HP is the player's health
+    - If the player runs out of HP, they die and lose
+      a Life
+    - If the player runs out of Lives, the game is over
+    - The player levels up as XP (experience) is gained 
+    - Coins are the game's currency
+    - Weapons are used to battle enemies
+    - Items are either used to heal, become stronger,
+      or assist in battle
+    - Perks are permanent upgrades that have special benefits
+    
+    WEAPON
+    - Dmg represents the base weapon damage 
+    - In battle, dmg reflects base damage multiplied by
+      the player or enemy's strength value
+    - Acc represents the base weapon accuracy
+    - In battle, acc reflects base accuracy multiplied by
+      the player or enemy's accuracy value
+    - Var represents the weapon's variance or spread
+      Ex. Dmg: 10, Var: 5 - Damage will be between 5-15
+    - Crit represents the weapon's odds for delivering a 
+      critical hit (1.5x damage)
+    - Uses represents the number of attacks the weapon is
+      able to deliver
+    - When no uses remain, the weapon breaks and is removed
+      from your inventory
+      
+    BATTLE
+    - The player and enemy take turns attacking during battle
+    - The player always goes first in the turn
+    - Each turn, the player has the option to either: 
+      Attack, Use an Item, Switch their Weapon, Flee,
+      or View player and enemy info
+    - If the player wins, they are awarded coins and xp,
+      and they may receive the enemy's weapon
+    - Battles may be affected by the enemy Traits, which
+      can be viewed in View during battle
+    
+    MAIN MENU
+    - Save your game, load your game, and adjust sound and sfx
 """))
 
 

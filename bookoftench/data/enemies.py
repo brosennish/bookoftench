@@ -27,7 +27,7 @@ EXPLORER = "Explorer"
 FERAL_PHILOSOPHER = "Feral Philosopher"
 FORAGER = "Forager"
 FORTUNE_TELLER = "Fortune Teller"
-FROGGER = "Frogger"
+PHROGGER = "Phrogger"
 FUGITIVE = "Fugitive"
 GATOR_WRESTLER = "Gator Wrestler"
 GOON = "Goon"
@@ -116,7 +116,7 @@ Enemies = [
      'bounty': 165, 'coins': 35, 'type': NORMAL, 'flee': 1.00, 'strength': 1, 'acc': 1, 'areas': [CITY]},
     {'name': CLOWN, 'trait': '', 'illness': None, 'hp': 100, 'weapons': [w.BROKEN_BOTTLE, w.MEAT_CLEAVER, w.RUBBER_CHICKEN],
      'bounty': 130, 'coins': 25, 'type': NORMAL, 'flee': 1.00, 'strength': 1, 'acc': 1, 'areas': [CITY]},
-    {'name': FROGGER, 'trait': '', 'illness': None, 'hp': 100, 'weapons': [w.FROG_GIG, w.PILLOW, w.PISTOL],
+    {'name': PHROGGER, 'trait': '', 'illness': None, 'hp': 100, 'weapons': [w.FROG_GIG, w.PILLOW, w.PISTOL],
      'bounty': 150, 'coins': 40, 'type': NORMAL, 'flee': 1.00, 'strength': 1, 'acc': 1, 'areas': [CITY]},
     {'name': INFLUENCER, 'trait': '', 'illness': None, 'hp': 75, 'weapons': [w.POCKET_KNIFE, w.SELFIE_STICK, w.PEPPER_SPRAY],
      'bounty': 120, 'coins': 65, 'type': NORMAL, 'flee': 1.20, 'strength': 0.75, 'acc': 0.75, 'areas': [CITY]},
@@ -344,10 +344,10 @@ Enemy_Lines = {
         "I scare little kids and make their parents uncomfortable for a living.",
     ],
 
-    FROGGER: [
+    PHROGGER: [
         "Attics are cozier than people give them credit for.",
         "I don't have to frog. I have money.",
-        "I was raised by a frogger. Spent my childhood hiding in random people's attics.",
+        "I was raised by a phrogger. Spent my childhood hiding in random people's attics.",
         "With your bounty, I will buy a mini fridge for the attic I'm frogging in.",
         "I have a son. He lives with me, learning the ways of frogging.",
         "My wife wants custody of our son, but she'll never find us.",
@@ -727,13 +727,14 @@ Enemy_Lines = {
 
 Enemy_Adjectives = [
     "Agitated", "Angry", "Animatronic", "Belligerent", "Bestial",
-    "Bloodthirsty", "Braindead", "Cannibalistic", "Crazy",
+    "Bloodthirsty", "Braindead", "Brainwashed",
+    "Cannibalistic", "Crazy",
     "Crazed", "Cross-eyed", "Cruel", "Cursed", "Damned",
     "Dastardly", "Degenerate",
     "Delirious", "Demented", "Depraved", "Deranged", "Desperate",
     "Detestable", "Diabolical", "Disgruntled", "Disillusioned",
     "Disoriented", "Disturbed", "Drug-fueled",
-    "Drunken", "Dubious", "Evil",
+    "Drunken", "Dubious", "Evangelical", "Evil",
     "Forgotten", "Godless", "Greedy", "Grotesque",
     "Hallucinatory", "Heartless",
     "Heinous", "Hollow", "Homicidal", "Hostile", "Hysterical",
@@ -746,7 +747,8 @@ Enemy_Adjectives = [
     "Rude", "Ruthless", "Sadistic", "Savage",
     "Satanic", "Sexually-frustrated",
     "Shallow", "Sinful", "Soulless",
-    "Tench-crazed", "Tench-eyed", "Typical", "Uncool", "Unholy",
+    "Tench-crazed", "Tench-eyed", "Typical",
+    "Uncool", "Unholy",
     "Uninspired", "Unnatural", "Unstable", "Untethered",
     "Untrustworthy", "Vile", "Violent", "Wretched",
 ]

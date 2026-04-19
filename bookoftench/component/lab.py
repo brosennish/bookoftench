@@ -108,7 +108,7 @@ def conduct_experiment(game_state):
     if random.random() < 0.08: # LEVEL
         original = player.lvl
         amount = -1
-        if random.random() < 0.55:  # higher odds to increase level (bad for player)
+        if random.random() < 0.58:  # higher odds to increase level (bad for player)
             amount = 1
         player.lvl += amount
         if player.lvl <= 0:
@@ -131,7 +131,7 @@ def conduct_experiment(game_state):
     if random.random() < 0.06: # LIVES
         original = player.lives
         amount = 1
-        if random.random() < 0.55:  # higher odds to lose a life since you're getting paid
+        if random.random() < 0.58:  # higher odds to lose a life since you're getting paid
             amount = -1
         else:
             if player.lives == 5:

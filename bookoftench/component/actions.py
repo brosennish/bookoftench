@@ -594,7 +594,7 @@ class Search(RandomChoiceComponent):
     @register_component(DISCOVER_PERK)
     @functional_component()
     def _discover_perk():
-        filtered: List[Perk] = load_perks(lambda p: not (p.active or p.name == WENCH_LOCATION))
+        filtered: List[Perk] = load_perks(lambda p: not p.active)
         if len(filtered) > 0:
             play_music(MENSCH_THEME)
             reward = random.choice(filtered)

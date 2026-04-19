@@ -129,7 +129,7 @@ def make_elite_weapon(weapon: Weapon) -> Weapon:
 
     # uses
     if weapon.uses > 0:
-        weapon.uses += random.randint(3, 6)
+        weapon.uses += random.randint(3, 5)
 
     # cost
     increase = round(weapon.cost * 0.12)
