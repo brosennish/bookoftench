@@ -15,7 +15,7 @@ from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEM
     OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
-from bookoftench.data.perks import WENCH_LOCATION, DEATH_CAN_WAIT, Perks
+from bookoftench.data.perks import DEATH_CAN_WAIT, Perks
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.discoverable import load_discoverables, search_discoverable_rarity, rarity_color
 from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE, Enemy
@@ -633,8 +633,6 @@ class ItemSelectionComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         self.length = 0
         enemy = game_state.current_area.current_enemy
-        time = game_state.time_of_day
-        moon = game_state.moon
 
         for i in game_state.player.items.keys():
             if len(i) > self.length:
@@ -700,8 +698,6 @@ class SwapFoundItemYN(BinarySelectionComponent):
 class SwapFoundItemMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         found = game_state.found_item
-        time = game_state.time_of_day
-        moon = game_state.moon
 
         valid = list(i for i in game_state.player.items.values())
         length = 0
@@ -958,7 +954,7 @@ class BattleEnd(NoOpComponent):
 class FightBossOther(Battle):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
-        self.enemy = self.game_state.current_area.summon_other_boss()
+        self.enemy = self.game_state.current_area.current_enemy
 
     def play_theme(self) -> None:
         play_music(self.enemy.theme)
@@ -966,6 +962,7 @@ class FightBossOther(Battle):
     def run(self) -> GameState:
         self.play_theme()
         self.enemy.do_preamble()
+        self.game_state = super().run()
         return self.game_state
 
 
