@@ -954,6 +954,9 @@ class BattleEnd(NoOpComponent):
         PostKillEncounters(self.game_state).run()
 
 
+
+
+
 @register_component(AREA_BOSS_FIGHT)
 class FightBoss(Battle):
     def __init__(self, game_state: GameState):

@@ -1,5 +1,6 @@
 from bookoftench.ui import Colors
 from . import audio, weapons as w
+from .weapons import TENTACLES, BEAK
 
 # Areas
 CAVE = "Cave"
@@ -35,6 +36,7 @@ GRAVE_ROBBER = "Grave Robber"
 HAND_FISHERMAN = "Hand Fisherman"
 HIKER = "Hiker"
 HOBO = "Hobo"
+HOHKKEN = "Hohkken"
 HUMANOID_CAVE_CREATURE = "Humanoid Cave Creature"
 HUNTER = "Hunter"
 INFLUENCER = "Influencer"
@@ -282,7 +284,12 @@ Bosses = [
      'bounty': 0, 'type': BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1.05, 'preamble': [
         {'text': "Captain Hole has offered to shoot himself in the jines in exchange for a Tench Filet.",
          'sleep': 4}
-    ]}
+    ]},
+
+    {'name': HOHKKEN, 'hp': 300,
+     'weapons': [BEAK, TENTACLES],
+     'bounty': 0, 'type': BOSS, 'flee': 0.95, 'strength': 1, 'acc': 1,
+    }
 ]
 
 # ========================
