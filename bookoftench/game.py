@@ -1,7 +1,7 @@
 from bookoftench.audio import stop_all_sounds
 from bookoftench.component import InitGame
 from bookoftench.component.base import Component
-from bookoftench.data.components import CRYPTO_EXCHANGE
+# from bookoftench.data.components import CRYPTO_EXCHANGE
 from bookoftench.globals import enable_debug_mode
 from bookoftench.model import GameState
 from bookoftench.model.perk import load_perks
@@ -41,7 +41,8 @@ class SaveTheWenchGame:
                 player.weapon_dict[weapon.base_name] = PlayerWeapon.from_weapon(weapon)
             for area in game_state.areas:
                 if area.name == "City":
-                    area.actions_menu.pages[-1].append(CRYPTO_EXCHANGE)
+                    pass
+                    # area.actions_menu.pages[-1].append(CRYPTO_EXCHANGE)
             component_type(game_state).run()
         except KeyboardInterrupt:
             print_and_sleep("\nExiting...", 1)
