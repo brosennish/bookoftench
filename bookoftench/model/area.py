@@ -24,7 +24,7 @@ from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
 from bookoftench.data.perks import SHERLOCK_TENCH
 from bookoftench.data.weapons import CLAWS, BLIND, SPECIAL
 from ..audio import play_sound
-from ..data.audio import ENEMY_APPEARS
+from ..data.audio import ENEMY_APPEARS, OWL
 
 _search_defaults = {
     DISCOVER_PERK: 1,
@@ -156,7 +156,7 @@ class Area:
             self.current_enemy.current_weapon = load_weapon(CLAWS)
             play_sound(WEREWOLF)
         elif self.current_enemy.trait.name == NIGHT_OWL and time == NIGHTTIME:
-            play_sound(NIGHT_OWL)
+            play_sound(OWL)
 
         # --- elite weapon logic ---
         if self.current_enemy.current_weapon.type not in [BLIND, SPECIAL] and random.random() < 0.15:
