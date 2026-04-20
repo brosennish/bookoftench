@@ -962,8 +962,8 @@ class BattleEnd(NoOpComponent):
         print_and_sleep(red(f"{enemy.name} is now in Hell."), 2)
 
         if enemy.name == HOHKKEN:
-            event_logger.log_event(DefeatHohkkenEvent())
             activate_perk(NEPTUNE)
+            event_logger.log_event(DefeatHohkkenEvent())
             self.game_state.hohkken_is_alive = False
 
         if self.game_state.is_wanted(enemy):

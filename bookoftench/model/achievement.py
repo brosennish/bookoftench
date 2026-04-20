@@ -43,7 +43,7 @@ class Achievement:
                 reward_str = f"{self.reward_value} of coin"
             case RewardType.PERK:
                 # TODO - this is duplicated
-                filtered: List[Perk] = load_perks(lambda p: not (p.active or p.name == WENCH_LOCATION))
+                filtered: List[Perk] = load_perks(lambda p: not p.active)
                 if len(filtered) > 0:
                     reward: Perk = random.choice(filtered)
                     reward_callback = lambda: reward.activate()
