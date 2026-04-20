@@ -1,4 +1,3 @@
-import os
 import pygame
 from dataclasses import dataclass
 from typing import Optional, List
@@ -14,6 +13,10 @@ pygame.mixer.init(buffer=256)
 # --- Cache ---
 _SOUND_CACHE = {}
 _INITIALIZED = False
+
+
+_current_music_file: Optional[str] = None
+
 
 def preload_all_audio() -> None:
     """Preload all audio files from the audio directory."""
@@ -107,14 +110,26 @@ def is_track_playing(file_name: str, volume: float) -> bool:
 
 
 def play_music(file_name: str) -> None:
+    global _current_music_file
+
     if not settings.is_audio_enabled():
+        return
+
+    # 🚫 don't restart if same track is already playing
+    if _current_music_file == file_name and pygame.mixer.music.get_busy():
         return
 
     path = get_audio_path(file_name)
 
+    # fade out current track if switching
+    if pygame.mixer.music.get_busy():
+        pygame.mixer.music.fadeout(50)
+
     pygame.mixer.music.load(path)
     pygame.mixer.music.set_volume(get_music_volume())
-    pygame.mixer.music.play(-1)  # infinite loop
+    pygame.mixer.music.play(-1, fade_ms=50)
+
+    _current_music_file = file_name
 
 
 def stop_music() -> None:
@@ -123,7 +138,7 @@ def stop_music() -> None:
 
 def restart_music() -> None:
     if settings.is_audio_enabled():
-        pygame.mixer.music.play(-1)
+        pygame.mixer.music.play(-1, fade_ms=300)
 
 
 # --- Global cleanup ---
