@@ -227,7 +227,6 @@ class AboveOrBelow(CasinoGame):
             if choice not in ('c', '$'):
                 print_and_sleep(yellow("Invalid choice."))
             else:
-                play_sound(PURCHASE)
                 return choice == '$'
 
     def get_wager_or_quit(self) -> int:
@@ -254,6 +253,7 @@ class AboveOrBelow(CasinoGame):
                 if self.turn == len(self.ladder):
                     print_and_sleep(f"{blue("You completed the final round.")}")
                     player.gain_xp_other(3)
+                play_sound(COINS)
                 print_and_sleep(f"{green(f"You cashed out {payout} coins!")}")
                 player.casino_won += payout
                 self.player_quit = True
