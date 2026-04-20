@@ -1,7 +1,10 @@
+import os
+
 try:
     import curses
 except ImportError:
     curses = None
+
 import time
 from abc import ABC, abstractmethod
 from typing import List
@@ -9,15 +12,14 @@ from typing import List
 import bookoftench.service.crypto_service as crypto_service
 from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import Component
-from bookoftench.component.registry import register_component
 from bookoftench.curses_util import init_colors, SimpleWindow, Line, LinePart
 from bookoftench.data.audio import CRYPTO_THEME, PURCHASE
-from bookoftench.data.components import CRYPTO_EXCHANGE
+# from bookoftench.data.components import CRYPTO_EXCHANGE
 from bookoftench.model import GameState
 from bookoftench.model.crypto import CryptoCurrency, TransactionType
 
 
-@register_component(CRYPTO_EXCHANGE)
+# @register_component(CRYPTO_EXCHANGE)
 class CryptoExchange(Component):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
