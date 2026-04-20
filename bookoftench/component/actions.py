@@ -20,7 +20,7 @@ from bookoftench.event_logger import subscribe_function
 from bookoftench.model.discoverable import load_discoverables, search_discoverable_rarity, rarity_color
 from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE, Enemy
 from bookoftench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent, DiscoveryEvent, \
-    FailedFleeEvent
+    FailedFleeEvent, DefeatHohkkenEvent
 from bookoftench.model.game_state import GameState
 from bookoftench.model.item import load_items
 from bookoftench.model.perk import load_perks, Perk, perk_is_active, activate_perk
@@ -962,8 +962,9 @@ class BattleEnd(NoOpComponent):
         print_and_sleep(red(f"{enemy.name} is now in Hell."), 2)
 
         if enemy.name == HOHKKEN:
+            event_logger.log_event(DefeatHohkkenEvent())
             activate_perk(NEPTUNE)
-            self.game_state.hohkken = False
+            self.game_state.hohkken_is_alive = False
 
         if self.game_state.is_wanted(enemy):
             event_logger.log_event(BountyCollectedEvent(enemy.name))

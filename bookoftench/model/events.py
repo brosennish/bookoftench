@@ -108,6 +108,11 @@ class HohkkenEvent(Event):
         print_and_sleep(red(f"Hohkken!"), 3)
 
 
+class DefeatHohkkenEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.DEFEAT_HOHKKEN)
+
+
 class CritEvent(Event):
     def __init__(self):
         super().__init__(EventType.CRIT)

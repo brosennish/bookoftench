@@ -16,6 +16,7 @@ MASTER_OF_TENCH = "Master of Tench"
 MYTHIC = "Mythic"
 PATIENT_68 = "Patient 68"
 RECKLESS = "Reckless"
+SEONG_GI_HUN = "Seong Gi-Hun"
 TENCH_BUNDY = "Tench Bundy"
 TENCH_KILLS = "Tench Kills"
 VIGILANTE = "Vigilante"
@@ -28,6 +29,14 @@ class RewardType(Enum):
 
 
 Achievements = [
+    {
+        'id': SEONG_GI_HUN,
+        'name': "Seong Gi-hun",
+        'description': "Defeat the Hohkken",
+        'reward_type': RewardType.PERK,
+        'event_type': EventType.DEFEAT_HOHKKEN,
+        'event_threshold': 1
+    },
     {
         'id': KRILL_OR_BE_KRILLED,
         'name': "Krill or be Krilled",
