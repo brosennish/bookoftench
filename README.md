@@ -1,6 +1,6 @@
 # Book of Tench
 
-Terminal-based roguelite RPG built in Python.
+Save Chula. Fulfill the prophecy.
 
 ## Run
 
