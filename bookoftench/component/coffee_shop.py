@@ -33,7 +33,7 @@ class CoffeeSleeping(GatekeepingComponent):
         super().__init__(game_state, decision_function=lambda: game_state.time_of_day == DAYTIME,
                          accept_component=CoffeeBouncer,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             red(f"Coughy is trying to rest and recover.\n"), 1.5)))
+                             red(f"Coughy is trying to sleep.\n"), 1.5)))
 
 
 class CoffeeBouncer(GatekeepingComponent):
