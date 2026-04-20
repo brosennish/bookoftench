@@ -1,4 +1,7 @@
-import curses
+try:
+    import curses
+except ImportError:
+    curses = None
 import time
 from abc import ABC, abstractmethod
 from typing import List
