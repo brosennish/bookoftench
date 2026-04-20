@@ -1,10 +1,43 @@
-import subprocess
+import os
+import pygame
 from dataclasses import dataclass
-from subprocess import Popen
 from typing import Optional, List
 
 from bookoftench import settings
 from .data.audio import get_audio_path
+
+
+# --- Init mixer (low latency) ---
+pygame.mixer.init(buffer=256)
+
+
+# --- Cache ---
+_SOUND_CACHE = {}
+_INITIALIZED = False
+
+def preload_all_audio() -> None:
+    """Preload all audio files from the audio directory."""
+    import os
+    from .data.audio import get_audio_path
+
+    global _INITIALIZED
+    if _INITIALIZED:
+        return
+
+    audio_dir = os.path.dirname(get_audio_path(""))
+
+    for file in os.listdir(audio_dir):
+        if file.lower().endswith((".wav", ".mp3")):
+            _preload_sound(file)
+
+    _INITIALIZED = True
+
+
+def _preload_sound(file_name: str):
+    if file_name not in _SOUND_CACHE:
+        _SOUND_CACHE[file_name] = pygame.mixer.Sound(
+            get_audio_path(file_name)
+        )
 
 
 # --- Tracking state ---
@@ -12,26 +45,34 @@ from .data.audio import get_audio_path
 class AudioProcess:
     file_name: Optional[str] = None
     volume: Optional[float] = None
-    _process: Optional[Popen] = None
+    _channel: Optional[pygame.mixer.Channel] = None
 
     def is_playing(self) -> bool:
-        if self._process is not None:
-            return self._process.poll() is None
-        return False
+        return self._channel is not None and self._channel.get_busy()
 
-    def play(self) -> None:
-        if self._process is not None:
-            if self.is_playing():
-                self.terminate()
-        if self.file_name is not None and self.volume is not None:
-            self._process = subprocess.Popen(
-                ["afplay", "-v", str(self.volume), get_audio_path(self.file_name)],
-                stderr=subprocess.DEVNULL)
+    def play(self, loop: bool = False) -> None:
+        if self.file_name is None or self.volume is None:
+            return
+
+        if self.is_playing():
+            self.terminate()
+
+        # --- MUST already be preloaded ---
+        sound = _SOUND_CACHE.get(self.file_name)
+        if sound is None:
+            # fallback (shouldn't happen if preloaded properly)
+            sound = pygame.mixer.Sound(get_audio_path(self.file_name))
+            _SOUND_CACHE[self.file_name] = sound
+
+        sound.set_volume(self.volume)
+
+        loops = -1 if loop else 0
+        self._channel = sound.play(loops=loops)
 
     def terminate(self) -> None:
-        if self._process is not None:
-            self._process.terminate()
-        self._process = None
+        if self._channel is not None:
+            self._channel.stop()
+        self._channel = None
 
 
 _current_music: AudioProcess = AudioProcess()
@@ -49,7 +90,6 @@ def get_sfx_volume() -> float:
 # --- SFX ---
 
 def play_sound(file_name: str) -> None:
-    """Fire-and-forget sound effect, tracked so we can stop it later."""
     if not settings.is_audio_enabled():
         return
 
@@ -69,38 +109,33 @@ def is_track_playing(file_name: str, volume: float) -> bool:
 def play_music(file_name: str) -> None:
     global _current_music
 
-    # OPTIONAL: don't restart if same track is already playing
     if is_track_playing(file_name, get_music_volume()):
         return
+
+    _current_music.terminate()
 
     _current_music.file_name = file_name
     _current_music.volume = get_music_volume()
 
-    # only play if audio is enabled, but track state in case it is re-enabled later
     if settings.is_audio_enabled():
-        # TODO log/print some message if this fails and disable audio
-        _current_music.play()
+        _current_music.play(loop=True)
 
 
 def stop_music() -> None:
-    """Stop only the current music track."""
     _current_music.terminate()
 
 
 def restart_music() -> None:
     _current_music.volume = get_music_volume()
     if settings.is_audio_enabled():
-        _current_music.play()
+        _current_music.play(loop=True)
 
 
 # --- Global cleanup ---
 
 def stop_all_sounds() -> None:
-    """Stop music and all tracked SFX processes."""
-    # Stop music
     stop_music()
 
-    # Stop SFX
     for p in ACTIVE_SOUNDS:
         p.terminate()
 

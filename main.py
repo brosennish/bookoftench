@@ -2,6 +2,11 @@ import argparse
 
 from bookoftench import SaveTheWenchGame
 
+from bookoftench.audio import preload_all_audio
+from bookoftench.data.audio import get_audio_path
+
+import os
+
 
 def load_component(class_name):
     import importlib
@@ -29,6 +34,9 @@ if __name__ == '__main__':
     parser.add_argument("-s", "--seed", type=int, default=666)
 
     args = parser.parse_args()
+
+    audio_dir = os.path.dirname(get_audio_path("dummy.wav"))
+    preload_all_audio()
 
     if args.debug:
         import random
