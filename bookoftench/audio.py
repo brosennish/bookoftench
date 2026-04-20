@@ -107,28 +107,23 @@ def is_track_playing(file_name: str, volume: float) -> bool:
 
 
 def play_music(file_name: str) -> None:
-    global _current_music
-
-    if is_track_playing(file_name, get_music_volume()):
+    if not settings.is_audio_enabled():
         return
 
-    _current_music.terminate()
+    path = get_audio_path(file_name)
 
-    _current_music.file_name = file_name
-    _current_music.volume = get_music_volume()
-
-    if settings.is_audio_enabled():
-        _current_music.play(loop=True)
+    pygame.mixer.music.load(path)
+    pygame.mixer.music.set_volume(get_music_volume())
+    pygame.mixer.music.play(-1)  # infinite loop
 
 
 def stop_music() -> None:
-    _current_music.terminate()
+    pygame.mixer.music.stop()
 
 
 def restart_music() -> None:
-    _current_music.volume = get_music_volume()
     if settings.is_audio_enabled():
-        _current_music.play(loop=True)
+        pygame.mixer.music.play(-1)
 
 
 # --- Global cleanup ---
