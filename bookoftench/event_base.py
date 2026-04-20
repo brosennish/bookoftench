@@ -20,6 +20,7 @@ class EventType(Enum):
     COIN_DELISTING_SCHEDULED = "coin_delisting_scheduled"
     COIN_LISTED = "coin_listed"
     CRIT = "crit"
+    DEFEAT_HOHKKEN = "defeat_hohkken"
     DEPOSIT = "deposit"
     DISCOVERY_COMMON = "discovery_common"
     DISCOVERY_UNCOMMON = "discovery_uncommon"
