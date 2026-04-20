@@ -354,10 +354,10 @@ Enemy_Lines = {
 
     PHROGGER: [
         "Attics are cozier than people give them credit for.",
-        "I don't have to frog. I have money.",
+        "I don't have to phrog. I have money.",
         "I was raised by a phrogger. Spent my childhood hiding in random people's attics.",
-        "With your bounty, I will buy a mini fridge for the attic I'm frogging in.",
-        "I have a son. He lives with me, learning the ways of frogging.",
+        "With your bounty, I will buy a mini fridge for the attic I'm phrogging in.",
+        "I have a son. He lives with me, learning the ways of phrogging.",
         "My wife wants custody of our son, but she'll never find us.",
     ],
 

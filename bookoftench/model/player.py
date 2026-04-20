@@ -263,10 +263,12 @@ class Player(Combatant):
                 return 0
             if item.name == BOOMERANG:
                 damage = random.randint(5, 25)
-                self.hp -= min(self.hp, round(damage/2))
+                half = damage // 2
+                self.hp -= min(self.hp, half)
                 enemy.hp -= min(enemy.hp, damage)
+                play_sound(BOOMERANG)
                 print_and_sleep(purple("..."), 2)
-                print_and_sleep(purple(f"Boomerang did {damage} damage and you lost {damage} HP!"), 1)
+                print_and_sleep(purple(f"Boomerang did {damage} damage and you lost {half} HP!"), 1)
             elif item.name == FLACCID_ACID:
                 original = round(enemy.strength, 2)
                 decrement = round(enemy.strength * 0.25, 2)

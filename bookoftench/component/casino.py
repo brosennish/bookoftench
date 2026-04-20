@@ -4,7 +4,7 @@ from functools import partial
 from typing import Callable
 
 from bookoftench.audio import play_music, play_sound
-from bookoftench.data.audio import GOLF_CLAP, CASINO_THEME, COINS, ROLL_DIE
+from bookoftench.data.audio import GOLF_CLAP, CASINO_THEME, COINS, ROLL_DIE, PURCHASE
 from bookoftench.data.components import CASINO
 from bookoftench.data.perks import GRAMBLING_ADDICT, WrapperIndices
 from bookoftench.model.game_state import GameState
@@ -227,6 +227,7 @@ class AboveOrBelow(CasinoGame):
             if choice not in ('c', '$'):
                 print_and_sleep(yellow("Invalid choice."))
             else:
+                play_sound(PURCHASE)
                 return choice == '$'
 
     def get_wager_or_quit(self) -> int:

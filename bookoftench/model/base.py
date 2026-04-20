@@ -325,7 +325,7 @@ class Combatant(ABC):
             self.acc += round(random.uniform(0.03, 0.12), 2)
             print_and_sleep(green(f"{self.name}'s strength and accuracy increased."), time)
             other.oracle_active = False
-        elif self.trait.name == PLANT:
+        elif self.trait.name == PLANT and self.hp < self.max_hp:
             amount = random.randint(1, 10)
             if (self.max_hp - self.hp) < amount:
                 amount = self.max_hp - self.hp
