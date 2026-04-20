@@ -16,7 +16,7 @@ from .achievement import AchievementEvent, set_achievement_cache, load_achieveme
 from .area import Area, load_areas
 from .bank import Bank
 from .build import Build
-from .crypto import CryptoMarketState
+# from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
 from .events import TravelEvent, BountyCollectedEvent, LevelUpEvent, HohkkenEvent
 from .illness import load_illness
@@ -65,8 +65,7 @@ class GameState:
     perk_cache: Dict[str, Perk] = field(default_factory=dict)
     achievement_cache: Dict[str, Achievement] = field(default_factory=dict)
     settings: Settings = field(default_factory=Settings.defaults)
-    crypto_market_state: CryptoMarketState = field(default_factory=CryptoMarketState.defaults)
-
+    crypto_market_state = None
     _all_builds: List[Build] = field(init=False)
 
     @property
@@ -128,8 +127,8 @@ class GameState:
         set_perk_cache(self.perk_cache)
         set_settings(self.settings)
         load_achievements()
-        crypto_service.init(self.crypto_market_state)
-        crypto_service.start()
+        if self.crypto_market_state is not None:
+            crypto_service.init(self.crypto_market_state)
         self._subscribe_listeners()
 
     def set_time_of_day(self):

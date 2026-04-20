@@ -4,7 +4,7 @@ from .bank import *
 from .blacksmith import *
 from .casino import *
 from .coffee_shop import *
-from .crypto import *
+# from .crypto import *
 from .lab import *
 from .game import InitGame
 from .hospital import *
