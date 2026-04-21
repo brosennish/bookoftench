@@ -301,7 +301,7 @@ class Combatant(ABC):
                 self.handle_traits(other)
 
     def handle_traits(self, other: "Combatant") -> None:
-        time = 1.5
+        time = 1
         if self.trait.name == BUTTERFINGERS:
             dropped = min(self.coins, random.randint(1, 10))
             self.coins -= dropped
