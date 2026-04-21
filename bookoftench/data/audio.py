@@ -48,6 +48,7 @@ WHIFF = "whiff.mp3"
 
 # Misc Sounds
 ACHIEVEMENT = "achievement.mp3"
+BOOMERANG_SFX = "boomerang.mp3"
 CLICK = "click.mp3"
 COINS = "coins.wav"
 DEVIL_THUNDER = "devil_thunder.wav"
@@ -69,7 +70,7 @@ RITUAL = "ritual.wav"
 ROLL_DIE = "roll_die.mp3"
 TELEPORT = "teleport.mp3"
 WELCOME_TO_HELL = "welcome_to_hell.wav"
-WEREWOLF = "werewolf.wav"
+WEREWOLF_SFX = "werewolf.wav"
 XP = "xp.mp3"
 
 

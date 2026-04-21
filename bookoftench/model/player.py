@@ -6,7 +6,8 @@ from typing import Dict, List, Optional
 
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
-from bookoftench.data.audio import RIFLE, COINS, POSITIVE, XP, EQUIP_WEAPON
+from bookoftench.data.audio import RIFLE, COINS, XP, EQUIP_WEAPON, BOOMERANG_SFX, WHIFF, DRINK, DISCOVERABLE, POSITIVE, \
+    MAGIC, SPRAY, PUNCH
 from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, STAT, HTH, ACCURACY_SEARUM, DMG, CRIT, HEALTH, nPnG, \
     ENEMY, BOOMERANG, FLACCID_ACID, PHOTOSYNTHOPHYL, MOON_RUNE
 from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
@@ -220,26 +221,28 @@ class Player(Combatant):
 
 
     def handle_special_item(self, item, enemy, time, moon, game_state) -> int:
-        sfx = item.sound
-        play_sound(sfx)
-
         if item.type == FLEE:
+            play_sound(WHIFF)
             self.can_flee = True
 
         elif item.type == STAT:
             if item.name == ACCURACY_SEARUM:
                 old = round(self.acc, 2)
                 self.acc = round(self.acc + 0.03, 2)
+                play_sound(DRINK)
                 print_and_sleep(green(f"Accuracy: {old} -> {self.acc}"), 1)
             elif item.name == HTH:
                 old = round(self.strength, 2)
                 self.strength = round(self.strength + 0.03, 2)
+                play_sound(DRINK)
                 print_and_sleep(green(f"Strength: {old} -> {self.strength}"), 1)
 
         elif item.type == DMG:
+            play_sound(DISCOVERABLE)
             self.double_damage_active = True
 
         elif item.type == CRIT:
+            play_sound(DISCOVERABLE)
             self.crit_active = True
 
         elif item.type == HEALTH:
@@ -247,6 +250,7 @@ class Player(Combatant):
                 original_max = self.max_hp
                 amount = random.randint(1, 5)
                 self.max_hp += amount
+                play_sound(POSITIVE)
                 print_and_sleep(green(f"Max HP: {original_max} -> {self.max_hp}"), 1)
                 original_hp = self.hp
                 self.hp -= min(amount, original_hp)
@@ -255,6 +259,7 @@ class Player(Combatant):
                 if time == DAYTIME and game_state.current_area.name != CAVE:
                     amount = self.max_hp - self.hp
                     self.hp = self.max_hp
+                    play_sound(POSITIVE)
                     print_and_sleep(green(f"You used Photosynthophyl to restore {amount} HP!"), 1)
                     return amount
 
@@ -266,13 +271,15 @@ class Player(Combatant):
                 half = damage // 2
                 self.hp -= min(self.hp, half)
                 enemy.hp -= min(enemy.hp, damage)
-                play_sound(BOOMERANG)
+                play_sound(BOOMERANG_SFX)
                 print_and_sleep(purple("..."), 2)
+                play_sound(PUNCH)
                 print_and_sleep(purple(f"Boomerang did {damage} damage and you lost {half} HP!"), 1)
             elif item.name == FLACCID_ACID:
                 original = round(enemy.strength, 2)
                 decrement = round(enemy.strength * 0.25, 2)
                 enemy.strength = round(original - decrement, 2)
+                play_sound(SPRAY)
                 print_and_sleep(purple(f"You doused {enemy.name} with Flaccid Acid! Strength: "
                                        f"{original} -> {enemy.strength}"), 1)
             elif item.name == MOON_RUNE and time == NIGHTTIME and game_state.current_area.name != CAVE:
@@ -284,6 +291,7 @@ class Player(Combatant):
                 elif moon == FULL:
                     damage = 100
                 enemy.hp -= min(enemy.hp, damage) # add damage when solved
+                play_sound(MAGIC)
                 print_and_sleep(purple(f"Moon Rune did {damage} damage!"), 1)
         return 0
 
