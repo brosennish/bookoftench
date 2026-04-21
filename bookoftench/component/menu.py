@@ -34,6 +34,7 @@ class ActionMenu(PaginatedMenuComponent):
                 if self.game_state.current_area.enemies_remaining == 0:
                     modified.remove(SEARCH)
                     if not self.game_state.current_area.boss_defeated:
+                        self.game_state.current_area.current_enemy = self.game_state.current_area.boss
                         modified = [AREA_BOSS_FIGHT, *modified]
                     elif self.game_state.is_final_boss_available():
                         modified = [FINAL_BOSS_FIGHT, *modified]

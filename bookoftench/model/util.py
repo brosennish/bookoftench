@@ -218,7 +218,7 @@ def display_game_stats(game_state: GameState) -> None:
     display_stat("Shoplifts", event_logger.get_count(EventType.STEAL), cyan)
     display_stat("Bribes Paid", event_logger.get_count(EventType.OFFICER_PAID), green)
     display_stat("Police Brutalities", event_logger.get_count(EventType.OFFICER_UNPAID), red)
-    display_stat("Hohkken Attacks", event_logger.get_count(EventType.HOHKKEN), red)
+    display_stat("Hohkken Encounters", event_logger.get_count(EventType.HOHKKEN), red)
 
     display_stat("Areas Cleared", sum(1 for a in game_state.areas if a.enemies_remaining == 0), blue)
     display_stat("Bosses Defeated", sum(1 for a in game_state.areas if a.boss_defeated), red)
@@ -259,6 +259,14 @@ def display_active_perks(game_state: GameState) -> None:
 def get_battle_info_view(game_state: GameState) -> str:
     player: Player = game_state.player
     enemy: Enemy = game_state.current_area.current_enemy
+    tod = game_state.time_of_day
+    moon = game_state.moon
+
+    def format_world_data() -> str:
+        color = yellow if tod == DAYTIME else purple
+        word = "Day" if tod == DAYTIME else "Night"
+        return f"\n{color(word)} {dim('|')} {moon} Moon"
+
 
     def format_combatant_data(cmbt: Player | Enemy, name_color) -> str:
         if cmbt.trait in ['', None]:
@@ -284,7 +292,8 @@ def get_battle_info_view(game_state: GameState) -> str:
                     f"\n{dim('Ability  |')} {purple(cmbt.trait.desc)}"
                     )
 
-    return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, purple)}"
+    return (f"{format_world_data()}\n{format_combatant_data(player, orange)}\n"
+            f"{format_combatant_data(enemy, purple)}")
 
 
 def display_battle_info(game_state: GameState) -> None:

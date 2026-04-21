@@ -473,7 +473,7 @@ class Player(Combatant):
                 self.gain_accuracy(self.acc * 0.015)
 
         old_max = self.max_hp
-        if self.max_hp < 160:
+        if self.max_hp < 150:
             self.max_hp += 5
         self.hp = self.max_hp
 
