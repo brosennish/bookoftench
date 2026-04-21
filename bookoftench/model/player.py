@@ -7,7 +7,7 @@ from typing import Dict, List, Optional
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import RIFLE, COINS, XP, EQUIP_WEAPON, BOOMERANG_SFX, WHIFF, DRINK, DISCOVERABLE, POSITIVE, \
-    MAGIC, SPRAY
+    MAGIC, SPRAY, PUNCH
 from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, STAT, HTH, ACCURACY_SEARUM, DMG, CRIT, HEALTH, nPnG, \
     ENEMY, BOOMERANG, FLACCID_ACID, PHOTOSYNTHOPHYL, MOON_RUNE
 from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
@@ -273,6 +273,7 @@ class Player(Combatant):
                 enemy.hp -= min(enemy.hp, damage)
                 play_sound(BOOMERANG_SFX)
                 print_and_sleep(purple("..."), 2)
+                play_sound(PUNCH)
                 print_and_sleep(purple(f"Boomerang did {damage} damage and you lost {half} HP!"), 1)
             elif item.name == FLACCID_ACID:
                 original = round(enemy.strength, 2)
