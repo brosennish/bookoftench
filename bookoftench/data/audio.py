@@ -48,6 +48,7 @@ WHIFF = "whiff.mp3"
 
 # Misc Sounds
 ACHIEVEMENT = "achievement.mp3"
+BOOMERANG = "boomerang.mp3"
 CLICK = "click.mp3"
 COINS = "coins.wav"
 DEVIL_THUNDER = "devil_thunder.wav"

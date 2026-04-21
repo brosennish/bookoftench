@@ -6,7 +6,7 @@ from typing import Dict, List, Optional
 
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
-from bookoftench.data.audio import RIFLE, COINS, POSITIVE, XP, EQUIP_WEAPON
+from bookoftench.data.audio import RIFLE, COINS, XP, EQUIP_WEAPON, BOOMERANG
 from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, STAT, HTH, ACCURACY_SEARUM, DMG, CRIT, HEALTH, nPnG, \
     ENEMY, BOOMERANG, FLACCID_ACID, PHOTOSYNTHOPHYL, MOON_RUNE
 from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
