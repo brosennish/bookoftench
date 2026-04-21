@@ -108,13 +108,13 @@ Weapons = [
     #                       TIER 0 (BLIND)
     # =====================================================
     {'name': PEPPER_SPRAY, 'damage': 0, 'uses': 3, 'accuracy': 0.85, 'var': 0,
-     'crit': 0, 'cost': 25, 'sell_value': 12, 'type': BLIND, 'subtype': BLIND, 'tier': 0, 'sound': audio.SPRAY,
-     'blind_effect': 0.50, 'blind_turns_min': 2, 'blind_turns_max': 4,
+     'crit': 0, 'cost': 30, 'sell_value': 12, 'type': BLIND, 'subtype': BLIND, 'tier': 0, 'sound': audio.SPRAY,
+     'blind_effect': 0.50, 'blind_turns_min': 3, 'blind_turns_max': 5,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
 
     {'name': BEAR_SPRAY, 'damage': 0, 'uses': 2, 'accuracy': 0.85, 'var': 0, 'crit': 0,
      'cost': 60, 'sell_value': 30, 'type': BLIND, 'subtype': BLIND, 'tier': 0, 'sound': audio.SPRAY,
-     'blind_effect': 0.65, 'blind_turns_min': 2, 'blind_turns_max': 4,
+     'blind_effect': 0.65, 'blind_turns_min': 3, 'blind_turns_max': 5,
      'areas': [CAVE, FOREST, SWAMP]},
 
     {'name': CHILI_POWDER, 'damage': 0, 'uses': 1, 'accuracy': 0.90, 'var': 0, 'crit': 0,

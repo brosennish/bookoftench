@@ -1005,7 +1005,7 @@ class FightBossOther(Battle):
 class FightBoss(Battle):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
-        self.enemy = self.game_state.current_area.summon_boss()
+        self.enemy = self.game_state.current_area.current_enemy
 
     def play_theme(self) -> None:
         play_music(self.enemy.theme)

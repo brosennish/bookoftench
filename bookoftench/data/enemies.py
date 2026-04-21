@@ -247,11 +247,11 @@ Bosses = [
     # ========================
     #        AREA BOSSES
     # ========================
-    {'name': SLEDGE_HAMMOND, 'hp': 275,
+    {'name': SLEDGE_HAMMOND, 'hp': 250,
      'weapons': [w.SLEDGEHAMMER, w.AXE, w.CHAINSAW, w.BRASS_KNUCKLES, w.INJECTION_NEEDLE],
      'bounty': 0, 'type': BOSS, 'flee': 0.65, 'strength': 1.2, 'acc': 0.95, 'preamble': []},
 
-    {'name': THE_MAYOR, 'hp': 265,
+    {'name': THE_MAYOR, 'hp': 250,
      'weapons': [w.PISTOL, w.SHOTGUN, w.REVOLVER, w.BRASS_KNUCKLES, w.BASEBALL_BAT],
      'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1.1, 'acc': 1.05, 'theme': audio.FINAL_BOSS_THEME},
 
@@ -280,14 +280,14 @@ Bosses = [
           ]},
      ]},
 
-    {'name': CAPTAIN_HOLE, 'hp': 265,
+    {'name': CAPTAIN_HOLE, 'hp': 250,
      'weapons': [w.RIFLE, w.HARPOON, w.KNIFE, w.PISTOL, w.MACHETE],
      'bounty': 0, 'type': BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1.05, 'preamble': [
         {'text': "Captain Hole has offered to shoot himself in the jines in exchange for a Tench Filet.",
          'sleep': 4}
     ]},
 
-    {'name': HOHKKEN, 'hp': 300,
+    {'name': HOHKKEN, 'hp': 250,
      'weapons': [TENTACLES, BEAK],
      'bounty': 0, 'type': BOSS, 'flee': 0.90, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
     }
@@ -307,7 +307,7 @@ I knew if I captured the champion's beloved Chula, he would send you to her resc
 Well, let's have at it then."""
 Final_Boss = {
     'name': DENNY_BILTMORE,
-    'hp': 325, 'weapons': [w.BRASS_KNUCKLES, w.REVOLVER, w.SHOTGUN, w.CANE],
+    'hp': 300, 'weapons': [w.BRASS_KNUCKLES, w.REVOLVER, w.SHOTGUN, w.CANE],
     'bounty': 0, 'type': FINAL_BOSS, 'flee': 0.69, 'strength': 1.2, 'acc': 1.1, 'theme': audio.FINAL_BOSS_THEME,
     'preamble': [{'text': text, 'color': Colors.RED, 'sleep': 4}
                                                   for text in _biltmore_preamble_lines.split('\n')],

@@ -131,6 +131,7 @@ BOOK OF TENCH - OVERVIEW
     - Travel between areas as needed
     - You may encounter the Hohkken while traveling,
       especially at night
+    - Track and take out wanted enemies to collect bounties
     - Search to find discoverables, items, weapons, perks,
       special events, and enemies
     - Shop to buy/sell items and weapons or purchase perks;

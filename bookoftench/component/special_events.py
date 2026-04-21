@@ -211,7 +211,7 @@ class DiscoverSpecial(RandomChoiceComponent):
                     player.gain_xp_other(min(wager, 20))
                     return None
                 else:  # You suffer 1, calc damage and lose your wager (death if applicable)
-                    damage = random.randint(1, min(wager, 50))
+                    damage = random.randint(1, min(wager, 40))
                     original = player.hp
                     player.hp -= min(damage, original)
                     play_sound(PISTOL)
