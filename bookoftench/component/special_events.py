@@ -7,6 +7,7 @@ from bookoftench.component import RandomChoiceComponent, register_component, Pro
 from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH, POSITIVE, GOLF_CLAP, MONSTER_ATTACK
 from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, \
     ZONKED, GREEDY_BASTARD
+from bookoftench.data.enviroment import DAYTIME, NIGHTTIME
 from bookoftench.data.perks import BEER_GOGGLES
 from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent
@@ -303,7 +304,7 @@ Choose wisely.\n\n"""), 3)
     @functional_component(state_dependent=True)
     def _triple_tench_dare(game_state: GameState):
         player = game_state.player
-        if perk_is_active(BEER_GOGGLES):
+        if perk_is_active(BEER_GOGGLES) or game_state.time_of_day == NIGHTTIME:
             print_and_sleep(dim(f"You came up dry."), 1)
             return None
 
