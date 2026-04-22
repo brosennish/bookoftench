@@ -315,7 +315,7 @@ Perks = [
     },
     {
         'name': WENCH_LOCATION,
-        'cost': 500,
+        'cost': 300,
         'description': "Reveal the wench's location",
     },
 ]
