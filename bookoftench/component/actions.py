@@ -939,10 +939,12 @@ class BattleEnd(NoOpComponent):
     def check_battle_end(self):
         player = self.game_state.player
         enemy = self.game_state.current_area.current_enemy
+        current_area = self.game_state.current_area
+        wench_area = self.game_state.wench_area
 
         if not enemy.is_alive():
-            self.game_state.current_area.kill_current_enemy()
             self.handle_enemy_death(player, enemy)
+            self.game_state.current_area.kill_current_enemy(current_area, wench_area)
         if not player.is_alive():
             player.lives -= 1
             event_logger.log_event(PlayerDeathEvent(player.lives))

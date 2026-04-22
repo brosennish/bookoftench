@@ -222,10 +222,7 @@ class Combatant(ABC):
 
     def handle_crit(self, is_crit: bool) -> None:
         if not is_crit:
-            if self.crit_active:
-                self.crit_active = False
-            else:
-                return
+            return
         self.current_weapon.play_sound()
         print_and_sleep(red("*** Critical hit ***"), 1)
         if not isinstance(self, NPC):
@@ -264,6 +261,9 @@ class Combatant(ABC):
         if self.current_weapon.type == MELEE:
             base_damage = round(base_damage * self.strength)  # apply strength to melee
         crit = random.random() < self.get_crit_chance()  # get calculated crit chance
+        if self.crit_active:
+            crit = True
+            self.crit_active = False
         self.handle_crit(crit)
 
         damage_inflicted = round(base_damage * 1.5) if crit else base_damage  # 1.5x damage if crit
