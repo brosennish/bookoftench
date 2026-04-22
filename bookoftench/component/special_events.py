@@ -218,6 +218,7 @@ class DiscoverSpecial(RandomChoiceComponent):
                     print_and_sleep(red(f"The man shot you for {damage} damage!"), 3)
                     print_and_sleep(yellow(f"You lost your wager of {wager} coins."), 2)
                     player.coins -= wager
+                    player.gain_xp_other(damage)
                     if player.hp == 0:
                         player.lives -= 1
                         event_logger.log_event(PlayerDeathEvent(player.lives))

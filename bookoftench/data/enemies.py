@@ -247,15 +247,15 @@ Bosses = [
     # ========================
     #        AREA BOSSES
     # ========================
-    {'name': SLEDGE_HAMMOND, 'hp': 250,
+    {'name': SLEDGE_HAMMOND, 'hp': 250, 'coins': 100,
      'weapons': [w.SLEDGEHAMMER, w.AXE, w.CHAINSAW, w.BRASS_KNUCKLES, w.INJECTION_NEEDLE],
      'bounty': 0, 'type': BOSS, 'flee': 0.65, 'strength': 1.2, 'acc': 0.95, 'preamble': []},
 
-    {'name': THE_MAYOR, 'hp': 250,
+    {'name': THE_MAYOR, 'hp': 250, 'coins': 100,
      'weapons': [w.PISTOL, w.SHOTGUN, w.REVOLVER, w.BRASS_KNUCKLES, w.BASEBALL_BAT],
      'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1.1, 'acc': 1.05, 'theme': audio.FINAL_BOSS_THEME},
 
-    {'name': BAYOU_BILL, 'hp': 250,
+    {'name': BAYOU_BILL, 'hp': 250, 'coins': 100,
      'weapons': [w.MACHETE, w.SLEDGEHAMMER, w.SHOTGUN, w.CHAINSAW, w.FROG_GIG],
      'bounty': 0, 'type': BOSS, 'flee': 0.75, 'strength': 1.2, 'acc': 1.05,
      'preamble': [
@@ -280,7 +280,7 @@ Bosses = [
           ]},
      ]},
 
-    {'name': CAPTAIN_HOLE, 'hp': 250,
+    {'name': CAPTAIN_HOLE, 'hp': 250, 'coins': 100,
      'weapons': [w.RIFLE, w.HARPOON, w.KNIFE, w.PISTOL, w.MACHETE],
      'bounty': 0, 'type': BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1.05, 'preamble': [
         {'text': "Captain Hole has offered to shoot himself in the jines in exchange for a Tench Filet.",
