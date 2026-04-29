@@ -22,7 +22,7 @@ from .trait import load_traits
 from .weapon import load_weapon, make_elite_weapon
 from bookoftench.data.enviroment import NIGHTTIME, FULL
 from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
-from bookoftench.data.perks import SHERLOCK_TENCH
+from bookoftench.data.perks import DENCH_THE_BOUNTY_HUNTER, SHERLOCK_TENCH
 from bookoftench.data.weapons import CLAWS, BLIND, SPECIAL
 from ..audio import play_sound
 from ..data.audio import ENEMY_APPEARS, OWL_SFX, WEREWOLF_SFX
@@ -104,7 +104,14 @@ class Area:
             if random.random() < min(0.15, 0.01 * len(self.enemies_seen)):  # If random < scaling float value
                 enemy_name = random.choice(tuple(self.enemies_seen))  # Select enemy from seen
 
-        if perk_is_active(SHERLOCK_TENCH):  # 10% chance of wanted enemy encounter if perk is active
+        # Dench keeps bounty hunting scalable as new enemies are added: when the
+        # current area can naturally spawn the bounty target, there is a flat
+        # chance that the next enemy is the target regardless of pool size.
+        if perk_is_active(DENCH_THE_BOUNTY_HUNTER):
+            if self.name in wanted.areas and random.random() < 0.15:
+                enemy_name = wanted.name
+
+        if perk_is_active(SHERLOCK_TENCH):  # 15% chance of wanted enemy encounter if perk is active
             if self.name in wanted.areas and random.random() < 0.15:
                 enemy_name = wanted.name
 
