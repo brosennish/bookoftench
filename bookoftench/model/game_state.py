@@ -6,7 +6,7 @@ from typing import List, Dict
 import bookoftench.service.crypto_service as crypto_service
 from bookoftench import event_logger
 from bookoftench.audio import play_music, play_sound
-from bookoftench.data.perks import TENCH_THE_BOUNTY_HUNTER, NEPTUNE
+from bookoftench.data.perks import TENCH_THE_BOUNTY_HUNTER, CRENCH_THE_BOUNTY_HUNTER, NEPTUNE
 from bookoftench.event_base import EventType, Event
 from bookoftench.event_logger import subscribe_function
 from bookoftench.settings import Settings, set_settings
@@ -105,6 +105,7 @@ class GameState:
         return self.current_area.shop
 
     @property
+    @attach_perk(CRENCH_THE_BOUNTY_HUNTER, silent=True)
     @attach_perk(TENCH_THE_BOUNTY_HUNTER, silent=True)
     def bounty(self) -> int:
         return self._bounty

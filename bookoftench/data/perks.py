@@ -33,6 +33,8 @@ SOLOMON_TRAIN = "Solomon Train"
 TENCH_EYES = "Tench Eyes"
 TENCH_GENES = "Tench Genes"
 TENCH_THE_BOUNTY_HUNTER = "Tench the Bounty Hunter"
+CRENCH_THE_BOUNTY_HUNTER = "Crench the Bounty Hunter"
+DENCH_THE_BOUNTY_HUNTER = "Dench the Bounty Hunter"
 TRADE_SHIP = "Trade Ship"
 USED_SNEAKERS = "Used Sneakers"
 VAGABONDAGE = "Vagabondage"
@@ -281,6 +283,18 @@ Perks = [
         'description': "Earn +25 coins from each bounty enemy",
         'wrapper_type': WrapperType.INT_CHANGE,
         'wrapper_config': {'change': 25}
+    },
+    {
+        'name': CRENCH_THE_BOUNTY_HUNTER,
+        'cost': 180,
+        'description': "Earn 15% more from each bounty enemy",
+        'wrapper_type': WrapperType.INT_CHANGE_BY_PERCENT,
+        'wrapper_config': {'change': 15}
+    },
+    {
+        'name': DENCH_THE_BOUNTY_HUNTER,
+        'cost': 170,
+        'description': "15% chance to encounter the bounty target in matching areas",
     },
     {
         'name': TRADE_SHIP,
