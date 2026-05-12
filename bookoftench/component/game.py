@@ -49,14 +49,14 @@ class VictoryHandler(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
                          display_callback=self._display,
-                         next_component=PlayAgainDecision)
+                         next_component=ViewStatsDecision)
 
     @staticmethod
     def _display(_: GameState):
         print_and_sleep(f"You defeated the evil Denny Biltmore and rescued Chula!\n", 1)
         play_sound(GREAT_JOB)
         print_and_sleep(green("You win!"), 10)
-        play_sound(VICTORY_THEME)
+        play_music(VICTORY_THEME)
 
 
 class DeathHandler(GatekeepingComponent):

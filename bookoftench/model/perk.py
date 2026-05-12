@@ -6,7 +6,7 @@ from typing import List, Callable, Dict, ParamSpec
 from typing import TypeVar
 
 from bookoftench.data import Perks
-from bookoftench.data.perks import WrapperType
+from bookoftench.data.perks import WrapperType, RICKETY_PICKPOCKET
 from bookoftench.model.base import Buyable
 from bookoftench.ui import purple, dim, cyan, orange
 from bookoftench.util import print_and_sleep
