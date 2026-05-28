@@ -1,4 +1,5 @@
 BABIES = "Babies"
+HERPES = "Herpes"
 LATE_ONSET_SIDS = "Late Onset Sudden Infant Death Syndrome"
 MAD_TENCH_DISEASE = "Mad Tench Disease"
 MIND_EATING_BACTERIAL_DISEASE = "Mind Eating Bacterial Disease"
@@ -34,6 +35,12 @@ Illnesses = [
      'success_rate': 0.80},
 
     # --- Three Levels ---
+    {'name': HERPES,
+     'description': "It's not not herpes.",
+     'levels_until_death': 3,
+     'cost': 120,
+     'success_rate': 0.80},
+
     {'name': MIND_EATING_BACTERIAL_DISEASE,
      'description': "An infection involving mind-eating bacteria.",
      'levels_until_death': 3,
