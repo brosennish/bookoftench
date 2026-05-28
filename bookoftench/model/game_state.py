@@ -10,7 +10,7 @@ from bookoftench.data.perks import TENCH_THE_BOUNTY_HUNTER, NEPTUNE
 from bookoftench.event_base import EventType, Event
 from bookoftench.event_logger import subscribe_function
 from bookoftench.settings import Settings, set_settings
-from bookoftench.ui import green, blue, red, yellow
+from bookoftench.ui import green, red, yellow
 from bookoftench.util import print_and_sleep
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas

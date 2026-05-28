@@ -7,7 +7,6 @@ from bookoftench.audio import play_sound
 from bookoftench.data import Achievements
 from bookoftench.data.achievements import RewardType
 from bookoftench.data.audio import ACHIEVEMENT
-from bookoftench.data.perks import WENCH_LOCATION
 from bookoftench.event_base import EventType, Event
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.events import KillEvent, CoffeeEvent, LevelUpEvent, FleeEvent, BountyCollectedEvent, \
