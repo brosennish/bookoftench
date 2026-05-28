@@ -16,6 +16,7 @@ from .achievement import AchievementEvent, set_achievement_cache, load_achieveme
 from .area import Area, load_areas
 from .bank import Bank
 from .build import Build
+from .discoverable import Discoverable
 # from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
 from .events import TravelEvent, BountyCollectedEvent, LevelUpEvent, HohkkenEvent
@@ -62,6 +63,7 @@ class GameState:
     victory = False
 
     event_counter: Counter = field(default_factory=Counter)
+    discoveries: List[Discoverable] = field(default_factory=list)
     liberated_enemies: List[Enemy] = field(default_factory=list)
     perk_cache: Dict[str, Perk] = field(default_factory=dict)
     achievement_cache: Dict[str, Achievement] = field(default_factory=dict)
@@ -121,6 +123,7 @@ class GameState:
             self.wench_area = random.choice(self.areas)
         if len(self.wanted) == 0:
             self.refresh_bounty()
+        self.discoveries = []
         self.liberated_enemies = []
         self.set_moon()
         self.set_time_of_day()

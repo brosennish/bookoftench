@@ -17,6 +17,7 @@ DISCOVER_ITEM = "Discover Item"
 DISCOVER_PERK = "Discover Perk"
 DISCOVER_SPECIAL = "Discover Special"
 DISCOVER_WEAPON = "Discover Weapon"
+DISCOVERIES = "Discoveries"
 EQUIP_WEAPON = "Equip Weapon"
 FIGHT_BOSS_OTHER = "Fight Boss Other"
 FINAL_BOSS_FIGHT = purple("BATTLE DENNY BILTMORE")
@@ -58,7 +59,7 @@ class ActionMenuDefaults:
 
 
 class OverviewMenuDefaults:
-    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, LIBERATED, PERKS, STATS]
+    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, DISCOVERIES, LIBERATED, PERKS, STATS]
 
 
 class InGameMenuDefaults:

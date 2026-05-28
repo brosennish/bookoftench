@@ -10,6 +10,7 @@ from bookoftench.model.perk import load_perks, perk_is_active, attach_perks
 from bookoftench.model.player import Player
 from bookoftench.ui import blue, cyan, green, orange, purple, red, yellow, dim, white
 from bookoftench.util import print_and_sleep
+from .discoverable import rarity_color
 from .game_state import GameState
 from ..data.enemies import CONTAGIOUS, BOSS
 from ..data.enviroment import DAYTIME
@@ -270,6 +271,20 @@ def display_liberated(game_state: GameState) -> None:
                 f"{purple(f'{i.trait.name if i.trait else ''}')}\n")
     else:
         print_and_sleep(yellow("Go liberate some enemies fool."), 1)
+
+
+def display_discoveries(game_state: GameState) -> None:
+    discoveries = game_state.discoveries
+
+    if discoveries:
+        abc = sorted(discoveries, key=lambda a: a.name)
+        for i in abc:
+            color = rarity_color(i.rarity)
+            print_and_sleep(f"{color(f'{i.name}')}"
+                f"\n{blue(f'{i.desc}')}"
+                f"\nCount: {i.count}")
+    else:
+        print_and_sleep(yellow("Go make some discoveries fool."), 1)
 
 
 def get_battle_info_view(game_state: GameState) -> str:
