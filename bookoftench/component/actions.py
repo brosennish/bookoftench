@@ -984,6 +984,10 @@ class BattleEnd(NoOpComponent):
             self.game_state.update_time_of_day()
         if event_logger.get_count(EventType.KILL) % 4 == 0:
             self.game_state.update_moon()
+
+        # add enemy to list of liberated enemies
+        self.game_state.liberated_enemies.append(self.game_state.current_area.current_enemy)
+
         PostKillEncounters(self.game_state).run()
 
 

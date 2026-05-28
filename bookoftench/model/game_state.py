@@ -62,6 +62,7 @@ class GameState:
     victory = False
 
     event_counter: Counter = field(default_factory=Counter)
+    liberated_enemies: List[Enemy] = field(default_factory=dict)
     perk_cache: Dict[str, Perk] = field(default_factory=dict)
     achievement_cache: Dict[str, Achievement] = field(default_factory=dict)
     settings: Settings = field(default_factory=Settings.defaults)
