@@ -11,7 +11,7 @@ from bookoftench.model.player import Player
 from bookoftench.ui import blue, cyan, green, orange, purple, red, yellow, dim, white
 from bookoftench.util import print_and_sleep
 from .game_state import GameState
-from ..data.enemies import CONTAGIOUS
+from ..data.enemies import CONTAGIOUS, BOSS
 from ..data.enviroment import DAYTIME
 
 
@@ -254,6 +254,22 @@ def display_active_perks(game_state: GameState) -> None:
             print_and_sleep(purple(perk.name) + dim(" | ") + purple(perk.description))
         if perk_is_active(WENCH_LOCATION):
             print_and_sleep(f'Wench Location: {blue(game_state.wench_area.name)}')
+
+
+def display_liberated(game_state: GameState) -> None:
+    liberated = game_state.liberated_enemies
+    pipe = dim(" | ")
+
+    if liberated:
+        for i in liberated:
+            color = orange if i.type == BOSS else purple
+            print_and_sleep(f"{color(f'{i.name}')}"
+                f"\n{green(f'{i.max_hp}{white(f'{pipe}')}')}"
+                f"{red(f'{round(i.strength, 2)}{white(f'{pipe}')}')}"
+                f"{yellow(f'{round(i.acc, 2)}{white(f'{pipe}')}')}"
+                f"{purple(f'{i.trait.name if i.trait else ''}')}\n")
+    else:
+        print_and_sleep(yellow("Go liberate some enemies fool."), 1)
 
 
 def get_battle_info_view(game_state: GameState) -> str:

@@ -24,6 +24,7 @@ GREEDY_BASTARD = "Greedy Bastard"
 HOSPITAL = "Hospital"
 INFO = "Info"
 LAB = "Lab"
+LIBERATED = "Liberated"
 LOAD_GAME = "Load Game"
 NEW_GAME = "New Game"
 OCCULTIST = "Occultist"
@@ -57,7 +58,7 @@ class ActionMenuDefaults:
 
 
 class OverviewMenuDefaults:
-    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, PERKS, STATS]
+    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, LIBERATED, PERKS, STATS]
 
 
 class InGameMenuDefaults:

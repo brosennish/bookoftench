@@ -12,7 +12,7 @@ from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL, MENSCH_T
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
-    OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER
+    OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER, LIBERATED
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER, HOHKKEN
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import DEATH_CAN_WAIT, Perks, NEPTUNE
@@ -25,7 +25,8 @@ from bookoftench.model.game_state import GameState
 from bookoftench.model.item import load_items
 from bookoftench.model.perk import load_perks, Perk, perk_is_active, activate_perk
 from bookoftench.model.util import get_battle_status_view, display_player_achievements, \
-    display_game_stats, calculate_flee, display_active_perks, display_battle_info, display_player_attributes
+    display_game_stats, calculate_flee, display_active_perks, display_battle_info, display_player_attributes, \
+    display_liberated
 from bookoftench.model.weapon import load_discoverable_weapons, load_weapons, make_elite_weapon, make_autographed_weapon
 from bookoftench.ui import green, purple, yellow, dim, red, cyan, blue
 from bookoftench.util import print_and_sleep, safe_input
@@ -1078,6 +1079,12 @@ class Stats(TextDisplayingComponent):
 class Attributes(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, display_callback=display_player_attributes)
+
+
+@register_component(LIBERATED)
+class Liberated(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_liberated)
 
 
 @register_component(OVERVIEW)
