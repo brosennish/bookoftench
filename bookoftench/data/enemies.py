@@ -1,6 +1,6 @@
 from bookoftench.ui import Colors
 from . import audio, weapons as w
-from .weapons import TENTACLES, BEAK
+from .weapons import TENTACLES, BEAK, PEPPER_SPRAY
 
 # Areas
 CAVE = "Cave"
@@ -39,6 +39,7 @@ HOBO = "Hobo"
 HOHKKEN = "Hohkken"
 HUMANOID_CAVE_CREATURE = "Humanoid Cave Creature"
 HUNTER = "Hunter"
+ICE_CREAM_MAN = "Ice Cream Man"
 INFLUENCER = "Influencer"
 LIFE_COACH = "Life Coach"
 MASCOT = "Mascot"
@@ -121,6 +122,8 @@ Enemies = [
      'bounty': 130, 'coins': 25, 'type': NORMAL, 'flee': 1.00, 'strength': 1, 'acc': 1, 'areas': [CITY]},
     {'name': PHROGGER, 'trait': '', 'illness': None, 'hp': 100, 'weapons': [w.FROG_GIG, w.PILLOW, w.PISTOL],
      'bounty': 150, 'coins': 40, 'type': NORMAL, 'flee': 1.00, 'strength': 1, 'acc': 1, 'areas': [CITY]},
+    {'name': ICE_CREAM_MAN, 'trait': '', 'illness': None, 'hp': 75, 'weapons': [w.KNIFE, w.BINOCULARS, PEPPER_SPRAY],
+     'bounty': 130, 'coins': 45, 'type': NORMAL, 'flee': 1.05, 'strength': 1, 'acc': 0.90, 'areas': [CITY]},
     {'name': INFLUENCER, 'trait': '', 'illness': None, 'hp': 75, 'weapons': [w.POCKET_KNIFE, w.SELFIE_STICK, w.PEPPER_SPRAY],
      'bounty': 120, 'coins': 65, 'type': NORMAL, 'flee': 1.20, 'strength': 0.75, 'acc': 0.75, 'areas': [CITY]},
     {'name': LIFE_COACH, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.KNIFE, w.BASEBALL_BAT, w.FIRE_AXE],
@@ -359,6 +362,14 @@ Enemy_Lines = {
         "With your bounty, I will buy a mini fridge for the attic I'm phrogging in.",
         "I have a son. He lives with me, learning the ways of phrogging.",
         "My wife wants custody of our son, but she'll never find us.",
+    ],
+
+    ICE_CREAM_MAN: [
+        "Want some cream? I mean, ice cream?",
+        "My truck is big enough for two people, if you know what I mean.",
+        "Want to see me do a banana split? Hold on, I don't want to rip my pants.",
+        "I drive around town blasting music that people have hated for over a century.",
+        "Do you like nuts? You look like someone who would like nuts.",
     ],
 
     INFLUENCER: [
@@ -742,13 +753,14 @@ Enemy_Adjectives = [
     "Delirious", "Demented", "Deplorable",
     "Depraved", "Deranged", "Desperate",
     "Detestable", "Diabolical", "Disgruntled", "Disillusioned",
-    "Disoriented", "Disturbed", "Drug-fueled",
+    "Disfigured", "Disoriented", "Disturbed", "Drug-fueled",
     "Drunken", "Dubious", "Evangelical", "Evil",
-    "Forgotten", "Godless", "Greedy", "Grotesque",
+    "Forgotten", "Godless", "Greasy", "Greedy", "Grotesque",
     "Hallucinatory", "Heartless",
     "Heinous", "Hollow", "Homicidal", "Hostile", "Hysterical",
     "Idolatrous", "Immoral", "Impotent",
-    "Inbred", "Insane", "Insecure", "Malevolent", "Malicious",
+    "Inbred", "Insane", "Insecure", "Inside-out",
+    "Malevolent", "Malicious",
     "Merciless", "Misguided", "Money-hungry", "Moralless",
     "Murderous", "Obscene", "Possessed", "Psychotic",
     "Rabid", "Radioactive", "Rancid",

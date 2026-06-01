@@ -239,6 +239,11 @@ class DiscoverSpecial(RandomChoiceComponent):
     @register_component(THREE_HOLES)
     @functional_component(state_dependent=True)
     def _three_holes(game_state: GameState):
+        adjectives = ["A horny man", "A suspicious man", "A handsome man", "A disfigured man", "A rotting man",
+                      "A translucent man", "A malleable man", "A man with little skin", "A man with a child-sized baby",
+                      "A man with an upside-down face", "A denim", "A drunken", "A tiny", "A renaissance man",
+                      "A famous man"]
+
         player = game_state.player
         holes = ["good", "bad", "dry"]
         random.shuffle(holes)
@@ -248,8 +253,9 @@ class DiscoverSpecial(RandomChoiceComponent):
 
         print_and_sleep(purple("You come upon three holes in the ground...\n"), 2)
 
-        print_and_sleep(purple("""They are far too deep, and too dark, to see what's inside.
-A ghastly man whispers that you may only reach into one of the holes.
+        word = random.choice(adjectives)
+        print_and_sleep(purple(f"""They are far too deep, and too dark, to see what's inside.
+{word} whispers that you may only reach into one of the holes.
 Choose wisely.\n\n"""), 3)
 
         while True:
