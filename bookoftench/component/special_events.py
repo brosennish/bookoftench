@@ -80,7 +80,7 @@ class DiscoverSpecial(RandomChoiceComponent):
                 print_and_sleep(purple(f"You're not a greedy bastard. Good for you.\n"), 2)
                 player.gain_coins(request)
                 player.gain_xp_other(woman_coins - request)
-                player.gain_or_lose_luck(0.025)
+                player.gain_or_lose_luck(0.01)
             elif request == woman_coins:  # You request what the woman has to offer
                 play_sound(POSITIVE)
                 print_and_sleep(purple(f"Wow, that's exactly what I have to offer. Kudos.\n"), 2)
@@ -92,7 +92,7 @@ class DiscoverSpecial(RandomChoiceComponent):
                 play_sound(PUNCH)
                 print_and_sleep(red(f"The woman slapped you for {damage} damage!"), 1)
                 print_and_sleep(purple(f"That's for being a greedy bastard!\n"), 2)
-                player.gain_or_lose_luck(-0.05)
+                player.gain_or_lose_luck(-0.01)
                 if player.hp == 0:
                     player.lives -= 1
                     event_logger.log_event(PlayerDeathEvent(player.lives))
@@ -126,7 +126,7 @@ class DiscoverSpecial(RandomChoiceComponent):
                 play_sound(PUNCH)
                 print_and_sleep(red(f"The woman slapped you for {damage} damage!"), 1)
                 print_and_sleep(purple(f"That's for being a stingy bastard!\n"), 2)
-                player.gain_or_lose_luck(-0.05)
+                player.gain_or_lose_luck(-0.01)
                 if player.hp == 0:
                     player.lives -= 1
                     event_logger.log_event(PlayerDeathEvent(player.lives))
@@ -139,7 +139,7 @@ class DiscoverSpecial(RandomChoiceComponent):
                 play_sound(POSITIVE)
                 print_and_sleep(purple(f"You're not a stingy bastard. Keep the coin. Good for you.\n"), 2)
                 player.gain_xp_other(offer - woman_desired)
-                player.gain_or_lose_luck(0.025)
+                player.gain_or_lose_luck(0.01)
             return None
         return None
 
