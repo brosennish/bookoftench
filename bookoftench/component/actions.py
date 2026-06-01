@@ -12,7 +12,7 @@ from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL, MENSCH_T
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
-    OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER, Kills, DISCOVERIES
+    OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER, KILLS, DISCOVERIES, ENCOUNTERS
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER, HOHKKEN
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import DEATH_CAN_WAIT, Perks, NEPTUNE
@@ -26,7 +26,7 @@ from bookoftench.model.item import load_items
 from bookoftench.model.perk import load_perks, Perk, perk_is_active, activate_perk
 from bookoftench.model.util import get_battle_status_view, display_player_achievements, \
     display_game_stats, calculate_flee, display_active_perks, display_battle_info, display_player_attributes, \
-    display_liberated, display_discoveries
+    display_liberated, display_discoveries, display_encountered
 from bookoftench.model.weapon import load_discoverable_weapons, load_weapons, make_elite_weapon, make_autographed_weapon
 from bookoftench.ui import green, purple, yellow, dim, red, cyan, blue
 from bookoftench.util import print_and_sleep, safe_input
@@ -885,11 +885,16 @@ class SpawnEnemy(LinearComponent):
         super().__init__(game_state, next_component=Battle)
 
     def execute_current(self) -> GameState:
-        wanted = self.game_state.wanted
-        time = self.game_state.time_of_day
+        area = self.game_state.current_area.name
         moon = self.game_state.moon
+        time = self.game_state.time_of_day
+        wanted = self.game_state.wanted
         self.game_state.current_area.spawn_enemy(wanted, self.game_state.player.lvl, time, moon)
+        self.log_encounter(area, self.game_state.current_area.current_enemy)
         return self.game_state
+
+    def log_encounter(self, area, enemy):
+        self.game_state.encountered_enemies.append({"area": area, "enemy": enemy})
 
 
 class Battle(LabeledSelectionComponent):
@@ -1101,7 +1106,13 @@ class Discoveries(TextDisplayingComponent):
         super().__init__(game_state, display_callback=display_discoveries)
 
 
-@register_component(Kills)
+@register_component(ENCOUNTERS)
+class Liberated(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_encountered)
+
+
+@register_component(KILLS)
 class Liberated(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, display_callback=display_liberated)
