@@ -257,6 +257,22 @@ def display_active_perks(game_state: GameState) -> None:
             print_and_sleep(f'Wench Location: {blue(game_state.wench_area.name)}')
 
 
+def display_encountered(game_state: GameState) -> None:
+    encountered = game_state.encountered_enemies
+    pipe = dim(" | ")
+
+    if encountered:
+        for i in encountered:
+            color = orange if i.type == BOSS else purple
+            print_and_sleep(f"{color(f'{i.name}')}"
+                f"\n{green(f'{i.max_hp}{white(f'{pipe}')}')}"
+                f"{red(f'{round(i.strength, 2)}{white(f'{pipe}')}')}"
+                f"{yellow(f'{round(i.acc, 2)}{white(f'{pipe}')}')}"
+                f"{purple(f'{i.trait.name if i.trait else ''}')}\n")
+    else:
+        print_and_sleep(yellow("Go liberate some enemies fool."), 1)
+
+
 def display_liberated(game_state: GameState) -> None:
     liberated = game_state.liberated_enemies
     pipe = dim(" | ")
