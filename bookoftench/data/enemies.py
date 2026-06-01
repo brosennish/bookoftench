@@ -148,7 +148,7 @@ Enemies = [
     {'name': PIMP, 'trait': '', 'illness': None, 'hp': 95, 'weapons': [w.CANE, w.BRASS_KNUCKLES, w.REVOLVER, w.SWITCHBLADE],
      'bounty': 200, 'coins': 85, 'type': NORMAL, 'flee': 1.00, 'strength': 1.01, 'acc': 1.04, 'areas': [CITY]},
     {'name': SERIAL_KILLER, 'trait': '', 'illness': None, 'hp': 105, 'weapons': [w.BONE_SAW, w.KNIFE, w.MEAT_CLEAVER],
-     'bounty': 240, 'coins': 45, 'type': NORMAL, 'flee': 0.90, 'strength': 1.1, 'acc': 1.04, 'areas': [CITY]},
+     'bounty': 240, 'coins': 45, 'type': NORMAL, 'flee': 0.90, 'strength': 1.1, 'acc': 1.04, 'areas': [CITY, FOREST]},
     {'name': THIEF, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.KNIFE, w.CROWBAR, w.PISTOL],
      'bounty': 165, 'coins': 80, 'type': NORMAL, 'flee': 1.00, 'strength': 0.95, 'acc': 1.03, 'areas': [CITY]},
 
@@ -175,7 +175,7 @@ Enemies = [
     {'name': BIGFOOT_IMPERSONATOR, 'trait': '', 'illness': None, 'hp': 110, 'weapons': [w.WOODEN_CLUB, w.BRANCH_SPEAR, w.CLAWS, w.BEAR_SPRAY],
      'bounty': 185, 'coins': 35, 'type': NORMAL, 'flee': 0.90, 'strength': 1.14, 'acc': 1, 'areas': [FOREST]},
     {'name': DISGRACED_EXILE, 'trait': '', 'illness': None, 'hp': 85, 'weapons': [w.KNIFE, w.HATCHET, w.SHOVEL, w.TROWEL],
-     'bounty': 160, 'coins': 25, 'type': NORMAL, 'flee': 1.05, 'strength': 1, 'acc': 1, 'areas': [FOREST]},
+     'bounty': 160, 'coins': 25, 'type': NORMAL, 'flee': 1.05, 'strength': 1, 'acc': 1, 'areas': [CAVE, FOREST, SWAMP]},
     {'name': HIKER, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.TREKKING_POLE, w.SURVIVAL_KNIFE, w.BEAR_SPRAY],
      'bounty': 130, 'coins': 30, 'type': NORMAL, 'flee': 1.00, 'strength': 1, 'acc': 1, 'areas': [FOREST]},
     {'name': HUNTER, 'trait': '', 'illness': None, 'hp': 100, 'weapons': [w.KNIFE, w.RIFLE, w.BEAR_SPRAY, w.LONGBOW],

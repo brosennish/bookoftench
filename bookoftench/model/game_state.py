@@ -64,7 +64,7 @@ class GameState:
 
     event_counter: Counter = field(default_factory=Counter)
     discoveries: List[Discoverable] = field(default_factory=list)
-    encountered_enemies: List[Enemy] = field(default_factory=list)
+    encountered_enemies: List[dict] = field(default_factory=list)
     liberated_enemies: List[Enemy] = field(default_factory=list)
     perk_cache: Dict[str, Perk] = field(default_factory=dict)
     achievement_cache: Dict[str, Achievement] = field(default_factory=dict)

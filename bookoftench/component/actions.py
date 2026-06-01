@@ -885,11 +885,16 @@ class SpawnEnemy(LinearComponent):
         super().__init__(game_state, next_component=Battle)
 
     def execute_current(self) -> GameState:
-        wanted = self.game_state.wanted
-        time = self.game_state.time_of_day
+        area = self.game_state.current_area.name
         moon = self.game_state.moon
+        time = self.game_state.time_of_day
+        wanted = self.game_state.wanted
         self.game_state.current_area.spawn_enemy(wanted, self.game_state.player.lvl, time, moon)
+        self.log_encounter(area, self.game_state.current_area.current_enemy)
         return self.game_state
+
+    def log_encounter(self, area, enemy):
+        self.game_state.encountered_enemies.append({"area": area, "enemy": enemy})
 
 
 class Battle(LabeledSelectionComponent):

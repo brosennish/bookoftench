@@ -12,6 +12,7 @@ from bookoftench.ui import blue, cyan, green, orange, purple, red, yellow, dim, 
 from bookoftench.util import print_and_sleep
 from .discoverable import rarity_color
 from .game_state import GameState
+from ..data.areas import CAVE, CITY, FOREST, SWAMP
 from ..data.enemies import CONTAGIOUS, BOSS
 from ..data.enviroment import DAYTIME
 
@@ -259,18 +260,43 @@ def display_active_perks(game_state: GameState) -> None:
 
 def display_encountered(game_state: GameState) -> None:
     encountered = game_state.encountered_enemies
+    if not encountered:
+        print_and_sleep(yellow("Go find some enemies fool."), 1)
+        return
+    else:
+        cave_encounters = [i for i in encountered if i["area"] == CAVE]
+        city_encounters = [i for i in encountered if i["area"] == CITY]
+        forest_encounters = [i for i in encountered if i["area"] == FOREST]
+        swamp_encounters = [i for i in encountered if i["area"] == SWAMP]
+
+    print_and_sleep(blue("Cave\n"))
+    for i in cave_encounters:
+        enemy = i["enemy"]
+        display_encountered_enemy(enemy)
+
+    print_and_sleep(blue("City\n"))
+    for i in city_encounters:
+        enemy = i["enemy"]
+        display_encountered_enemy(enemy)
+
+    print_and_sleep(blue("Forest\n"))
+    for i in forest_encounters:
+        enemy = i["enemy"]
+        display_encountered_enemy(enemy)
+
+    print_and_sleep(blue("Swamp\n"))
+    for i in swamp_encounters:
+        enemy = i["enemy"]
+        display_encountered_enemy(enemy)
+
+
+def display_encountered_enemy(enemy):
     pipe = dim(" | ")
 
-    if encountered:
-        for i in encountered:
-            color = orange if i.type == BOSS else purple
-            print_and_sleep(f"{color(f'{i.name}')}"
-                f"\n{green(f'{i.max_hp}{white(f'{pipe}')}')}"
-                f"{red(f'{round(i.strength, 2)}{white(f'{pipe}')}')}"
-                f"{yellow(f'{round(i.acc, 2)}{white(f'{pipe}')}')}"
-                f"{purple(f'{i.trait.name if i.trait else ''}')}\n")
-    else:
-        print_and_sleep(yellow("Go liberate some enemies fool."), 1)
+    print_and_sleep(f"{purple(f'{enemy.name}')}"
+                    f"\n{green(f'{enemy.max_hp}{white(f'{pipe}')}')}"
+                    f"{red(f'{round(enemy.strength, 2)}{white(f'{pipe}')}')}"
+                    f"{yellow(f'{round(enemy.acc, 2)}{white(f'{pipe}')}')}\n")
 
 
 def display_liberated(game_state: GameState) -> None:
