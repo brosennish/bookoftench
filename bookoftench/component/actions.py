@@ -26,7 +26,7 @@ from bookoftench.model.item import load_items
 from bookoftench.model.perk import load_perks, Perk, perk_is_active, activate_perk
 from bookoftench.model.util import get_battle_status_view, display_player_achievements, \
     display_game_stats, calculate_flee, display_active_perks, display_battle_info, display_player_attributes, \
-    display_liberated, display_discoveries
+    display_liberated, display_discoveries, display_encountered
 from bookoftench.model.weapon import load_discoverable_weapons, load_weapons, make_elite_weapon, make_autographed_weapon
 from bookoftench.ui import green, purple, yellow, dim, red, cyan, blue
 from bookoftench.util import print_and_sleep, safe_input
@@ -1109,7 +1109,7 @@ class Discoveries(TextDisplayingComponent):
 @register_component(ENCOUNTERS)
 class Liberated(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, display_callback=display_encounters)
+        super().__init__(game_state, display_callback=display_encountered)
 
 
 @register_component(KILLS)

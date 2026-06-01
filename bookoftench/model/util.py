@@ -269,22 +269,22 @@ def display_encountered(game_state: GameState) -> None:
         forest_encounters = [i for i in encountered if i["area"] == FOREST]
         swamp_encounters = [i for i in encountered if i["area"] == SWAMP]
 
-    print_and_sleep(blue("Cave\n"))
+    print_and_sleep(blue("Cave"))
     for i in cave_encounters:
         enemy = i["enemy"]
         display_encountered_enemy(enemy)
 
-    print_and_sleep(blue("City\n"))
+    print_and_sleep(blue("City"))
     for i in city_encounters:
         enemy = i["enemy"]
         display_encountered_enemy(enemy)
 
-    print_and_sleep(blue("Forest\n"))
+    print_and_sleep(blue("Forest"))
     for i in forest_encounters:
         enemy = i["enemy"]
         display_encountered_enemy(enemy)
 
-    print_and_sleep(blue("Swamp\n"))
+    print_and_sleep(blue("Swamp"))
     for i in swamp_encounters:
         enemy = i["enemy"]
         display_encountered_enemy(enemy)
@@ -296,7 +296,7 @@ def display_encountered_enemy(enemy):
     print_and_sleep(f"{purple(f'{enemy.name}')}"
                     f"\n{green(f'{enemy.max_hp}{white(f'{pipe}')}')}"
                     f"{red(f'{round(enemy.strength, 2)}{white(f'{pipe}')}')}"
-                    f"{yellow(f'{round(enemy.acc, 2)}{white(f'{pipe}')}')}\n")
+                    f"{yellow(f'{round(enemy.acc, 2)}')}")
 
 
 def display_liberated(game_state: GameState) -> None:

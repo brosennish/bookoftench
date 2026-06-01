@@ -60,7 +60,7 @@ class ActionMenuDefaults:
 
 
 class OverviewMenuDefaults:
-    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, DISCOVERIES, KILLS, PERKS, STATS]
+    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, DISCOVERIES, ENCOUNTERS, KILLS, PERKS, STATS]
 
 
 class InGameMenuDefaults:
