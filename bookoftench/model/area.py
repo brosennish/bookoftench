@@ -11,15 +11,15 @@ from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABL
     DISCOVER_WEAPON, \
     SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD, \
     ENCOUNTER_BOSS
-from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, COWARD, CONTAGIOUS, NIGHT_OWL, HOHKKEN, BOSS, \
-    NORMAL
+from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, CONTAGIOUS, NIGHT_OWL, HOHKKEN, BOSS, \
+    NORMAL, Special_Bosses
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
-from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
+from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss, load_special_boss
 from .illness import load_illnesses
 from .perk import perk_is_active
 from .shop import Shop
-from .trait import load_traits
+from .trait import load_traits, load_trait
 from .weapon import load_weapon, make_elite_weapon
 from bookoftench.data.enviroment import NIGHTTIME, FULL
 from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
@@ -29,13 +29,13 @@ from ..audio import play_sound
 from ..data.audio import ENEMY_APPEARS, OWL_SFX, WEREWOLF_SFX
 
 _search_defaults = {
-    DISCOVER_PERK: 1,
-    DISCOVER_WEAPON: 2,
-    DISCOVER_ITEM: 3,
-    ENCOUNTER_BOSS: 3,
-    DISCOVER_DISCOVERABLE: 45,
-    DISCOVER_SPECIAL: 8,
-    SPAWN_ENEMY: 30
+    DISCOVER_PERK: 0,
+    DISCOVER_WEAPON: 0,
+    DISCOVER_ITEM: 0,
+    ENCOUNTER_BOSS: 100,
+    DISCOVER_DISCOVERABLE: 0,
+    DISCOVER_SPECIAL: 0,
+    SPAWN_ENEMY: 0
 }
 
 _event_defaults = {
@@ -115,7 +115,7 @@ class Area:
 
         # --- trait and illness ---
         if not enemy.trait and enemy.type == NORMAL:
-            enemy = handle_trait_and_illness(enemy, time)
+            enemy = handle_trait_and_illness(enemy)
 
         # --- standard stat adjustments ---
         enemy.hp += random.randint(-2, 2)  # apply hp spread first
@@ -169,6 +169,42 @@ class Area:
 
         return self.current_enemy
 
+
+    def spawn_special_boss(self, name: str, time: str) -> Enemy:
+        enemy = load_special_boss(name)  # convert selected special boss to Enemy type
+        self.enemies_seen.add(name)  # add selected enemy to enemies_seen
+        enemy_dict = next(i for i in Special_Bosses if i['name'] == name)
+
+        # --- assign Trait ---
+        if enemy.trait:
+            if isinstance(enemy.trait, str):
+                trait_dict = next((i for i in Traits if i['name'] == enemy.trait), None)
+
+                if trait_dict:
+                    enemy.trait = load_trait(trait_dict)
+
+            # --- traits and illness ---
+            if enemy.trait and enemy.trait.name == CONTAGIOUS:
+                enemy = handle_trait_and_illness(enemy)
+
+            # --- night owl logic ---
+            if enemy.trait.name == NIGHT_OWL and time == NIGHTTIME:
+                enemy = create_night_owl(enemy)
+
+        self.current_enemy = enemy
+
+        # --- night owl sfx ---
+        if self.current_enemy.trait.name == NIGHT_OWL and time == NIGHTTIME:
+            play_sound(OWL_SFX)
+
+        # --- elite weapon logic ---
+        if self.current_enemy.current_weapon.type not in [BLIND, SPECIAL] and random.random() < 0.15:
+            base = self.current_enemy.current_weapon
+            self.current_enemy.current_weapon = make_elite_weapon(base)
+
+        return self.current_enemy
+
+
     def set_boss_to_current_enemy(self, name: str):
         self.current_enemy = load_boss(name)
         if self.current_enemy.name != HOHKKEN:
@@ -215,12 +251,11 @@ def create_werewolf(enemy) -> Enemy:
     enemy.coins = 0
     return enemy
 
-def handle_trait_and_illness(enemy, time) -> Enemy:
-    valid = [i['name'] for i in Traits]
-    if time == NIGHTTIME:
-        valid = [i['name'] for i in Traits if i['name'] not in [COWARD]]
-    traits = load_traits(valid)
-    enemy.trait = random.choice(traits)
+def handle_trait_and_illness(enemy) -> Enemy:
+    if enemy.type == NORMAL:
+        valid = [i['name'] for i in Traits]
+        traits = load_traits(valid)
+        enemy.trait = random.choice(traits)
 
     if enemy.trait.name == CONTAGIOUS:
         valid = [i['name'] for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]

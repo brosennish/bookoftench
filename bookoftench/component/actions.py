@@ -13,12 +13,14 @@ from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEM
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
     OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER, KILLS, DISCOVERIES, ENCOUNTERS, ENCOUNTER_BOSS
-from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER, HOHKKEN, Bosses
+from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER, HOHKKEN, \
+    Cave_Special_Bosses, City_Special_Bosses, Swamp_Special_Bosses, \
+    Forest_Special_Bosses
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import DEATH_CAN_WAIT, Perks, NEPTUNE
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.discoverable import load_discoverables, search_discoverable_rarity, rarity_color
-from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE, Enemy, load_boss
+from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE, Enemy
 from bookoftench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent, DiscoveryEvent, \
     FailedFleeEvent, DefeatHohkkenEvent
 from bookoftench.model.game_state import GameState
@@ -42,6 +44,7 @@ from bookoftench.event_base import EventType
 from bookoftench.model.build import Build, load_builds
 from bookoftench.model.illness import load_illnesses, load_illness
 from bookoftench.model.player import PlayerWeapon
+from ..data.areas import FOREST, CAVE, CITY
 
 
 @register_component(BUILD)
@@ -886,21 +889,28 @@ class EncounterBoss(LinearComponent):
 
     def execute_current(self) -> GameState:
         area = self.game_state.current_area.name
-        area_bosses = [i for i in Bosses if i['area'] == area]
+        time = self.game_state.time_of_day
+        if area == CAVE:
+            options = [i for i in Cave_Special_Bosses]
+        elif area == CITY:
+            options = [i for i in City_Special_Bosses]
+        elif area == FOREST:
+            options = [i for i in Forest_Special_Bosses]
+        else:
+            options = [i for i in Swamp_Special_Bosses]
         liberated = [i.name for i in self.game_state.liberated_enemies]
-        available = [i['name'] for i in area_bosses if i['name'] not in liberated]
+        available = [i for i in options if i not in liberated]
 
         if not available:
             print_and_sleep(yellow("All bosses in this area are now in Hell."), 1.5)
             return self.game_state
         else:
-            selection = random.choice(available)
+            choice = random.choice(available)
 
-            boss = load_boss(selection)
+            boss = self.game_state.current_area.spawn_special_boss(choice, time)
             self.game_state.current_area.boss = boss
             self.game_state.boss_pending = True
             self.game_state.current_area.current_enemy = boss
-            self.game_state.current_area.set_boss_to_current_enemy(boss)
 
             self.log_encounter(area, self.game_state.current_area.current_enemy)
             return self.game_state
