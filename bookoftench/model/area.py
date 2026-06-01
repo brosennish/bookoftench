@@ -190,12 +190,9 @@ class Area:
             # --- night owl logic ---
             if enemy.trait.name == NIGHT_OWL and time == NIGHTTIME:
                 enemy = create_night_owl(enemy)
+                play_sound(OWL_SFX)
 
         self.current_enemy = enemy
-
-        # --- night owl sfx ---
-        if self.current_enemy.trait.name == NIGHT_OWL and time == NIGHTTIME:
-            play_sound(OWL_SFX)
 
         # --- elite weapon logic ---
         if self.current_enemy.current_weapon.type not in [BLIND, SPECIAL] and random.random() < 0.15:

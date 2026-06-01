@@ -8,14 +8,14 @@ from bookoftench.component.base import TextDisplayingComponent, functional_compo
     ColoredNameSelectionBinding, BinarySelectionComponent, \
     NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent, ReprBinding
 from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL, MENSCH_THEME, POSITIVE, DISCOVERABLE, \
-    DISCOVERABLE_2
+    DISCOVERABLE_2, HOHKKEN_THEME
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
     OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER, KILLS, DISCOVERIES, ENCOUNTERS, ENCOUNTER_BOSS
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER, HOHKKEN, \
     Cave_Special_Bosses, City_Special_Bosses, Swamp_Special_Bosses, \
-    Forest_Special_Bosses
+    Forest_Special_Bosses, SPECIAL_BOSS
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import DEATH_CAN_WAIT, Perks, NEPTUNE
 from bookoftench.event_logger import subscribe_function
@@ -958,7 +958,10 @@ class Battle(LabeledSelectionComponent):
         self._subscribe_listeners()
 
     def play_theme(self) -> None:
-        play_music(BATTLE_THEME)
+        theme = BATTLE_THEME
+        if self.game_state.current_area.current_enemy.type == SPECIAL_BOSS:
+            theme = HOHKKEN_THEME
+        play_music(theme)
 
     def can_exit(self) -> bool:
         return self.fled or self.player.can_flee or not (self.player.is_alive() and self.enemy.is_alive())
