@@ -14,6 +14,8 @@ class Discoverable:
     hp: int
     rarity: str
     areas: List[str]
+    count: int
+    desc: str | None
 
 
 def search_discoverable_rarity() -> str:

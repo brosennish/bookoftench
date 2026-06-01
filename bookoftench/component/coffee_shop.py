@@ -11,7 +11,7 @@ from bookoftench.data.enviroment import DAYTIME
 from bookoftench.model import GameState
 from bookoftench.model.coffee_item import CoffeeItem
 from bookoftench.model.coffee_shop import CoffeeShop
-from bookoftench.model.events import PlayerDeathEvent
+from bookoftench.model.events import PlayerDeathEvent, CoffeeEvent
 from bookoftench.model.illness import load_illnesses
 from bookoftench.model.player import Player
 from bookoftench.model.util import display_coffee_header
@@ -105,6 +105,7 @@ class CoffeeShopComponent(LabeledSelectionComponent):
                 player.coins -= coffee_item.cost
                 play_sound(DRINK)
                 apply_coffee_effect(coffee_item, player)
+                event_logger.log_event(CoffeeEvent())
 
         return purchase_component
 

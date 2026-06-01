@@ -10,12 +10,13 @@ from bookoftench.data.perks import TENCH_THE_BOUNTY_HUNTER, NEPTUNE
 from bookoftench.event_base import EventType, Event
 from bookoftench.event_logger import subscribe_function
 from bookoftench.settings import Settings, set_settings
-from bookoftench.ui import green, blue, red, yellow
+from bookoftench.ui import green, red, yellow
 from bookoftench.util import print_and_sleep
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
 from .bank import Bank
 from .build import Build
+from .discoverable import Discoverable
 # from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
 from .events import TravelEvent, BountyCollectedEvent, LevelUpEvent, HohkkenEvent
@@ -62,6 +63,8 @@ class GameState:
     victory = False
 
     event_counter: Counter = field(default_factory=Counter)
+    discoveries: List[Discoverable] = field(default_factory=list)
+    liberated_enemies: List[Enemy] = field(default_factory=list)
     perk_cache: Dict[str, Perk] = field(default_factory=dict)
     achievement_cache: Dict[str, Achievement] = field(default_factory=dict)
     settings: Settings = field(default_factory=Settings.defaults)
@@ -120,6 +123,8 @@ class GameState:
             self.wench_area = random.choice(self.areas)
         if len(self.wanted) == 0:
             self.refresh_bounty()
+        self.discoveries = []
+        self.liberated_enemies = []
         self.set_moon()
         self.set_time_of_day()
         event_logger.set_counter(self.event_counter)

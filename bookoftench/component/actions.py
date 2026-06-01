@@ -12,7 +12,7 @@ from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL, MENSCH_T
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
-    OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER
+    OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER, Kills, DISCOVERIES
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER, HOHKKEN
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import DEATH_CAN_WAIT, Perks, NEPTUNE
@@ -25,7 +25,8 @@ from bookoftench.model.game_state import GameState
 from bookoftench.model.item import load_items
 from bookoftench.model.perk import load_perks, Perk, perk_is_active, activate_perk
 from bookoftench.model.util import get_battle_status_view, display_player_achievements, \
-    display_game_stats, calculate_flee, display_active_perks, display_battle_info, display_player_attributes
+    display_game_stats, calculate_flee, display_active_perks, display_battle_info, display_player_attributes, \
+    display_liberated, display_discoveries
 from bookoftench.model.weapon import load_discoverable_weapons, load_weapons, make_elite_weapon, make_autographed_weapon
 from bookoftench.ui import green, purple, yellow, dim, red, cyan, blue
 from bookoftench.util import print_and_sleep, safe_input
@@ -481,7 +482,6 @@ class Search(RandomChoiceComponent):
         else:
             time = 2
 
-
         # log event for stats
         if rarity == COMMON:
             play_sound(DISCOVERABLE)
@@ -498,6 +498,21 @@ class Search(RandomChoiceComponent):
         else:
             play_sound(DISCOVERABLE_2)
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_MYTHIC))
+
+        # add to discoveries and update count
+        if game_state.discoveries:
+            names = [i.name for i in game_state.discoveries]
+
+            if find.name not in names:
+                game_state.discoveries.append(find)
+            for i in game_state.discoveries:
+                if i.name == find.name:
+                    i.count += 1
+        else:
+            game_state.discoveries.append(find)
+            for i in game_state.discoveries:
+                i.count += 1
+
 
         # take damage if find.hp < 0
         if find.hp < 0:
@@ -984,6 +999,10 @@ class BattleEnd(NoOpComponent):
             self.game_state.update_time_of_day()
         if event_logger.get_count(EventType.KILL) % 4 == 0:
             self.game_state.update_moon()
+
+        # add enemy to list of liberated enemies
+        self.game_state.liberated_enemies.append(self.game_state.current_area.current_enemy)
+
         PostKillEncounters(self.game_state).run()
 
 
@@ -1074,6 +1093,18 @@ class Stats(TextDisplayingComponent):
 class Attributes(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, display_callback=display_player_attributes)
+
+
+@register_component(DISCOVERIES)
+class Discoveries(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_discoveries)
+
+
+@register_component(Kills)
+class Liberated(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_liberated)
 
 
 @register_component(OVERVIEW)

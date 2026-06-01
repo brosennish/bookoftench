@@ -17,12 +17,14 @@ DISCOVER_ITEM = "Discover Item"
 DISCOVER_PERK = "Discover Perk"
 DISCOVER_SPECIAL = "Discover Special"
 DISCOVER_WEAPON = "Discover Weapon"
+DISCOVERIES = "Discoveries"
 EQUIP_WEAPON = "Equip Weapon"
 FIGHT_BOSS_OTHER = "Fight Boss Other"
 FINAL_BOSS_FIGHT = purple("BATTLE DENNY BILTMORE")
 GREEDY_BASTARD = "Greedy Bastard"
 HOSPITAL = "Hospital"
 INFO = "Info"
+Kills = "Kills"
 LAB = "Lab"
 LOAD_GAME = "Load Game"
 NEW_GAME = "New Game"
@@ -57,7 +59,7 @@ class ActionMenuDefaults:
 
 
 class OverviewMenuDefaults:
-    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, PERKS, STATS]
+    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, DISCOVERIES, Kills, PERKS, STATS]
 
 
 class InGameMenuDefaults:

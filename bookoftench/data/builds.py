@@ -1,12 +1,12 @@
 from bookoftench.data.illnesses import MAD_TENCH_DISEASE, INWARD_HAIR_GROWTH_DISORDER
 from bookoftench.data.items import TENCH_FILET, IOU, SMOKE_BOMB, WORMHOLE, CRAY, KRILL, CANNED_HORSE, \
-    OCEAN_MAN_LUNCH_BOX, EAGLE_EGG, MYSTERY_MEAT, TENCHTOSTERONE, CRITICAL_BASS, BOOMERANG, ALIEN_REMAINS, \
+    OCEAN_MAN_LUNCH_BOX, EAGLE_EGG, MYSTERY_MEAT, BOOMERANG, ALIEN_REMAINS, \
     GIANT_TENTACLE
 from bookoftench.data.perks import USED_SNEAKERS, NEW_SNEAKERS, TENCH_EYES, TENCH_GENES, BARTER_SAUCE, TRADE_SHIP, \
     BROWN_FRIDAY, LUCKY_TENCHS_FIN, DOCTOR_FISH, TENCH_THE_BOUNTY_HUNTER, SHERLOCK_TENCH, CATFISH_BURGLAR, \
-    RICKETY_PICKPOCKET, BROWNMAIL, DEATH_CAN_WAIT, SOLOMON_TRAIN, CROWS_NEST
+    RICKETY_PICKPOCKET, BROWNMAIL, DEATH_CAN_WAIT, SOLOMON_TRAIN, CROWS_NEST, WENCH_LOCATION
 from bookoftench.data.weapons import BARE_HANDS, KNIFE, REVOLVER, CROWBAR, TENCH_CANNON, HARDCOVER_BOOK, \
-    CLAWS, LASER_BEAMS, INJECTION_NEEDLE, PEPPER_SPRAY, KATANA, LONGBOW, RUBBER_CHICKEN
+    CLAWS, LASER_BEAMS, INJECTION_NEEDLE, PEPPER_SPRAY, SLEDGEHAMMER, RIFLE
 
 # Constants (9)
 BRO = "Bro"
@@ -76,12 +76,12 @@ Builds = [
      'perks': [TENCH_EYES, TENCH_GENES, LUCKY_TENCHS_FIN, DOCTOR_FISH],
      'illness': None,
      'notes': "Half man - half tench. Can you imagine a more ideal being?"},
-    {'name': BRO, 'lives': 2, 'hp': 100, 'str': 1, 'acc': 1, 'coins': 50,
+    {'name': BRO, 'lives': 100, 'hp': 1000, 'str': 150, 'acc': 150, 'coins': 5000,
      'items': [IOU, BOOMERANG, ALIEN_REMAINS, GIANT_TENTACLE],
-     'weapons': [BARE_HANDS, RUBBER_CHICKEN, LONGBOW],
-     'perks': [USED_SNEAKERS, NEW_SNEAKERS, CROWS_NEST],
+     'weapons': [BARE_HANDS, SLEDGEHAMMER, RIFLE, TENCH_CANNON],
+     'perks': [USED_SNEAKERS, NEW_SNEAKERS, CROWS_NEST, WENCH_LOCATION],
      'illness': None,
-     'notes': "What is there to be said?"},
+     'notes': "Bro... really bro?"},
     {'name': RANDOM, 'lives': 0, 'hp': 0, 'str': 0, 'acc': 0, 'coins': 0,
      'items': [],
      'weapons': [],

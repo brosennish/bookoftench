@@ -7,6 +7,7 @@ ACCURACY_SEARUM = "Accuracy Searum"
 ALIEN_REMAINS = "Alien Remains"
 ANTS_ON_A_LOG = "Ants On A Log"
 ASHWAGANDHA_GUMMIES = "Ashwagandha Gummies"
+BABY = "Baby"
 BAT_MATTER ="Bat Matter"
 BERRIES = "Berries"
 BONE_MEAL = "Bone Meal"
@@ -173,6 +174,10 @@ Items = [
     {'name': FERMENTED_CELERY_MILK, 'type': NORMAL, 'hp': 50, 'cost': 55, 'sell_value': 22, 'areas': [CITY, FOREST, SWAMP], 'desc': None,
      'sound': DRINK},
     {'name': OXYGENATED_BIOFILM, 'type': NORMAL, 'hp': 50, 'cost': 55, 'sell_value': 23, 'areas': [CAVE], 'desc': None,
+     'sound': EAT},
+
+    # --- Tier 7 (51+ HP) ---
+    {'name': BABY, 'type': NORMAL, 'hp': 100, 'cost': 110, 'sell_value': 50, 'areas': [SWAMP], 'desc': None,
      'sound': EAT},
 
     # --- SPECIAL ---

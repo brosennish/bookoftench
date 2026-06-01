@@ -220,10 +220,8 @@ class WizardEvent(Event):
 
 
 class CoffeeEvent(Event):
-    def __init__(self, coffee_item, event_type: EventType):
-        super().__init__(event_type)
-        self.coffee_item = coffee_item
-
+    def __init__(self):
+        super().__init__(EventType.COFFEE_EVENT)
 
 class TreatmentEvent(Event):
     def __init__(self, illness: Illness, event_type: EventType):
