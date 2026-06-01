@@ -529,6 +529,10 @@ Search_Discoverables = [
      "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,
      "desc": "Just your typical ghost. A phantom, a ghoul - hovering about and trying to spook. Nothing better to do."},
 
+    {"pre": "a", "name": "Giant Footprint", "value": 0, "hp": 0, "rarity": UNCOMMON,
+     "areas": [FOREST], "count": 0,
+     "desc": "Hm... it couldn't be, could it?"},
+
     {"pre": "a", "name": "Gray Cat", "value": 0, "hp": 0, "rarity": UNCOMMON,
      "areas": [CITY], "count": 0,
      "desc": "Big boy with white mittens. If you say come, he doesn't listen."},

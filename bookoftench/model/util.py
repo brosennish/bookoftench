@@ -13,7 +13,7 @@ from bookoftench.util import print_and_sleep
 from .discoverable import rarity_color
 from .game_state import GameState
 from ..data.areas import CAVE, CITY, FOREST, SWAMP
-from ..data.enemies import CONTAGIOUS, BOSS, Special_Bosses, SPECIAL_BOSS
+from ..data.enemies import CONTAGIOUS, BOSS, Special_Bosses, SPECIAL_BOSS, FINAL_BOSS
 from ..data.enviroment import DAYTIME
 
 
@@ -201,6 +201,8 @@ def display_game_stats(game_state: GameState) -> None:
     display_stat("Name", str(player.name), cyan)
     display_stat("Build", str(player_build.name), orange)
     display_stat("Level", player.lvl, cyan)
+    display_stat("Strength", player.strength, red)
+    display_stat("Accuracy", player.acc, yellow)
     display_stat("Luck", player.luck, green)
     display_stat("Deaths", event_logger.get_count(EventType.PLAYER_DEATH), red)
 
@@ -225,7 +227,8 @@ def display_game_stats(game_state: GameState) -> None:
     display_stat("Hohkken Encounters", event_logger.get_count(EventType.HOHKKEN), red)
 
     display_stat("Areas Cleared", sum(1 for a in game_state.areas if a.enemies_remaining == 0), blue)
-    display_stat("Bosses Defeated", sum(1 for a in game_state.areas if a.boss_defeated), red)
+    display_stat("Bosses Defeated", len([a for a in game_state.liberated_enemies if a.type in
+                                        [SPECIAL_BOSS, BOSS, FINAL_BOSS]]), red)
 
     display_stat("Coffees Purchased", event_logger.get_count(EventType.COFFEE_EVENT), green)
 
