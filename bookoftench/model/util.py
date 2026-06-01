@@ -13,7 +13,7 @@ from bookoftench.util import print_and_sleep
 from .discoverable import rarity_color
 from .game_state import GameState
 from ..data.areas import CAVE, CITY, FOREST, SWAMP
-from ..data.enemies import CONTAGIOUS, BOSS, Special_Bosses
+from ..data.enemies import CONTAGIOUS, BOSS, Special_Bosses, SPECIAL_BOSS
 from ..data.enviroment import DAYTIME
 
 
@@ -159,7 +159,7 @@ def get_player_status_view(game_state: GameState) -> str:
 def get_battle_status_view(game_state: GameState) -> str:
     player: Player = game_state.player
     enemy: Enemy = game_state.current_area.current_enemy
-    enemy_name_color = red if enemy.type == BOSS else purple
+    enemy_name_color = red if enemy.type in [SPECIAL_BOSS, BOSS] else purple
 
     def format_combatant_data(cmbt: Combatant, name_color) -> str:
         blind_turns = f"{cmbt.blind_turns} turn{'s' if cmbt.blind_turns > 1 else ''}"

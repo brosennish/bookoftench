@@ -5,7 +5,6 @@ from typing import List, Callable, Any
 from bookoftench.data.discoverables import Search_Discoverables, MYTHIC, LEGENDARY, RARE, UNCOMMON, COMMON
 from bookoftench.ui import purple, orange, blue, green, yellow
 
-
 @dataclass
 class Discoverable:
     pre: str | None

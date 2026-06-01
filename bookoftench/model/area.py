@@ -12,7 +12,7 @@ from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABL
     SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD, \
     ENCOUNTER_BOSS
 from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, CONTAGIOUS, NIGHT_OWL, HOHKKEN, BOSS, \
-    NORMAL, Special_Bosses
+    NORMAL
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss, load_special_boss
@@ -29,13 +29,13 @@ from ..audio import play_sound
 from ..data.audio import ENEMY_APPEARS, OWL_SFX, WEREWOLF_SFX
 
 _search_defaults = {
-    DISCOVER_PERK: 0,
-    DISCOVER_WEAPON: 0,
-    DISCOVER_ITEM: 0,
-    ENCOUNTER_BOSS: 100,
-    DISCOVER_DISCOVERABLE: 0,
-    DISCOVER_SPECIAL: 0,
-    SPAWN_ENEMY: 0
+    DISCOVER_PERK: 1,
+    DISCOVER_WEAPON: 2,
+    DISCOVER_ITEM: 3,
+    ENCOUNTER_BOSS: 3,
+    DISCOVER_DISCOVERABLE: 45,
+    DISCOVER_SPECIAL: 8,
+    SPAWN_ENEMY: 30
 }
 
 _event_defaults = {
@@ -173,7 +173,6 @@ class Area:
     def spawn_special_boss(self, name: str, time: str) -> Enemy:
         enemy = load_special_boss(name)  # convert selected special boss to Enemy type
         self.enemies_seen.add(name)  # add selected enemy to enemies_seen
-        enemy_dict = next(i for i in Special_Bosses if i['name'] == name)
 
         # --- assign Trait ---
         if enemy.trait:

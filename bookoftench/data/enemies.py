@@ -1,6 +1,5 @@
 from bookoftench.ui import Colors
 from . import audio, weapons as w
-from .audio import HOHKKEN_THEME
 
 # Areas
 CAVE = "Cave"

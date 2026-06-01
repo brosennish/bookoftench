@@ -333,7 +333,7 @@ Search_Discoverables = [
 
     {"pre": "some", "name": "Bush Meat", "value": 7, "hp": 10, "rarity": UNCOMMON,
      "areas": [CITY, FOREST, SWAMP], "count": 0,
-     "desc": "Never know what you'll find in a deep, thick, dense bush."},
+     "desc": "Never know what you'll find in a deep, dense bush."},
 
     {"pre": "a", "name": "Can of Spam", "value": 3, "hp": 8, "rarity": UNCOMMON,
      "areas": [CAVE, FOREST, SWAMP], "count": 0,

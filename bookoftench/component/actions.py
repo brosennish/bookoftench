@@ -227,7 +227,7 @@ class BuildBlindEffectSelection(LinearComponent):
         player = self.game_state.player
         player.blind = True
         while True:
-            effect = safe_input("How blind are you (1-100)")
+            effect = safe_input("How blind are you (1-100)?")
             if not effect.isdigit():
                 print_and_sleep(yellow("Effect must be an integer."))
             elif int(effect) < 1 or int(effect) > 100:
@@ -244,7 +244,7 @@ class BuildBlindTurnsSelection(LinearComponent):
         player = self.game_state.player
         player.blind = True
         while True:
-            turns = safe_input("How many turns")
+            turns = safe_input("How many turns?")
             if not turns.isdigit():
                 print_and_sleep(yellow("Turns must be an integer."))
             elif int(turns) < 1:
@@ -260,7 +260,7 @@ class BuildItemsSelection(LinearComponent):
     def execute_current(self) -> None:
         player = self.game_state.player
         player.items.clear()
-        items = [i for i in Items]
+        items = random.sample([i for i in Items], k=12)
         for i in items:
             if i['type'] == NORMAL:
                 print_and_sleep(cyan(f"{i['name']:<24}") + (dim(' | ')) + "HP: +" + (green(i['hp'])))
@@ -293,8 +293,13 @@ class BuildWeaponsSelection(LinearComponent):
 
     def execute_current(self) -> None:
         player = self.game_state.player
+
         player.weapon_dict.clear()
-        weapons = [w['name'] for w in Weapons]
+        load = load_weapons([BARE_HANDS])
+        weapon = next(i for i in load)
+        player.weapon_dict[BARE_HANDS] = PlayerWeapon.from_weapon(weapon)
+
+        weapons = random.sample([w['name'] for w in Weapons if w['uses'] >= 0], k=12)
         weapon_options = load_weapons(weapons)
         weapons_sorted = sorted(weapon_options, key=lambda w: w.damage)
         for w in weapons_sorted:
@@ -302,7 +307,7 @@ class BuildWeaponsSelection(LinearComponent):
 
         selections = []
         while True:
-            weapon = safe_input(f"Add a weapon ({len(selections)}/4 selected) or c to continue:")
+            weapon = safe_input(f"Add a weapon ({len(selections)}/3 selected) or c to continue:")
             if weapon == "c":
                 if not selections:
                     print_and_sleep(yellow("Please select at least one weapon (case-sensitive)."))
@@ -320,7 +325,7 @@ class BuildWeaponsSelection(LinearComponent):
                 print_and_sleep(yellow("Weapon not found - Please try again (case-sensitive)."))
             else:
                 selections.append(weapon) # add to list for counting
-                if len(selections) == 4: # if max reached
+                if len(selections) == 3: # if max reached
                     final_picks = load_weapons(selections) # convert selections to Weapon objects
                     for w in final_picks: # add each one to player weapon dict
                         player.weapon_dict.update({w.name: PlayerWeapon.from_weapon(w)})
@@ -472,7 +477,7 @@ class Search(RandomChoiceComponent):
     @functional_component(state_dependent=True)
     def _discover_discoverable(game_state: GameState):
         player = game_state.player
-        rarity = search_discoverable_rarity()
+        rarity = search_discoverable_rarity(player)
         color = rarity_color(rarity)
         available = [d for d in load_discoverables() if game_state.current_area.name
                      in d.areas and d.rarity == rarity]
