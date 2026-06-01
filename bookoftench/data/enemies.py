@@ -1,7 +1,7 @@
 from bookoftench.ui import Colors
 from . import audio, weapons as w
 from .audio import SHOTGUN
-from .weapons import TENTACLES, BEAK, PEPPER_SPRAY, BARE_HANDS, BRASS_KNUCKLES, BONE_SAW
+from .weapons import WOODEN_CLUB
 
 # Areas
 CAVE = "Cave"
@@ -20,8 +20,11 @@ BODY_BUILDER = "Body Builder"
 BONE_COLLECTOR = "Bone Collector"
 CAPTAIN_HOLE = "Captain Hole"
 CARD_JOCKEY = "Card Jockey"
+CENTAUR = "Centaur"
 CLONE = "Clone"
 CLOWN = "Clown"
+CYCLOPS = "Cyclops"
+DEATH_WORM = "Death Worm"
 DENNY_BILTMORE = "Denny Biltmore"
 DISGRACED_EXILE = "Disgraced Exile"
 DOOMSDAY_PREPPER = "Doomsday Prepper"
@@ -30,36 +33,52 @@ FERAL_PHILOSOPHER = "Feral Philosopher"
 FORAGER = "Forager"
 FORTUNE_TELLER = "Fortune Teller"
 PHROGGER = "Phrogger"
+FAIRY_CODMOTHER = "Fairy Codmother"
 FUGITIVE = "Fugitive"
 GATOR_WRESTLER = "Gator Wrestler"
+GIANT_MUTANT_RAT = "Giant Mutant Rat"
 GOON = "Goon"
 GRAVE_ROBBER = "Grave Robber"
 HAND_FISHERMAN = "Hand Fisherman"
 HIKER = "Hiker"
 HOBO = "Hobo"
+HODAG = "Hodag"
 HOHKKEN = "Hohkken"
 HUMANOID_CAVE_CREATURE = "Humanoid Cave Creature"
 HUNTER = "Hunter"
+HYDRA = "Hydra"
 ICE_CREAM_MAN = "Ice Cream Man"
 INFLUENCER = "Influencer"
+KNOBGOBLIN = "Knobgoblin"
 LIFE_COACH = "Life Coach"
+LUCKY_THE_LEPRECHAUN = "Lucky The Leprechaun"
 MASCOT = "Mascot"
 MAGICIAN = "Magician"
 MIME = "Mime"
 MINER = "Miner"
+MINOTAUR = "Minotaur"
 MOLE_PERSON = "Mole Person"
 MOONSHINER = "Moonshiner"
+MOTHMAN = "Mothman"
 MUSHROOM_HUNTER = "Mushroom Hunter"
+OGRE = "Ogre"
+OILY_DOILY = "Oily Doily"
 PARK_RANGER = "Park Ranger"
 PARTY_ANIMAL = "Party Animal"
 PIMP = "Pimp"
 POACHER = "Poacher"
 PROSPECTOR = "Prospector"
+ROUGAROU = "Rougarou"
+SABERTOOTH_LIGER = "Sabertooth Liger"
+SAMSQUANCH = "Samsquanch"
 SERIAL_KILLER = "Serial Killer"
 SENTIENT_ROBOT = "Sentient Robot"
+SEWER_GATOR = "Sewer Gator"
 SKIN_COLLECTOR = "Skin Collector"
+SKUNK_APE = "Skunk Ape"
 SLEDGE_HAMMOND = "Sledge Hammond"
 SLEEPWALKER = "Sleepwalker"
+SLENDERMAN = "Slenderman"
 SMUGGLER = "Smuggler"
 SPELUNKER = "Spelunker"
 SURVIVALIST = "Survivalist"
@@ -67,8 +86,11 @@ SURVIVOR = "Survivor"
 THE_MAYOR = "The Mayor"
 TELEPATHIC_MUTE = "Telepathic Mute"
 TRACKER = "Tracker"
+TROLL = "Troll"
 THIEF = "Thief"
+VAMPIRE_OVERLORD = "Vampire Overlord"
 VOODOO_PRIESTESS = "Voodoo Priestess"
+WENDIGO = "Wendigo"
 
 # Traits
 ACHILLES = "Achilles"
@@ -123,7 +145,7 @@ Enemies = [
      'bounty': 130, 'coins': 25, 'type': NORMAL, 'flee': 1.00, 'strength': 1, 'acc': 1, 'areas': [CITY]},
     {'name': PHROGGER, 'trait': '', 'illness': None, 'hp': 100, 'weapons': [w.FROG_GIG, w.PILLOW, w.PISTOL],
      'bounty': 150, 'coins': 40, 'type': NORMAL, 'flee': 1.00, 'strength': 1, 'acc': 1, 'areas': [CITY]},
-    {'name': ICE_CREAM_MAN, 'trait': '', 'illness': None, 'hp': 75, 'weapons': [w.KNIFE, w.BINOCULARS, PEPPER_SPRAY],
+    {'name': ICE_CREAM_MAN, 'trait': '', 'illness': None, 'hp': 75, 'weapons': [w.KNIFE, w.BINOCULARS, w.PEPPER_SPRAY],
      'bounty': 130, 'coins': 45, 'type': NORMAL, 'flee': 1.05, 'strength': 1, 'acc': 0.90, 'areas': [CITY]},
     {'name': INFLUENCER, 'trait': '', 'illness': None, 'hp': 75, 'weapons': [w.POCKET_KNIFE, w.SELFIE_STICK, w.PEPPER_SPRAY],
      'bounty': 120, 'coins': 65, 'type': NORMAL, 'flee': 1.20, 'strength': 0.75, 'acc': 0.75, 'areas': [CITY]},
@@ -294,126 +316,126 @@ Bosses = [
     # ------ Special Bosses ------
 
     {'name': HOHKKEN, 'hp': 250,
-     'weapons': [TENTACLES, BEAK],
+     'weapons': [w.TENTACLES, w.BEAK],
      'bounty': 0, 'type': BOSS, 'flee': 0.80, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
     },
 
     # --- Cave ---
 
-    {'name': CYCLOPS, 'hp': 225, 'coins': 0,
-     'weapons': [],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    {'name': CYCLOPS, 'hp': 200, 'coins': 0,
+     'weapons': [w.TORCH_CLUB],
+     'bounty': 0, 'type': BOSS, 'flee': 0.95, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': DEATH_WORM, 'hp': 225, 'coins': 0,
+    {'name': DEATH_WORM, 'hp': 195, 'coins': 0,
      'weapons': [],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+     'bounty': 0, 'type': BOSS, 'flee': 0.95, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': MINOTAUR, 'hp': 225, 'coins': 0,
-     'weapons': [],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    {'name': MINOTAUR, 'hp': 240, 'coins': 0,
+     'weapons': [w.CLAWS],
+     'bounty': 0, 'type': BOSS, 'flee': 0.85, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': SABERTOOTH_LIGER, 'hp': 225, 'coins': 0,
-     'weapons': [],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    {'name': SABERTOOTH_LIGER, 'hp': 210, 'coins': 0,
+     'weapons': [w.CLAWS],
+     'bounty': 0, 'type': BOSS, 'flee': 0.8, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': TROLL, 'hp': 230, 'coins': 60,
-     'weapons': [],
+    {'name': TROLL, 'hp': 185, 'coins': 90,
+     'weapons': [w.BARE_HANDS, w.TORCH_CLUB],
      'bounty': 0, 'type': BOSS, 'flee': 0.9, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
     # --- City ---
 
-    {'name': GIANT_MUTANT_RAT, 'hp': 210,
-     'weapons': [CLAWS, TEETH, TAIL],
-     'bounty': 0, 'type': BOSS, 'flee': 0.85, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
-    },
-
-    {'name': KNOBGOBLIN, 'hp': 200,
-     'weapons': [CLAWS, TEETH],
-     'bounty': 0, 'type': BOSS, 'flee': 0.85, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
-    },
-
-    {'name': OILY_DOILY, 'hp': 220, 'coins': 80,
-     'weapons': [BARE_HANDS, SHOTGUN, BONE_SAW],
-     'bounty': 0, 'type': BOSS, 'flee': 0.95, 'strength': 1.25, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
-    },
-
-    {'name': SEWER_GATOR, 'hp': 215,
-     'weapons': [TAIL, TEETH],
+    {'name': GIANT_MUTANT_RAT, 'hp': 160,
+     'weapons': [w.CLAWS],
      'bounty': 0, 'type': BOSS, 'flee': 0.9, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
     },
 
-    {'name': VAMPIRE_OVERLORD, 'hp': 235,
-     'weapons': [BARE_HANDS, TEETH],
-     'bounty': 0, 'type': BOSS, 'flee': 0.80, 'strength': 1.5, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    {'name': KNOBGOBLIN, 'hp': 155, 'coins': 65,
+     'weapons': [w.CLAWS],
+     'bounty': 0, 'type': BOSS, 'flee': 0.95, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    },
+
+    {'name': OILY_DOILY, 'hp': 175, 'coins': 100,
+     'weapons': [w.BARE_HANDS, w.SHOTGUN, w.BONE_SAW],
+     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1.1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    },
+
+    {'name': SEWER_GATOR, 'hp': 180,
+     'weapons': [w.CLAWS],
+     'bounty': 0, 'type': BOSS, 'flee': 0.9, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    },
+
+    {'name': VAMPIRE_OVERLORD, 'hp': 165,
+     'weapons': [w.BARE_HANDS, w.FANGS],
+     'bounty': 0, 'type': BOSS, 'flee': 0.75, 'strength': 1.25, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
     },
 
     # --- Forest ---
 
     {'name': CENTAUR, 'hp': 225, 'coins': 0,
-     'weapons': [],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+     'weapons': [w.CLAWS],
+     'bounty': 0, 'type': BOSS, 'flee': 0.9, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': FAIRY_CODMOTHER, 'hp': 225, 'coins': 0,
-     'weapons': [MAGIC_WAND, ],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    {'name': FAIRY_CODMOTHER, 'hp': 175, 'coins': 0,
+     'weapons': [w.LONGBOW, w.MAGIC_WAND],
+     'bounty': 0, 'type': BOSS, 'flee': 1.1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': LUCKY_THE_LEPRECHAUN, 'hp': 225, 'coins': 200,
-     'weapons': [],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    {'name': LUCKY_THE_LEPRECHAUN, 'hp': 160, 'coins': 200,
+     'weapons': [w.CANE, w.MAGIC_WAND],
+     'bounty': 0, 'type': BOSS, 'flee': 1.5, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': MOTHMAN, 'hp': 225, 'coins': 0,
-     'weapons': [],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    {'name': MOTHMAN, 'hp': 215, 'coins': 0,
+     'weapons': [w.BARE_HANDS, w.CLAWS],
+     'bounty': 0, 'type': BOSS, 'flee': 0.9, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': SAMSQUANCH, 'hp': 225, 'coins': 0,
-     'weapons': [],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    {'name': SAMSQUANCH, 'hp': 245, 'coins': 0,
+     'weapons': [w.BARE_HANDS, w.WOODEN_CLUB],
+     'bounty': 0, 'type': BOSS, 'flee': 0.9, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': SLENDERMAN, 'hp': 225, 'coins': 0,
-     'weapons': [],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    {'name': SLENDERMAN, 'hp': 230, 'coins': 0,
+     'weapons': [w.BARE_HANDS, w.TENTACLES],
+     'bounty': 0, 'type': BOSS, 'flee': 0.85, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': WENDIGO, 'hp': 225, 'coins': 0,
-     'weapons': [],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    {'name': WENDIGO, 'hp': 235, 'coins': 0,
+     'weapons': [w.CLAWS],
+     'bounty': 0, 'type': BOSS, 'flee': 0.85, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
     # --- Swamp ---
 
-    {'name': HODAG, 'hp': 225, 'coins': 0,
-     'weapons': [],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    {'name': HODAG, 'hp': 220, 'coins': 0,
+     'weapons': [w.CLAWS],
+     'bounty': 0, 'type': BOSS, 'flee': 0.9, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
-    
-    {'name': HYDRA, 'hp': 225, 'coins': 0,
-     'weapons': [],
+
+    {'name': HYDRA, 'hp': 245, 'coins': 0,
+     'weapons': [w.CLAWS],
+     'bounty': 0, 'type': BOSS, 'flee': 0.85, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+     },
+
+    {'name': OGRE, 'hp': 235, 'coins': 0,
+     'weapons': [w.BARE_HANDS, w.WOODEN_CLUB],
      'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': OGRE, 'hp': 225, 'coins': 0,
-     'weapons': [],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    {'name': ROUGAROU, 'hp': 215, 'coins': 0,
+     'weapons': [w.CLAWS],
+     'bounty': 0, 'type': BOSS, 'flee': 0.85, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': ROUGARU, 'hp': 225, 'coins': 0,
-     'weapons': [],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
-     },
-
-    {'name': SKUNK_APE, 'hp': 225, 'coins': 0,
-     'weapons': [],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
+    {'name': SKUNK_APE, 'hp': 230, 'coins': 0,
+     'weapons': [w.BARE_HANDS, w.WOODEN_CLUB],
+     'bounty': 0, 'type': BOSS, 'flee': 0.9, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
 ]
@@ -869,7 +891,7 @@ Enemy_Lines = {
 Enemy_Adjectives = [
     "Agitated", "Angry", "Animatronic", "Belligerent", "Bestial",
     "Bloodthirsty", "Braindead", "Brainwashed",
-    "Cannibalistic", "Crazy",
+    "Cannibalistic", "Closeted", "Crazy",
     "Crazed", "Cross-eyed", "Cruel", "Cursed", "Damned",
     "Dastardly", "Degenerate",
     "Delirious", "Demented", "Deplorable",
