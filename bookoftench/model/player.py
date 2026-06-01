@@ -430,6 +430,8 @@ class Player(Combatant):
         self.luck += round(amount, 3)
         if self.luck < 0:
             self.luck = 0
+        if self.luck > 10:
+            self.luck = 10
 
     @staticmethod
     @attach_perk(INTRO_TO_TENCH, value_description="xp gained")
