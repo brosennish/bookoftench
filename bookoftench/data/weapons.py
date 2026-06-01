@@ -99,6 +99,7 @@ BLUNT = 'blunt'
 MELEE = 'melee'
 RANGED = 'ranged'
 SPECIAL = 'special'
+STUN = 'stun'
 
 
 Weapons = [

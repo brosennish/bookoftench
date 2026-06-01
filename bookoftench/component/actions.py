@@ -12,13 +12,13 @@ from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL, MENSCH_T
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
-    OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER, KILLS, DISCOVERIES, ENCOUNTERS
-from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER, HOHKKEN
+    OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER, KILLS, DISCOVERIES, ENCOUNTERS, ENCOUNTER_BOSS
+from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER, HOHKKEN, Bosses
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import DEATH_CAN_WAIT, Perks, NEPTUNE
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.discoverable import load_discoverables, search_discoverable_rarity, rarity_color
-from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE, Enemy
+from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE, Enemy, load_boss
 from bookoftench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent, DiscoveryEvent, \
     FailedFleeEvent, DefeatHohkkenEvent
 from bookoftench.model.game_state import GameState
@@ -877,6 +877,36 @@ class TryFlee(RandomChoiceComponent):
     def _flee_success(game_state: GameState):
         event_logger.log_event(FleeEvent(game_state.current_area.current_enemy.name))
         game_state.player.gain_xp_other(1)
+
+
+@register_component(ENCOUNTER_BOSS)
+class EncounterBoss(LinearComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, next_component=Battle)
+
+    def execute_current(self) -> GameState:
+        area = self.game_state.current_area.name
+        area_bosses = [i for i in Bosses if i['area'] == area]
+        liberated = [i.name for i in self.game_state.liberated_enemies]
+        available = [i['name'] for i in area_bosses if i['name'] not in liberated]
+
+        if not available:
+            print_and_sleep(yellow("All bosses in this area are now in Hell."), 1.5)
+            return self.game_state
+        else:
+            selection = random.choice(available)
+
+            boss = load_boss(selection)
+            self.game_state.current_area.boss = boss
+            self.game_state.boss_pending = True
+            self.game_state.current_area.current_enemy = boss
+            self.game_state.current_area.set_boss_to_current_enemy(boss)
+
+            self.log_encounter(area, self.game_state.current_area.current_enemy)
+            return self.game_state
+
+    def log_encounter(self, area, enemy):
+        self.game_state.encountered_enemies.append({"area": area, "enemy": enemy})
 
 
 @register_component(SPAWN_ENEMY)
