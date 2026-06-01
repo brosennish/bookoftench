@@ -177,7 +177,7 @@ Items = [
      'sound': EAT},
 
     # --- Tier 7 (51+ HP) ---
-    {'name': BABY, 'type': NORMAL, 'hp': 100, 'cost': 110, 'sell_value': 50, 'areas': [FOREST, SWAMP], 'desc': None,
+    {'name': BABY, 'type': NORMAL, 'hp': 100, 'cost': 110, 'sell_value': 50, 'areas': [SWAMP], 'desc': None,
      'sound': EAT},
 
     # --- SPECIAL ---

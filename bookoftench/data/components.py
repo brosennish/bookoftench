@@ -24,8 +24,8 @@ FINAL_BOSS_FIGHT = purple("BATTLE DENNY BILTMORE")
 GREEDY_BASTARD = "Greedy Bastard"
 HOSPITAL = "Hospital"
 INFO = "Info"
+Kills = "Kills"
 LAB = "Lab"
-LIBERATED = "Liberated"
 LOAD_GAME = "Load Game"
 NEW_GAME = "New Game"
 OCCULTIST = "Occultist"
@@ -59,7 +59,7 @@ class ActionMenuDefaults:
 
 
 class OverviewMenuDefaults:
-    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, DISCOVERIES, LIBERATED, PERKS, STATS]
+    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, DISCOVERIES, Kills, PERKS, STATS]
 
 
 class InGameMenuDefaults:

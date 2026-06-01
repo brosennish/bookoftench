@@ -62,6 +62,10 @@ Search_Discoverables = [
      "areas": [FOREST], "count": 0,
      "desc": "Could also be from the Wendigo."},
 
+    {"pre": "some", "name": "Detritus", "value": 3, "hp": 0, "rarity": COMMON,
+     "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,
+     "desc": "Could also be from the Wendigo."},
+
     {"pre": "a", "name": "Dipstick", "value": 3, "hp": 0, "rarity": COMMON,
      "areas": [CITY], "count": 0,
      "desc": "Use to check your current poop levels - doesn't work on cars."},
@@ -893,7 +897,7 @@ Search_Discoverables = [
     {"pre": "a", "name": "Primordial Being", "value": 950, "hp": 0, "rarity": MYTHIC,
      "areas": [CAVE], "count": 0,
      "desc": "It is beyond description. Language was not made for this being."},
-    
+
     {"pre": None, "name": "The Book of Tench", "value": 1500, "hp": 0, "rarity": MYTHIC,
      "areas": [CAVE], "count": 0,
      "desc": "The only piece of literature needed in the universe."},

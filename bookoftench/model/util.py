@@ -281,7 +281,7 @@ def display_discoveries(game_state: GameState) -> None:
         for i in abc:
             color = rarity_color(i.rarity)
             print_and_sleep(f"{color(f'{i.name}')}"
-                f"\n{blue(f'{i.desc}')}"
+                f"\n{color(f'{i.desc}')}"
                 f"\nCount: {i.count}")
     else:
         print_and_sleep(yellow("Go make some discoveries fool."), 1)
