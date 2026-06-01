@@ -322,7 +322,7 @@ Bosses = [
 
     # --- Cave ---
 
-    {'name': CYCLOPS, 'hp': 200, 'coins': 0, 'trait': '',
+    {'name': CYCLOPS, 'hp': 200, 'coins': 35, 'trait': ORACLE,
      'weapons': [w.BARE_HANDS, w.TORCH_CLUB],
      'bounty': 0, 'type': BOSS, 'flee': 0.95, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
@@ -349,17 +349,17 @@ Bosses = [
 
     # --- City ---
 
-    {'name': GIANT_MUTANT_RAT, 'hp': 160, 'coins': 0, 'trait': '',
+    {'name': GIANT_MUTANT_RAT, 'hp': 160, 'coins': 25, 'trait': CONTAGIOUS,
      'weapons': [w.CLAWS, w.FANGS],
      'bounty': 0, 'type': BOSS, 'flee': 0.9, 'strength': 1.05, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
     },
 
-    {'name': KNOBGOBLIN, 'hp': 155, 'coins': 65, 'trait': '',
+    {'name': KNOBGOBLIN, 'hp': 155, 'coins': 65, 'trait': CHEATER,
      'weapons': [w.CLAWS, w.FANGS],
      'bounty': 0, 'type': BOSS, 'flee': 0.95, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
     },
 
-    {'name': OILY_DOILY, 'hp': 175, 'coins': 100, 'trait': '',
+    {'name': OILY_DOILY, 'hp': 175, 'coins': 100, 'trait': ACHILLES,
      'weapons': [w.BARE_HANDS, w.SHOTGUN, w.BONE_SAW],
      'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1.05, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
     },
@@ -369,7 +369,7 @@ Bosses = [
      'bounty': 0, 'type': BOSS, 'flee': 0.9, 'strength': 1.5, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
     },
 
-    {'name': VAMPIRE_OVERLORD, 'hp': 165, 'coins': 0, 'trait': '',
+    {'name': VAMPIRE_OVERLORD, 'hp': 165, 'coins': 0, 'trait': PLANT,
      'weapons': [w.BARE_HANDS, w.FANGS],
      'bounty': 0, 'type': BOSS, 'flee': 0.75, 'strength': 1.1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
     },
@@ -381,17 +381,17 @@ Bosses = [
      'bounty': 0, 'type': BOSS, 'flee': 0.9, 'strength': 1.1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': FAIRY_CODMOTHER, 'hp': 175, 'coins': 0, 'trait': '',
+    {'name': FAIRY_CODMOTHER, 'hp': 175, 'coins': 50, 'trait': EMPATH,
      'weapons': [w.LONGBOW, w.MAGIC_WAND, w.SLINGSHOT],
      'bounty': 0, 'type': BOSS, 'flee': 1.1, 'strength': 0.85, 'acc': 1.1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': LUCKY_THE_LEPRECHAUN, 'hp': 160, 'coins': 200, 'trait': '',
+    {'name': LUCKY_THE_LEPRECHAUN, 'hp': 160, 'coins': 200, 'trait': COWARD,
      'weapons': [w.CANE, w.MAGIC_WAND, w.POCKET_SAND, w.SLINGSHOT],
      'bounty': 0, 'type': BOSS, 'flee': 1.5, 'strength': 0.85, 'acc': 1.1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': MOTHMAN, 'hp': 215, 'coins': 0, 'trait': '',
+    {'name': MOTHMAN, 'hp': 215, 'coins': 0, 'trait': COWARD,
      'weapons': [w.BARE_HANDS, w.CLAWS],
      'bounty': 0, 'type': BOSS, 'flee': 0.9, 'strength': 1.05, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
@@ -401,7 +401,7 @@ Bosses = [
      'bounty': 0, 'type': BOSS, 'flee': 0.9, 'strength': 1.1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': SLENDERMAN, 'hp': 230, 'coins': 0, 'trait': '',
+    {'name': SLENDERMAN, 'hp': 230, 'coins': 0, 'trait': PLANT,
      'weapons': [w.BARE_HANDS, w.TENTACLES],
      'bounty': 0, 'type': BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
@@ -423,7 +423,7 @@ Bosses = [
      'bounty': 0, 'type': BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': OGRE, 'hp': 235, 'coins': 0, 'trait': '',
+    {'name': OGRE, 'hp': 235, 'coins': 69, 'trait': JUNKIE,
      'weapons': [w.BARE_HANDS, w.WOODEN_CLUB, w.BONE_CLUB],
      'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1.15, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
@@ -433,7 +433,7 @@ Bosses = [
      'bounty': 0, 'type': BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },
 
-    {'name': SKUNK_APE, 'hp': 230, 'coins': 0, 'trait': '',
+    {'name': SKUNK_APE, 'hp': 230, 'coins': 0, 'trait': CONTAGIOUS,
      'weapons': [w.BARE_HANDS, w.WOODEN_CLUB],
      'bounty': 0, 'type': BOSS, 'flee': 0.9, 'strength': 1.1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
      },

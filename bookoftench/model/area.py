@@ -11,7 +11,7 @@ from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABL
     DISCOVER_WEAPON, \
     SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD
 from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, COWARD, CONTAGIOUS, NIGHT_OWL, HOHKKEN, BOSS, \
-    DENNY_BILTMORE
+    DENNY_BILTMORE, NORMAL
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss
@@ -112,7 +112,8 @@ class Area:
         self.enemies_seen.add(enemy_name)  # add selected enemy to enemies_seen
 
         # --- trait and illness ---
-        enemy = handle_trait_and_illness(enemy, time)
+        if not enemy.trait and enemy.type == NORMAL:
+            enemy = handle_trait_and_illness(enemy, time)
 
         # --- standard stat adjustments ---
         enemy.hp += random.randint(-2, 2)  # apply hp spread first
