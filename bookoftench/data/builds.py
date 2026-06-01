@@ -82,7 +82,7 @@ Builds = [
 
     {'name': BRO, 'lives': 100, 'hp': 1000, 'str': 150, 'acc': 150, 'coins': 5000,
      'items': [i.IOU, i.SMOKE_BOMB, i.WORMHOLE],
-     'weapons': [w.BARE_HANDS, w.SLEDGEHAMMER, w.RIFLE, w.TENCH_CANNON],
+     'weapons': [w.BARE_HANDS, w.TENCH_CANNON],
      'perks': [],
      'illness': RESTLESS_BUTT_SYNDROME,
      'notes': "Bro... really bro?"},

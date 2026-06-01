@@ -184,7 +184,8 @@ def display_player_attributes(game_state: GameState) -> None:
     player: Player = game_state.player
 
     print_and_sleep(f"\n{dim('Strength |')} {red(round(player.strength, 2))}"
-        f"\n{dim('Accuracy |')} {yellow(round(player.acc, 2))}\n")
+        f"\n{dim('Accuracy |')} {yellow(round(player.acc, 2))}"
+        f"\n{dim('Luck     |')} {green(round(player.luck, 3))}\n")
 
 
 def display_game_stats(game_state: GameState) -> None:
@@ -199,8 +200,8 @@ def display_game_stats(game_state: GameState) -> None:
 
     display_stat("Name", str(player.name), cyan)
     display_stat("Build", str(player_build.name), orange)
-    display_stat("Current Level", player.lvl, cyan)
-    display_stat("Current HP", player.hp, player_color)
+    display_stat("Level", player.lvl, cyan)
+    display_stat("Luck", player.luck, green)
     display_stat("Deaths", event_logger.get_count(EventType.PLAYER_DEATH), red)
 
     display_stat("Coins", player.coins, green)

@@ -108,6 +108,7 @@ class Player(Combatant):
     xp: int = 0
     strength: float = 1
     acc: float = 1
+    luck: float = 1
 
     illness: Optional[Illness] = None
     illness_death_lvl: Optional[int] = None
@@ -424,6 +425,11 @@ class Player(Combatant):
     def gain_accuracy(self, amount: float) -> None:
         self.acc += round(amount, 2)
         print_and_sleep(cyan(f"Your accuracy increased by {round(amount, 2)}!"), 1)
+
+    def gain_or_lose_luck(self, amount: float):
+        self.luck += round(amount, 3)
+        if self.luck < 0:
+            self.luck = 0
 
     @staticmethod
     @attach_perk(INTRO_TO_TENCH, value_description="xp gained")

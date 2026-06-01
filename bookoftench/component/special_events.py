@@ -80,9 +80,11 @@ class DiscoverSpecial(RandomChoiceComponent):
                 print_and_sleep(purple(f"You're not a greedy bastard. Good for you.\n"), 2)
                 player.gain_coins(request)
                 player.gain_xp_other(woman_coins - request)
+                player.gain_or_lose_luck(0.025)
             elif request == woman_coins:  # You request what the woman has to offer
                 play_sound(POSITIVE)
                 print_and_sleep(purple(f"Wow, that's exactly what I have to offer. Kudos.\n"), 2)
+                player.gain_or_lose_luck(0.1)
                 player.gain_coins(woman_coins)
             elif request > woman_coins:  # You request more than the woman has to offer
                 damage = min(request - woman_coins, player.hp)
@@ -90,6 +92,7 @@ class DiscoverSpecial(RandomChoiceComponent):
                 play_sound(PUNCH)
                 print_and_sleep(red(f"The woman slapped you for {damage} damage!"), 1)
                 print_and_sleep(purple(f"That's for being a greedy bastard!\n"), 2)
+                player.gain_or_lose_luck(-0.05)
                 if player.hp == 0:
                     player.lives -= 1
                     event_logger.log_event(PlayerDeathEvent(player.lives))
@@ -123,17 +126,20 @@ class DiscoverSpecial(RandomChoiceComponent):
                 play_sound(PUNCH)
                 print_and_sleep(red(f"The woman slapped you for {damage} damage!"), 1)
                 print_and_sleep(purple(f"That's for being a stingy bastard!\n"), 2)
+                player.gain_or_lose_luck(-0.05)
                 if player.hp == 0:
                     player.lives -= 1
                     event_logger.log_event(PlayerDeathEvent(player.lives))
             elif offer == woman_desired:  # You offer what the woman wants
                 play_sound(POSITIVE)
                 print_and_sleep(purple(f"Wow, that's exactly what I was hoping for. Thanks a lot!\n"), 2)
+                player.gain_or_lose_luck(0.1)
                 player.coins -= offer
             elif offer > woman_desired:  # You offer more than what the woman wants
                 play_sound(POSITIVE)
                 print_and_sleep(purple(f"You're not a stingy bastard. Keep the coin. Good for you.\n"), 2)
                 player.gain_xp_other(offer - woman_desired)
+                player.gain_or_lose_luck(0.025)
             return None
         return None
 
@@ -209,6 +215,7 @@ class DiscoverSpecial(RandomChoiceComponent):
                     print_and_sleep(cyan(f"You shot the man and collected {wager} coins!"), 3)
                     player.gain_coins(wager)
                     player.gain_xp_other(min(wager, 20))
+                    player.gain_or_lose_luck(0.1)
                     return None
                 else:  # You suffer 1, calc damage and lose your wager (death if applicable)
                     damage = random.randint(1, min(wager, 40))
@@ -219,6 +226,7 @@ class DiscoverSpecial(RandomChoiceComponent):
                     print_and_sleep(yellow(f"You lost your wager of {wager} coins."), 2)
                     player.coins -= wager
                     player.gain_xp_other(damage)
+                    player.gain_or_lose_luck(-0.1)
                     if player.hp == 0:
                         player.lives -= 1
                         event_logger.log_event(PlayerDeathEvent(player.lives))
@@ -282,6 +290,7 @@ Choose wisely.\n\n"""), 3)
             item = random.choice([i for i in load_items() if game_state.current_area.name in i.areas
                                   and i.name not in player.items])
             play_sound(POSITIVE)
+            player.gain_or_lose_luck(0.05)
             print_and_sleep(cyan(f"You found {'an' if item.name[0].lower() in 'aeiou' else 'a'} {item.name}!"), 1)
 
             if player.add_item(item):
@@ -296,6 +305,7 @@ Choose wisely.\n\n"""), 3)
             player.hp -= damage
             play_sound(MONSTER_ATTACK)
             print_and_sleep(red(f"You were ravaged by an unseen creature and lost {damage} hp."), 2)
+            player.gain_or_lose_luck(-0.05)
             if player.hp == 0:
                 player.lives -= 1
                 event_logger.log_event(PlayerDeathEvent(player.lives))
@@ -342,7 +352,8 @@ What do you say?\n\n"""), 3)
 
         print_and_sleep(yellow("..."), seconds)  # time.sleep for the number of seconds entered
 
-        sun_effect = random.uniform(0.25, 0.75)  # Sun blind effect between 0.25, 0.75
+        sun_effect = random.uniform(0.2, 0.8)
+        luck = 0.8 - sun_effect
         if player.blind:
             player.blind_turns += seconds  # Add to current turns
             player.blind_effect = sun_effect if sun_effect > player.blind_effect else player.blind_effect
@@ -359,6 +370,7 @@ What do you say?\n\n"""), 3)
                 f"{player.blind_turns} turns"), 3)
 
         payment = seconds * 5
+        player.gain_or_lose_luck(luck)
         player.gain_coins(payment)
         return None
 
@@ -395,6 +407,7 @@ What do you say?\n\n"""), 3)
                 print_and_sleep(red(f"You startled the man and he punched you for {amount} damage!"), 3)
                 original = player.hp
                 player.hp -= min(amount, original)
+                player.gain_or_lose_luck(-0.1)
                 if player.hp == 0:
                     player.lives -= 1
                     event_logger.log_event(PlayerDeathEvent(player.lives))
@@ -404,9 +417,11 @@ I would've slept through my appointment today.
 I'm scheduled to be buried alive at 6... or was it 8?"""), 3)
                 print_and_sleep(green(f"He pays you {amount} of coin and immediately zonks back out."), 3)
                 player.gain_coins(amount)
+                player.gain_or_lose_luck(0.1)
         elif choice == "b":  # You bury him alive
             print_and_sleep(purple(f"You bury the man alive..."), 3)
             player.gain_xp_other(amount)  # Gain xp for helping him
             if random.random() < 0.25:  # Chance Officer Hohkken busts you
+                player.gain_or_lose_luck(-0.1)
                 OfficerEncounter(game_state).run()
         return None

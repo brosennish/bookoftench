@@ -23,7 +23,7 @@ class LabBounder(GatekeepingComponent):
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("The laboratory is closed during the day.\n"), 1.5)))
 
-# --- Casino menu ---
+# --- Casino Menu ---
 
 class LabComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -75,9 +75,11 @@ def conduct_experiment(game_state):
         if original != player.strength:
             if amount > 0:
                 print_and_sleep(green(f"Strength: {original} -> {player.strength}"), 1)
+                player.gain_or_lose_luck(0.01)
                 mutation = True
             elif amount < 0:
                 print_and_sleep(yellow(f"Strength: {original} -> {player.strength}"), 1)
+                player.gain_or_lose_luck(-0.01)
                 mutation = True
 
     if random.random() < 0.23: # ACCURACY
@@ -87,28 +89,32 @@ def conduct_experiment(game_state):
         if original != player.acc:
             if amount > 0:
                 print_and_sleep(green(f"Accuracy: {original} -> {player.acc}"), 1)
+                player.gain_or_lose_luck(0.01)
                 mutation = True
             elif amount < 0:
                 print_and_sleep(yellow(f"Accuracy: {original} -> {player.acc}"), 1)
+                player.gain_or_lose_luck(-0.01)
                 mutation = True
 
     if random.random() < 0.21: # HP
         original = player.max_hp
-        amount = random.randint(-2, 2)
+        amount = random.randint(-3, 3)
         player.max_hp += amount
         if player.hp > player.max_hp:
             player.hp = player.max_hp
         if amount > 0:
             print_and_sleep(green(f"Max HP: {original} -> {player.max_hp}"), 1)
+            player.gain_or_lose_luck(0.01)
             mutation = True
         elif amount < 0:
             print_and_sleep(yellow(f"Max HP: {original} -> {player.max_hp}"), 1)
+            player.gain_or_lose_luck(-0.01)
             mutation = True
 
     if random.random() < 0.08: # LEVEL
         original = player.lvl
         amount = -1
-        if random.random() < 0.58:  # higher odds to increase level (bad for player)
+        if random.random() < (min(player.luck, 10) / 100):
             amount = 1
         player.lvl += amount
         if player.lvl <= 0:
@@ -116,9 +122,11 @@ def conduct_experiment(game_state):
         if original != player.lvl:
             if amount > 0:
                 print_and_sleep(cyan(f"Level: {original} -> {player.lvl}"), 1)
+                player.gain_or_lose_luck(0.05)
                 mutation = True
             elif amount < 0:
                 print_and_sleep(cyan(f"Level: {original} -> {player.lvl}"), 1)
+                player.gain_or_lose_luck(-0.05)
                 mutation = True
         if player.lvl == player.illness_death_lvl:
             player.lives -= 1
@@ -131,9 +139,11 @@ def conduct_experiment(game_state):
     if random.random() < 0.06: # LIVES
         original = player.lives
         amount = 1
-        if random.random() < 0.58:  # higher odds to lose a life since you're getting paid
+        if random.random() < 0.60 - (min(player.luck, 10) / 100):
+            player.gain_or_lose_luck(-0.05)
             amount = -1
         else:
+            player.gain_or_lose_luck(0.05)
             if player.lives == 5:
                 amount = 0
         player.lives += amount

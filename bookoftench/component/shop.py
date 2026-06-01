@@ -11,7 +11,7 @@ from bookoftench.component.registry import register_component
 from bookoftench.data.audio import SHOP_THEME, PURCHASE, XP, WHIFF
 from bookoftench.data.components import SHOP
 from bookoftench.data.perks import CATFISH_BURGLAR
-from bookoftench.model import GameState
+from bookoftench.model import GameState, game_state
 from bookoftench.model.base import Buyable
 from bookoftench.model.perk import attach_perk
 from bookoftench.model.util import display_active_perk_count, display_shop_header
@@ -105,7 +105,8 @@ def refresh_cost(game_state) -> str:
 
 class BuyOrStealDecision(LabeledSelectionComponent):
     def __init__(self, game_state: GameState, buyable: Buyable):
-        success_chance = self.calculate_success_chance(buyable)
+        luck = min(game_state.player.luck, 7)
+        success_chance = self.calculate_success_chance(buyable, luck)
         super().__init__(game_state, bindings=[
             SelectionBinding('B', f"Buy ({buyable.cost})", self._make_purchase_component(buyable)),
             SelectionBinding('S', f"Steal ({success_chance}% chance)",
@@ -114,9 +115,9 @@ class BuyOrStealDecision(LabeledSelectionComponent):
 
     @staticmethod
     @attach_perk(CATFISH_BURGLAR, value_description="shoplifting odds")
-    def calculate_success_chance(buyable: Buyable) -> int:
+    def calculate_success_chance(buyable: Buyable, luck: float) -> int:
         upper_bound = max(_max_steal_chance - buyable.cost, _steal_spread)
-        return random.randint(max(1, upper_bound - _steal_spread), upper_bound)
+        return random.randint(max(1, upper_bound - _steal_spread + int(luck)), upper_bound)
 
     @staticmethod
     def _make_purchase_component(buyable: Buyable):
@@ -149,6 +150,7 @@ class StealItem(RandomChoiceComponent):
         def steal_component(game_state: GameState):
             if game_state.player.steal_buyable(buyable):
                 game_state.player.gain_xp_other(1)
+                game_state.player.gain_or_lose_luck(0.1)
                 game_state.shop.remove_listing(buyable)
 
         return steal_component
@@ -157,6 +159,7 @@ class StealItem(RandomChoiceComponent):
     @functional_component(state_dependent=True)
     def busted_component(game_state: GameState):
         game_state.shop.ban_player()
+        game_state.player.gain_or_lose_luck(-0.1)
         OfficerEncounter(game_state).run()
 
 
