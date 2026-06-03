@@ -5,7 +5,6 @@ from typing import List, Callable, Any
 from bookoftench.data.discoverables import Search_Discoverables, MYTHIC, LEGENDARY, RARE, UNCOMMON, COMMON
 from bookoftench.ui import purple, orange, blue, green, yellow
 
-
 @dataclass
 class Discoverable:
     pre: str | None
@@ -18,16 +17,17 @@ class Discoverable:
     desc: str | None
 
 
-def search_discoverable_rarity() -> str:
+def search_discoverable_rarity(player) -> str:
     roll = random.random()
+    luck = player.luck
 
-    if roll < 0.0004:
+    if roll < luck * 0.0004:
         rarity = MYTHIC
-    elif roll < 0.0014:
+    elif roll < luck * 0.0014:
         rarity = LEGENDARY
-    elif roll < 0.08:
+    elif roll < luck * 0.08:
         rarity = RARE
-    elif roll < 0.3:
+    elif roll < luck * 0.3:
         rarity = UNCOMMON
     else:
         rarity = COMMON

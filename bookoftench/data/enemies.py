@@ -1,6 +1,6 @@
 from bookoftench.ui import Colors
 from . import audio, weapons as w
-from .weapons import TENTACLES, BEAK, PEPPER_SPRAY
+from .audio import CRYPTO_THEME
 
 # Areas
 CAVE = "Cave"
@@ -19,8 +19,11 @@ BODY_BUILDER = "Body Builder"
 BONE_COLLECTOR = "Bone Collector"
 CAPTAIN_HOLE = "Captain Hole"
 CARD_JOCKEY = "Card Jockey"
+CENTAUR = "Centaur"
 CLONE = "Clone"
 CLOWN = "Clown"
+CYCLOPS = "Cyclops"
+DEATH_WORM = "Death Worm"
 DENNY_BILTMORE = "Denny Biltmore"
 DISGRACED_EXILE = "Disgraced Exile"
 DOOMSDAY_PREPPER = "Doomsday Prepper"
@@ -29,36 +32,52 @@ FERAL_PHILOSOPHER = "Feral Philosopher"
 FORAGER = "Forager"
 FORTUNE_TELLER = "Fortune Teller"
 PHROGGER = "Phrogger"
+FAIRY_CODMOTHER = "Fairy Codmother"
 FUGITIVE = "Fugitive"
 GATOR_WRESTLER = "Gator Wrestler"
+GIANT_MUTANT_RAT = "Giant Mutant Rat"
 GOON = "Goon"
 GRAVE_ROBBER = "Grave Robber"
 HAND_FISHERMAN = "Hand Fisherman"
 HIKER = "Hiker"
 HOBO = "Hobo"
+HODAG = "Hodag"
 HOHKKEN = "Hohkken"
 HUMANOID_CAVE_CREATURE = "Humanoid Cave Creature"
 HUNTER = "Hunter"
+HYDRA = "Hydra"
 ICE_CREAM_MAN = "Ice Cream Man"
 INFLUENCER = "Influencer"
+KNOBGOBLIN = "Knobgoblin"
 LIFE_COACH = "Life Coach"
+LUCKY_THE_LEPRECHAUN = "Lucky The Leprechaun"
 MASCOT = "Mascot"
 MAGICIAN = "Magician"
 MIME = "Mime"
 MINER = "Miner"
+MINOTAUR = "Minotaur"
 MOLE_PERSON = "Mole Person"
 MOONSHINER = "Moonshiner"
+MOTHMAN = "Mothman"
 MUSHROOM_HUNTER = "Mushroom Hunter"
+OGRE = "Ogre"
+OILY_DOILY = "Oily Doily"
 PARK_RANGER = "Park Ranger"
 PARTY_ANIMAL = "Party Animal"
 PIMP = "Pimp"
 POACHER = "Poacher"
 PROSPECTOR = "Prospector"
+ROUGAROU = "Rougarou"
+SABERTOOTH_LIGER = "Sabertooth Liger"
+SAMSQUANCH = "Samsquanch"
 SERIAL_KILLER = "Serial Killer"
 SENTIENT_ROBOT = "Sentient Robot"
+SEWER_GATOR = "Sewer Gator"
 SKIN_COLLECTOR = "Skin Collector"
+SKUNK_APE = "Skunk Ape"
 SLEDGE_HAMMOND = "Sledge Hammond"
 SLEEPWALKER = "Sleepwalker"
+SLENDERMAN = "Slenderman"
 SMUGGLER = "Smuggler"
 SPELUNKER = "Spelunker"
 SURVIVALIST = "Survivalist"
@@ -66,8 +85,11 @@ SURVIVOR = "Survivor"
 THE_MAYOR = "The Mayor"
 TELEPATHIC_MUTE = "Telepathic Mute"
 TRACKER = "Tracker"
+TROLL = "Troll"
 THIEF = "Thief"
+VAMPIRE_OVERLORD = "Vampire Overlord"
 VOODOO_PRIESTESS = "Voodoo Priestess"
+WENDIGO = "Wendigo"
 
 # Traits
 ACHILLES = "Achilles"
@@ -86,11 +108,14 @@ PREPARED = "Prepared"
 WEREWOLF = "Werewolf"
 
 # Types
-NORMAL = "normal"
 BOSS = "boss"
 FINAL_BOSS = "final_boss"
+NORMAL = "normal"
+SPECIAL_BOSS = "special_boss"
 
-It_Its = [HOHKKEN, SENTIENT_ROBOT]
+It_Its = [SEWER_GATOR, HOHKKEN, KNOBGOBLIN, GIANT_MUTANT_RAT, SENTIENT_ROBOT,
+          TROLL, CYCLOPS, MINOTAUR, DEATH_WORM, SABERTOOTH_LIGER, WENDIGO, CENTAUR,
+          SKUNK_APE, OGRE, HYDRA, ROUGAROU, HODAG]
 
 Traits = [
     {'name': ACHILLES, 'desc': 'Equips a Tench Cannon when HP falls below 25'}, 
@@ -122,7 +147,7 @@ Enemies = [
      'bounty': 130, 'coins': 25, 'type': NORMAL, 'flee': 1.00, 'strength': 1, 'acc': 1, 'areas': [CITY]},
     {'name': PHROGGER, 'trait': '', 'illness': None, 'hp': 100, 'weapons': [w.FROG_GIG, w.PILLOW, w.PISTOL],
      'bounty': 150, 'coins': 40, 'type': NORMAL, 'flee': 1.00, 'strength': 1, 'acc': 1, 'areas': [CITY]},
-    {'name': ICE_CREAM_MAN, 'trait': '', 'illness': None, 'hp': 75, 'weapons': [w.KNIFE, w.BINOCULARS, PEPPER_SPRAY],
+    {'name': ICE_CREAM_MAN, 'trait': '', 'illness': None, 'hp': 75, 'weapons': [w.KNIFE, w.BINOCULARS, w.PEPPER_SPRAY],
      'bounty': 130, 'coins': 45, 'type': NORMAL, 'flee': 1.05, 'strength': 1, 'acc': 0.90, 'areas': [CITY]},
     {'name': INFLUENCER, 'trait': '', 'illness': None, 'hp': 75, 'weapons': [w.POCKET_KNIFE, w.SELFIE_STICK, w.PEPPER_SPRAY],
      'bounty': 120, 'coins': 65, 'type': NORMAL, 'flee': 1.20, 'strength': 0.75, 'acc': 0.75, 'areas': [CITY]},
@@ -290,10 +315,148 @@ Bosses = [
          'sleep': 4}
     ]},
 
-    {'name': HOHKKEN, 'hp': 250,
-     'weapons': [TENTACLES, BEAK],
-     'bounty': 0, 'type': BOSS, 'flee': 0.90, 'strength': 1, 'acc': 1, 'theme': audio.HOHKKEN_THEME,
-    }
+    {'name': HOHKKEN, 'hp': 250, 'coins': 0,
+     'weapons': [w.TENTACLES, w.BEAK],
+     'bounty': 0, 'type': BOSS, 'flee': 0.80, 'strength': 1, 'acc': 1,
+    },
+
+]
+
+    # ------ Special Bosses ------
+
+Cave_Special_Bosses = [
+    CYCLOPS, DEATH_WORM, MINOTAUR, SABERTOOTH_LIGER, TROLL]
+
+City_Special_Bosses = [
+    GIANT_MUTANT_RAT, KNOBGOBLIN, OILY_DOILY, SEWER_GATOR, VAMPIRE_OVERLORD]
+
+Forest_Special_Bosses = [
+    CENTAUR, FAIRY_CODMOTHER, LUCKY_THE_LEPRECHAUN, MOTHMAN, SAMSQUANCH, SLENDERMAN, WENDIGO]
+
+Swamp_Special_Bosses = [
+    HODAG, HYDRA, OGRE, ROUGAROU, SKUNK_APE]
+
+
+Special_Bosses = [
+
+    # --- Cave ---
+
+    {'name': CYCLOPS, 'hp': 200, 'coins': 35, 'trait': ORACLE,
+     'weapons': [w.BARE_HANDS, w.TORCH_CLUB],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.95, 'strength': 1, 'acc': 1,
+     },
+
+    {'name': DEATH_WORM, 'hp': 195, 'coins': 0, 'trait': None,
+     'weapons': [w.FANGS, w.TAIL, w.TEETH],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.95, 'strength': 1, 'acc': 1,
+     },
+
+    {'name': MINOTAUR, 'hp': 240, 'coins': 0, 'trait': None,
+     'weapons': [w.CLAWS],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1, 'acc': 1,
+     },
+
+    {'name': SABERTOOTH_LIGER, 'hp': 210, 'coins': 0, 'trait': None,
+     'weapons': [w.CLAWS, w.FANGS, w.TEETH],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.8, 'strength': 1, 'acc': 1,
+     },
+
+    {'name': TROLL, 'hp': 190, 'coins': 90, 'trait': None,
+     'weapons': [w.BARE_HANDS, w.TORCH_CLUB],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1, 'acc': 1,
+     },
+
+    # --- City ---
+
+    {'name': GIANT_MUTANT_RAT, 'hp': 170, 'coins': 25, 'trait': CONTAGIOUS,
+     'weapons': [w.CLAWS, w.FANGS],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.05, 'acc': 1,
+    },
+
+    {'name': KNOBGOBLIN, 'hp': 165, 'coins': 65, 'trait': CHEATER,
+     'weapons': [w.CLAWS, w.FANGS],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.95, 'strength': 1, 'acc': 1,
+    },
+
+    {'name': OILY_DOILY, 'hp': 175, 'coins': 100, 'trait': ACHILLES,
+     'weapons': [w.BARE_HANDS, w.SHOTGUN, w.BONE_SAW],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 1, 'strength': 1.05, 'acc': 1,
+    },
+
+    {'name': SEWER_GATOR, 'hp': 185, 'coins': 0, 'trait': None,
+     'weapons': [w.CLAWS, w.TAIL, w.TEETH],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.5, 'acc': 1,
+    },
+
+    {'name': VAMPIRE_OVERLORD, 'hp': 170, 'coins': 0, 'trait': PLANT,
+     'weapons': [w.BARE_HANDS, w.FANGS],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.75, 'strength': 1.1, 'acc': 1
+    },
+
+    # --- Forest ---
+
+    {'name': CENTAUR, 'hp': 225, 'coins': 0, 'trait': None,
+     'weapons': [w.CLAWS],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.1, 'acc': 1,
+     },
+
+    {'name': FAIRY_CODMOTHER, 'hp': 175, 'coins': 50, 'trait': EMPATH,
+     'weapons': [w.LONGBOW, w.MAGIC_WAND, w.SLINGSHOT],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 1.1, 'strength': 0.85, 'acc': 1.1,
+     },
+
+    {'name': LUCKY_THE_LEPRECHAUN, 'hp': 160, 'coins': 200, 'trait': COWARD,
+     'weapons': [w.CANE, w.MAGIC_WAND, w.POCKET_SAND, w.SLINGSHOT],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 1.5, 'strength': 0.85, 'acc': 1.1,
+     },
+
+    {'name': MOTHMAN, 'hp': 215, 'coins': 0, 'trait': COWARD,
+     'weapons': [w.BARE_HANDS, w.CLAWS],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.05, 'acc': 1,
+     },
+
+    {'name': SAMSQUANCH, 'hp': 245, 'coins': 0, 'trait': None,
+     'weapons': [w.BARE_HANDS, w.TEETH, w.WOODEN_CLUB],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.1, 'acc': 1,
+     },
+
+    {'name': SLENDERMAN, 'hp': 230, 'coins': 0, 'trait': PLANT,
+     'weapons': [w.BARE_HANDS, w.TENTACLES],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1,
+     },
+
+    {'name': WENDIGO, 'hp': 235, 'coins': 0, 'trait': None,
+     'weapons': [w.CLAWS, w.FANGS],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1,
+     },
+
+    # --- Swamp ---
+
+    {'name': HODAG, 'hp': 220, 'coins': 0, 'trait': None,
+     'weapons': [w.CLAWS, w.FANGS],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.05, 'acc': 1,
+     },
+
+    {'name': HYDRA, 'hp': 245, 'coins': 0, 'trait': None,
+     'weapons': [w.CLAWS, w.TAIL, w.FANGS],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1,
+     },
+
+    {'name': OGRE, 'hp': 235, 'coins': 69, 'trait': JUNKIE,
+     'weapons': [w.BARE_HANDS, w.WOODEN_CLUB, w.BONE_CLUB],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 1, 'strength': 1.15, 'acc': 1,
+     },
+
+    {'name': ROUGAROU, 'hp': 215, 'coins': 0, 'trait': None,
+     'weapons': [w.CLAWS, w.TEETH, w.FANGS],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1,
+     },
+
+    {'name': SKUNK_APE, 'hp': 230, 'coins': 0, 'trait': CONTAGIOUS,
+     'weapons': [w.BARE_HANDS, w.WOODEN_CLUB],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.1, 'acc': 1,
+     },
+
 ]
 
 # ========================
@@ -747,7 +910,7 @@ Enemy_Lines = {
 Enemy_Adjectives = [
     "Agitated", "Angry", "Animatronic", "Belligerent", "Bestial",
     "Bloodthirsty", "Braindead", "Brainwashed",
-    "Cannibalistic", "Crazy",
+    "Cannibalistic", "Closeted", "Crazy",
     "Crazed", "Cross-eyed", "Cruel", "Cursed", "Damned",
     "Dastardly", "Degenerate",
     "Delirious", "Demented", "Deplorable",

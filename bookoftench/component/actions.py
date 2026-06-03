@@ -8,17 +8,19 @@ from bookoftench.component.base import TextDisplayingComponent, functional_compo
     ColoredNameSelectionBinding, BinarySelectionComponent, \
     NoOpComponent, LinearComponent, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent, ReprBinding
 from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL, MENSCH_THEME, POSITIVE, DISCOVERABLE, \
-    DISCOVERABLE_2
+    DISCOVERABLE_2, HOHKKEN_THEME
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
-    OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER, KILLS, DISCOVERIES, ENCOUNTERS
-from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER, HOHKKEN
+    OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER, KILLS, DISCOVERIES, ENCOUNTERS, ENCOUNTER_BOSS
+from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER, HOHKKEN, \
+    Cave_Special_Bosses, City_Special_Bosses, Swamp_Special_Bosses, \
+    Forest_Special_Bosses, SPECIAL_BOSS
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import DEATH_CAN_WAIT, Perks, NEPTUNE
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.discoverable import load_discoverables, search_discoverable_rarity, rarity_color
-from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE, Enemy
+from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE, Enemy, SpecialBoss
 from bookoftench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent, DiscoveryEvent, \
     FailedFleeEvent, DefeatHohkkenEvent
 from bookoftench.model.game_state import GameState
@@ -42,6 +44,7 @@ from bookoftench.event_base import EventType
 from bookoftench.model.build import Build, load_builds
 from bookoftench.model.illness import load_illnesses, load_illness
 from bookoftench.model.player import PlayerWeapon
+from ..data.areas import FOREST, CAVE, CITY
 
 
 @register_component(BUILD)
@@ -224,7 +227,7 @@ class BuildBlindEffectSelection(LinearComponent):
         player = self.game_state.player
         player.blind = True
         while True:
-            effect = safe_input("How blind are you (1-100)")
+            effect = safe_input("How blind are you (1-100)?")
             if not effect.isdigit():
                 print_and_sleep(yellow("Effect must be an integer."))
             elif int(effect) < 1 or int(effect) > 100:
@@ -241,7 +244,7 @@ class BuildBlindTurnsSelection(LinearComponent):
         player = self.game_state.player
         player.blind = True
         while True:
-            turns = safe_input("How many turns")
+            turns = safe_input("How many turns?")
             if not turns.isdigit():
                 print_and_sleep(yellow("Turns must be an integer."))
             elif int(turns) < 1:
@@ -257,7 +260,7 @@ class BuildItemsSelection(LinearComponent):
     def execute_current(self) -> None:
         player = self.game_state.player
         player.items.clear()
-        items = [i for i in Items]
+        items = random.sample([i for i in Items], k=12)
         for i in items:
             if i['type'] == NORMAL:
                 print_and_sleep(cyan(f"{i['name']:<24}") + (dim(' | ')) + "HP: +" + (green(i['hp'])))
@@ -290,8 +293,13 @@ class BuildWeaponsSelection(LinearComponent):
 
     def execute_current(self) -> None:
         player = self.game_state.player
+
         player.weapon_dict.clear()
-        weapons = [w['name'] for w in Weapons]
+        load = load_weapons([BARE_HANDS])
+        weapon = next(i for i in load)
+        player.weapon_dict[BARE_HANDS] = PlayerWeapon.from_weapon(weapon)
+
+        weapons = random.sample([w['name'] for w in Weapons if w['uses'] >= 0], k=12)
         weapon_options = load_weapons(weapons)
         weapons_sorted = sorted(weapon_options, key=lambda w: w.damage)
         for w in weapons_sorted:
@@ -299,7 +307,7 @@ class BuildWeaponsSelection(LinearComponent):
 
         selections = []
         while True:
-            weapon = safe_input(f"Add a weapon ({len(selections)}/4 selected) or c to continue:")
+            weapon = safe_input(f"Add a weapon ({len(selections)}/3 selected) or c to continue:")
             if weapon == "c":
                 if not selections:
                     print_and_sleep(yellow("Please select at least one weapon (case-sensitive)."))
@@ -317,7 +325,7 @@ class BuildWeaponsSelection(LinearComponent):
                 print_and_sleep(yellow("Weapon not found - Please try again (case-sensitive)."))
             else:
                 selections.append(weapon) # add to list for counting
-                if len(selections) == 4: # if max reached
+                if len(selections) == 3: # if max reached
                     final_picks = load_weapons(selections) # convert selections to Weapon objects
                     for w in final_picks: # add each one to player weapon dict
                         player.weapon_dict.update({w.name: PlayerWeapon.from_weapon(w)})
@@ -384,8 +392,8 @@ class BuildComponent(LabeledSelectionComponent):
             print_and_sleep(f"You selected {cyan(build.name)}", 1.5)
 
             if build.name == RANDOM:
-                player.lives = random.randint(1, 5)
-                player.max_hp = random.randint(60, 140)
+                player.lives = random.randint(1, 3)
+                player.max_hp = random.randint(80, 120)
                 player.hp = player.max_hp
                 player.strength = round(random.uniform(0.8, 1.2), 2)
                 player.acc = round(random.uniform(0.9, 1.1), 2)
@@ -397,7 +405,7 @@ class BuildComponent(LabeledSelectionComponent):
                     player.illness_death_lvl = 1 + player.illness.levels_until_death
 
                     # --- items ---
-                    items_count = random.randint(0, 5)
+                    items_count = random.randint(0, 3)
                     if items_count >= 1:
                         items = [i['name'] for i in Items]
                         item_options = load_items(items)
@@ -469,7 +477,7 @@ class Search(RandomChoiceComponent):
     @functional_component(state_dependent=True)
     def _discover_discoverable(game_state: GameState):
         player = game_state.player
-        rarity = search_discoverable_rarity()
+        rarity = search_discoverable_rarity(player)
         color = rarity_color(rarity)
         available = [d for d in load_discoverables() if game_state.current_area.name
                      in d.areas and d.rarity == rarity]
@@ -879,6 +887,43 @@ class TryFlee(RandomChoiceComponent):
         game_state.player.gain_xp_other(1)
 
 
+@register_component(ENCOUNTER_BOSS)
+class EncounterBoss(LinearComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, next_component=Battle)
+
+    def execute_current(self) -> GameState:
+        area = self.game_state.current_area.name
+        time = self.game_state.time_of_day
+        if area == CAVE:
+            options = [i for i in Cave_Special_Bosses]
+        elif area == CITY:
+            options = [i for i in City_Special_Bosses]
+        elif area == FOREST:
+            options = [i for i in Forest_Special_Bosses]
+        else:
+            options = [i for i in Swamp_Special_Bosses]
+        liberated = [i.name for i in self.game_state.liberated_enemies]
+        available = [i for i in options if i not in liberated]
+
+        if not available:
+            print_and_sleep(yellow("All bosses in this area are now in Hell."), 1.5)
+            return self.game_state
+        else:
+            choice = random.choice(available)
+
+            boss = self.game_state.current_area.spawn_special_boss(choice, time)
+            self.game_state.current_area.boss = boss
+            self.game_state.boss_pending = True
+            self.game_state.current_area.current_enemy = boss
+
+            self.log_encounter(area, self.game_state.current_area.current_enemy)
+            return self.game_state
+
+    def log_encounter(self, area, enemy):
+        self.game_state.encountered_enemies.append({"area": area, "enemy": enemy})
+
+
 @register_component(SPAWN_ENEMY)
 class SpawnEnemy(LinearComponent):
     def __init__(self, game_state: GameState):
@@ -893,7 +938,7 @@ class SpawnEnemy(LinearComponent):
         self.log_encounter(area, self.game_state.current_area.current_enemy)
         return self.game_state
 
-    def log_encounter(self, area, enemy):
+    def log_encounter(self, area, enemy: Enemy):
         self.game_state.encountered_enemies.append({"area": area, "enemy": enemy})
 
 
@@ -918,7 +963,11 @@ class Battle(LabeledSelectionComponent):
         self._subscribe_listeners()
 
     def play_theme(self) -> None:
-        play_music(BATTLE_THEME)
+        theme = BATTLE_THEME
+        current_enemy = self.game_state.current_area.current_enemy
+        if type(current_enemy) == SpecialBoss:
+            theme = current_enemy.theme if len(current_enemy.theme) > 0 else HOHKKEN_THEME
+        play_music(theme)
 
     def can_exit(self) -> bool:
         return self.fled or self.player.can_flee or not (self.player.is_alive() and self.enemy.is_alive())

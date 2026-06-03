@@ -8,7 +8,7 @@ from typing import List, Optional, Dict, Self
 from bookoftench.audio import play_sound
 from bookoftench.data import Enemies
 from bookoftench.data.audio import AREA_BOSS_THEME, GATOR, EQUIP_WEAPON
-from bookoftench.data.enemies import Bosses, Final_Boss, BAYOU_BILL, Enemy_Lines, WEREWOLF
+from bookoftench.data.enemies import Bosses, Final_Boss, BAYOU_BILL, Enemy_Lines, WEREWOLF, Special_Bosses
 from bookoftench.data.perks import RICKETY_PICKPOCKET
 from bookoftench.data.weapons import BARE_HANDS, BLIND, SPECIAL
 from bookoftench.ui import purple, cyan
@@ -128,6 +128,30 @@ def load_boss(name: str) -> Boss:
         raise ValueError(f"Could not find boss data for {name}")
     return matches[0]
 
-
 def load_final_boss() -> Boss:
     return Boss.from_dict(Final_Boss)
+
+@dataclass
+class SpecialBoss(Enemy):
+    preamble: List[DisplayableText] = field(default_factory=list)
+    theme: str = ""
+
+    @classmethod
+    def from_dict(cls, data: dict) -> Self:
+        data = copy.deepcopy(data)
+        if 'preamble' in data:
+            data['preamble'] = [DisplayableText(**d) for d in data['preamble']]
+        return super().from_dict(data)
+
+    def do_preamble(self) -> None:
+        for displayableText in self.preamble:
+            displayableText.display()
+
+def load_special_boss(name: str) -> SpecialBoss:
+    matches = load_special_bosses([name])
+    if len(matches) == 0:
+        raise ValueError(f"Could not find special boss2 data for {name}")
+    return matches[0]
+
+def load_special_bosses(restriction: List[str] = None) -> List[SpecialBoss]:
+    return [SpecialBoss(**d) for d in Special_Bosses if restriction is None or d['name'] in restriction]

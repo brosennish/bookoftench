@@ -32,6 +32,7 @@ COMPOUND_BOW = "Compound Bow"
 CROSSBOW = "Crossbow"
 CROWBAR = "Crowbar"
 DUMBBELL = "Dumbbell"
+FANGS = "Fangs"
 FIRE_AXE = "Fire Axe"
 FISHING_SPEAR = "Fishing Spear"
 FLASHLIGHT = "Flashlight"
@@ -49,6 +50,7 @@ KNIFE = "Knife"
 LASER_BEAMS = "Laser Beams"
 LONGBOW = "Longbow"
 MACHETE = "Machete"
+MAGIC_WAND = "Magic Wand"
 MEAT_CLEAVER = "Meat Cleaver"
 NAIL_GUN = "Nail Gun"
 OBSIDIAN_KNIFE = "Obsidian Knife"
@@ -74,6 +76,9 @@ STONE_SPEAR = "Stone Spear"
 SUITCASE = "Suitcase"
 SURVIVAL_KNIFE = "Survival Knife"
 SWITCHBLADE = "Switchblade"
+TAIL = "Tail"
+TASER = "Taser"
+TEETH = "Teeth"
 TENCH_CANNON = "Tench Cannon"
 TENTACLES = "Tentacles"
 TIRE_IRON = "Tire Iron"
@@ -94,6 +99,7 @@ BLUNT = 'blunt'
 MELEE = 'melee'
 RANGED = 'ranged'
 SPECIAL = 'special'
+STUN = 'stun'
 
 
 Weapons = [
@@ -126,6 +132,14 @@ Weapons = [
      'cost': 20, 'sell_value': 8, 'type': BLIND, 'subtype': BLIND, 'tier': 0, 'sound': '',
      'blind_effect': 0.20, 'blind_turns_min': 3, 'blind_turns_max': 5,
      'areas': NA},
+
+    # =====================================================
+    #                       TIER 0 (STUN)
+    # =====================================================
+
+    {'name': TASER, 'damage': 0, 'uses': 1, 'accuracy': 0.90, 'var': 0, 'crit': 0,
+     'cost': 50, 'sell_value': 25, 'type': STUN, 'subtype': STUN, 'tier': 0, 'sound': '',
+     'areas': CITY},
 
     # =====================================================
     #                       TIER 1
@@ -412,8 +426,24 @@ Weapons = [
      'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'subtype': MELEE, 'tier': 0, 'sound': audio.PUNCH,
      'areas': NA},
 
+    {'name': FANGS, 'damage': 27, 'uses': -1, 'accuracy': 0.86, 'var': 3, 'crit': 0.15,
+     'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'subtype': MELEE, 'tier': 0, 'sound': audio.EAT,
+     'areas': NA},
+
     {'name': LASER_BEAMS, 'damage': 30, 'uses': -1, 'accuracy': 0.74, 'var': 3, 'crit': 0.12,
      'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'subtype': RANGED, 'tier': 0, 'sound': audio.MAGIC,
+     'areas': NA},
+
+    {'name': MAGIC_WAND, 'damage': 25, 'uses': -1, 'accuracy': 0.77, 'var': 4, 'crit': 0.09,
+     'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'subtype': RANGED, 'tier': 0, 'sound': audio.MAGIC,
+     'areas': NA},
+
+    {'name': TAIL, 'damage': 25, 'uses': -1, 'accuracy': 0.86, 'var': 2, 'crit': 0.1,
+     'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'subtype': MELEE, 'tier': 0, 'sound': audio.PUNCH,
+     'areas': NA},
+
+    {'name': TEETH, 'damage': 23, 'uses': -1, 'accuracy': 0.86, 'var': 3, 'crit': 0.1,
+     'cost': 0, 'sell_value': 0, 'type': SPECIAL, 'subtype': MELEE, 'tier': 0, 'sound': audio.EAT,
      'areas': NA},
 
     {'name': TENTACLES, 'damage': 30, 'uses': -1, 'accuracy': 0.90, 'var': 2, 'crit': 0.1,

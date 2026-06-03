@@ -13,7 +13,7 @@ from bookoftench.util import print_and_sleep
 from .discoverable import rarity_color
 from .game_state import GameState
 from ..data.areas import CAVE, CITY, FOREST, SWAMP
-from ..data.enemies import CONTAGIOUS, BOSS
+from ..data.enemies import CONTAGIOUS, BOSS, Special_Bosses, SPECIAL_BOSS, FINAL_BOSS
 from ..data.enviroment import DAYTIME
 
 
@@ -159,6 +159,7 @@ def get_player_status_view(game_state: GameState) -> str:
 def get_battle_status_view(game_state: GameState) -> str:
     player: Player = game_state.player
     enemy: Enemy = game_state.current_area.current_enemy
+    enemy_name_color = red if enemy.type in [SPECIAL_BOSS, BOSS] else purple
 
     def format_combatant_data(cmbt: Combatant, name_color) -> str:
         blind_turns = f"{cmbt.blind_turns} turn{'s' if cmbt.blind_turns > 1 else ''}"
@@ -170,7 +171,7 @@ def get_battle_status_view(game_state: GameState) -> str:
                 f"{p_color(cmbt.hp, cmbt.max_hp)(f"{cmbt.hp} HP")}"
                 f"\n{cmbt.current_weapon.get_complete_format(cmbt.strength, cmbt.acc)}")
 
-    return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, purple)}\n"
+    return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, enemy_name_color)}\n"
 
 
 def display_bank_balance(game_state: GameState) -> None:
@@ -183,12 +184,12 @@ def display_player_attributes(game_state: GameState) -> None:
     player: Player = game_state.player
 
     print_and_sleep(f"\n{dim('Strength |')} {red(round(player.strength, 2))}"
-        f"\n{dim('Accuracy |')} {yellow(round(player.acc, 2))}\n")
+        f"\n{dim('Accuracy |')} {yellow(round(player.acc, 2))}"
+        f"\n{dim('Luck     |')} {green(round(player.luck, 3))}\n")
 
 
 def display_game_stats(game_state: GameState) -> None:
     player = game_state.player
-    player_color = p_color(player.hp, player.max_hp)
     player_build = player.build
 
     width = 18  # adjust if you want wider/narrower labels
@@ -198,8 +199,12 @@ def display_game_stats(game_state: GameState) -> None:
 
     display_stat("Name", str(player.name), cyan)
     display_stat("Build", str(player_build.name), orange)
-    display_stat("Current Level", player.lvl, cyan)
-    display_stat("Current HP", player.hp, player_color)
+    display_stat("Level", player.lvl, cyan)
+    display_stat("Strength", player.strength, red)
+    display_stat("Accuracy", player.acc, yellow)
+    display_stat("Luck", player.luck, green)
+    display_stat("Perks", len([p for p in load_perks() if p.active]), purple)
+    display_stat("Achievements", len([a for a in load_achievements() if a.active]), orange)
     display_stat("Deaths", event_logger.get_count(EventType.PLAYER_DEATH), red)
 
     display_stat("Coins", player.coins, green)
@@ -218,12 +223,12 @@ def display_game_stats(game_state: GameState) -> None:
     display_stat("Enemies Killed", event_logger.get_count(EventType.KILL), red)
     display_stat("Bounties Claimed", event_logger.get_count(EventType.BOUNTY_COLLECTED), purple)
     display_stat("Shoplifts", event_logger.get_count(EventType.STEAL), cyan)
-    display_stat("Bribes Paid", event_logger.get_count(EventType.OFFICER_PAID), green)
+    display_stat("Sum of Bribes", player.sum_of_bribes, green)
     display_stat("Police Brutalities", event_logger.get_count(EventType.OFFICER_UNPAID), red)
-    display_stat("Hohkken Encounters", event_logger.get_count(EventType.HOHKKEN), red)
 
     display_stat("Areas Cleared", sum(1 for a in game_state.areas if a.enemies_remaining == 0), blue)
-    display_stat("Bosses Defeated", sum(1 for a in game_state.areas if a.boss_defeated), red)
+    display_stat("Bosses Defeated", len([a for a in game_state.liberated_enemies if a.type in
+                                        [SPECIAL_BOSS, BOSS, FINAL_BOSS]]), red)
 
     display_stat("Coffees Purchased", event_logger.get_count(EventType.COFFEE_EVENT), green)
 

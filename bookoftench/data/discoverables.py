@@ -333,7 +333,7 @@ Search_Discoverables = [
 
     {"pre": "some", "name": "Bush Meat", "value": 7, "hp": 10, "rarity": UNCOMMON,
      "areas": [CITY, FOREST, SWAMP], "count": 0,
-     "desc": "Never know what you'll find in a deep, thick, dense bush."},
+     "desc": "Never know what you'll find in a deep, dense bush."},
 
     {"pre": "a", "name": "Can of Spam", "value": 3, "hp": 8, "rarity": UNCOMMON,
      "areas": [CAVE, FOREST, SWAMP], "count": 0,
@@ -528,6 +528,10 @@ Search_Discoverables = [
     {"pre": "a", "name": "Ghost", "value": 0, "hp": 0, "rarity": UNCOMMON,
      "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,
      "desc": "Just your typical ghost. A phantom, a ghoul - hovering about and trying to spook. Nothing better to do."},
+
+    {"pre": "a", "name": "Giant Footprint", "value": 0, "hp": 0, "rarity": UNCOMMON,
+     "areas": [FOREST], "count": 0,
+     "desc": "Hm... it couldn't be, could it?"},
 
     {"pre": "a", "name": "Gray Cat", "value": 0, "hp": 0, "rarity": UNCOMMON,
      "areas": [CITY], "count": 0,

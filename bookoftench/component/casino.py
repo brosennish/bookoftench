@@ -4,7 +4,7 @@ from functools import partial
 from typing import Callable
 
 from bookoftench.audio import play_music, play_sound
-from bookoftench.data.audio import GOLF_CLAP, CASINO_THEME, COINS, ROLL_DIE, PURCHASE
+from bookoftench.data.audio import GOLF_CLAP, CASINO_THEME, COINS, ROLL_DIE
 from bookoftench.data.components import CASINO
 from bookoftench.data.perks import GRAMBLING_ADDICT, WrapperIndices
 from bookoftench.model.game_state import GameState
@@ -155,11 +155,13 @@ class KrillOrCray(CasinoGame):
             play_sound(GOLF_CLAP)
             print_and_sleep(green(f"Lucky guess, bozo! You won {payout} coins."), 1)
             player.gain_xp_other(1)
+            player.gain_or_lose_luck(0.01)
         else:
             print_and_sleep(
                 blue("Bozo's blunder. Classic. Could've seen that coming from six or eight miles away."), 1)
             player.coins -= wager
             player.casino_lost += wager
+            player.gain_or_lose_luck(-0.01)
         player.games_played += 1
         return self.game_state
 
@@ -248,11 +250,13 @@ class AboveOrBelow(CasinoGame):
             self.turn += 1
             payout = self.get_payout()
             print_and_sleep(blue(f"Lucky guess!\nPayout increased to {payout} coins.\n"))
+            player.gain_or_lose_luck(0.01)
             if self.turn == len(self.ladder) - 1 or self.should_cash_out():
                 player.coins += payout
                 if self.turn == len(self.ladder):
                     print_and_sleep(f"{blue("You completed the final round.")}")
                     player.gain_xp_other(3)
+                    player.gain_or_lose_luck(0.1)
                 play_sound(COINS)
                 print_and_sleep(f"{green(f"You cashed out {payout} coins!")}")
                 player.casino_won += payout
@@ -263,6 +267,7 @@ class AboveOrBelow(CasinoGame):
             print_and_sleep(yellow("Your guess was dry."))
             player.coins -= wager
             player.casino_lost += wager
+            player.gain_or_lose_luck(-0.01)
             self.turn = 0
             player.games_played += 1
         return self.game_state

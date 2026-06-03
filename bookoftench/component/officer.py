@@ -76,9 +76,11 @@ def calculate_bribe(game_state: GameState) -> int:
 
 @functional_component(state_dependent=True)
 def obey_officer(game_state: GameState):
-    if game_state.player.coins >= calculate_bribe(game_state):
-        game_state.player.coins -= calculate_bribe(game_state)
+    amount = calculate_bribe(game_state)
+    if game_state.player.coins >= amount:
+        game_state.player.coins -= amount
         event_logger.log_event(OfficerEvent(EventType.OFFICER_PAID))
+        game_state.player.sum_of_bribes += amount
     else:
         disobey_officer(game_state).run()
 
