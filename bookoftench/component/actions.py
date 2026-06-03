@@ -15,7 +15,7 @@ from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEM
     OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER, KILLS, DISCOVERIES, ENCOUNTERS, ENCOUNTER_BOSS
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER, HOHKKEN, \
     Cave_Special_Bosses, City_Special_Bosses, Swamp_Special_Bosses, \
-    Forest_Special_Bosses, SPECIAL_BOSS
+    Forest_Special_Bosses
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import DEATH_CAN_WAIT, Perks, NEPTUNE
 from bookoftench.event_logger import subscribe_function
@@ -46,6 +46,7 @@ from bookoftench.model.illness import load_illnesses, load_illness
 from bookoftench.model.player import PlayerWeapon
 from ..data.areas import FOREST, CAVE, CITY
 
+# ================================================================================================
 
 @register_component(BUILD)
 class BuildTypeSelection(BinarySelectionComponent):
@@ -55,7 +56,10 @@ class BuildTypeSelection(BinarySelectionComponent):
                          yes_component=BuildNameSelection,
                          no_component=BuildComponent)
 
+# ================================================================================================
+
 # --- custom build path ---
+
 class BuildNameSelection(LinearComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, BuildLevelSelection)
@@ -286,7 +290,6 @@ class BuildItemsSelection(LinearComponent):
                     player.items = dict((it.name, it) for it in final_picks)
                     return self.game_state
 
-
 class BuildWeaponsSelection(LinearComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, BuildPerksSelection)
@@ -363,9 +366,9 @@ class BuildPerksSelection(LinearComponent):
                 if len(selections) == len(perks):
                     return self.game_state
 
+# ================================================================================================
 
 # --- standard build path ---
-
 class BuildComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         build_bindings = [ReprBinding(str(i + 1), build.name, self._make_selection_component(build), build) for
@@ -382,6 +385,7 @@ class BuildComponent(LabeledSelectionComponent):
         for component in self.selection_components:
             component.display_options()
 
+    # TODO - refactor
     @staticmethod
     def _make_selection_component(build: Build) -> type[Component]:
         @functional_component(state_dependent=True)
@@ -463,6 +467,7 @@ class BuildComponent(LabeledSelectionComponent):
 
         return selection_component
 
+# ================================================================================================
 
 @register_component(SEARCH)
 class Search(RandomChoiceComponent):
@@ -471,6 +476,7 @@ class Search(RandomChoiceComponent):
         super().__init__(game_state, bindings=[ProbabilityBinding(prob, get_registered_component(name))
                                                for name, prob in ep.items()])
 
+# ================================================================================================
 
     @staticmethod
     @register_component(DISCOVER_DISCOVERABLE)
@@ -561,6 +567,8 @@ class Search(RandomChoiceComponent):
             f"{color(f'({find.rarity})')}!", time)
         return
 
+# ================================================================================================
+
     @staticmethod
     @register_component(DISCOVER_ITEM)
     @functional_component(state_dependent=True)
@@ -584,6 +592,8 @@ class Search(RandomChoiceComponent):
             return game_state
         else:
             return SwapFoundItemYN(game_state).run()
+
+# ================================================================================================
 
     @staticmethod
     @register_component(DISCOVER_WEAPON)
@@ -613,6 +623,8 @@ class Search(RandomChoiceComponent):
         else:
             return SwapFoundWeaponYN(game_state).run()
 
+# ================================================================================================
+
     @staticmethod
     @register_component(DISCOVER_PERK)
     @functional_component()
@@ -628,6 +640,7 @@ class Search(RandomChoiceComponent):
         else:
             print_and_sleep(dim("You came up dry."), 1)
 
+# ================================================================================================
 
 @register_component(TRAVEL)
 class Travel(LabeledSelectionComponent):
@@ -666,6 +679,7 @@ class Travel(LabeledSelectionComponent):
 
         return travel_component
 
+# ================================================================================================
 
 @register_component(USE_ITEM)
 class UseItem(GatekeepingComponent):
@@ -720,6 +734,8 @@ class ItemSelectionComponent(LabeledSelectionComponent):
         if not player.is_alive() or (current_enemy and not current_enemy.is_alive()):
             BattleEnd(self.game_state).run()
 
+# ================================================================================================
+
 @register_component(EQUIP_WEAPON)
 class EquipWeapon(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -733,6 +749,7 @@ class EquipWeapon(LabeledSelectionComponent):
                              for (i, weapon) in enumerate(game_state.player.get_weapons(), 1)],
                          top_level_prompt_callback=lambda gs: gs.player.display_equip_header(), quittable=True)
 
+# ================================================================================================
 
 class SwapFoundItemYN(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
@@ -807,6 +824,7 @@ class SwapFoundWeaponMenu(LabeledSelectionComponent):
             quittable=True
         )
 
+# ================================================================================================
 
 class Attack(Component):
     def __init__(self, game_state: GameState):
@@ -848,6 +866,7 @@ class Attack(Component):
         if random.random() < ENEMY_SWITCH_WEAPON_CHANCE and enemy.current_weapon.base_name != TENCH_CANNON:
             enemy.current_weapon = enemy.enemy_switch_weapon(None)
 
+# ================================================================================================
 
 class FailedFlee(Attack):
     def __init__(self, game_state: GameState):
@@ -886,6 +905,7 @@ class TryFlee(RandomChoiceComponent):
         event_logger.log_event(FleeEvent(game_state.current_area.current_enemy.name))
         game_state.player.gain_xp_other(1)
 
+# ================================================================================================
 
 @register_component(ENCOUNTER_BOSS)
 class EncounterBoss(LinearComponent):
@@ -919,6 +939,7 @@ class EncounterBoss(LinearComponent):
 
             return self.game_state
 
+# ================================================================================================
 
 @register_component(SPAWN_ENEMY)
 class SpawnEnemy(LinearComponent):
@@ -934,6 +955,7 @@ class SpawnEnemy(LinearComponent):
 
         return self.game_state
 
+# ================================================================================================
 
 class Battle(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -970,6 +992,7 @@ class Battle(LabeledSelectionComponent):
         def handle_flee(_: FleeEvent):
             self.fled = True
 
+# ================================================================================================
 
 class EnemyInfect(NoOpComponent):
     def __init__(self, game_state: GameState):
@@ -990,6 +1013,7 @@ class EnemyInfect(NoOpComponent):
             print_and_sleep(yellow(f"You caught {player.illness.name} from {enemy.name}!"), 2)
         return self.game_state
 
+# ================================================================================================
 
 class BattleEnd(NoOpComponent):
     def __init__(self, game_state: GameState):
@@ -1012,6 +1036,7 @@ class BattleEnd(NoOpComponent):
             event_logger.log_event(PlayerDeathEvent(player.lives))
         return self.game_state
 
+    # TODO - refactor
     def handle_enemy_death(self, player, enemy) -> None:
         if enemy.type == FINAL_BOSS:
             self.game_state.victory = True
@@ -1020,7 +1045,7 @@ class BattleEnd(NoOpComponent):
         if self.game_state.pending_boss:
             self.game_state.pending_boss = False
 
-        # TODO maybe put the next 3 lines in an event callback
+        # TODO maybe put the next 3 lines in an event callback (Kill)
         stop_music()
         play_sound(DEVIL_THUNDER)
         print_and_sleep(red(f"{enemy.name} is now in Hell."), 2)
@@ -1052,6 +1077,7 @@ class BattleEnd(NoOpComponent):
 
         PostKillEncounters(self.game_state).run()
 
+# ================================================================================================
 
 @register_component(FIGHT_BOSS_OTHER)
 class FightBossOther(Battle):
@@ -1068,6 +1094,7 @@ class FightBossOther(Battle):
         self.game_state = super().run()
         return self.game_state
 
+# ================================================================================================
 
 @register_component(AREA_BOSS_FIGHT)
 class FightBoss(Battle):
@@ -1104,6 +1131,7 @@ class FightBoss(Battle):
             return FightFinalBoss(self.game_state).run()
         return self.game_state
 
+# ================================================================================================
 
 @register_component(FINAL_BOSS_FIGHT)
 class FightFinalBoss(FightBoss):
@@ -1111,29 +1139,14 @@ class FightFinalBoss(FightBoss):
         super().__init__(game_state)
         self.enemy = self.game_state.current_area.summon_final_boss()
 
+# ================================================================================================
+
+# --- keep alphabetical ---
 
 @register_component(ACHIEVEMENTS)
 class Achievements(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, display_callback=display_player_achievements)
-
-
-@register_component(PERKS)
-class DisplayPerks(TextDisplayingComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state, display_callback=display_active_perks)
-
-
-@register_component(INFO)
-class DisplayInfo(TextDisplayingComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state, display_callback=display_battle_info)
-
-
-@register_component(STATS)
-class Stats(TextDisplayingComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state, display_callback=display_game_stats)
 
 
 @register_component(ATTRIBUTES)
@@ -1154,6 +1167,12 @@ class Liberated(TextDisplayingComponent):
         super().__init__(game_state, display_callback=display_encountered)
 
 
+@register_component(INFO)
+class DisplayInfo(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_battle_info)
+
+
 @register_component(KILLS)
 class Liberated(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
@@ -1168,3 +1187,14 @@ class Overview(GatekeepingComponent):
                                                                                               print_and_sleep(yellow(
                                                                                                   f"You're a dang ghost."),
                                                                                                               1)))
+
+@register_component(PERKS)
+class DisplayPerks(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_active_perks)
+
+
+@register_component(STATS)
+class Stats(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_game_stats)
