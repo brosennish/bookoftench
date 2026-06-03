@@ -99,16 +99,17 @@ def build_weapon_defaults(build: Build | None) -> Dict[str, PlayerWeapon]:
 @dataclass
 class Player(Combatant):
     name: str = ''
-    trait: Trait = None
     build: Build = None
     lives: int = 3
     lvl: int = 1
-    hp: int = 100
+    coins: int = 0
     max_hp: int = 100
+    hp: int = 100
     xp: int = 0
     strength: float = 1
     acc: float = 1
     luck: float = 1
+    trait: Trait = None
 
     illness: Optional[Illness] = None
     illness_death_lvl: Optional[int] = None
@@ -116,8 +117,8 @@ class Player(Combatant):
     can_flee: bool = False
     double_damage_active: bool = False
     crit_active: bool = False
+    cheat_death_enabled: bool = False
 
-    coins: int = 0
     casino_won: int = 0
     casino_lost: int = 0
     games_played: int = 0
@@ -133,8 +134,6 @@ class Player(Combatant):
     items: Dict[str, Item] = field(default_factory=item_defaults)
     weapon_dict: Dict[str, PlayerWeapon] = field(default_factory=weapon_defaults)
     current_weapon: Weapon = None
-
-    cheat_death_enabled: bool = False
 
     def __post_init__(self):
         self.current_weapon = self.weapon_dict[BARE_HANDS]
@@ -200,75 +199,100 @@ class Player(Combatant):
     def _apply_hp_bonus(base: int) -> int:
         return base
 
+# ================================================================================================
+
     def use_item(self, name: str, enemy: Enemy | None, game_state) -> None:
         item = self.items[name]
         sfx = item.sound
         time = game_state.time_of_day
         moon = game_state.moon
 
-        if item.type == NORMAL:
+        # --- retrieve gain amount and/or activate special item ---
+        if item.type == NORMAL: # normal hp gain
             play_sound(sfx)
             gain = int(min(self.max_hp - self.hp, self._apply_hp_bonus(item.hp)))
-            self.gain_hp(gain)
-            if enemy and enemy.trait and enemy.trait.name == EMPATH:
-                heal = min(gain, enemy.max_hp - enemy.hp)
-                if heal > 0:
-                    enemy.hp += heal
-                    print_and_sleep(green(f"The empathic {enemy.name} gained {heal} HP."), 1.5)
         else:
             gain = self.handle_special_item(item, enemy, time, moon, game_state)
 
-        # Remove from actual inventory
+        # --- Gain hp and activate enemy's empath trait if applicable ---
+        self.gain_hp(gain)
+        if enemy and enemy.trait and enemy.trait.name == EMPATH:
+            heal = min(gain, enemy.max_hp - enemy.hp)
+            if heal > 0:
+                enemy.hp += heal
+                print_and_sleep(green(f"The empathic {enemy.name} gained {heal} HP."), 1.5)
+
+        # --- Remove from actual inventory ---
         del self.items[item.name]
         event_logger.log_event(ItemUsedEvent(item.name, item.type, len(self.items), self.hp, self.max_hp, gain))
 
+# ================================================================================================
 
-    def handle_special_item(self, item, enemy, time, moon, game_state) -> int:
-        if item.type == FLEE:
+    def handle_special_item(self, item, enemy, time, moon, game_state) -> int | None:
+        if item.type == FLEE: # used to escape from battle
             play_sound(WHIFF)
             self.can_flee = True
+            return None
 
-        elif item.type == STAT:
-            if item.name == ACCURACY_SEARUM:
-                old = round(self.acc, 2)
-                self.acc = round(self.acc + 0.03, 2)
-                play_sound(DRINK)
-                print_and_sleep(green(f"Accuracy: {old} -> {self.acc}"), 1)
-            elif item.name == HTH:
-                old = round(self.strength, 2)
-                self.strength = round(self.strength + 0.03, 2)
-                play_sound(DRINK)
-                print_and_sleep(green(f"Strength: {old} -> {self.strength}"), 1)
+        elif item.type == STAT: # used to mutate stats
+            self.handle_stat_item(item)
+            return None
 
-        elif item.type == DMG:
+        elif item.type == DMG: # used to alter your damage output
             play_sound(DISCOVERABLE)
             self.double_damage_active = True
+            return None
 
-        elif item.type == CRIT:
+        elif item.type == CRIT: # used to alter your critical hit odds
             play_sound(DISCOVERABLE)
             self.crit_active = True
+            return None
 
-        elif item.type == HEALTH:
-            if item.name == nPnG:
-                original_max = self.max_hp
-                amount = random.randint(1, 5)
-                self.max_hp += amount
+        elif item.type == HEALTH: # used to heal in an abnormal way
+            gain = self.handle_health_item(item, time, game_state)
+            return gain
+
+        elif item.type == ENEMY: # used to do damage to enemy or mutate their stats
+            self.handle_enemy_item(enemy, item, time, game_state, moon)
+            return None
+        return None
+
+# ================================================================================================
+
+    def handle_stat_item(self, item):
+        if item.name == ACCURACY_SEARUM:
+            old = round(self.acc, 2)
+            self.acc = round(self.acc + 0.03, 2)
+            play_sound(DRINK)
+            print_and_sleep(green(f"Accuracy: {old} -> {self.acc}"), 1)
+        elif item.name == HTH:
+            old = round(self.strength, 2)
+            self.strength = round(self.strength + 0.03, 2)
+            play_sound(DRINK)
+            print_and_sleep(green(f"Strength: {old} -> {self.strength}"), 1)
+        return None
+
+    def handle_health_item(self, item, time, game_state) -> int | None:
+        if item.name == nPnG:
+            original_max = self.max_hp
+            amount = random.randint(1, 5)
+            self.max_hp += amount
+            play_sound(POSITIVE)
+            print_and_sleep(green(f"Max HP: {original_max} -> {self.max_hp}"), 1)
+            original_hp = self.hp
+            self.hp -= min(amount, original_hp)
+            print_and_sleep(red(f"You lost {original_hp - self.hp} HP."), 1)
+            return None
+        elif item.name == PHOTOSYNTHOPHYL:
+            if time == DAYTIME and game_state.current_area.name != CAVE:
+                amount = self.max_hp - self.hp
+                self.hp = self.max_hp
                 play_sound(POSITIVE)
-                print_and_sleep(green(f"Max HP: {original_max} -> {self.max_hp}"), 1)
-                original_hp = self.hp
-                self.hp -= min(amount, original_hp)
-                print_and_sleep(red(f"You lost {original_hp - self.hp} HP."), 1)
-            elif item.name == PHOTOSYNTHOPHYL:
-                if time == DAYTIME and game_state.current_area.name != CAVE:
-                    amount = self.max_hp - self.hp
-                    self.hp = self.max_hp
-                    play_sound(POSITIVE)
-                    print_and_sleep(green(f"You used Photosynthophyl to restore {amount} HP!"), 1)
-                    return amount
+                print_and_sleep(green(f"You used Photosynthophyl to restore {amount} HP!"), 1)
+                return amount
+        return None
 
-        elif item.type == ENEMY:
-            if not enemy:
-                return 0
+    def handle_enemy_item(self, enemy, item, time, game_state, moon):
             if item.name == BOOMERANG:
                 damage = random.randint(5, 25)
                 half = damage // 2
@@ -296,7 +320,8 @@ class Player(Combatant):
                 enemy.hp -= min(enemy.hp, damage) # add damage when solved
                 play_sound(MAGIC)
                 print_and_sleep(purple(f"Moon Rune did {damage} damage!"), 1)
-        return 0
+
+# ================================================================================================
 
     def make_purchase(self, buyable: Buyable) -> bool:
         if self.coins < buyable.cost:
