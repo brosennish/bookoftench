@@ -5,22 +5,27 @@ from functools import partial
 
 from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, ReprBinding, SelectionBinding, \
-    functional_component, Component, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent, NoOpComponent
+    functional_component, Component, RandomChoiceComponent, ProbabilityBinding, GatekeepingComponent
 from bookoftench.component.officer import OfficerEncounter
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import SHOP_THEME, PURCHASE, XP, WHIFF
+from bookoftench.data.audio import SHOP_THEME, WHIFF
 from bookoftench.data.components import SHOP
 from bookoftench.data.perks import CATFISH_BURGLAR
-from bookoftench.model import GameState, game_state
+from bookoftench.model import GameState
 from bookoftench.model.base import Buyable
 from bookoftench.model.perk import attach_perk
 from bookoftench.model.util import display_active_perk_count, display_shop_header
-from bookoftench.ui import blue, yellow, orange
+from bookoftench.ui import blue, yellow
 from bookoftench.util import print_and_sleep
+
+# ================================================================================================
 
 _max_steal_chance = 75
 _steal_spread = 5
 
+# ================================================================================================
+
+# --- check if player is banned ---
 
 @register_component(SHOP)
 class ShopBouncer(GatekeepingComponent):
@@ -33,6 +38,7 @@ class ShopBouncer(GatekeepingComponent):
     def _player_can_enter_shop(self) -> bool:
         return not self.game_state.shop.player_is_banned
 
+# ================================================================================================
 
 class ShopComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -97,11 +103,14 @@ class ShopComponent(LabeledSelectionComponent):
 
         return buy_or_steal_component
 
+# ================================================================================================
+
 def refresh_cost(game_state) -> str:
     player = game_state.player
     cost = min(4 + (1 * player.lvl), 10)
     return f"Refresh ({cost})"
 
+# ================================================================================================
 
 class BuyOrStealDecision(LabeledSelectionComponent):
     def __init__(self, game_state: GameState, buyable: Buyable):
@@ -136,6 +145,7 @@ class BuyOrStealDecision(LabeledSelectionComponent):
 
         return steal_component
 
+# ================================================================================================
 
 class StealItem(RandomChoiceComponent):
     def __init__(self, game_state: GameState, buyable: Buyable, success_chance: int):
@@ -162,6 +172,7 @@ class StealItem(RandomChoiceComponent):
         game_state.player.gain_or_lose_luck(-0.1)
         OfficerEncounter(game_state).run()
 
+# ================================================================================================
 
 class SellItem(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
