@@ -18,7 +18,18 @@ from bookoftench.util import print_and_sleep
 
 # ================================================================================================
 
+# --- check if wizard is open ---
+
 @register_component(WIZARD)
+class WizardOpen(GatekeepingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, decision_function=lambda: game_state.wizard_is_open,
+                         accept_component=WizardBouncer,
+                         deny_component=functional_component()(lambda: print_and_sleep(
+                             blue("The Wizard is nowhere to be found.\n"), 1.5)))
+
+# ================================================================================================
+
 class WizardBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player

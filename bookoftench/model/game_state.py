@@ -47,6 +47,9 @@ class GameState:
     casino_is_open: bool = True
     coffee_is_open: bool = True
     hospital_is_open: bool = True
+    wizard_is_open: bool = True
+    shaman_is_open: bool = True
+    blacksmith_is_open: bool = True
     hohkken_is_alive: bool = True
 
     time_of_day: str = field(default=DAYTIME)
@@ -249,6 +252,36 @@ class GameState:
             if random.random() < 0.50:
                 self.hospital_is_open = True
                 print_and_sleep(green(f"The hospital has reopened following a successful bribe."))
+
+        # --- wizard ---
+        if self.wizard_is_open:
+            if random.random() < 0.10:
+                self.wizard_is_open = False
+                print_and_sleep(yellow(f"The Wizard has disappeared."))
+        elif not self.wizard_is_open:
+            if random.random() < 0.50:
+                self.wizard_is_open = True
+                print_and_sleep(green(f"The Wizard has reappeared."))
+
+        # --- shaman ---
+        if self.shaman_is_open:
+            if random.random() < 0.10:
+                self.shaman_is_open = False
+                print_and_sleep(yellow(f"The Shaman has gone to the underworld."))
+        elif not self.shaman_is_open:
+            if random.random() < 0.50:
+                self.shaman_is_open = True
+                print_and_sleep(green(f"The Shaman has returned from the underworld."))
+
+        # --- blacksmith ---
+        if self.blacksmith_is_open:
+            if random.random() < 0.10:
+                self.blacksmith_is_open = False
+                print_and_sleep(yellow(f"Sledge Jr. went on an HTH run."))
+        elif not self.blacksmith_is_open:
+            if random.random() < 0.50:
+                self.blacksmith_is_open = True
+                print_and_sleep(green(f"Sledge Jr. has returned from his HTH run."))
 
 # ================================================================================================
 

@@ -18,9 +18,20 @@ from bookoftench.util import print_and_sleep
 
 # ================================================================================================
 
-# --- check if player can benefit from any of the shaman's offerings ---
+# --- check if shaman is open ---
 
 @register_component(SHAMAN)
+class ShamanOpen(GatekeepingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, decision_function=lambda: game_state.shaman_is_open,
+                         accept_component=ShamanBouncer,
+                         deny_component=functional_component()(lambda: print_and_sleep(
+                             blue("The Shaman is in the underworld.\n"), 1.5)))
+
+# ================================================================================================
+
+# --- check if player can benefit from any of the shaman's offerings ---
+
 class ShamanBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
