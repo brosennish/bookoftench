@@ -29,6 +29,8 @@ from bookoftench.data.weapons import CLAWS, BLIND, SPECIAL
 from ..audio import play_sound
 from ..data.audio import ENEMY_APPEARS, OWL_SFX, WEREWOLF_SFX
 
+# ================================================================================================
+
 _search_defaults = {
     DISCOVER_PERK: 1,
     DISCOVER_WEAPON: 2,
@@ -47,6 +49,7 @@ _event_defaults = {
     ZONKED: 12
 }
 
+# ================================================================================================
 
 @dataclass
 class AreaActions:
@@ -93,7 +96,54 @@ class Area:
     def enemies_remaining(self) -> int:
         return max(self.enemy_count - self.enemies_killed, 0)
 
-    def spawn_enemy(self, game_state, player_level: int, wanted: str, time: str, moon: str) -> Enemy:
+# ================================================================================================
+
+    def spawn_enemy(self, gs, player_level: int, wanted: str, time: str, moon: str) -> Enemy:
+        enemy_name = self.handle_enemy_selection(wanted)  # select enemy name
+
+        # --- load Enemy, log encounter, add to seen ---
+        enemy = load_enemy(enemy_name)
+        self.log_encounter(enemy, gs)
+        self.enemies_seen.add(enemy_name)
+
+        # --- trait and illness ---
+        if not enemy.trait and enemy.type == NORMAL:
+            enemy = handle_trait_and_illness(enemy)
+
+        # --- standard stat adjustments ---
+        enemy_line = self.handle_stat_adjustments(enemy, player_level)
+
+        # --- trait transformation logic ---
+        enemy = self.handle_trait_transformation(enemy, time, moon)
+
+        # --- elite logic ---
+        elite = self.handle_elite_chance(enemy, player_level)
+
+        if elite:
+            print_and_sleep(f"{yellow("An enemy appears!")} {purple("(Elite enemy!)")}", 1)
+        else:
+            play_sound(ENEMY_APPEARS)
+            print_and_sleep(yellow("An enemy appears!"), 1.5)
+
+        # --- print enemy line, add adjective, and set current_enemy ---
+        if enemy_line:
+            print_and_sleep(f"{blue(f'{enemy_line}')}", 3)
+        adj = random.choice(Enemy_Adjectives)
+        enemy.name = f"{adj} {enemy.name}"
+
+        self.current_enemy = enemy
+
+        # --- werewolf and night owl final initialization ---
+        self.handle_final_trait_initialization(time)
+
+        # --- elite weapon logic ---
+        self.handle_elite_weapon()
+
+        return self.current_enemy
+
+    # ================================================================================================
+
+    def handle_enemy_selection(self, wanted: str):
         wanted = load_enemy(wanted)
         available = [i for i in self.enemies if i not in self.enemies_seen]
 
@@ -109,17 +159,13 @@ class Area:
 
         if perk_is_active(SHERLOCK_TENCH):  # 10% chance of wanted enemy encounter if perk is active
             if self.name in wanted.areas and random.random() < 0.15:
-                enemy_name = wanted.name
+                enemy_name = wanted
 
-        enemy = load_enemy(enemy_name)  # convert selected enemy to Enemy
-        self.log_encounter(enemy, game_state)
-        self.enemies_seen.add(enemy_name)  # add selected enemy to enemies_seen
+        return enemy_name
 
-        # --- trait and illness ---
-        if not enemy.trait and enemy.type == NORMAL:
-            enemy = handle_trait_and_illness(enemy)
 
-        # --- standard stat adjustments ---
+    @staticmethod
+    def handle_stat_adjustments(enemy: Enemy, player_level: int):
         enemy.hp += random.randint(-2, 2)  # apply hp spread first
         enemy.hp += round((enemy.hp * 0.03) * max(player_level - 1, 0))  # then apply hp scaling
         enemy.max_hp = enemy.hp
@@ -128,16 +174,25 @@ class Area:
         enemy.coins = max(0, enemy.coins + random.randint(-10, 20))
         if random.random() < 0.20:
             enemy.coins += round(enemy.coins * random.uniform(0.05, 0.25))
-        enemy_lines = enemy.get_enemy_encounter_line()  # get the line before mutating enemy.name
-        elite_chance = min(0.15, max(0.0, (player_level - 1) * 0.03))
+        enemy_line = enemy.get_enemy_encounter_line()
 
-        # --- night owl & werewolf logic ---
+        return enemy_line
+
+
+    @staticmethod
+    def handle_trait_transformation(enemy: Enemy, time: str, moon: str):
         if enemy.trait.name == NIGHT_OWL and time == NIGHTTIME:
             enemy = create_night_owl(enemy)
         if enemy.trait.name == WEREWOLF and time == NIGHTTIME and moon == FULL:
             enemy = create_werewolf(enemy)
 
-        # --- elite logic ---
+        return enemy
+
+
+    @staticmethod
+    def handle_elite_chance(enemy: Enemy, player_level: int):
+        elite_chance = min(0.15, max(0.0, (player_level - 1) * 0.03))
+
         if random.random() < elite_chance:
             enemy.name = f"Elite {enemy.name}"
             enemy.hp = int(enemy.hp * 1.5)
@@ -145,34 +200,27 @@ class Area:
             enemy.strength += 0.1
             enemy.acc += 0 if enemy.trait.name == WEREWOLF else 0.1
             enemy.coins = int(enemy.coins * 1.5)
-            print_and_sleep(f"{yellow("An enemy appears!")} {purple("(Elite enemy!)")}", 1)
+            return True
         else:
-            play_sound(ENEMY_APPEARS)
-            print_and_sleep(yellow("An enemy appears!"), 1.5)
+            return False
 
-        if enemy_lines:
-            print_and_sleep(f"{blue(f'{enemy_lines}')}", 3)
-        adj = random.choice(Enemy_Adjectives)
-        enemy.name = f"{adj} {enemy.name}"
 
-        self.current_enemy = enemy
-
-        # --- werewolf and night owl final initialization ---
+    def handle_final_trait_initialization(self, time: str):
         if WEREWOLF in self.current_enemy.name:
             self.current_enemy.current_weapon = load_weapon(CLAWS)
             play_sound(WEREWOLF_SFX)
         elif self.current_enemy.trait.name == NIGHT_OWL and time == NIGHTTIME:
             play_sound(OWL_SFX)
 
-        # --- elite weapon logic ---
+
+    def handle_elite_weapon(self):
         if self.current_enemy.current_weapon.type not in [BLIND, SPECIAL] and random.random() < 0.15:
             base = self.current_enemy.current_weapon
             self.current_enemy.current_weapon = make_elite_weapon(base)
 
-        return self.current_enemy
+# ================================================================================================
 
-
-    def spawn_special_boss(self, name: str, time: str, game_state) -> Enemy:
+    def spawn_special_boss(self, name: str, time: str, gs) -> Enemy:
         enemy = load_special_boss(name)  # convert selected special boss to Enemy type
         self.enemies_seen.add(name)  # add selected enemy to enemies_seen
 
@@ -194,7 +242,7 @@ class Area:
                 play_sound(OWL_SFX)
 
         self.current_enemy = enemy
-        self.log_encounter(self.current_enemy, game_state)
+        self.log_encounter(self.current_enemy, gs)
 
         # --- elite weapon logic ---
         if self.current_enemy.current_weapon.type not in [BLIND, SPECIAL] and random.random() < 0.15:
@@ -209,6 +257,7 @@ class Area:
         area = game_state.current_area.name
         game_state.encountered_enemies.append({"area": area, "enemy": enemy})
 
+# ================================================================================================
 
     def set_boss_to_current_enemy(self, name: str):
         self.current_enemy = load_boss(name)
@@ -239,6 +288,8 @@ class Area:
 
     def __hash__(self) -> int:
         return hash((self.name, self.enemy_count, self.enemies_killed, self.boss_defeated, self.current_enemy))
+
+# ================================================================================================
 
 def create_night_owl(enemy) -> Enemy:
     enemy.max_hp += random.randint(5, 10)

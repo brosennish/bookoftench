@@ -926,10 +926,12 @@ class SpawnEnemy(LinearComponent):
         super().__init__(game_state, next_component=Battle)
 
     def execute_current(self) -> GameState:
-        moon = self.game_state.moon
-        time = self.game_state.time_of_day
-        wanted = self.game_state.wanted
-        self.game_state.current_area.spawn_enemy(self.game_state, self.game_state.player.lvl, wanted, time, moon)
+        self.game_state.current_area.spawn_enemy(self.game_state,
+                                                 self.game_state.player.lvl,
+                                                 self.game_state.wanted,
+                                                 self.game_state.time_of_day,
+                                                 self.game_state.moon)
+
         return self.game_state
 
 
