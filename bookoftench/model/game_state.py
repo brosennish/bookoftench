@@ -47,6 +47,7 @@ class GameState:
     casino_is_open: bool = True
     coffee_is_open: bool = True
     hospital_is_open: bool = True
+    wizard_is_open: bool = True
     hohkken_is_alive: bool = True
 
     time_of_day: str = field(default=DAYTIME)
@@ -249,6 +250,16 @@ class GameState:
             if random.random() < 0.50:
                 self.hospital_is_open = True
                 print_and_sleep(green(f"The hospital has reopened following a successful bribe."))
+
+        # --- wizard ---
+        if self.wizard_is_open:
+            if random.random() < 0.10:
+                self.hospital_is_open = False
+                print_and_sleep(yellow(f"The wizard has disappeared."))
+        elif not self.wizard_is_open:
+            if random.random() < 0.50:
+                self.hospital_is_open = True
+                print_and_sleep(green(f"The wizard has reappeared."))
 
 # ================================================================================================
 

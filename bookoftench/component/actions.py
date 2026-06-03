@@ -313,8 +313,7 @@ class BuildWeaponsSelection(LinearComponent):
             weapon = safe_input(f"Add a weapon ({len(selections)}/3 selected) or c to continue:")
             if weapon == "c":
                 if not selections:
-                    print_and_sleep(yellow("Please select at least one weapon (case-sensitive)."))
-                    continue
+                    return self.game_state
                 else:
                     final_picks = load_weapons(selections) # convert selections to Weapon objects
                     for w in final_picks: # add each one to player weapon dict
