@@ -264,7 +264,7 @@ class BuildItemsSelection(LinearComponent):
     def execute_current(self) -> None:
         player = self.game_state.player
         player.items.clear()
-        items = random.sample([i for i in Items], k=12)
+        items = random.sample([i for i in Items], k=10)
         for i in items:
             if i['type'] == NORMAL:
                 print_and_sleep(cyan(f"{i['name']:<24}") + (dim(' | ')) + "HP: +" + (green(i['hp'])))
@@ -302,7 +302,7 @@ class BuildWeaponsSelection(LinearComponent):
         weapon = next(i for i in load)
         player.weapon_dict[BARE_HANDS] = PlayerWeapon.from_weapon(weapon)
 
-        weapons = random.sample([w['name'] for w in Weapons if w['uses'] >= 0], k=12)
+        weapons = random.sample([w['name'] for w in Weapons if w['uses'] >= 0], k=10)
         weapon_options = load_weapons(weapons)
         weapons_sorted = sorted(weapon_options, key=lambda w: w.damage)
         for w in weapons_sorted:
