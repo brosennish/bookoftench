@@ -4,10 +4,10 @@ from bookoftench import event_logger
 from bookoftench.audio import play_sound, play_music
 from bookoftench.component import RandomChoiceComponent, register_component, ProbabilityBinding, \
     get_registered_component, functional_component, SwapFoundItemYN, OfficerEncounter
-from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH, POSITIVE, GOLF_CLAP, MONSTER_ATTACK
+from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH, POSITIVE, MONSTER_ATTACK
 from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, \
     ZONKED, GREEDY_BASTARD
-from bookoftench.data.enviroment import DAYTIME, NIGHTTIME
+from bookoftench.data.enviroment import NIGHTTIME
 from bookoftench.data.perks import BEER_GOGGLES
 from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent
@@ -16,6 +16,7 @@ from bookoftench.model.perk import perk_is_active
 from bookoftench.ui import yellow, dim, purple, red, cyan, green, blue
 from bookoftench.util import print_and_sleep, carrot
 
+# ================================================================================================
 
 @register_component(DISCOVER_SPECIAL)
 class DiscoverSpecial(RandomChoiceComponent):
@@ -23,15 +24,19 @@ class DiscoverSpecial(RandomChoiceComponent):
         evp = game_state.current_area.event_probabilities
         super().__init__(game_state, bindings=[ProbabilityBinding(prob, get_registered_component(name))
                                                for name, prob in evp.items()])
+# TODO - refactor
+# 1. Greedy Bastard
+# 2. Shebokken Roulette
+# 3. Three Holes
+# 4. Triple Tench Dare
+# 5. Zonked
+
+# ================================================================================================
 
     @staticmethod
     @register_component(GREEDY_BASTARD)
     @functional_component(state_dependent=True)
     def _greedy_bastard(game_state: GameState):
-        # Request or offer coins
-        # Depending on if > or < you may or may not be deemed a greedy or stingy bastard
-        # Varying rewards and penalties for how generous, greedy or stingy you are
-
         player = game_state.player
         print_and_sleep(purple("An old woman approaches you, waving her hands in the air...\n"), 2)
         print_and_sleep(blue("Hey, you there! I have coin. Want some?\n\n"), 2)
@@ -55,6 +60,8 @@ class DiscoverSpecial(RandomChoiceComponent):
             else:
                 print_and_sleep(yellow("Invalid choice.\n"), 1)
                 continue
+
+        # --- player requests coin ---
 
         if choice == "y":
             woman_coins = random.randint(1, 50)
@@ -98,6 +105,8 @@ class DiscoverSpecial(RandomChoiceComponent):
                     event_logger.log_event(PlayerDeathEvent(player.lives))
             return None
 
+        # --- player offers coin ---
+
         elif choice == "o":
             woman_desired = random.randint(1, 50)
             veg = carrot(green)
@@ -120,7 +129,7 @@ class DiscoverSpecial(RandomChoiceComponent):
                     print_and_sleep(yellow("Invalid choice.\n"), 1)
                     continue
 
-            if offer < woman_desired:  # Your offer is less than what the woman wants
+            if offer < woman_desired:  # offer is less than what the woman wants
                 damage = min(woman_desired - offer, player.hp)
                 player.hp -= damage
                 play_sound(PUNCH)
@@ -130,18 +139,20 @@ class DiscoverSpecial(RandomChoiceComponent):
                 if player.hp == 0:
                     player.lives -= 1
                     event_logger.log_event(PlayerDeathEvent(player.lives))
-            elif offer == woman_desired:  # You offer what the woman wants
+            elif offer == woman_desired:  # offer is what the woman wants
                 play_sound(POSITIVE)
                 print_and_sleep(purple(f"Wow, that's exactly what I was hoping for. Thanks a lot!\n"), 2)
                 player.gain_or_lose_luck(0.1)
                 player.coins -= offer
-            elif offer > woman_desired:  # You offer more than what the woman wants
+            elif offer > woman_desired:  # offer is more than what the woman wants
                 play_sound(POSITIVE)
                 print_and_sleep(purple(f"You're not a stingy bastard. Keep the coin. Good for you.\n"), 2)
                 player.gain_xp_other(offer - woman_desired)
                 player.gain_or_lose_luck(0.01)
             return None
         return None
+
+# ================================================================================================
 
     @staticmethod
     @register_component(SHEBOKKEN_ROULETTE)
@@ -243,6 +254,8 @@ class DiscoverSpecial(RandomChoiceComponent):
             elif shooter == player_1:
                 shooter = player_2
 
+# ================================================================================================
+
     @staticmethod
     @register_component(THREE_HOLES)
     @functional_component(state_dependent=True)
@@ -315,6 +328,7 @@ Choose wisely.\n\n"""), 3)
             print_and_sleep(dim("You came up dry."), 1)
             return None
 
+# ================================================================================================
 
     @staticmethod
     @register_component(TRIPLE_TENCH_DARE)
@@ -373,6 +387,8 @@ What do you say?\n\n"""), 3)
         player.gain_or_lose_luck(luck)
         player.gain_coins(payment)
         return None
+
+# ================================================================================================
 
     @staticmethod
     @register_component(ZONKED)
