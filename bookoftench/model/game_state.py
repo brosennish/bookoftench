@@ -32,6 +32,7 @@ from ..data.enemies import HOHKKEN
 from ..data.illnesses import Illnesses
 from ..data.enviroment import DRY, DAYTIME, NIGHTTIME, WETTING, FULL, DRYING
 
+# ================================================================================================
 
 @dataclass
 class GameState:
@@ -46,7 +47,6 @@ class GameState:
     casino_is_open: bool = True
     coffee_is_open: bool = True
     hospital_is_open: bool = True
-
     hohkken_is_alive: bool = True
 
     time_of_day: str = field(default=DAYTIME)
@@ -62,15 +62,17 @@ class GameState:
 
     victory = False
 
-    event_counter: Counter = field(default_factory=Counter)
+    achievement_cache: Dict[str, Achievement] = field(default_factory=dict)
+    crypto_market_state = None
     discoveries: List[Discoverable] = field(default_factory=list)
     encountered_enemies: List[dict] = field(default_factory=list)
+    event_counter: Counter = field(default_factory=Counter)
     liberated_enemies: List[Enemy] = field(default_factory=list)
     perk_cache: Dict[str, Perk] = field(default_factory=dict)
-    achievement_cache: Dict[str, Achievement] = field(default_factory=dict)
     settings: Settings = field(default_factory=Settings.defaults)
-    crypto_market_state = None
     _all_builds: List[Build] = field(init=False)
+
+# ================================================================================================
 
     @property
     def build_inventory(self) -> List[Build]:
@@ -103,6 +105,8 @@ class GameState:
             )
             builds_list.append(build_obj)
         return builds_list
+
+# ================================================================================================
 
     @property
     def shop(self) -> Shop:
@@ -187,6 +191,8 @@ class GameState:
     def play_current_area_theme(self) -> None:
         play_music(self.current_area.theme)
 
+# ================================================================================================
+
     def _subscribe_listeners(self):
         @subscribe_function(BountyCollectedEvent)
         def handle_bounty_collected_event(event: BountyCollectedEvent):
@@ -211,8 +217,10 @@ class GameState:
             self.refresh_bounty()
             self.handle_component_statuses()
 
+# ================================================================================================
+
     def handle_component_statuses(self):
-        # casino
+        # --- casino ---
         if self.casino_is_open:
             if random.random() < 0.10:
                 self.casino_is_open = False
@@ -222,7 +230,7 @@ class GameState:
                 self.casino_is_open = True
                 print_and_sleep(green(f"The casino has reopened following a successful bribe."))
 
-        # coffee
+        # --- coffee ---
         if self.coffee_is_open:
             if random.random() < 0.10:
                 self.coffee_is_open = False
@@ -232,7 +240,7 @@ class GameState:
                 self.coffee_is_open = True
                 print_and_sleep(green(f"Coughy's Coffee has reopened following Coughy's resurrection."))
 
-        # hospital
+        # --- hospital ---
         if self.hospital_is_open:
             if random.random() < 0.10:
                 self.hospital_is_open = False
@@ -241,6 +249,8 @@ class GameState:
             if random.random() < 0.50:
                 self.hospital_is_open = True
                 print_and_sleep(green(f"The hospital has reopened following a successful bribe."))
+
+# ================================================================================================
 
     def is_final_boss_available(self) -> bool:
         return self.current_area.boss_defeated and (self.wench_area == self.current_area) and not self.victory
