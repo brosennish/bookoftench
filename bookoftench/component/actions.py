@@ -1161,7 +1161,7 @@ class Discoveries(TextDisplayingComponent):
 
 
 @register_component(ENCOUNTERS)
-class Liberated(TextDisplayingComponent):
+class Encounters(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, display_callback=display_encountered)
 
@@ -1185,7 +1185,9 @@ class Overview(GatekeepingComponent):
                          accept_component=OverviewMenu, deny_component=functional_component()(lambda:
                                                                                               print_and_sleep(yellow(
                                                                                                   f"You're a dang ghost."),
+
                                                                                                               1)))
+
 
 @register_component(PERKS)
 class DisplayPerks(TextDisplayingComponent):
