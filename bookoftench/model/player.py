@@ -6,14 +6,9 @@ from typing import Dict, List, Optional
 
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
-from bookoftench.data.audio import RIFLE, COINS, XP, EQUIP_WEAPON, BOOMERANG_SFX, WHIFF, DRINK, DISCOVERABLE, POSITIVE, \
-    MAGIC, SPRAY, PUNCH
-from bookoftench.data.items import TENCH_FILET, NORMAL, FLEE, STAT, HTH, ACCURACY_SEARUM, DMG, CRIT, HEALTH, nPnG, \
-    ENEMY, BOOMERANG, FLACCID_ACID, PHOTOSYNTHOPHYL, MOON_RUNE
-from bookoftench.data.perks import DOCTOR_FISH, HEALTH_NUT, LUCKY_TENCHS_FIN, GRAMBLIN_MAN, GRAMBLING_ADDICT, \
-    VAGABONDAGE, NOMADS_LAND, BEER_GOGGLES, WALLET_CHAIN, INTRO_TO_TENCH, AP_TENCH_STUDIES, AMBROSE_BLADE, \
-    ROSETTI_THE_GYM_RAT, KARATE_LESSONS, MARTIAL_ARTS_TRAINING, TENCH_EYES, SOLOMON_TRAIN, VAMPIRIC_SPERM, TENCH_GENES, \
-    WrapperIndices, AMBERJACKED, CASTING_RANGE
+from bookoftench.data import audio as a
+from bookoftench.data import items as i
+from bookoftench.data import perks as p
 from bookoftench.data.weapons import BARE_HANDS, MELEE, RANGED, BLADED, LASER_BEAMS, VOODOO_STAFF, CLAWS, KNIFE
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.illness import Illness
@@ -40,11 +35,11 @@ class PlayerWeapon(Weapon):
     def calculate_base_damage(self) -> int:
         base_damage = self.calculate_base_damage_no_perk()
 
-        @attach_perk(ROSETTI_THE_GYM_RAT, value_description="melee damage",
+        @attach_perk(p.ROSETTI_THE_GYM_RAT, value_description="melee damage",
                      condition=lambda: self.type == MELEE)
-        @attach_perk(AMBROSE_BLADE, value_description="blade damage",
+        @attach_perk(p.AMBROSE_BLADE, value_description="blade damage",
                      condition=lambda: self.subtype == BLADED)
-        @attach_perks(KARATE_LESSONS, MARTIAL_ARTS_TRAINING, value_description="bare hands damage",
+        @attach_perks(p.KARATE_LESSONS, p.MARTIAL_ARTS_TRAINING, value_description="bare hands damage",
                       condition=lambda: self.name == BARE_HANDS)
         def apply_perks():
             return base_damage
@@ -52,7 +47,7 @@ class PlayerWeapon(Weapon):
         return int(apply_perks())
 
     def get_accuracy(self) -> float:
-        @attach_perk(TENCH_EYES, value_description="projectile accuracy",
+        @attach_perk(p.TENCH_EYES, value_description="projectile accuracy",
                      condition=lambda: self.type == RANGED)
         def apply_perks():
             return self.accuracy
@@ -75,7 +70,7 @@ class PlayerWeapon(Weapon):
 
 
 def item_defaults() -> Dict[str, Item]:
-    return dict((it.name, it) for it in load_items([TENCH_FILET]))
+    return dict((it.name, it) for it in load_items([i.TENCH_FILET]))
 
 
 def weapon_defaults() -> Dict[str, PlayerWeapon]:
@@ -140,18 +135,18 @@ class Player(Combatant):
         self._subscribe_listeners()
 
     @property
-    @attach_perk(GRAMBLIN_MAN, silent=True)
-    @attach_perk(GRAMBLING_ADDICT, WrapperIndices.GramblingAddict.PLAYS, silent=True)
+    @attach_perk(p.GRAMBLIN_MAN, silent=True)
+    @attach_perk(p.GRAMBLING_ADDICT, p.WrapperIndices.GramblingAddict.PLAYS, silent=True)
     def max_plays(self) -> int:
         return self._max_plays
 
     @property
-    @attach_perks(NOMADS_LAND, VAGABONDAGE, silent=True)
+    @attach_perks(p.NOMADS_LAND, p.VAGABONDAGE, silent=True)
     def max_items(self) -> int:
         return self._max_items
 
     @property
-    @attach_perks(NOMADS_LAND, VAGABONDAGE, silent=True)
+    @attach_perks(p.NOMADS_LAND, p.VAGABONDAGE, silent=True)
     def max_weapons(self) -> int:
         return self._max_weapons
 
@@ -169,8 +164,8 @@ class Player(Combatant):
 
     @blind.setter
     def blind(self, blind: bool) -> None:
-        if blind and perk_is_active(BEER_GOGGLES):
-            print_and_sleep(purple(f"{BEER_GOGGLES} prevented blindness."), 1)
+        if blind and perk_is_active(p.BEER_GOGGLES):
+            print_and_sleep(purple(f"{p.BEER_GOGGLES} prevented blindness."), 1)
         else:
             self._blind = blind
 
@@ -195,7 +190,7 @@ class Player(Combatant):
             return True
 
     @staticmethod
-    @attach_perks(HEALTH_NUT, DOCTOR_FISH, value_description="hp gained")
+    @attach_perks(p.HEALTH_NUT, p.DOCTOR_FISH, value_description="hp gained")
     def _apply_hp_bonus(base: int) -> int:
         return base
 
@@ -208,19 +203,20 @@ class Player(Combatant):
         moon = game_state.moon
 
         # --- retrieve gain amount and/or activate special item ---
-        if item.type == NORMAL: # normal hp gain
+        if item.type == i.NORMAL: # normal hp gain
             play_sound(sfx)
             gain = int(min(self.max_hp - self.hp, self._apply_hp_bonus(item.hp)))
         else:
             gain = self.handle_special_item(item, enemy, time, moon, game_state)
 
         # --- Gain hp and activate enemy's empath trait if applicable ---
-        self.gain_hp(gain)
-        if enemy and enemy.trait and enemy.trait.name == EMPATH:
-            heal = min(gain, enemy.max_hp - enemy.hp)
-            if heal > 0:
-                enemy.hp += heal
-                print_and_sleep(green(f"The empathic {enemy.name} gained {heal} HP."), 1.5)
+        if gain:
+            self.gain_hp(gain)
+            if enemy and enemy.trait and enemy.trait.name == EMPATH:
+                heal = min(gain, enemy.max_hp - enemy.hp)
+                if heal > 0:
+                    enemy.hp += heal
+                    print_and_sleep(green(f"The empathic {enemy.name} gained {heal} HP."), 1.5)
 
         # --- Remove from actual inventory ---
         del self.items[item.name]
@@ -229,30 +225,30 @@ class Player(Combatant):
 # ================================================================================================
 
     def handle_special_item(self, item, enemy, time, moon, game_state) -> int | None:
-        if item.type == FLEE: # used to escape from battle
-            play_sound(WHIFF)
+        if item.type == i.FLEE: # used to escape from battle
+            play_sound(a.WHIFF)
             self.can_flee = True
             return None
 
-        elif item.type == STAT: # used to mutate stats
+        elif item.type == i.STAT: # used to mutate stats
             self.handle_stat_item(item)
             return None
 
-        elif item.type == DMG: # used to alter your damage output
-            play_sound(DISCOVERABLE)
+        elif item.type == i.DMG: # used to alter your damage output
+            play_sound(a.DISCOVERABLE)
             self.double_damage_active = True
             return None
 
-        elif item.type == CRIT: # used to alter your critical hit odds
-            play_sound(DISCOVERABLE)
+        elif item.type == i.CRIT: # used to alter your critical hit odds
+            play_sound(a.DISCOVERABLE)
             self.crit_active = True
             return None
 
-        elif item.type == HEALTH: # used to heal in an abnormal way
+        elif item.type == i.HEALTH: # used to heal in an abnormal way
             gain = self.handle_health_item(item, time, game_state)
             return gain
 
-        elif item.type == ENEMY: # used to do damage to enemy or mutate their stats
+        elif item.type == i.ENEMY: # used to do damage to enemy or mutate their stats
             self.handle_enemy_item(enemy, item, time, game_state, moon)
             return None
         return None
@@ -260,56 +256,56 @@ class Player(Combatant):
 # ================================================================================================
 
     def handle_stat_item(self, item):
-        if item.name == ACCURACY_SEARUM:
+        if item.name == i.ACCURACY_SEARUM:
             old = round(self.acc, 2)
             self.acc = round(self.acc + 0.03, 2)
-            play_sound(DRINK)
+            play_sound(a.DRINK)
             print_and_sleep(green(f"Accuracy: {old} -> {self.acc}"), 1)
-        elif item.name == HTH:
+        elif item.name == i.HTH:
             old = round(self.strength, 2)
             self.strength = round(self.strength + 0.03, 2)
-            play_sound(DRINK)
+            play_sound(a.DRINK)
             print_and_sleep(green(f"Strength: {old} -> {self.strength}"), 1)
         return None
 
     def handle_health_item(self, item, time, game_state) -> int | None:
-        if item.name == nPnG:
+        if item.name == i.nPnG:
             original_max = self.max_hp
             amount = random.randint(1, 5)
             self.max_hp += amount
-            play_sound(POSITIVE)
+            play_sound(a.POSITIVE)
             print_and_sleep(green(f"Max HP: {original_max} -> {self.max_hp}"), 1)
             original_hp = self.hp
             self.hp -= min(amount, original_hp)
             print_and_sleep(red(f"You lost {original_hp - self.hp} HP."), 1)
             return None
-        elif item.name == PHOTOSYNTHOPHYL:
+        elif item.name == i.PHOTOSYNTHOPHYL:
             if time == DAYTIME and game_state.current_area.name != CAVE:
                 amount = self.max_hp - self.hp
                 self.hp = self.max_hp
-                play_sound(POSITIVE)
+                play_sound(a.POSITIVE)
                 print_and_sleep(green(f"You used Photosynthophyl to restore {amount} HP!"), 1)
                 return amount
         return None
 
     def handle_enemy_item(self, enemy, item, time, game_state, moon):
-            if item.name == BOOMERANG:
+            if item.name == i.BOOMERANG:
                 damage = random.randint(5, 25)
                 half = damage // 2
                 self.hp -= min(self.hp, half)
                 enemy.hp -= min(enemy.hp, damage)
-                play_sound(BOOMERANG_SFX)
+                play_sound(a.BOOMERANG_SFX)
                 print_and_sleep(purple("..."), 2)
-                play_sound(PUNCH)
+                play_sound(a.PUNCH)
                 print_and_sleep(purple(f"Boomerang did {damage} damage and you lost {half} HP!"), 1)
-            elif item.name == FLACCID_ACID:
+            elif item.name == i.FLACCID_ACID:
                 original = round(enemy.strength, 2)
                 decrement = round(enemy.strength * 0.25, 2)
                 enemy.strength = round(original - decrement, 2)
-                play_sound(SPRAY)
+                play_sound(a.SPRAY)
                 print_and_sleep(purple(f"You doused {enemy.name} with Flaccid Acid! Strength: "
                                        f"{original} -> {enemy.strength}"), 1)
-            elif item.name == MOON_RUNE and time == NIGHTTIME and game_state.current_area.name != CAVE:
+            elif item.name == i.MOON_RUNE and time == NIGHTTIME and game_state.current_area.name != CAVE:
                 damage = 10 # dry moon
                 if moon == DRYING:
                     damage = 25
@@ -318,7 +314,7 @@ class Player(Combatant):
                 elif moon == FULL:
                     damage = 100
                 enemy.hp -= min(enemy.hp, damage) # add damage when solved
-                play_sound(MAGIC)
+                play_sound(a.MAGIC)
                 print_and_sleep(purple(f"Moon Rune did {damage} damage!"), 1)
 
 # ================================================================================================
@@ -352,7 +348,7 @@ class Player(Combatant):
 
     def sell_item(self, name: str) -> None:
         item = self.items[name]
-        play_sound(COINS)
+        play_sound(a.COINS)
         self.coins += item.sell_value
         del self.items[name]
         event_logger.log_event(ItemSoldEvent(item.name, item.sell_value))
@@ -391,14 +387,14 @@ class Player(Combatant):
         if name == self.current_weapon.base_name:
             selection = next((w for w in self.weapon_dict.values()))
             self.current_weapon = PlayerWeapon.from_weapon(selection)
-        play_sound(COINS)
+        play_sound(a.COINS)
         event_logger.log_event(ItemSoldEvent(sellable_weapon.name, sellable_weapon.sell_value))
 
     def equip_weapon(self, name: str, base_name: str) -> None:
         if base_name != self.current_weapon.base_name:
             event_logger.log_event(SwapWeaponEvent())
             self.current_weapon = self.weapon_dict[base_name]
-            play_sound(EQUIP_WEAPON)
+            play_sound(a.EQUIP_WEAPON)
             print_and_sleep(cyan(f"{name} equipped."), 1)
 
     def swap_found_item(self, old_name: str, found_item: Item, game_state) -> None:
@@ -428,7 +424,7 @@ class Player(Combatant):
             if self.add_weapon(enemy_weapon):
                 print_and_sleep(cyan(f"{enemy_weapon.name} added to sack."), 1)
 
-    @attach_perk(LUCKY_TENCHS_FIN, value_description="crit chance")
+    @attach_perk(p.LUCKY_TENCHS_FIN, value_description="crit chance")
     def get_crit_chance(self) -> float:
         return super().get_crit_chance()
 
@@ -441,7 +437,7 @@ class Player(Combatant):
         return True
 
     def gain_coins(self, amount: int) -> None:
-        play_sound(COINS)
+        play_sound(a.COINS)
         self.coins += amount
         print_and_sleep(green(f"You gained {amount} of coin!"), 1)
 
@@ -461,8 +457,8 @@ class Player(Combatant):
             self.luck = 10
 
     @staticmethod
-    @attach_perk(INTRO_TO_TENCH, value_description="xp gained")
-    @attach_perk(AP_TENCH_STUDIES, WrapperIndices.ApTenchStudies.BATTLE_XP, value_description="xp gained")
+    @attach_perk(p.INTRO_TO_TENCH, value_description="xp gained")
+    @attach_perk(p.AP_TENCH_STUDIES, p.WrapperIndices.ApTenchStudies.BATTLE_XP, value_description="xp gained")
     def _calculate_xp_from_enemy(enemy: Combatant) -> int:
         return round((enemy.max_hp / 2.75) * ((enemy.strength + enemy.acc) / 2))
 
@@ -470,7 +466,7 @@ class Player(Combatant):
         amount = self._calculate_xp_from_enemy(enemy)
         self._gain_xp(amount)
 
-    @attach_perk(AP_TENCH_STUDIES, WrapperIndices.ApTenchStudies.OTHER_XP, value_description="xp gained")
+    @attach_perk(p.AP_TENCH_STUDIES, p.WrapperIndices.ApTenchStudies.OTHER_XP, value_description="xp gained")
     def _calculate_xp_other(self, amount: int) -> int:
         return amount
 
@@ -479,7 +475,7 @@ class Player(Combatant):
         self._gain_xp(amount)
 
     def _gain_xp(self, amount: int) -> None:
-        play_sound(XP)
+        play_sound(a.XP)
         self.xp += amount
         print_and_sleep(cyan(f"You gained {amount} XP!"), 1)
 
@@ -487,7 +483,7 @@ class Player(Combatant):
         while self.xp >= self.xp_needed:
             self.level_up()
 
-    @attach_perk(TENCH_GENES, WrapperIndices.TenchGenes.SURVIVAL, value_description="illness survival chance")
+    @attach_perk(p.TENCH_GENES, p.WrapperIndices.TenchGenes.SURVIVAL, value_description="illness survival chance")
     def get_illness_survival_probability(self) -> float:
         return 0.0
 
@@ -499,11 +495,11 @@ class Player(Combatant):
         self.coins += cash_reward
         self.games_played = 0
 
-        if perk_is_active(AMBERJACKED):
+        if perk_is_active(p.AMBERJACKED):
             if self.strength < 1.25:
                 self.gain_strength(self.strength * 0.03)
 
-        if perk_is_active(CASTING_RANGE):
+        if perk_is_active(p.CASTING_RANGE):
             if self.acc < 1.15:
                 self.gain_accuracy(self.acc * 0.015)
 
@@ -528,7 +524,7 @@ class Player(Combatant):
                 self.illness_death_lvl = None
 
     def apply_death_penalties(self) -> None:
-        self.coins = round(self.coins * 0.25) if perk_is_active(WALLET_CHAIN) else 0  # TODO use the framework for this
+        self.coins = round(self.coins * 0.25) if perk_is_active(p.WALLET_CHAIN) else 0  # TODO use the framework for this
         self.items = item_defaults()
         self.weapon_dict = build_weapon_defaults(self.build)
         if self.weapon_dict:
@@ -558,8 +554,8 @@ class Player(Combatant):
 
     def take_damage(self, damage: int, other: Combatant) -> int:
         if damage >= self.hp:
-            if perk_is_active(SOLOMON_TRAIN) and random.random() < 0.15:
-                play_sound(RIFLE)
+            if perk_is_active(p.SOLOMON_TRAIN) and random.random() < 0.15:
+                play_sound(a.RIFLE)
                 print_and_sleep(purple("You were saved by Solomon Train!"), 1)
                 return other.take_damage(other.hp, other)
             elif self.cheat_death_enabled:
@@ -571,7 +567,7 @@ class Player(Combatant):
     def _subscribe_listeners(self):
         @subscribe_function(HitEvent)
         def handle_hit(event: HitEvent):
-            if event.weapon_type == MELEE and perk_is_active(VAMPIRIC_SPERM):
+            if event.weapon_type == MELEE and perk_is_active(p.VAMPIRIC_SPERM):
                 if self.hp < self.max_hp:
                     gain = min(3, self.max_hp - self.hp)
                     self.gain_hp(gain)
