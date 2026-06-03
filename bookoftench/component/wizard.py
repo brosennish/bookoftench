@@ -26,7 +26,7 @@ class WizardOpen(GatekeepingComponent):
         super().__init__(game_state, decision_function=lambda: game_state.wizard_is_open,
                          accept_component=WizardBouncer,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("The wizard is nowhere to be found.\n"), 1.5)))
+                             blue("The Wizard is nowhere to be found.\n"), 1.5)))
 
 # ================================================================================================
 
