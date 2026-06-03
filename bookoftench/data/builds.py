@@ -3,7 +3,8 @@ from bookoftench.data import items as i
 from bookoftench.data import perks as p
 from bookoftench.data import weapons as w
 
-# Constants (9)
+# ================================================================================================
+
 BRO = "Bro"
 CAT_BURGLAR = "Cat Burglar"
 COWARD = "Coward"
@@ -15,6 +16,8 @@ MERCENARY = "Mercenary"
 RANDOM = "Random"
 SHOPAHOLIC = "Shopaholic"
 TENCH = "Tench"
+
+# ================================================================================================
 
 Builds = [
     {'name': DENNY, 'lives': 2, 'hp': 100, 'str': 1, 'acc': 1, 'coins': 25,
