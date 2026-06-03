@@ -17,6 +17,7 @@ from bookoftench.model.trait import Trait
 from bookoftench.ui import red, yellow, color_text, purple, cyan, dim, green
 from bookoftench.util import print_and_sleep
 
+# ================================================================================================
 
 @dataclass
 class Buyable:
@@ -35,6 +36,7 @@ class Buyable:
         init_fields = {f.name for f in fields(cls) if f.init}
         return cls(**{k: v for k, v in data.items() if k in init_fields})
 
+# ================================================================================================
 
 @dataclass
 class WeaponBase(ABC):
@@ -101,6 +103,7 @@ class WeaponBase(ABC):
     def get_blind_turns(self) -> int:
         pass
 
+# ================================================================================================
 
 @dataclass
 class DisplayableText:
@@ -111,6 +114,7 @@ class DisplayableText:
     def display(self) -> None:
         print_and_sleep(color_text(self.color, self.text) if self.color is not None else self.text, seconds=self.sleep)
 
+# ================================================================================================
 
 @dataclass
 class RandomDisplayableText:
@@ -128,6 +132,7 @@ class RandomDisplayableText:
             dialogue=[DisplayableText(**d) for d in data['dialogue']],
         )
 
+# ================================================================================================
 
 @dataclass
 class NPC:
@@ -151,6 +156,7 @@ class NPC:
             data['random_dialogue'] = [RandomDisplayableText.from_dict(d) for d in data['random_dialogue']]
         return cls(**data)
 
+# ================================================================================================
 
 @dataclass
 class Combatant(ABC):
@@ -193,11 +199,7 @@ class Combatant(ABC):
                 print_and_sleep(purple("Sledge Hammond took steroids and restored 5 HP!"), 1)
         return damage
 
-    def reset_blindness(self) -> None:
-        self.blind: bool = False
-        self.blinded_by: str = ''
-        self.blind_effect: float = 0.0
-        self.blind_turns: int = 0
+# ================================================================================================
 
     def calculate_accuracy(self) -> float:
         base = self.current_weapon.get_accuracy()
@@ -209,9 +211,6 @@ class Combatant(ABC):
             return accuracy * (1 - self.blind_effect)
         return accuracy
 
-    def get_crit_chance(self) -> float:
-        return self.current_weapon.crit
-
     def handle_miss(self) -> None:
         play_sound(WHIFF)
         if isinstance(self, NPC):
@@ -219,6 +218,11 @@ class Combatant(ABC):
         else:
             print_and_sleep(yellow(f"You missed!"), 1)
             event_logger.log_event(MissEvent())
+
+# ================================================================================================
+
+    def get_crit_chance(self) -> float:
+        return self.current_weapon.crit
 
     def handle_crit(self, is_crit: bool) -> None:
         if not is_crit:
@@ -228,9 +232,19 @@ class Combatant(ABC):
         if not isinstance(self, NPC):
             event_logger.log_event(CritEvent())
 
+# ================================================================================================
+
     @abstractmethod
     def handle_broken_weapon(self) -> None:
         pass
+
+# ================================================================================================
+
+    def reset_blindness(self) -> None:
+        self.blind: bool = False
+        self.blinded_by: str = ''
+        self.blind_effect: float = 0.0
+        self.blind_turns: int = 0
 
     def set_blind_effect(self, blinded_by: str, blind_effect: float, blind_turns: int) -> None:
         self.blind = True
@@ -252,6 +266,8 @@ class Combatant(ABC):
                     purple(
                         f"{prefix} blinded by {self.current_weapon.name}. Accuracy down {round(blind_effect * 100)}% for "
                         f"{blind_turns} turns"), 1)
+
+# ================================================================================================
 
     def handle_hit(self, other: "Combatant") -> None:
         self.current_weapon.use()
@@ -289,6 +305,8 @@ class Combatant(ABC):
             print_and_sleep(yellow(f"{self.current_weapon.name} broke!"), 1)
             self.handle_broken_weapon()
 
+# ================================================================================================
+
     def attack(self, other: "Combatant") -> None:
         if random.random() > self.calculate_accuracy():
             self.handle_miss()
@@ -299,6 +317,8 @@ class Combatant(ABC):
         if not isinstance(other, NPC):
             if self.is_alive() and self.trait:
                 self.handle_traits(other)
+
+# ================================================================================================
 
     def handle_traits(self, other: "Combatant") -> None:
         time = 1

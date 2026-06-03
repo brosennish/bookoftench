@@ -16,6 +16,7 @@ from bookoftench.model.util import display_wizard_header
 from bookoftench.ui import blue, yellow
 from bookoftench.util import print_and_sleep
 
+# ================================================================================================
 
 @register_component(WIZARD)
 class WizardBouncer(GatekeepingComponent):
@@ -26,6 +27,7 @@ class WizardBouncer(GatekeepingComponent):
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("Come back when you have 30 of coin!\nI gotta take a wiz anyway."), 1.5)))
 
+# ================================================================================================
 
 class WizardSleeping(GatekeepingComponent):
     def __init__(self, game_state: GameState):
@@ -34,6 +36,7 @@ class WizardSleeping(GatekeepingComponent):
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("The Wizard sleeps at night."), 1.5)))
 
+# ================================================================================================
 
 class WizardComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -74,6 +77,8 @@ class WizardComponent(LabeledSelectionComponent):
         )
         for component in self.selection_components:
             component.display_options()
+
+    # ================================================================================================
 
     @staticmethod
     def _make_purchase_component(spell: Spell) -> type[Component]:

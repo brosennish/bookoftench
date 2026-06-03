@@ -13,10 +13,12 @@ from bookoftench.persistence import SaveSlot, load_save_slots
 from bookoftench.ui import blue, yellow
 from bookoftench.util import print_and_sleep
 
+# ================================================================================================
 
 def _your_funeral():
     print_and_sleep(blue("Your funeral..."), 1)
 
+# ================================================================================================
 
 class SavedGameInteractingComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState, action: Callable[[SaveSlot], type[Component]]):
@@ -26,6 +28,7 @@ class SavedGameInteractingComponent(LabeledSelectionComponent):
                              action(slot))
             for slot in load_save_slots()], quittable=True)
 
+# ================================================================================================
 
 @register_component(SAVE_GAME)
 class SaveGame(SavedGameInteractingComponent):
@@ -47,12 +50,14 @@ class SaveGame(SavedGameInteractingComponent):
 
         return OverwriteCheck
 
+# ================================================================================================
 
 class SaveGameDecision(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, query="Would you like to save the game?",
                          yes_component=SaveGame, no_component=functional_component()(_your_funeral))
 
+# ================================================================================================
 
 @subscribe_listener(SaveGameDecisionTriggerEvent)
 class SaveGameDecisionListener(Listener):
@@ -60,6 +65,7 @@ class SaveGameDecisionListener(Listener):
     def handle_event(event: SaveGameDecisionTriggerEvent) -> None:
         SaveGameDecision(event.game_state).run()
 
+# ================================================================================================
 
 @register_component(LOAD_GAME)
 class LoadGame(SavedGameInteractingComponent):

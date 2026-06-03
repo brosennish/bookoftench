@@ -14,6 +14,7 @@ from bookoftench.model.util import display_game_stats
 from bookoftench.ui import red, green
 from bookoftench.util import print_and_sleep, safe_input
 
+# ================================================================================================
 
 class InitGame(GatekeepingComponent):
     def __init__(self, _: GameState = None):
@@ -118,7 +119,7 @@ class Tutorial(TextDisplayingComponent):
         super().__init__(game_state,
                          next_component=Intro,
                          display_callback=lambda _: print_and_sleep("""
-BOOK OF TENCH - OVERVIEW
+BOOK OF TENCH - GENERAL OVERVIEW 
 
     MISSION
     - Your mission is to find and rescue Chula

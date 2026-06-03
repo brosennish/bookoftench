@@ -15,6 +15,9 @@ from bookoftench.model.util import display_hospital_header
 from bookoftench.ui import blue, cyan, yellow
 from bookoftench.util import print_and_sleep
 
+# ================================================================================================
+
+# --- check if hospital is open ---
 
 @register_component(HOSPITAL)
 class HospitalOpen(GatekeepingComponent):
@@ -24,6 +27,9 @@ class HospitalOpen(GatekeepingComponent):
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("The hospital is closed due to pending litigation.\n"), 1.5)))
 
+# ================================================================================================
+
+# --- check if player is sick --- 
 
 class HospitalBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
@@ -32,6 +38,7 @@ class HospitalBouncer(GatekeepingComponent):
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("Come back when you have something we can make money from.\n"), 1.5)))
 
+# ================================================================================================
 
 class HospitalComponent(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
@@ -58,6 +65,7 @@ class HospitalComponent(BinarySelectionComponent):
         self.exit_hospital = True
         print_and_sleep(blue("You'll be back!"), 1)
 
+# ================================================================================================
 
 @functional_component(state_dependent=True)
 def treatment_component(game_state: GameState) -> None:

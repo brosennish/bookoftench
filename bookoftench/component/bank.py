@@ -13,10 +13,12 @@ from bookoftench.model.util import display_bank_balance
 from bookoftench.ui import blue, yellow
 from bookoftench.util import print_and_sleep, safe_input
 
+# ================================================================================================
 
 def _very_well():
     print_and_sleep(blue("Very well..."), 1)
 
+# ================================================================================================
 
 class BankComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState, allow_deposit=True):
@@ -47,6 +49,8 @@ class BankComponent(LabeledSelectionComponent):
                             "We do not accept deposits between level-ups.\n"
                             "Withdrawals will incur a 10% fee.", 2)
 
+# ================================================================================================
+
     @staticmethod
     @functional_component(state_dependent=True)
     def _make_deposit(game_state: GameState):
@@ -60,6 +64,8 @@ class BankComponent(LabeledSelectionComponent):
                 print_and_sleep(yellow("You don't have that many coins."), 1)
         else:
             print_and_sleep(yellow("Invalid choice."))
+
+# ================================================================================================
 
     @staticmethod
     def _make_withdrawal(incur_fee=False) -> type[Component]:
@@ -77,6 +83,8 @@ class BankComponent(LabeledSelectionComponent):
 
         return component
 
+# ================================================================================================
+
     def _return(self):  # TODO stop duplicating this pattern
         _very_well()
         self.leave_bank = True
@@ -84,12 +92,14 @@ class BankComponent(LabeledSelectionComponent):
     def can_exit(self) -> bool:
         return self.leave_bank
 
+# ================================================================================================
 
 class BankVisitDecision(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, query="Would you like to visit the bank?",
                          yes_component=BankComponent, no_component=functional_component()(_very_well))
 
+# ================================================================================================
 
 @register_component(BANK)
 class WithdrawalOnlyBank(BankComponent):

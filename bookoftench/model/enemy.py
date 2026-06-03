@@ -19,9 +19,12 @@ from .perk import attach_perk
 from .trait import Trait
 from .weapon import Weapon, load_weapon, load_weapons
 
+# ================================================================================================
+
 # Constants
 ENEMY_SWITCH_WEAPON_CHANCE = 0.2
 
+# ================================================================================================
 
 @dataclass
 class Enemy(Combatant, NPC):
@@ -94,6 +97,7 @@ def load_enemy(name: str) -> Enemy:
 def load_enemies(restriction: List[str] = None) -> List[Enemy]:
     return [Enemy(**d) for d in Enemies if restriction is None or d['name'] in restriction]
 
+# ================================================================================================
 
 @dataclass
 class Boss(Enemy):
@@ -121,7 +125,6 @@ class Boss(Enemy):
                 print_and_sleep(purple(f"Mama Gator attacked you for {bite} damage!"), 2)
                 other.take_damage(bite, self)
 
-
 def load_boss(name: str) -> Boss:
     matches = [Boss.from_dict(d) for d in Bosses if d['name'] == name]
     if len(matches) == 0:
@@ -130,6 +133,8 @@ def load_boss(name: str) -> Boss:
 
 def load_final_boss() -> Boss:
     return Boss.from_dict(Final_Boss)
+
+# ================================================================================================
 
 @dataclass
 class SpecialBoss(Enemy):

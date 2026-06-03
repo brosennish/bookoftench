@@ -13,6 +13,7 @@ from bookoftench.model.player import Player
 from bookoftench.ui import cyan, orange, dim, purple, green
 from bookoftench.util import print_and_sleep
 
+# ================================================================================================
 
 @dataclass
 class Rite(Buyable):
@@ -63,6 +64,7 @@ class Rite(Buyable):
             player.gain_hp(gain)
             print_and_sleep(f"You restored {green(player.hp - original_hp)} hp.", 2)
 
+# ================================================================================================
 
 def load_rites(player: Player) -> List[Rite]:
     correct = Rites.copy()

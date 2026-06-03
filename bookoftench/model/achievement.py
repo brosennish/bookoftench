@@ -16,6 +16,7 @@ from bookoftench.model.player import Player
 from bookoftench.ui import orange
 from bookoftench.util import print_and_sleep
 
+# ================================================================================================
 
 @dataclass
 class Achievement:
@@ -54,6 +55,7 @@ class Achievement:
                                f"{f"\nReward: {reward_str}" if len(reward_str) > 0 else ''}"), 2)
         reward_callback()
 
+# ================================================================================================
 
 class AchievementEvent(Event):
     def __init__(self, achievement: Achievement):
@@ -86,16 +88,6 @@ class CoffeeAchievement(Achievement):
 
 
 @dataclass
-class HohkkenAchievement(Achievement):
-
-    def __post_init__(self):
-        @subscribe_function(DefeatHohkkenEvent, name_override=self.id)
-        def handle_event(_: Event):
-            if event_logger.get_count(self.event_type) == self.event_threshold:
-                event_logger.log_event(AchievementEvent(self))
-
-
-@dataclass
 class DiscoveryAchievement(Achievement):
 
     def __post_init__(self):
@@ -110,6 +102,16 @@ class FleeAchievement(Achievement):
 
     def __post_init__(self):
         @subscribe_function(FleeEvent, name_override=self.id)
+        def handle_event(_: Event):
+            if event_logger.get_count(self.event_type) == self.event_threshold:
+                event_logger.log_event(AchievementEvent(self))
+
+
+@dataclass
+class HohkkenAchievement(Achievement):
+
+    def __post_init__(self):
+        @subscribe_function(DefeatHohkkenEvent, name_override=self.id)
         def handle_event(_: Event):
             if event_logger.get_count(self.event_type) == self.event_threshold:
                 event_logger.log_event(AchievementEvent(self))
@@ -136,16 +138,6 @@ class LevelUpAchievement(Achievement):
 
 
 @dataclass
-class TreatmentEventAchievement(Achievement):
-
-    def __post_init__(self):
-        @subscribe_function(TreatmentEvent, name_override=self.id)
-        def handle_event(_: Event):
-            if event_logger.get_count(self.event_type) == self.event_threshold:
-                event_logger.log_event(AchievementEvent(self))
-
-
-@dataclass
 class StealingAchievement(Achievement):
 
     def __post_init__(self):
@@ -155,13 +147,27 @@ class StealingAchievement(Achievement):
                 event_logger.log_event(AchievementEvent(self))
 
 
+@dataclass
+class TreatmentEventAchievement(Achievement):
+
+    def __post_init__(self):
+        @subscribe_function(TreatmentEvent, name_override=self.id)
+        def handle_event(_: Event):
+            if event_logger.get_count(self.event_type) == self.event_threshold:
+                event_logger.log_event(AchievementEvent(self))
+
+
+# ================================================================================================
+
 _ACHIEVEMENTS: Dict[str, Achievement] = {}
 
+# ================================================================================================
 
 def set_achievement_cache(achievement_cache: Dict[str, Achievement]):
     global _ACHIEVEMENTS
     _ACHIEVEMENTS = achievement_cache
 
+# ================================================================================================
 
 def load_achievements() -> List[Achievement]:
     global _ACHIEVEMENTS

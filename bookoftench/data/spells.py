@@ -3,10 +3,14 @@ ITEM_MAGIC = "Item Magic"
 WEAPON = 'weapon'
 WEAPON_MAGIC = "Weapon Magic"
 
+# ================================================================================================
+
 Spells = [
     {'name': ITEM_MAGIC, 'description': 'Conjure a random item', 'cost': 30, 'type': ITEM},
     {'name': WEAPON_MAGIC, 'description': 'Conjure a random weapon', 'cost': 60, 'type': WEAPON},
 ]
+
+# ================================================================================================
 
 Wizard_Lines = [
     "Do you like my hat? It's 10,000 years old.",

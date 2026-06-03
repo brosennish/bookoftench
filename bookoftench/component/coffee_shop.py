@@ -18,6 +18,9 @@ from bookoftench.model.util import display_coffee_header
 from bookoftench.ui import blue, yellow, green, red
 from bookoftench.util import print_and_sleep
 
+# ================================================================================================
+
+# --- check if coughy is alive ---
 
 @register_component(COFFEE_SHOP)
 class CoffeeOpen(GatekeepingComponent):
@@ -27,6 +30,9 @@ class CoffeeOpen(GatekeepingComponent):
                          deny_component=functional_component()(lambda: print_and_sleep(
                              red("Coughy is dead.\n"), 1.5)))
 
+# ================================================================================================
+
+# --- check if coughy is trying to sleep ---
 
 class CoffeeSleeping(GatekeepingComponent):
     def __init__(self, game_state: GameState):
@@ -35,6 +41,9 @@ class CoffeeSleeping(GatekeepingComponent):
                          deny_component=functional_component()(lambda: print_and_sleep(
                              red(f"Coughy is trying to sleep.\n"), 1.5)))
 
+# ================================================================================================
+
+# --- check if player is sick ---
 
 class CoffeeBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
@@ -43,7 +52,7 @@ class CoffeeBouncer(GatekeepingComponent):
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue(f"Get {yellow('*cough cough*')} {blue('lost. No sickos allowed.')}\n"), 1.5)))
 
-
+# ================================================================================================
 
 class CoffeeShopComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -93,6 +102,8 @@ class CoffeeShopComponent(LabeledSelectionComponent):
         for component in self.selection_components:
             component.display_options()
 
+# ================================================================================================
+
     @staticmethod
     def _make_purchase_component(coffee_item: CoffeeItem) -> type[Component]:
         @functional_component(state_dependent=True)
@@ -109,6 +120,7 @@ class CoffeeShopComponent(LabeledSelectionComponent):
 
         return purchase_component
 
+# ================================================================================================
 
 def apply_coffee_effect(item: CoffeeItem, player: Player):
     original_hp = player.hp

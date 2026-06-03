@@ -13,9 +13,10 @@ from bookoftench.util import print_and_sleep
 from .discoverable import rarity_color
 from .game_state import GameState
 from ..data.areas import CAVE, CITY, FOREST, SWAMP
-from ..data.enemies import CONTAGIOUS, BOSS, Special_Bosses, SPECIAL_BOSS, FINAL_BOSS, NORMAL
+from ..data.enemies import CONTAGIOUS, BOSS, SPECIAL_BOSS, FINAL_BOSS, NORMAL
 from ..data.enviroment import DAYTIME
 
+# ================================================================================================
 
 # --- HP COLOR CODING ---
 def p_color(hp: int, max_hp: int) -> Callable[[str], str]:
@@ -28,6 +29,7 @@ def p_color(hp: int, max_hp: int) -> Callable[[str], str]:
     else:
         return red
 
+# ================================================================================================
 
 def display_coffee_header(game_state: GameState) -> None:
     player = game_state.player
@@ -40,6 +42,7 @@ def display_coffee_header(game_state: GameState) -> None:
         "\nMenu:"
     ])}")
 
+# ================================================================================================
 
 def display_blacksmith_header(game_state: GameState) -> None:
     player = game_state.player
@@ -51,6 +54,7 @@ def display_blacksmith_header(game_state: GameState) -> None:
         f"Special (∞): {orange(f"400")}\n",
     ])}\n")
 
+# ================================================================================================
 
 def display_occultist_header(game_state: GameState) -> None:
     player = game_state.player
@@ -60,6 +64,7 @@ def display_occultist_header(game_state: GameState) -> None:
         f"Lives: {yellow(f"{player.lives}")}\n",
     ])}")
 
+# ================================================================================================
 
 def display_wizard_header(game_state: GameState) -> None:
     player = game_state.player
@@ -70,6 +75,7 @@ def display_wizard_header(game_state: GameState) -> None:
         f"Weapons: {cyan(f"{len(player.get_weapons())}/{player.max_weapons}")}"
     ])}\n")
 
+# ================================================================================================
 
 def display_shaman_header(game_state: GameState) -> None:
     player = game_state.player
@@ -90,6 +96,7 @@ def display_shaman_header(game_state: GameState) -> None:
 
     print(player_status, "\n", status_line_two, "\n")
 
+# ================================================================================================
 
 def display_hospital_header(game_state: GameState) -> None:
     player = game_state.player
@@ -102,6 +109,7 @@ def display_hospital_header(game_state: GameState) -> None:
     ])}")
     print_and_sleep(f"Chance of Success: {cyan(f'{int(player.illness.success_rate * 100)}%')}\n")
 
+# ================================================================================================
 
 def display_shop_header(game_state: GameState):
     player = game_state.player
@@ -115,6 +123,7 @@ def display_shop_header(game_state: GameState):
         ])
     )
 
+# ================================================================================================
 
 def get_player_status_view(game_state: GameState) -> str:
     player = game_state.player
@@ -155,6 +164,7 @@ def get_player_status_view(game_state: GameState) -> str:
     else:
         return player_status
 
+# ================================================================================================
 
 def get_battle_status_view(game_state: GameState) -> str:
     player: Player = game_state.player
@@ -173,12 +183,14 @@ def get_battle_status_view(game_state: GameState) -> str:
 
     return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, enemy_name_color)}\n"
 
+# ================================================================================================
 
 def display_bank_balance(game_state: GameState) -> None:
     print_and_sleep(f"{dim(' | ').join([
         f"Player: {green(f"{game_state.player.coins}")}",
         f"Bank: {green(f"{game_state.bank.balance}")}"])}\n")
 
+# ================================================================================================
 
 def display_player_attributes(game_state: GameState) -> None:
     player: Player = game_state.player
@@ -187,6 +199,7 @@ def display_player_attributes(game_state: GameState) -> None:
         f"\n{dim('Accuracy |')} {yellow(round(player.acc, 2))}"
         f"\n{dim('Luck     |')} {green(round(player.luck, 3))}\n")
 
+# ================================================================================================
 
 def display_game_stats(game_state: GameState) -> None:
     player = game_state.player
@@ -240,6 +253,7 @@ def display_game_stats(game_state: GameState) -> None:
 
     display_stat("Times Traveled", event_logger.get_count(EventType.TRAVEL), blue)
 
+# ================================================================================================
 
 def display_player_achievements(_: GameState) -> None:
     achievements = [a for a in load_achievements() if a.active]
@@ -250,6 +264,7 @@ def display_player_achievements(_: GameState) -> None:
         for ach in sorted(achievements, key=lambda a: a.name):
             print(orange(f"\n{ach.name} | {ach.description}"))
 
+# ================================================================================================
 
 def display_active_perks(game_state: GameState) -> None:
     active_perks = [p for p in load_perks() if p.active]
@@ -262,6 +277,7 @@ def display_active_perks(game_state: GameState) -> None:
         if perk_is_active(WENCH_LOCATION):
             print_and_sleep(f'Wench Location: {blue(game_state.wench_area.name)}')
 
+# ================================================================================================
 
 def display_encountered(game_state: GameState) -> None:
     encountered = game_state.encountered_enemies
@@ -294,11 +310,13 @@ def display_encountered(game_state: GameState) -> None:
         enemy = i["enemy"]
         display_encountered_enemy(enemy)
 
+# ================================================================================================
 
 def display_encountered_enemy(enemy):
     color = purple if enemy.type == NORMAL else red
     print_and_sleep(f"{color(f'{enemy.name}')}")
 
+# ================================================================================================
 
 def display_liberated(game_state: GameState) -> None:
     liberated = game_state.liberated_enemies
@@ -315,6 +333,7 @@ def display_liberated(game_state: GameState) -> None:
     else:
         print_and_sleep(yellow("Go liberate some enemies fool."), 1)
 
+# ================================================================================================
 
 def display_discoveries(game_state: GameState) -> None:
     discoveries = game_state.discoveries
@@ -329,6 +348,7 @@ def display_discoveries(game_state: GameState) -> None:
     else:
         print_and_sleep(yellow("Go make some discoveries fool."), 1)
 
+# ================================================================================================
 
 def get_battle_info_view(game_state: GameState) -> str:
     player: Player = game_state.player
@@ -369,14 +389,17 @@ def get_battle_info_view(game_state: GameState) -> str:
     return (f"{format_world_data()}\n{format_combatant_data(player, orange)}\n"
             f"{format_combatant_data(enemy, purple)}")
 
+# ================================================================================================
 
 def display_battle_info(game_state: GameState) -> None:
     print_and_sleep(get_battle_info_view(game_state))
 
+# ================================================================================================
 
 def display_active_perk_count() -> None:
     print_and_sleep(f"Perks {dim(f"({len(load_perks(lambda p: p.active))})")}")
 
+# ================================================================================================
 
 @attach_perks(USED_SNEAKERS, NEW_SNEAKERS, silent=True)
 def calculate_flee() -> float:

@@ -7,15 +7,24 @@ PHANTOM_HIM_SYNDROME = "Phantom Him Syndrome"
 RESTLESS_BUTT_SYNDROME = "Restless Butt Syndrome"
 INWARD_HAIR_GROWTH_DISORDER = "Inward Hair Growth Disorder"
 
+# ================================================================================================
+
 Illnesses = [
-    # --- Instant Death ---
+
+    # ============================
+    #        SUDDEN DEATH
+    # ============================
+
     {'name': LATE_ONSET_SIDS,
      'description': "Sudden infant death syndrome that occurs after infancy.",
      'levels_until_death': 0,
      'cost': 0,
      'success_rate': 0},
 
-    # --- Two Levels ---
+    # ============================
+    #         TWO LEVELS
+    # ============================
+
     {'name': PHANTOM_HIM_SYNDROME,
      'description': "A condition in which one eventually dies at the hands of a man only they can perceive.",
      'levels_until_death': 2,
@@ -34,7 +43,10 @@ Illnesses = [
      'cost': 95,
      'success_rate': 0.80},
 
-    # --- Three Levels ---
+    # ============================
+    #        THREE LEVELS
+    # ============================
+
     {'name': HERPES,
      'description': "It's not not herpes.",
      'levels_until_death': 3,

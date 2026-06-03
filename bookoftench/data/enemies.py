@@ -1,12 +1,15 @@
 from bookoftench.ui import Colors
 from . import audio, weapons as w
-from .audio import CRYPTO_THEME
+
+# ================================================================================================
 
 # Areas
 CAVE = "Cave"
 CITY = "City"
 FOREST = "Forest"
 SWAMP = "Swamp"
+
+# ================================================================================================
 
 # Names
 ANCIENT_MAN = "Ancient Man"
@@ -91,6 +94,8 @@ VAMPIRE_OVERLORD = "Vampire Overlord"
 VOODOO_PRIESTESS = "Voodoo Priestess"
 WENDIGO = "Wendigo"
 
+# ================================================================================================
+
 # Traits
 ACHILLES = "Achilles"
 BUTTERFINGERS = "Butterfingers"
@@ -107,15 +112,21 @@ PLANT = "Plant"
 PREPARED = "Prepared"
 WEREWOLF = "Werewolf"
 
+# ================================================================================================
+
 # Types
 BOSS = "boss"
 FINAL_BOSS = "final_boss"
 NORMAL = "normal"
 SPECIAL_BOSS = "special_boss"
 
+# ================================================================================================
+
 It_Its = [SEWER_GATOR, HOHKKEN, KNOBGOBLIN, GIANT_MUTANT_RAT, SENTIENT_ROBOT,
           TROLL, CYCLOPS, MINOTAUR, DEATH_WORM, SABERTOOTH_LIGER, WENDIGO, CENTAUR,
           SKUNK_APE, OGRE, HYDRA, ROUGAROU, HODAG]
+
+# ================================================================================================
 
 Traits = [
     {'name': ACHILLES, 'desc': 'Equips a Tench Cannon when HP falls below 25'}, 
@@ -134,10 +145,13 @@ Traits = [
     {'name': WEREWOLF, 'desc': 'Transforms under a full moon'}, 
 ]
 
+# ================================================================================================
+
 Enemies = [
-    # ========================
+
+    # ============================
     #        CITY ENEMIES
-    # ========================
+    # ============================
     # --- new ---
     {'name': CARD_JOCKEY, 'trait': '', 'illness': None, 'hp': 85, 'weapons': [w.SWITCHBLADE, w.POOL_CUE, w.PEPPER_SPRAY],
      'bounty': 150, 'coins': 85, 'type': NORMAL, 'flee': 1.10, 'strength': 0.85, 'acc': 1.05, 'areas': [CITY]},
@@ -180,9 +194,9 @@ Enemies = [
     {'name': THIEF, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.KNIFE, w.CROWBAR, w.PISTOL],
      'bounty': 165, 'coins': 80, 'type': NORMAL, 'flee': 1.00, 'strength': 0.95, 'acc': 1.03, 'areas': [CITY]},
 
-    # ========================
+    # ============================
     #       FOREST ENEMIES
-    # ========================
+    # ============================
     # --- new ---
     {'name': BIRDER, 'trait': '', 'illness': None, 'hp': 75, 'weapons': [w.TRIPOD, w.BINOCULARS, w.PEPPER_SPRAY],
      'bounty': 110, 'coins': 30, 'type': NORMAL, 'flee': 1.20, 'strength': 0.70, 'acc': 0.75, 'areas': [FOREST]},
@@ -213,9 +227,9 @@ Enemies = [
     {'name': POACHER, 'trait': '', 'illness': None, 'hp': 95, 'weapons': [w.CROSSBOW, w.MACHETE, w.KNIFE, w.COMPOUND_BOW],
      'bounty': 195, 'coins': 55, 'type': NORMAL, 'flee': 0.95, 'strength': 1, 'acc': 1.07, 'areas': [FOREST]},
 
-    # ========================
+    # ============================
     #        CAVE ENEMIES
-    # ========================
+    # ============================
     # --- new ---
     {'name': ARCHAEOLOGIST, 'trait': '', 'illness': None, 'hp': 80, 'weapons': [w.FLASHLIGHT, w.CHISEL, w.HARDCOVER_BOOK],
      'bounty': 120, 'coins': 55, 'type': NORMAL, 'flee': 1.15, 'strength': 0.85, 'acc': 0.85, 'areas': [CAVE]},
@@ -240,9 +254,9 @@ Enemies = [
     {'name': SPELUNKER, 'trait': '', 'illness': None, 'hp': 90, 'weapons': [w.FLASHLIGHT, w.PICKAXE, w.FLARE_GUN],
      'bounty': 125, 'coins': 40, 'type': NORMAL, 'flee': 1.10, 'strength': 1, 'acc': 1, 'areas': [CAVE]},
 
-    # ========================
+    # ============================
     #        SWAMP ENEMIES
-    # ========================
+    # ============================
     # --- new ---
     {'name': BONE_COLLECTOR, 'trait': '', 'illness': None, 'hp': 105, 'weapons': [w.BONE_SAW, w.BONE_CLUB, w.MEAT_CLEAVER],
      'bounty': 205, 'coins': 20, 'type': NORMAL, 'flee': 1.00, 'strength': 1.1, 'acc': 1, 'areas': [SWAMP]},
@@ -270,18 +284,13 @@ Enemies = [
      'bounty': 160, 'coins': 45, 'type': NORMAL, 'flee': 1.15, 'strength': 0.85, 'acc': 1.08, 'areas': [SWAMP]},
 ]
 
+# ================================================================================================
 
 Bosses = [
-    # ========================
-    #        AREA BOSSES
-    # ========================
-    {'name': SLEDGE_HAMMOND, 'hp': 250, 'coins': 100,
-     'weapons': [w.SLEDGEHAMMER, w.AXE, w.CHAINSAW, w.BRASS_KNUCKLES, w.INJECTION_NEEDLE],
-     'bounty': 0, 'type': BOSS, 'flee': 0.65, 'strength': 1.2, 'acc': 0.95, 'preamble': []},
 
-    {'name': THE_MAYOR, 'hp': 250, 'coins': 100,
-     'weapons': [w.PISTOL, w.SHOTGUN, w.REVOLVER, w.BRASS_KNUCKLES, w.BASEBALL_BAT],
-     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1.1, 'acc': 1.05, 'theme': audio.FINAL_BOSS_THEME},
+    # ============================
+    #        AREA BOSSES
+    # ============================
 
     {'name': BAYOU_BILL, 'hp': 250, 'coins': 100,
      'weapons': [w.MACHETE, w.SLEDGEHAMMER, w.SHOTGUN, w.CHAINSAW, w.FROG_GIG],
@@ -315,6 +324,19 @@ Bosses = [
          'sleep': 4}
     ]},
 
+    {'name': SLEDGE_HAMMOND, 'hp': 250, 'coins': 100,
+     'weapons': [w.SLEDGEHAMMER, w.AXE, w.CHAINSAW, w.BRASS_KNUCKLES, w.INJECTION_NEEDLE],
+     'bounty': 0, 'type': BOSS, 'flee': 0.65, 'strength': 1.2, 'acc': 0.95, 'preamble': []},
+
+    {'name': THE_MAYOR, 'hp': 250, 'coins': 100,
+     'weapons': [w.PISTOL, w.SHOTGUN, w.REVOLVER, w.BRASS_KNUCKLES, w.BASEBALL_BAT],
+     'bounty': 0, 'type': BOSS, 'flee': 1, 'strength': 1.1, 'acc': 1.05, 'theme': audio.FINAL_BOSS_THEME},
+
+
+    # ============================
+    #          HOHKKEN
+    # ============================
+
     {'name': HOHKKEN, 'hp': 250, 'coins': 0,
      'weapons': [w.TENTACLES, w.BEAK],
      'bounty': 0, 'type': BOSS, 'flee': 0.80, 'strength': 1, 'acc': 1,
@@ -322,7 +344,9 @@ Bosses = [
 
 ]
 
-    # ------ Special Bosses ------
+# ================================================================================================
+
+    # ------ Special Bosses by Area ------
 
 Cave_Special_Bosses = [
     CYCLOPS, DEATH_WORM, MINOTAUR, SABERTOOTH_LIGER, TROLL]
@@ -336,10 +360,13 @@ Forest_Special_Bosses = [
 Swamp_Special_Bosses = [
     HODAG, HYDRA, OGRE, ROUGAROU, SKUNK_APE]
 
+# ================================================================================================
 
 Special_Bosses = [
 
-    # --- Cave ---
+    # ============================
+    #           CAVE
+    # ============================
 
     {'name': CYCLOPS, 'hp': 200, 'coins': 35, 'trait': ORACLE,
      'weapons': [w.BARE_HANDS, w.TORCH_CLUB],
@@ -366,7 +393,9 @@ Special_Bosses = [
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1, 'acc': 1,
      },
 
-    # --- City ---
+    # ============================
+    #            CITY
+    # ============================
 
     {'name': GIANT_MUTANT_RAT, 'hp': 170, 'coins': 25, 'trait': CONTAGIOUS,
      'weapons': [w.CLAWS, w.FANGS],
@@ -393,7 +422,9 @@ Special_Bosses = [
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.75, 'strength': 1.1, 'acc': 1
     },
 
-    # --- Forest ---
+    # ============================
+    #           FOREST
+    # ============================
 
     {'name': CENTAUR, 'hp': 225, 'coins': 0, 'trait': None,
      'weapons': [w.CLAWS],
@@ -430,7 +461,9 @@ Special_Bosses = [
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1,
      },
 
-    # --- Swamp ---
+    # ============================
+    #           SWAMP
+    # ============================
 
     {'name': HODAG, 'hp': 220, 'coins': 0, 'trait': None,
      'weapons': [w.CLAWS, w.FANGS],
@@ -459,10 +492,11 @@ Special_Bosses = [
 
 ]
 
+# ================================================================================================
+
 # ========================
 #        FINAL BOSS
 # ========================
-
 
 _biltmore_preamble_lines = """You look through the corpse's phone...
 Its last location was the Biltmore Estate...
@@ -489,13 +523,96 @@ Final_Boss = {
             {'text': "Let me just place a quick phone call...", 'color': Colors.RED, 'sleep': 2},
         ]}]}
 
+
+# ================================================================================================
+
 # ========================
 #        ENEMY LINES
 # ========================
 
 Enemy_Lines = {
 
-    # ===== CITY (existing + new empty) =====
+    # ============================
+    #           CAVE
+    # ============================
+
+    ARCHAEOLOGIST: [
+        "Ancient people are like us but dead.",
+        "When the institute slashed my pay, I had to resort to bounty hunting.",
+        "It will be strange putting something into the ground rather than carefully exhuming it."
+    ],
+
+    EXPLORER: [
+        "There's always more holes to explore.",
+        "I explored my first hole the moment I was born. I've been hooked ever since.",
+        "Have you explored the ways and the rules of the world? I keep putting it off...",
+        "I saw you on a wanted poster and wish to explore the collection of your bounty.",
+        "I encountered a mole man in a hole. Impossible to understand, but a remarkable specimen nonetheless.",
+    ],
+
+    FUGITIVE: [
+        "I didn't do it, I swear!",
+        "Guilty until proven innocent. The law is different in Shebokken.",
+        "All I did was steal a frozen waffle.",
+        "Did you know there's more than one of Officer Hohkken?",
+        "He might look like a donut-eating slob of a cop. But Officer Hohkken has a dark side.",
+        "I'm already facing life in Shebokken's underground jail, might as well collect your bounty.",
+    ],
+
+    PROSPECTOR: [
+        "I found gold the other day. Well, I think it's gold.",
+        "Why is that creek over there full of human teeth?",
+        "Gold is cool, but I prefer mold. Can't eat gold. Well, you can, but you know what I mean.",
+    ],
+
+    SURVIVOR: [
+        "I was attacked by some sort of human-like cave monster. It kept talking about God.",
+        "A mole person tried to drown me in a puddle. Holy moley, am I right?",
+        "I've seen things you couldn't dream of, and they all tried to kill me.",
+    ],
+
+    ANCIENT_MAN: [
+        "A rich man hired me to kill you. While I don't need money, I do need blood to remain.",
+        "I know how the Pyramids were built. I was there.",
+        "I've never left this cave for fear of falling off the edge of the Earth.",
+        "Is Hammurabi still in power?",
+        "My liberation is imminent, but yours is... what's more imminent than imminent?",
+        "Plato autographed my favorite rock. It's in my rockpile.",
+        "The Hindustan Times underestimated my age by a few thousand years.",
+    ],
+
+    MINER: [
+        "All of my friends worked in these mines. They're all dead now. Maybe I should get a different job?",
+        "I nearly had a heart attack when I heard a man talking in the mine. Turns out it was just me, talking to myself.",
+        "I thought I found some coal a month ago... turns out poop looks a lot like coal in the pitch dark.",
+        "There was a bloody envelope full of cash and your picture in my mining helmet when I'd come to.",
+    ],
+
+    SPELUNKER: [
+        "A man paid me to kill you. I asked my mom if it's okay. She nodded absently while reading The Shebokken Times!",
+        "I got into this because of a video game... and now I'm in one! Oh my god... how do I go back!?",
+        "I haven't found anything, but my mom always says I'm the real treasure.",
+        "People think spelunking is just playing around in dark, wet holes.",
+    ],
+
+    MOLE_PERSON: [
+        "fircnosdnvkclgnsdksnlfdkdfmkmcyufgkuyfk",
+        "ihfedkjnefdnefidnifnidnuygfkuyfv",
+        "ioefhdfeiodnsjkgnfdkjneidsngilrjdlighjdlisfngfdi",
+        "orihgeoiwsifdjnwsietnvirodbrgnioevndoirnguyf",
+    ],
+
+    HUMANOID_CAVE_CREATURE: [
+        "God may be merciful... loving... but I am not God. I am not God.",
+        "I am one with God, because I am God. You are not God... you are not God.",
+        "Man pays. God accepts. Man pays.",
+        "You think you are holy... but you are not holy. Do you even live in a hole?",
+    ],
+
+    # ============================
+    #            CITY
+    # ============================
+
     CARD_JOCKEY: [
         "If I don't collect your bounty the goons at the casino are gonna cut off my jines.",
         "I used to work at the casino. That is, until they caught me rigging krill or cray for my friend.",
@@ -649,7 +766,10 @@ Enemy_Lines = {
         "I stole coin from an old lady today... or was that yesterday? Probably both.",
     ],
 
-    # ===== FOREST =====
+    # ============================
+    #           FOREST
+    # ============================
+
     BIGFOOT_IMPERSONATOR: [
         "What's a bigfoot?",
         "Who's bigfoot?",
@@ -747,81 +867,10 @@ Enemy_Lines = {
         "Tusks are sharp, but I'm the sharpest.",
     ],
 
-    # ===== CAVE =====
-    ARCHAEOLOGIST: [
-        "Ancient people are like us but dead.",
-        "When the institute slashed my pay, I had to resort to bounty hunting.",
-        "It will be strange putting something into the ground rather than carefully exhuming it."
-    ],
+    # ============================
+    #           SWAMP
+    # ============================
 
-    EXPLORER: [
-        "There's always more holes to explore.",
-        "I explored my first hole the moment I was born. I've been hooked ever since.",
-        "Have you explored the ways and the rules of the world? I keep putting it off...",
-        "I saw you on a wanted poster and wish to explore the collection of your bounty.",
-        "I encountered a mole man in a hole. Impossible to understand, but a remarkable specimen nonetheless.",
-    ],
-
-    FUGITIVE: [
-        "I didn't do it, I swear!",
-        "Guilty until proven innocent. The law is different in Shebokken.",
-        "All I did was steal a frozen waffle.",
-        "Did you know there's more than one of Officer Hohkken?",
-        "He might look like a donut-eating slob of a cop. But Officer Hohkken has a dark side.",
-        "I'm already facing life in Shebokken's underground jail, might as well collect your bounty.",
-    ],
-
-    PROSPECTOR: [
-        "I found gold the other day. Well, I think it's gold.",
-        "Why is that creek over there full of human teeth?",
-        "Gold is cool, but I prefer mold. Can't eat gold. Well, you can, but you know what I mean.",
-    ],
-
-    SURVIVOR: [
-        "I was attacked by some sort of human-like cave monster. It kept talking about God.",
-        "A mole person tried to drown me in a puddle. Holy moley, am I right?",
-        "I've seen things you couldn't dream of, and they all tried to kill me.",
-    ],
-
-    ANCIENT_MAN: [
-        "A rich man hired me to kill you. While I don't need money, I do need blood to remain.",
-        "I know how the Pyramids were built. I was there.",
-        "I've never left this cave for fear of falling off the edge of the Earth.",
-        "Is Hammurabi still in power?",
-        "My liberation is imminent, but yours is... what's more imminent than imminent?",
-        "Plato autographed my favorite rock. It's in my rockpile.",
-        "The Hindustan Times underestimated my age by a few thousand years.",
-    ],
-
-    MINER: [
-        "All of my friends worked in these mines. They're all dead now. Maybe I should get a different job?",
-        "I nearly had a heart attack when I heard a man talking in the mine. Turns out it was just me, talking to myself.",
-        "I thought I found some coal a month ago... turns out poop looks a lot like coal in the pitch dark.",
-        "There was a bloody envelope full of cash and your picture in my mining helmet when I'd come to.",
-    ],
-
-    SPELUNKER: [
-        "A man paid me to kill you. I asked my mom if it's okay. She nodded absently while reading The Shebokken Times!",
-        "I got into this because of a video game... and now I'm in one! Oh my god... how do I go back!?",
-        "I haven't found anything, but my mom always says I'm the real treasure.",
-        "People think spelunking is just playing around in dark, wet holes.",
-    ],
-
-    MOLE_PERSON: [
-        "fircnosdnvkclgnsdksnlfdkdfmkmcyufgkuyfk",
-        "ihfedkjnefdnefidnifnidnuygfkuyfv",
-        "ioefhdfeiodnsjkgnfdkjneidsngilrjdlighjdlisfngfdi",
-        "orihgeoiwsifdjnwsietnvirodbrgnioevndoirnguyf",
-    ],
-
-    HUMANOID_CAVE_CREATURE: [
-        "God may be merciful... loving... but I am not God. I am not God.",
-        "I am one with God, because I am God. You are not God... you are not God.",
-        "Man pays. God accepts. Man pays.",
-        "You think you are holy... but you are not holy. Do you even live in a hole?",
-    ],
-
-    # ===== SWAMP =====
     BONE_COLLECTOR: [
         "What do I do? Well, collect bones, of course!",
         "I have so many bones. Too many to count, bones.",
@@ -915,14 +964,15 @@ Enemy_Adjectives = [
     "Dastardly", "Degenerate",
     "Delirious", "Demented", "Deplorable",
     "Depraved", "Deranged", "Desperate",
-    "Detestable", "Diabolical", "Disgruntled", "Disillusioned",
+    "Detestable", "Diabolical", "Dirty", "Disgruntled", "Disillusioned",
     "Disfigured", "Disoriented", "Disturbed", "Drug-fueled",
-    "Drunken", "Dubious", "Evangelical", "Evil",
+    "Drunken", "Dubious", "Evangelical", "Evil", "Felonious",
     "Forgotten", "Godless", "Greasy", "Greedy", "Grotesque",
     "Hallucinatory", "Heartless",
     "Heinous", "Hollow", "Homicidal", "Hostile", "Hysterical",
     "Idolatrous", "Immoral", "Impotent",
-    "Inbred", "Insane", "Insecure", "Inside-out",
+    "Inbred", "Incestuous", "Inconsiderate",
+    "Insane", "Insecure", "Inside-out",
     "Malevolent", "Malicious",
     "Merciless", "Misguided", "Money-hungry", "Moralless",
     "Murderous", "Obscene", "Possessed", "Psychotic",
@@ -930,9 +980,9 @@ Enemy_Adjectives = [
     "Repugnant", "Repulsive", "Revolting",
     "Rude", "Ruthless", "Sadistic", "Savage",
     "Satanic", "Sexually-frustrated",
-    "Shallow", "Sinful", "Soulless",
-    "Tench-crazed", "Tench-eyed", "Typical",
-    "Uncool", "Unholy",
+    "Shallow", "Sinful", "Sloppy", "Soulless",
+    "Tench-crazed", "Tench-eyed", "Typical", "Unbaptized",
+    "Uncool", "Unforgivable", "Unholy",
     "Uninspired", "Unnatural", "Unstable", "Untethered",
     "Untrustworthy", "Vile", "Violent", "Wretched",
 ]

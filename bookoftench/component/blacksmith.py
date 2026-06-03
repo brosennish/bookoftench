@@ -18,8 +18,13 @@ from bookoftench.model.weapon import make_elite_weapon, load_weapon
 from bookoftench.ui import blue, yellow, cyan
 from bookoftench.util import print_and_sleep
 
+# ================================================================================================
 
 ELITE = "Elite"
+
+# ================================================================================================
+
+# --- Sledge only available during the daytime ---
 
 @register_component(BLACKSMITH)
 class BlacksmithSleeping(GatekeepingComponent):
@@ -29,6 +34,7 @@ class BlacksmithSleeping(GatekeepingComponent):
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("Sledge Jr. is resting his scaly muscles."), 1.5)))
 
+# ================================================================================================
 
 class BlacksmithComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -75,6 +81,8 @@ class BlacksmithComponent(LabeledSelectionComponent):
         for component in self.selection_components:
             component.display_options()
 
+# ================================================================================================
+
     @staticmethod
     def _make_purchase_component(weapon: PlayerWeapon) -> type[Component]:
         @functional_component(state_dependent=True)
@@ -110,6 +118,7 @@ class BlacksmithComponent(LabeledSelectionComponent):
 
         return purchase_component
 
+# ================================================================================================
 
 def forge_weapon(weapon: PlayerWeapon, game_state) -> None:
     player = game_state.player

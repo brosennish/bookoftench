@@ -10,12 +10,15 @@ from bookoftench.data.components import SHAMAN
 from bookoftench.data.enviroment import DAYTIME
 from bookoftench.data.rites import Shaman_Lines
 from bookoftench.model import GameState
-from bookoftench.model.events import ShamanEvent, TreatmentEvent
+from bookoftench.model.events import ShamanEvent
 from bookoftench.model.rite import Rite, load_rites
 from bookoftench.model.util import display_shaman_header
 from bookoftench.ui import blue, yellow
 from bookoftench.util import print_and_sleep
 
+# ================================================================================================
+
+# --- check if player can benefit from any of the shaman's offerings ---
 
 @register_component(SHAMAN)
 class ShamanBouncer(GatekeepingComponent):
@@ -27,6 +30,9 @@ class ShamanBouncer(GatekeepingComponent):
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("There is nothing the Shaman can do you for you at this time.\n"), 1.5)))
 
+# ================================================================================================
+
+# --- check if daytime ---
 
 class ShamanSleeping(GatekeepingComponent):
     def __init__(self, game_state: GameState):
@@ -35,6 +41,7 @@ class ShamanSleeping(GatekeepingComponent):
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("The Shaman sleeps at night.\n"), 1.5)))
 
+# ================================================================================================
 
 class ShamanComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -75,6 +82,8 @@ class ShamanComponent(LabeledSelectionComponent):
         )
         for component in self.selection_components:
             component.display_options()
+
+# ================================================================================================
 
     @staticmethod
     def _make_purchase_component(rite: Rite) -> type[Component]:

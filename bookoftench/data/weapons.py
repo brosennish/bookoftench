@@ -1,14 +1,14 @@
 import bookoftench.data.audio as audio
 
-# --------- #
-# Constants #
-# --------- #
+# ================================================================================================
 
 CAVE = "Cave"
 CITY = "City"
 FOREST = "Forest"
 SWAMP = "Swamp"
 NA = "NA" # Not applicable / can't be found or purchased
+
+# ================================================================================================
 
 # Names
 AXE = "Axe"
@@ -91,6 +91,7 @@ VOODOO_STAFF = "Voodoo Staff"
 WALKING_STICK = "Walking Stick"
 WOODEN_CLUB = "Wooden Club"
 
+# ================================================================================================
 
 # Types
 BLADED = 'bladed'
@@ -101,6 +102,7 @@ RANGED = 'ranged'
 SPECIAL = 'special'
 STUN = 'stun'
 
+# ================================================================================================
 
 Weapons = [
     # =====================================================

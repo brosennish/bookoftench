@@ -1,15 +1,21 @@
 from bookoftench.data.areas import CAVE, CITY, FOREST, SWAMP
 
+# ================================================================================================
+
 COMMON = "Common"
 UNCOMMON = "Uncommon"
 RARE = "Rare"
 LEGENDARY = "Legendary"
 MYTHIC = "Mythic"
 
-Search_Discoverables = [
-    # === COMMON === p/n/n
+# ================================================================================================
 
-    # --- common/Positive ---
+Search_Discoverables = [
+
+    # ============================
+    #       COMMON / POSITIVE
+    # ============================
+
     {"pre": "an", "name": "Abandoned Undergarments", "value": 5, "hp": 0, "rarity": COMMON,
      "areas": [CAVE, FOREST, SWAMP], "count": 0,
      "desc": "Someone forgot to dipe up..."},
@@ -64,11 +70,11 @@ Search_Discoverables = [
 
     {"pre": "some", "name": "Detritus", "value": 3, "hp": 0, "rarity": COMMON,
      "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,
-     "desc": "Could also be from the Wendigo."},
+     "desc": "Nothing special in this particular pile of detrite."},
 
     {"pre": "a", "name": "Dipstick", "value": 3, "hp": 0, "rarity": COMMON,
      "areas": [CITY], "count": 0,
-     "desc": "Use to check your current poop levels - doesn't work on cars."},
+     "desc": "Used to check your current poop levels - doesn't work on cars."},
 
     {"pre": "a", "name": "Disposable Camera", "value": 5, "hp": 0, "rarity": COMMON,
      "areas": [CITY, FOREST, SWAMP], "count": 0,
@@ -152,7 +158,7 @@ Search_Discoverables = [
 
     {"pre": "a", "name": "Pepperoni Salad", "value": 2, "hp": 7, "rarity": COMMON,
      "areas": [CITY], "count": 0,
-     "desc": "A cesar salad covered with delicious pepperonis."},
+     "desc": "A caesar salad covered with delicious pepperonis."},
 
     {"pre": "some", "name": "Remains", "value": 3, "hp": 0, "rarity": COMMON,
      "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,
@@ -194,7 +200,10 @@ Search_Discoverables = [
      "areas": [CITY, FOREST, SWAMP], "count": 0,
      "desc": "I must find a string ASAP."},
 
-    # --- common/Negative ---
+    # ============================
+    #       COMMON / NEGATIVE
+    # ============================
+
     {"pre": "were", "name": "Attacked by a Squirrel", "value": 0, "hp": -3, "rarity": COMMON,
      "areas": [CITY, FOREST, SWAMP], "count": 0,
      "desc": "It went for your nuts!"},
@@ -251,18 +260,21 @@ Search_Discoverables = [
      "areas": [FOREST, SWAMP], "count": 0,
      "desc": "That one's on me."},
 
-    # --- common/Neutral ---
+    # ============================
+    #       COMMON / NEUTRAL
+    # ============================
+
     {"pre": "some", "name": "Bat Scat", "value": 0, "hp": 0, "rarity": COMMON,
      "areas": [CAVE], "count": 0,
      "desc": "Droppings from above."},
 
     {"pre": "a", "name": "Chakra Specialist", "value": 0, "hp": 0, "rarity": COMMON,
      "areas": [CITY], "count": 0,
-     "desc": "A total fraud, scamming anyone they can trick into believing their pseudo-scientific nonsense."},
+     "desc": "A total fraud, scamming anyone they can trick into believing their pseudo-scientific bullshit."},
 
     {"pre": "a", "name": "Disillusioned Man", "value": 0, "hp": 0, "rarity": COMMON,
      "areas": [CITY], "count": 0,
-     "desc": "See the conventional world for what it is and does not care for it at all."},
+     "desc": "Sees the conventional world for what it is and does not care for it one bit."},
 
     {"pre": "an", "name": "Expired Riverboat Casino Voucher", "value": 0, "hp": 0, "rarity": COMMON,
      "areas": [CITY], "count": 0,
@@ -304,9 +316,12 @@ Search_Discoverables = [
      "areas": [CITY, FOREST, SWAMP], "count": 0,
      "desc": "Came pre-scratched to spare the purchaser from having to listen to it."},
 
-    # === UNCOMMON === p/n/n
+# ================================================================================================
 
-    # --- uncommon/Positive ---
+    # ============================
+    #      UNCOMMON / POSITIVE
+    # ============================
+
     {"pre": "a", "name": "Balloon Man Comic Book", "value": 11, "hp": 0, "rarity": UNCOMMON,
      "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,
      "desc": "Balloon Man is a supervillain who kills people by tying large helium balloons to their ankles."},
@@ -353,7 +368,7 @@ Search_Discoverables = [
 
     {"pre": "an", "name": "Engraved Pocket Watch", "value": 13, "hp": 0, "rarity": UNCOMMON,
      "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,
-     "desc": "Engraved with someone bozo's SoundCloud handle."},
+     "desc": "Engraved with some bozo's SoundCloud handle."},
 
     {"pre": "a", "name": "Fanny Pack", "value": 10, "hp": 0, "rarity": UNCOMMON,
      "areas": [CITY, FOREST], "count": 0,
@@ -479,7 +494,10 @@ Search_Discoverables = [
      "areas": [CITY], "count": 0,
      "desc": "Likely a mixture of party drugs, steroids, and erection pills."},
 
-    # --- uncommon/Negative ---
+    # ============================
+    #      UNCOMMON / NEGATIVE
+    # ============================
+
     {"pre": "were", "name": "Bitten by a Snake", "value": 0, "hp": -10, "rarity": UNCOMMON,
      "areas": [CAVE, FOREST, SWAMP], "count": 0,
      "desc": "Slithered right up behind you..."},
@@ -512,7 +530,10 @@ Search_Discoverables = [
      "areas": [CITY], "count": 0,
      "desc": "You did nothing wrong, but they thought you were their high school crush who just broke their heart."},
 
-    # --- uncommon/Neutral ---
+    # ============================
+    #      UNCOMMON / NEUTRAL
+    # ============================
+
     {"pre": "a", "name": "Cannibals Anonymous Flyer", "value": 0, "hp": 0, "rarity": UNCOMMON,
      "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,
      "desc": "For when eating alone turns to feeling alone... a human meat-and-greet."},
@@ -557,9 +578,12 @@ Search_Discoverables = [
      "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,
      "desc": "If the lord taketh, and the satanist takes people lives, then they are doing the lord's work - no?"},
 
-    # === RARE === p/n/n
+# ================================================================================================
 
-    # --- rare/Positive ---
+    # ============================
+    #       RARE / POSITIVE
+    # ============================
+
     {"pre": "an", "name": "Authenticated Photo of the Hohkken", "value": 50, "hp": 0, "rarity": RARE,
      "areas": [CITY], "count": 0,
      "desc": "Authenticator unknown, but you know it's legit."},
@@ -578,7 +602,7 @@ Search_Discoverables = [
 
     {"pre": "a", "name": "Bowl Made of Soup Containing The Like and So Forth", "value": 25, "hp": 100, "rarity": RARE,
      "areas": [CITY], "count": 0,
-     "desc": "It's all soup - pretty self explanatory."},
+     "desc": "It's all soup - pretty self-explanatory."},
 
     {"pre": "some", "name": "Brain Matter", "value": 20, "hp": 15, "rarity": RARE,
      "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,
@@ -614,7 +638,7 @@ Search_Discoverables = [
 
     {"pre": "some", "name": "Erotic Prehistoric Pictographs", "value": 69, "hp": 0, "rarity": RARE,
      "areas": [CAVE], "count": 0,
-     "desc": "Depictions of ancient people copulating with tench and fellating them in and around gravel pits."},
+     "desc": "Depictions of ancient peoples copulating with tench and fellating them in and around gravel pits."},
 
     {"pre": "a copy of the children's book", "name": "Fatal Christmas", "value": 12, "hp": 0, "rarity": RARE,
      "areas": [CITY], "count": 0,
@@ -678,7 +702,7 @@ Search_Discoverables = [
 
     {"pre": "a", "name": "Peg Leg", "value": 23, "hp": 0, "rarity": RARE,
      "areas": [CAVE], "count": 0,
-     "desc": "Belonged to a pirate from days gone past. He definitely used it to deplorable sexual acts."},
+     "desc": "Belonged to a pirate from days long past. He definitely used it to perform deplorable sexual acts."},
 
     {"pre": "a", "name": "Pirate Cutlass", "value": 37, "hp": 0, "rarity": RARE,
      "areas": [CAVE], "count": 0,
@@ -740,7 +764,10 @@ Search_Discoverables = [
      "areas": [SWAMP], "count": 0,
      "desc": "A pirated tape of all of Billy Mays' OxiClean commercials from 1995."},
 
-    # --- rare/Negative ---
+    # ============================
+    #       RARE / NEGATIVE
+    # ============================
+
     {"pre": "were", "name": "Attacked by the Black Eyed Children", "value": 0, "hp": -17, "rarity": RARE,
      "areas": [CAVE], "count": 0,
      "desc": "Descendants of malevolent aliens, very unfortunate to encounter whilst perusing the cave."},
@@ -759,7 +786,7 @@ Search_Discoverables = [
 
     {"pre": "were", "name": "Dragged Down", "value": 0, "hp": -11, "rarity": RARE,
      "areas": [CAVE, SWAMP], "count": 0,
-     "desc": "It is unclear by who or what, but you were definitely dragged down pretty good ther'."},
+     "desc": "It is unclear by whom or what, but you were definitely dragged down pretty good ther'."},
 
     {"pre": None, "name": "Fell Down a Manhole", "value": 0, "hp": -8, "rarity": RARE,
      "areas": [CITY], "count": 0,
@@ -779,7 +806,7 @@ Search_Discoverables = [
 
     {"pre": "were", "name": "Struck by Lightning", "value": 0, "hp": -13, "rarity": RARE,
      "areas": [CITY, FOREST, SWAMP], "count": 0,
-     "desc": "Caught the tip. Why is it always to the jines?."},
+     "desc": "Caught the tip. Why is it always to the jines?"},
 
     {"pre": "were", "name": "Thrashed by a Gator", "value": 0, "hp": -13, "rarity": RARE,
      "areas": [SWAMP], "count": 0,
@@ -793,7 +820,10 @@ Search_Discoverables = [
      "areas": [FOREST], "count": 0,
      "desc": "It happened so fast that it was impossible to tell exactly what kind of herd it was."},
 
-    # --- rare/Neutral ---
+    # ============================
+    #       RARE / POSITIVE
+    # ============================
+
     {"pre": "a", "name": "Cryptic Message from The Gorilla Pages", "value": 0, "hp": 0, "rarity": RARE,
      "areas": [CITY], "count": 0,
      "desc": "Sent from an anonymous member of the highly secretive Gorilla Pages deep web server."},
@@ -824,7 +854,7 @@ Search_Discoverables = [
 
     {"pre": "a", "name": "Polaroid Photo of Yourself Sleeping Last Night", "value": 0, "hp": 0, "rarity": RARE,
      "areas": [CAVE, CITY], "count": 0,
-     "desc": "A little unsettling to say the least."},
+     "desc": "A little unsettling if I do say so myself."},
 
     {"pre": None, "name": "One of The Mayor's Ex Wives", "value": 0, "hp": 0, "rarity": RARE,
      "areas": [CITY], "count": 0,
@@ -846,9 +876,12 @@ Search_Discoverables = [
      "areas": [CITY], "count": 0,
      "desc": "He's right - you definitely don't wanna end up like him."},
 
-    # === LEGENDARY == p only
+# ================================================================================================
 
-    # --- legendary/Positive ---
+    # ============================
+    #         LEGENDARY
+    # ============================
+
     {"pre": "an", "name": "Alien Fugitive", "value": 350, "hp": 0, "rarity": LEGENDARY,
      "areas": [CAVE], "count": 0,
      "desc": "Wanted by the galactic federation."},

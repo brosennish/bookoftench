@@ -19,6 +19,9 @@ from bookoftench.model.weapon import Weapon
 from bookoftench.ui import dim, yellow, green, purple, blue
 from bookoftench.util import print_and_sleep
 
+# ================================================================================================
+
+# --- check if officer is lurking ---
 
 @register_component(OFFICER)
 class OfficerEncounterDecision(ConditionalComponent):
@@ -26,6 +29,7 @@ class OfficerEncounterDecision(ConditionalComponent):
         super().__init__(game_state, decision_function=is_officer_lurking,
                          component=OfficerEncounter)
 
+# ================================================================================================
 
 class OfficerEncounter(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
@@ -64,6 +68,7 @@ class OfficerEncounter(BinarySelectionComponent):
         self._display_header()
         super().display_options()
 
+# ================================================================================================
 
 @attach_perk(BROWNMAIL)
 def is_officer_lurking() -> bool:
@@ -73,6 +78,7 @@ def is_officer_lurking() -> bool:
 def calculate_bribe(game_state: GameState) -> int:
     return min(game_state.player.lvl * 10, 50)
 
+# ================================================================================================
 
 @functional_component(state_dependent=True)
 def obey_officer(game_state: GameState):
@@ -84,6 +90,7 @@ def obey_officer(game_state: GameState):
     else:
         disobey_officer(game_state).run()
 
+# ================================================================================================
 
 @functional_component(state_dependent=True)
 def disobey_officer(game_state: GameState):
@@ -91,6 +98,7 @@ def disobey_officer(game_state: GameState):
     OfficerHohkken(calculate_bribe(game_state)).handle_hit(player)
     event_logger.log_event(OfficerEvent(EventType.OFFICER_UNPAID))
 
+# ================================================================================================
 
 @dataclass
 class PoliceBrutality(Weapon):
@@ -108,9 +116,11 @@ class PoliceBrutality(Weapon):
     def use(self) -> None:
         play_sound(self.sound)
 
+# ================================================================================================
 
 class OfficerHohkken(Enemy):
     def __init__(self, bribe: int):
+        super().__init__()
         self.name: str = 'Officer Hohkken'
         self.hp: int = 100
         self.current_weapon: Weapon = PoliceBrutality()

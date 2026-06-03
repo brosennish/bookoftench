@@ -3,6 +3,7 @@ from typing import List
 
 from bookoftench.data.enemies import Traits
 
+# ================================================================================================
 
 @dataclass
 class Trait:

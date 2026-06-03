@@ -10,6 +10,7 @@ from bookoftench.model.util import get_player_status_view
 from bookoftench.util import print_and_sleep
 from .registry import get_registered_component
 
+# ================================================================================================
 
 class StartMenu(PaginatedMenuComponent):
     def __init__(self, game_state: GameState):
@@ -19,6 +20,7 @@ class StartMenu(PaginatedMenuComponent):
         return [[SelectionBinding(str(i), name, get_registered_component(name))
                  for i, name in enumerate(StartGameMenuDefaults.page_one, 1)]]
 
+# ================================================================================================
 
 class ActionMenu(PaginatedMenuComponent):
     def __init__(self, game_state: GameState):
@@ -48,6 +50,7 @@ class ActionMenu(PaginatedMenuComponent):
     def can_exit(self) -> bool:
         return self.game_state.victory or not self.game_state.player.is_alive()
 
+# ================================================================================================
 
 class InGameMenu(PaginatedMenuComponent):
     def __init__(self, game_state: GameState):
@@ -60,6 +63,7 @@ class InGameMenu(PaginatedMenuComponent):
         return [[SelectionBinding(str(i), name, get_registered_component(name))
                  for i, name in enumerate(page, 1)]]
 
+# ================================================================================================
 
 class OverviewMenu(PaginatedMenuComponent):
     def __init__(self, game_state: GameState):

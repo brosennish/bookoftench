@@ -6,20 +6,24 @@ from typing import List, Callable, Dict, ParamSpec
 from typing import TypeVar
 
 from bookoftench.data import Perks
-from bookoftench.data.perks import WrapperType, RICKETY_PICKPOCKET
+from bookoftench.data.perks import WrapperType
 from bookoftench.model.base import Buyable
 from bookoftench.ui import purple, dim, cyan, orange
 from bookoftench.util import print_and_sleep
 
+# ================================================================================================
+
 T = TypeVar('T')
 P = ParamSpec("P")
 
+# ================================================================================================
 
 @dataclass
 class WrapperConfig[T]:
     def to_wrapper(self, name: str, wrapper_type: WrapperType) -> Callable[[T, str, bool], T]:
         return lambda original, value_description, silent: original
 
+# ================================================================================================
 
 @dataclass
 class BooleanOverrideConfig(WrapperConfig):
@@ -28,6 +32,7 @@ class BooleanOverrideConfig(WrapperConfig):
     def to_wrapper(self, name: str, _: WrapperType) -> Callable[[bool, str, bool], bool]:
         return lambda original, value_description, silent: self.override
 
+# ================================================================================================
 
 @dataclass
 class BoundedRandomConfig(WrapperConfig):
@@ -46,12 +51,14 @@ class BoundedRandomConfig(WrapperConfig):
     def to_wrapper(self, name: str, _: WrapperType) -> Callable[[int, str, bool], int]:
         return partial(self._wrapper, name=name)
 
+# ================================================================================================
 
 _int_change: Callable[[int, int], int] = lambda orig, i: orig + i
 _percent_change: Callable[[float, int], float] = lambda orig, pct: orig + (float(pct) / 100.0)
 _int_change_by_percent: Callable[[int, int], int] = lambda orig, pct: int(orig * (1 + (float(pct) / 100.0)))
 _float_change_by_percent: Callable[[float, int], float] = lambda orig, pct: orig * (1 + (float(pct) / 100.0))
 
+# ================================================================================================
 
 @dataclass
 class NumericChangeConfig(WrapperConfig):
@@ -81,12 +88,14 @@ class NumericChangeConfig(WrapperConfig):
             case _:
                 raise NotImplementedError(f"{wrapper_type} not implemented")
 
+# ================================================================================================
 
 @dataclass
 class FunctionWrapper:
     wrapper_type: WrapperType = WrapperType.NONE
     wrapper_config: WrapperConfig = field(default_factory=WrapperConfig)
 
+# ================================================================================================
 
 @dataclass
 class Perk[T](Buyable):
@@ -117,14 +126,17 @@ class Perk[T](Buyable):
             f"{self.description}"
         ])
 
+# ================================================================================================
 
 _PERKS: Dict[str, Perk] = {}
 
+# ================================================================================================
 
 def set_perk_cache(perk_cache: Dict[str, Perk]) -> None:
     global _PERKS
     _PERKS = perk_cache
 
+# ================================================================================================
 
 def map_wrapper_config(data: dict) -> WrapperConfig:
     wrapper_type: WrapperType = data['wrapper_type'] if 'wrapper_type' in data else WrapperType.NONE
@@ -138,6 +150,7 @@ def map_wrapper_config(data: dict) -> WrapperConfig:
         case _:
             return NumericChangeConfig(**data['wrapper_config'])
 
+# ================================================================================================
 
 def load_perks(perk_filter: Callable[[Perk], bool] = lambda _: True) -> List[Perk]:
     res = []
@@ -161,20 +174,24 @@ def load_perks(perk_filter: Callable[[Perk], bool] = lambda _: True) -> List[Per
             res.append(_PERKS[name])
     return res
 
+# ================================================================================================
 
 def load_perk(perk_name: str) -> Perk:
     if perk_name in _PERKS:
         return _PERKS[perk_name]
     return load_perks(lambda p: p.name == perk_name)[0]
 
+# ================================================================================================
 
 def activate_perk(perk_name: str) -> None:
     load_perk(perk_name).activate()
 
+# ================================================================================================
 
 def perk_is_active(perk_name: str) -> bool:
     return load_perk(perk_name).active
 
+# ================================================================================================
 
 def attach_perk(perk: str, wrapper_idx: int = 0, value_description: str = "", silent: bool = False,
                 condition: Callable[[], bool] = lambda: True) -> Callable[[Callable[[P], T]], Callable[[P], T]]:
@@ -192,6 +209,7 @@ def attach_perk(perk: str, wrapper_idx: int = 0, value_description: str = "", si
 
     return decorator
 
+# ================================================================================================
 
 def attach_perks(*perks: str, value_description: str = "", silent: bool = False,
                  condition: Callable[[], bool] = lambda: True) -> Callable[[Callable[[P], T]], Callable[[P], T]]:

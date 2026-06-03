@@ -1,7 +1,8 @@
 from .areas import CITY, CAVE, FOREST, SWAMP
 from .audio import DRINK, WHIFF, POSITIVE, MAGIC, SPRAY, EAT, BOOMERANG_SFX
 
-# --- items ---
+# ================================================================================================
+
 ABANDONED_EYEBALLS = "Abandoned Eyeballs"
 ACCURACY_SEARUM = "Accuracy Searum"
 ALIEN_REMAINS = "Alien Remains"
@@ -62,7 +63,8 @@ UNWANTED_PROTEIN = "Unwanted Protein"
 VERY_SPICY_NOODLES = "Very Spicy Noodles"
 WORMHOLE = "Wormhole"
 
-# --- types ---
+# ================================================================================================
+
 CRIT = "crit"      # affects player attack critical hit odds
 DMG = "dmg"        # affects player attack damage
 ENEMY = "enemy"    # used against enemy
@@ -71,8 +73,14 @@ HEALTH = "health"  # non-normal item used to restore HP
 NORMAL = "normal"  # normal item used to restore HP
 STAT = "stat"      # used to mutate one or more player stats
 
+# ================================================================================================
+
 Items = [
-    # --- Tier 1 (10 HP) ---
+
+    # ============================
+    #       TIER 1 (10 HP)
+    # ============================
+
     {'name': ANTS_ON_A_LOG, 'type': NORMAL, 'hp': 10, 'cost': 10, 'sell_value': 4, 'areas': [FOREST, SWAMP], 'desc': None,
      'sound': EAT},
     {'name': BERRIES, 'type': NORMAL, 'hp': 10, 'cost': 9, 'sell_value': 4, 'areas': [FOREST], 'desc': None,
@@ -92,7 +100,10 @@ Items = [
     {'name': TOAD_STOOL, 'type': NORMAL, 'hp': 10, 'cost': 9, 'sell_value': 4, 'areas': [FOREST, SWAMP], 'desc': None,
      'sound': EAT},
 
-    # --- Tier 2 (16–20 HP) ---
+    # ============================
+    #      TIER 2 (16-20 HP)
+    # ============================
+
     {'name': BAT_MATTER, 'type': NORMAL, 'hp': 15, 'cost': 16, 'sell_value': 6, 'areas': [CAVE], 'desc': None,
      'sound': EAT},
     {'name': CAMPBELLS_GOOP, 'type': NORMAL, 'hp': 20, 'cost': 22, 'sell_value': 9, 'areas': [CITY, CAVE, FOREST], 'desc': None,
@@ -112,7 +123,10 @@ Items = [
     {'name': SOMEWHAT_SPICY_NOODLES, 'type': NORMAL, 'hp': 18, 'cost': 20, 'sell_value': 8, 'areas': [CITY], 'desc': None,
      'sound': EAT},
 
-    # --- Tier 3 (24–28 HP) ---
+    # ============================
+    #      TIER 3 (24-28 HP)
+    # ============================
+
     {'name': ABANDONED_EYEBALLS, 'type': NORMAL, 'hp': 28, 'cost': 32, 'sell_value': 13, 'areas': [CAVE, CITY, FOREST, SWAMP], 'desc': None,
      'sound': EAT},
     {'name': CATFISH_FILET, 'type': NORMAL, 'hp': 26, 'cost': 27, 'sell_value': 11, 'areas': [SWAMP], 'desc': None,
@@ -132,7 +146,10 @@ Items = [
     {'name': VERY_SPICY_NOODLES, 'type': NORMAL, 'hp': 24, 'cost': 24, 'sell_value': 10, 'areas': [CITY, FOREST, SWAMP], 'desc': None,
      'sound': EAT},
 
-    # --- Tier 4 (30–35 HP) ---
+    # ============================
+    #      TIER 4 (30-35 HP)
+    # ============================
+
     {'name': CANNED_HORSE, 'type': NORMAL, 'hp': 35, 'cost': 37, 'sell_value': 15, 'areas': [CITY, CAVE], 'desc': None,
      'sound': EAT},
     {'name': CARP_FILET, 'type': NORMAL, 'hp': 35, 'cost': 35, 'sell_value': 15, 'areas': [CITY], 'desc': None,
@@ -152,7 +169,10 @@ Items = [
     {'name': UNIDENTIFIED_MUSHROOMS, 'type': NORMAL, 'hp': 35, 'cost': 35, 'sell_value': 16, 'areas': [CAVE, FOREST, SWAMP], 'desc': None,
      'sound': EAT},
 
-    # --- Tier 5 (38–40 HP) ---
+    # ============================
+    #      TIER 5 (38-40 HP)
+    # ============================
+
     {'name': ALIEN_REMAINS, 'type': NORMAL, 'hp': 39, 'cost': 40, 'sell_value': 20, 'areas': [FOREST], 'desc': None,
      'sound': EAT},
     {'name': GIANT_TENTACLE, 'type': NORMAL, 'hp': 38, 'cost': 42, 'sell_value': 16, 'areas': [CITY], 'desc': None,
@@ -166,7 +186,10 @@ Items = [
     {'name': TENCH_FILET, 'type': NORMAL, 'hp': 40, 'cost': 42, 'sell_value': 17, 'areas': [CITY], 'desc': None,
      'sound': EAT},
 
-    # --- Tier 6 (50 HP) ---
+    # ============================
+    #       TIER 6 (50 HP)
+    # ============================
+
     {'name': ASHWAGANDHA_GUMMIES, 'type': NORMAL, 'hp': 50, 'cost': 55, 'sell_value': 23, 'areas': [CITY, FOREST, SWAMP], 'desc': None,
      'sound': EAT},
     {'name': ENERGY_CRYSTAL, 'type': NORMAL, 'hp': 50, 'cost': 55, 'sell_value': 24, 'areas': [CAVE, CITY, SWAMP], 'desc': None,
@@ -176,11 +199,17 @@ Items = [
     {'name': OXYGENATED_BIOFILM, 'type': NORMAL, 'hp': 50, 'cost': 55, 'sell_value': 23, 'areas': [CAVE], 'desc': None,
      'sound': EAT},
 
-    # --- Tier 7 (51+ HP) ---
+    # ============================
+    #       TIER 7 (51+ HP)
+    # ============================
+
     {'name': BABY, 'type': NORMAL, 'hp': 100, 'cost': 110, 'sell_value': 50, 'areas': [SWAMP], 'desc': None,
      'sound': EAT},
 
-    # --- SPECIAL ---
+    # ============================
+    #       SPECIAL (HP N/A)
+    # ============================
+
     {'name': ACCURACY_SEARUM, 'type': STAT, 'hp': 0, 'cost': 110, 'sell_value': 55, 'areas': [CAVE, FOREST],
      'desc': 'Increase accuracy by 0.03', 'sound': DRINK},
     {'name': BOOMERANG, 'type': ENEMY, 'hp': 0, 'cost': 45, 'sell_value': 14, 'areas': [CITY, FOREST, SWAMP],
