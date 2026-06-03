@@ -28,6 +28,7 @@ from bookoftench.data.enviroment import DAYTIME, NIGHTTIME, FULL, WETTING, DRYIN
 from bookoftench.data.areas import CAVE
 from ..data.enemies import EMPATH
 
+# ================================================================================================
 
 @dataclass
 class PlayerWeapon(Weapon):
@@ -89,7 +90,7 @@ def build_weapon_defaults(build: Build | None) -> Dict[str, PlayerWeapon]:
 
     return {it.name: PlayerWeapon.from_weapon(it) for it in build.weapons}
 
-
+# ================================================================================================
 
 @dataclass
 class Player(Combatant):
@@ -133,6 +134,8 @@ class Player(Combatant):
     def __post_init__(self):
         self.current_weapon = self.weapon_dict[BARE_HANDS]
         self._subscribe_listeners()
+
+# ================================================================================================
 
     @property
     @attach_perk(p.GRAMBLIN_MAN, silent=True)
@@ -359,6 +362,8 @@ class Player(Combatant):
     def lose_hp(self, amount: int) -> None:
         self.hp = max(0, self.hp - amount)
 
+# ================================================================================================
+
     def display_weapon_count(self) -> None:
         print_and_sleep(f"Weapons {dim(f"({len(self.weapon_dict)}/{self.max_weapons})")}")
 
@@ -424,6 +429,8 @@ class Player(Combatant):
             if self.add_weapon(enemy_weapon):
                 print_and_sleep(cyan(f"{enemy_weapon.name} added to sack."), 1)
 
+# ================================================================================================
+
     @attach_perk(p.LUCKY_TENCHS_FIN, value_description="crit chance")
     def get_crit_chance(self) -> float:
         return super().get_crit_chance()
@@ -487,6 +494,8 @@ class Player(Combatant):
     def get_illness_survival_probability(self) -> float:
         return 0.0
 
+# ================================================================================================
+
     def level_up(self) -> None:
         # ---- core level-up effects ----
         self.xp -= self.xp_needed
@@ -510,7 +519,7 @@ class Player(Combatant):
 
         event_logger.log_event(LevelUpEvent(self.lvl, old_max, self.max_hp, cash_reward))
 
-        # check for illness death level match
+        # --- check for illness death level match ---
         if self.lvl == self.illness_death_lvl:
             if random.random() < self.get_illness_survival_probability():
                 self.illness_death_lvl += 1
@@ -522,6 +531,8 @@ class Player(Combatant):
                 event_logger.log_event(PlayerDeathEvent(self.lives))
                 self.illness = None
                 self.illness_death_lvl = None
+
+# ================================================================================================
 
     def apply_death_penalties(self) -> None:
         self.coins = round(self.coins * 0.25) if perk_is_active(p.WALLET_CHAIN) else 0  # TODO use the framework for this
@@ -539,6 +550,8 @@ class Player(Combatant):
         self.illness = None
         self.illness_death_lvl = None
         self._max_plays = 10
+
+# ================================================================================================
 
     def handle_broken_weapon(self) -> None:
         event_logger.log_event(WeaponBrokeEvent())
