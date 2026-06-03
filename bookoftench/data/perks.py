@@ -1,6 +1,8 @@
 from enum import Enum
 
-# Constants
+# ================================================================================================
+
+# Perks
 AMBERJACKED = "Amberjacked"
 AMBROSE_BLADE = "Ambrose Blade"
 AP_TENCH_STUDIES = "AP Tench Studies"
@@ -40,6 +42,7 @@ VAMPIRIC_SPERM = "Vampiric Sperm"
 WALLET_CHAIN = "Wallet Chain"
 WENCH_LOCATION = "Wench Location"
 
+# ================================================================================================
 
 class WrapperType(Enum):
     BOOLEAN_OVERRIDE = 0
@@ -64,6 +67,7 @@ class WrapperIndices:
         RISK: int = 0
         SURVIVAL: int = 1
 
+# ================================================================================================
 
 Perks = [
     {

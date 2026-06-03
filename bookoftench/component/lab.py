@@ -1,7 +1,7 @@
 import random
 
 from bookoftench.model.game_state import GameState
-from bookoftench.ui import blue, cyan, green, yellow, red, dim
+from bookoftench.ui import blue, cyan, green, yellow, dim
 from bookoftench.util import print_and_sleep
 from .base import LabeledSelectionComponent, SelectionBinding, \
     GatekeepingComponent, functional_component, TextDisplayingComponent
@@ -14,6 +14,9 @@ from ..data.components import LAB
 from ..data.enviroment import NIGHTTIME
 from ..model.events import PlayerDeathEvent
 
+# ================================================================================================
+
+# --- check if lab is open ---
 
 @register_component(LAB)
 class LabBounder(GatekeepingComponent):
@@ -23,7 +26,7 @@ class LabBounder(GatekeepingComponent):
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("The laboratory is closed during the day.\n"), 1.5)))
 
-# --- Casino Menu ---
+# ================================================================================================
 
 class LabComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -47,7 +50,7 @@ Interested? I pay one of coin per trial.\n"""))
     def can_exit(self) -> bool:
         return self.leave or not self.game_state.player.is_alive()
 
-# --- Risks info ---
+# ================================================================================================
 
 class ExperimentRisks(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
@@ -60,15 +63,18 @@ Max HP   : 21%
 Level    : 8%
 Lives    : 6%\n""")))
 
+# ================================================================================================
 
 def conduct_experiment(game_state):
     player = game_state.player
     player.coins += 1
     mutation = False
 
-    # minor mutations allowing for more experiments with ever-present risk of losing a life or gaining level
+    # ============================
+    #          STRENGTH
+    # ============================
 
-    if random.random() < 0.23: # STRENGTH
+    if random.random() < 0.23:
         original = player.strength
         amount = random.uniform(-0.02, 0.02)
         player.strength = round(player.strength + amount, 2)
@@ -82,7 +88,11 @@ def conduct_experiment(game_state):
                 player.gain_or_lose_luck(-0.01)
                 mutation = True
 
-    if random.random() < 0.23: # ACCURACY
+    # ============================
+    #          ACCURACY
+    # ============================
+
+    if random.random() < 0.23:
         original = player.acc
         amount = random.uniform(-0.02, 0.02)
         player.acc = round(player.acc + amount, 2)
@@ -96,7 +106,11 @@ def conduct_experiment(game_state):
                 player.gain_or_lose_luck(-0.01)
                 mutation = True
 
-    if random.random() < 0.21: # HP
+    # ============================
+    #            MAX HP
+    # ============================
+
+    if random.random() < 0.21:
         original = player.max_hp
         amount = random.randint(-3, 3)
         player.max_hp += amount
@@ -111,7 +125,11 @@ def conduct_experiment(game_state):
             player.gain_or_lose_luck(-0.01)
             mutation = True
 
-    if random.random() < 0.08: # LEVEL
+    # ============================
+    #            LEVEL
+    # ============================
+
+    if random.random() < 0.08:
         original = player.lvl
         amount = -1
         if random.random() < (min(player.luck, 10) / 100):
@@ -136,7 +154,11 @@ def conduct_experiment(game_state):
             else:
                 DeathHandler.run(game_state)
 
-    if random.random() < 0.06: # LIVES
+    # ============================
+    #            LIVES
+    # ============================
+
+    if random.random() < 0.06:
         original = player.lives
         amount = 1
         if random.random() < 0.60 - (min(player.luck, 10) / 100):
@@ -155,6 +177,9 @@ def conduct_experiment(game_state):
             event_logger.log_event(PlayerDeathEvent(player.lives))
             DeathHandler.run(game_state)
 
+    # ============================
+    #         NO MUTATION
+    # ============================
 
     if not mutation and player.lives > 0:
         print_and_sleep(dim("No mutations occurred."), 1)

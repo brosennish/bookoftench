@@ -7,7 +7,7 @@ from bookoftench.component.base import LabeledSelectionComponent, SelectionBindi
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import OCCULTIST_THEME, RITUAL, PURCHASE
 from bookoftench.data.components import OCCULTIST
-from bookoftench.data.enviroment import FULL, NIGHTTIME
+from bookoftench.data.enviroment import FULL
 from bookoftench.data.rituals import Occultist_Lines
 from bookoftench.model import GameState
 from bookoftench.model.events import OccultistEvent
@@ -16,6 +16,9 @@ from bookoftench.model.util import display_occultist_header
 from bookoftench.ui import blue, yellow
 from bookoftench.util import print_and_sleep
 
+# ================================================================================================
+
+# --- check if full moon ---
 
 @register_component(OCCULTIST)
 class OccultistTime(GatekeepingComponent):
@@ -25,6 +28,9 @@ class OccultistTime(GatekeepingComponent):
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("The Occultist requires a Full Moon to perform rituals."), 1.5)))
 
+# ================================================================================================
+
+# --- check if player has < 3 lives ---
 
 class OccultistBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
@@ -33,6 +39,7 @@ class OccultistBouncer(GatekeepingComponent):
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("You have too much life to justify a sacrifice."), 1.5)))
 
+# ================================================================================================
 
 class OccultistComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
@@ -73,6 +80,8 @@ class OccultistComponent(LabeledSelectionComponent):
         )
         for component in self.selection_components:
             component.display_options()
+
+# ================================================================================================
 
     @staticmethod
     def _make_purchase_component(ritual: Ritual) -> type[Component]:

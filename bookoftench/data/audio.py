@@ -1,6 +1,8 @@
 import os
 from typing import AnyStr
 
+# ================================================================================================
+
 # Themes
 AREA_BOSS_THEME = "area_boss_theme.mp3"
 BANK_THEME = "bank_theme.mp3"
@@ -29,6 +31,8 @@ TRAVEL_THEME = "travel_theme.mp3"
 VICTORY_THEME = "victory_theme.mp3"
 WIZARD_THEME = "wizard_theme.mp3"
 
+# ================================================================================================
+
 # Weapon Sounds
 ARROW = "arrow.wav"
 AXE = "axe.wav"
@@ -45,6 +49,8 @@ SPRAY = "spray.wav"
 SQUEAK = "squeak.wav"
 WEAPON_BROKE = "weapon_broke.wav"
 WHIFF = "whiff.mp3"
+
+# ================================================================================================
 
 # Misc Sounds
 ACHIEVEMENT = "achievement.mp3"
@@ -73,6 +79,7 @@ WELCOME_TO_HELL = "welcome_to_hell.wav"
 WEREWOLF_SFX = "werewolf.wav"
 XP = "xp.mp3"
 
+# ================================================================================================
 
 # TODO make sure this works regardless of cwd
 def get_audio_path(filename) -> AnyStr:

@@ -2,6 +2,8 @@ from enum import Enum
 
 from bookoftench.event_base import EventType
 
+# ================================================================================================
+
 ALWAYS_SOMETHING = "Always Something"
 CHICKEN = "Chicken"
 DRY_FIVE = "Dry Five"
@@ -21,6 +23,7 @@ TENCH_BUNDY = "Tench Bundy"
 TENCH_KILLS = "Tench Kills"
 VIGILANTE = "Vigilante"
 
+# ================================================================================================
 
 class RewardType(Enum):
     XP = "xp"

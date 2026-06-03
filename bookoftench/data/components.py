@@ -2,6 +2,8 @@ from typing import List
 
 from bookoftench.ui import purple
 
+# ================================================================================================
+
 ACHIEVEMENTS = "Achievements"
 AREA_BOSS_FIGHT = "Fight Boss"
 ATTRIBUTES = "Attributes"
@@ -50,6 +52,7 @@ USE_ITEM = "Use Item"
 WIZARD = "Wizard"
 ZONKED = "Zonked"
 
+# ================================================================================================
 
 class StartGameMenuDefaults:
     page_one: List[str] = [NEW_GAME, LOAD_GAME, QUIT_GAME]
