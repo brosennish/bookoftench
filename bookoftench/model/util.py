@@ -155,7 +155,7 @@ def get_player_status_view(game_state: GameState) -> str:
         illness_status = (f"{dim(' | ').join([
             f"\nIllness: {yellow(f"{player.illness.name}")}",
             f"Death Level: {red(f"{player.illness_death_lvl}")}",
-        ])}\n")
+        ])}")
 
         return "\n".join([
             player_status,

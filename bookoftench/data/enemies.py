@@ -72,7 +72,7 @@ POACHER = "Poacher"
 PROSPECTOR = "Prospector"
 ROUGAROU = "Rougarou"
 SABERTOOTH_LIGER = "Sabertooth Liger"
-SAMSQUANCH = "Samsquanch"
+SASQUATCH = "Sasquatch"
 SERIAL_KILLER = "Serial Killer"
 SENTIENT_ROBOT = "Sentient Robot"
 SEWER_GATOR = "Sewer Gator"
@@ -355,7 +355,7 @@ City_Special_Bosses = [
     GIANT_MUTANT_RAT, KNOBGOBLIN, OILY_DOILY, SEWER_GATOR, VAMPIRE_OVERLORD]
 
 Forest_Special_Bosses = [
-    CENTAUR, FAIRY_CODMOTHER, LUCKY_THE_LEPRECHAUN, MOTHMAN, SAMSQUANCH, SLENDERMAN, WENDIGO]
+    CENTAUR, FAIRY_CODMOTHER, LUCKY_THE_LEPRECHAUN, MOTHMAN, SASQUATCH, SLENDERMAN, WENDIGO]
 
 Swamp_Special_Bosses = [
     HODAG, HYDRA, OGRE, ROUGAROU, SKUNK_APE]
@@ -399,17 +399,17 @@ Special_Bosses = [
 
     {'name': GIANT_MUTANT_RAT, 'hp': 170, 'coins': 25, 'trait': CONTAGIOUS,
      'weapons': [w.CLAWS, w.FANGS],
-     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.05, 'acc': 1,
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.1, 'acc': 1,
     },
 
     {'name': KNOBGOBLIN, 'hp': 165, 'coins': 65, 'trait': CHEATER,
      'weapons': [w.CLAWS, w.FANGS],
-     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.95, 'strength': 1, 'acc': 1,
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.95, 'strength': 1.1, 'acc': 1,
     },
 
     {'name': OILY_DOILY, 'hp': 175, 'coins': 100, 'trait': ACHILLES,
      'weapons': [w.BARE_HANDS, w.SHOTGUN, w.BONE_SAW],
-     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 1, 'strength': 1.05, 'acc': 1,
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 1, 'strength': 1.1, 'acc': 1,
     },
 
     {'name': SEWER_GATOR, 'hp': 185, 'coins': 0, 'trait': None,
@@ -446,7 +446,7 @@ Special_Bosses = [
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.05, 'acc': 1,
      },
 
-    {'name': SAMSQUANCH, 'hp': 245, 'coins': 0, 'trait': None,
+    {'name': SASQUATCH, 'hp': 245, 'coins': 0, 'trait': None,
      'weapons': [w.BARE_HANDS, w.TEETH, w.WOODEN_CLUB],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.1, 'acc': 1,
      },
