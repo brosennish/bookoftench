@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from bookoftench.model.base import Buyable
 from bookoftench.ui import dim, red, cyan, orange, green
 
+# ================================================================================================
 
 @dataclass
 class CoffeeItem(Buyable):

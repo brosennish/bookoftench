@@ -7,6 +7,7 @@ from bookoftench.data import Items
 from bookoftench.model.base import Buyable
 from bookoftench.ui import dim, cyan, orange, green
 
+# ================================================================================================
 
 @dataclass
 class Item(Buyable):
@@ -41,6 +42,7 @@ class Item(Buyable):
             (f"HP: +{green(self.hp)}" if self.hp > 0 else f"{self.desc}"),
         ])
 
+# ================================================================================================
 
 @dataclass
 class SellableItem(Item):

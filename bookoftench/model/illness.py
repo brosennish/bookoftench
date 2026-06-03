@@ -4,6 +4,7 @@ from typing import List
 from bookoftench.data.illnesses import Illnesses
 from bookoftench.ui import dim, cyan, orange, yellow
 
+# ================================================================================================
 
 @dataclass
 class Illness:

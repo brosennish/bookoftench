@@ -10,6 +10,7 @@ from bookoftench.model.player import Player
 from bookoftench.ui import cyan, orange, dim, purple, red
 from bookoftench.util import print_and_sleep
 
+# ================================================================================================
 
 @dataclass
 class Ritual(Buyable):
@@ -41,6 +42,7 @@ class Ritual(Buyable):
                     player.hp = 0
                     event_logger.log_event(PlayerDeathEvent(player.lives))
 
+# ================================================================================================
 
 def load_rituals() -> List[Ritual]:
     return [

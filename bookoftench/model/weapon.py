@@ -9,8 +9,9 @@ from bookoftench.data.perks import BULLETPROOF
 from bookoftench.data.weapons import PISTOL, REVOLVER, RIFLE, SHOTGUN
 from bookoftench.model.base import WeaponBase, Buyable
 from bookoftench.model.perk import attach_perk
-from bookoftench.ui import dim, cyan, orange, red, yellow, blue
+from bookoftench.ui import dim, cyan, orange, red, yellow
 
+# ================================================================================================
 
 @dataclass
 class Weapon(WeaponBase, Buyable):
@@ -61,6 +62,8 @@ class Weapon(WeaponBase, Buyable):
             f"{"Uses:"} {self.format_uses()}",
         ])
 
+# ================================================================================================
+
 @dataclass
 class SellableWeapon(Weapon):
     _sell_value: int = field(init=False)
@@ -93,6 +96,7 @@ class SellableWeapon(Weapon):
             f"{dim("Uses:")} {self.format_uses()}",
         ])
 
+# ================================================================================================
 
 def load_weapon(name: str) -> Weapon:
     matches = load_weapons([name])
@@ -108,6 +112,7 @@ def load_weapons(restriction: List[str] = None):
 def load_discoverable_weapons():
     return [w for w in load_weapons() if w.uses > 0]
 
+# ================================================================================================
 
 def make_elite_weapon(weapon: Weapon) -> Weapon:
     # name
@@ -142,6 +147,8 @@ def make_elite_weapon(weapon: Weapon) -> Weapon:
 
     weapon.is_elite = True
     return weapon
+
+# ================================================================================================
 
 def make_autographed_weapon(weapon: Weapon) -> Weapon:
     # name

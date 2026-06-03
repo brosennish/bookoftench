@@ -5,6 +5,7 @@ from bookoftench.model.illness import Illness
 from bookoftench.ui import green, cyan, red, yellow, dim, blue
 from bookoftench.util import print_and_sleep
 
+# ================================================================================================
 
 class ItemUsedEvent(Event):
     def __init__(self, item_name: str, item_type: str, items_remaining: int, player_hp: int,
@@ -17,6 +18,7 @@ class ItemUsedEvent(Event):
         self.player_max_hp = player_max_hp
         self.bonus = bonus
 
+# ================================================================================================
 
 class PurchaseEvent(Event):
     def __init__(self, event_type: EventType, name: str, amount: int):
@@ -31,6 +33,7 @@ class PurchaseEvent(Event):
         print_and_sleep(green(f"You purchased {name} for {amount} of coin."), 1)
         self.sub_callback()
 
+# ================================================================================================
 
 class BuyItemEvent(PurchaseEvent):
     def __init__(self, name: str, amount: int):
@@ -40,6 +43,7 @@ class BuyItemEvent(PurchaseEvent):
     def sub_callback(self) -> None:
         print_and_sleep(cyan(self.sub_msg), 1)
 
+# ================================================================================================
 
 class BuyWeaponEvent(PurchaseEvent):
     def __init__(self, name: str, amount: int, uses: int):
@@ -49,11 +53,13 @@ class BuyWeaponEvent(PurchaseEvent):
     def sub_callback(self) -> None:
         print_and_sleep(cyan(self.sub_msg), 1)
 
+# ================================================================================================
 
 class BuyPerkEvent(PurchaseEvent):
     def __init__(self, name: str, amount: int):
         super().__init__(EventType.BUY_PERK, name, amount)
 
+# ================================================================================================
 
 class StealEventBase(Event):
     def __init__(self, event_type: EventType, name: str, amount: int):
@@ -67,6 +73,7 @@ class StealEventBase(Event):
         print_and_sleep(yellow(f"Saved yourself {amount} of coin there."), 1)
         print_and_sleep(red(f"But you are now destined for Hell."), 2)
 
+# ================================================================================================
 
 class GenericStealEvent(Event):
     def __init__(self):
@@ -133,6 +140,7 @@ class MissEvent(Event):
     def __init__(self):
         super().__init__(EventType.MISS)
 
+# ================================================================================================
 
 class BankDepositEvent(Event):
     def __init__(self, amount: int):
@@ -145,6 +153,7 @@ class BankWithdrawalEvent(Event):
         super().__init__(EventType.WITHDRAW, lambda:
         print_and_sleep(f"You withdrew {green(amount)} of coin (before any applicable fees) from the bank.", 1.5))
 
+# ================================================================================================
 
 class LevelUpEvent(Event):
     def __init__(self, level: int, old_max_hp: int, new_max_hp: int, cash_reward: int):
@@ -161,6 +170,7 @@ class LevelUpEvent(Event):
         play_sound(COINS)
         print_and_sleep(green(f"You were awarded {cash_reward} of coin."), 1)
 
+# ================================================================================================
 
 class SwapWeaponEvent(Event):
     def __init__(self):
@@ -202,17 +212,21 @@ class DiscoveryEvent(Event):
     def __init__(self, event_type: EventType):
         super().__init__(event_type)
 
+
 class BlacksmithEvent(Event):
     def __init__(self):
         super().__init__(EventType.PAY_BLACKSMITH)
+
 
 class OccultistEvent(Event):
     def __init__(self):
         super().__init__(EventType.PAY_OCCULTIST)
 
+
 class ShamanEvent(Event):
     def __init__(self):
         super().__init__(EventType.PAY_SHAMAN)
+
 
 class WizardEvent(Event):
     def __init__(self):
@@ -223,6 +237,7 @@ class CoffeeEvent(Event):
     def __init__(self):
         super().__init__(EventType.COFFEE_EVENT)
 
+
 class TreatmentEvent(Event):
     def __init__(self, illness: Illness, event_type: EventType):
         super().__init__(event_type, callback=self._callback)
@@ -232,6 +247,7 @@ class TreatmentEvent(Event):
         if self.type == EventType.TREATMENT_SUCCESS:
             print_and_sleep(green(f"You have been cured of {self.illness.name}!"), 2)
 
+# ================================================================================================
 
 class OfficerEvent(Event):
     def __init__(self, event_type: EventType):
@@ -247,6 +263,7 @@ class OfficerEvent(Event):
         print_and_sleep(f"{blue("...")}", 1.5)
         print_and_sleep(f"{blue("This is Officer Hohkken.")}", 1.5)
 
+# ================================================================================================
 
 # TODO for crypto events, figure out a method of alerting that doesn't print to console
 # printing to console screws up curses display if player is in the crypto market component when a coin is (de)listed

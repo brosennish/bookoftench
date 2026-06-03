@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from typing import List, TypeVar
 
 from bookoftench.data.perks import BROWN_FRIDAY, BARTER_SAUCE, TRADE_SHIP
-from bookoftench.event_base import Event, EventType
+from bookoftench.event_base import Event
 from bookoftench.event_logger import subscribe_function
 from bookoftench.ui import red, green
 from bookoftench.util import print_and_sleep
@@ -12,13 +12,15 @@ from .events import LevelUpEvent, PlayerDeathEvent
 from .item import Item, load_items
 from .perk import Perk, load_perks, attach_perk, attach_perks, perk_is_active
 from .weapon import Weapon, load_discoverable_weapons
-from .. import event_logger
+
+# ================================================================================================
 
 # TODO maybe read these from config
 _MAX_ITEMS: int = 3
 _MAX_WEAPONS: int = 3
 _MAX_PERKS: int = 3
 
+# ================================================================================================
 
 @dataclass
 class Shop:
@@ -97,6 +99,8 @@ class Shop:
     def _discounted_cost(cost: int) -> int:
         return cost
 
+# ================================================================================================
+
     B = TypeVar("B", bound=Buyable)
 
     def apply_discounts(self, buyables: List[B]) -> List[B]:
@@ -104,6 +108,8 @@ class Shop:
             original_cost = buyable.cost
             buyable.cost = round(max(5, self._discounted_cost(original_cost)))
         return buyables
+
+# ================================================================================================
 
     def remove_listing(self, buyable: Buyable) -> None:
         if isinstance(buyable, Item) and buyable in self.item_inventory:
@@ -113,11 +119,15 @@ class Shop:
         if isinstance(buyable, Perk) and buyable in self.perk_inventory:
             self.perk_inventory.remove(buyable)
 
+# ================================================================================================
+
     def reset_inventory(self) -> None:
         self._item_inventory = random.sample(self._all_items, k=min(self.max_items, len(self._all_items)))
         self._weapon_inventory = random.sample([w for w in self._all_weapons if w.sell_value > 0],
                                                k=min(self.max_weapons, len(self._all_weapons)))
         self.perk_inventory = random.sample(self._all_perks, k=min(self.max_perks, len(self._all_perks)))
+
+# ================================================================================================
 
     def ban_player(self):
         self.player_is_banned = True
@@ -127,6 +137,8 @@ class Shop:
             f"Well bad news - you're not welcome at this here shop here in the {self.area_name} no more, bozo."), 2)
         print_and_sleep(red(f"Come back when you level up."), 1)
 
+# ================================================================================================
+
     def _subscribe_listeners(self):
         @subscribe_function(LevelUpEvent, PlayerDeathEvent, name_override=f"{self.area_name}_shop_reset")
         def handle_reset_events(_: Event):
@@ -134,6 +146,8 @@ class Shop:
                 print_and_sleep(green(f"You can once again access the shop in the {self.area_name}."), 1.5)
             self.player_is_banned = False
             self.reset_inventory()
+
+# ================================================================================================
 
     # for loading from save file
     def __setstate__(self, state):

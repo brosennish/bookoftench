@@ -6,6 +6,7 @@ from bookoftench.data.perks import BARTER_SAUCE, TRADE_SHIP, TENCH_GENES, Wrappe
 from .coffee_item import CoffeeItem
 from .perk import attach_perk, attach_perks
 
+# ================================================================================================
 
 @dataclass
 class CoffeeShop:  # class creation
@@ -21,6 +22,8 @@ class CoffeeShop:  # class creation
             for item_dict in Coffee_Items
         ]
 
+# ================================================================================================
+
     @attach_perks(BARTER_SAUCE, TRADE_SHIP, silent=True)  # apply perks to cost if owned
     def _discounted_cost(self, cost):
         return cost
@@ -28,6 +31,8 @@ class CoffeeShop:  # class creation
     @attach_perk(TENCH_GENES, WrapperIndices.TenchGenes.RISK, silent=True)  # apply perks to cost if owned
     def _discounted_risk(self, risk):
         return risk
+
+# ================================================================================================
 
     C = TypeVar("C", bound=CoffeeItem)
 

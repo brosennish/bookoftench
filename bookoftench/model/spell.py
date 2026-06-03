@@ -13,6 +13,7 @@ from bookoftench.model.weapon import load_weapons, make_elite_weapon
 from bookoftench.ui import cyan, orange, dim, purple
 from bookoftench.util import print_and_sleep
 
+# ================================================================================================
 
 @dataclass
 class Spell(Buyable):
@@ -53,6 +54,7 @@ class Spell(Buyable):
             play_sound(MAGIC)
             print_and_sleep(f"{cyan(f'{weapon.name} magically added to sack.')}", 2)
 
+# ================================================================================================
 
 def load_spells() -> List[Spell]:
     return [
