@@ -188,7 +188,7 @@ def get_battle_status_view(game_state: GameState) -> str:
 def display_bank_balance(game_state: GameState) -> None:
     print_and_sleep(f"{dim(' | ').join([
         f"Player: {green(f"{game_state.player.coins}")}",
-        f"Bank: {green(f"{game_state.bank.balance}")}"])}\n")
+        f"Bank: {green(f"{game_state.bank.balance}")}"])}")
 
 # ================================================================================================
 
@@ -197,7 +197,7 @@ def display_player_attributes(game_state: GameState) -> None:
 
     print_and_sleep(f"\n{dim('Strength |')} {red(round(player.strength, 2))}"
         f"\n{dim('Accuracy |')} {yellow(round(player.acc, 2))}"
-        f"\n{dim('Luck     |')} {green(round(player.luck, 3))}\n")
+        f"\n{dim('Luck     |')} {green(round(player.luck, 3))}")
 
 # ================================================================================================
 
