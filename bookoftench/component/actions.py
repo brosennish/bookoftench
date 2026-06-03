@@ -20,7 +20,7 @@ from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import DEATH_CAN_WAIT, Perks, NEPTUNE
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.discoverable import load_discoverables, search_discoverable_rarity, rarity_color
-from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE, Enemy
+from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE, Enemy, SpecialBoss
 from bookoftench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent, DiscoveryEvent, \
     FailedFleeEvent, DefeatHohkkenEvent
 from bookoftench.model.game_state import GameState
@@ -392,8 +392,8 @@ class BuildComponent(LabeledSelectionComponent):
             print_and_sleep(f"You selected {cyan(build.name)}", 1.5)
 
             if build.name == RANDOM:
-                player.lives = random.randint(1, 5)
-                player.max_hp = random.randint(60, 140)
+                player.lives = random.randint(1, 3)
+                player.max_hp = random.randint(80, 120)
                 player.hp = player.max_hp
                 player.strength = round(random.uniform(0.8, 1.2), 2)
                 player.acc = round(random.uniform(0.9, 1.1), 2)
@@ -405,7 +405,7 @@ class BuildComponent(LabeledSelectionComponent):
                     player.illness_death_lvl = 1 + player.illness.levels_until_death
 
                     # --- items ---
-                    items_count = random.randint(0, 5)
+                    items_count = random.randint(0, 3)
                     if items_count >= 1:
                         items = [i['name'] for i in Items]
                         item_options = load_items(items)
@@ -938,7 +938,7 @@ class SpawnEnemy(LinearComponent):
         self.log_encounter(area, self.game_state.current_area.current_enemy)
         return self.game_state
 
-    def log_encounter(self, area, enemy):
+    def log_encounter(self, area, enemy: Enemy):
         self.game_state.encountered_enemies.append({"area": area, "enemy": enemy})
 
 
@@ -964,8 +964,9 @@ class Battle(LabeledSelectionComponent):
 
     def play_theme(self) -> None:
         theme = BATTLE_THEME
-        if self.game_state.current_area.current_enemy.type == SPECIAL_BOSS:
-            theme = HOHKKEN_THEME
+        current_enemy = self.game_state.current_area.current_enemy
+        if type(current_enemy) == SpecialBoss:
+            theme = current_enemy.theme if len(current_enemy.theme) > 0 else HOHKKEN_THEME
         play_music(theme)
 
     def can_exit(self) -> bool:

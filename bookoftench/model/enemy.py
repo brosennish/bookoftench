@@ -134,6 +134,7 @@ def load_final_boss() -> Boss:
 @dataclass
 class SpecialBoss(Enemy):
     preamble: List[DisplayableText] = field(default_factory=list)
+    theme: str = ""
 
     @classmethod
     def from_dict(cls, data: dict) -> Self:
@@ -146,11 +147,11 @@ class SpecialBoss(Enemy):
         for displayableText in self.preamble:
             displayableText.display()
 
-def load_special_boss(name: str) -> Enemy:
+def load_special_boss(name: str) -> SpecialBoss:
     matches = load_special_bosses([name])
     if len(matches) == 0:
-        raise ValueError(f"Could not find enemy data for {name}")
+        raise ValueError(f"Could not find special boss2 data for {name}")
     return matches[0]
 
-def load_special_bosses(restriction: List[str] = None) -> List[Enemy]:
-    return [Enemy(**d) for d in Special_Bosses if restriction is None or d['name'] in restriction]
+def load_special_bosses(restriction: List[str] = None) -> List[SpecialBoss]:
+    return [SpecialBoss(**d) for d in Special_Bosses if restriction is None or d['name'] in restriction]

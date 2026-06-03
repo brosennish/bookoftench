@@ -190,7 +190,6 @@ def display_player_attributes(game_state: GameState) -> None:
 
 def display_game_stats(game_state: GameState) -> None:
     player = game_state.player
-    player_color = p_color(player.hp, player.max_hp)
     player_build = player.build
 
     width = 18  # adjust if you want wider/narrower labels
@@ -204,6 +203,8 @@ def display_game_stats(game_state: GameState) -> None:
     display_stat("Strength", player.strength, red)
     display_stat("Accuracy", player.acc, yellow)
     display_stat("Luck", player.luck, green)
+    display_stat("Perks", len([p for p in load_perks() if p.active]), purple)
+    display_stat("Achievements", len([a for a in load_achievements() if a.active]), orange)
     display_stat("Deaths", event_logger.get_count(EventType.PLAYER_DEATH), red)
 
     display_stat("Coins", player.coins, green)
@@ -222,9 +223,8 @@ def display_game_stats(game_state: GameState) -> None:
     display_stat("Enemies Killed", event_logger.get_count(EventType.KILL), red)
     display_stat("Bounties Claimed", event_logger.get_count(EventType.BOUNTY_COLLECTED), purple)
     display_stat("Shoplifts", event_logger.get_count(EventType.STEAL), cyan)
-    display_stat("Bribes Paid", event_logger.get_count(EventType.OFFICER_PAID), green)
+    display_stat("Sum of Bribes", player.sum_of_bribes, green)
     display_stat("Police Brutalities", event_logger.get_count(EventType.OFFICER_UNPAID), red)
-    display_stat("Hohkken Encounters", event_logger.get_count(EventType.HOHKKEN), red)
 
     display_stat("Areas Cleared", sum(1 for a in game_state.areas if a.enemies_remaining == 0), blue)
     display_stat("Bosses Defeated", len([a for a in game_state.liberated_enemies if a.type in

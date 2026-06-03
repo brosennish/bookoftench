@@ -1,5 +1,6 @@
 from bookoftench.ui import Colors
 from . import audio, weapons as w
+from .audio import CRYPTO_THEME
 
 # Areas
 CAVE = "Cave"
@@ -389,7 +390,7 @@ Special_Bosses = [
 
     {'name': VAMPIRE_OVERLORD, 'hp': 170, 'coins': 0, 'trait': PLANT,
      'weapons': [w.BARE_HANDS, w.FANGS],
-     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.75, 'strength': 1.1, 'acc': 1,
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.75, 'strength': 1.1, 'acc': 1
     },
 
     # --- Forest ---

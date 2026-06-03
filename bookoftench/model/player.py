@@ -122,6 +122,8 @@ class Player(Combatant):
     casino_lost: int = 0
     games_played: int = 0
 
+    sum_of_bribes: int = 0
+
     _max_plays: int = 10
     _max_items: int = 5
     _max_weapons: int = 4
