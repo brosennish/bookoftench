@@ -15,7 +15,6 @@ from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, CONTAGI
     NORMAL
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
-from . import game_state
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss, load_special_boss, SpecialBoss
 from .illness import load_illnesses
 from .perk import perk_is_active

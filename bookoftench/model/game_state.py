@@ -220,7 +220,7 @@ class GameState:
         elif not self.casino_is_open:
             if random.random() < 0.50:
                 self.casino_is_open = True
-                print_and_sleep(green(f"The casino has reopened after a substantial bribe."))
+                print_and_sleep(green(f"The casino has reopened following a successful bribe."))
 
         # coffee
         if self.coffee_is_open:
@@ -230,7 +230,7 @@ class GameState:
         elif not self.coffee_is_open:
             if random.random() < 0.50:
                 self.coffee_is_open = True
-                print_and_sleep(green(f"Coughy's Coffee has reopened following his resurrection."))
+                print_and_sleep(green(f"Coughy's Coffee has reopened following Coughy's resurrection."))
 
         # hospital
         if self.hospital_is_open:
@@ -240,7 +240,7 @@ class GameState:
         elif not self.hospital_is_open:
             if random.random() < 0.50:
                 self.hospital_is_open = True
-                print_and_sleep(green(f"The hospital has reopened after a substantial bribe."))
+                print_and_sleep(green(f"The hospital has reopened following a successful bribe."))
 
     def is_final_boss_available(self) -> bool:
         return self.current_area.boss_defeated and (self.wench_area == self.current_area) and not self.victory
