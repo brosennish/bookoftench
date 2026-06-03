@@ -8,6 +8,7 @@ from bookoftench.model.perk import attach_perk
 from bookoftench.ui import yellow
 from bookoftench.util import print_and_sleep
 
+# ================================================================================================
 
 @dataclass
 class Bank:
@@ -43,6 +44,8 @@ class Bank:
         @subscribe_function(LevelUpEvent)
         def handle_level_up(_: LevelUpEvent):
             self.apply_interest()
+
+# ================================================================================================
 
     # for loading from save file
     def __setstate__(self, state):
