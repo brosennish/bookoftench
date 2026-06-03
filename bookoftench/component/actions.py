@@ -912,16 +912,12 @@ class EncounterBoss(LinearComponent):
         else:
             choice = random.choice(available)
 
-            boss = self.game_state.current_area.spawn_special_boss(choice, time)
+            boss = self.game_state.current_area.spawn_special_boss(choice, time, self.game_state)
             self.game_state.current_area.boss = boss
             self.game_state.boss_pending = True
             self.game_state.current_area.current_enemy = boss
 
-            self.log_encounter(area, self.game_state.current_area.current_enemy)
             return self.game_state
-
-    def log_encounter(self, area, enemy):
-        self.game_state.encountered_enemies.append({"area": area, "enemy": enemy})
 
 
 @register_component(SPAWN_ENEMY)
@@ -930,16 +926,11 @@ class SpawnEnemy(LinearComponent):
         super().__init__(game_state, next_component=Battle)
 
     def execute_current(self) -> GameState:
-        area = self.game_state.current_area.name
         moon = self.game_state.moon
         time = self.game_state.time_of_day
         wanted = self.game_state.wanted
-        self.game_state.current_area.spawn_enemy(wanted, self.game_state.player.lvl, time, moon)
-        self.log_encounter(area, self.game_state.current_area.current_enemy)
+        self.game_state.current_area.spawn_enemy(self.game_state, self.game_state.player.lvl, wanted, time, moon)
         return self.game_state
-
-    def log_encounter(self, area, enemy: Enemy):
-        self.game_state.encountered_enemies.append({"area": area, "enemy": enemy})
 
 
 class Battle(LabeledSelectionComponent):

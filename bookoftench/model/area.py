@@ -15,7 +15,8 @@ from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, CONTAGI
     NORMAL
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
-from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss, load_special_boss
+from . import game_state
+from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss, load_special_boss, SpecialBoss
 from .illness import load_illnesses
 from .perk import perk_is_active
 from .shop import Shop
@@ -92,7 +93,7 @@ class Area:
     def enemies_remaining(self) -> int:
         return max(self.enemy_count - self.enemies_killed, 0)
 
-    def spawn_enemy(self, wanted: str, player_level: int, time: str, moon: str) -> Enemy:
+    def spawn_enemy(self, game_state, player_level: int, wanted: str, time: str, moon: str) -> Enemy:
         wanted = load_enemy(wanted)
         available = [i for i in self.enemies if i not in self.enemies_seen]
 
@@ -111,6 +112,7 @@ class Area:
                 enemy_name = wanted.name
 
         enemy = load_enemy(enemy_name)  # convert selected enemy to Enemy
+        self.log_encounter(enemy, game_state)
         self.enemies_seen.add(enemy_name)  # add selected enemy to enemies_seen
 
         # --- trait and illness ---
@@ -170,7 +172,7 @@ class Area:
         return self.current_enemy
 
 
-    def spawn_special_boss(self, name: str, time: str) -> Enemy:
+    def spawn_special_boss(self, name: str, time: str, game_state) -> Enemy:
         enemy = load_special_boss(name)  # convert selected special boss to Enemy type
         self.enemies_seen.add(name)  # add selected enemy to enemies_seen
 
@@ -192,6 +194,7 @@ class Area:
                 play_sound(OWL_SFX)
 
         self.current_enemy = enemy
+        self.log_encounter(self.current_enemy, game_state)
 
         # --- elite weapon logic ---
         if self.current_enemy.current_weapon.type not in [BLIND, SPECIAL] and random.random() < 0.15:
@@ -199,6 +202,12 @@ class Area:
             self.current_enemy.current_weapon = make_elite_weapon(base)
 
         return self.current_enemy
+
+
+    @staticmethod
+    def log_encounter(enemy: Enemy | SpecialBoss, game_state):
+        area = game_state.current_area.name
+        game_state.encountered_enemies.append({"area": area, "enemy": enemy})
 
 
     def set_boss_to_current_enemy(self, name: str):

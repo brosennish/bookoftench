@@ -13,7 +13,7 @@ from bookoftench.util import print_and_sleep
 from .discoverable import rarity_color
 from .game_state import GameState
 from ..data.areas import CAVE, CITY, FOREST, SWAMP
-from ..data.enemies import CONTAGIOUS, BOSS, Special_Bosses, SPECIAL_BOSS, FINAL_BOSS
+from ..data.enemies import CONTAGIOUS, BOSS, Special_Bosses, SPECIAL_BOSS, FINAL_BOSS, NORMAL
 from ..data.enviroment import DAYTIME
 
 
@@ -296,12 +296,8 @@ def display_encountered(game_state: GameState) -> None:
 
 
 def display_encountered_enemy(enemy):
-    pipe = dim(" | ")
-
-    print_and_sleep(f"{purple(f'{enemy.name}')}"
-                    f"\n{green(f'{enemy.max_hp}{white(f'{pipe}')}')}"
-                    f"{red(f'{round(enemy.strength, 2)}{white(f'{pipe}')}')}"
-                    f"{yellow(f'{round(enemy.acc, 2)}')}")
+    color = purple if enemy.type == NORMAL else red
+    print_and_sleep(f"{color(f'{enemy.name}')}")
 
 
 def display_liberated(game_state: GameState) -> None:
