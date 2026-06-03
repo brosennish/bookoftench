@@ -24,9 +24,20 @@ ELITE = "Elite"
 
 # ================================================================================================
 
-# --- Sledge only available during the daytime ---
+# --- check if blacksmith is open ---
 
 @register_component(BLACKSMITH)
+class BlacksmithOpen(GatekeepingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, decision_function=lambda: game_state.blacksmith_is_open,
+                         accept_component=BlacksmithSleeping,
+                         deny_component=functional_component()(lambda: print_and_sleep(
+                             blue("Sledge Jr. is out looking for HTH.\n"), 1.5)))
+
+# ================================================================================================
+
+# --- Sledge only available during the daytime ---
+
 class BlacksmithSleeping(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, decision_function=lambda: game_state.time_of_day == DAYTIME,
