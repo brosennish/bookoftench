@@ -229,7 +229,7 @@ class GameState:
                 self.casino_is_open = False
                 print_and_sleep(yellow(f"The casino has closed pending investigation."), 1)
         elif not self.casino_is_open:
-            if random.random() < 0.50:
+            if random.random() < 0.75:
                 self.casino_is_open = True
                 print_and_sleep(green(f"The casino has reopened following a successful bribe."), 1)
 
@@ -255,7 +255,7 @@ class GameState:
 
         # --- wizard ---
         if self.wizard_is_open:
-            if random.random() < 0.10:
+            if random.random() < 0.15:
                 self.wizard_is_open = False
                 print_and_sleep(yellow(f"The Wizard has disappeared."), 1)
         elif not self.wizard_is_open:
@@ -265,7 +265,7 @@ class GameState:
 
         # --- shaman ---
         if self.shaman_is_open:
-            if random.random() < 0.10:
+            if random.random() < 0.15:
                 self.shaman_is_open = False
                 print_and_sleep(yellow(f"The Shaman has gone to the underworld."), 1)
         elif not self.shaman_is_open:
@@ -275,11 +275,11 @@ class GameState:
 
         # --- blacksmith ---
         if self.blacksmith_is_open:
-            if random.random() < 0.10:
+            if random.random() < 0.20:
                 self.blacksmith_is_open = False
                 print_and_sleep(yellow(f"Sledge Jr. went on an HTH run."), 1)
         elif not self.blacksmith_is_open:
-            if random.random() < 0.50:
+            if random.random() < 0.65:
                 self.blacksmith_is_open = True
                 print_and_sleep(green(f"Sledge Jr. has returned from his HTH run."), 1)
 
