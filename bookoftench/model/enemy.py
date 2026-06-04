@@ -140,6 +140,7 @@ def load_final_boss() -> Boss:
 class SpecialBoss(Enemy):
     preamble: List[DisplayableText] = field(default_factory=list)
     theme: str = ""
+    item: str = ""
 
     @classmethod
     def from_dict(cls, data: dict) -> Self:
@@ -155,7 +156,7 @@ class SpecialBoss(Enemy):
 def load_special_boss(name: str) -> SpecialBoss:
     matches = load_special_bosses([name])
     if len(matches) == 0:
-        raise ValueError(f"Could not find special boss2 data for {name}")
+        raise ValueError(f"Could not find special boss data for {name}")
     return matches[0]
 
 def load_special_bosses(restriction: List[str] = None) -> List[SpecialBoss]:
