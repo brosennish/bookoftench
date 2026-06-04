@@ -23,6 +23,16 @@ OCEAN = "Ocean"
 DAY = "Day"
 NIGHT = "Night"
 
+# Casting
+SHALLOWS_MIN_DISTANCE = 10
+SHALLOWS_MAX_DISTANCE = 50
+
+BAY_MIN_DISTANCE = 50
+BAY_MAX_DISTANCE = 100
+
+OCEAN_MIN_DISTANCE = 100
+OCEAN_MAX_DISTANCE = 300
+
 # ================================================================================================
 
 Fish_Species = [
@@ -39,8 +49,8 @@ Fish_Species = [
     #                       SHALLOWS
     # =====================================================
     {'name': TENCH, 'rarity': RARE, 'areas': [SHALLOWS], 'time': [DAY], 'moon': '',
-     'min_length': 8, 'max_length': 28, 'min_weight_per_inch': 0.28, 'max_weight_per_inch': 0.42,
-     'value_for_size': 0.5, 'hp_for_size': 0.5, 'rage': 1, 'speed': 1, 'strength': 1,
+     'min_length': 8, 'max_length': 28, 'min_weight_per_inch': 0.18, 'max_weight_per_inch': 0.30,
+     'value_for_size': 0.50, 'hp_for_size': 0.50, 'rage': 1, 'speed': 1, 'strength': 1,
      'preferred_bait': [b.WORM, b.DOUGH_BALL]
      },
 

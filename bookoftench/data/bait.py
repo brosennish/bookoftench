@@ -31,23 +31,23 @@ Bait_And_Lures = [
     # --- SHALLOWS ---
     {'name': WORM, 'areas': [SHALLOWS], 'casts': 2, 'cost': 3},
     {'name': DOUGH_BALL, 'areas': [SHALLOWS], 'casts': 1, 'cost': 1},
-    {'name': CRICKET, 'areas': [SHALLOWS], 'casts': 2, 'cost': 5},
+    {'name': CRICKET, 'areas': [SHALLOWS], 'casts': 2, 'cost': 4},
     {'name': MINNOW, 'areas': [SHALLOWS], 'casts': 2, 'cost': 6},
-    {'name': CRAY, 'areas': [SHALLOWS], 'casts': 3, 'cost': 9},
-    {'name': FROG, 'areas': [SHALLOWS], 'casts': 10, 'cost': 18},
-    {'name': FLY, 'areas': [SHALLOWS], 'casts': 15, 'cost': 30},
+    {'name': CRAY, 'areas': [SHALLOWS], 'casts': 3, 'cost': 8},
+    {'name': FROG, 'areas': [SHALLOWS], 'casts': 12, 'cost': 20},
+    {'name': FLY, 'areas': [SHALLOWS], 'casts': 15, 'cost': 28},
 
     # --- BAY ---
     {'name': SHRIMP, 'areas': [BAY], 'casts': 2, 'cost': 3},
-    {'name': CRAB, 'areas': [BAY], 'casts': 4, 'cost': 12},
+    {'name': CRAB, 'areas': [BAY], 'casts': 4, 'cost': 10},
     {'name': SPOON, 'areas': [BAY], 'casts': 20, 'cost': 45},
 
     # --- OCEAN ---
-    {'name': KRILL, 'areas': [OCEAN], 'casts': 2, 'cost': 3},
+    {'name': KRILL, 'areas': [OCEAN], 'casts': 1, 'cost': 2},
 
     # --- MULTI-ZONE SALTWATER ---
-    {'name': MEAT, 'areas': [BAY, OCEAN], 'casts': 3, 'cost': 10},
-    {'name': SQUID, 'areas': [BAY, OCEAN], 'casts': 4, 'cost': 15},
+    {'name': MEAT, 'areas': [BAY, OCEAN], 'casts': 2, 'cost': 8},
+    {'name': SQUID, 'areas': [BAY, OCEAN], 'casts': 4, 'cost': 12},
 
     # --- NOCTURNAL / ALL-ZONE ---
     {'name': RATTLER, 'areas': [SHALLOWS, BAY, OCEAN], 'casts': 15, 'cost': 35},
