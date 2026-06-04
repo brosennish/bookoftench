@@ -87,7 +87,7 @@ Builds = [
      'items': [i.IOU, i.SMOKE_BOMB, i.WORMHOLE],
      'weapons': [w.BARE_HANDS, w.TENCH_CANNON],
      'perks': [],
-     'illness': RESTLESS_BUTT_SYNDROME,
+     'illness': None,
      'notes': "Bro... really bro?"},
 
     {'name': RANDOM, 'lives': 0, 'hp': 0, 'str': 0, 'acc': 0, 'coins': 0,

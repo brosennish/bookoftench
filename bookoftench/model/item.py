@@ -56,3 +56,11 @@ class SellableItem(Item):
 
 def load_items(restriction: List[str] = None) -> List[Item]:
     return [Item(**d) for d in Items if restriction is None or d['name'] in restriction]
+
+# ================================================================================================
+
+def load_boss_item(name: str) -> Item:
+    matches = load_items([name])
+    if len(matches) == 0:
+        raise ValueError(f"Could not find item data for {name}")
+    return matches[0]

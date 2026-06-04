@@ -324,7 +324,7 @@ def display_liberated(game_state: GameState) -> None:
 
     if liberated:
         for i in liberated:
-            color = orange if i.type == BOSS else purple
+            color = orange if i.type in [BOSS, SPECIAL_BOSS] else purple
             print_and_sleep(f"{color(f'{i.name}')}"
                 f"\n{green(f'{i.max_hp}{white(f'{pipe}')}')}"
                 f"{red(f'{round(i.strength, 2)}{white(f'{pipe}')}')}"

@@ -369,7 +369,7 @@ Special_Bosses = [
     #           CAVE
     # ============================
 
-    {'name': CYCLOPS, 'hp': 200, 'coins': 35, 'trait': ORACLE,
+    {'name': CYCLOPS, 'hp': 200, 'coins': 0, 'trait': ORACLE,
      'weapons': [w.BARE_HANDS, w.TORCH_CLUB],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.95, 'strength': 1, 'acc': 1,
      'item': i.CYCLOPS_EYE},
@@ -399,8 +399,8 @@ Special_Bosses = [
     #            CITY
     # ============================
 
-    {'name': GIANT_MUTANT_RAT, 'hp': 175, 'coins': 25, 'trait': CONTAGIOUS,
-     'weapons': [w.CLAWS, w.FANGS],
+    {'name': GIANT_MUTANT_RAT, 'hp': 175, 'coins': 0, 'trait': CONTAGIOUS,
+     'weapons': [w.CLAWS, w.FANGS, w.TAIL],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.1, 'acc': 1,
      'item': i.HALF_DIGESTED_DIAMOND_NECKLACE},
 
@@ -434,7 +434,7 @@ Special_Bosses = [
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.1, 'acc': 1,
      'item': i.CENTAURIAN_HOOF},
 
-    {'name': FAIRY_CODMOTHER, 'hp': 175, 'coins': 50, 'trait': EMPATH,
+    {'name': FAIRY_CODMOTHER, 'hp': 175, 'coins': 0, 'trait': EMPATH,
      'weapons': [w.LONGBOW, w.MAGIC_WAND, w.SLINGSHOT],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 1.1, 'strength': 0.85, 'acc': 1.1,
      'item': i.FAIRY_WINGS},

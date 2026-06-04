@@ -227,61 +227,61 @@ class GameState:
         if self.casino_is_open:
             if random.random() < 0.10:
                 self.casino_is_open = False
-                print_and_sleep(yellow(f"The casino has closed pending investigation."))
+                print_and_sleep(yellow(f"The casino has closed pending investigation."), 1)
         elif not self.casino_is_open:
             if random.random() < 0.50:
                 self.casino_is_open = True
-                print_and_sleep(green(f"The casino has reopened following a successful bribe."))
+                print_and_sleep(green(f"The casino has reopened following a successful bribe."), 1)
 
         # --- coffee ---
         if self.coffee_is_open:
             if random.random() < 0.10:
                 self.coffee_is_open = False
-                print_and_sleep(red(f"Coughy has died."))
+                print_and_sleep(red(f"Coughy has died."), 1)
         elif not self.coffee_is_open:
             if random.random() < 0.50:
                 self.coffee_is_open = True
-                print_and_sleep(green(f"Coughy's Coffee has reopened following Coughy's resurrection."))
+                print_and_sleep(green(f"Coughy's Coffee has reopened following Coughy's resurrection."), 1)
 
         # --- hospital ---
         if self.hospital_is_open:
             if random.random() < 0.10:
                 self.hospital_is_open = False
-                print_and_sleep(yellow(f"The hospital has closed due to pending litigation."))
+                print_and_sleep(yellow(f"The hospital has closed due to pending litigation."), 1)
         elif not self.hospital_is_open:
             if random.random() < 0.50:
                 self.hospital_is_open = True
-                print_and_sleep(green(f"The hospital has reopened following a successful bribe."))
+                print_and_sleep(green(f"The hospital has reopened following a successful bribe."), 1)
 
         # --- wizard ---
         if self.wizard_is_open:
             if random.random() < 0.10:
                 self.wizard_is_open = False
-                print_and_sleep(yellow(f"The Wizard has disappeared."))
+                print_and_sleep(yellow(f"The Wizard has disappeared."), 1)
         elif not self.wizard_is_open:
             if random.random() < 0.50:
                 self.wizard_is_open = True
-                print_and_sleep(green(f"The Wizard has reappeared."))
+                print_and_sleep(green(f"The Wizard has reappeared."), 1)
 
         # --- shaman ---
         if self.shaman_is_open:
             if random.random() < 0.10:
                 self.shaman_is_open = False
-                print_and_sleep(yellow(f"The Shaman has gone to the underworld."))
+                print_and_sleep(yellow(f"The Shaman has gone to the underworld."), 1)
         elif not self.shaman_is_open:
             if random.random() < 0.50:
                 self.shaman_is_open = True
-                print_and_sleep(green(f"The Shaman has returned from the underworld."))
+                print_and_sleep(green(f"The Shaman has returned from the underworld."), 1)
 
         # --- blacksmith ---
         if self.blacksmith_is_open:
             if random.random() < 0.10:
                 self.blacksmith_is_open = False
-                print_and_sleep(yellow(f"Sledge Jr. went on an HTH run."))
+                print_and_sleep(yellow(f"Sledge Jr. went on an HTH run."), 1)
         elif not self.blacksmith_is_open:
             if random.random() < 0.50:
                 self.blacksmith_is_open = True
-                print_and_sleep(green(f"Sledge Jr. has returned from his HTH run."))
+                print_and_sleep(green(f"Sledge Jr. has returned from his HTH run."), 1)
 
 # ================================================================================================
 

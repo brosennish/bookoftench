@@ -15,7 +15,7 @@ from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEM
     OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER, KILLS, DISCOVERIES, ENCOUNTERS, ENCOUNTER_BOSS
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER, HOHKKEN, \
     Cave_Special_Bosses, City_Special_Bosses, Swamp_Special_Bosses, \
-    Forest_Special_Bosses
+    Forest_Special_Bosses, SPECIAL_BOSS
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import DEATH_CAN_WAIT, Perks, NEPTUNE
 from bookoftench.event_logger import subscribe_function
@@ -24,7 +24,7 @@ from bookoftench.model.enemy import ENEMY_SWITCH_WEAPON_CHANCE, Enemy, SpecialBo
 from bookoftench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, BountyCollectedEvent, DiscoveryEvent, \
     FailedFleeEvent, DefeatHohkkenEvent
 from bookoftench.model.game_state import GameState
-from bookoftench.model.item import load_items
+from bookoftench.model.item import load_items, load_boss_item
 from bookoftench.model.perk import load_perks, Perk, perk_is_active, activate_perk
 from bookoftench.model.util import get_battle_status_view, display_player_achievements, \
     display_game_stats, calculate_flee, display_active_perks, display_battle_info, display_player_attributes, \
@@ -907,13 +907,17 @@ class TryFlee(RandomChoiceComponent):
 # ================================================================================================
 
 @register_component(ENCOUNTER_BOSS)
-class EncounterBoss(LinearComponent):
+class EncounterBoss(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, next_component=Battle)
+        super().__init__(game_state, decision_function=lambda: self.execute_current(),
+                         accept_component=Battle,
+                         deny_component=functional_component()(lambda: print_and_sleep(
+                             yellow("All bosses in this area are now in Hell.\n"), 1.5)))
 
-    def execute_current(self) -> GameState:
+    def execute_current(self) -> bool:
         area = self.game_state.current_area.name
         time = self.game_state.time_of_day
+        
         if area == CAVE:
             options = [i for i in Cave_Special_Bosses]
         elif area == CITY:
@@ -926,17 +930,12 @@ class EncounterBoss(LinearComponent):
         available = [i for i in options if i not in liberated]
 
         if not available:
-            print_and_sleep(yellow("All bosses in this area are now in Hell."), 1.5)
-            return self.game_state
+            return False
         else:
             choice = random.choice(available)
-
-            boss = self.game_state.current_area.spawn_special_boss(choice, time, self.game_state)
-            self.game_state.current_area.boss = boss
-            self.game_state.boss_pending = True
-            self.game_state.current_area.current_enemy = boss
-
-            return self.game_state
+            special_boss = self.game_state.current_area.spawn_special_boss(choice, time, self.game_state)
+            self.game_state.current_area.current_enemy = special_boss
+            return True
 
 # ================================================================================================
 
@@ -1049,29 +1048,42 @@ class BattleEnd(NoOpComponent):
         play_sound(DEVIL_THUNDER)
         print_and_sleep(red(f"{enemy.name} is now in Hell."), 2)
 
+        # --- Hohkken ---
         if enemy.name == HOHKKEN:
             event_logger.log_event(DefeatHohkkenEvent())
             activate_perk(NEPTUNE)
             self.game_state.hohkken_is_alive = False
 
+        # --- wanted / bounty ---
         if self.game_state.is_wanted(enemy):
             event_logger.log_event(BountyCollectedEvent(enemy.name))
         enemy_weapon = enemy.drop_weapon()
         if enemy_weapon is not None:
             player.obtain_enemy_weapon(enemy_weapon)
 
+        # --- coins and xp ---
         coins = enemy.drop_coins(enemy)
         coins *= min(1.25, 1 + ((player.lvl - 1) * 0.025))
-        player.gain_coins(round(coins))
+        if coins:
+            player.gain_coins(round(coins))
         player.gain_xp_from_enemy(enemy)
 
+        # --- special boss item drop ---
+        # TODO - add swap item code eventually just in case (usually going to use an item to beat a boss)
+        if enemy.type == SPECIAL_BOSS:
+            if enemy.item:
+                item = load_boss_item(enemy.item)
+                if player.add_item(item):
+                    print_and_sleep(cyan(f"{item.name} added to sack."), 1)
+
+        # --- logging and updates ---
         event_logger.log_event(KillEvent())
         if event_logger.get_count(EventType.KILL) % 2 == 0:
             self.game_state.update_time_of_day()
         if event_logger.get_count(EventType.KILL) % 4 == 0:
             self.game_state.update_moon()
 
-        # add enemy to list of liberated enemies
+        # --- add enemy to list of liberated enemies ---
         self.game_state.liberated_enemies.append(self.game_state.current_area.current_enemy)
 
         PostKillEncounters(self.game_state).run()

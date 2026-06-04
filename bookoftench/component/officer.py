@@ -124,5 +124,5 @@ class OfficerHohkken(Enemy):
         self.name: str = 'Officer Hohkken'
         self.hp: int = 100
         self.current_weapon: Weapon = PoliceBrutality()
-        self.current_weapon.damage = random.randint(5, bribe)
+        self.current_weapon.damage = random.randint(round(bribe / 2), bribe)
         self.random_dialogue = []  # TODO maybe add some here?
