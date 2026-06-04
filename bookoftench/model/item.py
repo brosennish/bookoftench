@@ -4,6 +4,7 @@ from dataclasses import dataclass, asdict
 from typing import List
 
 from bookoftench.data import Items
+from bookoftench.data.enemies import SPECIAL_BOSS
 from bookoftench.model.base import Buyable
 from bookoftench.ui import dim, cyan, orange, green
 
@@ -36,6 +37,7 @@ class Item(Buyable):
         return SellableItem.from_dict(asdict(self))
 
     def __repr__(self):
+
         return dim(' | ').join([
             cyan(f"{self.name:<24}"),
             f"Cost: {orange(self.cost):<18}",
@@ -47,11 +49,19 @@ class Item(Buyable):
 @dataclass
 class SellableItem(Item):
     def __repr__(self):
-        return dim(' | ').join([
-            cyan(f"{self.name:<24}"),
-            f"Value: {orange(self.sell_value):<18}",
-            (f"HP: +{green(self.hp)}" if self.hp > 0 else f"{self.desc}"),
-        ])
+        if self.type == SPECIAL_BOSS:
+            return dim(' | ').join([
+                cyan(f"{self.name:<24}"),
+                f"Value: {orange(self.sell_value):<18}",
+                f"HP: +{green(self.hp)}" if self.hp > 0 else f"{self.desc}",
+                f"{self.desc}" if self.hp > 0 else "",
+            ])
+        else:
+            return dim(' | ').join([
+                cyan(f"{self.name:<24}"),
+                f"Value: {orange(self.sell_value):<18}",
+                (f"HP: +{green(self.hp)}" if self.hp > 0 else f"{self.desc}"),
+            ])
 
 
 def load_items(restriction: List[str] = None) -> List[Item]:
