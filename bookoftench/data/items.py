@@ -1,5 +1,11 @@
-from .areas import CITY, CAVE, FOREST, SWAMP
 from .audio import DRINK, WHIFF, POSITIVE, MAGIC, SPRAY, EAT, BOOMERANG_SFX
+
+# ================================================================================================
+
+CAVE = "Cave"
+CITY = "City"
+FOREST = "Forest"
+SWAMP = "Swamp"
 
 # ================================================================================================
 
