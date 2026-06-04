@@ -296,7 +296,7 @@ Items = [
     {'name': ROUGAROU_TAIL, 'type': BOSS, 'hp': 45, 'cost': 0, 'sell_value': 120, 'areas': None,
      'desc': 'The tail of the ferocious Rougarou', 'sound': EAT},
     {'name': SABERTOOTH_LIGER_FILET, 'type': BOSS, 'hp': 100, 'cost': 0, 'sell_value': 100, 'areas': None,
-     'desc': 'A cut of Sabertooth Liger Meat', 'sound': EAT},
+     'desc': 'A generous cut of Sabertooth Liger Meat', 'sound': EAT},
     {'name': SASQUATCH_FOOT, 'type': BOSS, 'hp': 80, 'cost': 0, 'sell_value': 160, 'areas': None,
      'desc': 'A big foot', 'sound': EAT},
     {'name': SEWER_GATOR_SKULL, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 100, 'areas': None,

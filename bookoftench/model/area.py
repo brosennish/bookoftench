@@ -31,13 +31,13 @@ from ..data.audio import ENEMY_APPEARS, OWL_SFX, WEREWOLF_SFX
 # ================================================================================================
 
 _search_defaults = {
-    DISCOVER_PERK: 1,
-    DISCOVER_WEAPON: 2,
-    DISCOVER_ITEM: 3,
-    ENCOUNTER_BOSS: 3,
-    DISCOVER_DISCOVERABLE: 45,
-    DISCOVER_SPECIAL: 8,
-    SPAWN_ENEMY: 30
+    DISCOVER_PERK: 0,
+    DISCOVER_WEAPON: 0,
+    DISCOVER_ITEM: 0,
+    ENCOUNTER_BOSS: 100,
+    DISCOVER_DISCOVERABLE: 0,
+    DISCOVER_SPECIAL: 0,
+    SPAWN_ENEMY: 0
 }
 
 _event_defaults = {

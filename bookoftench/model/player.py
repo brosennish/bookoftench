@@ -206,10 +206,13 @@ class Player(Combatant):
         moon = game_state.moon
 
         # --- retrieve gain amount and/or activate special item ---
-        if item.type == i.NORMAL: # normal hp gain
+        if item.type in [i.NORMAL, i.BOSS] and item.hp > 0: # normal hp gain
             play_sound(sfx)
             gain = int(min(self.max_hp - self.hp, self._apply_hp_bonus(item.hp)))
         else:
+            if item.type == i.BOSS:
+                print_and_sleep(yellow(f"Sell this at the shop, bozo."), 1.5)
+                return
             gain = self.handle_special_item(item, enemy, time, moon, game_state)
 
         # --- Gain hp and activate enemy's empath trait if applicable ---

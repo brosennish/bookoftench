@@ -4,7 +4,7 @@ from dataclasses import dataclass, asdict
 from typing import List
 
 from bookoftench.data import Items
-from bookoftench.data.enemies import SPECIAL_BOSS
+from bookoftench.data.items import BOSS
 from bookoftench.model.base import Buyable
 from bookoftench.ui import dim, cyan, orange, green
 
@@ -22,10 +22,24 @@ class Item(Buyable):
     sound: str
 
     def get_simple_format(self, length: int) -> str:
-        return dim(' | ').join([
-            cyan(f"{self.name:<{length}}"),
-            (f"HP: +{green(self.hp)}" if self.hp > 0 else f"{self.desc}")
-        ])
+        if self.type == BOSS:
+            if self.hp > 0:
+                return dim(' | ').join([
+                    cyan(f"{self.name:<{length}}"),
+                    f"HP: +{green(self.hp)}",
+                    f"{self.desc}",
+                ])
+            else:
+                return dim(' | ').join([
+                    cyan(f"{self.name:<{length}}"),
+                    f"HP: +{green(self.hp)}",
+                    f"{self.desc}",
+                ])
+        else:
+            return dim(' | ').join([
+                cyan(f"{self.name:<{length}}"),
+                (f"HP: +{green(self.hp)}" if self.hp > 0 else f"{self.desc}"),
+            ])
 
     def get_found_format(self) -> str:
         return dim(' | ').join([
@@ -49,13 +63,20 @@ class Item(Buyable):
 @dataclass
 class SellableItem(Item):
     def __repr__(self):
-        if self.type == SPECIAL_BOSS:
-            return dim(' | ').join([
-                cyan(f"{self.name:<24}"),
-                f"Value: {orange(self.sell_value):<18}",
-                f"HP: +{green(self.hp)}" if self.hp > 0 else f"{self.desc}",
-                f"{self.desc}" if self.hp > 0 else "",
-            ])
+        if self.type == BOSS:
+            if self.hp > 0:
+                return dim(' | ').join([
+                    cyan(f"{self.name:<24}"),
+                    f"Value: {orange(self.sell_value):<18}",
+                    f"HP: +{green(self.hp)}",
+                    f"{self.desc}",
+                ])
+            else:
+                return dim(' | ').join([
+                    cyan(f"{self.name:<24}"),
+                    f"Value: {orange(self.sell_value):<18}",
+                    f"{self.desc}",
+                ])
         else:
             return dim(' | ').join([
                 cyan(f"{self.name:<24}"),
