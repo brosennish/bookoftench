@@ -1,5 +1,6 @@
 from bookoftench.ui import Colors
 from . import audio, weapons as w
+from bookoftench.data import items as i
 
 # ================================================================================================
 
@@ -371,28 +372,28 @@ Special_Bosses = [
     {'name': CYCLOPS, 'hp': 200, 'coins': 35, 'trait': ORACLE,
      'weapons': [w.BARE_HANDS, w.TORCH_CLUB],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.95, 'strength': 1, 'acc': 1,
-     },
+     'item': i.CYCLOPS_EYE},
 
     {'name': DEATH_WORM, 'hp': 195, 'coins': 0, 'trait': None,
      'weapons': [w.FANGS, w.TAIL, w.TEETH],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.95, 'strength': 1, 'acc': 1,
-     },
+     'item': i.DEATH_BRAIN},
 
     # TODO - add special axe
     {'name': MINOTAUR, 'hp': 240, 'coins': 0, 'trait': None,
      'weapons': [w.CLAWS],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1.2, 'acc': 1,
-     },
+     'item': i.MINOTAUR_NOSE_RING},
 
     {'name': SABERTOOTH_LIGER, 'hp': 210, 'coins': 0, 'trait': None,
      'weapons': [w.CLAWS, w.FANGS, w.TEETH],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.8, 'strength': 1, 'acc': 1,
-     },
+     'item': i.SABERTOOTH_LIGER_FILET},
 
     {'name': TROLL, 'hp': 190, 'coins': 90, 'trait': None,
      'weapons': [w.BARE_HANDS, w.TORCH_CLUB],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1, 'acc': 1,
-     },
+     'item': i.TROLL_TOLL},
 
     # ============================
     #            CITY
@@ -401,28 +402,28 @@ Special_Bosses = [
     {'name': GIANT_MUTANT_RAT, 'hp': 175, 'coins': 25, 'trait': CONTAGIOUS,
      'weapons': [w.CLAWS, w.FANGS],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.1, 'acc': 1,
-    },
+     'item': i.HALF_DIGESTED_DIAMOND_NECKLACE},
 
     {'name': KNOBGOBLIN, 'hp': 170, 'coins': 65, 'trait': CHEATER,
      'weapons': [w.CLAWS, w.FANGS],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.95, 'strength': 1.1, 'acc': 1,
-    },
+     'item': i.MISCELLANEOUS_TREASURED_ITEMS},
 
     {'name': OILY_DOILY, 'hp': 175, 'coins': 100, 'trait': ACHILLES,
      'weapons': [w.BARE_HANDS, w.SHOTGUN, w.BONE_SAW],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 1, 'strength': 1.1, 'acc': 1,
-    },
+     'item': i.CUSTOM_INFLATABLE_SUIT},
 
     {'name': SEWER_GATOR, 'hp': 185, 'coins': 0, 'trait': None,
      'weapons': [w.CLAWS, w.TAIL, w.TEETH],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.5, 'acc': 1,
-    },
+     'item': i.SEWER_GATOR_SKULL},
 
     # TODO - what weapons?
     {'name': VAMPIRE_OVERLORD, 'hp': 175, 'coins': 0, 'trait': PLANT,
      'weapons': [w.BARE_HANDS, w.FANGS],
-     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.75, 'strength': 1.1, 'acc': 1
-    },
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.75, 'strength': 1.1, 'acc': 1,
+     'item': i.ANCIENT_CLOAK},
 
     # ============================
     #           FOREST
@@ -431,37 +432,37 @@ Special_Bosses = [
     {'name': CENTAUR, 'hp': 225, 'coins': 0, 'trait': None,
      'weapons': [w.CLAWS],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.1, 'acc': 1,
-     },
+     'item': i.CENTAURIAN_HOOF},
 
     {'name': FAIRY_CODMOTHER, 'hp': 175, 'coins': 50, 'trait': EMPATH,
      'weapons': [w.LONGBOW, w.MAGIC_WAND, w.SLINGSHOT],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 1.1, 'strength': 0.85, 'acc': 1.1,
-     },
+     'item': i.FAIRY_WINGS},
 
     {'name': LUCKY_THE_LEPRECHAUN, 'hp': 160, 'coins': 200, 'trait': COWARD,
      'weapons': [w.CANE, w.MAGIC_WAND, w.POCKET_SAND, w.SLINGSHOT],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 1.5, 'strength': 0.85, 'acc': 1.1,
-     },
+     'item': None},
 
     {'name': MOTHMAN, 'hp': 215, 'coins': 0, 'trait': COWARD,
      'weapons': [w.BARE_HANDS, w.CLAWS],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.05, 'acc': 1,
-     },
+     'item': i.MOTHMAN_DNA},
 
     {'name': SASQUATCH, 'hp': 245, 'coins': 0, 'trait': None,
      'weapons': [w.BARE_HANDS, w.TEETH, w.WOODEN_CLUB],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.1, 'acc': 1,
-     },
+     'item': i.SASQUATCH_FOOT},
 
     {'name': SLENDERMAN, 'hp': 230, 'coins': 0, 'trait': PLANT,
      'weapons': [w.BARE_HANDS, w.TENTACLES],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1,
-     },
+     'item': i.SLENDERMANS_SUIT},
 
     {'name': WENDIGO, 'hp': 235, 'coins': 0, 'trait': None,
      'weapons': [w.CLAWS, w.FANGS],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1,
-     },
+     'item': i.WENDIGO_ANTLER},
 
     # ============================
     #           SWAMP
@@ -470,27 +471,27 @@ Special_Bosses = [
     {'name': HODAG, 'hp': 220, 'coins': 0, 'trait': None,
      'weapons': [w.CLAWS, w.FANGS],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.05, 'acc': 1,
-     },
+     'item': i.HODAG_TOOTH},
 
     {'name': HYDRA, 'hp': 245, 'coins': 0, 'trait': None,
      'weapons': [w.CLAWS, w.TAIL, w.FANGS],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1,
-     },
+     'item': i.HYDRA_HEAD},
 
     {'name': OGRE, 'hp': 235, 'coins': 69, 'trait': JUNKIE,
      'weapons': [w.BARE_HANDS, w.WOODEN_CLUB, w.BONE_CLUB],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 1, 'strength': 1.15, 'acc': 1,
-     },
+     'item': i.TALKING_DONKEY},
 
     {'name': ROUGAROU, 'hp': 215, 'coins': 0, 'trait': None,
      'weapons': [w.CLAWS, w.TEETH, w.FANGS],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1,
-     },
+     'item': i.ROUGAROU_TAIL},
 
     {'name': SKUNK_APE, 'hp': 230, 'coins': 0, 'trait': CONTAGIOUS,
      'weapons': [w.BARE_HANDS, w.WOODEN_CLUB],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.1, 'acc': 1,
-     },
+     'item': i.SKUNK_APE_PELT},
 
 ]
 
