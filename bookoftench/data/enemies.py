@@ -510,7 +510,7 @@ I knew if I captured the champion's beloved Chula, he would send you to her resc
 Well, let's have at it then."""
 Final_Boss = {
     'name': DENNY_BILTMORE,
-    'hp': 300, 'weapons': [w.BRASS_KNUCKLES, w.REVOLVER, w.SHOTGUN, w.CANE],
+    'hp': 325, 'weapons': [w.BARE_HANDS, w.REVOLVER, w.SHOTGUN, w.CANE],
     'bounty': 0, 'type': FINAL_BOSS, 'flee': 0.69, 'strength': 1.2, 'acc': 1.1, 'theme': audio.FINAL_BOSS_THEME,
     'preamble': [{'text': text, 'color': Colors.RED, 'sleep': 4}
                                                   for text in _biltmore_preamble_lines.split('\n')],
