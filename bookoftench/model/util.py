@@ -14,7 +14,7 @@ from .discoverable import rarity_color
 from .game_state import GameState
 from ..data.areas import CAVE, CITY, FOREST, SWAMP
 from ..data.enemies import CONTAGIOUS, BOSS, SPECIAL_BOSS, FINAL_BOSS, NORMAL
-from ..data.enviroment import DAYTIME
+from ..data.enviroment import DAY
 
 # ================================================================================================
 
@@ -129,7 +129,7 @@ def get_player_status_view(game_state: GameState) -> str:
     player = game_state.player
     player_color = p_color(player.hp, player.max_hp)
     tod = game_state.time_of_day
-    tod_display = "Day" if tod == DAYTIME else "Night"
+    tod_display = "Day" if tod == DAY else "Night"
     moon = game_state.moon
     killed_remaining = [f"Killed: {red(f"{game_state.current_area.enemies_killed}")}"]
     if perk_is_active(CROWS_NEST):
@@ -140,7 +140,7 @@ def get_player_status_view(game_state: GameState) -> str:
     player_status = (f"{dim(' | ').join([
         f"{blue(game_state.current_area.name)}",
         *killed_remaining,
-        f"{yellow(tod_display) if tod == DAYTIME else purple(tod_display)}",
+        f"{yellow(tod_display) if tod == DAY else purple(tod_display)}",
         f"{moon} Moon",
         f"Wanted: {purple(game_state.wanted)}",
         f"Bounty: {purple(f"{game_state.bounty}")}"])}"
@@ -357,8 +357,8 @@ def get_battle_info_view(game_state: GameState) -> str:
     moon = game_state.moon
 
     def format_world_data() -> str:
-        color = yellow if tod == DAYTIME else purple
-        word = "Day" if tod == DAYTIME else "Night"
+        color = yellow if tod == DAY else purple
+        word = "Day" if tod == DAY else "Night"
         return f"\n{color(word)} {dim('|')} {moon} Moon"
 
 

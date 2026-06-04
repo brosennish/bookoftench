@@ -21,7 +21,7 @@ from .perk import perk_is_active
 from .shop import Shop
 from .trait import load_traits, load_trait
 from .weapon import load_weapon, make_elite_weapon
-from bookoftench.data.enviroment import NIGHTTIME, FULL
+from bookoftench.data.enviroment import NIGHT, FULL
 from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
 from bookoftench.data.perks import SHERLOCK_TENCH
 from bookoftench.data.weapons import CLAWS, BLIND, SPECIAL
@@ -180,9 +180,9 @@ class Area:
 
     @staticmethod
     def handle_trait_transformation(enemy: Enemy, time: str, moon: str):
-        if enemy.trait.name == NIGHT_OWL and time == NIGHTTIME:
+        if enemy.trait.name == NIGHT_OWL and time == NIGHT:
             enemy = create_night_owl(enemy)
-        if enemy.trait.name == WEREWOLF and time == NIGHTTIME and moon == FULL:
+        if enemy.trait.name == WEREWOLF and time == NIGHT and moon == FULL:
             enemy = create_werewolf(enemy)
 
         return enemy
@@ -208,7 +208,7 @@ class Area:
         if WEREWOLF in self.current_enemy.name:
             self.current_enemy.current_weapon = load_weapon(CLAWS)
             play_sound(WEREWOLF_SFX)
-        elif self.current_enemy.trait.name == NIGHT_OWL and time == NIGHTTIME:
+        elif self.current_enemy.trait.name == NIGHT_OWL and time == NIGHT:
             play_sound(OWL_SFX)
 
 
@@ -236,7 +236,7 @@ class Area:
                 enemy = handle_trait_and_illness(special_boss)
 
             # --- night owl logic ---
-            if special_boss.trait.name == NIGHT_OWL and time == NIGHTTIME:
+            if special_boss.trait.name == NIGHT_OWL and time == NIGHT:
                 special_boss = create_night_owl(special_boss)
                 play_sound(OWL_SFX)
 

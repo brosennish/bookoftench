@@ -24,7 +24,7 @@ from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
 from .trait import Trait
 from .weapon import load_weapons, Weapon
-from bookoftench.data.enviroment import DAYTIME, NIGHTTIME, FULL, WETTING, DRYING
+from bookoftench.data.enviroment import DAY, NIGHT, FULL, WETTING, DRYING
 from bookoftench.data.areas import CAVE
 from ..data.enemies import EMPATH
 
@@ -286,7 +286,7 @@ class Player(Combatant):
             print_and_sleep(red(f"You lost {original_hp - self.hp} HP."), 1)
             return None
         elif item.name == i.PHOTOSYNTHOPHYL:
-            if time == DAYTIME and game_state.current_area.name != CAVE:
+            if time == DAY and game_state.current_area.name != CAVE:
                 amount = self.max_hp - self.hp
                 self.hp = self.max_hp
                 play_sound(a.POSITIVE)
@@ -311,7 +311,7 @@ class Player(Combatant):
                 play_sound(a.SPRAY)
                 print_and_sleep(purple(f"You doused {enemy.name} with Flaccid Acid! Strength: "
                                        f"{original} -> {enemy.strength}"), 1)
-            elif item.name == i.MOON_RUNE and time == NIGHTTIME and game_state.current_area.name != CAVE:
+            elif item.name == i.MOON_RUNE and time == NIGHT and game_state.current_area.name != CAVE:
                 damage = 10 # dry moon
                 if moon == DRYING:
                     damage = 25

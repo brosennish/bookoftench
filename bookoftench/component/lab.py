@@ -11,7 +11,7 @@ from .. import event_logger
 from ..audio import play_music
 from ..data.audio import LAB_THEME
 from ..data.components import LAB
-from ..data.enviroment import NIGHTTIME
+from ..data.enviroment import NIGHT
 from ..model.events import PlayerDeathEvent
 
 # ================================================================================================
@@ -21,7 +21,7 @@ from ..model.events import PlayerDeathEvent
 @register_component(LAB)
 class LabBounder(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: game_state.time_of_day == NIGHTTIME,
+        super().__init__(game_state, decision_function=lambda: game_state.time_of_day == NIGHT,
                          accept_component=LabComponent,
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("The laboratory is closed during the day.\n"), 1.5)))

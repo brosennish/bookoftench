@@ -30,7 +30,7 @@ from ..data.audio import COINS
 from ..data.builds import Builds
 from ..data.enemies import HOHKKEN
 from ..data.illnesses import Illnesses
-from ..data.enviroment import DRY, DAYTIME, NIGHTTIME, WETTING, FULL, DRYING
+from ..data.enviroment import DRY, DAY, NIGHT, WETTING, FULL, DRYING
 
 # ================================================================================================
 
@@ -52,7 +52,7 @@ class GameState:
     blacksmith_is_open: bool = True
     hohkken_is_alive: bool = True
 
-    time_of_day: str = field(default=DAYTIME)
+    time_of_day: str = field(default=DAY)
     moon: str = field(default=DRY)
 
     wench_area: Area = None
@@ -146,13 +146,13 @@ class GameState:
         self._subscribe_listeners()
 
     def set_time_of_day(self):
-        self.time_of_day = random.choice([DAYTIME, NIGHTTIME])
+        self.time_of_day = random.choice([DAY, NIGHT])
 
     def update_time_of_day(self) -> None:
-        if self.time_of_day == DAYTIME:
-            self.time_of_day = NIGHTTIME
-        elif self.time_of_day == NIGHTTIME:
-            self.time_of_day = DAYTIME
+        if self.time_of_day == DAY:
+            self.time_of_day = NIGHT
+        elif self.time_of_day == NIGHT:
+            self.time_of_day = DAY
 
     def set_moon(self):
         self.moon = random.choice([DRY, DRYING, WETTING, FULL])
@@ -183,9 +183,9 @@ class GameState:
                 self.current_area = area
                 event_logger.log_event(TravelEvent(area_name))
                 if not perk_is_active(NEPTUNE) and self.hohkken_is_alive:
-                    if self.time_of_day == DAYTIME and random.random() < 0.04:
+                    if self.time_of_day == DAY and random.random() < 0.04:
                         event_logger.log_event(HohkkenEvent())
-                    elif self.time_of_day == NIGHTTIME and random.random() < 0.08:
+                    elif self.time_of_day == NIGHT and random.random() < 0.08:
                         event_logger.log_event(HohkkenEvent())
                 return
 
