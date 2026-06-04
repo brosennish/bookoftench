@@ -269,6 +269,7 @@ class Combatant(ABC):
 
 # ================================================================================================
 
+    # TODO - refactor
     def handle_hit(self, other: "Combatant") -> None:
         self.current_weapon.use()
         if not self.is_alive():  # solomon train

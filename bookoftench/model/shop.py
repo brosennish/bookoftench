@@ -88,7 +88,7 @@ class Shop:
         self._perk_inventory = perks
 
     def __post_init__(self):
-        self._all_items = [i for i in load_items() if self.area_name in i.areas]
+        self._all_items = [i for i in load_items() if i.areas and self.area_name in i.areas]
         self._all_weapons = load_discoverable_weapons()
         self._all_perks = load_perks()
         self.reset_inventory()

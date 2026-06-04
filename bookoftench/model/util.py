@@ -155,7 +155,7 @@ def get_player_status_view(game_state: GameState) -> str:
         illness_status = (f"{dim(' | ').join([
             f"\nIllness: {yellow(f"{player.illness.name}")}",
             f"Death Level: {red(f"{player.illness_death_lvl}")}",
-        ])}\n")
+        ])}")
 
         return "\n".join([
             player_status,
@@ -188,7 +188,7 @@ def get_battle_status_view(game_state: GameState) -> str:
 def display_bank_balance(game_state: GameState) -> None:
     print_and_sleep(f"{dim(' | ').join([
         f"Player: {green(f"{game_state.player.coins}")}",
-        f"Bank: {green(f"{game_state.bank.balance}")}"])}\n")
+        f"Bank: {green(f"{game_state.bank.balance}")}"])}")
 
 # ================================================================================================
 
@@ -197,7 +197,7 @@ def display_player_attributes(game_state: GameState) -> None:
 
     print_and_sleep(f"\n{dim('Strength |')} {red(round(player.strength, 2))}"
         f"\n{dim('Accuracy |')} {yellow(round(player.acc, 2))}"
-        f"\n{dim('Luck     |')} {green(round(player.luck, 3))}\n")
+        f"\n{dim('Luck     |')} {green(round(player.luck, 3))}")
 
 # ================================================================================================
 
@@ -324,7 +324,7 @@ def display_liberated(game_state: GameState) -> None:
 
     if liberated:
         for i in liberated:
-            color = orange if i.type == BOSS else purple
+            color = orange if i.type in [BOSS, SPECIAL_BOSS] else purple
             print_and_sleep(f"{color(f'{i.name}')}"
                 f"\n{green(f'{i.max_hp}{white(f'{pipe}')}')}"
                 f"{red(f'{round(i.strength, 2)}{white(f'{pipe}')}')}"

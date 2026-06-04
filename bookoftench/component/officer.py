@@ -1,5 +1,6 @@
 import random
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Dict
 
 from bookoftench import event_logger
 from bookoftench.audio import play_music, play_sound
@@ -15,7 +16,7 @@ from bookoftench.model.enemy import Enemy
 from bookoftench.model.events import OfficerEvent
 from bookoftench.model.perk import attach_perk
 from bookoftench.model.util import p_color
-from bookoftench.model.weapon import Weapon
+from bookoftench.model.weapon import Weapon, load_weapons
 from bookoftench.ui import dim, yellow, green, purple, blue
 from bookoftench.util import print_and_sleep
 
@@ -123,6 +124,10 @@ class OfficerHohkken(Enemy):
         super().__init__()
         self.name: str = 'Officer Hohkken'
         self.hp: int = 100
-        self.current_weapon: Weapon = PoliceBrutality()
-        self.current_weapon.damage = random.randint(5, bribe)
+        self.weapon_dict: Dict[str, Weapon] = field(init=False)
+        self.current_weapon.damage = random.randint(round(bribe / 2), bribe)
         self.random_dialogue = []  # TODO maybe add some here?
+
+    def __post_init__(self):
+        self.current_weapon: Weapon = PoliceBrutality()
+        self.weapon_dict = dict((w.name, w) for w in load_weapons([self.current_weapon.name]))

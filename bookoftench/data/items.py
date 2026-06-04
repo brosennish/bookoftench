@@ -1,11 +1,18 @@
-from .areas import CITY, CAVE, FOREST, SWAMP
 from .audio import DRINK, WHIFF, POSITIVE, MAGIC, SPRAY, EAT, BOOMERANG_SFX
+
+# ================================================================================================
+
+CAVE = "Cave"
+CITY = "City"
+FOREST = "Forest"
+SWAMP = "Swamp"
 
 # ================================================================================================
 
 ABANDONED_EYEBALLS = "Abandoned Eyeballs"
 ACCURACY_SEARUM = "Accuracy Searum"
 ALIEN_REMAINS = "Alien Remains"
+ANCIENT_CLOAK = "Ancient Cloak"
 ANTS_ON_A_LOG = "Ants On A Log"
 ASHWAGANDHA_GUMMIES = "Ashwagandha Gummies"
 BABY = "Baby"
@@ -17,13 +24,18 @@ CAMPBELLS_GOOP = "Campbell's Goop"
 CANNED_HORSE = "Canned Horse"
 CARP_FILET = "Carp Filet"
 CATFISH_FILET = "Catfish Filet"
+CENTAURIAN_HOOF = "Centaurian Hoof"
 CRABS_ON_RYE = "Crabs on Rye"
 CRAY = "Cray"
 CRITICAL_BASS = "Critical Bass"
+CUSTOM_INFLATABLE_SUIT = "Custom Inflatable Suit"
+CYCLOPS_EYE = "Cyclops Eye"
+DEATH_BRAIN = "Death Brain"
 EAGLE_EGG = "Eagle Egg"
 EGG_ON_EGGS = "Egg on Eggs"
 EGGS_ON_EGG = "Eggs on Egg"
 ENERGY_CRYSTAL = "Energy Crystal"
+FAIRY_WINGS = "Fairy Wings"
 FERMENTED_CELERY_MILK = "Fermented Celery Milk"
 FLACCID_ACID = "Flaccid Acid"
 FROZEN_WAFFLE = "Frozen Waffle"
@@ -31,15 +43,21 @@ GATOR_TESTICLES = "Gator Testicles"
 GIANT_TENTACLE = "Giant Tentacle"
 GIZZARDS_AND_LIVERS = "Gizzards and Livers"
 GOBY = "Goby"
+HALF_DIGESTED_DIAMOND_NECKLACE = "Half-Digested Diamond Necklace"
+HODAG_TOOTH = "Hodag Tooth"
 HOG_LOINS = "Hog Loins"
 HTH = "HTH"
+HYDRA_HEAD = "Hydra Head"
 IOU = "IOU"
 KRILL = "Krill"
 LACED_HONEY = "Laced Honey"
 LOST_SAUCE = "Lost Sauce"
+MINOTAUR_NOSE_RING = "Minotaur Nose Ring"
+MISCELLANEOUS_TREASURED_ITEMS = "Miscellaneous Treasured Items"
 MOON_RUNE = "Moon Rune"
 MOONSHINE = "Moonshine"
 MOREL = "Morel"
+MOTHMAN_DNA = "Mothman DNA"
 MUSKRAT_SKEWER = "Muskrat Skewer"
 MYSTERY_MEAT = "Mystery Meat"
 MYSTICAL_MUSHROOMS = "Mystical Mushrooms"
@@ -50,21 +68,31 @@ OWL_EGG = "Owl Egg"
 OXYGENATED_BIOFILM = "Oxygenated Biofilm"
 PANTHER_LOINS = "Panther Loins"
 PHOTOSYNTHOPHYL = "Photosynthophyl"
+ROUGAROU_TAIL = "Rougarou Tail"
+SABERTOOTH_LIGER_FILET = "Sabertooth Liger Filet"
+SASQUATCH_FOOT = "Sasquatch Foot"
+SEWER_GATOR_SKULL = "Sewer Gator Skull"
+SKUNK_APE_PELT = "Skunk Ape Pelt"
+SLENDERMANS_SUIT = "Slenderman's Suit"
 SMOKE_BOMB = "Smoke Bomb"
 SOMEWHAT_SPICY_NOODLES = "Somewhat Spicy Noodles"
 SOUR_MILK = "Sour Milk"
 STALE_GREENS = "Stale Greens"
 SUSPICIOUS_GUMBO = "Suspicious Gumbo"
+TALKING_DONKEY = "Talking Donkey"
 TENCH_FILET = "Tench Filet"
 TENCHTOSTERONE = "Tenchtosterone"
 TOAD_STOOL = "Toad Stool"
+TROLL_TOLL = "Troll Toll"
 UNIDENTIFIED_MUSHROOMS = "Unidentified Mushrooms"
 UNWANTED_PROTEIN = "Unwanted Protein"
 VERY_SPICY_NOODLES = "Very Spicy Noodles"
+WENDIGO_ANTLER = "Wendigo Antler"
 WORMHOLE = "Wormhole"
 
 # ================================================================================================
 
+BOSS = "boss"      # valuable item acquired from a boss
 CRIT = "crit"      # affects player attack critical hit odds
 DMG = "dmg"        # affects player attack damage
 ENEMY = "enemy"    # used against enemy
@@ -234,4 +262,51 @@ Items = [
      'desc': 'Use to escape from battle', 'sound': MAGIC},
     {'name': nPnG, 'type': HEALTH, 'hp': 0, 'cost': 105, 'sell_value': 28, 'areas': [CAVE, CITY],
      'desc': 'Lose X HP and increase max HP by X', 'sound': DRINK},
+
+    # ============================
+    #     SPECIAL BOSS ITEMS
+    # ============================
+
+    {'name': ANCIENT_CLOAK, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 130, 'areas': None,
+     'desc': 'Cloak obtained by the Vampire Overlord in ancient times', 'sound': WHIFF},
+    {'name': CENTAURIAN_HOOF, 'type': BOSS, 'hp': 50, 'cost': 0, 'sell_value': 100, 'areas': None,
+     'desc': 'One of the four hooves previously utilized by the mighty Centaur', 'sound': EAT},
+    {'name': CUSTOM_INFLATABLE_SUIT, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 80, 'areas': None,
+     'desc': 'Used by Oily Doily to float in the air', 'sound': WHIFF},
+    {'name': CYCLOPS_EYE, 'type': BOSS, 'hp': 50, 'cost': 0, 'sell_value': 110, 'areas': None,
+     'desc': 'A large eye that once belonged to a Cyclops', 'sound': EAT},
+    {'name': DEATH_BRAIN, 'type': BOSS, 'hp': 50, 'cost': 0, 'sell_value': 90, 'areas': None,
+     'desc': 'The tiny brain of the giant Death Worm', 'sound': EAT},
+    {'name': HALF_DIGESTED_DIAMOND_NECKLACE, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 130, 'areas': None,
+     'desc': 'Giant mutant rats will eat anything - especially jines', 'sound': EAT},
+    {'name': FAIRY_WINGS, 'type': BOSS, 'hp': 35, 'cost': 0, 'sell_value': 120, 'areas': None,
+     'desc': 'Allowed the Fairy Codmother to fly - like a horsefly', 'sound': EAT},
+    {'name': HODAG_TOOTH, 'type': BOSS, 'hp': 30, 'cost': 0, 'sell_value': 135, 'areas': None,
+     'desc': 'A massive tooth from the mouth of the elusive Hodag', 'sound': EAT},
+    {'name': HYDRA_HEAD, 'type': BOSS, 'hp': 120, 'cost': 0, 'sell_value': 180, 'areas': None,
+     'desc': 'One of the Hydra\'s many heads', 'sound': EAT},
+    {'name': MISCELLANEOUS_TREASURED_ITEMS, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 90, 'areas': None,
+     'desc': 'Various items stolen from poor, unsuspecting saps', 'sound': EAT},
+    {'name': MINOTAUR_NOSE_RING, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 120, 'areas': None,
+     'desc': 'A ring that once pierced the nose of the mighty Minotaur', 'sound': WHIFF},
+    {'name': MOTHMAN_DNA, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 150, 'areas': None,
+     'desc': 'DNA belonging to the late, great Mothman', 'sound': WHIFF},
+    {'name': SKUNK_APE_PELT, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 100, 'areas': None,
+     'desc': 'The worst thing you\'ll ever smell', 'sound': WHIFF},
+    {'name': ROUGAROU_TAIL, 'type': BOSS, 'hp': 45, 'cost': 0, 'sell_value': 120, 'areas': None,
+     'desc': 'The tail of the ferocious Rougarou', 'sound': EAT},
+    {'name': SABERTOOTH_LIGER_FILET, 'type': BOSS, 'hp': 100, 'cost': 0, 'sell_value': 100, 'areas': None,
+     'desc': 'A generous cut of Sabertooth Liger Meat', 'sound': EAT},
+    {'name': SASQUATCH_FOOT, 'type': BOSS, 'hp': 80, 'cost': 0, 'sell_value': 160, 'areas': None,
+     'desc': 'A big foot', 'sound': EAT},
+    {'name': SEWER_GATOR_SKULL, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 100, 'areas': None,
+     'desc': 'The skull of the notorious Sewer Gator', 'sound': WHIFF},
+    {'name': SLENDERMANS_SUIT, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 150, 'areas': None,
+     'desc': 'A suit, custom-made for Slenderman - origins unknown', 'sound': WHIFF},
+    {'name': TALKING_DONKEY, 'type': BOSS, 'hp': 100, 'cost': 0, 'sell_value': 125, 'areas': None,
+     'desc': 'Smells like onions', 'sound': EAT},
+    {'name': TROLL_TOLL, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 100, 'areas': None,
+     'desc': 'You didn\'t have to pay it', 'sound': WHIFF},
+    {'name': WENDIGO_ANTLER, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 150, 'areas': None,
+     'desc': 'One of the two antlers that once adorned the magnificent Wendigo', 'sound': WHIFF},
 ]

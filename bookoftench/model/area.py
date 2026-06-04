@@ -12,7 +12,7 @@ from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABL
     SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD, \
     ENCOUNTER_BOSS
 from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, CONTAGIOUS, NIGHT_OWL, HOHKKEN, BOSS, \
-    NORMAL
+    NORMAL, SPECIAL_BOSS
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss, load_special_boss, SpecialBoss
@@ -219,28 +219,28 @@ class Area:
 
 # ================================================================================================
 
-    def spawn_special_boss(self, name: str, time: str, gs) -> Enemy:
-        enemy = load_special_boss(name)  # convert selected special boss to Enemy type
+    def spawn_special_boss(self, name: str, time: str, gs) -> SpecialBoss:
+        special_boss = load_special_boss(name)  # convert selected special boss to Enemy type
         self.enemies_seen.add(name)  # add selected enemy to enemies_seen
 
         # --- assign Trait ---
-        if enemy.trait:
-            if isinstance(enemy.trait, str):
-                trait_dict = next((i for i in Traits if i['name'] == enemy.trait), None)
+        if special_boss.trait:
+            if isinstance(special_boss.trait, str):
+                trait_dict = next((i for i in Traits if i['name'] == special_boss.trait), None)
 
                 if trait_dict:
-                    enemy.trait = load_trait(trait_dict)
+                    special_boss.trait = load_trait(trait_dict)
 
             # --- traits and illness ---
-            if enemy.trait and enemy.trait.name == CONTAGIOUS:
-                enemy = handle_trait_and_illness(enemy)
+            if special_boss.trait and special_boss.trait.name == CONTAGIOUS:
+                enemy = handle_trait_and_illness(special_boss)
 
             # --- night owl logic ---
-            if enemy.trait.name == NIGHT_OWL and time == NIGHTTIME:
-                enemy = create_night_owl(enemy)
+            if special_boss.trait.name == NIGHT_OWL and time == NIGHTTIME:
+                special_boss = create_night_owl(special_boss)
                 play_sound(OWL_SFX)
 
-        self.current_enemy = enemy
+        self.current_enemy = special_boss
         self.log_encounter(self.current_enemy, gs)
 
         # --- elite weapon logic ---
@@ -276,7 +276,7 @@ class Area:
         return self.current_enemy
 
     def kill_current_enemy(self, current_area, wench_area) -> None:
-        if self.current_enemy.type != BOSS:
+        if self.current_enemy.type not in [BOSS, SPECIAL_BOSS]:
             self.enemies_killed += 1
         if self.current_enemy == self.boss:
             self.boss_defeated = True
