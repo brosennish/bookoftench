@@ -378,9 +378,10 @@ Special_Bosses = [
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.95, 'strength': 1, 'acc': 1,
      },
 
+    # TODO - add special axe
     {'name': MINOTAUR, 'hp': 240, 'coins': 0, 'trait': None,
      'weapons': [w.CLAWS],
-     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1, 'acc': 1,
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1.2, 'acc': 1,
      },
 
     {'name': SABERTOOTH_LIGER, 'hp': 210, 'coins': 0, 'trait': None,
@@ -397,12 +398,12 @@ Special_Bosses = [
     #            CITY
     # ============================
 
-    {'name': GIANT_MUTANT_RAT, 'hp': 170, 'coins': 25, 'trait': CONTAGIOUS,
+    {'name': GIANT_MUTANT_RAT, 'hp': 175, 'coins': 25, 'trait': CONTAGIOUS,
      'weapons': [w.CLAWS, w.FANGS],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.1, 'acc': 1,
     },
 
-    {'name': KNOBGOBLIN, 'hp': 165, 'coins': 65, 'trait': CHEATER,
+    {'name': KNOBGOBLIN, 'hp': 170, 'coins': 65, 'trait': CHEATER,
      'weapons': [w.CLAWS, w.FANGS],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.95, 'strength': 1.1, 'acc': 1,
     },
@@ -417,7 +418,8 @@ Special_Bosses = [
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.5, 'acc': 1,
     },
 
-    {'name': VAMPIRE_OVERLORD, 'hp': 170, 'coins': 0, 'trait': PLANT,
+    # TODO - what weapons?
+    {'name': VAMPIRE_OVERLORD, 'hp': 175, 'coins': 0, 'trait': PLANT,
      'weapons': [w.BARE_HANDS, w.FANGS],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.75, 'strength': 1.1, 'acc': 1
     },

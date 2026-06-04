@@ -16,7 +16,7 @@ class Item(Buyable):
     hp: int
     cost: int
     sell_value: int
-    areas: List[str]
+    areas: List[str] | None
     desc: str | None
     sound: str
 
