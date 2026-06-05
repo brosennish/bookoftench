@@ -73,6 +73,8 @@ class Fish:
         else:
             return orange(self.rarity)
 
+# ================================================================================================
+
     def get_simple_format(self) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:<19}"),
