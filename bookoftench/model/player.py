@@ -107,6 +107,7 @@ class Player(Combatant):
     acc: float = 1
     luck: float = 1
     trait: Trait = None
+    fishing_level: int = 1
 
     illness: Optional[Illness] = None
     illness_death_lvl: Optional[int] = None
@@ -469,6 +470,8 @@ class Player(Combatant):
         if self.luck > 10:
             self.luck = 10
 
+# ================================================================================================
+
     @staticmethod
     @attach_perk(p.INTRO_TO_TENCH, value_description="xp gained")
     @attach_perk(p.AP_TENCH_STUDIES, p.WrapperIndices.ApTenchStudies.BATTLE_XP, value_description="xp gained")
@@ -495,10 +498,6 @@ class Player(Combatant):
         # handles cases where a big XP chunk might give multiple levels
         while self.xp >= self.xp_needed:
             self.level_up()
-
-    @attach_perk(p.TENCH_GENES, p.WrapperIndices.TenchGenes.SURVIVAL, value_description="illness survival chance")
-    def get_illness_survival_probability(self) -> float:
-        return 0.0
 
 # ================================================================================================
 
@@ -557,6 +556,12 @@ class Player(Combatant):
         self.illness_death_lvl = None
         self._max_plays = 10
 
+# ================================================================================================
+
+    @attach_perk(p.TENCH_GENES, p.WrapperIndices.TenchGenes.SURVIVAL, value_description="illness survival chance")
+    def get_illness_survival_probability(self) -> float:
+        return 0.0
+    
 # ================================================================================================
 
     def handle_broken_weapon(self) -> None:
