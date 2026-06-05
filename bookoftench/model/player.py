@@ -127,6 +127,8 @@ class Player(Combatant):
 
     _blind = False
     # TODO maybe add starting items/weapons to config file
+    tackle_box: Dict[str, Bait] = field(default_factory=bait_defaults)
+    current_bait: Bait = None
     items: Dict[str, Item] = field(default_factory=item_defaults)
     weapon_dict: Dict[str, PlayerWeapon] = field(default_factory=weapon_defaults)
     current_weapon: Weapon = None
