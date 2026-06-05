@@ -49,19 +49,6 @@ SPOOKED = "Spooked"
 AGITATED = "Agitated"
 ENRAGED = "Enraged"
 
-# Casting
-SHALLOWS_MIN_DISTANCE = 10
-SHALLOWS_MAX_DISTANCE = 50
-SHALLOWS_MAX_LINE = 100
-
-BAY_MIN_DISTANCE = 50
-BAY_MAX_DISTANCE = 100
-BAY_MAX_LINE = 200
-
-OCEAN_MIN_DISTANCE = 100
-OCEAN_MAX_DISTANCE = 300
-OCEAN_MAX_LINE = 500
-
 # ================================================================================================
 
 Fish_Species = [
