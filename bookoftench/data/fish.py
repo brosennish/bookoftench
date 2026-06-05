@@ -3,6 +3,11 @@ from bookoftench.data import bait as b
 # ================================================================================================
 
 # Species
+BARRACUDA = "Barracuda"
+BULL_SHARK = "Bull Shark"
+CHANNEL_CATFISH = "Channel Catfish"
+ROUND_GOBY = "Round Goby"
+TARPON = "Tarpon"
 TENCH = "Tench"
 
 # ================================================================================================
@@ -48,10 +53,45 @@ Fish_Species = [
     # =====================================================
     #                       SHALLOWS
     # =====================================================
-    {'name': TENCH, 'rarity': RARE, 'areas': [SHALLOWS], 'time': [DAY], 'moon': '',
-     'min_length': 8, 'max_length': 28, 'min_weight_per_inch': 0.18, 'max_weight_per_inch': 0.30,
-     'value_for_size': 0.50, 'hp_for_size': 0.50, 'rage': 1, 'speed': 1, 'strength': 1,
-     'preferred_bait': [b.WORM, b.DOUGH_BALL]
+
+    {'name': CHANNEL_CATFISH, 'rarity': UNCOMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': '',
+     'min_length': 12, 'max_length': 42, 'min_weight_per_inch': 0.25, 'max_weight_per_inch': 0.55,
+     'value_for_size': 0.09, 'hp_for_size': 0.12, 'rage': 1.1, 'speed': 0.8, 'strength': 1.6,
+     'preferred_bait': [b.WORM, b.MEAT], 'spit_hook_chance': 0.005
      },
 
-    ]
+    {'name': ROUND_GOBY, 'rarity': COMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': '',
+     'min_length': 3, 'max_length': 10, 'min_weight_per_inch': 0.08, 'max_weight_per_inch': 0.18,
+     'value_for_size': 2.5, 'hp_for_size': 2.2, 'rage': 0.8, 'speed': 1.2, 'strength': 0.6,
+     'preferred_bait': [b.WORM, b.CRAY], 'spit_hook_chance': 0.008
+     },
+
+    {'name': TENCH, 'rarity': RARE, 'areas': [SHALLOWS], 'time': [DAY], 'moon': '',
+     'min_length': 8, 'max_length': 28, 'min_weight_per_inch': 0.18, 'max_weight_per_inch': 0.30,
+     'value_for_size': 0.32, 'hp_for_size': 0.48, 'rage': 1, 'speed': 1, 'strength': 1,
+     'preferred_bait': [b.WORM, b.DOUGH_BALL], 'spit_hook_chance': 0.003
+     },
+
+    # =====================================================
+    #                        BAY
+    # =====================================================
+
+    {'name': BARRACUDA, 'rarity': COMMON, 'areas': [BAY, OCEAN], 'time': [DAY], 'moon': '',
+     'min_length': 18, 'max_length': 60, 'min_weight_per_inch': 0.18, 'max_weight_per_inch': 0.35,
+     'value_for_size': 0.05, 'hp_for_size': 0.08, 'rage': 1.4, 'speed': 1.8, 'strength': 1.2,
+     'preferred_bait': [b.MINNOW, b.SPOON], 'spit_hook_chance': 0.006
+     },
+
+    {'name': BULL_SHARK, 'rarity': RARE, 'areas': [SHALLOWS, BAY, OCEAN], 'time': [DAY, NIGHT], 'moon': '',
+     'min_length': 36, 'max_length': 120, 'min_weight_per_inch': 0.60, 'max_weight_per_inch': 1.40,
+     'value_for_size': 0.008, 'hp_for_size': 0.008, 'rage': 1.2, 'speed': 1.1, 'strength': 2.5,
+     'preferred_bait': [b.MEAT, b.SQUID], 'spit_hook_chance': 0.002
+     },
+
+    {'name': TARPON, 'rarity': UNCOMMON, 'areas': [BAY, OCEAN], 'time': [DAY, NIGHT], 'moon': '',
+     'min_length': 24, 'max_length': 84, 'min_weight_per_inch': 0.35, 'max_weight_per_inch': 0.75,
+     'value_for_size': 0.02, 'hp_for_size': 0.025, 'rage': 1.3, 'speed': 1.7, 'strength': 1.8,
+     'preferred_bait': [b.SHRIMP, b.MINNOW], 'spit_hook_chance': 0.012
+     },
+
+]
