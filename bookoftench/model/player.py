@@ -14,6 +14,7 @@ from bookoftench.event_logger import subscribe_function
 from bookoftench.model.illness import Illness
 from bookoftench.ui import yellow, dim, green, cyan, purple, red
 from bookoftench.util import print_and_sleep
+from .bait import Bait
 from .base import Combatant, Buyable
 from .build import Build
 from .enemy import Enemy
