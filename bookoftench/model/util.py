@@ -48,12 +48,11 @@ def display_coffee_header(game_state: GameState) -> None:
 
 def display_fishmonger_header(game_state: GameState) -> None:
     player = game_state.player
-    season_color = blue if WET_SEASON else yellow
+    season = game_state.season
+    season_color = blue if season == WET_SEASON else yellow
 
     print_and_sleep(f"{dim(' | ').join([
-        f"{season_color(f"{game_state.season}")}",
-        f"Fishing Lvl: {cyan(f"{player.fishing_lvl}")}",
-        f"XP: {cyan(f"{player.fishing_xp}")}", # todo - add xp system 
+        f"{season_color(f"{season}")}",
         f"Coins: {green(f"{player.coins}")}",
     ])}\n")
 
@@ -70,7 +69,7 @@ def c_color(casts: int) -> Callable[[str], str]:
     else:
         return red
 
-def display_fishing_header(game_state: GameState) -> None:
+def display_boat_header(game_state: GameState):
     player = game_state.player
     tod = game_state.time_of_day
     tod_display = "Day" if tod == DAY else "Night"
@@ -78,20 +77,24 @@ def display_fishing_header(game_state: GameState) -> None:
     casts = game_state.current_fishing_area.casts
 
     # --- top row ---
-    print_and_sleep(f"{dim(' | ').join([
-        f"{blue if WET_SEASON else yellow(f"{game_state.season}")}",
-        f"{blue(f"{game_state.current_fishing_area}")}",
+    top_row = f"{dim(' | ').join([
+        f"{blue(f"{game_state.current_fishing_area.name}")}",
         f"{yellow(tod_display) if tod == DAY else purple(tod_display)}",
         f"{moon} Moon",
-    ])}\n")
+    ])}\n"
 
-    # --- second row ---
-    print_and_sleep(f"{dim(' | ').join([
-        f"Fishing Lvl: {cyan(f"{player.fishing_lvl}")}",
-        f"Fishing XP: {cyan(f"{player.fishing_xp}")}",  # todo - add xp system 
+    # --- bottom row ---
+    bottom_row = f"{dim(' | ').join([
+        f"Lvl: {cyan(f"{player.fishing_lvl}")}",
+        f"XP: {cyan(f"{player.fishing_xp}")}",  # todo - add xp system 
         f"Coins: {green(f"{player.coins}")}",
         f"Casts: {c_color(casts)(f"{game_state.current_fishing_area.casts}")}",
-    ])}\n")
+    ])}\n"
+
+    print_and_sleep("\n".join([
+        top_row,
+        bottom_row,
+    ]))
 
 # ================================================================================================
 

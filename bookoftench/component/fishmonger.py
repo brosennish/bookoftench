@@ -2,6 +2,7 @@ import random
 
 from bookoftench import event_logger
 from bookoftench.audio import play_music, play_sound
+from bookoftench.component import BoatComponent
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
@@ -91,7 +92,7 @@ class FishmongerComponent(LabeledSelectionComponent):
                 player.coins -= fishing_area.travel_cost
                 play_sound(PURCHASE)
                 game_state.current_fishing_area = fishing_area
-                game_state.casts_remaining = fishing_area.casts # subtract a cast each cast
+                BoatComponent(game_state).run()
 
             # event_logger.log_event(FishingEvent())
 

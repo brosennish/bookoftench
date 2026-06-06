@@ -5,6 +5,7 @@ from .blacksmith import *
 from .casino import *
 from .coffee_shop import *
 # from .crypto import *
+from .fishing import *
 from .fishmonger import *
 from .game import InitGame
 from .hospital import *

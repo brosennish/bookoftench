@@ -6,19 +6,20 @@ from bookoftench.component.base import LabeledSelectionComponent, SelectionBindi
     functional_component
 from bookoftench.component.registry import register_component
 from bookoftench.data.fishing import TACKLE_BOX, FISHING_OPTIONS, CAST, FISH_LOG, SHOP
-from bookoftench.data.components import FISHING
+from bookoftench.data.components import BOAT
 from bookoftench.model import GameState
-from bookoftench.model.util import display_fishing_header
+from bookoftench.model.util import display_boat_header
 from bookoftench.ui import blue, yellow
 from bookoftench.util import print_and_sleep
 
 # ================================================================================================
 
-@register_component(FISHING)
-class FishingComponent(LabeledSelectionComponent):
+@register_component(BOAT)
+class BoatComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
-        options = FISHING_OPTIONS.copy()
+        original = FISHING_OPTIONS.copy()
+        options = [i['name'] for i in original]
 
         fishing_option_bindings = [ReprBinding(str(i + 1), option,
                                        self._handle_selection_component(option), option) for
@@ -32,7 +33,7 @@ class FishingComponent(LabeledSelectionComponent):
             LabeledSelectionComponent(
                 game_state,
                 fishing_option_bindings,
-                top_level_prompt_callback=display_fishing_header,
+                top_level_prompt_callback=display_boat_header,
             ),
             LabeledSelectionComponent(
                 game_state,
@@ -63,7 +64,7 @@ class FishingComponent(LabeledSelectionComponent):
     @staticmethod
     def _handle_selection_component(selection: str) -> type[Component]:
         @functional_component(state_dependent=True)
-        def purchase_component(game_state: GameState):
+        def selection_component(game_state: GameState):
             player = game_state.player
 
             if selection == CAST:
@@ -75,5 +76,8 @@ class FishingComponent(LabeledSelectionComponent):
             elif selection == TACKLE_BOX:
                 pass
             else:
-                return FishingComponent(game_state).run()
+                return selection_component(game_state)
 
+        return selection_component
+
+# ================================================================================================

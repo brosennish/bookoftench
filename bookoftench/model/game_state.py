@@ -58,7 +58,7 @@ class GameState:
     fishmonger_is_open: bool = True
     hohkken_is_alive: bool = True
 
-    season: str = None
+    season: str = DRY_SEASON
     time_of_day: str = field(default=DAY)
     moon: str = field(default=DRY)
 
