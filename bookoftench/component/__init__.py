@@ -5,9 +5,10 @@ from .blacksmith import *
 from .casino import *
 from .coffee_shop import *
 # from .crypto import *
-from .lab import *
+from .fishmonger import *
 from .game import InitGame
 from .hospital import *
+from .lab import *
 from .occultist import *
 from .officer import *
 from .settings import *

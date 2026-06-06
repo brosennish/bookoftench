@@ -32,7 +32,7 @@ class FishmongerOpen(GatekeepingComponent):
 class FishmongerComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
-        valid = [i['name'] for i in Fishing_Areas if i.level <= player.lvl]
+        valid = [i['name'] for i in Fishing_Areas if i['lvl'] <= player.lvl]
         available = load_fishing_areas(valid)
 
         fishing_area_bindings = [ReprBinding(str(i + 1), area.name,
@@ -93,7 +93,7 @@ class FishmongerComponent(LabeledSelectionComponent):
                 game_state.current_fishing_area = fishing_area
                 game_state.casts_remaining = fishing_area.casts # subtract a cast each cast
 
-            event_logger.log_event(FishingEvent())
+            # event_logger.log_event(FishingEvent())
 
-        return FishingComponent(game_state).run()
+        return purchase_component
 

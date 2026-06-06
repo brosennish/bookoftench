@@ -48,11 +48,12 @@ def display_coffee_header(game_state: GameState) -> None:
 
 def display_fishmonger_header(game_state: GameState) -> None:
     player = game_state.player
+    season_color = blue if WET_SEASON else yellow
 
     print_and_sleep(f"{dim(' | ').join([
-        f"{blue if WET_SEASON else yellow(f"{game_state.season}")}",
+        f"{season_color(f"{game_state.season}")}",
         f"Fishing Lvl: {cyan(f"{player.fishing_lvl}")}",
-        f"Fishing XP: {cyan(f"{player.fishing_xp}")}", # todo - add xp system 
+        f"XP: {cyan(f"{player.fishing_xp}")}", # todo - add xp system 
         f"Coins: {green(f"{player.coins}")}",
     ])}\n")
 
@@ -89,7 +90,7 @@ def display_fishing_header(game_state: GameState) -> None:
         f"Fishing Lvl: {cyan(f"{player.fishing_lvl}")}",
         f"Fishing XP: {cyan(f"{player.fishing_xp}")}",  # todo - add xp system 
         f"Coins: {green(f"{player.coins}")}",
-        f"Casts Remaining: {c_color(casts)(f"{game_state.current_fishing_area.casts}")}",
+        f"Casts: {c_color(casts)(f"{game_state.current_fishing_area.casts}")}",
     ])}\n")
 
 # ================================================================================================
