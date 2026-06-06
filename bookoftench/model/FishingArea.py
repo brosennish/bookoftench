@@ -8,6 +8,7 @@ class FishingArea:
     name: str
     bite_chance: float
     hook_chance: float
+    lvl: int
     min_hook_distance: int
     max_hook_distance: int
     escape_distance: int

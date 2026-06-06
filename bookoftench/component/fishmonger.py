@@ -6,14 +6,14 @@ from bookoftench.component.base import LabeledSelectionComponent, SelectionBindi
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import PURCHASE, BLACKSMITH_THEME
-from bookoftench.data.blacksmith import Blacksmith_Lines
+from bookoftench.data.fishing_areas import Fishing_Areas
+from bookoftench.data.fishmonger import Fishmonger_Lines
 from bookoftench.data.components import FISHMONGER
 from bookoftench.data.weapons import BLIND, MELEE, RANGED
 from bookoftench.model import GameState
 from bookoftench.model.events import BlacksmithEvent
 from bookoftench.model.player import PlayerWeapon
 from bookoftench.model.util import display_blacksmith_header
-from bookoftench.model.weapon import make_elite_weapon, load_weapon
 from bookoftench.ui import blue, yellow, cyan
 from bookoftench.util import print_and_sleep
 
@@ -34,22 +34,21 @@ class FishmongerOpen(GatekeepingComponent):
 class FishmongerComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
-        valid = [i for i in player.weapon_dict.values() if i.type not in [BLIND] and
-                 not i.is_elite]
+        valid = [i for i in Fishing_Areas if i.level <= player.lvl]
 
-        weapon_bindings = [ReprBinding(str(i + 1), weapon.base_name,
-                                       self._make_purchase_component(weapon), weapon) for
-                          i, weapon in enumerate(valid)]
+        fishing_area_bindings = [ReprBinding(str(i + 1), area.name,
+                                       self._make_purchase_component(area), area) for
+                          i, area in enumerate(valid)]
 
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
 
         super().__init__(game_state, refresh_menu=True,
-                         bindings=[*weapon_bindings, return_binding])
+                         bindings=[*fishing_area_bindings, return_binding])
         self.selection_components = [
             LabeledSelectionComponent(
                 game_state,
-                weapon_bindings,
-                top_level_prompt_callback=display_blacksmith_header,
+                fishing_area_bindings,
+                top_level_prompt_callback=display_fishmonger_header,
             ),
             LabeledSelectionComponent(
                 game_state,
@@ -59,7 +58,8 @@ class FishmongerComponent(LabeledSelectionComponent):
         self.leave = False
 
     def play_theme(self) -> None:
-        play_music(BLACKSMITH_THEME)
+        pass
+        # play_music(FISHMONGER_THEME)
 
     def _return(self):
         self.leave = True

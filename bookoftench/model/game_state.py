@@ -20,6 +20,7 @@ from .discoverable import Discoverable
 # from .crypto import CryptoMarketState
 from .enemy import Enemy, load_enemy
 from .events import TravelEvent, BountyCollectedEvent, LevelUpEvent, HohkkenEvent
+from .fish import Fish
 from .illness import load_illness
 from .item import Item, load_items
 from .perk import attach_perk, Perk, set_perk_cache, load_perk, perk_is_active
@@ -43,6 +44,7 @@ class GameState:
     areas: List[Area] = field(default_factory=load_areas)
     current_area: Area = None
     current_fishing_area: str | None = None
+    current_fish: Fish | None = None
 
     pending_boss: bool = False
 

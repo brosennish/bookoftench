@@ -1,4 +1,7 @@
 from dataclasses import dataclass
+from typing import List
+
+from bookoftench.data.bait import Bait_And_Lures
 from bookoftench.model.base import Buyable
 from bookoftench.ui import dim, cyan, orange, green, red
 
@@ -10,6 +13,8 @@ class Bait(Buyable):
     areas: list
     casts: int
     cost: int
+
+# ================================================================================================
 
     def get_casts(self):
         if self.casts > 1:
@@ -29,3 +34,14 @@ class Bait(Buyable):
             f"Cost: {orange(self.cost)}",
             f"Casts: {self.get_casts()}",
         ])
+
+# ================================================================================================
+
+def load_bait(name: str) -> Bait:
+    matches = load_baits([name])
+    if len(matches) == 0:
+        raise ValueError(f"Could not find bait data for {name}")
+    return matches[0]
+
+def load_baits(restriction: List[str] = None) -> List[Bait]:
+    return [Bait(**d) for d in Bait_And_Lures if restriction is None or d['name'] in restriction]

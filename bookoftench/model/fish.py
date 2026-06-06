@@ -2,6 +2,7 @@ import random
 from dataclasses import dataclass
 
 from bookoftench.data import fish as f
+from bookoftench.data.fish import VARIANTS
 from bookoftench.ui import dim, cyan, orange, green, yellow, blue
 
 # ================================================================================================
@@ -9,6 +10,7 @@ from bookoftench.ui import dim, cyan, orange, green, yellow, blue
 @dataclass
 class Fish:
     name: str
+    base_name: str
     description: str
     rarity: str
     areas: list[str]
@@ -22,16 +24,16 @@ class Fish:
     weight: int | float
     value_for_size: float
     value: int
-    hp_for_size: float
-    hp: int
     rage: float
     speed: float
     strength: float
     preferred_bait: list[str]
     spit_hook_chance: float
-    sex: str
-    state: str
     max_age: int
+
+    sex: str | None = None
+    state: str | None = None
+    variant: str | None = None
     age: int | None = None
     catch_location: str | None = None # assigned when caught
 
@@ -44,11 +46,19 @@ class Fish:
         weight_factor = random.uniform(self.min_weight_factor, self.max_weight_factor)
         self.weight = round(((self.length ** 2) * weight_factor) / 144)
         size = self.length * self.weight
-        self.state = self.get_state()
-        self.hp = round(size * self.hp_for_size)
+        self.get_state()
+        self.get_variant()
         self.value = round(size * self.value_for_size)
 
 # ================================================================================================
+
+    def get_variant(self):
+        variants = VARIANTS.copy()
+        random.shuffle(variants)
+        for i in variants:
+            if random.random() < i['chance']:
+                self.variant = i['name']
+                break
 
     def get_state(self):
         roll = random.random()
@@ -60,8 +70,6 @@ class Fish:
             self.state = f.SPOOKED
         else:
             self.state = f.CALM
-
-        return self.state
 
     def get_rarity(self):
         if self.rarity == f.COMMON:

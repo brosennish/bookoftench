@@ -44,6 +44,18 @@ def display_coffee_header(game_state: GameState) -> None:
 
 # ================================================================================================
 
+def display_fishmonger_header(game_state: GameState) -> None:
+    player = game_state.player
+
+    print_and_sleep(f"{dim(' | ').join([
+        f"Coins: {green(f"{player.coins}")}",
+        f"Melee: {orange(f"125")}",
+        f"Ranged: {orange(f"150")}",
+        f"Special (∞): {orange(f"400")}\n",
+    ])}\n")
+
+# ================================================================================================
+
 def display_blacksmith_header(game_state: GameState) -> None:
     player = game_state.player
 

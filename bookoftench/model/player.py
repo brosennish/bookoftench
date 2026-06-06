@@ -14,7 +14,8 @@ from bookoftench.event_logger import subscribe_function
 from bookoftench.model.illness import Illness
 from bookoftench.ui import yellow, dim, green, cyan, purple, red
 from bookoftench.util import print_and_sleep
-from .bait import Bait
+from bookoftench.model.bait import Bait, load_baits
+from bookoftench.data.bait import DOUGH_BALL
 from .base import Combatant, Buyable
 from .build import Build
 from .enemy import Enemy
@@ -27,7 +28,7 @@ from .trait import Trait
 from .weapon import load_weapons, Weapon
 from bookoftench.data.enviroment import DAY, NIGHT, FULL, WETTING, DRYING
 from bookoftench.data.areas import CAVE
-from ..data.enemies import EMPATH
+from bookoftench.data.enemies import EMPATH
 
 # ================================================================================================
 
@@ -71,6 +72,10 @@ class PlayerWeapon(Weapon):
         ])
 
 
+def bait_defaults() -> Dict[str, Bait]:
+    return dict((b.name, b) for b in load_baits([DOUGH_BALL]))
+
+
 def item_defaults() -> Dict[str, Item]:
     return dict((it.name, it) for it in load_items([i.TENCH_FILET]))
 
@@ -107,7 +112,7 @@ class Player(Combatant):
     acc: float = 1
     luck: float = 1
     trait: Trait = None
-    fishing_level: int = 1
+    fishing_lvl: int = 1
 
     illness: Optional[Illness] = None
     illness_death_lvl: Optional[int] = None
@@ -561,7 +566,7 @@ class Player(Combatant):
     @attach_perk(p.TENCH_GENES, p.WrapperIndices.TenchGenes.SURVIVAL, value_description="illness survival chance")
     def get_illness_survival_probability(self) -> float:
         return 0.0
-    
+
 # ================================================================================================
 
     def handle_broken_weapon(self) -> None:
