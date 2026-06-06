@@ -1,10 +1,18 @@
 
 # ================================================================================================
 
-# Species
+# Fishing Areas
 SHALLOWS = "Shallows"
 BAY = " Bay"
 OCEAN = "Ocean"
+
+# Seasons
+DRY_SEASON = "Dry Season"
+WET_SEASON = "Wet Season"
+
+# Season Effects
+DRY_SEASON_BITE_CHANCE_EFFECT = -0.05
+WET_SEASON_BITE_CHANCE_EFFECT = 0.05
 
 # ================================================================================================
 

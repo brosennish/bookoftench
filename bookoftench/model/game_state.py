@@ -29,6 +29,7 @@ from .weapon import Weapon, load_weapons
 from ..data.audio import COINS
 from ..data.builds import Builds
 from ..data.enemies import HOHKKEN
+from ..data.fishing_areas import DRY_SEASON, WET_SEASON
 from ..data.illnesses import Illnesses
 from ..data.enviroment import DRY, DAY, NIGHT, WETTING, FULL, DRYING
 
@@ -51,8 +52,10 @@ class GameState:
     wizard_is_open: bool = True
     shaman_is_open: bool = True
     blacksmith_is_open: bool = True
+    fishmonger_is_open: bool = True
     hohkken_is_alive: bool = True
 
+    season: str = None
     time_of_day: str = field(default=DAY)
     moon: str = field(default=DRY)
 
@@ -146,6 +149,14 @@ class GameState:
             crypto_service.init(self.crypto_market_state)
         self._subscribe_listeners()
 
+# ================================================================================================
+
+    def update_season(self):
+        if self.season == DRY_SEASON:
+            self.season = WET_SEASON
+        else:
+            self.season = DRY_SEASON
+
     def set_time_of_day(self):
         self.time_of_day = random.choice([DAY, NIGHT])
 
@@ -218,6 +229,7 @@ class GameState:
         def trigger_level_up_events(_: LevelUpEvent):
             event_logger.log_event(BankVisitDecisionTriggerEvent(self))
             event_logger.log_event(SaveGameDecisionTriggerEvent(self))
+            self.update_season()
             self.refresh_bounty()
             self.handle_component_statuses()
 
@@ -229,7 +241,7 @@ class GameState:
             if random.random() < 0.10:
                 self.casino_is_open = False
                 print_and_sleep(yellow(f"The casino has closed pending investigation."), 1)
-        elif not self.casino_is_open:
+        else:
             if random.random() < 0.75:
                 self.casino_is_open = True
                 print_and_sleep(green(f"The casino has reopened following a successful bribe."), 1)
@@ -239,7 +251,7 @@ class GameState:
             if random.random() < 0.10:
                 self.coffee_is_open = False
                 print_and_sleep(red(f"Coughy has died."), 1)
-        elif not self.coffee_is_open:
+        else:
             if random.random() < 0.50:
                 self.coffee_is_open = True
                 print_and_sleep(green(f"Coughy's Coffee has reopened following Coughy's resurrection."), 1)
@@ -249,7 +261,7 @@ class GameState:
             if random.random() < 0.10:
                 self.hospital_is_open = False
                 print_and_sleep(yellow(f"The hospital has closed due to pending litigation."), 1)
-        elif not self.hospital_is_open:
+        else:
             if random.random() < 0.50:
                 self.hospital_is_open = True
                 print_and_sleep(green(f"The hospital has reopened following a successful bribe."), 1)
@@ -259,7 +271,7 @@ class GameState:
             if random.random() < 0.15:
                 self.wizard_is_open = False
                 print_and_sleep(yellow(f"The Wizard has disappeared."), 1)
-        elif not self.wizard_is_open:
+        else:
             if random.random() < 0.50:
                 self.wizard_is_open = True
                 print_and_sleep(green(f"The Wizard has reappeared."), 1)
@@ -269,7 +281,7 @@ class GameState:
             if random.random() < 0.15:
                 self.shaman_is_open = False
                 print_and_sleep(yellow(f"The Shaman has gone to the underworld."), 1)
-        elif not self.shaman_is_open:
+        else:
             if random.random() < 0.50:
                 self.shaman_is_open = True
                 print_and_sleep(green(f"The Shaman has returned from the underworld."), 1)
@@ -279,10 +291,20 @@ class GameState:
             if random.random() < 0.20:
                 self.blacksmith_is_open = False
                 print_and_sleep(yellow(f"Sledge Jr. went on an HTH run."), 1)
-        elif not self.blacksmith_is_open:
+        else:
             if random.random() < 0.65:
                 self.blacksmith_is_open = True
                 print_and_sleep(green(f"Sledge Jr. has returned from his HTH run."), 1)
+
+        # --- fishmonger ---
+        if self.fishmonger_is_open:
+            if random.random() < 0.15:
+                self.fishmonger_is_open = False
+                print_and_sleep(yellow(f"The Fishmonger got lost at sea."), 1)
+        else:
+            if random.random() < 0.75:
+                self.fishmonger_is_open = True
+                print_and_sleep(green(f"The Fishmonger has returned from being lost at sea."), 1)
 
 # ================================================================================================
 
