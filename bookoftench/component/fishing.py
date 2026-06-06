@@ -3,33 +3,21 @@ import random
 from bookoftench import event_logger
 from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
-    functional_component, GatekeepingComponent
+    functional_component
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import PURCHASE
 from bookoftench.data.fishing_areas import Fishing_Areas
 from bookoftench.data.fishmonger import Fishmonger_Lines
-from bookoftench.data.components import FISHMONGER
+from bookoftench.data.components import FISHING
 from bookoftench.model import GameState
 from bookoftench.model.FishingArea import load_fishing_areas, FishingArea
-from bookoftench.model.util import display_fishmonger_header
 from bookoftench.ui import blue, yellow
 from bookoftench.util import print_and_sleep
 
 # ================================================================================================
 
-# --- check if fishmonger is open ---
-
-@register_component(FISHMONGER)
-class FishmongerOpen(GatekeepingComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: game_state.fishmonger_is_open,
-                         accept_component=FishmongerComponent,
-                         deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("The Fishmonger is lost at sea.\n"), 1.5)))
-
-# ================================================================================================
-
-class FishmongerComponent(LabeledSelectionComponent):
+@register_component(FISHING)
+class FishingComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
         valid = [i['name'] for i in Fishing_Areas if i.level <= player.lvl]
@@ -47,7 +35,7 @@ class FishmongerComponent(LabeledSelectionComponent):
             LabeledSelectionComponent(
                 game_state,
                 fishing_area_bindings,
-                top_level_prompt_callback=display_fishmonger_header,
+                top_level_prompt_callback=display_fishing_header,
             ),
             LabeledSelectionComponent(
                 game_state,
@@ -90,8 +78,7 @@ class FishmongerComponent(LabeledSelectionComponent):
             else:
                 player.coins -= fishing_area.travel_cost
                 play_sound(PURCHASE)
-                game_state.current_fishing_area = fishing_area
-                game_state.casts_remaining = fishing_area.casts # subtract a cast each cast
+                game_state.current_fishing_area = fishing_area.name
 
             event_logger.log_event(FishingEvent())
 

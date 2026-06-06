@@ -54,12 +54,13 @@ class Fish:
 # ================================================================================================
 
     def get_variant(self):
-        variants = VARIANTS.copy()
-        random.shuffle(variants)
-        for i in variants:
-            if random.random() < i['chance']:
-                self.variant = i['name']
-                break
+        if random.random() < 0.5:
+            variants = VARIANTS.copy()
+            random.shuffle(variants)
+            for i in variants:
+                if random.random() < i['chance']:
+                    self.variant = i['name']
+                    break
 
     def get_state(self):
         roll = random.random()

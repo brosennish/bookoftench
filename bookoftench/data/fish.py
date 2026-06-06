@@ -46,6 +46,7 @@ ENRAGED = "Enraged"
 # Variants
 ALBINO = "Albino"
 GLOWING = "Glowing"
+IRIDESCENT = "Iridescent"
 ONE_EYED = "One-eyed"
 RADIOACTIVE = "Radioactive"
 SAPIENT = "Sapient"
@@ -57,15 +58,16 @@ TWO_HEADED = "Two-headed"
 
 VARIANTS = [
     {'name': ALBINO,      'chance': 0.03},
-    {'name': SCARRED,     'chance': 0.03},
-    {'name': ONE_EYED,    'chance': 0.02},
-    {'name': TRANSLUCENT, 'chance': 0.02},
     {'name': GLOWING,     'chance': 0.01},
-    {'name': THREE_EYED,  'chance': 0.01},
+    {'name': IRIDESCENT,  'chance': 0.01},
+    {'name': ONE_EYED,    'chance': 0.02},
     {'name': RADIOACTIVE, 'chance': 0.005},
-    {'name': TWO_HEADED,  'chance': 0.005},
-    {'name': TELEPATHIC,  'chance': 0.002},
     {'name': SAPIENT,     'chance': 0.001},
+    {'name': SCARRED,     'chance': 0.03},
+    {'name': TELEPATHIC,  'chance': 0.002},
+    {'name': THREE_EYED,  'chance': 0.01},
+    {'name': TRANSLUCENT, 'chance': 0.02},
+    {'name': TWO_HEADED,  'chance': 0.005},
 ]
 
 # ================================================================================================

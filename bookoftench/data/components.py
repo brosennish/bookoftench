@@ -25,6 +25,7 @@ ENCOUNTERS = "Encounters"
 EQUIP_WEAPON = "Equip Weapon"
 FIGHT_BOSS_OTHER = "Fight Boss Other"
 FINAL_BOSS_FIGHT = purple("BATTLE DENNY BILTMORE")
+FISHING = "Fishing"
 FISHMONGER = "Fishmonger"
 GREEDY_BASTARD = "Greedy Bastard"
 HOSPITAL = "Hospital"

@@ -58,6 +58,42 @@ def display_fishmonger_header(game_state: GameState) -> None:
 
 # ================================================================================================
 
+# --- CASTS REMAINING COLOR CODING ---
+def c_color(casts: int) -> Callable[[str], str]:
+    # Casts remaining (c)
+    c = casts
+    if c >= 6:
+        return green
+    elif c >= 4:
+        return yellow
+    else:
+        return red
+
+def display_fishing_header(game_state: GameState) -> None:
+    player = game_state.player
+    tod = game_state.time_of_day
+    tod_display = "Day" if tod == DAY else "Night"
+    moon = game_state.moon
+    casts = game_state.current_fishing_area.casts
+
+    # --- top row ---
+    print_and_sleep(f"{dim(' | ').join([
+        f"{blue if WET_SEASON else yellow(f"{game_state.season}")}",
+        f"{blue(f"{game_state.current_fishing_area}")}",
+        f"{yellow(tod_display) if tod == DAY else purple(tod_display)}",
+        f"{moon} Moon",
+    ])}\n")
+
+    # --- second row ---
+    print_and_sleep(f"{dim(' | ').join([
+        f"Fishing Lvl: {cyan(f"{player.fishing_lvl}")}",
+        f"Fishing XP: {cyan(f"{player.fishing_xp}")}",  # todo - add xp system 
+        f"Coins: {green(f"{player.coins}")}",
+        f"Casts Remaining: {c_color(casts)(f"{game_state.current_fishing_area.casts}")}",
+    ])}\n")
+
+# ================================================================================================
+
 def display_blacksmith_header(game_state: GameState) -> None:
     player = game_state.player
 
