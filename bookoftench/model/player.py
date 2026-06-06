@@ -112,6 +112,7 @@ class Player(Combatant):
     acc: float = 1
     luck: float = 1
     trait: Trait = None
+    fishing_xp: int = 0
     fishing_lvl: int = 1
 
     illness: Optional[Illness] = None

@@ -15,6 +15,8 @@ from .game_state import GameState
 from ..data.areas import CAVE, CITY, FOREST, SWAMP
 from ..data.enemies import CONTAGIOUS, BOSS, SPECIAL_BOSS, FINAL_BOSS, NORMAL
 from ..data.enviroment import DAY
+from ..data.fishing_areas import WET_SEASON
+
 
 # ================================================================================================
 
@@ -48,10 +50,10 @@ def display_fishmonger_header(game_state: GameState) -> None:
     player = game_state.player
 
     print_and_sleep(f"{dim(' | ').join([
+        f"{blue if WET_SEASON else yellow(f"{game_state.season}")}",
+        f"Fishing Lvl: {cyan(f"{player.fishing_lvl}")}",
+        f"Fishing XP: {cyan(f"{player.fishing_xp}")}", # todo - add xp system 
         f"Coins: {green(f"{player.coins}")}",
-        f"Melee: {orange(f"125")}",
-        f"Ranged: {orange(f"150")}",
-        f"Special (∞): {orange(f"400")}\n",
     ])}\n")
 
 # ================================================================================================

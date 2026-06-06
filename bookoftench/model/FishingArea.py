@@ -1,4 +1,7 @@
 from dataclasses import dataclass
+from typing import List
+
+from bookoftench.data.fishing_areas import Fishing_Areas
 from bookoftench.ui import dim, orange, green, blue
 
 # ================================================================================================
@@ -26,3 +29,14 @@ class FishingArea:
 
     def __repr__(self):
         return self.get_simple_format()
+
+# ================================================================================================
+
+def load_fishing_area(name: str) -> FishingArea:
+    matches = load_fishing_areas([name])
+    if len(matches) == 0:
+        raise ValueError(f"Could not find fishing area data for {name}")
+    return matches[0]
+
+def load_fishing_areas(restriction: List[str] = None) -> List[FishingArea]:
+    return [FishingArea(**d) for d in Fishing_Areas if restriction is None or d['name'] in restriction]

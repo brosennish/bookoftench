@@ -14,6 +14,9 @@ WET_SEASON = "Wet Season"
 DRY_SEASON_BITE_CHANCE_EFFECT = -0.05
 WET_SEASON_BITE_CHANCE_EFFECT = 0.05
 
+# Bite Chance Multiplier
+BITE_CHANCE_MULTIPLIER = 1
+
 # ================================================================================================
 
 Fishing_Areas = [
@@ -24,12 +27,12 @@ Fishing_Areas = [
      'escape_distance': 100},
 
     {'name': BAY, 'bite_chance': 0.30, 'hook_chance': 0.65,
-     'travel_cost': 25, 'casts': 10, 'lvl': 2,
+     'travel_cost': 20, 'casts': 10, 'lvl': 2,
      'min_hook_distance': 50, 'max_hook_distance': 100,
      'escape_distance': 200},
 
     {'name': OCEAN, 'bite_chance': 0.25, 'hook_chance': 0.55,
-     'travel_cost': 50, 'casts': 10, 'lvl': 3,
+     'travel_cost': 30, 'casts': 10, 'lvl': 3,
      'min_hook_distance': 100, 'max_hook_distance': 300,
      'escape_distance': 500},
 

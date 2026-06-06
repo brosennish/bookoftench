@@ -5,16 +5,14 @@ from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import PURCHASE, BLACKSMITH_THEME
+from bookoftench.data.audio import PURCHASE
 from bookoftench.data.fishing_areas import Fishing_Areas
 from bookoftench.data.fishmonger import Fishmonger_Lines
 from bookoftench.data.components import FISHMONGER
-from bookoftench.data.weapons import BLIND, MELEE, RANGED
 from bookoftench.model import GameState
-from bookoftench.model.events import BlacksmithEvent
-from bookoftench.model.player import PlayerWeapon
-from bookoftench.model.util import display_blacksmith_header
-from bookoftench.ui import blue, yellow, cyan
+from bookoftench.model.FishingArea import load_fishing_areas, FishingArea
+from bookoftench.model.util import display_fishmonger_header
+from bookoftench.ui import blue, yellow
 from bookoftench.util import print_and_sleep
 
 # ================================================================================================
@@ -34,11 +32,12 @@ class FishmongerOpen(GatekeepingComponent):
 class FishmongerComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
-        valid = [i for i in Fishing_Areas if i.level <= player.lvl]
+        valid = [i['name'] for i in Fishing_Areas if i.level <= player.lvl]
+        available = load_fishing_areas(valid)
 
         fishing_area_bindings = [ReprBinding(str(i + 1), area.name,
                                        self._make_purchase_component(area), area) for
-                          i, area in enumerate(valid)]
+                          i, area in enumerate(available)]
 
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
 
@@ -78,38 +77,23 @@ class FishmongerComponent(LabeledSelectionComponent):
 
 # ================================================================================================
 
+    # todo - add logic for cost to increase with player level and vary w/ season
+
     @staticmethod
-    def _make_purchase_component(weapon: PlayerWeapon) -> type[Component]:
+    def _make_purchase_component(fishing_area: FishingArea) -> type[Component]:
         @functional_component(state_dependent=True)
         def purchase_component(game_state: GameState):
             player = game_state.player
 
-            if weapon.is_elite:
-                print_and_sleep(yellow(f"Weapon is already Elite."), 2)
-                return
-            if weapon.uses == -1:
-                if player.coins < 400:
-                    print_and_sleep(yellow(f"Need more coin"), 2)
-                    return
-                cost = 400
-            elif weapon.type == MELEE:
-                if player.coins < 125:
-                    print_and_sleep(yellow(f"Need more coin"), 2)
-                    return
-                cost = 125
-            elif weapon.type == RANGED:
-                if player.coins < 150:
-                    print_and_sleep(yellow(f"Need more coin"), 2)
-                    return
-                cost = 150
+            if fishing_area.travel_cost > player.coins:
+                print_and_sleep(yellow(f"Need more coin"), 2)
             else:
-                print_and_sleep(yellow("Not happening."), 2)
-                return
+                player.coins -= fishing_area.travel_cost
+                play_sound(PURCHASE)
+                game_state.current_fishing_area = fishing_area.name
 
-            play_sound(PURCHASE)
-            player.coins -= cost
-            event_logger.log_event(BlacksmithEvent())
+            event_logger.log_event(FishingEvent())
 
-        return purchase_component
+        return FishingComponent(game_state).run()
 
 # ================================================================================================

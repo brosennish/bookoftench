@@ -1,8 +1,9 @@
 import random
 from dataclasses import dataclass
+from typing import List
 
 from bookoftench.data import fish as f
-from bookoftench.data.fish import VARIANTS
+from bookoftench.data.fish import VARIANTS, Fish_Species
 from bookoftench.ui import dim, cyan, orange, green, yellow, blue
 
 # ================================================================================================
@@ -101,3 +102,14 @@ class Fish:
             f"{self.length} in",
             f"{self.weight} lbs",
         ])
+
+# ================================================================================================
+
+def load_fish(name: str) -> Fish:
+    matches = load_fishes([name])
+    if len(matches) == 0:
+        raise ValueError(f"Could not find fish data for {name}")
+    return matches[0]
+
+def load_fishes(restriction: List[str] = None) -> List[Fish]:
+    return [Fish(**d) for d in Fish_Species if restriction is None or d['name'] in restriction]
