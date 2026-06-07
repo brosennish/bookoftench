@@ -170,7 +170,8 @@ class GameState:
             self.time_of_day = DAY
 
     def set_moon(self):
-        self.moon = random.choice([DRY, DRYING, WETTING, FULL])
+        moons = [DRY, DRYING, WETTING, FULL]
+        self.moon = random.choice(moons)
 
     def update_moon(self) -> None:
         if self.moon == DRY:

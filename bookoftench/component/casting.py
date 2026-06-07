@@ -1,10 +1,8 @@
 import random
-from abc import abstractmethod, ABC
-
-from markdown_it.rules_core.replacements import RARE_RE
 
 from bookoftench import event_logger
 from bookoftench.audio import play_music, play_sound
+from bookoftench.component import LinearComponent
 from bookoftench.component.base import functional_component, GatekeepingComponent, \
     LabeledSelectionComponent, ReprBinding, SelectionBinding, Component, NoOpComponent
 from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED
@@ -18,15 +16,16 @@ from bookoftench.util import print_and_sleep
 
 # ================================================================================================
 
-class DryCastCheck(GatekeepingComponent):
+class DryCastCheck(NoOpComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: self.dry_check(),
-                         accept_component=SpawnFish,
-                         deny_component=functional_component()(lambda: print_and_sleep(
-                             dim("You came up dry."), 1.5)))
+        super().__init__(game_state)
 
     def run(self):
-        self.dry_check()
+        dry = self.dry_check()
+        if not dry:
+            SpawnFish(self.game_state).run()
+        else:
+            print_and_sleep(yellow("You came up dry."), 1.5)
 
     def dry_check(self) -> bool:
         bite_chance = self.game_state.current_fishing_area.bite_chance
@@ -55,12 +54,9 @@ class DryCastCheck(GatekeepingComponent):
 # ================================================================================================
 # ================================================================================================
 
-class SpawnFish(GatekeepingComponent):
+class SpawnFish(LinearComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: self.game_state.current_fish is not None,
-                         accept_component=FishBattle,
-                         deny_component=functional_component()(lambda: print_and_sleep(
-                             dim("You came up dry."), 1.5)))
+        super().__init__(game_state, next_component=LaunchFishBattle)
 
     def execute_current(self) -> GameState:
         return self.spawn_fish()
@@ -108,6 +104,13 @@ class SpawnFish(GatekeepingComponent):
             return UNCOMMON
         else:
             return COMMON
+
+class LaunchFishBattle(GatekeepingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, decision_function=lambda: self.game_state.current_fish is not None,
+                         accept_component=FishBattle,
+                         deny_component=functional_component()(lambda: print_and_sleep(
+                             dim("You came up dry."), 1.5)))
 
 # ================================================================================================
 # ================================================================================================
