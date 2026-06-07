@@ -69,7 +69,7 @@ class BoatComponent(LabeledSelectionComponent):
 
             if selection == CAST:
                 if not player.current_bait:
-                    print_and_sleep(f"{blue('Add some bait, bozo.')}", 1)
+                    print_and_sleep(f"{blue('Add some bait first, bozo.')}", 1)
                     return None
                 game_state.current_fishing_area.casts -= 1
                 DryCastCheck(game_state).run()

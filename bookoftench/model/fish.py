@@ -25,24 +25,28 @@ class Fish:
     weight: int | float
     value_for_size: float
     value: int
-    rage: float
+    rage_factor: float
     speed: float
     strength: float
     preferred_bait: list[str]
     spit_hook_chance: float
     max_age: int
+
     distance: int = 0
     stamina: int = 100
-
+    rage: int = 0
     sex: str | None = None
     state: str | None = None
     variant: str | None = None
     age: int | None = None
+    caught: bool = False
     catch_location: str | None = None # assigned when caught
+    lost: bool = False
 
 # ================================================================================================
 
     def __post_init__(self):
+        self.base_name = self.name
         self.age = random.randint(1, self.max_age)
         self.sex = random.choice([f.MALE, f.FEMALE])
         self.length = random.randint(self.min_length, self.max_length)
@@ -51,6 +55,8 @@ class Fish:
         size = self.length * self.weight
         self.get_state()
         self.get_variant()
+        if self.variant:
+            self.name = f"{self.variant} {self.base_name}"
         self.value = round(size * self.value_for_size)
 
 # ================================================================================================

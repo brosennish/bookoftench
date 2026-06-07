@@ -1,19 +1,19 @@
 import random
 
 from bookoftench import event_logger
-from bookoftench.audio import play_music, play_sound
+from bookoftench.audio import play_music, play_sound, stop_music
 from bookoftench.component import BoatComponent
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import PURCHASE
+from bookoftench.data.audio import PURCHASE, TRAVEL_THEME
 from bookoftench.data.fishing_areas import Fishing_Areas
 from bookoftench.data.fishmonger import Fishmonger_Lines
 from bookoftench.data.components import FISHMONGER
 from bookoftench.model import GameState
 from bookoftench.model.FishingArea import load_fishing_areas, FishingArea
 from bookoftench.model.util import display_fishmonger_header
-from bookoftench.ui import blue, yellow
+from bookoftench.ui import blue, yellow, cyan
 from bookoftench.util import print_and_sleep
 
 # ================================================================================================
@@ -92,9 +92,13 @@ class FishmongerComponent(LabeledSelectionComponent):
                 player.coins -= fishing_area.travel_cost
                 play_sound(PURCHASE)
                 game_state.current_fishing_area = fishing_area
+                play_music(TRAVEL_THEME)
+                print_and_sleep(cyan(f'Traveling by boat to the {fishing_area.name}...'), 4)
+                stop_music() # todo - remove this once boat component has theme
                 BoatComponent(game_state).run()
 
             # event_logger.log_event(FishingEvent())
 
         return purchase_component
+
 

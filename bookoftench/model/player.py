@@ -14,7 +14,7 @@ from bookoftench.event_logger import subscribe_function
 from bookoftench.model.illness import Illness
 from bookoftench.ui import yellow, dim, green, cyan, purple, red
 from bookoftench.util import print_and_sleep
-from bookoftench.model.bait import Bait, load_baits
+from bookoftench.model.bait import Bait, load_baits, load_bait
 from bookoftench.data.bait import DOUGH_BALL
 from .base import Combatant, Buyable
 from .build import Build
@@ -143,6 +143,7 @@ class Player(Combatant):
 
     def __post_init__(self):
         self.current_weapon = self.weapon_dict[BARE_HANDS]
+        self.current_bait = load_bait(DOUGH_BALL)
         self._subscribe_listeners()
 
 # ================================================================================================
