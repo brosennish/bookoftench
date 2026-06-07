@@ -31,6 +31,8 @@ class Fish:
     preferred_bait: list[str]
     spit_hook_chance: float
     max_age: int
+    distance: int = 0
+    stamina: int = 100
 
     sex: str | None = None
     state: str | None = None

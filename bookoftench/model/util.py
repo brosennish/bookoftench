@@ -58,6 +58,20 @@ def display_fishmonger_header(game_state: GameState) -> None:
 
 # ================================================================================================
 
+def display_fishing_battle_header(game_state: GameState) -> None:
+    player = game_state.player
+    fish = game_state.current_fish
+    fish_name = fish.name if player.fishing_lvl > 2 else "Unknown Fish"
+
+    print_and_sleep(f"{dim(' | ').join([
+        f"{orange(f"{fish_name}")}",
+        f"Distance: {f"{fish.distance}"}",
+        f"Stamina: {green(f"{fish.stamina}")}",
+        f"Rage: {red(f"{fish.rage}")}",
+    ])}\n")
+
+# ================================================================================================
+
 # --- CASTS REMAINING COLOR CODING ---
 def c_color(casts: int) -> Callable[[str], str]:
     # Casts remaining (c)

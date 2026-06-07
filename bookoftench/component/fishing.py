@@ -4,8 +4,9 @@ from bookoftench import event_logger
 from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component
+from bookoftench.component.casting import DryCastCheck
 from bookoftench.component.registry import register_component
-from bookoftench.data.fishing import TACKLE_BOX, FISHING_OPTIONS, CAST, FISH_LOG, SHOP
+from bookoftench.data.boat import TACKLE_BOX, FISHING_OPTIONS, CAST, FISH_LOG, SHOP
 from bookoftench.data.components import BOAT
 from bookoftench.model import GameState
 from bookoftench.model.util import display_boat_header
@@ -17,7 +18,6 @@ from bookoftench.util import print_and_sleep
 @register_component(BOAT)
 class BoatComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        player = game_state.player
         original = FISHING_OPTIONS.copy()
         options = [i['name'] for i in original]
 
@@ -68,7 +68,12 @@ class BoatComponent(LabeledSelectionComponent):
             player = game_state.player
 
             if selection == CAST:
-                pass
+                if not player.current_bait:
+                    print_and_sleep(f"{blue('Add some bait, bozo.')}", 1)
+                    return None
+                game_state.current_fishing_area.casts -= 1
+                DryCastCheck(game_state).run()
+                return None
             elif selection == FISH_LOG:
                 pass
             elif selection == SHOP:
@@ -79,5 +84,3 @@ class BoatComponent(LabeledSelectionComponent):
                 return selection_component(game_state)
 
         return selection_component
-
-# ================================================================================================
