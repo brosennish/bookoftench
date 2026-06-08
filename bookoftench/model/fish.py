@@ -1,5 +1,5 @@
 import random
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 
 from bookoftench.data import fish as f
@@ -46,7 +46,7 @@ class Fish:
     lost: bool = False
 
     # --- ObserveFish ---
-    observed_characteristics: list[str]
+    observed_characteristics: list[str] = field(default_factory=list)
     species_observed: bool = False
     variant_observed: bool = False
     strength_observed: bool = False
