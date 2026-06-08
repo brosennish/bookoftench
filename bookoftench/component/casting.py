@@ -374,7 +374,7 @@ class PullComponent(NoOpComponent):
         elif fish.stamina <= 0:
             fish.caught = True
             fish.catch_location = location
-            print_and_sleep(green(f"You reeled in the exhausted {fish.name}!"), 1.5)
+            print_and_sleep(green(f"You reeled in an exhausted {fish.name}!"), 1.5)
         elif fish.rage >= 100:
             fish.lost = True
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
@@ -393,15 +393,7 @@ class PullComponent(NoOpComponent):
 
         print_and_sleep(color(f"{variable}: {original} -> {new}"), 1)
 
-
-    # fish turn
-
-
-
-
-
-
-
+# ================================================================================================
 # ================================================================================================
 
 class ReelComponent(NoOpComponent):
@@ -409,7 +401,89 @@ class ReelComponent(NoOpComponent):
         super().__init__(game_state)
 
     def run(self):
-        pass
+        fish = self.game_state.current_fish
+        player = self.game_state.player
+
+        reel = self.get_reel(fish, player)
+        self.apply_reel(reel, fish)
+        self.apply_reel_outcome(fish)
+        if fish.caught or fish.lost:
+            EndFishBattle(self.game_state).run()
+        else:
+            FishTurn(self.game_state).run()
+
+    @staticmethod
+    def get_reel(fish, player) -> int:
+        reel = random.randint(1, 3)
+        missing_stamina_ratio = (fish.max_stamina - fish.stamina) / fish.max_stamina
+
+        reel += missing_stamina_ratio * 3
+        reel -= fish.strength * 0.5
+
+        if fish.state == SPOOKED:
+            reel -= 0.5
+        elif fish.state == ENRAGED:
+            reel -= 1
+
+        reel += min(player.fishing_lvl // 2, 3)
+        reel *= min(player.strength, 1.15)
+        reel = max(1, reel)
+
+        return round(reel)
+
+    def apply_reel(self, reel: int, fish):
+        stamina_loss = max(1, round(reel / 2)) + random.randint(0, 1)
+        rage_gain = random.randint(0, 1) + reel / 3
+
+        # --- distance ---
+        original_distance = fish.distance
+        fish.distance -= round(reel)
+        fish.distance = max(0, fish.distance)
+        self.display_reel_result('Distance', original_distance, fish.distance)
+
+        # --- stamina ---
+        original_stamina = fish.stamina
+        fish.stamina -= stamina_loss
+        fish.stamina = max(0, fish.stamina)
+        self.display_reel_result('Stamina', original_stamina, fish.stamina)
+
+        # --- rage ---
+        original_rage = fish.rage
+        rage_gain *= fish.rage_factor
+        fish.rage += round(rage_gain)
+        fish.rage = min(100, fish.rage)
+        self.display_reel_result('Rage', original_rage, fish.rage)
+
+    def apply_reel_outcome(self, fish):
+        player = self.game_state.player
+        location = self.game_state.current_fishing_area.name
+        name = fish.name if player.fishing_lvl > 2 else "Unknown Fish"
+
+        if fish.distance <= 0:
+            fish.caught = True
+            fish.catch_location = location
+            print_and_sleep(green(f"You caught a {fish.name}!"), 1.5)
+        elif fish.stamina <= 0:
+            fish.caught = True
+            fish.catch_location = location
+            print_and_sleep(green(f"You reeled in an exhausted {fish.name}!"), 1.5)
+        elif fish.rage >= 100:
+            fish.lost = True
+            print_and_sleep(red(f"The raging {name} got away!"), 1.5)
+        else:
+            pass
+
+    @staticmethod
+    def display_reel_result(variable: str, original: int, new: int):
+        change = "increased" if original < new else "decreased"
+        color = white
+
+        if variable in ['Distance', 'Stamina']:
+            color = green if change == "decreased" else yellow
+        elif variable == 'Rage':
+            color = red if change == "increased" else yellow
+
+        print_and_sleep(color(f"{variable}: {original} -> {new}"), 1)
 
 # ================================================================================================
 
