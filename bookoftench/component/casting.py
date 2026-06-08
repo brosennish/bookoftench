@@ -163,13 +163,13 @@ class FishBattle(LabeledSelectionComponent):
         def selection_component(game_state: GameState):
 
             if selection == PULL:
-                 PullComponent(game_state).run()
+                 Pull(game_state).run()
             elif selection == REEL:
-                ReelComponent(game_state).run()
+                Reel(game_state).run()
             elif selection == GIVE_LINE:
-                GiveLineComponent(game_state).run()
+                GiveLine(game_state).run()
             elif selection == OBSERVE:
-                ObserveComponent(game_state).run()
+                ObserveFish(game_state).run()
             else:
                 return selection_component(game_state)
 
@@ -301,7 +301,7 @@ class FishTurn(NoOpComponent):
 # ================================================================================================
 # ================================================================================================
 
-class PullComponent(NoOpComponent):
+class Pull(NoOpComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
 
@@ -327,10 +327,14 @@ class PullComponent(NoOpComponent):
         pull = random.randint(2, 5)
         pull += pull_bonus
         pull -= fish.strength
-        if fish.state == SPOOKED:
+
+        if fish.state == AGITATED:
             pull -= 1
-        elif fish.state == ENRAGED:
+        elif fish.state == SPOOKED:
             pull -= 2
+        elif fish.state == ENRAGED:
+            pull -= 3
+
         pull *= min(player.strength, 1.25)
         pull = max(1, pull)
 
@@ -359,6 +363,8 @@ class PullComponent(NoOpComponent):
         rage_gain *= fish.rage_factor
         fish.rage += round(rage_gain)
         fish.rage = min(100, fish.rage)
+        FishTurn.update_fish_state(fish)
+
         self.display_pull_result('Rage', original_rage, fish.rage)
 
     def apply_pull_outcome(self):
@@ -396,7 +402,7 @@ class PullComponent(NoOpComponent):
 # ================================================================================================
 # ================================================================================================
 
-class ReelComponent(NoOpComponent):
+class Reel(NoOpComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
 
@@ -420,7 +426,9 @@ class ReelComponent(NoOpComponent):
         reel += missing_stamina_ratio * 3
         reel -= fish.strength * 0.5
 
-        if fish.state == SPOOKED:
+        if fish.state == AGITATED:
+            reel -= 0.25
+        elif fish.state == SPOOKED:
             reel -= 0.5
         elif fish.state == ENRAGED:
             reel -= 1
@@ -452,6 +460,8 @@ class ReelComponent(NoOpComponent):
         rage_gain *= fish.rage_factor
         fish.rage += round(rage_gain)
         fish.rage = min(100, fish.rage)
+        FishTurn.update_fish_state(fish)
+
         self.display_reel_result('Rage', original_rage, fish.rage)
 
     def apply_reel_outcome(self, fish):
@@ -487,16 +497,90 @@ class ReelComponent(NoOpComponent):
 
 # ================================================================================================
 
-class GiveLineComponent(NoOpComponent):
+class GiveLine(NoOpComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
 
     def run(self):
-        pass
+        fish = self.game_state.current_fish
+        player = self.game_state.player
+
+        line = self.get_give_line(fish)
+        self.apply_give_line(fish, line, player)
+        self.apply_give_line_outcome(fish)
+        if fish.caught or fish.lost:
+            EndFishBattle(self.game_state).run()
+        else:
+            FishTurn(self.game_state).run()
+
+    @staticmethod
+    def get_give_line(fish) -> int:
+        line = random.randint(2, 4)
+        line *= fish.speed
+
+        if fish.state == AGITATED:
+            line += 1
+        elif fish.state == SPOOKED:
+            line += 2
+        elif fish.state == ENRAGED:
+            line += 4
+
+        return round(line)
+
+    def apply_give_line(self, fish, line, player):
+        # --- distance ---
+        original_distance = fish.distance
+        fish.distance += line
+        self.display_give_line_result('Distance', original_distance, fish.distance)
+
+        # --- rage ---
+        original_rage = fish.rage
+        rage_loss = random.randint(6, 10)
+
+        if fish.state == AGITATED:
+            rage_loss += 1
+        elif fish.state == SPOOKED:
+            rage_loss += 2
+        elif fish.state == ENRAGED:
+            rage_loss += 4
+
+        rage_loss += min(player.fishing_lvl // 2, 3)
+        fish.rage -= rage_loss
+        fish.rage = max(0, fish.rage)
+        FishTurn.update_fish_state(fish)
+
+        self.display_give_line_result('Rage', original_rage, fish.rage)
+
+    def apply_give_line_outcome(self, fish):
+        player = self.game_state.player
+        location = self.game_state.current_fishing_area.name
+        name = fish.name if player.fishing_lvl > 2 else "Unknown Fish"
+
+        if fish.distance <= 0:
+            fish.caught = True
+            fish.catch_location = location
+            print_and_sleep(green(f"You caught a {fish.name}!"), 1.5)
+        elif fish.rage >= 100:
+            fish.lost = True
+            print_and_sleep(red(f"The raging {name} got away!"), 1.5)
+        else:
+            pass
+
+    @staticmethod
+    def display_give_line_result(variable: str, original: int, new: int):
+        change = "increased" if original < new else "decreased"
+        color = white
+
+        if variable in ['Distance', 'Stamina']:
+            color = green if change == "decreased" else yellow
+        elif variable == 'Rage':
+            color = red if change == "increased" else yellow
+
+        print_and_sleep(color(f"{variable}: {original} -> {new}"), 1)
 
 # ================================================================================================
 
-class ObserveComponent(NoOpComponent):
+class ObserveFish(NoOpComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
 
