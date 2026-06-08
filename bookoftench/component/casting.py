@@ -445,7 +445,7 @@ class Pull(NoOpComponent):
             fish.lost = True
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
         else:
-            print_and_sleep(yellow("You pull hard against the fish."))
+            # print_and_sleep(yellow("You pull hard against the fish."))
             pass
 
 # ================================================================================================
@@ -527,7 +527,7 @@ class Reel(NoOpComponent):
             fish.lost = True
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
         else:
-            print_and_sleep(yellow("You reel steadily."))
+            # print_and_sleep(yellow("You reel steadily."))
             pass
 
 # ================================================================================================
@@ -597,7 +597,7 @@ class GiveLine(NoOpComponent):
             fish.lost = True
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
         else:
-            print_and_sleep(yellow("You let the fish go temporarily."))
+            # print_and_sleep(yellow("You let the fish go temporarily."))
             pass
 
 # ================================================================================================

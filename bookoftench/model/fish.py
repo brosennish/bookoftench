@@ -187,7 +187,6 @@ class Fish:
             cyan(f"{self.name:<19}"),
             f"{self.get_rarity()}",
             f"Value: {orange(self.value)}",
-            f"HP: {green(self.hp)}",
             f"{self.length} in",
             f"{self.weight} lbs",
         ])

@@ -79,7 +79,7 @@ def display_tackle_box_header(game_state: GameState) -> None:
     bait = player.current_bait
 
     print_and_sleep(
-        f"Current: {cyan(f"{bait.name}")} - {green(f"{player.current_bait.casts} casts remaining")}"
+        f"Current: {cyan(f"{bait.name}")} | Casts: {green(f"{player.current_bait.casts}")}"
     )
 
 # ================================================================================================
@@ -154,6 +154,7 @@ def display_fishing_battle_header(game_state: GameState) -> None:
     fish = game_state.current_fish
     fish_name = fish.name if player.fishing_lvl > 2 else "Unknown Fish"
     stamina_percentage = round((fish.stamina / fish.max_stamina) * 100)
+    max_distance = game_state.current_fishing_area.escape_distance
 
     # --- get colors ---
     state_color = fishing_state_color(game_state)
@@ -167,7 +168,7 @@ def display_fishing_battle_header(game_state: GameState) -> None:
     ])
 
     second_row = dim(' | ').join([
-        f"Distance: {distance_color(f'{fish.distance} feet')}",
+        f"Distance: {distance_color(f'{fish.distance}/{max_distance}')}",
         f"Stamina: {stamina_color(f'{stamina_percentage}%')}",
         f"Rage: {red(f'{fish.rage}%')}",
     ])
