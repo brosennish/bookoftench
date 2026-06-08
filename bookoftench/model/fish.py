@@ -3,7 +3,8 @@ from dataclasses import dataclass
 from typing import List
 
 from bookoftench.data import fish as f
-from bookoftench.data.fish import VARIANTS, Fish_Species
+from bookoftench.data.fish import VARIANTS, Fish_Species, TWO_HEADED, TRANSLUCENT, THREE_EYED, TELEPATHIC, SCARRED, \
+    SAPIENT, RADIOACTIVE, ONE_EYED, IRIDESCENT, GLOWING, ALBINO
 from bookoftench.ui import dim, cyan, orange, green, yellow, blue
 
 # ================================================================================================
@@ -28,12 +29,13 @@ class Fish:
     rage_factor: float
     speed: float
     strength: float
+    max_stamina: int
     preferred_bait: list[str]
     spit_hook_chance: float
     max_age: int
 
     distance: int = 0
-    stamina: int = 100
+    stamina: int = 0
     rage: int = 0
     sex: str | None = None
     state: str | None = None
@@ -53,6 +55,7 @@ class Fish:
         weight_factor = random.uniform(self.min_weight_factor, self.max_weight_factor)
         self.weight = round(((self.length ** 2) * weight_factor) / 144)
         size = self.length * self.weight
+        self.stamina = self.max_stamina
         self.get_state()
         self.get_variant()
         if self.variant:
@@ -60,15 +63,6 @@ class Fish:
         self.value = round(size * self.value_for_size)
 
 # ================================================================================================
-
-    def get_variant(self):
-        if random.random() < 0.5:
-            variants = VARIANTS.copy()
-            random.shuffle(variants)
-            for i in variants:
-                if random.random() < i['chance']:
-                    self.variant = i['name']
-                    break
 
     def get_state(self):
         roll = random.random()
@@ -80,6 +74,72 @@ class Fish:
             self.state = f.SPOOKED
         else:
             self.state = f.CALM
+
+    def get_variant(self):
+        if random.random() < 0.5:
+            variants = VARIANTS.copy()
+            random.shuffle(variants)
+            for i in variants:
+                if random.random() < i['chance']:
+                    self.variant = i['name']
+                    self.init_variant_effects()
+                    break
+
+    def init_variant_effects(self):
+        if self.variant == ALBINO:
+            self.value *= 1.4
+
+        elif self.variant == GLOWING:
+            self.value *= 1.8
+            self.rage_factor *= 1.15
+
+        elif self.variant == IRIDESCENT:
+            self.value *= 2.0
+            self.max_stamina *= 1.1
+
+        elif self.variant == ONE_EYED:
+            self.value *= 1.25
+            self.speed *= 0.9
+
+        elif self.variant == RADIOACTIVE:
+            self.value *= 3.0
+            self.rage_factor *= 1.4
+            self.strength *= 1.15
+            self.max_stamina *= 1.15
+
+        elif self.variant == SAPIENT:
+            self.value *= 5.0
+            self.rage_factor *= 0.8
+            self.max_stamina *= 1.2
+
+        elif self.variant == SCARRED:
+            self.value *= 1.3
+            self.strength *= 1.2
+            self.max_stamina *= 1.15
+
+        elif self.variant == TELEPATHIC:
+            self.value *= 4.0
+            self.rage_factor *= 0.7
+            self.speed *= 1.2
+
+        elif self.variant == THREE_EYED:
+            self.value *= 1.7
+            self.rage_factor *= 1.1
+            self.speed *= 1.1
+
+        elif self.variant == TRANSLUCENT:
+            self.value *= 1.6
+            self.strength *= 0.9
+            self.speed *= 1.15
+
+        elif self.variant == TWO_HEADED:
+            self.value *= 3.5
+            self.rage_factor *= 1.35
+            self.strength *= 1.25
+            self.max_stamina *= 1.2
+
+        self.value = round(self.value)
+        self.max_stamina = round(self.max_stamina)
 
     def get_rarity(self):
         if self.rarity == f.COMMON:

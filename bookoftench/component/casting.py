@@ -191,7 +191,7 @@ class PullComponent(NoOpComponent):
         self.apply_pull(pull)
         self.apply_pull_outcome()
         if caught or lost:
-            pass
+            EndFishBattle.run()
             # end fish battle component
 
     def get_pull(self) -> int:
