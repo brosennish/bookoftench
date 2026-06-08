@@ -41,6 +41,23 @@ SPOOKED = "Spooked"
 AGITATED = "Agitated"
 ENRAGED = "Enraged"
 
+# Observable Characteristics
+SPECIES = "Species"
+VARIANT = "Variant"
+STRENGTH = "Strength"
+SPEED = "Speed"
+STAMINA = "Stamina"
+RAGE_FACTOR = "Rage Factor"
+
+possible_observations = [
+    SPECIES,
+    VARIANT,
+    STRENGTH,
+    SPEED,
+    STAMINA,
+    RAGE_FACTOR,
+]
+
 # ================================================================================================
 
 # Variants

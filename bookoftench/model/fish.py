@@ -4,7 +4,7 @@ from typing import List
 
 from bookoftench.data import fish as f
 from bookoftench.data.fish import VARIANTS, Fish_Species, TWO_HEADED, TRANSLUCENT, THREE_EYED, TELEPATHIC, SCARRED, \
-    SAPIENT, RADIOACTIVE, ONE_EYED, IRIDESCENT, GLOWING, ALBINO
+    SAPIENT, RADIOACTIVE, ONE_EYED, IRIDESCENT, GLOWING, ALBINO, NORMAL
 from bookoftench.ui import dim, cyan, orange, green, yellow, blue
 
 # ================================================================================================
@@ -44,6 +44,15 @@ class Fish:
     caught: bool = False
     catch_location: str | None = None # assigned when caught
     lost: bool = False
+
+    # --- ObserveFish ---
+    observed_characteristics: list[str]
+    species_observed: bool = False
+    variant_observed: bool = False
+    strength_observed: bool = False
+    speed_observed: bool = False
+    stamina_observed: bool = False
+    rage_factor_observed: bool = False
 
 # ================================================================================================
 

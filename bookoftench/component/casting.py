@@ -5,13 +5,14 @@ from bookoftench.audio import play_music, play_sound
 from bookoftench.component import LinearComponent
 from bookoftench.component.base import functional_component, GatekeepingComponent, \
     LabeledSelectionComponent, ReprBinding, SelectionBinding, Component, NoOpComponent
-from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED
+from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED, \
+    possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, STAMINA, RAGE_FACTOR
 from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL
 from bookoftench.data.fishing_areas import WET_SEASON_BITE_CHANCE_EFFECT, DRY_SEASON_BITE_CHANCE_EFFECT, WET_SEASON
 from bookoftench.model import GameState
 from bookoftench.model.fish import load_fishes, load_fish
 from bookoftench.model.util import display_fishing_battle_header
-from bookoftench.ui import yellow, dim, blue, white, green, red
+from bookoftench.ui import yellow, dim, blue, white, green, red, purple, cyan
 from bookoftench.util import print_and_sleep
 
 # ================================================================================================
@@ -585,12 +586,65 @@ class ObserveFish(NoOpComponent):
         super().__init__(game_state)
 
     def run(self):
-        pass
+        fish = self.game_state.current_fish
 
+        observation = self.get_observation(fish)
+        if observation:
+            self.apply_observation(fish, observation)
+            FishTurn(self.game_state).run()
+        else:
+            print_and_sleep(yellow(f"You must catch this fish to learn more."), 1.5)
 
+    @staticmethod
+    def get_observation(fish) -> str | None:
+        valid = [i for i in possible_observations if i not in fish.observed_characteristics]
+        if valid:
+            observation = random.choice(valid)
+        else:
+            return None
 
+        return observation
 
+    def apply_observation(self, fish, observation):
+        fish.observed_characteristics.append(observation)
 
+        if observation == SPECIES:
+            color = white
+            word = SPECIES
+            value = fish.base_name
+            fish.species_observed = True
+        elif observation == VARIANT:
+            color = purple
+            word = VARIANT
+            value = fish.variant if fish.variant else "None"
+            fish.variant_observed = True
+        elif observation == STRENGTH:
+            color = yellow
+            word = STRENGTH
+            value = str(round(fish.strength, 2))
+            fish.strength_observed = True
+        elif observation == SPEED:
+            color = cyan
+            word = SPEED
+            value = str(round(fish.speed, 2))
+            fish.speed_observed = True
+        elif observation == STAMINA:
+            color = green
+            word = STAMINA
+            value = f"{round((fish.stamina / fish.max_stamina) * 100)}%"
+            fish.stamina_observed = True
+        elif observation == RAGE_FACTOR:
+            color = red
+            word = RAGE_FACTOR
+            value = str(round(fish.rage_factor, 2))
+            fish.rage_factor_observed = True
+        else:
+            return
 
+        self.display_observation_result(color, word, value)
 
+    @staticmethod
+    def display_observation_result(color, word: str, value: str) -> None:
 
+        print_and_sleep(blue(f"You observe the fish to gain insight..."), 1.5)
+        print_and_sleep(f"{color(word)}: {value}", 1.5)
