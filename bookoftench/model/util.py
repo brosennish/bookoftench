@@ -33,6 +33,21 @@ def p_color(hp: int, max_hp: int) -> Callable[[str], str]:
 
 # ================================================================================================
 
+def get_fish_stamina_label(game_state: GameState) -> str:
+    fish = game_state.current_fish
+    ratio = fish.stamina / fish.max_stamina
+
+    if ratio >= 0.75:
+        return "Strong"
+    elif ratio >= 0.50:
+        return "Tiring"
+    elif ratio >= 0.25:
+        return "Weary"
+    else:
+        return "Exhausted"
+
+# ================================================================================================
+
 def display_coffee_header(game_state: GameState) -> None:
     player = game_state.player
     player_color = p_color(player.hp, player.max_hp)

@@ -48,19 +48,24 @@ class Fish:
 # ================================================================================================
 
     def __post_init__(self):
+        # --- core characteristics ---
         self.base_name = self.name
         self.age = random.randint(1, self.max_age)
         self.sex = random.choice([f.MALE, f.FEMALE])
+
+        # --- size and value ---
         self.length = random.randint(self.min_length, self.max_length)
         weight_factor = random.uniform(self.min_weight_factor, self.max_weight_factor)
         self.weight = round(((self.length ** 2) * weight_factor) / 144)
         size = self.length * self.weight
-        self.stamina = self.max_stamina
+        self.value = round(size * self.value_for_size)
+
+        # --- state, variant, and related variables ---
         self.get_state()
         self.get_variant()
         if self.variant:
             self.name = f"{self.variant} {self.base_name}"
-        self.value = round(size * self.value_for_size)
+        self.stamina = self.max_stamina
 
 # ================================================================================================
 
@@ -140,6 +145,7 @@ class Fish:
 
         self.value = round(self.value)
         self.max_stamina = round(self.max_stamina)
+        self.stamina = self.max_stamina
 
     def get_rarity(self):
         if self.rarity == f.COMMON:
