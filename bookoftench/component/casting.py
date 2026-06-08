@@ -1,11 +1,9 @@
 import random
 import time
 
-from bookoftench import event_logger
 from bookoftench.audio import play_music, play_sound
-from bookoftench.component import LinearComponent, BoatComponent
 from bookoftench.component.base import functional_component, GatekeepingComponent, \
-    LabeledSelectionComponent, ReprBinding, SelectionBinding, Component, NoOpComponent
+    LabeledSelectionComponent, ReprBinding, SelectionBinding, Component, NoOpComponent, LinearComponent
 from bookoftench.data.audio import COINS
 from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED, \
     possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, STAMINA, RAGE_FACTOR, TENCH
@@ -91,7 +89,8 @@ class SpawnFish(LinearComponent):
         available = [i for i in fishes if i.rarity == rarity]
 
         if available:
-            selection = load_fish(random.choice(available))
+            pick = random.choice(available)
+            selection = load_fish(pick)
             selection.distance = random.randint(fishing_area.min_hook_distance, fishing_area.max_hook_distance)
             self.game_state.current_fish = selection
         else:
@@ -195,12 +194,15 @@ class EndFishBattle(NoOpComponent):
         super().__init__(game_state)
 
     def run(self):
-        self.display_catch()
-        self.award_xp()
-        self.sell_fish()
-        self.update_log
+        fish = self.game_state.current_fish
+
+        if fish.caught:
+            self.display_catch()
+            self.award_xp()
+            self.sell_fish()
+            self.update_log()
         self.reset_state()
-        BoatComponent(self.game_state).run()
+        return None
 
     def display_catch(self):
         fish = self.game_state.current_fish
@@ -210,8 +212,8 @@ class EndFishBattle(NoOpComponent):
             green(f"You caught a {fish.name}!"),
             "",
             f"Rarity: {rarity}",
-            f"Length: {blue(f'{fish.length}\"')}",
-            f"Weight: {orange(f'{round(fish.weight, 2)} lbs')}",
+            f"Length: {yellow(f'{fish.length} in')}",
+            f"Weight: {yellow(f'{round(fish.weight, 2)} lbs')}",
             f"Value: {green(f'{fish.value} coins')}",
             "",
             f"Strength: {yellow(round(fish.strength, 2))}",
@@ -226,7 +228,6 @@ class EndFishBattle(NoOpComponent):
         xp = max(1, round(fish.value ** 0.5))
         player.gain_fishing_xp(xp)
 
-
     def sell_fish(self):
         player = self.game_state.player
         fish = self.game_state.current_fish
@@ -237,7 +238,9 @@ class EndFishBattle(NoOpComponent):
         player.coins += value
 
     def update_log(self):
-        pass
+        fish = self.game_state.current_fish
+        fish.catch_location = self.game_state.current_fishing_area.name
+        self.game_state.player.caught_fish.append(fish)
 
     def reset_state(self):
         self.game_state.current_fish = None
@@ -252,8 +255,9 @@ class FishTurn(NoOpComponent):
 
     def run(self):
         fish = self.game_state.current_fish
+        player = self.game_state.player
 
-        self.spit_hook(fish)
+        self.spit_hook(fish, player)
 
         if fish.lost:
             EndFishBattle(self.game_state).run()
@@ -267,11 +271,13 @@ class FishTurn(NoOpComponent):
         if fish.lost:
             EndFishBattle(self.game_state).run()
         else:
-            FishBattle(self.game_state).run()
+            return
 
     @staticmethod
-    def spit_hook(fish):
+    def spit_hook(fish, player):
         if random.random() < fish.spit_hook_chance:
+            name = fish.name if player.fishing_lvl > 2 else "Unknown Fish"
+            print_and_sleep(yellow(f"The {name} dropped the hook and swam away!"))
             fish.lost = True
 
     @staticmethod
@@ -308,8 +314,6 @@ class FishTurn(NoOpComponent):
         rage_gain = random.randint(1, 3)
         stamina_ratio = fish.stamina / fish.max_stamina
 
-        time.sleep(1)
-
         if fish.state == AGITATED:
             state_modifier = 1.1
         elif fish.state == SPOOKED:
@@ -330,8 +334,8 @@ class FishTurn(NoOpComponent):
         rage_gain *= fish.rage_factor
         rage_gain *= state_modifier
         rage_gain *= stamina_modifier
-        fish.rage = min(100, fish.rage)
         fish.rage += round(rage_gain)
+        fish.rage = min(100, fish.rage)
 
     @staticmethod
     def update_fish_state(fish):
@@ -441,6 +445,7 @@ class Pull(NoOpComponent):
             fish.lost = True
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
         else:
+            print_and_sleep(yellow("You pull hard against the fish."))
             pass
 
 # ================================================================================================
@@ -522,6 +527,7 @@ class Reel(NoOpComponent):
             fish.lost = True
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
         else:
+            print_and_sleep(yellow("You reel steadily."))
             pass
 
 # ================================================================================================
@@ -540,7 +546,7 @@ class GiveLine(NoOpComponent):
         if fish.caught or fish.lost:
             EndFishBattle(self.game_state).run()
         else:
-            FishTurn(self.game_state).run()
+            return
 
     @staticmethod
     def get_give_line(fish) -> int:
@@ -591,6 +597,7 @@ class GiveLine(NoOpComponent):
             fish.lost = True
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
         else:
+            print_and_sleep(yellow("You let the fish go temporarily."))
             pass
 
 # ================================================================================================
@@ -608,6 +615,7 @@ class ObserveFish(NoOpComponent):
             FishTurn(self.game_state).run()
         else:
             print_and_sleep(yellow(f"You must catch this fish to learn more."), 1.5)
+            FishTurn(self.game_state).run()
 
     @staticmethod
     def get_observation(fish) -> str | None:

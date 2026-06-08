@@ -3,7 +3,8 @@ from typing import List
 
 from bookoftench.data.bait import Bait_And_Lures
 from bookoftench.model.base import Buyable
-from bookoftench.ui import dim, cyan, orange, green, red
+from bookoftench.ui import dim, cyan, orange, green, red, white
+
 
 # ================================================================================================
 
@@ -31,10 +32,10 @@ class Bait(Buyable):
 
     def __repr__(self):
         return dim(' | ').join([
-            f"{self.name:<16}",
+            f"{cyan(f"{self.name:<16}")}",
             f"Cost: {orange(f'{self.cost:>2}')}",
             f"Casts: {green(f'{self.casts:>3}')}",
-            f"{self.description}"
+            f"{self.description}",
         ])
 
 # ================================================================================================

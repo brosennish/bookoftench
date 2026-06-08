@@ -1,7 +1,7 @@
 import random
 
 from bookoftench.audio import play_music, play_sound, stop_music
-from bookoftench.component import BoatComponent, TackleBox
+from bookoftench.component import BoatComponent, TackleBox, FishLog
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
@@ -42,10 +42,11 @@ class Fishmonger(LabeledSelectionComponent):
                           i, area in enumerate(available)]
 
         bait_shop_binding = SelectionBinding('S', "Shop", functional_component()(lambda: self._shop()))
+        fish_log_binding = SelectionBinding('L', "Fish Log", FishLog)
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
 
         super().__init__(game_state, refresh_menu=True,
-                         bindings=[*fishing_area_bindings, bait_shop_binding, return_binding])
+                         bindings=[*fishing_area_bindings, bait_shop_binding, fish_log_binding, return_binding])
         self.selection_components = [
             LabeledSelectionComponent(
                 game_state,

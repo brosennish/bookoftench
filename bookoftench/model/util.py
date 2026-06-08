@@ -15,7 +15,7 @@ from .game_state import GameState
 from ..data.areas import CAVE, CITY, FOREST, SWAMP
 from ..data.enemies import CONTAGIOUS, BOSS, SPECIAL_BOSS, FINAL_BOSS, NORMAL
 from ..data.enviroment import DAY
-from ..data.fish import AGITATED, SPOOKED, CALM
+from ..data.fish import AGITATED, SPOOKED, CALM, SHALLOWS, BAY, OCEAN
 from ..data.fishing_areas import WET_SEASON
 
 
@@ -76,13 +76,20 @@ def display_fishmonger_header(game_state: GameState) -> None:
 
 def display_tackle_box_header(game_state: GameState) -> None:
     player = game_state.player
-    season = game_state.season
-    season_color = blue if season == WET_SEASON else yellow
+    bait = player.current_bait
+
+    print_and_sleep(
+        f"Current: {cyan(f"{bait.name}")} - {green(f"{player.current_bait.casts} casts remaining")}"
+    )
+
+# ================================================================================================
+
+def display_fish_log_header(game_state: GameState) -> None:
+    player = game_state.player
 
     print_and_sleep(f"{dim(' | ').join([
-        f"{season_color(f"{season}")}",
-        f"Coins: {green(f"{player.coins}")}",
-    ])}\n")
+        f"* {player.name}'s Fishing Log *",
+    ])}")
 
 # ================================================================================================
 
@@ -174,14 +181,7 @@ def display_fishing_battle_header(game_state: GameState) -> None:
 
 # --- CASTS REMAINING COLOR CODING ---
 def c_color(casts: int) -> Callable[[str], str]:
-    # Casts remaining (c)
-    c = casts
-    if c >= 6:
-        return green
-    elif c >= 4:
-        return yellow
-    else:
-        return red
+    return green
 
 def display_boat_header(game_state: GameState):
     player = game_state.player
@@ -575,3 +575,125 @@ def display_active_perk_count() -> None:
 @attach_perks(USED_SNEAKERS, NEW_SNEAKERS, silent=True)
 def calculate_flee() -> float:
     return 0.5
+
+# ================================================================================================
+# ================================================================================================
+
+def display_fishing_stats(game_state: GameState) -> None:
+    player = game_state.player
+    caught = player.caught_fish
+    shallows_fish = [i for i in caught if i.catch_location == SHALLOWS]
+    bay_fish = [i for i in caught if i.catch_location == BAY]
+    ocean_fish = [i for i in caught if i.catch_location == OCEAN]
+    largest = max(caught, key=lambda fish: fish.size)
+    smallest = min(caught, key=lambda fish: fish.size)
+    longest = max(caught, key=lambda fish: fish.length)
+    heaviest = max(caught, key=lambda fish: fish.weight)
+    valuable = max(caught, key=lambda fish: fish.value)
+    fastest = max(caught, key=lambda fish: fish.speed)
+    enraged = max(caught, key=lambda fish: fish.rage_factor)
+    toughest = max(caught, key=lambda fish: fish.max_stamina)
+    strongest = max(caught, key=lambda fish: fish.strength)
+
+    if not player.caught_fish:
+        print_and_sleep(yellow("Go catch some fish fool."))
+    else:
+        print_and_sleep("\n".join([
+            f"Total:         {cyan(len(caught))}",
+            f"Shallows:      {blue(len(shallows_fish))}",
+            f"Bay:           {blue(len(bay_fish))}",
+            f"Ocean:         {blue(len(ocean_fish))}",
+            "",
+            f"Largest:       {blue(largest.name)}, {yellow(largest.weight)} lbs, {yellow(largest.length)} in",
+            f"Smallest:      {blue(smallest.name)}, {yellow(smallest.weight)} lbs, {yellow(smallest.length)} in",
+            f"Longest:       {blue(longest.name)}, {yellow(longest.length)} in",
+            f"Heaviest:      {blue(heaviest.name)}, {yellow(heaviest.weight)} lbs",
+            f"Most Valuable: {blue(valuable.name)}, {green(valuable.value)} coins",
+            f"Fastest:       {blue(fastest.name)}, {cyan(fastest.speed)}",
+            f"Most Rage:     {blue(enraged.name)}, {red(enraged.rage_factor)}",
+            f"Strongest:     {blue(strongest.name)}, {yellow(strongest.strength)}",
+            f"Toughest:      {blue(toughest.name)}, {orange(toughest.strength)}",
+        ]))
+
+# ================================================================================================
+
+def display_shallows_fish(game_state: GameState) -> None:
+    player = game_state.player
+
+    shallows = [
+        fish for fish in player.caught_fish
+        if fish.catch_location == SHALLOWS
+    ]
+
+    if not shallows:
+        print_and_sleep(yellow("No fish caught in the Shallows."))
+        return
+
+    print_and_sleep(cyan("=== SHALLOWS FISH ==="))
+
+    for fish in sorted(shallows, key=lambda fish: fish.size, reverse=True):
+
+        print_and_sleep(
+            dim(" | ").join([
+                blue(f"{fish.name}"),
+                f"Rarity: {fish.get_rarity()}",
+                f"{fish.length} in",
+                f"{fish.weight} lbs",
+                f"Value:  {green(fish.value)}",
+            ])
+        )
+
+# ================================================================================================
+
+def display_bay_fish(game_state: GameState) -> None:
+    player = game_state.player
+
+    bay = [
+        fish for fish in player.caught_fish
+        if fish.catch_location == BAY
+    ]
+
+    if not bay:
+        print_and_sleep(yellow("No fish caught in the Bay."))
+        return
+
+    print_and_sleep(cyan("=== BAY FISH ==="))
+
+    for fish in sorted(bay, key=lambda fish: fish.size, reverse=True):
+
+        print_and_sleep(
+            dim(" | ").join([
+                blue(f"{fish.name}"),
+                f"Rarity: {fish.get_rarity()}",
+                f"{fish.length} in",
+                f"{fish.weight} lbs",
+                f"Value:  {green(fish.value)}",
+            ])
+        )
+
+# ================================================================================================
+
+def display_ocean_fish(game_state: GameState) -> None:
+    player = game_state.player
+
+    ocean = [
+        fish for fish in player.caught_fish
+        if fish.catch_location == OCEAN
+    ]
+
+    if not ocean:
+        print_and_sleep(yellow("No fish caught in the Ocean."))
+        return
+
+    print_and_sleep(cyan("=== OCEAN FISH ==="))
+
+    for fish in sorted(ocean, key=lambda fish: fish.size, reverse=True):
+        print_and_sleep(
+            dim(" | ").join([
+                blue(f"{fish.name}"),
+                f"Rarity: {fish.get_rarity()}",
+                f"{fish.length} in",
+                f"{fish.weight} lbs",
+                f"Value:  {green(fish.value)}",
+            ])
+        )

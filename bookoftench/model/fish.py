@@ -40,6 +40,7 @@ class Fish:
     length: int | None = None
     weight: int | float | None = None
     value: int | None = None
+    size: int | None = None
     sex: str | None = None
     state: str | None = None
     variant: str | None = None
@@ -70,6 +71,7 @@ class Fish:
         weight_factor = random.uniform(self.min_weight_factor, self.max_weight_factor)
         self.weight = round(((self.length ** 2) * weight_factor) / 144)
         size = self.length * self.weight
+        self.size = int(size)
         self.value = round(size * self.value_for_size)
 
         # --- state, variant, and related variables ---

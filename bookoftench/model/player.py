@@ -22,6 +22,7 @@ from .enemy import Enemy
 from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent, LevelUpEvent, \
     SwapWeaponEvent, WeaponBrokeEvent, HitEvent, PlayerDeathEvent, StealItemEvent, StealWeaponEvent, StealPerkEvent, \
     GenericStealEvent
+from .fish import Fish
 from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
 from .trait import Trait
@@ -138,6 +139,7 @@ class Player(Combatant):
 
     _blind = False
 
+    caught_fish: list[Fish] = field(default_factory=list)
     tackle_box: Dict[str, Bait] = field(default_factory=bait_defaults)
     current_bait: Bait = None
     items: Dict[str, Item] = field(default_factory=item_defaults)
@@ -499,7 +501,7 @@ class Player(Combatant):
         fishing_xp = self.fishing_xp
         original_fishing_lvl = self.fishing_lvl
 
-        print_and_sleep(cyan(f"You gained {xp}!"), 1)
+        print_and_sleep(cyan(f"You gained {xp} fishing XP!"), 1)
 
         if fishing_xp >= 550:
             fishing_lvl = 8

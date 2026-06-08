@@ -3,22 +3,24 @@ import random
 from bookoftench import event_logger
 from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
-    functional_component
+    functional_component, TextDisplayingComponent
 from bookoftench.component.casting import DryCastCheck
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import EQUIP_WEAPON
 from bookoftench.data.boat import TACKLE_BOX, FISHING_OPTIONS, CAST, FISH_LOG, SHOP
 from bookoftench.data.components import BOAT
+from bookoftench.data.fish import SHALLOWS, OCEAN, BAY
 from bookoftench.model import GameState
 from bookoftench.model.bait import Bait
-from bookoftench.model.util import display_boat_header, display_tackle_box_header
+from bookoftench.model.util import display_boat_header, display_tackle_box_header, display_fish_log_header, \
+    display_fishing_stats, display_shallows_fish, display_bay_fish, display_ocean_fish
 from bookoftench.ui import blue, yellow
 from bookoftench.util import print_and_sleep
 
 # ================================================================================================
 # ================================================================================================
 
-@register_component(BOAT)
+register_component(BOAT)
 class BoatComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         original = FISHING_OPTIONS.copy()
@@ -85,7 +87,8 @@ class BoatComponent(LabeledSelectionComponent):
                 return None
 
             elif selection == FISH_LOG:
-                pass
+                FishLog(game_state).run()
+                return None
             elif selection == TACKLE_BOX:
                 if player.has_usable_bait:
                     TackleBox(game_state).run()
@@ -103,7 +106,7 @@ class BoatComponent(LabeledSelectionComponent):
 class TackleBox(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
-        available = [i for i in player.tackle_box.values() if i.casts > 0]
+        available = [i for i in player.tackle_box.values() if i.casts > 0 and i != player.current_bait]
 
         tackle_box_bindings = [ReprBinding(str(i + 1), bait.name,
                                            self._handle_selection_component(bait), bait) for
@@ -140,7 +143,7 @@ class TackleBox(LabeledSelectionComponent):
         for component in self.selection_components:
             component.display_options()
 
-    # ================================================================================================
+# ================================================================================================
 
     @staticmethod
     def _handle_selection_component(selection: Bait) -> type[Component]:
@@ -154,3 +157,86 @@ class TackleBox(LabeledSelectionComponent):
 
         return selection_component
 
+# ================================================================================================
+# ================================================================================================
+
+class FishLog(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState):
+        areas = [SHALLOWS, BAY, OCEAN]
+
+        fishing_area_bindings = [ReprBinding(str(i + 1), area,
+                                           self._handle_selection_component(area), area) for
+                               i, area in enumerate(areas)]
+
+        stats_binding = SelectionBinding('S', "Stats", FishingStats)
+        return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
+
+        super().__init__(game_state, refresh_menu=True,
+                         bindings=[*fishing_area_bindings, stats_binding, return_binding])
+        self.selection_components = [
+            LabeledSelectionComponent(
+                game_state,
+                fishing_area_bindings,
+                top_level_prompt_callback=display_fish_log_header,
+            ),
+            LabeledSelectionComponent(
+                game_state,
+                [stats_binding, return_binding]
+            ),
+        ]
+        self.leave = False
+
+    def play_theme(self) -> None:
+        pass
+        # play_music(FISHMONGER_THEME)
+
+    def _return(self):
+        self.leave = True
+
+    def can_exit(self) -> bool:
+        return self.leave or not self.game_state.player.is_alive()
+
+    def display_options(self) -> None:
+        for component in self.selection_components:
+            component.display_options()
+
+# ================================================================================================
+
+    @staticmethod
+    def _handle_selection_component(selection: str) -> type[Component]:
+        @functional_component(state_dependent=True)
+        def selection_component(game_state: GameState):
+
+            if selection == SHALLOWS:
+                ShallowsFishLog(game_state).run()
+                return None
+            elif selection == BAY:
+                BayFishLog(game_state).run()
+                return None
+            elif selection == OCEAN:
+                OceanFishLog(game_state).run()
+                return None
+            else:
+                return None
+
+        return selection_component
+
+# ================================================================================================
+
+class FishingStats(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_fishing_stats)
+
+
+class ShallowsFishLog(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_shallows_fish)
+
+
+class BayFishLog(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_bay_fish)
+
+class OceanFishLog(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_ocean_fish)

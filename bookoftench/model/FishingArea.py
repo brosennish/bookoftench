@@ -2,7 +2,8 @@ from dataclasses import dataclass
 from typing import List
 
 from bookoftench.data.fishing_areas import Fishing_Areas
-from bookoftench.ui import dim, orange, green, blue
+from bookoftench.ui import dim, orange, green, blue, cyan
+
 
 # ================================================================================================
 
@@ -24,7 +25,7 @@ class FishingArea:
         return dim(' | ').join([
             blue(f"{self.name:<10}"),
             f"Cost: {orange(self.travel_cost)}",
-            f"Casts: {green(self.casts)}",
+            f"Casts: {cyan(self.casts)}",
         ])
 
     def __repr__(self):
