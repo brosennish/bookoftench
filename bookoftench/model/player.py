@@ -494,6 +494,37 @@ class Player(Combatant):
 
 # ================================================================================================
 
+    def gain_fishing_xp(self, xp: int) -> None:
+        self.fishing_xp += xp
+        fishing_xp = self.fishing_xp
+        original_fishing_lvl = self.fishing_lvl
+
+        print_and_sleep(cyan(f"You gained {xp}!"), 1)
+
+        if fishing_xp >= 550:
+            fishing_lvl = 8
+        elif fishing_xp >= 360:
+            fishing_lvl = 7
+        elif fishing_xp >= 250:
+            fishing_lvl = 6
+        elif fishing_xp >= 160:
+            fishing_lvl = 5
+        elif fishing_xp >= 90:
+            fishing_lvl = 4
+        elif fishing_xp >= 40:
+            fishing_lvl = 3
+        elif fishing_xp >= 10:
+            fishing_lvl = 2
+        else:
+            fishing_lvl = 1
+
+        self.fishing_lvl = fishing_lvl
+
+        if original_fishing_lvl != fishing_lvl:
+            print_and_sleep(cyan(f"You are now fishing level {self.fishing_lvl}!"), 1)
+
+# ================================================================================================
+
     @staticmethod
     @attach_perk(p.INTRO_TO_TENCH, value_description="xp gained")
     @attach_perk(p.AP_TENCH_STUDIES, p.WrapperIndices.ApTenchStudies.BATTLE_XP, value_description="xp gained")
