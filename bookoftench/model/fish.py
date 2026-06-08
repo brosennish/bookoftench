@@ -4,7 +4,7 @@ from typing import List
 
 from bookoftench.data import fish as f
 from bookoftench.data.fish import VARIANTS, Fish_Species, TWO_HEADED, TRANSLUCENT, THREE_EYED, TELEPATHIC, SCARRED, \
-    SAPIENT, RADIOACTIVE, ONE_EYED, IRIDESCENT, GLOWING, ALBINO, NORMAL
+    SAPIENT, RADIOACTIVE, ONE_EYED, IRIDESCENT, GLOWING, ALBINO
 from bookoftench.ui import dim, cyan, orange, green, yellow, blue
 
 # ================================================================================================
@@ -12,7 +12,6 @@ from bookoftench.ui import dim, cyan, orange, green, yellow, blue
 @dataclass
 class Fish:
     name: str
-    base_name: str
     description: str
     rarity: str
     areas: list[str]
@@ -20,12 +19,11 @@ class Fish:
     moon: list[str] | None
     min_length: int
     max_length: int
-    length: int
+
     min_weight_factor: float
     max_weight_factor: float
-    weight: int | float
     value_for_size: float
-    value: int
+
     rage_factor: float
     speed: float
     strength: float
@@ -37,6 +35,11 @@ class Fish:
     distance: int = 0
     stamina: int = 0
     rage: int = 0
+
+    base_name: str | None = None
+    length: int | None = None
+    weight: int | float | None = None
+    value: int | None = None
     sex: str | None = None
     state: str | None = None
     variant: str | None = None

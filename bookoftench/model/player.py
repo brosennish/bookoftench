@@ -73,8 +73,11 @@ class PlayerWeapon(Weapon):
 
 
 def bait_defaults() -> Dict[str, Bait]:
-    return dict((b.name, b) for b in load_baits([DOUGH_BALL]))
+    bait = load_baits([DOUGH_BALL])[0]
+    bait.casts = 100
+    return {bait.name: bait}
 
+    return dict((b.name, b) for b in load_baits([DOUGH_BALL]))
 
 def item_defaults() -> Dict[str, Item]:
     return dict((it.name, it) for it in load_items([i.TENCH_FILET]))
@@ -207,6 +210,18 @@ class Player(Combatant):
     @attach_perks(p.HEALTH_NUT, p.DOCTOR_FISH, value_description="hp gained")
     def _apply_hp_bonus(base: int) -> int:
         return base
+
+# ================================================================================================
+
+    def equip_bait(self, bait: Bait):
+        self.current_bait = bait
+
+    @property
+    def has_usable_bait(self) -> bool:
+        has_bait = any(bait.casts > 0 for bait in self.tackle_box.values())
+        if has_bait:
+            return True
+        return False
 
 # ================================================================================================
 

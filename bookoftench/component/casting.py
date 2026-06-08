@@ -6,7 +6,7 @@ from bookoftench.component import LinearComponent
 from bookoftench.component.base import functional_component, GatekeepingComponent, \
     LabeledSelectionComponent, ReprBinding, SelectionBinding, Component, NoOpComponent
 from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED, \
-    possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, STAMINA, RAGE_FACTOR
+    possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, STAMINA, RAGE_FACTOR, TENCH
 from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL
 from bookoftench.data.fishing_areas import WET_SEASON_BITE_CHANCE_EFFECT, DRY_SEASON_BITE_CHANCE_EFFECT, WET_SEASON
 from bookoftench.model import GameState
@@ -63,17 +63,22 @@ class SpawnFish(LinearComponent):
         return self.spawn_fish()
 
     def spawn_fish(self) -> GameState:
+        self.game_state.current_fish = load_fish(TENCH)
+        return self.game_state
+
         fishing_area = self.game_state.current_fishing_area
         time = self.game_state.time_of_day
         moon = self.game_state.moon
         bait = self.game_state.player.current_bait
 
-        filtered = [i['name'] for i in Fish_Species if
-                    fishing_area.name in i['areas'] and
-                    time in i['time'] and
-                    not i['moon'] or moon in i['moon'] and
-                    bait in i['preferred_bait']
-                    ]
+        filtered = [
+            i['name']
+            for i in Fish_Species
+            if fishing_area.name in i['areas']
+               and time in i['time']
+               and (i['moon'] is None or moon in i['moon'])
+               and bait in i['preferred_bait']
+        ]
 
         fishes = load_fishes(filtered)
 
@@ -150,7 +155,7 @@ class FishBattle(LabeledSelectionComponent):
 
     def can_exit(self) -> bool:
         return (self.leave or not self.game_state.player.is_alive() or
-                self.game_state.fishing_area.casts == 0 or not self.game_state.current_fish)
+                self.game_state.current_fishing_area.casts == 0 or not self.game_state.current_fish)
 
     def display_options(self) -> None:
         for component in self.selection_components:
@@ -388,18 +393,6 @@ class Pull(NoOpComponent):
         else:
             pass
 
-    @staticmethod
-    def display_pull_result(variable: str, original: int, new: int):
-        change = "increased" if original < new else "decreased"
-        color = white
-
-        if variable in ['Distance', 'Stamina']:
-            color = green if change == "decreased" else yellow
-        elif variable == 'Rage':
-            color = red if change == "increased" else yellow
-
-        print_and_sleep(color(f"{variable}: {original} -> {new}"), 1)
-
 # ================================================================================================
 # ================================================================================================
 
@@ -448,13 +441,13 @@ class Reel(NoOpComponent):
         original_distance = fish.distance
         fish.distance -= round(reel)
         fish.distance = max(0, fish.distance)
-        self.display_reel_result('Distance', original_distance, fish.distance)
+        display_result('Distance', original_distance, fish.distance)
 
         # --- stamina ---
         original_stamina = fish.stamina
         fish.stamina -= stamina_loss
         fish.stamina = max(0, fish.stamina)
-        self.display_reel_result('Stamina', original_stamina, fish.stamina)
+        display_result('Stamina', original_stamina, fish.stamina)
 
         # --- rage ---
         original_rage = fish.rage
@@ -463,7 +456,7 @@ class Reel(NoOpComponent):
         fish.rage = min(100, fish.rage)
         FishTurn.update_fish_state(fish)
 
-        self.display_reel_result('Rage', original_rage, fish.rage)
+        display_result('Rage', original_rage, fish.rage)
 
     def apply_reel_outcome(self, fish):
         player = self.game_state.player
@@ -483,18 +476,6 @@ class Reel(NoOpComponent):
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
         else:
             pass
-
-    @staticmethod
-    def display_reel_result(variable: str, original: int, new: int):
-        change = "increased" if original < new else "decreased"
-        color = white
-
-        if variable in ['Distance', 'Stamina']:
-            color = green if change == "decreased" else yellow
-        elif variable == 'Rage':
-            color = red if change == "increased" else yellow
-
-        print_and_sleep(color(f"{variable}: {original} -> {new}"), 1)
 
 # ================================================================================================
 
@@ -528,11 +509,12 @@ class GiveLine(NoOpComponent):
 
         return round(line)
 
+    @staticmethod
     def apply_give_line(self, fish, line, player):
         # --- distance ---
         original_distance = fish.distance
         fish.distance += line
-        self.display_give_line_result('Distance', original_distance, fish.distance)
+        display_result('Distance', original_distance, fish.distance)
 
         # --- rage ---
         original_rage = fish.rage
@@ -550,7 +532,7 @@ class GiveLine(NoOpComponent):
         fish.rage = max(0, fish.rage)
         FishTurn.update_fish_state(fish)
 
-        self.display_give_line_result('Rage', original_rage, fish.rage)
+        display_result('Rage', original_rage, fish.rage)
 
     def apply_give_line_outcome(self, fish):
         player = self.game_state.player
@@ -566,18 +548,6 @@ class GiveLine(NoOpComponent):
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
         else:
             pass
-
-    @staticmethod
-    def display_give_line_result(variable: str, original: int, new: int):
-        change = "increased" if original < new else "decreased"
-        color = white
-
-        if variable in ['Distance', 'Stamina']:
-            color = green if change == "decreased" else yellow
-        elif variable == 'Rage':
-            color = red if change == "increased" else yellow
-
-        print_and_sleep(color(f"{variable}: {original} -> {new}"), 1)
 
 # ================================================================================================
 
@@ -648,3 +618,24 @@ class ObserveFish(NoOpComponent):
 
         print_and_sleep(blue(f"You observe the fish to gain insight..."), 1.5)
         print_and_sleep(f"{color(word)}: {value}", 1.5)
+
+# ================================================================================================
+
+def display_result(variable: str, original: int, new: int):
+    if original > new:
+        change = "decreased"
+    elif original < new:
+        change = "increased"
+    else:
+        change = None
+
+    color = white
+
+    if change:
+        if variable in ['Distance', 'Stamina']:
+            color = green if change == "decreased" else yellow
+        elif variable == 'Rage':
+            color = green if change == "decreased" else red
+        print_and_sleep(color(f"{variable}: {original} -> {new}"), 1)
+    else:
+        print_and_sleep(f"{variable}: {original}", 1)

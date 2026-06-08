@@ -22,7 +22,7 @@ class FishingArea:
 
     def get_simple_format(self) -> str:
         return dim(' | ').join([
-            blue(f"{self.name:<19}"),
+            blue(f"{self.name:<10}"),
             f"Cost: {orange(self.travel_cost)}",
             f"Casts: {green(self.casts)}",
         ])

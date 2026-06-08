@@ -13,6 +13,7 @@ class Bait(Buyable):
     areas: list
     casts: int
     cost: int
+    description: str
 
 # ================================================================================================
 
@@ -30,9 +31,10 @@ class Bait(Buyable):
 
     def __repr__(self):
         return dim(' | ').join([
-            cyan(f"{self.name:<19}"),
-            f"Cost: {orange(self.cost)}",
-            f"Casts: {self.get_casts()}",
+            f"{self.name:<16}",
+            f"Cost: {orange(f'{self.cost:>2}')}",
+            f"Casts: {green(f'{self.casts:>3}')}",
+            f"{self.description}"
         ])
 
 # ================================================================================================

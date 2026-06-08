@@ -15,6 +15,7 @@ from .game_state import GameState
 from ..data.areas import CAVE, CITY, FOREST, SWAMP
 from ..data.enemies import CONTAGIOUS, BOSS, SPECIAL_BOSS, FINAL_BOSS, NORMAL
 from ..data.enviroment import DAY
+from ..data.fish import AGITATED, SPOOKED, CALM
 from ..data.fishing_areas import WET_SEASON
 
 
@@ -73,17 +74,101 @@ def display_fishmonger_header(game_state: GameState) -> None:
 
 # ================================================================================================
 
+def display_tackle_box_header(game_state: GameState) -> None:
+    player = game_state.player
+    season = game_state.season
+    season_color = blue if season == WET_SEASON else yellow
+
+    print_and_sleep(f"{dim(' | ').join([
+        f"{season_color(f"{season}")}",
+        f"Coins: {green(f"{player.coins}")}",
+    ])}\n")
+
+# ================================================================================================
+
+def display_bait_shop_header(game_state: GameState) -> None:
+    player = game_state.player
+    season = game_state.season
+    season_color = blue if season == WET_SEASON else yellow
+    tod = game_state.time_of_day
+    tod_display = "Day" if tod == DAY else "Night"
+    moon = game_state.moon
+
+    print_and_sleep(f"{dim(' | ').join([
+        f"{season_color(f"{season}")}",
+        f"{yellow(tod_display) if tod == DAY else purple(tod_display)}",
+        f"{moon} Moon",
+        f"Coins: {green(f"{player.coins}")}",
+    ])}\n")
+
+# ================================================================================================
+
+def fishing_state_color(game_state: GameState) -> Callable[[str], str]:
+    fish = game_state.current_fish
+
+    if fish.state == CALM:
+        return cyan
+    elif fish.state == AGITATED:
+        return yellow
+    elif fish.state == SPOOKED:
+        return purple
+    else:
+        return red
+
+def fishing_distance_color(game_state: GameState) -> Callable[[str], str]:
+    fishing_area = game_state.current_fishing_area
+    remaining = fishing_area.escape_distance
+    ratio = remaining / fishing_area.escape_distance
+
+    if ratio < 0.15:
+        return red
+    elif ratio < 0.35:
+        return orange
+    elif ratio < 0.60:
+        return yellow
+    else:
+        return green
+
+def fishing_stamina_color(game_state: GameState) -> Callable[[str], str]:
+    fish = game_state.current_fish
+    stamina_percentage = round((fish.stamina / fish.max_stamina) * 100)
+
+    if stamina_percentage >= 70:
+        return yellow
+    elif stamina_percentage <= 30:
+        return red
+    else:
+        return green
+
+# ================================================================================================
+
 def display_fishing_battle_header(game_state: GameState) -> None:
     player = game_state.player
     fish = game_state.current_fish
     fish_name = fish.name if player.fishing_lvl > 2 else "Unknown Fish"
+    stamina_percentage = round((fish.stamina / fish.max_stamina) * 100)
 
-    print_and_sleep(f"{dim(' | ').join([
-        f"{orange(f"{fish_name}")}",
-        f"Distance: {f"{fish.distance}"}",
-        f"Stamina: {green(f"{fish.stamina}")}",
-        f"Rage: {red(f"{fish.rage}")}",
-    ])}\n")
+    # --- get colors ---
+    state_color = fishing_state_color(game_state)
+    distance_color = fishing_distance_color(game_state)
+    stamina_color = fishing_stamina_color(game_state)
+
+    # --- print ---
+    top_row = dim(' | ').join([
+        orange(fish_name),
+        state_color(fish.state),
+    ])
+
+    second_row = dim(' | ').join([
+        f"Distance: {distance_color(f'{fish.distance} feet')}",
+        f"Stamina: {stamina_color(f'{stamina_percentage}%')}",
+        f"Rage: {red(f'{fish.rage}%')}",
+    ])
+
+    print_and_sleep("\n".join([
+        top_row,
+        second_row,
+    ]))
 
 # ================================================================================================
 
@@ -104,9 +189,12 @@ def display_boat_header(game_state: GameState):
     tod_display = "Day" if tod == DAY else "Night"
     moon = game_state.moon
     casts = game_state.current_fishing_area.casts
+    season = game_state.season
+    season_color = blue if season == WET_SEASON else yellow
 
     # --- top row ---
     top_row = f"{dim(' | ').join([
+        f"{season_color(f"{season}")}",
         f"{blue(f"{game_state.current_fishing_area.name}")}",
         f"{yellow(tod_display) if tod == DAY else purple(tod_display)}",
         f"{moon} Moon",
@@ -116,7 +204,7 @@ def display_boat_header(game_state: GameState):
     bottom_row = f"{dim(' | ').join([
         f"Lvl: {cyan(f"{player.fishing_lvl}")}",
         f"XP: {cyan(f"{player.fishing_xp}")}",  # todo - add xp system 
-        f"Coins: {green(f"{player.coins}")}",
+        f"Bait: {orange(f"{player.current_bait.name}")}",
         f"Casts: {c_color(casts)(f"{game_state.current_fishing_area.casts}")}",
     ])}\n"
 
