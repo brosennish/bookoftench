@@ -1,12 +1,12 @@
 import random
 
-from bookoftench.audio import play_music, play_sound
+from bookoftench.audio import play_sound
 from bookoftench.component.base import functional_component, GatekeepingComponent, \
     LabeledSelectionComponent, ReprBinding, SelectionBinding, Component, NoOpComponent, LinearComponent, \
     TextDisplayingComponent
 from bookoftench.data.audio import COINS, CATCH_FISH, GOLF_CLAP, FISH_ON
 from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED, \
-    possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, STAMINA, RAGE_FACTOR, TENCH
+    possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, RAGE_FACTOR
 from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL
 from bookoftench.data.fishing_areas import WET_SEASON_BITE_CHANCE_EFFECT, DRY_SEASON_BITE_CHANCE_EFFECT, WET_SEASON
 from bookoftench.model import GameState
@@ -83,7 +83,7 @@ class SpawnFish(LinearComponent):
 
         fishes = load_fishes(filtered)
 
-        rarity = self.get_rarity()
+        rarity = self.get_rarity(self.game_state.player.luck)
 
         available = [i for i in fishes if i.rarity == rarity]
 
@@ -106,17 +106,17 @@ class SpawnFish(LinearComponent):
 # ================================================================================================
 
     @staticmethod
-    def get_rarity():
+    def get_rarity(luck):
         roll = random.random()
+        luck_bonus = min((luck - 1) / 100, 0.08)
 
-        if roll < 0.02:
+        if roll < 0.02 + luck_bonus:
             return LEGENDARY
-        if roll < 0.10:
+        if roll < 0.10 + luck_bonus:
             return RARE
-        if roll < 0.30:
+        if roll < 0.30 + luck_bonus:
             return UNCOMMON
-        else:
-            return COMMON
+        return COMMON
 
 class LaunchFishBattle(GatekeepingComponent):
     def __init__(self, game_state: GameState):

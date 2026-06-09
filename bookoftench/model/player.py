@@ -14,8 +14,7 @@ from bookoftench.event_logger import subscribe_function
 from bookoftench.model.illness import Illness
 from bookoftench.ui import yellow, dim, green, cyan, purple, red
 from bookoftench.util import print_and_sleep
-from bookoftench.model.bait import Bait, load_bait
-from bookoftench.data.bait import DOUGH_BALL
+from bookoftench.model.bait import Bait
 from .base import Combatant, Buyable
 from .build import Build
 from .enemy import Enemy
@@ -30,7 +29,7 @@ from .weapon import load_weapons, Weapon
 from bookoftench.data.enviroment import DAY, NIGHT, FULL, WETTING, DRYING
 from bookoftench.data.areas import CAVE
 from bookoftench.data.enemies import EMPATH
-from ..data.audio import XP, POSITIVE, GREAT_JOB, GOLF_CLAP
+from ..data.audio import XP, GREAT_JOB, GOLF_CLAP
 
 
 # ================================================================================================
@@ -86,7 +85,7 @@ def build_weapon_defaults(build: Build | None) -> Dict[str, PlayerWeapon]:
     # Clean out bad data first (temporary safety net)
     build.weapons = [w for w in build.weapons if hasattr(w, "name")]
 
-    filtered = [i.name for i in build.weapons if i.name in [BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF]]
+    filtered = [w.name for w in build.weapons if w.name in [BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF]]
 
     if filtered:
         build.weapons.extend(load_weapons(filtered))
