@@ -117,6 +117,7 @@ class Player(Combatant):
     luck: float = 1
     trait: Trait = None
     fishing_xp: int = 0
+    fishing_xp_needed: int = 10
     fishing_lvl: int = 1
 
     illness: Optional[Illness] = None
@@ -506,21 +507,29 @@ class Player(Combatant):
         if fishing_xp >= 550:
             fishing_lvl = 8
         elif fishing_xp >= 360:
+            xp_needed = 550
             fishing_lvl = 7
         elif fishing_xp >= 250:
+            xp_needed = 360
             fishing_lvl = 6
         elif fishing_xp >= 160:
+            xp_needed = 250
             fishing_lvl = 5
         elif fishing_xp >= 90:
+            xp_needed = 160
             fishing_lvl = 4
         elif fishing_xp >= 40:
+            xp_needed = 90
             fishing_lvl = 3
         elif fishing_xp >= 10:
+            xp_needed = 40
             fishing_lvl = 2
         else:
+            xp_needed = 10
             fishing_lvl = 1
 
         self.fishing_lvl = fishing_lvl
+        self.fishing_xp_needed = xp_needed
 
         if original_fishing_lvl != fishing_lvl:
             print_and_sleep(cyan(f"You are now fishing level {self.fishing_lvl}!"), 1)

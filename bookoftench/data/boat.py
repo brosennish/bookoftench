@@ -3,13 +3,13 @@ from bookoftench.ui import blue, green, cyan, purple, red, yellow
 # ================================================================================================
 
 CAST = "Cast"
-FISH_LOG = "Fish Log"
+FISHING_LOG = "Fishing Log"
 SHOP = "Shop"
 TACKLE_BOX = "Tackle Box"
 
 FISHING_OPTIONS = [
     {'name': CAST, 'color': cyan},
-    {'name': FISH_LOG, 'color': blue},
+    {'name': FISHING_LOG, 'color': blue},
     {'name': TACKLE_BOX, 'color': purple},
 ]
 

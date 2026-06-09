@@ -3,7 +3,8 @@ import time
 
 from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import functional_component, GatekeepingComponent, \
-    LabeledSelectionComponent, ReprBinding, SelectionBinding, Component, NoOpComponent, LinearComponent
+    LabeledSelectionComponent, ReprBinding, SelectionBinding, Component, NoOpComponent, LinearComponent, \
+    TextDisplayingComponent
 from bookoftench.data.audio import COINS
 from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED, \
     possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, STAMINA, RAGE_FACTOR, TENCH
@@ -11,7 +12,7 @@ from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PU
 from bookoftench.data.fishing_areas import WET_SEASON_BITE_CHANCE_EFFECT, DRY_SEASON_BITE_CHANCE_EFFECT, WET_SEASON
 from bookoftench.model import GameState
 from bookoftench.model.fish import load_fishes, load_fish
-from bookoftench.model.util import display_fishing_battle_header
+from bookoftench.model.util import display_fishing_battle_header, display_fishing_actions, display_fishing_info
 from bookoftench.ui import yellow, dim, blue, white, green, red, purple, cyan, orange
 from bookoftench.util import print_and_sleep
 
@@ -132,10 +133,12 @@ class FishBattle(LabeledSelectionComponent):
                                        self._handle_selection_component(option), option) for
                           i, option in enumerate(options)]
 
+        view_actions_binding = SelectionBinding('V', "View Actions", ViewFishingActions)
+        view_info_binding = SelectionBinding('M', "More Info", ViewFishingInfo)
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
 
         super().__init__(game_state, refresh_menu=True,
-                         bindings=[*fishing_battle_option_bindings, return_binding])
+                         bindings=[*fishing_battle_option_bindings, view_actions_binding, view_info_binding, return_binding])
         self.selection_components = [
             LabeledSelectionComponent(
                 game_state,
@@ -144,7 +147,7 @@ class FishBattle(LabeledSelectionComponent):
             ),
             LabeledSelectionComponent(
                 game_state,
-                [return_binding]
+                [view_actions_binding, view_info_binding, return_binding]
             ),
         ]
         self.leave = False
@@ -187,6 +190,15 @@ class FishBattle(LabeledSelectionComponent):
         return selection_component
 
 # ================================================================================================
+
+class ViewFishingActions(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_fishing_actions)
+
+class ViewFishingInfo(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_fishing_info)
+
 # ================================================================================================
 
 class EndFishBattle(NoOpComponent):

@@ -7,7 +7,7 @@ from bookoftench.component.base import LabeledSelectionComponent, SelectionBindi
 from bookoftench.component.casting import DryCastCheck
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import EQUIP_WEAPON
-from bookoftench.data.boat import TACKLE_BOX, FISHING_OPTIONS, CAST, FISH_LOG, SHOP
+from bookoftench.data.boat import TACKLE_BOX, FISHING_OPTIONS, CAST, FISHING_LOG, SHOP
 from bookoftench.data.components import BOAT
 from bookoftench.data.fish import SHALLOWS, OCEAN, BAY
 from bookoftench.model import GameState
@@ -86,8 +86,8 @@ class BoatComponent(LabeledSelectionComponent):
                 DryCastCheck(game_state).run()
                 return None
 
-            elif selection == FISH_LOG:
-                FishLog(game_state).run()
+            elif selection == FISHING_LOG:
+                FishingLog(game_state).run()
                 return None
             elif selection == TACKLE_BOX:
                 if player.has_usable_bait:
@@ -160,7 +160,7 @@ class TackleBox(LabeledSelectionComponent):
 # ================================================================================================
 # ================================================================================================
 
-class FishLog(LabeledSelectionComponent):
+class FishingLog(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         areas = [SHALLOWS, BAY, OCEAN]
 
