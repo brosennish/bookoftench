@@ -65,11 +65,6 @@ class SpawnFish(LinearComponent):
         return self.spawn_fish()
 
     def spawn_fish(self) -> GameState:
-        self.game_state.current_fish = load_fish(TENCH)
-        self.game_state.current_fish.distance = 30
-        print_and_sleep(orange(f"Fish on!"), 2)
-        return self.game_state
-
         fishing_area = self.game_state.current_fishing_area
         time = self.game_state.time_of_day
         moon = self.game_state.moon
@@ -99,7 +94,6 @@ class SpawnFish(LinearComponent):
             print_and_sleep(yellow("No fish met the criteria. Add more fish bozo."))
 
         return self.game_state
-
 
 # ================================================================================================
 
