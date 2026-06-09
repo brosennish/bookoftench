@@ -166,6 +166,7 @@ class TackleBox(LabeledSelectionComponent):
 # ================================================================================================
 # ================================================================================================
 
+@register_component(FISHING_LOG)
 class FishingLog(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         areas = [SHALLOWS, BAY, OCEAN]

@@ -73,7 +73,7 @@ class Fish:
         self.weight = round(((self.length ** 2) * weight_factor) / 144, 2)
         size = self.length * self.weight
         self.size = int(size)
-        self.value = round(size * self.value_for_size)
+        self.value = max(1, round(size * self.value_for_size))
 
         # --- state, variant, and related variables ---
         self.get_state()

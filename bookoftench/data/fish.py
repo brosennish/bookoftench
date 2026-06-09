@@ -215,7 +215,7 @@ Fish_Species = [
 
     {'name': ALLIGATOR, 'rarity': UNCOMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 48, 'max_length': 180, 'min_weight_factor': 0.50, 'max_weight_factor': 1.80,
-     'value_for_size': 0.10, 'rage_factor': 0.90, 'speed': 0.80, 'strength': 2.40, 'max_stamina': 170,
+     'value_for_size': 0.015, 'rage_factor': 0.90, 'speed': 0.80, 'strength': 2.40, 'max_stamina': 170,
      'preferred_bait': [b.MEAT, b.MINNOW, b.FROG, b.RATTLER],
      'spit_hook_chance': 0.001, 'max_age': 50,
      'description': 'A formidable reptilian predator that has changed little since the age of the dinosaurs.',
@@ -239,7 +239,7 @@ Fish_Species = [
 
     {'name': ARAPAIMA, 'rarity': RARE, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 60, 'max_length': 180, 'min_weight_factor': 0.40, 'max_weight_factor': 1.20,
-     'value_for_size': 0.10, 'rage_factor': 0.90, 'speed': 1.10, 'strength': 2.20, 'max_stamina': 180,
+     'value_for_size': 0.016, 'rage_factor': 0.90, 'speed': 1.10, 'strength': 2.20, 'max_stamina': 180,
      'preferred_bait': [b.MINNOW, b.MEAT, b.FROG, b.RATTLER],
      'spit_hook_chance': 0.001, 'max_age': 25,
      'description': 'One of the largest freshwater fish in the world, capable of explosive power and frequent leaps for air.',
@@ -343,7 +343,7 @@ Fish_Species = [
 
     {'name': GIANT_STINGRAY, 'rarity': RARE, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 24, 'max_length': 120, 'min_weight_factor': 0.50, 'max_weight_factor': 1.80,
-     'value_for_size': 0.11, 'rage_factor': 0.20, 'speed': 0.25, 'strength': 2.40, 'max_stamina': 220,
+     'value_for_size': 0.050, 'rage_factor': 0.20, 'speed': 0.25, 'strength': 2.40, 'max_stamina': 220,
      'preferred_bait': [b.CRAY, b.WORM, b.MINNOW, b.RATTLER],
      'spit_hook_chance': 0.001, 'max_age': 30,
      'description': 'A colossal freshwater ray that hugs the river bottom and can weigh well over a thousand pounds.',
@@ -415,7 +415,7 @@ Fish_Species = [
 
     {'name': MEKONG_GIANT_CATFISH, 'rarity': RARE, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 48, 'max_length': 144, 'min_weight_factor': 0.50, 'max_weight_factor': 1.50,
-     'value_for_size': 0.12, 'rage_factor': 0.20, 'speed': 0.30, 'strength': 2.50, 'max_stamina': 250,
+     'value_for_size': 0.037, 'rage_factor': 0.20, 'speed': 0.30, 'strength': 2.50, 'max_stamina': 250,
      'preferred_bait': [b.WORM, b.KRILL, b.DOUGH_BALL],
      'spit_hook_chance': 0.001, 'max_age': 60,
      'description': 'One of the largest freshwater fish on Earth, capable of reaching truly astonishing sizes.',
@@ -527,7 +527,7 @@ Fish_Species = [
 
     {'name': WHITE_STURGEON, 'rarity': RARE, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 36, 'max_length': 240, 'min_weight_factor': 0.40, 'max_weight_factor': 1.40,
-     'value_for_size': 0.12, 'rage_factor': 0.35, 'speed': 0.45, 'strength': 2.40, 'max_stamina': 260,
+     'value_for_size': 0.014, 'rage_factor': 0.35, 'speed': 0.45, 'strength': 2.40, 'max_stamina': 260,
      'preferred_bait': [b.WORM, b.CRAY, b.SHRIMP, b.RATTLER],
      'spit_hook_chance': 0.001, 'max_age': 100,
      'description': 'The largest freshwater fish in North America, an ancient giant armored with rows of bony scutes.',
@@ -643,7 +643,7 @@ Fish_Species = [
 
     {'name': CROCODILE, 'rarity': RARE, 'areas': [BAY, SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 60, 'max_length': 240, 'min_weight_factor': 0.60, 'max_weight_factor': 2.20,
-     'value_for_size': 0.12, 'rage_factor': 1.00, 'speed': 0.90, 'strength': 2.70, 'max_stamina': 200,
+     'value_for_size': 0.007, 'rage_factor': 1.00, 'speed': 0.90, 'strength': 2.70, 'max_stamina': 200,
      'preferred_bait': [b.MEAT, b.MINNOW, b.FROG, b.RATTLER],
      'spit_hook_chance': 0.001, 'max_age': 70,
      'description': 'An ancient ambush predator capable of explosive bursts of speed and immense crushing power.',
@@ -731,7 +731,7 @@ Fish_Species = [
 
     {'name': MANATEE, 'rarity': UNCOMMON, 'areas': [BAY], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 72, 'max_length': 156, 'min_weight_factor': 0.50, 'max_weight_factor': 1.50,
-     'value_for_size': 0.08, 'rage_factor': 0.05, 'speed': 0.10, 'strength': 1.20, 'max_stamina': 120,
+     'value_for_size': 0.015, 'rage_factor': 0.05, 'speed': 0.10, 'strength': 1.20, 'max_stamina': 120,
      'preferred_bait': [b.SHRIMP, b.KRILL],
      'spit_hook_chance': 0.002, 'max_age': 60,
      'description': 'A gentle aquatic mammal that spends most of its time grazing on seagrass and other vegetation.',
@@ -819,7 +819,7 @@ Fish_Species = [
 
     {'name': SAWFISH, 'rarity': LEGENDARY, 'areas': [BAY, SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 48, 'max_length': 240, 'min_weight_factor': 0.40, 'max_weight_factor': 1.30,
-     'value_for_size': 0.18, 'rage_factor': 0.65, 'speed': 0.90, 'strength': 2.30, 'max_stamina': 180,
+     'value_for_size': 0.0141844, 'rage_factor': 0.65, 'speed': 0.90, 'strength': 2.30, 'max_stamina': 180,
      'preferred_bait': [b.MINNOW, b.MEAT, b.SHRIMP, b.RATTLER],
      'spit_hook_chance': 0.001, 'max_age': 50,
      'description': 'A critically endangered ray armed with a long saw-like snout used to detect and slash at prey.',
@@ -911,7 +911,7 @@ Fish_Species = [
 
     {'name': BASKING_SHARK, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 120, 'max_length': 480, 'min_weight_factor': 0.70, 'max_weight_factor': 2.20,
-     'value_for_size': 0.08, 'rage_factor': 0.08, 'speed': 0.15, 'strength': 1.80, 'max_stamina': 180,
+     'value_for_size': 0.00090, 'rage_factor': 0.08, 'speed': 0.15, 'strength': 1.80, 'max_stamina': 180,
      'preferred_bait': [b.KRILL, b.GLOW_LURE, b.SQUID],
      'spit_hook_chance': 0.001, 'max_age': 50,
      'description': 'The second-largest fish in the world, a gentle giant that filters plankton from the water.',
@@ -919,7 +919,7 @@ Fish_Species = [
 
     {'name': BELUGA_WHALE, 'rarity': UNCOMMON, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 96, 'max_length': 216, 'min_weight_factor': 0.40, 'max_weight_factor': 1.20,
-     'value_for_size': 0.12, 'rage_factor': 0.12, 'speed': 0.70, 'strength': 1.60, 'max_stamina': 160,
+     'value_for_size': 0.0110, 'rage_factor': 0.12, 'speed': 0.70, 'strength': 1.60, 'max_stamina': 160,
      'preferred_bait': [b.SQUID, b.KRILL, b.SHRIMP],
      'spit_hook_chance': 0.001, 'max_age': 60,
      'description': 'A highly vocal Arctic whale known for its white coloration and remarkable facial expressions.',
@@ -927,7 +927,7 @@ Fish_Species = [
 
     {'name': BLACK_MARLIN, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY], 'moon': None,
      'min_length': 72, 'max_length': 180, 'min_weight_factor': 0.40, 'max_weight_factor': 1.10,
-     'value_for_size': 0.13, 'rage_factor': 1.10, 'speed': 1.70, 'strength': 2.10, 'max_stamina': 230,
+     'value_for_size': 0.021, 'rage_factor': 1.10, 'speed': 1.70, 'strength': 2.10, 'max_stamina': 230,
      'preferred_bait': [b.SQUID, b.MINNOW, b.SPOON, b.RATTLER],
      'spit_hook_chance': 0.001, 'max_age': 25,
      'description': 'One of the largest billfish in the world, renowned for its immense power and long oceanic runs.',
@@ -935,7 +935,7 @@ Fish_Species = [
 
     {'name': BLUEFIN_TUNA, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 36, 'max_length': 144, 'min_weight_factor': 0.35, 'max_weight_factor': 1.00,
-     'value_for_size': 0.15, 'rage_factor': 0.95, 'speed': 1.60, 'strength': 2.00, 'max_stamina': 220,
+     'value_for_size': 0.044, 'rage_factor': 0.95, 'speed': 1.60, 'strength': 2.00, 'max_stamina': 220,
      'preferred_bait': [b.SQUID, b.MINNOW, b.SPOON, b.RATTLER],
      'spit_hook_chance': 0.001, 'max_age': 40,
      'description': 'A powerful ocean wanderer capable of crossing entire oceans at remarkable speeds.',
@@ -943,7 +943,7 @@ Fish_Species = [
 
     {'name': BLUE_MARLIN, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY], 'moon': None,
      'min_length': 72, 'max_length': 168, 'min_weight_factor': 0.30, 'max_weight_factor': 0.85,
-     'value_for_size': 0.10, 'rage_factor': 1.20, 'speed': 1.90, 'strength': 1.40, 'max_stamina': 180,
+     'value_for_size': 0.032, 'rage_factor': 1.20, 'speed': 1.90, 'strength': 1.40, 'max_stamina': 180,
      'preferred_bait': [b.SQUID, b.MINNOW, b.SHRIMP],
      'spit_hook_chance': 0.001, 'max_age': 30,
      'description': 'A legendary billfish famous for blistering runs, acrobatic leaps, and incredible endurance.',
@@ -951,7 +951,7 @@ Fish_Species = [
 
     {'name': BLUE_WHALE, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 600, 'max_length': 1200, 'min_weight_factor': 2.00, 'max_weight_factor': 6.00,
-     'value_for_size': 0.12, 'rage_factor': 0.02, 'speed': 0.25, 'strength': 4.50, 'max_stamina': 600,
+     'value_for_size': 0.000015, 'rage_factor': 0.02, 'speed': 0.25, 'strength': 4.50, 'max_stamina': 600,
      'preferred_bait': [b.KRILL, b.GLOW_LURE],
      'spit_hook_chance': 0.000, 'max_age': 90,
      'description': 'The largest animal ever known to have lived on Earth, feeding almost exclusively on tiny krill.',
@@ -1015,7 +1015,7 @@ Fish_Species = [
 
     {'name': GIANT_OCTOPUS, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 36, 'max_length': 180, 'min_weight_factor': 0.25, 'max_weight_factor': 0.90,
-     'value_for_size': 0.18, 'rage_factor': 0.45, 'speed': 0.60, 'strength': 1.75, 'max_stamina': 140,
+     'value_for_size': 0.036, 'rage_factor': 0.45, 'speed': 0.60, 'strength': 1.75, 'max_stamina': 140,
      'preferred_bait': [b.CRAB, b.SHRIMP, b.SQUID, b.MEAT, b.GLOW_LURE],
      'spit_hook_chance': 0.008, 'max_age': 5,
      'description': 'An enormous octopus capable of remarkable intelligence, camouflage, and crushing strength.',
@@ -1023,7 +1023,7 @@ Fish_Species = [
 
     {'name': GIANT_SQUID, 'rarity': LEGENDARY, 'areas': [OCEAN], 'time': [NIGHT], 'moon': None,
      'min_length': 120, 'max_length': 480, 'min_weight_factor': 0.8, 'max_weight_factor': 2.5,
-     'value_for_size': 0.0045, 'rage_factor': 0.6, 'speed': 0.7, 'strength': 3.5, 'max_stamina': 180,
+     'value_for_size': 0.00080, 'rage_factor': 0.6, 'speed': 0.7, 'strength': 3.5, 'max_stamina': 180,
      'preferred_bait': [b.SQUID, b.GLOW_LURE, b.RATTLER],
      'spit_hook_chance': 0.001, 'max_age': 15,
      'description': 'A colossal deep-sea predator rarely seen by human eyes.',
@@ -1031,7 +1031,7 @@ Fish_Species = [
 
     {'name': GREAT_WHITE_SHARK, 'rarity': RARE, 'areas': [BAY, OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 60, 'max_length': 240, 'min_weight_factor': 1.60, 'max_weight_factor': 4.20,
-     'value_for_size': 0.0042, 'rage_factor': 1.30, 'speed': 1.25, 'strength': 3.0, 'max_stamina': 150,
+     'value_for_size': 0.00265, 'rage_factor': 1.30, 'speed': 1.25, 'strength': 3.0, 'max_stamina': 150,
      'preferred_bait': [b.MEAT, b.SQUID, b.RATTLER, b.GLOW_LURE],
      'spit_hook_chance': 0.001, 'max_age': 70,
      'description': 'The ocean\'s largest predatory fish.',
@@ -1039,7 +1039,7 @@ Fish_Species = [
 
     {'name': GOBLIN_SHARK, 'rarity': LEGENDARY, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 48, 'max_length': 180, 'min_weight_factor': 0.35, 'max_weight_factor': 1.00,
-     'value_for_size': 0.20, 'rage_factor': 0.25, 'speed': 0.30, 'strength': 1.40, 'max_stamina': 120,
+     'value_for_size': 0.032, 'rage_factor': 0.25, 'speed': 0.30, 'strength': 1.40, 'max_stamina': 120,
      'preferred_bait': [b.GLOW_LURE, b.SQUID, b.MEAT, b.RATTLER],
      'spit_hook_chance': 0.001, 'max_age': 60,
      'description': 'A bizarre deep-sea shark with an elongated snout and jaws that can shoot forward to seize prey.',
@@ -1055,7 +1055,7 @@ Fish_Species = [
 
     {'name': GREENLAND_SHARK, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 96, 'max_length': 252, 'min_weight_factor': 0.60, 'max_weight_factor': 1.80,
-     'value_for_size': 0.11, 'rage_factor': 0.20, 'speed': 0.20, 'strength': 2.20, 'max_stamina': 220,
+     'value_for_size': 0.0050, 'rage_factor': 0.20, 'speed': 0.20, 'strength': 2.20, 'max_stamina': 220,
      'preferred_bait': [b.MEAT, b.SQUID, b.GLOW_LURE, b.KRILL],
      'spit_hook_chance': 0.001, 'max_age': 400,
      'description': 'A slow-moving Arctic shark famous for its extreme longevity and life in the cold depths of the ocean.',
@@ -1071,7 +1071,7 @@ Fish_Species = [
 
     {'name': HAMMERHEAD_SHARK, 'rarity': RARE, 'areas': [BAY, OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 36, 'max_length': 156, 'min_weight_factor': 0.30, 'max_weight_factor': 0.85,
-     'value_for_size': 0.09, 'rage_factor': 0.95, 'speed': 1.40, 'strength': 1.45, 'max_stamina': 130,
+     'value_for_size': 0.051, 'rage_factor': 0.95, 'speed': 1.40, 'strength': 1.45, 'max_stamina': 130,
      'preferred_bait': [b.SQUID, b.MINNOW, b.MEAT, b.CRAB],
      'spit_hook_chance': 0.001, 'max_age': 35,
      'description': 'A distinctive shark with a wide hammer-shaped head that enhances its senses and maneuverability.',
@@ -1079,7 +1079,7 @@ Fish_Species = [
 
     {'name': KILLER_WHALE, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 96, 'max_length': 384, 'min_weight_factor': 0.80, 'max_weight_factor': 2.50,
-     'value_for_size': 0.15, 'rage_factor': 0.70, 'speed': 1.60, 'strength': 2.50, 'max_stamina': 250,
+     'value_for_size': 0.00175, 'rage_factor': 0.70, 'speed': 1.60, 'strength': 2.50, 'max_stamina': 250,
      'preferred_bait': [b.SQUID, b.MEAT, b.MINNOW],
      'spit_hook_chance': 0.000, 'max_age': 80,
      'description': 'An intelligent apex predator that is found in oceans around the world.',
@@ -1095,7 +1095,7 @@ Fish_Species = [
 
     {'name': MAKO_SHARK, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 48, 'max_length': 144, 'min_weight_factor': 0.30, 'max_weight_factor': 0.80,
-     'value_for_size': 0.09, 'rage_factor': 1.50, 'speed': 2.20, 'strength': 1.50, 'max_stamina': 140,
+     'value_for_size': 0.052, 'rage_factor': 1.50, 'speed': 2.20, 'strength': 1.50, 'max_stamina': 140,
      'preferred_bait': [b.SQUID, b.MINNOW, b.MEAT, b.SHRIMP, b.RATTLER, b.GLOW_LURE],
      'spit_hook_chance': 0.001, 'max_age': 30,
      'description': 'The fastest shark in the ocean, famous for explosive runs, powerful leaps, and fierce aggression.',
@@ -1103,7 +1103,7 @@ Fish_Species = [
 
     {'name': MANTA_RAY, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 48, 'max_length': 180, 'min_weight_factor': 0.20, 'max_weight_factor': 0.70,
-     'value_for_size': 0.12, 'rage_factor': 0.25, 'speed': 0.70, 'strength': 1.40, 'max_stamina': 120,
+     'value_for_size': 0.037, 'rage_factor': 0.25, 'speed': 0.70, 'strength': 1.40, 'max_stamina': 120,
      'preferred_bait': [b.KRILL, b.SHRIMP, b.SQUID],
      'spit_hook_chance': 0.003, 'max_age': 40,
      'description': 'A graceful giant that glides through open waters while feeding on plankton and small prey.',
@@ -1111,7 +1111,7 @@ Fish_Species = [
 
     {'name': MEGALODON, 'rarity': LEGENDARY, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 480, 'max_length': 720, 'min_weight_factor': 1.50, 'max_weight_factor': 4.00,
-     'value_for_size': 0.25, 'rage_factor': 0.60, 'speed': 1.30, 'strength': 5.00, 'max_stamina': 500,
+     'value_for_size': 0.000075, 'rage_factor': 0.60, 'speed': 1.30, 'strength': 5.00, 'max_stamina': 500,
      'preferred_bait': [b.MEAT, b.SQUID, b.RATTLER, b.GLOW_LURE],
      'spit_hook_chance': 0.000, 'max_age': 100,
      'description': 'A colossal prehistoric shark believed to have been one of the largest predators ever to live.',
@@ -1119,7 +1119,7 @@ Fish_Species = [
 
     {'name': MEGAMOUTH_SHARK, 'rarity': LEGENDARY, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 120, 'max_length': 216, 'min_weight_factor': 0.50, 'max_weight_factor': 1.40,
-     'value_for_size': 0.22, 'rage_factor': 0.10, 'speed': 0.20, 'strength': 1.60, 'max_stamina': 160,
+     'value_for_size': 0.0075, 'rage_factor': 0.10, 'speed': 0.20, 'strength': 1.60, 'max_stamina': 160,
      'preferred_bait': [b.KRILL, b.GLOW_LURE, b.SQUID],
      'spit_hook_chance': 0.001, 'max_age': 50,
      'description': 'An extraordinarily rare deep-sea shark that filters plankton through its enormous glowing mouth.',
@@ -1135,7 +1135,7 @@ Fish_Species = [
 
     {'name': NARWHAL, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 120, 'max_length': 240, 'min_weight_factor': 0.50, 'max_weight_factor': 1.60,
-     'value_for_size': 0.14, 'rage_factor': 0.15, 'speed': 0.60, 'strength': 1.80, 'max_stamina': 180,
+     'value_for_size': 0.0050, 'rage_factor': 0.15, 'speed': 0.60, 'strength': 1.80, 'max_stamina': 180,
      'preferred_bait': [b.SQUID, b.KRILL, b.GLOW_LURE],
      'spit_hook_chance': 0.001, 'max_age': 50,
      'description': 'An Arctic whale distinguished by the long spiral tusk that extends from its upper jaw.',
@@ -1143,7 +1143,7 @@ Fish_Species = [
 
     {'name': SAILFISH, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY], 'moon': None,
      'min_length': 60, 'max_length': 120, 'min_weight_factor': 0.18, 'max_weight_factor': 0.45,
-     'value_for_size': 0.12, 'rage_factor': 1.35, 'speed': 2.10, 'strength': 1.05, 'max_stamina': 160,
+     'value_for_size': 0.014, 'rage_factor': 1.35, 'speed': 2.10, 'strength': 1.05, 'max_stamina': 160,
      'preferred_bait': [b.SQUID, b.MINNOW, b.SHRIMP],
      'spit_hook_chance': 0.002, 'max_age': 15,
      'description': 'One of the fastest fish in the ocean, capable of explosive runs and spectacular leaps.',
@@ -1159,7 +1159,7 @@ Fish_Species = [
 
     {'name': SWORDFISH, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 48, 'max_length': 180, 'min_weight_factor': 0.25, 'max_weight_factor': 0.75,
-     'value_for_size': 0.11, 'rage_factor': 1.10, 'speed': 1.70, 'strength': 1.55, 'max_stamina': 190,
+     'value_for_size': 0.037, 'rage_factor': 1.10, 'speed': 1.70, 'strength': 1.55, 'max_stamina': 190,
      'preferred_bait': [b.SQUID, b.GLOW_LURE, b.MINNOW, b.RATTLER],
      'spit_hook_chance': 0.001, 'max_age': 15,
      'description': 'A powerful ocean predator that uses its long bill to slash through schools of prey.',
@@ -1167,7 +1167,7 @@ Fish_Species = [
 
     {'name': THRESHER_SHARK, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 72, 'max_length': 180, 'min_weight_factor': 0.35, 'max_weight_factor': 0.90,
-     'value_for_size': 0.08, 'rage_factor': 0.75, 'speed': 1.60, 'strength': 1.25, 'max_stamina': 150,
+     'value_for_size': 0.022, 'rage_factor': 0.75, 'speed': 1.60, 'strength': 1.25, 'max_stamina': 150,
      'preferred_bait': [b.SQUID, b.SHRIMP, b.MINNOW, b.CRAB, b.GLOW_LURE],
      'spit_hook_chance': 0.001, 'max_age': 50,
      'description': 'An oceanic shark that uses its enormous tail like a whip to stun prey.',
@@ -1175,7 +1175,7 @@ Fish_Species = [
 
     {'name': TIGER_SHARK, 'rarity': RARE, 'areas': [BAY, OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 60, 'max_length': 216, 'min_weight_factor': 0.45, 'max_weight_factor': 1.30,
-     'value_for_size': 0.10, 'rage_factor': 1.10, 'speed': 1.30, 'strength': 2.20, 'max_stamina': 180,
+     'value_for_size': 0.014, 'rage_factor': 1.10, 'speed': 1.30, 'strength': 2.20, 'max_stamina': 180,
      'preferred_bait': [b.MEAT, b.SQUID, b.RATTLER, b.GLOW_LURE],
      'spit_hook_chance': 0.001, 'max_age': 50,
      'description': 'A massive ocean predator famous for its broad diet and distinctive striped markings.',
@@ -1199,7 +1199,7 @@ Fish_Species = [
 
     {'name': WHALE_SHARK, 'rarity': LEGENDARY, 'areas': [OCEAN], 'time': [DAY], 'moon': None,
      'min_length': 180, 'max_length': 720, 'min_weight_factor': 4.0, 'max_weight_factor': 12.0,
-     'value_for_size': 0.0018, 'rage_factor': 0.4, 'speed': 0.4, 'strength': 1.6, 'max_stamina': 250,
+     'value_for_size': 0.000055, 'rage_factor': 0.4, 'speed': 0.4, 'strength': 1.6, 'max_stamina': 250,
      'preferred_bait': [b.KRILL, b.SHRIMP, b.CRAB],
      'spit_hook_chance': 0.0005, 'max_age': 100,
      'description': 'The largest fish in the ocean, a gentle giant that filters tiny prey from the water.',

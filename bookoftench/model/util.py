@@ -15,7 +15,7 @@ from .game_state import GameState
 from ..data.areas import CAVE, CITY, FOREST, SWAMP
 from ..data.enemies import CONTAGIOUS, BOSS, SPECIAL_BOSS, FINAL_BOSS, NORMAL
 from ..data.enviroment import DAY
-from ..data.fish import AGITATED, SPOOKED, CALM, SHALLOWS, BAY, OCEAN, Fish_Species
+from ..data.fish import AGITATED, SPOOKED, CALM, SHALLOWS, BAY, OCEAN, Fish_Species, MALE
 from ..data.fishing_areas import WET_SEASON
 
 
@@ -708,7 +708,7 @@ def display_fishing_stats(game_state: GameState) -> None:
     ]
 
     space = max(len(fish.name) for fish in stats_fish)
-    pipe = white('|'
+    pipe = white('|')
 
     if not player.caught_fish:
         print_and_sleep(yellow("Go catch some fish fool."))
@@ -741,7 +741,7 @@ def display_shallows_fish(game_state: GameState) -> None:
     ]
 
     if not shallows:
-        print_and_sleep(yellow("No entries logged in the Shallows."))
+        print_and_sleep(yellow("Log is dry."))
         return
 
     print_and_sleep(cyan("=== SHALLOWS ==="))
@@ -759,12 +759,14 @@ def display_shallows_fish(game_state: GameState) -> None:
     rarity_width = max(len(fish.get_rarity()) for fish in shallows)
 
     for fish in sorted(shallows, key=lambda fish: fish.base_name):
+        sex_color = blue if fish.sex == MALE else purple
         print_and_sleep(
             dim(" | ").join([
                 blue(f"{fish.name:<{name_width}}"),
                 f"{fish.get_rarity():<{rarity_width}}",
                 f"{yellow(fish.length)} in",
                 f"{yellow(fish.weight)} lbs",
+                f"{sex_color(fish.sex)}",
             ])
         )
 
@@ -781,7 +783,7 @@ def display_bay_fish(game_state: GameState) -> None:
     ]
 
     if not bay:
-        print_and_sleep(yellow("No entries logged in the Bay."))
+        print_and_sleep(yellow("Log is dry."))
         return
 
     print_and_sleep(cyan("=== BAY ==="))
@@ -799,12 +801,14 @@ def display_bay_fish(game_state: GameState) -> None:
     rarity_width = max(len(fish.get_rarity()) for fish in bay)
 
     for fish in sorted(bay, key=lambda fish: fish.base_name):
+        sex_color = blue if fish.sex == MALE else purple
         print_and_sleep(
             dim(" | ").join([
                 blue(f"{fish.name:<{name_width}}"),
                 f"{fish.get_rarity():<{rarity_width}}",
                 f"{yellow(fish.length)} in",
                 f"{yellow(fish.weight)} lbs",
+                f"{sex_color(fish.sex)}",
             ])
         )
 
@@ -821,7 +825,7 @@ def display_ocean_fish(game_state: GameState) -> None:
     ]
 
     if not ocean:
-        print_and_sleep(yellow("No entries logged in the Ocean."))
+        print_and_sleep(yellow("Log is dry."))
         return
 
     print_and_sleep(cyan("=== OCEAN ==="))
@@ -839,12 +843,14 @@ def display_ocean_fish(game_state: GameState) -> None:
     rarity_width = max(len(fish.get_rarity()) for fish in ocean)
 
     for fish in sorted(ocean, key=lambda fish: fish.base_name):
+        sex_color = blue if fish.sex == MALE else purple
         print_and_sleep(
             dim(" | ").join([
                 blue(f"{fish.name:<{name_width}}"),
                 f"{fish.get_rarity():<{rarity_width}}",
                 f"{yellow(fish.length)} in",
                 f"{yellow(fish.weight)} lbs",
+                f"{sex_color(fish.sex)}",
             ])
         )
 
