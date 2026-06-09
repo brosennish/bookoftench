@@ -34,7 +34,7 @@ class Bait(Buyable):
         return dim(' | ').join([
             f"{cyan(f"{self.name:<16}")}",
             f"Cost: {orange(f'{self.cost:>2}')}",
-            f"Casts: {green(f'{self.casts:>3}')}",
+            f"Casts: {cyan(f'{self.casts:>3}')}",
             f"{self.description}",
         ])
 
