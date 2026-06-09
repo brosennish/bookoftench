@@ -754,14 +754,17 @@ def display_shallows_fish(game_state: GameState) -> None:
     name_width = max(len(fish.name) for fish in shallows)
     rarity_width = max(len(fish.get_rarity()) for fish in shallows)
 
+    length_width = max(len(str(fish.length)) for fish in shallows)
+    weight_width = max(len(str(fish.weight)) for fish in shallows)
+
     for fish in sorted(shallows, key=lambda fish: fish.base_name):
         sex_color = blue if fish.sex == MALE else purple
         print_and_sleep(
             dim(" | ").join([
                 blue(f"{fish.name:<{name_width}}"),
                 f"{fish.get_rarity():<{rarity_width}}",
-                f"{yellow(fish.length)} in",
-                f"{yellow(fish.weight)} lbs",
+                f"{yellow(f'{fish.length:>{length_width}}')} in",
+                f"{yellow(f'{fish.weight:>{weight_width}}')} lbs",
                 f"{sex_color(fish.sex)}",
             ])
         )
@@ -796,14 +799,17 @@ def display_bay_fish(game_state: GameState) -> None:
     name_width = max(len(fish.name) for fish in bay)
     rarity_width = max(len(fish.get_rarity()) for fish in bay)
 
+    length_width = max(len(str(fish.length)) for fish in bay)
+    weight_width = max(len(str(fish.weight)) for fish in bay)
+
     for fish in sorted(bay, key=lambda fish: fish.base_name):
         sex_color = blue if fish.sex == MALE else purple
         print_and_sleep(
             dim(" | ").join([
                 blue(f"{fish.name:<{name_width}}"),
                 f"{fish.get_rarity():<{rarity_width}}",
-                f"{yellow(fish.length)} in",
-                f"{yellow(fish.weight)} lbs",
+                f"{yellow(f'{fish.length:>{length_width}}')} in",
+                f"{yellow(f'{fish.weight:>{weight_width}}')} lbs",
                 f"{sex_color(fish.sex)}",
             ])
         )
@@ -829,6 +835,9 @@ def display_ocean_fish(game_state: GameState) -> None:
     ocean_species = {i['name'] for i in Fish_Species if OCEAN in i['areas']}
     caught_species = {i.base_name for i in player.caught_fish if OCEAN in i.areas}
 
+    length_width = max(len(str(fish.length)) for fish in ocean)
+    weight_width = max(len(str(fish.weight)) for fish in ocean)
+
     total = len(ocean_species)
     caught = len(caught_species)
     percentage = round((caught / total) * 100)
@@ -844,8 +853,8 @@ def display_ocean_fish(game_state: GameState) -> None:
             dim(" | ").join([
                 blue(f"{fish.name:<{name_width}}"),
                 f"{fish.get_rarity():<{rarity_width}}",
-                f"{yellow(fish.length)} in",
-                f"{yellow(fish.weight)} lbs",
+                f"{yellow(f'{fish.length:>{length_width}}')} in",
+                f"{yellow(f'{fish.weight:>{weight_width}}')} lbs",
                 f"{sex_color(fish.sex)}",
             ])
         )
