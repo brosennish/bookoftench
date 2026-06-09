@@ -54,7 +54,6 @@ possible_observations = [
     VARIANT,
     STRENGTH,
     SPEED,
-    STAMINA,
     RAGE_FACTOR,
 ]
 

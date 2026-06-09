@@ -502,7 +502,7 @@ class Player(Combatant):
         fishing_xp = self.fishing_xp
         original_fishing_lvl = self.fishing_lvl
 
-        print_and_sleep(cyan(f"You gained {xp} fishing XP!"), 1)
+        print_and_sleep(cyan(f"You gained {xp} XP!"), 1)
 
         if fishing_xp >= 550:
             fishing_lvl = 8

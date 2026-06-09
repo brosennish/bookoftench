@@ -80,6 +80,7 @@ class Fish:
         if self.variant:
             self.name = f"{self.variant} {self.base_name}"
         self.stamina = self.max_stamina
+        self.rage = random.randint(5, 15)
 
 # ================================================================================================
 

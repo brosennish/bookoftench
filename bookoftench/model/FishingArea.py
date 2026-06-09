@@ -25,7 +25,7 @@ class FishingArea:
         return dim(' | ').join([
             blue(f"{self.name:<10}"),
             f"Cost: {orange(self.travel_cost)}",
-            f"Casts: {cyan(self.casts)}",
+            f"Casts: {green(self.casts)}",
         ])
 
     def __repr__(self):

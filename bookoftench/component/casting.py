@@ -1,5 +1,6 @@
 import random
 import time
+from typing import Callable
 
 from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import functional_component, GatekeepingComponent, \
@@ -232,7 +233,7 @@ class EndFishBattle(NoOpComponent):
             f"Speed: {cyan(round(fish.speed, 2))}",
             f"Rage Factor: {red(round(fish.rage_factor, 2))}",
             f"Max Stamina: {green(fish.max_stamina)}",
-        ]), 3)
+        ]), 4)
 
     def award_xp(self):
         player = self.game_state.player
@@ -275,8 +276,8 @@ class FishTurn(NoOpComponent):
             EndFishBattle(self.game_state).run()
             return
 
-        self.fish_runs(fish)
-        self.fish_gains_rage(fish)
+        run = self.fish_runs(fish)
+        self.fish_gains_rage(fish, run)
         self.update_fish_state(fish)
         self.apply_fish_turn_outcome()
 
@@ -293,7 +294,7 @@ class FishTurn(NoOpComponent):
             fish.lost = True
 
     @staticmethod
-    def fish_runs(fish):
+    def fish_runs(fish) -> int:
         stamina_ratio = fish.stamina / fish.max_stamina
 
         # --- stamina ---
@@ -321,8 +322,10 @@ class FishTurn(NoOpComponent):
         run = max(1, round(run))
         fish.distance += run
 
+        return run
+
     @staticmethod
-    def fish_gains_rage(fish):
+    def fish_gains_rage(fish, run):
         rage_gain = random.randint(1, 3)
         stamina_ratio = fish.stamina / fish.max_stamina
 
@@ -343,11 +346,15 @@ class FishTurn(NoOpComponent):
         else:
             stamina_modifier = 1
 
+        original_rage = fish.rage
         rage_gain *= fish.rage_factor
         rage_gain *= state_modifier
         rage_gain *= stamina_modifier
         fish.rage += round(rage_gain)
         fish.rage = min(100, fish.rage)
+        rage_delta = fish.rage - original_rage
+
+        print_fish_turn_results(run, rage_delta)
 
     @staticmethod
     def update_fish_state(fish):
@@ -439,6 +446,9 @@ class Pull(NoOpComponent):
         fish.rage = min(100, fish.rage)
         FishTurn.update_fish_state(fish)
 
+        action = PULL
+        print_action_results(fish, action, original_distance, original_stamina, original_rage)
+
     def apply_pull_outcome(self):
         player = self.game_state.player
         fish = self.game_state.current_fish
@@ -448,11 +458,9 @@ class Pull(NoOpComponent):
         if fish.distance <= 0:
             fish.caught = True
             fish.catch_location = location
-            print_and_sleep(green(f"You caught a {fish.name}!"), 1.5)
         elif fish.stamina <= 0:
             fish.caught = True
             fish.catch_location = location
-            print_and_sleep(green(f"You reeled in an exhausted {fish.name}!"), 1.5)
         elif fish.rage >= 100:
             fish.lost = True
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
@@ -522,6 +530,9 @@ class Reel(NoOpComponent):
         fish.rage = min(100, fish.rage)
         FishTurn.update_fish_state(fish)
 
+        action = REEL
+        print_action_results(fish, action, original_distance, original_stamina, original_rage)
+
     def apply_reel_outcome(self, fish):
         player = self.game_state.player
         location = self.game_state.current_fishing_area.name
@@ -580,6 +591,9 @@ class GiveLine(NoOpComponent):
         original_distance = fish.distance
         fish.distance += line
 
+        # --- stamina unaffected ---
+        original_stamina = fish.stamina
+
         # --- rage ---
         original_rage = fish.rage
         rage_loss = random.randint(6, 10)
@@ -596,6 +610,9 @@ class GiveLine(NoOpComponent):
         fish.rage = max(0, fish.rage)
         FishTurn.update_fish_state(fish)
 
+        action = GIVE_LINE
+        print_action_results(fish, action, original_distance, original_stamina, original_rage)
+
     def apply_give_line_outcome(self, fish):
         player = self.game_state.player
         location = self.game_state.current_fishing_area.name
@@ -604,7 +621,6 @@ class GiveLine(NoOpComponent):
         if fish.distance <= 0:
             fish.caught = True
             fish.catch_location = location
-            print_and_sleep(green(f"You caught a {fish.name}!"), 1.5)
         elif fish.rage >= 100:
             fish.lost = True
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
@@ -626,7 +642,7 @@ class ObserveFish(NoOpComponent):
             self.apply_observation(fish, observation)
             FishTurn(self.game_state).run()
         else:
-            print_and_sleep(yellow(f"You must catch this fish to learn more."), 1.5)
+            print_and_sleep(yellow(f"You've learned all that you can."), 1.5)
             FishTurn(self.game_state).run()
 
     @staticmethod
@@ -662,11 +678,6 @@ class ObserveFish(NoOpComponent):
             word = SPEED
             value = str(round(fish.speed, 2))
             fish.speed_observed = True
-        elif observation == STAMINA:
-            color = green
-            word = STAMINA
-            value = f"{round((fish.stamina / fish.max_stamina) * 100)}%"
-            fish.stamina_observed = True
         elif observation == RAGE_FACTOR:
             color = red
             word = RAGE_FACTOR
@@ -681,4 +692,56 @@ class ObserveFish(NoOpComponent):
     def display_observation_result(color, word: str, value: str) -> None:
 
         print_and_sleep(blue(f"You observe the fish to gain insight..."), 1.5)
-        print_and_sleep(f"{color(word)}: {value}", 1)
+        print_and_sleep(f"{color(word)}: {value}", 1.5)
+
+# ================================================================================================
+
+def print_action_results(fish, action: str, original_distance, original_stamina, original_rage):
+    distance_delta = fish.distance - original_distance
+    stamina_delta = fish.stamina - original_stamina
+    rage_delta = fish.rage - original_rage
+    action_display = get_action_color(action)
+
+    parts = []
+
+    if distance_delta != 0:
+        color = green if distance_delta < 0 else yellow
+        parts.append(f"Distance {color(f'{distance_delta:+}')}")
+
+    if stamina_delta != 0:
+        color = green if stamina_delta < 0 else yellow
+        parts.append(f"Stamina {color(f'{stamina_delta:+}')}")
+
+    if rage_delta != 0:
+        color = red if rage_delta > 0 else green
+        parts.append(f"Rage {color(f'{rage_delta:+}')}")
+
+    if parts:
+        print_and_sleep(f"{action_display}: {' | '.join(parts)}", 1.5)
+
+
+def get_action_color(action) -> str:
+    if action == PULL:
+        return orange(PULL)
+    elif action == REEL:
+        return green(REEL)
+    elif action == GIVE_LINE:
+        return purple(GIVE_LINE)
+    else:
+        return white(action)
+
+
+def print_fish_turn_results(run: int, rage_delta: int):
+    fish = blue("Fish")
+    parts = []
+
+    if run != 0:
+        color = yellow if run > 0 else green
+        parts.append(f"Distance {color(f'{run:+}')}")
+
+    if rage_delta != 0:
+        color = red if rage_delta > 0 else green
+        parts.append(f"Rage {color(f'{rage_delta:+}')}")
+
+    if parts:
+        print_and_sleep(f"{fish}: {' | '.join(parts)}", 1.5)

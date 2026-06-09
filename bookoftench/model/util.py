@@ -161,7 +161,7 @@ def display_fishing_battle_header(game_state: GameState) -> None:
 
     # --- print ---
     top_row = dim(' | ').join([
-        orange(fish_name),
+        blue(fish_name),
         state_color(fish.state),
     ])
 
@@ -187,11 +187,10 @@ def display_boat_header(game_state: GameState):
     tod = game_state.time_of_day
     tod_display = "Day" if tod == DAY else "Night"
     moon = game_state.moon
-    casts = game_state.current_fishing_area.casts
     season = game_state.season
     season_color = blue if season == WET_SEASON else yellow
     bait = player.current_bait.name if player.current_bait else "None"
-    bait_color = yellow if bait == "None" else orange
+    bait_color = yellow if bait == "None" else cyan
 
     # --- top row ---
     top_row = f"{dim(' | ').join([
