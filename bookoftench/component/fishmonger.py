@@ -14,7 +14,7 @@ from bookoftench.model import GameState
 from bookoftench.model.FishingArea import load_fishing_areas, FishingArea
 from bookoftench.model.bait import load_baits, Bait
 from bookoftench.model.util import display_fishmonger_header, display_bait_shop_header
-from bookoftench.ui import blue, yellow, cyan
+from bookoftench.ui import blue, yellow, cyan, orange
 from bookoftench.util import print_and_sleep
 
 # ================================================================================================
@@ -34,7 +34,8 @@ class FishmongerOpen(GatekeepingComponent):
 class Fishmonger(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
-        cost = self.get_rod_upgrade_cost()
+        cost = get_rod_upgrade_cost(player)
+        cost_display = orange(f"{cost}")
         valid = [i['name'] for i in Fishing_Areas if i['lvl'] <= player.lvl]
         available = load_fishing_areas(valid)
 
@@ -43,8 +44,8 @@ class Fishmonger(LabeledSelectionComponent):
                           i, area in enumerate(available)]
 
         bait_shop_binding = SelectionBinding('S', "Shop", functional_component()(lambda: self._shop()))
-        upgrade_rod_binding = SelectionBinding('U', f"Upgrade Rod ({cost})",
-                                               functional_component()(lambda: self.upgrade_rod()))
+        upgrade_rod_binding = SelectionBinding('U', f"Upgrade Rod ({cost_display})",
+                                               functional_component()(lambda: upgrade_rod(player, cost)))
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
 
         super().__init__(game_state, refresh_menu=True,
@@ -72,24 +73,6 @@ class Fishmonger(LabeledSelectionComponent):
 
     def _shop(self):
         BaitShop(self.game_state).run()
-
-    def upgrade_rod(self):
-        player = self.game_state.player
-        cost = self.get_rod_upgrade_cost()
-        if player.coins > cost:
-            original = player.rod_level
-            player.rod_level += 1
-            play_sound(PURCHASE)
-            print_and_sleep(cyan(f"Rod Level: {original} -> {player.rod_level}"), 1)
-        else:
-            print_and_sleep(yellow(f"Need more coin."), 1)
-
-
-
-    def get_rod_upgrade_cost(self) -> int:
-        player = self.game_state.player
-        cost = 25 * (player.rod_level ** 1.8)
-        return round(cost / 5) * 5
 
     def can_exit(self) -> bool:
         return self.leave or not self.game_state.player.is_alive()
@@ -193,3 +176,15 @@ class BaitShop(LabeledSelectionComponent):
 
         return purchase_component
 
+def get_rod_upgrade_cost(player) -> int:
+    cost = 25 * (player.rod_lvl ** 1.8)
+    return round(cost / 5) * 5
+
+def upgrade_rod(player, cost):
+    if player.coins > cost:
+        original = player.rod_lvl
+        player.rod_lvl += 1
+        play_sound(PURCHASE)
+        print_and_sleep(cyan(f"Rod Level: {original} -> {player.rod_lvl}"), 1)
+    else:
+        print_and_sleep(yellow(f"Need more coin."), 1)

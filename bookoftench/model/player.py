@@ -119,7 +119,7 @@ class Player(Combatant):
     fishing_xp: int = 0
     fishing_xp_needed: int = 10
     fishing_lvl: int = 1
-    rod_level: int = 1
+    rod_lvl: int = 1
 
     illness: Optional[Illness] = None
     illness_death_lvl: Optional[int] = None

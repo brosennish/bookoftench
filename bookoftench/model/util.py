@@ -69,6 +69,7 @@ def display_fishmonger_header(game_state: GameState) -> None:
 
     print_and_sleep(f"{dim(' | ').join([
         f"{season_color(f"{season}")}",
+        f"Rod: {cyan(f"{player.rod_lvl}")}",
         f"Coins: {green(f"{player.coins}")}",
     ])}\n")
 
@@ -204,6 +205,7 @@ def display_boat_header(game_state: GameState):
     bottom_row = f"{dim(' | ').join([
         f"Lvl: {cyan(f"{player.fishing_lvl}")}",
         f"XP: {cyan(f"{player.fishing_xp}/{player.fishing_xp_needed}")}",  
+        f"Rod: {cyan(f"{player.rod_lvl}")}",
         f"Bait: {bait_color(f"{bait}")}",
         f"Casts: {c_color()(f"{game_state.current_fishing_area.casts}")}",
     ])}\n"
@@ -729,7 +731,7 @@ def display_shallows_fish(game_state: GameState) -> None:
                 f"Rarity: {fish.get_rarity()}",
                 f"{fish.length} in",
                 f"{fish.weight} lbs",
-                f"Value:  {green(fish.value)}",
+                f"Value: {green(fish.value)}",
             ])
         )
 
@@ -757,7 +759,7 @@ def display_bay_fish(game_state: GameState) -> None:
                 f"Rarity: {fish.get_rarity()}",
                 f"{fish.length} in",
                 f"{fish.weight} lbs",
-                f"Value:  {green(fish.value)}",
+                f"Value: {green(fish.value)}",
             ])
         )
 
@@ -784,6 +786,6 @@ def display_ocean_fish(game_state: GameState) -> None:
                 f"Rarity: {fish.get_rarity()}",
                 f"{fish.length} in",
                 f"{fish.weight} lbs",
-                f"Value:  {green(fish.value)}",
+                f"Value: {green(fish.value)}",
             ])
         )

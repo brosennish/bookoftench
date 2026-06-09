@@ -11,8 +11,9 @@ from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMO
     possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, STAMINA, RAGE_FACTOR, TENCH
 from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL
 from bookoftench.data.fishing_areas import WET_SEASON_BITE_CHANCE_EFFECT, DRY_SEASON_BITE_CHANCE_EFFECT, WET_SEASON
-from bookoftench.model import GameState
+from bookoftench.model import GameState, game_state
 from bookoftench.model.fish import load_fishes, load_fish
+from bookoftench.model.player import Player
 from bookoftench.model.util import display_fishing_battle_header, display_fishing_actions, display_fishing_info
 from bookoftench.ui import yellow, dim, blue, white, green, red, purple, cyan, orange
 from bookoftench.util import print_and_sleep
@@ -76,7 +77,7 @@ class SpawnFish(LinearComponent):
             if fishing_area.name in i['areas']
                and time in i['time']
                and (i['moon'] is None or moon in i['moon'])
-               and bait in i['preferred_bait']
+               and bait.name in i['preferred_bait']
         ]
 
         fishes = load_fishes(filtered)
@@ -86,11 +87,14 @@ class SpawnFish(LinearComponent):
         available = [i for i in fishes if i.rarity == rarity]
 
         if available:
-            pick = random.choice(available)
-            selection = load_fish(pick)
-            selection.distance = random.randint(fishing_area.min_hook_distance, fishing_area.max_hook_distance)
+            selection = random.choice(available)
+            selection.distance = random.randint(
+                fishing_area.min_hook_distance,
+                fishing_area.max_hook_distance
+            )
             self.game_state.current_fish = selection
         else:
+            self.game_state.current_fish = None
             print_and_sleep(yellow("No fish met the criteria. Add more fish bozo."))
 
         return self.game_state
@@ -115,7 +119,7 @@ class LaunchFishBattle(GatekeepingComponent):
         super().__init__(game_state, decision_function=lambda: self.game_state.current_fish is not None,
                          accept_component=FishBattle,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             dim("You came up dry."), 1.5)))
+                             yellow("You came up dry."), 1.5)))
 
 # ================================================================================================
 # ================================================================================================
@@ -413,6 +417,7 @@ class Pull(NoOpComponent):
             pull -= 3
 
         pull *= min(player.strength, 1.25)
+        pull *= get_rod_modifier(player)
         pull = max(1, pull)
 
         return round(pull)
@@ -498,6 +503,7 @@ class Reel(NoOpComponent):
 
         reel += min(player.fishing_lvl // 2, 3)
         reel *= min(player.strength, 1.15)
+        reel *= get_rod_modifier(player)
         reel = max(1, reel)
 
         return round(reel)
@@ -600,6 +606,7 @@ class GiveLine(NoOpComponent):
             rage_loss += 4
 
         rage_loss += min(player.fishing_lvl // 2, 3)
+        rage_loss += player.rod_lvl - 1
         fish.rage -= rage_loss
         fish.rage = max(0, fish.rage)
         FishTurn.update_fish_state(fish)
@@ -739,3 +746,6 @@ def print_fish_turn_results(run: int, rage_delta: int):
 
     if parts:
         print_and_sleep(f"{fish}: {' | '.join(parts)}", 1.5)
+
+def get_rod_modifier(player: Player) -> float:
+    return 1 + ((player.rod_lvl - 1) * 0.10)
