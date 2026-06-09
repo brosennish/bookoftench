@@ -72,10 +72,6 @@ class Fishmonger(LabeledSelectionComponent):
     def play_theme(self) -> None:
         play_music(self.theme)
 
-    @staticmethod
-    def play_jeremy_wade():
-        pass
-
     def _return(self):
         self.leave = True
         print_and_sleep(f"{blue("Aye.")}", 1)

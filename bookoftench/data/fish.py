@@ -162,7 +162,6 @@ SPECIES = "Species"
 VARIANT = "Variant"
 STRENGTH = "Strength"
 SPEED = "Speed"
-STAMINA = "Stamina"
 RAGE_FACTOR = "Rage Factor"
 
 possible_observations = [

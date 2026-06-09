@@ -34,6 +34,19 @@ def p_color(hp: int, max_hp: int) -> Callable[[str], str]:
 
 # ================================================================================================
 
+def display_coffee_header(game_state: GameState) -> None:
+    player = game_state.player
+    player_color = p_color(player.hp, player.max_hp)
+
+    print_and_sleep(f"{dim(' | ').join([
+        f"HP: {player_color(f"{player.hp}/{player.max_hp}")}",
+        f"Coins: {green(f"{player.coins}")}",
+        f"Lives: {yellow(f"{player.lives}")}\n"
+        "\nMenu:"
+    ])}")
+
+# ================================================================================================
+
 def get_fish_stamina_label(game_state: GameState) -> str:
     fish = game_state.current_fish
     ratio = fish.stamina / fish.max_stamina
@@ -46,19 +59,6 @@ def get_fish_stamina_label(game_state: GameState) -> str:
         return "Weary"
     else:
         return "Exhausted"
-
-# ================================================================================================
-
-def display_coffee_header(game_state: GameState) -> None:
-    player = game_state.player
-    player_color = p_color(player.hp, player.max_hp)
-
-    print_and_sleep(f"{dim(' | ').join([
-        f"HP: {player_color(f"{player.hp}/{player.max_hp}")}",
-        f"Coins: {green(f"{player.coins}")}",
-        f"Lives: {yellow(f"{player.lives}")}\n"
-        "\nMenu:"
-    ])}")
 
 # ================================================================================================
 
@@ -155,7 +155,7 @@ def fishing_distance_color(game_state: GameState) -> Callable[[str], str]:
 
 def display_fishing_battle_header(game_state: GameState) -> None:
     fish = game_state.current_fish
-    fish_name = fish.name
+    fish_name = fish.name if fish.species_known else "Unknown Creature"
 
     stamina_percentage = round((fish.stamina / fish.max_stamina) * 100)
     max_distance = game_state.current_fishing_area.escape_distance
@@ -609,7 +609,7 @@ def display_fishing_actions(game_state: GameState) -> None:
         purple("Observe"),
         "A tactical move.",
         "Reveals information about the fish.",
-        "May uncover its species, strength, speed, stamina, or temperament.",
+        "May uncover its species, variant, strength, speed, or temperament.",
         "Best used when you are unsure how to approach the fight.",
         "",
         orange("General Strategy"),
