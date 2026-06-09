@@ -122,7 +122,7 @@ class BaitShop(LabeledSelectionComponent):
                           i, bait in enumerate(available)]
 
         tackle_box_binding = SelectionBinding('T', "Tackle Box", TackleBox)
-        return_binding = SelectionBinding('R', "Return", Fishmonger)
+        return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
 
         super().__init__(game_state, refresh_menu=True,
                          bindings=[*bait_bindings, tackle_box_binding, return_binding])
