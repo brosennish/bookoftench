@@ -85,7 +85,6 @@ class BoatComponent(LabeledSelectionComponent):
                     print_and_sleep(f"{blue('Need some fresh bait mate.')}", 1)
                     return None
 
-                game_state.current_fishing_area.casts -= 1
                 game_state.player.current_bait.casts -= 1
                 DryCastCheck(game_state).run()
                 return None

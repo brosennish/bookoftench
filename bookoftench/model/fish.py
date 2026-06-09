@@ -57,6 +57,7 @@ class Fish:
     speed_observed: bool = False
     stamina_observed: bool = False
     rage_factor_observed: bool = False
+    species_known: bool = False
 
 # ================================================================================================
 
@@ -69,7 +70,7 @@ class Fish:
         # --- size and value ---
         self.length = random.randint(self.min_length, self.max_length)
         weight_factor = random.uniform(self.min_weight_factor, self.max_weight_factor)
-        self.weight = round(((self.length ** 2) * weight_factor) / 144)
+        self.weight = round(((self.length ** 2) * weight_factor) / 144, 2)
         size = self.length * self.weight
         self.size = int(size)
         self.value = round(size * self.value_for_size)

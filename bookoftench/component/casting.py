@@ -6,7 +6,7 @@ from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import functional_component, GatekeepingComponent, \
     LabeledSelectionComponent, ReprBinding, SelectionBinding, Component, NoOpComponent, LinearComponent, \
     TextDisplayingComponent
-from bookoftench.data.audio import COINS
+from bookoftench.data.audio import COINS, DISCOVERABLE
 from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED, \
     possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, STAMINA, RAGE_FACTOR, TENCH
 from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL
@@ -30,6 +30,7 @@ class DryCastCheck(NoOpComponent):
             SpawnFish(self.game_state).run()
         else:
             print_and_sleep(yellow("You came up dry."), 1.5)
+            self.game_state.current_fishing_area.casts -= 1
 
     def dry_check(self) -> bool:
         bite_chance = self.game_state.current_fishing_area.bite_chance
@@ -93,9 +94,10 @@ class SpawnFish(LinearComponent):
                 fishing_area.max_hook_distance
             )
             self.game_state.current_fish = selection
+            print_and_sleep(orange("Fish on!"), 1.5)
+            self.game_state.current_fishing_area.casts -= 1
         else:
             self.game_state.current_fish = None
-            print_and_sleep(yellow("No fish met the criteria. Add more fish bozo."))
 
         return self.game_state
 
@@ -222,6 +224,8 @@ class EndFishBattle(NoOpComponent):
         print_and_sleep("\n".join([
             green(f"You caught a {fish.name}!"),
             "",
+            f"{fish.description}",
+            "",
             f"Rarity: {rarity}",
             f"Length: {yellow(f'{fish.length} in')}",
             f"Weight: {yellow(f'{round(fish.weight, 2)} lbs')}",
@@ -241,12 +245,17 @@ class EndFishBattle(NoOpComponent):
 
     def sell_fish(self):
         player = self.game_state.player
+        area = self.game_state.current_area
         fish = self.game_state.current_fish
         value = fish.value
 
-        play_sound(COINS)
-        print_and_sleep(green(f"You received {value} coins for the {fish.name}!"), 1)
-        player.coins += value
+        if value > 0:
+            play_sound(COINS)
+            print_and_sleep(green(f"You received {value} coins for the {fish.name}!"), 1)
+            player.coins += value
+        else:
+            print_and_sleep(blue(f"You released the {fish.name} back into the {area}."), 1)
+
 
     def update_log(self):
         fish = self.game_state.current_fish
@@ -541,7 +550,7 @@ class Reel(NoOpComponent):
         if fish.distance <= 0:
             fish.caught = True
             fish.catch_location = location
-            print_and_sleep(green(f"You caught a {fish.name}!"), 1.5)
+            print_and_sleep(cyan(f"You caught a {fish.name}!"), 1.5)
         elif fish.stamina <= 0:
             fish.caught = True
             fish.catch_location = location
@@ -687,6 +696,7 @@ class ObserveFish(NoOpComponent):
         else:
             return
 
+        play_sound(DISCOVERABLE)
         self.display_observation_result(color, word, value)
 
     @staticmethod

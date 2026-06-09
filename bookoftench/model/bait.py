@@ -18,16 +18,10 @@ class Bait(Buyable):
 
 # ================================================================================================
 
-    def get_casts(self):
-        if self.casts > 1:
-            return green(self.casts)
-        else:
-            return red(self.casts)
-
     def get_simple_format(self) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:<19}"),
-            f"Casts: {self.get_casts()}",
+            f"Casts: {cyan(self.casts)}",
         ])
 
     def __repr__(self):

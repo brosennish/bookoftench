@@ -15,7 +15,7 @@ from .game_state import GameState
 from ..data.areas import CAVE, CITY, FOREST, SWAMP
 from ..data.enemies import CONTAGIOUS, BOSS, SPECIAL_BOSS, FINAL_BOSS, NORMAL
 from ..data.enviroment import DAY
-from ..data.fish import AGITATED, SPOOKED, CALM, SHALLOWS, BAY, OCEAN
+from ..data.fish import AGITATED, SPOOKED, CALM, SHALLOWS, BAY, OCEAN, Fish_Species
 from ..data.fishing_areas import WET_SEASON
 
 
@@ -67,20 +67,36 @@ def display_fishmonger_header(game_state: GameState) -> None:
     season = game_state.season
     season_color = blue if season == WET_SEASON else yellow
 
-    print_and_sleep(f"{dim(' | ').join([
-        f"{season_color(f"{season}")}",
+    top_row = f"{season_color(f"{season}")}"
+
+    second_row = dim(' | ').join([
+        f"Lvl: {cyan(f"{player.fishing_lvl}")}",
+        f"XP: {cyan(f"{player.fishing_xp}/{player.fishing_xp_needed}")}",
         f"Rod: {cyan(f"{player.rod_lvl}")}",
         f"Coins: {green(f"{player.coins}")}",
-    ])}\n")
+    ])
+
+    print_and_sleep("\n".join([
+        top_row,
+        second_row,
+    ]))
 
 # ================================================================================================
 
 def display_tackle_box_header(game_state: GameState) -> None:
     player = game_state.player
     bait = player.current_bait
+    if player.current_bait:
+        bait_name = bait.name
+        casts = bait.casts
+        b_color = cyan
+    else:
+        bait_name = "None"
+        casts = "N/A"
+        b_color = yellow
 
     print_and_sleep(
-        f"Current: {cyan(f"{bait.name}")} | Casts: {green(f"{player.current_bait.casts}")}"
+        f"Current: {b_color(f"{bait_name}")} | Casts: {b_color(f"{casts}")}"
     )
 
 # ================================================================================================
@@ -105,7 +121,7 @@ def display_bait_shop_header(game_state: GameState) -> None:
         f"{yellow(tod_display) if tod == DAY else purple(tod_display)}",
         f"{moon} Moon",
         f"Coins: {green(f"{player.coins}")}",
-    ])}\n")
+    ])}")
 
 # ================================================================================================
 
@@ -151,7 +167,10 @@ def fishing_stamina_color(game_state: GameState) -> Callable[[str], str]:
 def display_fishing_battle_header(game_state: GameState) -> None:
     player = game_state.player
     fish = game_state.current_fish
-    fish_name = fish.name if player.fishing_lvl > 2 else "Unknown Fish"
+    if player.fishing_lvl > 2 or fish.species_known:
+        fish_name = fish.name
+    else:
+        fish_name = "Unknown Fish"
     stamina_percentage = round((fish.stamina / fish.max_stamina) * 100)
     max_distance = game_state.current_fishing_area.escape_distance
 
@@ -205,7 +224,6 @@ def display_boat_header(game_state: GameState):
     bottom_row = f"{dim(' | ').join([
         f"Lvl: {cyan(f"{player.fishing_lvl}")}",
         f"XP: {cyan(f"{player.fishing_xp}/{player.fishing_xp_needed}")}",  
-        f"Rod: {cyan(f"{player.rod_lvl}")}",
         f"Bait: {bait_color(f"{bait}")}",
         f"Casts: {c_color()(f"{game_state.current_fishing_area.casts}")}",
     ])}\n"
@@ -718,19 +736,28 @@ def display_shallows_fish(game_state: GameState) -> None:
     ]
 
     if not shallows:
-        print_and_sleep(yellow("No fish caught in the Shallows."))
+        print_and_sleep(yellow("No entries logged in the Shallows."))
         return
 
-    print_and_sleep(cyan("=== SHALLOWS FISH ==="))
+    print_and_sleep(cyan("=== SHALLOWS ==="))
 
-    for fish in sorted(shallows, key=lambda fish: fish.size, reverse=True):
+    shallows_species = {i['name'] for i in Fish_Species if SHALLOWS in i['areas']}
+    caught_species = {i.base_name for i in player.caught_fish if SHALLOWS in i.areas}
+
+    total = len(shallows_species)
+    caught = len(caught_species)
+    percentage = round((caught / total) * 100)
+
+    print_and_sleep(f"Caught: {caught}/{total} ({percentage}%)", 2)
+
+    for fish in sorted(shallows, key=lambda fish: fish.base_name, reverse=True):
 
         print_and_sleep(
             dim(" | ").join([
                 blue(f"{fish.name}"),
                 f"Rarity: {fish.get_rarity()}",
-                f"{fish.length} in",
-                f"{fish.weight} lbs",
+                f"{yellow(fish.length)} in",
+                f"{yellow(fish.weight)} lbs",
                 f"Value: {green(fish.value)}",
             ])
         )
@@ -746,12 +773,21 @@ def display_bay_fish(game_state: GameState) -> None:
     ]
 
     if not bay:
-        print_and_sleep(yellow("No fish caught in the Bay."))
+        print_and_sleep(yellow("No entries logged in the Bay."))
         return
 
-    print_and_sleep(cyan("=== BAY FISH ==="))
+    print_and_sleep(cyan("=== BAY ==="))
 
-    for fish in sorted(bay, key=lambda fish: fish.size, reverse=True):
+    bay_species = {i['name'] for i in Fish_Species if BAY in i['areas']}
+    caught_species = {i.base_name for i in player.caught_fish if BAY in i.areas}
+
+    total = len(bay_species)
+    caught = len(caught_species)
+    percentage = round((caught / total) * 100)
+
+    print_and_sleep(f"Caught: {caught}/{total} ({percentage}%)", 2)
+
+    for fish in sorted(bay, key=lambda fish: fish.base_name, reverse=True):
 
         print_and_sleep(
             dim(" | ").join([
@@ -774,12 +810,21 @@ def display_ocean_fish(game_state: GameState) -> None:
     ]
 
     if not ocean:
-        print_and_sleep(yellow("No fish caught in the Ocean."))
+        print_and_sleep(yellow("No entries logged in the Ocean."))
         return
 
-    print_and_sleep(cyan("=== OCEAN FISH ==="))
+    print_and_sleep(cyan("=== OCEAN ==="))
 
-    for fish in sorted(ocean, key=lambda fish: fish.size, reverse=True):
+    ocean_species = {i['name'] for i in Fish_Species if OCEAN in i['areas']}
+    caught_species = {i.base_name for i in player.caught_fish if OCEAN in i.areas}
+
+    total = len(ocean_species)
+    caught = len(caught_species)
+    percentage = round((caught / total) * 100)
+
+    print_and_sleep(f"Caught: {caught}/{total} ({percentage}%)", 2)
+
+    for fish in sorted(ocean, key=lambda fish: fish.base_name, reverse=True):
         print_and_sleep(
             dim(" | ").join([
                 blue(f"{fish.name}"),

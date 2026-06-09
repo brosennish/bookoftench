@@ -14,7 +14,7 @@ from bookoftench.event_logger import subscribe_function
 from bookoftench.model.illness import Illness
 from bookoftench.ui import yellow, dim, green, cyan, purple, red
 from bookoftench.util import print_and_sleep
-from bookoftench.model.bait import Bait, load_baits, load_bait
+from bookoftench.model.bait import Bait, load_bait
 from bookoftench.data.bait import DOUGH_BALL
 from .base import Combatant, Buyable
 from .build import Build
@@ -72,13 +72,6 @@ class PlayerWeapon(Weapon):
             f"{"Uses:"} {self.format_uses()}",
         ])
 
-
-def bait_defaults() -> Dict[str, Bait]:
-    bait = load_baits([DOUGH_BALL])[0]
-    bait.casts = 100
-    return {bait.name: bait}
-
-    return dict((b.name, b) for b in load_baits([DOUGH_BALL]))
 
 def item_defaults() -> Dict[str, Item]:
     return dict((it.name, it) for it in load_items([i.TENCH_FILET]))
@@ -142,15 +135,14 @@ class Player(Combatant):
     _blind = False
 
     caught_fish: list[Fish] = field(default_factory=list)
-    tackle_box: Dict[str, Bait] = field(default_factory=bait_defaults)
-    current_bait: Bait = None
+    tackle_box: Dict[str, Bait] = field(default_factory=dict)
+    current_bait: Bait | None = None
     items: Dict[str, Item] = field(default_factory=item_defaults)
     weapon_dict: Dict[str, PlayerWeapon] = field(default_factory=weapon_defaults)
     current_weapon: Weapon = None
 
     def __post_init__(self):
         self.current_weapon = self.weapon_dict[BARE_HANDS]
-        self.current_bait = load_bait(DOUGH_BALL)
         self._subscribe_listeners()
 
 # ================================================================================================

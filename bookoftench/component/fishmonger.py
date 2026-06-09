@@ -78,10 +78,6 @@ class Fishmonger(LabeledSelectionComponent):
         return self.leave or not self.game_state.player.is_alive()
 
     def display_options(self) -> None:
-        message = random.choice(Fishmonger_Lines)
-        print_and_sleep(
-            f"{blue(message)}", 1.5
-        )
         for component in self.selection_components:
             component.display_options()
 
@@ -97,6 +93,10 @@ class Fishmonger(LabeledSelectionComponent):
 
             if fishing_area.travel_cost > player.coins:
                 print_and_sleep(yellow(f"Need more coin"), 2)
+                return None
+            elif not player.current_bait:
+                print_and_sleep(yellow(f"Need some bait"), 2)
+                return None
             else:
                 player.coins -= fishing_area.travel_cost
                 game_state.current_fishing_area = fishing_area
@@ -121,7 +121,7 @@ class BaitShop(LabeledSelectionComponent):
                                        self._make_purchase_component(bait), bait) for
                           i, bait in enumerate(available)]
 
-        tackle_box_binding = SelectionBinding('T', "Return", TackleBox)
+        tackle_box_binding = SelectionBinding('T', "Tackle Box", TackleBox)
         return_binding = SelectionBinding('R', "Return", Fishmonger)
 
         super().__init__(game_state, refresh_menu=True,
@@ -134,7 +134,7 @@ class BaitShop(LabeledSelectionComponent):
             ),
             LabeledSelectionComponent(
                 game_state,
-                [return_binding]
+                [tackle_box_binding, return_binding]
             ),
         ]
         self.leave = False
@@ -169,6 +169,7 @@ class BaitShop(LabeledSelectionComponent):
                 else:
                     player.tackle_box[bait.name] = bait
                 play_sound(PURCHASE)
+                player.coins -= bait.cost
                 print_and_sleep(cyan(f"{bait.name} added to tackle box."), 1.5)
 
             # BoatComponent(game_state).run() (not sure if it will return to Fishmonger)
