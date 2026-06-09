@@ -43,13 +43,16 @@ class Fishmonger(LabeledSelectionComponent):
                                        self._make_purchase_component(area), area) for
                           i, area in enumerate(available)]
 
-        bait_shop_binding = SelectionBinding('S', "Shop", functional_component()(lambda: self._shop()))
+        bait_shop_binding = SelectionBinding('S', "Shop", functional_component()(lambda: self.bait_shop()))
+        tackle_box_binding = SelectionBinding('T', "Tackle Box", functional_component()(lambda: self.tackle_box()))
         upgrade_rod_binding = SelectionBinding('U', f"Upgrade Rod ({cost_display})",
                                                functional_component()(lambda: upgrade_rod(player, cost)))
+
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
 
         super().__init__(game_state, refresh_menu=True,
-                         bindings=[*fishing_area_bindings, bait_shop_binding, upgrade_rod_binding, return_binding])
+                         bindings=[*fishing_area_bindings, bait_shop_binding, tackle_box_binding, upgrade_rod_binding,
+                                   return_binding])
         self.selection_components = [
             LabeledSelectionComponent(
                 game_state,
@@ -58,7 +61,7 @@ class Fishmonger(LabeledSelectionComponent):
             ),
             LabeledSelectionComponent(
                 game_state,
-                [bait_shop_binding, upgrade_rod_binding, return_binding],
+                [bait_shop_binding, tackle_box_binding, upgrade_rod_binding, return_binding],
             ),
         ]
         self.leave = False
@@ -71,8 +74,11 @@ class Fishmonger(LabeledSelectionComponent):
         self.leave = True
         print_and_sleep(f"{blue("Aye.")}", 1)
 
-    def _shop(self):
+    def bait_shop(self):
         BaitShop(self.game_state).run()
+
+    def tackle_box(self):
+        TackleBox(self.game_state).run()
 
     def can_exit(self) -> bool:
         return self.leave or not self.game_state.player.is_alive()
@@ -121,11 +127,10 @@ class BaitShop(LabeledSelectionComponent):
                                        self._make_purchase_component(bait), bait) for
                           i, bait in enumerate(available)]
 
-        tackle_box_binding = SelectionBinding('T', "Tackle Box", TackleBox)
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
 
         super().__init__(game_state, refresh_menu=True,
-                         bindings=[*bait_bindings, tackle_box_binding, return_binding])
+                         bindings=[*bait_bindings, return_binding])
         self.selection_components = [
             LabeledSelectionComponent(
                 game_state,
@@ -134,7 +139,7 @@ class BaitShop(LabeledSelectionComponent):
             ),
             LabeledSelectionComponent(
                 game_state,
-                [tackle_box_binding, return_binding]
+                [return_binding]
             ),
         ]
         self.leave = False
@@ -186,6 +191,7 @@ def upgrade_rod(player, cost):
         original = player.rod_lvl
         player.rod_lvl += 1
         play_sound(PURCHASE)
+        player.coins -= cost
         print_and_sleep(cyan(f"Rod Level: {original} -> {player.rod_lvl}"), 1)
     else:
         print_and_sleep(yellow(f"Need more coin."), 1)

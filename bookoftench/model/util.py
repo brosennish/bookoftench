@@ -151,33 +151,22 @@ def fishing_distance_color(game_state: GameState) -> Callable[[str], str]:
     else:
         return green
 
-def fishing_stamina_color(game_state: GameState) -> Callable[[str], str]:
-    fish = game_state.current_fish
-    stamina_percentage = round((fish.stamina / fish.max_stamina) * 100)
-
-    if stamina_percentage >= 70:
-        return yellow
-    elif stamina_percentage <= 30:
-        return red
-    else:
-        return green
-
 # ================================================================================================
 
 def display_fishing_battle_header(game_state: GameState) -> None:
     player = game_state.player
     fish = game_state.current_fish
-    if player.fishing_lvl > 2 or fish.species_known:
+    if fish.species_known or player.fishing_lvl > 2:
         fish_name = fish.name
     else:
         fish_name = "Unknown Fish"
+
     stamina_percentage = round((fish.stamina / fish.max_stamina) * 100)
     max_distance = game_state.current_fishing_area.escape_distance
 
     # --- get colors ---
     state_color = fishing_state_color(game_state)
     distance_color = fishing_distance_color(game_state)
-    stamina_color = fishing_stamina_color(game_state)
 
     # --- print ---
     top_row = dim(' | ').join([
@@ -187,7 +176,7 @@ def display_fishing_battle_header(game_state: GameState) -> None:
 
     second_row = dim(' | ').join([
         f"Distance: {distance_color(f'{fish.distance}/{max_distance}')}",
-        f"Stamina: {stamina_color(f'{stamina_percentage}%')}",
+        f"Stamina: {yellow(f'{stamina_percentage}%')}",
         f"Rage: {red(f'{fish.rage}%')}",
     ])
 
@@ -200,7 +189,7 @@ def display_fishing_battle_header(game_state: GameState) -> None:
 
 # --- CASTS REMAINING COLOR CODING ---
 def c_color() -> Callable[[str], str]:
-    return green
+    return cyan
 
 def display_boat_header(game_state: GameState):
     player = game_state.player
@@ -226,7 +215,7 @@ def display_boat_header(game_state: GameState):
         f"XP: {cyan(f"{player.fishing_xp}/{player.fishing_xp_needed}")}",  
         f"Bait: {bait_color(f"{bait}")}",
         f"Casts: {c_color()(f"{game_state.current_fishing_area.casts}")}",
-    ])}\n"
+    ])}"
 
     print_and_sleep("\n".join([
         top_row,
@@ -695,6 +684,7 @@ def display_fishing_stats(game_state: GameState) -> None:
     shallows_fish = [i for i in caught if i.catch_location == SHALLOWS]
     bay_fish = [i for i in caught if i.catch_location == BAY]
     ocean_fish = [i for i in caught if i.catch_location == OCEAN]
+
     largest = max(caught, key=lambda fish: fish.size)
     smallest = min(caught, key=lambda fish: fish.size)
     longest = max(caught, key=lambda fish: fish.length)
@@ -705,24 +695,39 @@ def display_fishing_stats(game_state: GameState) -> None:
     toughest = max(caught, key=lambda fish: fish.max_stamina)
     strongest = max(caught, key=lambda fish: fish.strength)
 
+    stats_fish = [
+        largest,
+        smallest,
+        longest,
+        heaviest,
+        valuable,
+        fastest,
+        enraged,
+        toughest,
+        strongest,
+    ]
+
+    space = max(len(fish.name) for fish in stats_fish)
+    pipe = white('|'
+
     if not player.caught_fish:
         print_and_sleep(yellow("Go catch some fish fool."))
     else:
         print_and_sleep("\n".join([
-            f"Total:         {cyan(len(caught))}",
-            f"Shallows:      {blue(len(shallows_fish))}",
-            f"Bay:           {blue(len(bay_fish))}",
-            f"Ocean:         {blue(len(ocean_fish))}",
+            f"Total:          {blue(len(caught))}",
+            f"Shallows:       {blue(len(shallows_fish))}",
+            f"Bay:            {blue(len(bay_fish))}",
+            f"Ocean:          {blue(len(ocean_fish))}",
             "",
-            f"Largest:       {blue(largest.name)}, {yellow(largest.weight)} lbs, {yellow(largest.length)} in",
-            f"Smallest:      {blue(smallest.name)}, {yellow(smallest.weight)} lbs, {yellow(smallest.length)} in",
-            f"Longest:       {blue(longest.name)}, {yellow(longest.length)} in",
-            f"Heaviest:      {blue(heaviest.name)}, {yellow(heaviest.weight)} lbs",
-            f"Most Valuable: {blue(valuable.name)}, {green(valuable.value)} coins",
-            f"Fastest:       {blue(fastest.name)}, {cyan(fastest.speed)}",
-            f"Most Rage:     {blue(enraged.name)}, {red(enraged.rage_factor)}",
-            f"Strongest:     {blue(strongest.name)}, {yellow(strongest.strength)}",
-            f"Toughest:      {blue(toughest.name)}, {orange(toughest.strength)}",
+            f"Largest:        {blue(f'{largest.name:<{space}}')} {pipe} {yellow(largest.weight)} lbs, {yellow(largest.length)} in",
+            f"Smallest:       {blue(f'{smallest.name:<{space}}')} {pipe} {yellow(smallest.weight)} lbs, {yellow(smallest.length)} in",
+            f"Longest:        {blue(f'{longest.name:<{space}}')} {pipe} {yellow(longest.length)} in",
+            f"Heaviest:       {blue(f'{heaviest.name:<{space}}')} {pipe} {yellow(heaviest.weight)} lbs",
+            f"Most Valuable:  {blue(f'{valuable.name:<{space}}')} {pipe} {green(valuable.value)} coins",
+            f"Fastest:        {blue(f'{fastest.name:<{space}}')} {pipe} Speed: {cyan(fastest.speed)}",
+            f"Most Rage:      {blue(f'{enraged.name:<{space}}')} {pipe} Rage Factor: {red(enraged.rage_factor)}",
+            f"Strongest:      {blue(f'{strongest.name:<{space}}')} {pipe} Strength: {yellow(strongest.strength)}",
+            f"Toughest:       {blue(f'{toughest.name:<{space}}')} {pipe} Max Stamina: {orange(toughest.max_stamina)}",
         ]))
 
 # ================================================================================================
@@ -750,17 +755,20 @@ def display_shallows_fish(game_state: GameState) -> None:
 
     print_and_sleep(f"Caught: {caught}/{total} ({percentage}%)", 2)
 
-    for fish in sorted(shallows, key=lambda fish: fish.base_name, reverse=True):
+    name_width = max(len(fish.name) for fish in shallows)
+    rarity_width = max(len(fish.get_rarity()) for fish in shallows)
 
+    for fish in sorted(shallows, key=lambda fish: fish.base_name):
         print_and_sleep(
             dim(" | ").join([
-                blue(f"{fish.name}"),
-                f"Rarity: {fish.get_rarity()}",
+                blue(f"{fish.name:<{name_width}}"),
+                f"{fish.get_rarity():<{rarity_width}}",
                 f"{yellow(fish.length)} in",
                 f"{yellow(fish.weight)} lbs",
-                f"Value: {green(fish.value)}",
             ])
         )
+
+    print("")
 
 # ================================================================================================
 
@@ -787,17 +795,20 @@ def display_bay_fish(game_state: GameState) -> None:
 
     print_and_sleep(f"Caught: {caught}/{total} ({percentage}%)", 2)
 
-    for fish in sorted(bay, key=lambda fish: fish.base_name, reverse=True):
+    name_width = max(len(fish.name) for fish in bay)
+    rarity_width = max(len(fish.get_rarity()) for fish in bay)
 
+    for fish in sorted(bay, key=lambda fish: fish.base_name):
         print_and_sleep(
             dim(" | ").join([
-                blue(f"{fish.name}"),
-                f"Rarity: {fish.get_rarity()}",
-                f"{fish.length} in",
-                f"{fish.weight} lbs",
-                f"Value: {green(fish.value)}",
+                blue(f"{fish.name:<{name_width}}"),
+                f"{fish.get_rarity():<{rarity_width}}",
+                f"{yellow(fish.length)} in",
+                f"{yellow(fish.weight)} lbs",
             ])
         )
+
+    print("")
 
 # ================================================================================================
 
@@ -824,13 +835,17 @@ def display_ocean_fish(game_state: GameState) -> None:
 
     print_and_sleep(f"Caught: {caught}/{total} ({percentage}%)", 2)
 
-    for fish in sorted(ocean, key=lambda fish: fish.base_name, reverse=True):
+    name_width = max(len(fish.name) for fish in ocean)
+    rarity_width = max(len(fish.get_rarity()) for fish in ocean)
+
+    for fish in sorted(ocean, key=lambda fish: fish.base_name):
         print_and_sleep(
             dim(" | ").join([
-                blue(f"{fish.name}"),
-                f"Rarity: {fish.get_rarity()}",
-                f"{fish.length} in",
-                f"{fish.weight} lbs",
-                f"Value: {green(fish.value)}",
+                blue(f"{fish.name:<{name_width}}"),
+                f"{fish.get_rarity():<{rarity_width}}",
+                f"{yellow(fish.length)} in",
+                f"{yellow(fish.weight)} lbs",
             ])
         )
+
+    print("")

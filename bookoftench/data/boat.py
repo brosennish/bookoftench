@@ -9,8 +9,8 @@ TACKLE_BOX = "Tackle Box"
 
 FISHING_OPTIONS = [
     {'name': CAST, 'color': cyan},
-    {'name': FISHING_LOG, 'color': blue},
     {'name': TACKLE_BOX, 'color': purple},
+    {'name': FISHING_LOG, 'color': blue},
 ]
 
 # ================================================================================================

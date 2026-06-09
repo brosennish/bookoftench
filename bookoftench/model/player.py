@@ -30,6 +30,8 @@ from .weapon import load_weapons, Weapon
 from bookoftench.data.enviroment import DAY, NIGHT, FULL, WETTING, DRYING
 from bookoftench.data.areas import CAVE
 from bookoftench.data.enemies import EMPATH
+from ..data.audio import XP, POSITIVE, GREAT_JOB, GOLF_CLAP
+
 
 # ================================================================================================
 
@@ -495,10 +497,12 @@ class Player(Combatant):
         fishing_xp = self.fishing_xp
         original_fishing_lvl = self.fishing_lvl
 
+        play_sound(XP)
         print_and_sleep(cyan(f"You gained {xp} XP!"), 1)
 
         if fishing_xp >= 550:
             fishing_lvl = 8
+            xp_needed = 880
         elif fishing_xp >= 360:
             xp_needed = 550
             fishing_lvl = 7
@@ -525,7 +529,9 @@ class Player(Combatant):
         self.fishing_xp_needed = xp_needed
 
         if original_fishing_lvl != fishing_lvl:
-            print_and_sleep(cyan(f"You are now fishing level {self.fishing_lvl}!"), 1)
+            play_sound(GOLF_CLAP)
+            play_sound(GREAT_JOB)
+            print_and_sleep(cyan(f"You have reached fishing level {self.fishing_lvl}!"), 1)
 
 # ================================================================================================
 

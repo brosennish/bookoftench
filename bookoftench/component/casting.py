@@ -29,7 +29,7 @@ class DryCastCheck(NoOpComponent):
         if not dry:
             SpawnFish(self.game_state).run()
         else:
-            print_and_sleep(yellow("You came up dry."), 1.5)
+            print_and_sleep(yellow("You came up dry."), 1)
             self.game_state.current_fishing_area.casts -= 1
 
     def dry_check(self) -> bool:
@@ -71,6 +71,8 @@ class SpawnFish(LinearComponent):
         time = self.game_state.time_of_day
         moon = self.game_state.moon
         bait = self.game_state.player.current_bait
+        if  bait.casts == 0:
+            self.game_state.player.current_bait  = None
 
         filtered = [
             i['name']
@@ -121,7 +123,7 @@ class LaunchFishBattle(GatekeepingComponent):
         super().__init__(game_state, decision_function=lambda: self.game_state.current_fish is not None,
                          accept_component=FishBattle,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             yellow("You came up dry."), 1.5)))
+                             yellow("You came up dry."), 1)))
 
 # ================================================================================================
 # ================================================================================================
@@ -144,7 +146,6 @@ class FishBattle(LabeledSelectionComponent):
             LabeledSelectionComponent(
                 game_state,
                 fishing_battle_option_bindings,
-                top_level_prompt_callback=display_fishing_battle_header,
             ),
             LabeledSelectionComponent(
                 game_state,
@@ -165,6 +166,8 @@ class FishBattle(LabeledSelectionComponent):
                 self.game_state.current_fishing_area.casts == 0 or not self.game_state.current_fish)
 
     def display_options(self) -> None:
+        display_fishing_battle_header(self.game_state)
+
         for component in self.selection_components:
             component.display_options()
 
@@ -222,9 +225,9 @@ class EndFishBattle(NoOpComponent):
         rarity = fish.get_rarity()
 
         print_and_sleep("\n".join([
-            green(f"You caught a {fish.name}!"),
+            cyan(f"You caught a {fish.name}!"),
             "",
-            f"{fish.description}",
+            dim(f"{fish.description}"),
             "",
             f"Rarity: {rarity}",
             f"Length: {yellow(f'{fish.length} in')}",
@@ -245,7 +248,7 @@ class EndFishBattle(NoOpComponent):
 
     def sell_fish(self):
         player = self.game_state.player
-        area = self.game_state.current_area
+        area = self.game_state.current_area.name
         fish = self.game_state.current_fish
         value = fish.value
 
@@ -473,7 +476,6 @@ class Pull(NoOpComponent):
             fish.lost = True
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
         else:
-            # print_and_sleep(yellow("You pull hard against the fish."))
             pass
 
 # ================================================================================================
@@ -550,11 +552,9 @@ class Reel(NoOpComponent):
         if fish.distance <= 0:
             fish.caught = True
             fish.catch_location = location
-            print_and_sleep(cyan(f"You caught a {fish.name}!"), 1.5)
         elif fish.stamina <= 0:
             fish.caught = True
             fish.catch_location = location
-            print_and_sleep(green(f"You reeled in an exhausted {fish.name}!"), 1.5)
         elif fish.rage >= 100:
             fish.lost = True
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
@@ -615,7 +615,7 @@ class GiveLine(NoOpComponent):
             rage_loss += 4
 
         rage_loss += min(player.fishing_lvl // 2, 3)
-        rage_loss += player.rod_lvl - 1
+        rage_loss += min(player.rod_lvl - 1, 3)
         fish.rage -= rage_loss
         fish.rage = max(0, fish.rage)
         FishTurn.update_fish_state(fish)
@@ -696,7 +696,6 @@ class ObserveFish(NoOpComponent):
         else:
             return
 
-        play_sound(DISCOVERABLE)
         self.display_observation_result(color, word, value)
 
     @staticmethod

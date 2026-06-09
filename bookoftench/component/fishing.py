@@ -81,6 +81,9 @@ class BoatComponent(LabeledSelectionComponent):
                 if not player.tackle_box:
                     print_and_sleep(f"{blue('Ain\'t got no bait, bozo.')}", 1)
                     return None
+                if not player.current_bait:
+                    print_and_sleep(f"{blue('Need some fresh bait mate.')}", 1)
+                    return None
                 if player.current_bait.casts == 0:
                     print_and_sleep(f"{blue('Need some fresh bait mate.')}", 1)
                     return None
