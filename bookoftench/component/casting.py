@@ -95,6 +95,7 @@ class SpawnFish(LinearComponent):
             )
             self.game_state.current_fish = selection
             play_sound(FISH_ON)
+            play_sound(REEL)
             print_and_sleep(orange("Fish on!"), 1.5)
             self.game_state.current_fishing_area.casts -= 1
         else:
@@ -646,6 +647,7 @@ class ObserveFish(NoOpComponent):
 
     def run(self):
         fish = self.game_state.current_fish
+        player = self.game_state.player
 
         check = self.get_observation(fish)
 
@@ -653,14 +655,17 @@ class ObserveFish(NoOpComponent):
             print_and_sleep(yellow(f"You've learned all that you can."), 1.5)
             FishTurn(self.game_state).run()
         else:
-            if random.random() < 0.67:
+            chance = min(0.5 + ((player.fishing_lvl - 1 / 10) * 2), 1)
+            if random.random() < chance:
                 observation = check
             else:
+                print_and_sleep(yellow(f"Your observation attempt was dry."), 1.5)
                 observation = None
 
             if observation:
                 self.apply_observation(fish, observation)
-                FishTurn(self.game_state).run()
+
+        FishTurn(self.game_state).run()
 
 
     @staticmethod

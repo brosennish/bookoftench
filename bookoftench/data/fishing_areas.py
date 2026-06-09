@@ -33,7 +33,7 @@ Fishing_Areas = [
 
     {'name': OCEAN, 'bite_chance': 0.25, 'hook_chance': 0.55,
      'travel_cost': 35, 'casts': 8, 'lvl': 1,
-     'min_hook_distance': 100, 'max_hook_distance': 300,
-     'escape_distance': 500},
+     'min_hook_distance': 100, 'max_hook_distance': 200,
+     'escape_distance': 350},
 
 ]

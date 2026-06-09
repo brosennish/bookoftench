@@ -6,7 +6,7 @@ from bookoftench.component.base import LabeledSelectionComponent, SelectionBindi
     functional_component, TextDisplayingComponent
 from bookoftench.component.casting import DryCastCheck
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import EQUIP_WEAPON, FISHING_THEME
+from bookoftench.data.audio import EQUIP_WEAPON, OCEAN_THEME, SHALLOWS_THEME, BAY_THEME
 from bookoftench.data.boat import TACKLE_BOX, FISHING_OPTIONS, CAST, FISHING_LOG, SHOP
 from bookoftench.data.components import BOAT
 from bookoftench.data.enviroment import DAY
@@ -15,7 +15,7 @@ from bookoftench.model import GameState
 from bookoftench.model.bait import Bait
 from bookoftench.model.util import display_boat_header, display_tackle_box_header, display_fish_log_header, \
     display_fishing_stats, display_shallows_fish, display_bay_fish, display_ocean_fish
-from bookoftench.ui import blue, yellow
+from bookoftench.ui import blue
 from bookoftench.util import print_and_sleep
 
 # ================================================================================================
@@ -24,6 +24,7 @@ from bookoftench.util import print_and_sleep
 register_component(BOAT)
 class BoatComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
+        self.fishing_area = self.game_state.current_fishing_area.name
         original = FISHING_OPTIONS.copy()
         options = [i['name'] for i in original]
 
@@ -49,7 +50,12 @@ class BoatComponent(LabeledSelectionComponent):
         self.leave = False
 
     def play_theme(self) -> None:
-        play_music(FISHING_THEME)
+        if self.fishing_area == SHALLOWS:
+            play_music(SHALLOWS_THEME)
+        elif self.fishing_area == BAY:
+            play_music(BAY_THEME)
+        else:
+            play_music(OCEAN_THEME)
 
     def _return(self):
         self.game_state.update_time_of_day()
