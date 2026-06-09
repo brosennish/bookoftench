@@ -6,7 +6,7 @@ from bookoftench.component.base import LabeledSelectionComponent, SelectionBindi
     functional_component, TextDisplayingComponent
 from bookoftench.component.casting import DryCastCheck
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import EQUIP_WEAPON
+from bookoftench.data.audio import EQUIP_WEAPON, FISHING_THEME
 from bookoftench.data.boat import TACKLE_BOX, FISHING_OPTIONS, CAST, FISHING_LOG, SHOP
 from bookoftench.data.components import BOAT
 from bookoftench.data.enviroment import DAY
@@ -49,8 +49,7 @@ class BoatComponent(LabeledSelectionComponent):
         self.leave = False
 
     def play_theme(self) -> None:
-        pass
-        # play_music(FISHMONGER_THEME)
+        play_music(FISHING_THEME)
 
     def _return(self):
         self.game_state.update_time_of_day()

@@ -5,7 +5,7 @@ from bookoftench.component import BoatComponent, TackleBox, FishingLog
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
-from bookoftench.data.audio import PURCHASE, TRAVEL_THEME
+from bookoftench.data.audio import PURCHASE, TRAVEL_THEME, FISHMONGER_THEME_1, FISHMONGER_THEME_2, FISHMONGER_THEME_3
 from bookoftench.data.bait import Bait_And_Lures
 from bookoftench.data.fishing_areas import Fishing_Areas
 from bookoftench.data.fishmonger import Fishmonger_Lines
@@ -33,6 +33,9 @@ class FishmongerOpen(GatekeepingComponent):
 
 class Fishmonger(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
+        themes = [FISHMONGER_THEME_1, FISHMONGER_THEME_2, FISHMONGER_THEME_3]
+        self.theme = random.choice(themes)
+
         player = game_state.player
         cost = get_rod_upgrade_cost(player)
         cost_display = orange(f"{cost}")
@@ -67,8 +70,11 @@ class Fishmonger(LabeledSelectionComponent):
         self.leave = False
 
     def play_theme(self) -> None:
+        play_music(self.theme)
+
+    @staticmethod
+    def play_jeremy_wade():
         pass
-        # play_music(FISHMONGER_THEME)
 
     def _return(self):
         self.leave = True

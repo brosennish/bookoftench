@@ -1,18 +1,16 @@
 import random
-import time
-from typing import Callable
 
 from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import functional_component, GatekeepingComponent, \
     LabeledSelectionComponent, ReprBinding, SelectionBinding, Component, NoOpComponent, LinearComponent, \
     TextDisplayingComponent
-from bookoftench.data.audio import COINS, DISCOVERABLE
+from bookoftench.data.audio import COINS, CATCH_FISH, GOLF_CLAP, FISH_ON
 from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED, \
     possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, STAMINA, RAGE_FACTOR, TENCH
 from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL
 from bookoftench.data.fishing_areas import WET_SEASON_BITE_CHANCE_EFFECT, DRY_SEASON_BITE_CHANCE_EFFECT, WET_SEASON
-from bookoftench.model import GameState, game_state
-from bookoftench.model.fish import load_fishes, load_fish
+from bookoftench.model import GameState
+from bookoftench.model.fish import load_fishes
 from bookoftench.model.player import Player
 from bookoftench.model.util import display_fishing_battle_header, display_fishing_actions, display_fishing_info
 from bookoftench.ui import yellow, dim, blue, white, green, red, purple, cyan, orange
@@ -43,17 +41,17 @@ class DryCastCheck(NoOpComponent):
 
         bite_chance += ((self.game_state.player.fishing_lvl - 1) / 100)
 
-        self.waiting_display()
-
         if random.random() < bite_chance:
+            value = random.randint(1, 3)
+            self.waiting_display(value)
             return False
         else:
+            self.waiting_display(3)
             return True
 
     @staticmethod
-    def waiting_display():
-        count = random.randint(1, 3)
-        for i in range(count):
+    def waiting_display(value: int):
+        for i in range(value):
             print_and_sleep(blue("..."), 0.8)
 
 # ================================================================================================
@@ -96,6 +94,7 @@ class SpawnFish(LinearComponent):
                 fishing_area.max_hook_distance
             )
             self.game_state.current_fish = selection
+            play_sound(FISH_ON)
             print_and_sleep(orange("Fish on!"), 1.5)
             self.game_state.current_fishing_area.casts -= 1
         else:
@@ -223,6 +222,8 @@ class EndFishBattle(NoOpComponent):
     def display_catch(self):
         fish = self.game_state.current_fish
         rarity = fish.get_rarity()
+        play_sound(CATCH_FISH)
+        play_sound(GOLF_CLAP)
 
         print_and_sleep("\n".join([
             cyan(f"You caught a {fish.name}!"),
@@ -559,7 +560,6 @@ class Reel(NoOpComponent):
             fish.lost = True
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
         else:
-            # print_and_sleep(yellow("You reel steadily."))
             pass
 
 # ================================================================================================
@@ -647,13 +647,21 @@ class ObserveFish(NoOpComponent):
     def run(self):
         fish = self.game_state.current_fish
 
-        observation = self.get_observation(fish)
-        if observation:
-            self.apply_observation(fish, observation)
-            FishTurn(self.game_state).run()
-        else:
+        check = self.get_observation(fish)
+
+        if not check:
             print_and_sleep(yellow(f"You've learned all that you can."), 1.5)
             FishTurn(self.game_state).run()
+        else:
+            if random.random() < 0.67:
+                observation = check
+            else:
+                observation = None
+
+            if observation:
+                self.apply_observation(fish, observation)
+                FishTurn(self.game_state).run()
+
 
     @staticmethod
     def get_observation(fish) -> str | None:

@@ -154,12 +154,8 @@ def fishing_distance_color(game_state: GameState) -> Callable[[str], str]:
 # ================================================================================================
 
 def display_fishing_battle_header(game_state: GameState) -> None:
-    player = game_state.player
     fish = game_state.current_fish
-    if fish.species_known or player.fishing_lvl > 2:
-        fish_name = fish.name
-    else:
-        fish_name = "Unknown Fish"
+    fish_name = fish.name
 
     stamina_percentage = round((fish.stamina / fish.max_stamina) * 100)
     max_distance = game_state.current_fishing_area.escape_distance
