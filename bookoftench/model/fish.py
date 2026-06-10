@@ -55,9 +55,9 @@ class Fish:
     observed_characteristics: list[str] = field(default_factory=list)
     species_observed: bool = False
     variant_observed: bool = False
+    rarity_observed: bool = False
     strength_observed: bool = False
     speed_observed: bool = False
-    stamina_observed: bool = False
     rage_factor_observed: bool = False
     species_known: bool = False
 
@@ -184,7 +184,7 @@ class Fish:
         self.max_stamina = round(self.max_stamina)
         self.stamina = self.max_stamina
 
-    def get_rarity(self):
+    def get_rarity_text(self):
         if self.rarity == f.COMMON:
             return yellow(self.rarity)
         elif self.rarity == f.UNCOMMON:
@@ -194,12 +194,22 @@ class Fish:
         else:
             return orange(self.rarity)
 
+    def get_rarity_color(self):
+        if self.rarity == f.COMMON:
+            return yellow
+        elif self.rarity == f.UNCOMMON:
+            return green
+        elif self.rarity == f.RARE:
+            return blue
+        else:
+            return orange
+
 # ================================================================================================
 
     def get_simple_format(self) -> str:
         return dim(' | ').join([
             cyan(f"{self.name:<19}"),
-            f"{self.get_rarity()}",
+            f"{self.get_rarity_text()}",
             f"{self.length} in",
             f"{self.weight} lbs",
             blue(f"{self.catch_location}"),
@@ -208,7 +218,7 @@ class Fish:
     def __repr__(self):
         return dim(' | ').join([
             cyan(f"{self.name:<19}"),
-            f"{self.get_rarity()}",
+            f"{self.get_rarity_text()}",
             f"Value: {orange(self.value)}",
             f"{self.length} in",
             f"{self.weight} lbs",

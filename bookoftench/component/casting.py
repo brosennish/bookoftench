@@ -6,7 +6,7 @@ from bookoftench.component.base import functional_component, GatekeepingComponen
     TextDisplayingComponent
 from bookoftench.data.audio import COINS, CATCH_FISH, GOLF_CLAP, FISH_ON
 from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED, \
-    possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, RAGE_FACTOR
+    possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, RAGE_FACTOR, RARITY, STAMINA
 from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL
 from bookoftench.data.fishing_areas import WET_SEASON_BITE_CHANCE_EFFECT, DRY_SEASON_BITE_CHANCE_EFFECT, WET_SEASON
 from bookoftench.model import GameState
@@ -222,7 +222,7 @@ class EndFishBattle(NoOpComponent):
 
     def display_catch(self):
         fish = self.game_state.current_fish
-        rarity = fish.get_rarity()
+        rarity = fish.get_rarity_text()
         play_sound(CATCH_FISH)
         play_sound(GOLF_CLAP)
 
@@ -305,7 +305,7 @@ class FishTurn(NoOpComponent):
     @staticmethod
     def spit_hook(fish, player):
         if random.random() < fish.spit_hook_chance:
-            name = fish.name if player.fishing_lvl > 2 else "Unknown Fish"
+            name = fish.name if fish.species_known else "Unknown Fish"
             print_and_sleep(yellow(f"The {name} dropped the hook and swam away!"))
             fish.lost = True
 
@@ -386,8 +386,7 @@ class FishTurn(NoOpComponent):
     def apply_fish_turn_outcome(self):
         fish = self.game_state.current_fish
         area = self.game_state.current_fishing_area
-        fishing_level = self.game_state.player.fishing_lvl
-        name = fish.name if fishing_level > 2 else "Unknown Fish"
+        name = fish.name if fish.species_known else "Unknown Fish"
 
         if fish.distance >= area.escape_distance:
             fish.lost = True
@@ -470,7 +469,7 @@ class Pull(NoOpComponent):
         player = self.game_state.player
         fish = self.game_state.current_fish
         location = self.game_state.current_fishing_area.name
-        name = fish.name if player.fishing_lvl > 2 else "Unknown Fish"
+        name = fish.name if fish.species_known else "Unknown Fish"
 
         if fish.distance <= 0:
             fish.caught = True
@@ -553,7 +552,7 @@ class Reel(NoOpComponent):
     def apply_reel_outcome(self, fish):
         player = self.game_state.player
         location = self.game_state.current_fishing_area.name
-        name = fish.name if player.fishing_lvl > 2 else "Unknown Fish"
+        name = fish.name if fish.species_known else "Unknown Fish"
 
         if fish.distance <= 0:
             fish.caught = True
@@ -629,9 +628,8 @@ class GiveLine(NoOpComponent):
         print_action_results(fish, action, original_distance, original_stamina, original_rage)
 
     def apply_give_line_outcome(self, fish):
-        player = self.game_state.player
         location = self.game_state.current_fishing_area.name
-        name = fish.name if player.fishing_lvl > 2 else "Unknown Fish"
+        name = fish.name if fish.species_known else "Unknown Fish"
 
         if fish.distance <= 0:
             fish.caught = True
@@ -651,24 +649,10 @@ class ObserveFish(NoOpComponent):
 
     def run(self):
         fish = self.game_state.current_fish
-        player = self.game_state.player
 
-        check = self.get_observation(fish)
-
-        if not check:
-            print_and_sleep(yellow(f"You've learned all that you can."), 1.5)
-            FishTurn(self.game_state).run()
-        else:
-            chance = min(0.5 + ((player.fishing_lvl - 1 / 10) * 2), 1)
-            if random.random() < chance:
-                observation = check
-            else:
-                print_and_sleep(yellow(f"Your observation attempt was dry."), 1.5)
-                observation = None
-
-            if observation:
-                self.apply_observation(fish, observation)
-
+        # --- stamina can be checked multiple times ---
+        observation = self.get_observation(fish)
+        self.apply_observation(fish, observation)
         FishTurn(self.game_state).run()
 
 
@@ -695,11 +679,20 @@ class ObserveFish(NoOpComponent):
             word = VARIANT
             value = fish.variant if fish.variant else "None"
             fish.variant_observed = True
+        elif observation == RARITY:
+            color = fish.get_rarity_color()
+            word = RARITY
+            value = fish.rarity
+            fish.rarity_observed = True
         elif observation == STRENGTH:
             color = yellow
             word = STRENGTH
             value = str(round(fish.strength, 2))
             fish.strength_observed = True
+        elif observation == STAMINA:
+            color = yellow
+            word = STAMINA
+            value = yellow(f"{fish.stamina}/{fish.max_stamina}")
         elif observation == SPEED:
             color = cyan
             word = SPEED
@@ -718,7 +711,7 @@ class ObserveFish(NoOpComponent):
     @staticmethod
     def display_observation_result(color, word: str, value: str) -> None:
 
-        print_and_sleep(blue(f"You observe the fish to gain insight..."), 1.5)
+        print_and_sleep(blue(f"You observe the fish to learn more..."), 1.5)
         print_and_sleep(f"{color(word)}: {value}", 1.5)
 
 # ================================================================================================

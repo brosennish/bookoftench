@@ -175,10 +175,14 @@ VARIANT = "Variant"
 STRENGTH = "Strength"
 SPEED = "Speed"
 RAGE_FACTOR = "Rage Factor"
+RARITY = "Rarity"
+STAMINA = "Stamina"
 
 possible_observations = [
     SPECIES,
+    RARITY,
     VARIANT,
+    STAMINA,
     STRENGTH,
     SPEED,
     RAGE_FACTOR,
@@ -580,7 +584,7 @@ Fish_Species = [
      'spit_hook_chance': 0.001, 'protected': False, 'max_age': 25,
      'description': 'A primitive deep-sea shark whose eel-like body has changed little for millions of years.',
      },
-    
+
     {'name': GIANT_ISOPOD, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 8, 'max_length': 20, 'min_weight_factor': 0.25, 'max_weight_factor': 0.70,
      'base_value': 80, 'rage_factor': 0.05, 'speed': 0.05, 'strength': 0.50, 'max_stamina': 100,

@@ -155,7 +155,7 @@ def fishing_distance_color(game_state: GameState) -> Callable[[str], str]:
 
 def display_fishing_battle_header(game_state: GameState) -> None:
     fish = game_state.current_fish
-    fish_name = fish.name if fish.species_known else "Unknown Creature"
+    name = fish.name if fish.species_known else "Unknown Creature"
 
     stamina_percentage = round((fish.stamina / fish.max_stamina) * 100)
     max_distance = game_state.current_fishing_area.escape_distance
@@ -166,7 +166,7 @@ def display_fishing_battle_header(game_state: GameState) -> None:
 
     # --- print ---
     top_row = dim(' | ').join([
-        blue(fish_name),
+        blue(name),
         state_color(fish.state),
     ])
 
@@ -752,7 +752,7 @@ def display_shallows_fish(game_state: GameState) -> None:
     print_and_sleep(f"Caught: {caught}/{total} ({percentage}%)", 2)
 
     name_width = max(len(fish.name) for fish in shallows)
-    rarity_width = max(len(fish.get_rarity()) for fish in shallows)
+    rarity_width = max(len(fish.get_rarity_text()) for fish in shallows)
 
     length_width = max(len(str(fish.length)) for fish in shallows)
     weight_width = max(len(str(fish.weight)) for fish in shallows)
@@ -763,7 +763,7 @@ def display_shallows_fish(game_state: GameState) -> None:
         print_and_sleep(
             dim(" | ").join([
                 blue(f"{fish.name:<{name_width}}"),
-                f"{fish.get_rarity():<{rarity_width}}",
+                f"{fish.get_rarity_text():<{rarity_width}}",
                 f"{sex_color(fish.sex[0])}",
                 f"{yellow(f'{fish.length:>{length_width}}')} in",
                 f"{yellow(f'{fish.weight:>{weight_width}}')} lbs",
@@ -799,7 +799,7 @@ def display_bay_fish(game_state: GameState) -> None:
     print_and_sleep(f"Caught: {caught}/{total} ({percentage}%)", 2)
 
     name_width = max(len(fish.name) for fish in bay)
-    rarity_width = max(len(fish.get_rarity()) for fish in bay)
+    rarity_width = max(len(fish.get_rarity_text()) for fish in bay)
 
     length_width = max(len(str(fish.length)) for fish in bay)
     weight_width = max(len(str(fish.weight)) for fish in bay)
@@ -810,7 +810,7 @@ def display_bay_fish(game_state: GameState) -> None:
         print_and_sleep(
             dim(" | ").join([
                 blue(f"{fish.name:<{name_width}}"),
-                f"{fish.get_rarity():<{rarity_width}}",
+                f"{fish.get_rarity_text():<{rarity_width}}",
                 f"{sex_color(fish.sex[0])}",
                 f"{yellow(f'{fish.length:>{length_width}}')} in",
                 f"{yellow(f'{fish.weight:>{weight_width}}')} lbs",
@@ -851,7 +851,7 @@ def display_ocean_fish(game_state: GameState) -> None:
     print_and_sleep(f"Caught: {caught}/{total} ({percentage}%)", 2)
 
     name_width = max(len(fish.name) for fish in ocean)
-    rarity_width = max(len(fish.get_rarity()) for fish in ocean)
+    rarity_width = max(len(fish.get_rarity_text()) for fish in ocean)
 
     for fish in sorted(ocean, key=lambda fish: fish.base_name):
         sex_color = blue if fish.sex == MALE else purple if fish.sex == FEMALE else orange
@@ -859,7 +859,7 @@ def display_ocean_fish(game_state: GameState) -> None:
         print_and_sleep(
             dim(" | ").join([
                 blue(f"{fish.name:<{name_width}}"),
-                f"{fish.get_rarity():<{rarity_width}}",
+                f"{fish.get_rarity_text():<{rarity_width}}",
                 f"{sex_color(fish.sex[0])}",
                 f"{yellow(f'{fish.length:>{length_width}}')} in",
                 f"{yellow(f'{fish.weight:>{weight_width}}')} lbs",
