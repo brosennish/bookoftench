@@ -109,6 +109,13 @@ def display_fish_log_header(game_state: GameState) -> None:
 
 # ================================================================================================
 
+def display_compendium_header(game_state: GameState) -> None:
+    player = game_state.player
+
+    print_and_sleep(f"* Compendium *")
+
+# ================================================================================================
+
 def display_bait_shop_header(game_state: GameState) -> None:
     player = game_state.player
     season = game_state.season
@@ -156,10 +163,13 @@ def fishing_distance_color(game_state: GameState) -> Callable[[str], str]:
 
 def display_fishing_battle_header(game_state: GameState) -> None:
     fish = game_state.current_fish
-    name = fish.name if fish.species_known else "Unknown Creature"
+    fishing_area = game_state.current_fishing_area
 
+    if fish is None:
+        return
+
+    name = fish.name if fish.species_known else "Unknown Creature"
     stamina_percentage = round((fish.stamina / fish.max_stamina) * 100)
-    max_distance = game_state.current_fishing_area.escape_distance
 
     # --- get colors ---
     state_color = fishing_state_color(game_state)
@@ -172,7 +182,7 @@ def display_fishing_battle_header(game_state: GameState) -> None:
     ])
 
     second_row = dim(' | ').join([
-        f"Distance: {distance_color(f'{fish.distance}/{max_distance}')}",
+        f"Distance: {distance_color(f'{fish.distance}/{fishing_area.escape_distance}')}",
         f"Stamina: {yellow(f'{stamina_percentage}%')}",
         f"Rage: {red(f'{fish.rage}%')}",
     ])
@@ -185,8 +195,13 @@ def display_fishing_battle_header(game_state: GameState) -> None:
 # ================================================================================================
 
 # --- CASTS REMAINING COLOR CODING ---
-def c_color() -> Callable[[str], str]:
-    return cyan
+def c_color(casts: int) -> Callable[[str], str]:
+    if casts == 1:
+        return red
+    elif casts <= 3:
+        return yellow
+    else:
+        return green
 
 def display_boat_header(game_state: GameState):
     player = game_state.player
@@ -197,6 +212,8 @@ def display_boat_header(game_state: GameState):
     season_color = blue if season == WET_SEASON else yellow
     bait = player.current_bait.name if player.current_bait else "None"
     bait_color = yellow if bait == "None" else cyan
+    casts = game_state.current_fishing_area.casts
+    casts_color = c_color(casts)
 
     # --- top row ---
     top_row = f"{dim(' | ').join([
@@ -211,7 +228,7 @@ def display_boat_header(game_state: GameState):
         f"Lvl: {cyan(f"{player.fishing_lvl}")}",
         f"XP: {cyan(f"{player.fishing_xp}/{player.fishing_xp_needed}")}",  
         f"Bait: {bait_color(f"{bait}")}",
-        f"Casts: {c_color()(f"{game_state.current_fishing_area.casts}")}",
+        f"Casts: {casts_color(f"{game_state.current_fishing_area.casts}")}",
     ])}"
 
     print_and_sleep("\n".join([
@@ -711,10 +728,11 @@ def display_fishing_stats(game_state: GameState) -> None:
         print_and_sleep(yellow("Go catch some fish fool."))
     else:
         print_and_sleep("\n".join([
-            f"Total:          {orange(len(caught))}",
-            f"Shallows:       {green(len(shallows_fish))}",
-            f"Bay:            {(cyan(bay_fish))}",
-            f"Ocean:          {(blue(ocean_fish))}",
+            f"Total Caught:   {blue(len(caught))}",
+
+            f"Shallows:       {blue(len(shallows_fish))}",
+            f"Bay:            {(blue(len(bay_fish)))}",
+            f"Ocean:          {(blue(len(ocean_fish)))}",
             "",
             f"Largest:        {blue(f'{largest.name:<{space}}')} {pipe} {yellow(largest.weight)} lbs, {yellow(largest.length)} in",
             f"Smallest:       {blue(f'{smallest.name:<{space}}')} {pipe} {yellow(smallest.weight)} lbs, {yellow(smallest.length)} in",
@@ -734,7 +752,7 @@ def display_area_log(game_state: GameState, area: str) -> None:
 
     all_catches_in_area = [
         fish for fish in player.caught_fish
-        if fish.catch_location == SHALLOWS
+        if fish.catch_location == area
     ]
 
     if not all_catches_in_area:

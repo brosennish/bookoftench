@@ -13,6 +13,8 @@ class FishingArea:
     bite_chance: float
     hook_chance: float
     lvl: int
+    pull_mult: float
+    run_mult: float
     min_hook_distance: int
     max_hook_distance: int
     escape_distance: int

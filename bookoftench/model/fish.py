@@ -47,9 +47,13 @@ class Fish:
     state: str | None = None
     variant: str | None = None
     age: int | None = None
+
+    adrenaline_ready: bool = True
+
     caught: bool = False
     catch_location: str | None = None # assigned when caught
     lost: bool = False
+
 
     # --- ObserveFish ---
     observed_characteristics: list[str] = field(default_factory=list)
@@ -105,11 +109,11 @@ class Fish:
         return round(size_pct * 100)
 
     def get_value(self) -> int:
-        size_pct = self.size_percentile
+        size_pct = self.size_percentile / 100
         modifier = 0.80 + (size_pct * 0.4)
         value = round(self.base_value * modifier)
 
-        return value
+        return max(1, value)
 
     def get_state(self):
         roll = random.random()

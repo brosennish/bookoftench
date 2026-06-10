@@ -11,7 +11,7 @@ from bookoftench.data.fish import SHALLOWS, OCEAN, BAY
 from bookoftench.model import GameState
 from bookoftench.model.bait import Bait
 from bookoftench.model.util import display_boat_header, display_tackle_box_header, display_fish_log_header, \
-    display_fishing_stats, display_area_log, display_area_compendium
+    display_fishing_stats, display_area_log, display_area_compendium, display_compendium_header
 from bookoftench.ui import blue, cyan
 from bookoftench.util import print_and_sleep
 
@@ -31,17 +31,21 @@ class BoatComponent(LabeledSelectionComponent):
 
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
 
-        super().__init__(game_state, refresh_menu=True,
-                         bindings=[*fishing_option_bindings, return_binding])
+        super().__init__(
+            game_state,
+            refresh_menu=True,
+            bindings=[*fishing_option_bindings, return_binding],
+            top_level_prompt_callback=display_boat_header,
+        )
+
         self.selection_components = [
             LabeledSelectionComponent(
                 game_state,
                 fishing_option_bindings,
-                top_level_prompt_callback=display_boat_header,
             ),
             LabeledSelectionComponent(
                 game_state,
-                [return_binding]
+                [return_binding],
             ),
         ]
         self.leave = False
@@ -61,11 +65,21 @@ class BoatComponent(LabeledSelectionComponent):
         self.leave = True
 
     def can_exit(self) -> bool:
-        return (self.leave or self.game_state.current_fishing_area.casts == 0
-                or not self.game_state.player.is_alive() or
-                not self.game_state.player.has_usable_bait)
+        no_casts_left = self.game_state.current_fishing_area.casts == 0
+        no_active_fish = self.game_state.current_fish is None
+        player_dead = not self.game_state.player.is_alive()
+        no_bait = not self.game_state.player.has_usable_bait
+
+        return (
+                self.leave
+                or (no_casts_left and no_active_fish)
+                or player_dead
+                or no_bait
+        )
 
     def display_options(self) -> None:
+        display_boat_header(self.game_state)
+
         for component in self.selection_components:
             component.display_options()
 
@@ -274,7 +288,7 @@ class Compendium(LabeledSelectionComponent):
             LabeledSelectionComponent(
                 game_state,
                 compendium_bindings,
-                top_level_prompt_callback=display_fish_log_header,
+                top_level_prompt_callback=display_compendium_header,
             ),
             LabeledSelectionComponent(
                 game_state,

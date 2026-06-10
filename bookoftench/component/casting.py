@@ -27,7 +27,7 @@ class DryCastCheck(NoOpComponent):
         if not dry:
             SpawnFish(self.game_state).run()
         else:
-            print_and_sleep(yellow("You came up dry."), 1)
+            print_and_sleep("You came up dry.", 1)
             self.game_state.current_fishing_area.casts -= 1
 
     def dry_check(self) -> bool:
@@ -123,7 +123,7 @@ class LaunchFishBattle(GatekeepingComponent):
         super().__init__(game_state, decision_function=lambda: self.game_state.current_fish is not None,
                          accept_component=FishBattle,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             yellow("You came up dry."), 1)))
+                             dim("You came up dry."), 1)))
 
 # ================================================================================================
 # ================================================================================================
@@ -141,7 +141,8 @@ class FishBattle(LabeledSelectionComponent):
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
 
         super().__init__(game_state, refresh_menu=True,
-                         bindings=[*fishing_battle_option_bindings, view_actions_binding, view_info_binding, return_binding])
+                         bindings=[*fishing_battle_option_bindings, view_actions_binding,
+                                   view_info_binding, return_binding])
         self.selection_components = [
             LabeledSelectionComponent(
                 game_state,
@@ -162,8 +163,15 @@ class FishBattle(LabeledSelectionComponent):
         self.leave = True
 
     def can_exit(self) -> bool:
-        return (self.leave or not self.game_state.player.is_alive() or
-                self.game_state.current_fishing_area.casts == 0 or not self.game_state.current_fish)
+        no_casts_left = self.game_state.current_fishing_area.casts == 0
+        no_active_fish = self.game_state.current_fish is None
+
+        return (
+                self.leave
+                or not self.game_state.player.is_alive()
+                or no_active_fish
+                or (no_casts_left and no_active_fish)
+        )
 
     def display_options(self) -> None:
         display_fishing_battle_header(self.game_state)
@@ -218,7 +226,7 @@ class EndFishBattle(NoOpComponent):
             self.sell_fish()
             self.update_log()
         self.reset_state()
-        return None
+        return self.game_state
 
     def display_catch(self):
         fish = self.game_state.current_fish
@@ -285,6 +293,7 @@ class FishTurn(NoOpComponent):
     def run(self):
         fish = self.game_state.current_fish
         player = self.game_state.player
+        fishing_area = self.game_state.current_fishing_area
 
         self.spit_hook(fish, player)
 
@@ -292,7 +301,7 @@ class FishTurn(NoOpComponent):
             EndFishBattle(self.game_state).run()
             return
 
-        run = self.fish_runs(fish)
+        run = self.fish_runs(fish, fishing_area)
         self.fish_gains_rage(fish, run)
         self.update_fish_state(fish)
         self.apply_fish_turn_outcome()
@@ -300,7 +309,20 @@ class FishTurn(NoOpComponent):
         if fish.lost:
             EndFishBattle(self.game_state).run()
         else:
+            self.adrenaline_rush(fish)
             return
+
+    @staticmethod
+    def adrenaline_rush(fish):
+        if fish.adrenaline_ready:
+            stamina_percentage = (fish.stamina / fish.max_stamina) * 100
+            if stamina_percentage <= 10:
+                name = fish.name if fish.species_known else "Unknown Fish"
+                stamina_gain_pct = random.randint(10, 20)
+                stamina_gain = round(fish.max_stamina * stamina_gain_pct / 100)
+                fish.stamina += stamina_gain
+                print_and_sleep(yellow(f"The {name} found a second wind and gained {stamina_gain} stamina!"))
+                fish.adrenaline_ready = False
 
     @staticmethod
     def spit_hook(fish, player):
@@ -310,8 +332,9 @@ class FishTurn(NoOpComponent):
             fish.lost = True
 
     @staticmethod
-    def fish_runs(fish) -> int:
+    def fish_runs(fish, fishing_area) -> int:
         stamina_ratio = fish.stamina / fish.max_stamina
+        run_mult = fishing_area.run_mult
 
         # --- stamina ---
         if stamina_ratio < 0.33:
@@ -331,14 +354,29 @@ class FishTurn(NoOpComponent):
         else:
             state_modifier = 1
 
+        # --- burst ---
+        burst_chance = min(0.15, fish.speed * 0.08)
+        if random.random() < burst_chance:
+            burst = True
+        else:
+            burst = False
+
+        # --- run ---
         run = random.randint(2, 5)
         run *= fish.speed
         run *= stamina_modifier
         run *= state_modifier
-        run = max(1, round(run))
-        fish.distance += run
+        run *= run_mult
+        if burst:
+            total_run = max(1, round(run * 2))
+            if total_run > 5:
+                print_and_sleep(yellow(f"The fish had a burst of speed!"))
+        else:
+            total_run = max(1, round(run))
 
-        return run
+        fish.distance += total_run
+
+        return total_run
 
     @staticmethod
     def fish_gains_rage(fish, run):
@@ -387,13 +425,28 @@ class FishTurn(NoOpComponent):
         fish = self.game_state.current_fish
         area = self.game_state.current_fishing_area
         name = fish.name if fish.species_known else "Unknown Fish"
+        break_chance = min(
+            0.025,
+            ((fish.weight / 1000) + (fish.strength * 0.01))
+            * (fish.rage / 100)
+        )
 
         if fish.distance >= area.escape_distance:
             fish.lost = True
-            print_and_sleep(red(f"The fish gained too much distance and escaped!"), 1.5)
+            print_and_sleep(red(f"The {name} gained too much distance and escaped!"), 1.5)
+            return self.game_state
         elif fish.rage >= 100:
             fish.lost = True
             print_and_sleep(red(f"The enraged {name} broke free and escaped!"), 1.5)
+            return self.game_state
+        elif fish.rage >= 80:
+            if random.random() < break_chance:
+                fish.lost = True
+                print_and_sleep(red("The fish snapped the line and escaped!"), 1.5)
+                return self.game_state
+            return None
+        else:
+            return None
 
 
 # ================================================================================================
@@ -417,6 +470,7 @@ class Pull(NoOpComponent):
     def get_pull(self) -> int:
         # --- variables ---
         player = self.game_state.player
+        pull_mult = self.game_state.current_fishing_area.pull_mult
         fish = self.game_state.current_fish
         missing_stamina_ratio = (fish.max_stamina - fish.stamina) / fish.max_stamina
         pull_bonus = missing_stamina_ratio * 5
@@ -435,6 +489,7 @@ class Pull(NoOpComponent):
 
         pull *= min(player.strength, 1.25)
         pull *= get_rod_modifier(player)
+        pull *= pull_mult
         pull = max(1, pull)
 
         return round(pull)
@@ -466,7 +521,6 @@ class Pull(NoOpComponent):
         print_action_results(fish, action, original_distance, original_stamina, original_rage)
 
     def apply_pull_outcome(self):
-        player = self.game_state.player
         fish = self.game_state.current_fish
         location = self.game_state.current_fishing_area.name
         name = fish.name if fish.species_known else "Unknown Fish"
@@ -674,6 +728,7 @@ class ObserveFish(NoOpComponent):
             word = SPECIES
             value = fish.base_name
             fish.species_observed = True
+            fish.species_known = True
         elif observation == VARIANT:
             color = purple
             word = VARIANT
