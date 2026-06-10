@@ -15,7 +15,8 @@ from .game_state import GameState
 from ..data.areas import CAVE, CITY, FOREST, SWAMP
 from ..data.enemies import CONTAGIOUS, BOSS, SPECIAL_BOSS, FINAL_BOSS, NORMAL
 from ..data.enviroment import DAY
-from ..data.fish import AGITATED, SPOOKED, CALM, SHALLOWS, BAY, OCEAN, Fish_Species, MALE, FEMALE
+from ..data.fish import AGITATED, SPOOKED, CALM, SHALLOWS, BAY, OCEAN, Fish_Species, MALE, FEMALE, COMMON, UNCOMMON, \
+    RARE, LEGENDARY
 from ..data.fishing_areas import WET_SEASON
 
 
@@ -710,10 +711,10 @@ def display_fishing_stats(game_state: GameState) -> None:
         print_and_sleep(yellow("Go catch some fish fool."))
     else:
         print_and_sleep("\n".join([
-            f"Total:          {blue(len(caught))}",
-            f"Shallows:       {blue(len(shallows_fish))}",
-            f"Bay:            {blue(len(bay_fish))}",
-            f"Ocean:          {blue(len(ocean_fish))}",
+            f"Total:          {(len(caught))}",
+            f"Shallows:       {(len(shallows_fish))}",
+            f"Bay:            {(len(bay_fish))}",
+            f"Ocean:          {(len(ocean_fish))}",
             "",
             f"Largest:        {blue(f'{largest.name:<{space}}')} {pipe} {yellow(largest.weight)} lbs, {yellow(largest.length)} in",
             f"Smallest:       {blue(f'{smallest.name:<{space}}')} {pipe} {yellow(smallest.weight)} lbs, {yellow(smallest.length)} in",
@@ -728,36 +729,36 @@ def display_fishing_stats(game_state: GameState) -> None:
 
 # ================================================================================================
 
-def display_shallows_fish(game_state: GameState) -> None:
+def display_area_log(game_state: GameState, area: str) -> None:
     player = game_state.player
 
-    shallows = [
+    all_catches_in_area = [
         fish for fish in player.caught_fish
         if fish.catch_location == SHALLOWS
     ]
 
-    if not shallows:
+    if not all_catches_in_area:
         print_and_sleep(yellow("Log is dry."))
         return
 
-    print_and_sleep(cyan("=== SHALLOWS ==="))
+    print_and_sleep(cyan(f"=== {area.upper()} ==="))
 
-    shallows_species = {i['name'] for i in Fish_Species if SHALLOWS in i['areas']}
-    caught_species = {i.base_name for i in player.caught_fish if SHALLOWS in i.areas}
+    area_species = {i['name'] for i in Fish_Species if area in i['areas']}
+    caught_species = {i.base_name for i in player.caught_fish if area in i.areas}
 
-    total = len(shallows_species)
+    total = len(area_species)
     caught = len(caught_species)
     percentage = round((caught / total) * 100)
 
     print_and_sleep(f"Caught: {caught}/{total} ({percentage}%)", 2)
 
-    name_width = max(len(fish.name) for fish in shallows)
-    rarity_width = max(len(fish.get_rarity_text()) for fish in shallows)
+    name_width = max(len(fish.name) for fish in all_catches_in_area)
+    rarity_width = max(len(fish.get_rarity_text()) for fish in all_catches_in_area)
 
-    length_width = max(len(str(fish.length)) for fish in shallows)
-    weight_width = max(len(str(fish.weight)) for fish in shallows)
+    length_width = max(len(str(fish.length)) for fish in all_catches_in_area)
+    weight_width = max(len(str(fish.weight)) for fish in all_catches_in_area)
 
-    for fish in sorted(shallows, key=lambda fish: fish.base_name):
+    for fish in sorted(all_catches_in_area, key=lambda fish: fish.base_name):
         sex_color = blue if fish.sex == MALE else purple if fish.sex == FEMALE else orange
 
         print_and_sleep(
@@ -770,104 +771,6 @@ def display_shallows_fish(game_state: GameState) -> None:
                 f"{yellow(f'{get_percentile_text(fish.size_percentile)}')}",
             ])
         )
-
-    print("")
-
-# ================================================================================================
-
-def display_bay_fish(game_state: GameState) -> None:
-    player = game_state.player
-
-    bay = [
-        fish for fish in player.caught_fish
-        if fish.catch_location == BAY
-    ]
-
-    if not bay:
-        print_and_sleep(yellow("Log is dry."))
-        return
-
-    print_and_sleep(cyan("=== BAY ==="))
-
-    bay_species = {i['name'] for i in Fish_Species if BAY in i['areas']}
-    caught_species = {i.base_name for i in player.caught_fish if BAY in i.areas}
-
-    total = len(bay_species)
-    caught = len(caught_species)
-    percentage = round((caught / total) * 100)
-
-    print_and_sleep(f"Caught: {caught}/{total} ({percentage}%)", 2)
-
-    name_width = max(len(fish.name) for fish in bay)
-    rarity_width = max(len(fish.get_rarity_text()) for fish in bay)
-
-    length_width = max(len(str(fish.length)) for fish in bay)
-    weight_width = max(len(str(fish.weight)) for fish in bay)
-
-    for fish in sorted(bay, key=lambda fish: fish.base_name):
-        sex_color = blue if fish.sex == MALE else purple if fish.sex == FEMALE else orange
-
-        print_and_sleep(
-            dim(" | ").join([
-                blue(f"{fish.name:<{name_width}}"),
-                f"{fish.get_rarity_text():<{rarity_width}}",
-                f"{sex_color(fish.sex[0])}",
-                f"{yellow(f'{fish.length:>{length_width}}')} in",
-                f"{yellow(f'{fish.weight:>{weight_width}}')} lbs",
-                f"{yellow(f'{get_percentile_text(fish.size_percentile)}')}",
-            ])
-        )
-
-        print("")
-
-    print("")
-
-# ================================================================================================
-
-def display_ocean_fish(game_state: GameState) -> None:
-    player = game_state.player
-
-    ocean = [
-        fish for fish in player.caught_fish
-        if fish.catch_location == OCEAN
-    ]
-
-    if not ocean:
-        print_and_sleep(yellow("Log is dry."))
-        return
-
-    print_and_sleep(cyan("=== OCEAN ==="))
-
-    ocean_species = {i['name'] for i in Fish_Species if OCEAN in i['areas']}
-    caught_species = {i.base_name for i in player.caught_fish if OCEAN in i.areas}
-
-    length_width = max(len(str(fish.length)) for fish in ocean)
-    weight_width = max(len(str(fish.weight)) for fish in ocean)
-
-    total = len(ocean_species)
-    caught = len(caught_species)
-    percentage = round((caught / total) * 100)
-
-    print_and_sleep(f"Caught: {caught}/{total} ({percentage}%)", 2)
-
-    name_width = max(len(fish.name) for fish in ocean)
-    rarity_width = max(len(fish.get_rarity_text()) for fish in ocean)
-
-    for fish in sorted(ocean, key=lambda fish: fish.base_name):
-        sex_color = blue if fish.sex == MALE else purple if fish.sex == FEMALE else orange
-
-        print_and_sleep(
-            dim(" | ").join([
-                blue(f"{fish.name:<{name_width}}"),
-                f"{fish.get_rarity_text():<{rarity_width}}",
-                f"{sex_color(fish.sex[0])}",
-                f"{yellow(f'{fish.length:>{length_width}}')} in",
-                f"{yellow(f'{fish.weight:>{weight_width}}')} lbs",
-                f"{yellow(f'{get_percentile_text(fish.size_percentile)}')}",
-            ])
-        )
-
-        print("")
 
     print("")
 
@@ -882,3 +785,90 @@ def get_percentile_text(percentile):
         return yellow(text)
     else:
         return red(text)
+
+# ================================================================================================
+
+def display_area_compendium(game_state: GameState, area: str) -> None:
+    player = game_state.player
+
+    print_and_sleep(cyan(f"=== {area.upper()} COMPENDIUM ==="))
+
+    # --- filtering ---
+    area_species = [
+        species for species in Fish_Species
+        if area in species['areas']
+    ]
+
+    caught_species = {
+        fish.base_name for fish in player.caught_fish
+        if area in fish.areas
+    }
+
+    total = len(area_species)
+    caught = len(caught_species)
+    percentage = round((caught / total) * 100) if total else 0
+
+    print_and_sleep(f"Discovered: {caught}/{total} ({percentage}%)", 2)
+
+    # --- spacing ---
+    name_width = max(
+        len(species['name']) if species['name'] in caught_species else len("Unknown Creature")
+        for species in area_species
+    )
+
+    rarity_width = max(
+        len(species['rarity'])
+        for species in area_species
+    )
+
+    area_width = max(
+        len(", ".join(species['areas']))
+        for species in area_species
+    )
+
+    bait_width = max(
+        len(", ".join(
+            b.name if hasattr(b, "name") else str(b)
+            for b in species['preferred_bait']
+        ))
+        for species in area_species
+    )
+
+
+    # --- iterate and print ---
+    for species in sorted(area_species, key=lambda species: species['name']):
+        discovered = species['name'] in caught_species
+
+        name = species['name'] if discovered else "Unknown Creature"
+        name_color = blue if discovered else dim
+
+        area_text = ", ".join(species['areas'])
+        bait_text = ", ".join(
+            b.name if hasattr(b, "name") else str(b)
+            for b in species['preferred_bait']
+        )
+
+        rarity = species['rarity']
+
+        print_and_sleep(
+            dim(" | ").join([
+                name_color(f"{name:<{name_width}}"),
+                get_rarity_text(f"{rarity:<{rarity_width}}"),
+                blue(f"{area_text:<{area_width}}"),
+                cyan(f"{bait_text:<{bait_width}}"),
+            ])
+        )
+
+    print("")
+
+def get_rarity_text(rarity: str) -> str:
+    raw = rarity.strip()
+
+    if raw == COMMON:
+        return yellow(rarity)
+    elif raw == UNCOMMON:
+        return green(rarity)
+    elif raw == RARE:
+        return blue(rarity)
+    else:
+        return orange(rarity)

@@ -1,20 +1,17 @@
-import random
-
-from bookoftench import event_logger
 from bookoftench.audio import play_music, play_sound
 from bookoftench.component.base import LabeledSelectionComponent, SelectionBinding, ReprBinding, Component, \
     functional_component, TextDisplayingComponent
 from bookoftench.component.casting import DryCastCheck
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import EQUIP_WEAPON, OCEAN_THEME, SHALLOWS_THEME, BAY_THEME
-from bookoftench.data.boat import TACKLE_BOX, FISHING_OPTIONS, CAST, FISHING_LOG, SHOP
-from bookoftench.data.components import BOAT
+from bookoftench.data.boat import TACKLE_BOX, FISHING_OPTIONS, CAST, FISHING_LOG
+from bookoftench.data.components import BOAT, COMPENDIUM
 from bookoftench.data.enviroment import DAY
 from bookoftench.data.fish import SHALLOWS, OCEAN, BAY
 from bookoftench.model import GameState
 from bookoftench.model.bait import Bait
 from bookoftench.model.util import display_boat_header, display_tackle_box_header, display_fish_log_header, \
-    display_fishing_stats, display_shallows_fish, display_bay_fish, display_ocean_fish
+    display_fishing_stats, display_area_log, display_area_compendium
 from bookoftench.ui import blue
 from bookoftench.util import print_and_sleep
 
@@ -24,7 +21,7 @@ from bookoftench.util import print_and_sleep
 register_component(BOAT)
 class BoatComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        self.fishing_area = self.game_state.current_fishing_area.name
+        self.fishing_area = game_state.current_fishing_area.name
         original = FISHING_OPTIONS.copy()
         options = [i['name'] for i in original]
 
@@ -181,10 +178,12 @@ class FishingLog(LabeledSelectionComponent):
                                i, area in enumerate(areas)]
 
         stats_binding = SelectionBinding('S', "Stats", FishingStats)
+        compendium_binding = SelectionBinding('C', "Compendium", functional_component()
+                                             (lambda: self.open_compendium()))
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
 
         super().__init__(game_state, refresh_menu=True,
-                         bindings=[*fishing_area_bindings, stats_binding, return_binding])
+                         bindings=[*fishing_area_bindings, stats_binding, compendium_binding, return_binding])
         self.selection_components = [
             LabeledSelectionComponent(
                 game_state,
@@ -193,7 +192,7 @@ class FishingLog(LabeledSelectionComponent):
             ),
             LabeledSelectionComponent(
                 game_state,
-                [stats_binding, return_binding]
+                [stats_binding, compendium_binding, return_binding]
             ),
         ]
         self.leave = False
@@ -201,6 +200,91 @@ class FishingLog(LabeledSelectionComponent):
     def play_theme(self) -> None:
         pass
         # play_music(FISHMONGER_THEME)
+
+    def _return(self):
+        self.leave = True
+
+    def open_compendium(self):
+        return Compendium(self.game_state).run()
+
+    def can_exit(self) -> bool:
+        return self.leave or not self.game_state.player.is_alive()
+
+    def display_options(self) -> None:
+        for component in self.selection_components:
+            component.display_options()
+
+# ================================================================================================
+
+    @staticmethod
+    def _handle_selection_component(selection: str) -> type[Component]:
+        @functional_component(state_dependent=True)
+        def selection_component(game_state: GameState):
+
+            if selection == SHALLOWS:
+                AreaFishLog(game_state, SHALLOWS).run()
+                return None
+            elif selection == BAY:
+                AreaFishLog(game_state, BAY).run()
+                return None
+            elif selection == OCEAN:
+                AreaFishLog(game_state, OCEAN).run()
+                return None
+            else:
+                return None
+
+        return selection_component
+
+# ================================================================================================
+
+class FishingStats(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_fishing_stats)
+
+
+class AreaFishLog(TextDisplayingComponent):
+    def __init__(self, game_state: GameState, area: str):
+        self.area = area
+        super().__init__(
+            game_state,
+            display_callback=self.display_log
+        )
+
+    def display_log(self, game_state: GameState):
+        return display_area_log(game_state, self.area)
+
+
+# ================================================================================================
+# ================================================================================================
+
+@register_component(COMPENDIUM)
+class Compendium(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState):
+        areas = [SHALLOWS, BAY, OCEAN]
+
+        compendium_bindings = [ReprBinding(str(i + 1), area,
+                                           self._handle_selection_component(area), area) for
+                               i, area in enumerate(areas)]
+
+        return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
+
+        super().__init__(game_state, refresh_menu=True,
+                         bindings=[*compendium_bindings, return_binding])
+        self.selection_components = [
+            LabeledSelectionComponent(
+                game_state,
+                compendium_bindings,
+                top_level_prompt_callback=display_fish_log_header,
+            ),
+            LabeledSelectionComponent(
+                game_state,
+                [return_binding],
+            ),
+        ]
+        self.leave = False
+
+    def play_theme(self) -> None:
+        pass
 
     def _return(self):
         self.leave = True
@@ -220,13 +304,13 @@ class FishingLog(LabeledSelectionComponent):
         def selection_component(game_state: GameState):
 
             if selection == SHALLOWS:
-                ShallowsFishLog(game_state).run()
+                AreaCompendium(game_state, SHALLOWS).run()
                 return None
             elif selection == BAY:
-                BayFishLog(game_state).run()
+                AreaCompendium(game_state, BAY).run()
                 return None
             elif selection == OCEAN:
-                OceanFishLog(game_state).run()
+                AreaCompendium(game_state, OCEAN).run()
                 return None
             else:
                 return None
@@ -235,20 +319,14 @@ class FishingLog(LabeledSelectionComponent):
 
 # ================================================================================================
 
-class FishingStats(TextDisplayingComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state, display_callback=display_fishing_stats)
+class AreaCompendium(TextDisplayingComponent):
+    def __init__(self, game_state: GameState, area: str):
+        self.area = area
+        super().__init__(
+            game_state,
+            display_callback=self.display_compendium
+        )
 
+    def display_compendium(self, game_state: GameState):
+        return display_area_compendium(game_state, self.area)
 
-class ShallowsFishLog(TextDisplayingComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state, display_callback=display_shallows_fish)
-
-
-class BayFishLog(TextDisplayingComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state, display_callback=display_bay_fish)
-
-class OceanFishLog(TextDisplayingComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state, display_callback=display_ocean_fish)

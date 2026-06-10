@@ -73,8 +73,9 @@ class Fish:
         self.length = random.randint(self.min_length, self.max_length)
         weight_factor = random.uniform(self.min_weight_factor, self.max_weight_factor)
         self.weight = round(((self.length ** 2) * weight_factor) / 144, 2)
-        self.get_size()
-        self.get_value(weight_factor)
+        self.size = self.get_size()
+        self.size_percentile = self.get_size_percentile(weight_factor)
+        self.value = self.get_value()
 
         # --- state, variant, and related variables ---
         self.get_state()
@@ -86,11 +87,11 @@ class Fish:
 
 # ================================================================================================
 
-    def get_size(self):
+    def get_size(self) -> float | int:
         size = self.length * self.weight
-        self.size = int(size)
+        return size
 
-    def get_value(self, weight_factor):
+    def get_size_percentile(self, weight_factor: float) -> int:
         length_pct = (
                 (self.length - self.min_length) / (self.max_length - self.min_length)
         )
@@ -100,11 +101,15 @@ class Fish:
         )
 
         size_pct = (length_pct + weight_pct) / 2
+
+        return round(size_pct * 100)
+
+    def get_value(self) -> int:
+        size_pct = self.size_percentile
         modifier = 0.80 + (size_pct * 0.4)
         value = round(self.base_value * modifier)
 
-        self.size_percentile = round(size_pct * 100) # log size percentile
-        self.value = value
+        return value
 
     def get_state(self):
         roll = random.random()

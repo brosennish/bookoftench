@@ -8,7 +8,6 @@ from bookoftench.component.registry import register_component
 from bookoftench.data.audio import PURCHASE, TRAVEL_THEME, FISHMONGER_THEME_1, FISHMONGER_THEME_2, FISHMONGER_THEME_3
 from bookoftench.data.bait import Bait_And_Lures
 from bookoftench.data.fishing_areas import Fishing_Areas
-from bookoftench.data.fishmonger import Fishmonger_Lines
 from bookoftench.data.components import FISHMONGER
 from bookoftench.model import GameState
 from bookoftench.model.FishingArea import load_fishing_areas, FishingArea
@@ -37,8 +36,6 @@ class Fishmonger(LabeledSelectionComponent):
         self.theme = random.choice(themes)
 
         player = game_state.player
-        cost = get_rod_upgrade_cost(player)
-        cost_display = orange(f"{cost}")
         valid = [i['name'] for i in Fishing_Areas if i['lvl'] <= player.lvl]
         available = load_fishing_areas(valid)
 
@@ -48,13 +45,13 @@ class Fishmonger(LabeledSelectionComponent):
 
         bait_shop_binding = SelectionBinding('S', "Shop", functional_component()(lambda: self.bait_shop()))
         tackle_box_binding = SelectionBinding('T', "Tackle Box", functional_component()(lambda: self.tackle_box()))
-        upgrade_rod_binding = SelectionBinding('U', f"Upgrade Rod ({cost_display})",
-                                               functional_component()(lambda: upgrade_rod(player, cost)))
+        fishing_log_binding = SelectionBinding('L', "Fishing Log", functional_component()(lambda: self.fishing_log()))
 
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
 
         super().__init__(game_state, refresh_menu=True,
-                         bindings=[*fishing_area_bindings, bait_shop_binding, tackle_box_binding, upgrade_rod_binding,
+                         bindings=[*fishing_area_bindings, bait_shop_binding,
+                                   tackle_box_binding, fishing_log_binding,
                                    return_binding])
         self.selection_components = [
             LabeledSelectionComponent(
@@ -64,7 +61,7 @@ class Fishmonger(LabeledSelectionComponent):
             ),
             LabeledSelectionComponent(
                 game_state,
-                [bait_shop_binding, tackle_box_binding, upgrade_rod_binding, return_binding],
+                [bait_shop_binding, tackle_box_binding, fishing_log_binding, return_binding],
             ),
         ]
         self.leave = False
@@ -81,6 +78,9 @@ class Fishmonger(LabeledSelectionComponent):
 
     def tackle_box(self):
         TackleBox(self.game_state).run()
+
+    def fishing_log(self):
+        FishingLog(self.game_state).run()
 
     def can_exit(self) -> bool:
         return self.leave or not self.game_state.player.is_alive()
@@ -122,6 +122,11 @@ class Fishmonger(LabeledSelectionComponent):
 
 class BaitShop(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
+        player = game_state.player
+
+        cost = get_rod_upgrade_cost(player)
+        cost_display = orange(f"{cost}")
+
         valid = [i['name'] for i in Bait_And_Lures]
         available = load_baits(valid)
 
@@ -129,10 +134,12 @@ class BaitShop(LabeledSelectionComponent):
                                        self._make_purchase_component(bait), bait) for
                           i, bait in enumerate(available)]
 
+        upgrade_rod_binding = SelectionBinding('U', f"Upgrade Rod ({cost_display})",
+                                               functional_component()(lambda: upgrade_rod(player, cost)))
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
 
         super().__init__(game_state, refresh_menu=True,
-                         bindings=[*bait_bindings, return_binding])
+                         bindings=[*bait_bindings, upgrade_rod_binding, return_binding])
         self.selection_components = [
             LabeledSelectionComponent(
                 game_state,
@@ -141,7 +148,7 @@ class BaitShop(LabeledSelectionComponent):
             ),
             LabeledSelectionComponent(
                 game_state,
-                [return_binding]
+                [upgrade_rod_binding, return_binding]
             ),
         ]
         self.leave = False
