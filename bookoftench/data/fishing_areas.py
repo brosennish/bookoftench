@@ -11,7 +11,7 @@ DRY_SEASON = "Dry Season"
 WET_SEASON = "Wet Season"
 
 # Season Effects
-DRY_SEASON_BITE_CHANCE_EFFECT = -0.05
+DRY_SEASON_BITE_CHANCE_EFFECT = -0.10
 WET_SEASON_BITE_CHANCE_EFFECT = 0.05
 
 # Bite Chance Multiplier

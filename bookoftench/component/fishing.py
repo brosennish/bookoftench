@@ -4,7 +4,7 @@ from bookoftench.component.base import LabeledSelectionComponent, SelectionBindi
 from bookoftench.component.casting import DryCastCheck
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import EQUIP_WEAPON, OCEAN_THEME, SHALLOWS_THEME, BAY_THEME
-from bookoftench.data.boat import TACKLE_BOX, FISHING_OPTIONS, CAST, FISHING_LOG
+from bookoftench.data.boat import TACKLE_BOX, FISHING_OPTIONS, CAST, FISHING_LOG, ALL_NEW_ONLY
 from bookoftench.data.components import BOAT, COMPENDIUM
 from bookoftench.data.enviroment import DAY
 from bookoftench.data.fish import SHALLOWS, OCEAN, BAY
@@ -18,7 +18,7 @@ from bookoftench.util import print_and_sleep
 # ================================================================================================
 # ================================================================================================
 
-register_component(BOAT)
+@register_component(BOAT)
 class BoatComponent(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         self.fishing_area = game_state.current_fishing_area.name
@@ -31,17 +31,14 @@ class BoatComponent(LabeledSelectionComponent):
 
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
 
-        super().__init__(
-            game_state,
-            refresh_menu=True,
-            bindings=[*fishing_option_bindings, return_binding],
-            top_level_prompt_callback=display_boat_header,
-        )
+        super().__init__(game_state, refresh_menu=True,
+                         bindings=[*fishing_option_bindings, return_binding])
 
         self.selection_components = [
             LabeledSelectionComponent(
                 game_state,
                 fishing_option_bindings,
+
             ),
             LabeledSelectionComponent(
                 game_state,
@@ -77,7 +74,16 @@ class BoatComponent(LabeledSelectionComponent):
                 or no_bait
         )
 
+    def toggle_fish(self):
+        if self.game_state.all_fish:
+            self.game_state.all_fish = False
+        else:
+            self.game_state.all_fish = True
+
     def display_options(self) -> None:
+        if self.can_exit():
+            return
+
         display_boat_header(self.game_state)
 
         for component in self.selection_components:
@@ -103,7 +109,6 @@ class BoatComponent(LabeledSelectionComponent):
                 if player.current_bait.casts == 0:
                     print_and_sleep(f"{blue('Need some fresh bait mate.')}", 1)
                     return None
-
                 game_state.player.current_bait.casts -= 1
                 DryCastCheck(game_state).run()
                 return None
@@ -117,7 +122,9 @@ class BoatComponent(LabeledSelectionComponent):
                 else:
                     print_and_sleep(f"{blue('Tackle box is dry.')}", 1)
                 return None
-
+            elif selection == ALL_NEW_ONLY:
+                BoatComponent(game_state).toggle_fish()
+                return None
             else:
                 return None
 

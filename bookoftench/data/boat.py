@@ -1,7 +1,8 @@
-from bookoftench.ui import blue, green, cyan, purple, red, yellow
+from bookoftench.ui import blue, green, cyan, purple, red, yellow, white
 
 # ================================================================================================
 
+ALL_NEW_ONLY = 'All/New Only'
 CAST = "Cast"
 FISHING_LOG = "Fishing Log"
 SHOP = "Shop"
@@ -11,6 +12,7 @@ FISHING_OPTIONS = [
     {'name': CAST, 'color': cyan},
     {'name': TACKLE_BOX, 'color': purple},
     {'name': FISHING_LOG, 'color': blue},
+    {'name': ALL_NEW_ONLY, 'color': green},
 ]
 
 # ================================================================================================

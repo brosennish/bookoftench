@@ -127,14 +127,13 @@ class Fish:
             self.state = f.CALM
 
     def get_variant(self):
-        if random.random() < 0.5:
-            variants = VARIANTS.copy()
-            random.shuffle(variants)
-            for i in variants:
-                if random.random() < i['chance']:
-                    self.variant = i['name']
-                    self.init_variant_effects()
-                    break
+        variants = VARIANTS.copy()
+        random.shuffle(variants)
+        for i in variants:
+            if random.random() < i['chance']:
+                self.variant = i['name']
+                self.init_variant_effects()
+                break
 
     def init_variant_effects(self):
         if self.variant == ALBINO:

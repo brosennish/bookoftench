@@ -24,12 +24,19 @@ class DryCastCheck(NoOpComponent):
         super().__init__(game_state)
 
     def run(self):
+        if self.game_state.current_fishing_area.casts == 0:
+            return self.game_state
+
+        # Spend exactly one cast immediately.
+        self.game_state.current_fishing_area.casts -= 1
+
         dry = self.dry_check()
-        if not dry:
-            SpawnFish(self.game_state).run()
-        else:
+
+        if dry:
             print_and_sleep("You came up dry.", 1)
-            self.game_state.current_fishing_area.casts -= 1
+            return self.game_state
+
+        return SpawnFish(self.game_state).run()
 
     def dry_check(self) -> bool:
         bite_chance = self.game_state.current_fishing_area.bite_chance
@@ -64,19 +71,30 @@ class SpawnFish(LinearComponent):
         super().__init__(game_state, next_component=LaunchFishBattle)
 
     def execute_current(self) -> GameState:
-        return self.spawn_fish()
+        self.spawn_fish()
+        return self.game_state
 
-    def spawn_fish(self) -> GameState:
+    def spawn_fish(self) -> GameState | None:
+        player = self.game_state.player
         fishing_area = self.game_state.current_fishing_area
+        all_fish = self.game_state.all_fish
         time = self.game_state.time_of_day
         moon = self.game_state.moon
         bait = self.game_state.player.current_bait
-        if  bait.casts == 0:
-            self.game_state.player.current_bait  = None
+
+        if bait.casts == 0:
+            self.game_state.player.current_bait = None
+            return None
+
+        if all_fish:
+            valid = Fish_Species
+        else:
+            caught = [i.name for i in player.caught_fish]
+            valid = [i for i in Fish_Species if i['name'] not in caught]
 
         filtered = [
             i['name']
-            for i in Fish_Species
+            for i in valid
             if fishing_area.name in i['areas']
                and time in i['time']
                and (i['moon'] is None or moon in i['moon'])
@@ -84,27 +102,28 @@ class SpawnFish(LinearComponent):
         ]
 
         fishes = load_fishes(filtered)
-
         rarity = self.get_rarity(self.game_state.player.luck)
-
         available = [i for i in fishes if i.rarity == rarity]
 
-        if available:
-            selection = random.choice(available)
-            selection.distance = random.randint(
-                fishing_area.min_hook_distance,
-                fishing_area.max_hook_distance
-            )
-            self.game_state.current_fish = selection
-            stop_music()
-            play_sound(FISH_ON)
-            play_sound(ENEMY_APPEARS)
-            print_and_sleep(orange("Fish on!"), 1.5)
-            self.game_state.current_fishing_area.casts -= 1
-        else:
+        if not available:
             self.game_state.current_fish = None
+            print_and_sleep(dim("You came up dry."), 1)
+            return None
 
-        return self.game_state
+        selection = random.choice(available)
+        selection.distance = random.randint(
+            fishing_area.min_hook_distance,
+            fishing_area.max_hook_distance
+        )
+
+        self.game_state.current_fish = selection
+
+        stop_music()
+        play_sound(FISH_ON)
+        play_sound(ENEMY_APPEARS)
+        print_and_sleep(orange("Fish on!"), 1.5)
+
+        return None
 
 # ================================================================================================
 
@@ -125,8 +144,7 @@ class LaunchFishBattle(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, decision_function=lambda: self.game_state.current_fish is not None,
                          accept_component=FishBattle,
-                         deny_component=functional_component()(lambda: print_and_sleep(
-                             dim("You came up dry."), 1)))
+                         deny_component=functional_component()(lambda: None))
 
 # ================================================================================================
 # ================================================================================================
@@ -172,14 +190,12 @@ class FishBattle(LabeledSelectionComponent):
         self.leave = True
 
     def can_exit(self) -> bool:
-        no_casts_left = self.game_state.current_fishing_area.casts == 0
         no_active_fish = self.game_state.current_fish is None
 
         return (
                 self.leave
                 or not self.game_state.player.is_alive()
                 or no_active_fish
-                or (no_casts_left and no_active_fish)
         )
 
     def display_options(self) -> None:
@@ -238,13 +254,21 @@ class EndFishBattle(NoOpComponent):
         return self.game_state
 
     def display_catch(self):
+        player = self.game_state.player
         fish = self.game_state.current_fish
         rarity = fish.get_rarity_text()
+
+        caught = [i.base_name for i in player.caught_fish]
+        if fish.base_name not in caught:
+            new = green("[NEW SPECIES]")
+        else:
+            new = ""
+
         play_sound(CATCH_FISH)
         play_sound(GOLF_CLAP)
 
         print_and_sleep("\n".join([
-            cyan(f"You caught a {fish.name}!"),
+            cyan(f"You caught a {fish.name}! {new}"),
             "",
             dim(f"{fish.description}"),
             "",

@@ -214,6 +214,12 @@ def display_boat_header(game_state: GameState):
     bait_color = yellow if bait == "None" else cyan
     casts = game_state.current_fishing_area.casts
     casts_color = c_color(casts)
+    if game_state.all_fish:
+        pref_color = blue
+        pref_text = "All"
+    else:
+        pref_color = green
+        pref_text = "New"
 
     # --- top row ---
     top_row = f"{dim(' | ').join([
@@ -221,6 +227,7 @@ def display_boat_header(game_state: GameState):
         f"{blue(f"{game_state.current_fishing_area.name}")}",
         f"{yellow(tod_display) if tod == DAY else purple(tod_display)}",
         f"{moon} Moon",
+        f"{pref_color(pref_text)}",
     ])}\n"
 
     # --- bottom row ---

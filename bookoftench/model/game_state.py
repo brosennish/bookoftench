@@ -43,9 +43,11 @@ class GameState:
 
     bank: Bank = field(default_factory=Bank)
     areas: List[Area] = field(default_factory=load_areas)
+
     current_area: Area = None
     current_fishing_area: FishingArea | None = None
     current_fish: Fish | None = None
+    all_fish: bool = True
 
     pending_boss: bool = False
 
