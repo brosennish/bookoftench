@@ -233,7 +233,7 @@ Fish_Species = [
      'description': 'A formidable reptilian predator that has changed little since the age of the dinosaurs.',
      },
 
-    {'name': ALLIGATOR_GAR, 'rarity': RARE, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': ALLIGATOR_GAR, 'rarity': UNCOMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 24, 'max_length': 120, 'min_weight_factor': 0.35, 'max_weight_factor': 1.10,
      'base_value': 80, 'rage_factor': 0.80, 'speed': 0.95, 'strength': 2.00, 'max_stamina': 150,
      'preferred_bait': [b.MINNOW, b.MEAT, b.FROG, b.RATTLER],
@@ -249,7 +249,7 @@ Fish_Species = [
      'description': 'A prehistoric-looking turtle that lures fish with a worm-like appendage hidden inside its mouth.',
      },
 
-    {'name': AMBERJACK, 'rarity': UNCOMMON, 'areas': [BAY, OCEAN], 'time': [DAY], 'moon': None,
+    {'name': AMBERJACK, 'rarity': COMMON, 'areas': [BAY, OCEAN], 'time': [DAY], 'moon': None,
      'min_length': 18, 'max_length': 72, 'min_weight_factor': 0.25, 'max_weight_factor': 0.75,
      'base_value': 95, 'rage_factor': 1.20, 'speed': 1.30, 'strength': 1.80, 'max_stamina': 140,
      'preferred_bait': [b.SQUID, b.MINNOW, b.SPOON, b.RATTLER],
@@ -281,7 +281,7 @@ Fish_Species = [
      'description': 'A deep-sea predator that uses a glowing lure to attract prey in the darkness.',
      },
 
-    {'name': ARAPAIMA, 'rarity': RARE, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': ARAPAIMA, 'rarity': UNCOMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 60, 'max_length': 180, 'min_weight_factor': 0.40, 'max_weight_factor': 1.20,
      'base_value': 120, 'rage_factor': 0.90, 'speed': 1.10, 'strength': 2.20, 'max_stamina': 180,
      'preferred_bait': [b.MINNOW, b.MEAT, b.FROG, b.RATTLER],
@@ -321,7 +321,7 @@ Fish_Species = [
      'description': 'A highly vocal Arctic whale known for its white coloration and remarkable facial expressions.',
      },
 
-    {'name': BIGMOUTH_BUFFALO, 'rarity': RARE, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': BIGMOUTH_BUFFALO, 'rarity': UNCOMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 18, 'max_length': 60, 'min_weight_factor': 0.70, 'max_weight_factor': 1.80,
      'base_value': 55, 'rage_factor': 0.65, 'speed': 0.55, 'strength': 1.50, 'max_stamina': 130,
      'preferred_bait': [b.DOUGH_BALL, b.WORM, b.KRILL, b.CRICKET],
@@ -329,7 +329,7 @@ Fish_Species = [
      'description': 'A massive native sucker fish capable of living for more than a century.',
      },
 
-    {'name': BLACKTIP_SHARK, 'rarity': UNCOMMON, 'areas': [BAY, OCEAN], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': BLACKTIP_SHARK, 'rarity': COMMON, 'areas': [BAY, OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 24, 'max_length': 72, 'min_weight_factor': 0.20, 'max_weight_factor': 0.60,
      'base_value': 120, 'rage_factor': 1.20, 'speed': 1.60, 'strength': 1.30, 'max_stamina': 110,
      'preferred_bait': [b.MEAT, b.SQUID, b.RATTLER, b.SHRIMP],
@@ -353,7 +353,7 @@ Fish_Species = [
      'description': 'A dark-colored sea turtle found primarily in the eastern Pacific, known for its long migrations and coastal feeding grounds.',
      },
 
-    {'name': BLUEFIN_TUNA, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': BLUEFIN_TUNA, 'rarity': UNCOMMON, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 36, 'max_length': 144, 'min_weight_factor': 0.35, 'max_weight_factor': 1.00,
      'base_value': 140, 'rage_factor': 0.95, 'speed': 1.60, 'strength': 2.00, 'max_stamina': 220,
      'preferred_bait': [b.SQUID, b.MINNOW, b.SPOON, b.RATTLER],
@@ -369,7 +369,7 @@ Fish_Species = [
      'description': 'A small sunfish known for its willingness to bite and energetic fight.',
      },
 
-    {'name': BLUE_CATFISH, 'rarity': UNCOMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': BLUE_CATFISH, 'rarity': COMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 12, 'max_length': 72, 'min_weight_factor': 0.30, 'max_weight_factor': 0.90,
      'base_value': 65, 'rage_factor': 0.75, 'speed': 0.70, 'strength': 2.10, 'max_stamina': 140,
      'preferred_bait': [b.MEAT, b.MINNOW, b.WORM, b.RATTLER],
@@ -401,7 +401,7 @@ Fish_Species = [
      'description': 'The largest animal ever known to have lived on Earth, feeding almost exclusively on tiny krill.',
      },
 
-    {'name': BONEFISH, 'rarity': RARE, 'areas': [BAY], 'time': [DAY], 'moon': None,
+    {'name': BONEFISH, 'rarity': UNCOMMON, 'areas': [BAY], 'time': [DAY], 'moon': None,
      'min_length': 12, 'max_length': 36, 'min_weight_factor': 0.20, 'max_weight_factor': 0.55,
      'base_value': 80, 'rage_factor': 1.15, 'speed': 2.20, 'strength': 1.20, 'max_stamina': 85,
      'preferred_bait': [b.SHRIMP, b.CRAB, b.FLY, b.MINNOW],
@@ -417,7 +417,7 @@ Fish_Species = [
      'description': 'A clever ocean mammal with surprising power and endurance.',
     },
 
-    {'name': BOWFIN, 'rarity': UNCOMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': BOWFIN, 'rarity': COMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 12, 'max_length': 36, 'min_weight_factor': 0.20, 'max_weight_factor': 0.55,
      'base_value': 30, 'rage_factor': 1.20, 'speed': 1.00, 'strength': 1.40, 'max_stamina': 90,
      'preferred_bait': [b.MINNOW, b.FROG, b.CRAY, b.RATTLER],
@@ -425,7 +425,7 @@ Fish_Species = [
      'description': 'A primitive freshwater predator that has survived largely unchanged for over 150 million years.',
      },
 
-    {'name': BROOK_TROUT, 'rarity': UNCOMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': BROOK_TROUT, 'rarity': COMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 4, 'max_length': 24, 'min_weight_factor': 0.10, 'max_weight_factor': 0.30,
      'base_value': 22, 'rage_factor': 1.00, 'speed': 1.15, 'strength': 0.90, 'max_stamina': 60,
      'preferred_bait': [b.FLY, b.WORM, b.CRICKET, b.MINNOW],
@@ -441,7 +441,7 @@ Fish_Species = [
      'description': 'A wary trout known for its intelligence, adaptability, and willingness to ambush larger prey.',
      },
 
-    {'name': BULL_SHARK, 'rarity': RARE, 'areas': [SHALLOWS, BAY, OCEAN], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': BULL_SHARK, 'rarity': UNCOMMON, 'areas': [SHALLOWS, BAY, OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 36, 'max_length': 120, 'min_weight_factor': 1.20, 'max_weight_factor': 2.80,
      'base_value': 170, 'rage_factor': 1.25, 'speed': 1.2, 'strength': 2.45, 'max_stamina': 115,
      'preferred_bait': [b.MEAT, b.SQUID, b.RATTLER],
@@ -449,7 +449,7 @@ Fish_Species = [
      'description': 'A large, aggressive shark that can enter freshwater.',
      },
 
-    {'name': CHANNEL_CATFISH, 'rarity': UNCOMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': CHANNEL_CATFISH, 'rarity': COMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 12, 'max_length': 42, 'min_weight_factor': 0.22, 'max_weight_factor': 0.50,
      'base_value': 45, 'rage_factor': 1.05, 'speed': 0.75, 'strength': 1.55, 'max_stamina': 80,
      'preferred_bait': [b.WORM, b.MEAT, b.DOUGH_BALL, b.CRAY, b.RATTLER],
@@ -497,7 +497,7 @@ Fish_Species = [
      'description': 'A colossal deep-sea predator armed with enormous eyes and tentacles lined with rotating hooks.',
     },
 
-    {'name': COMMON_CARP, 'rarity': UNCOMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': COMMON_CARP, 'rarity': COMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 12, 'max_length': 48, 'min_weight_factor': 0.45, 'max_weight_factor': 1.10,
      'base_value': 35, 'rage_factor': 0.85, 'speed': 0.75, 'strength': 1.35, 'max_stamina': 95,
      'preferred_bait': [b.DOUGH_BALL, b.WORM, b.CRICKET, b.KRILL, b.SHRIMP],
@@ -505,7 +505,7 @@ Fish_Species = [
      'description': 'A heavy-bodied fish famous for its endurance and stubborn fights.',
      },
 
-    {'name': COMMON_STINGRAY, 'rarity': UNCOMMON, 'areas': [BAY], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': COMMON_STINGRAY, 'rarity': COMMON, 'areas': [BAY], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 12, 'max_length': 72, 'min_weight_factor': 0.20, 'max_weight_factor': 0.80,
      'base_value': 50, 'rage_factor': 0.30, 'speed': 0.40, 'strength': 1.60, 'max_stamina': 110,
      'preferred_bait': [b.SHRIMP, b.CRAB, b.SQUID, b.MEAT],
@@ -561,7 +561,7 @@ Fish_Species = [
      'description': 'A South American predator capable of generating powerful electrical discharges to stun prey and defend itself.',
      },
 
-    {'name': FLATHEAD_CATFISH, 'rarity': UNCOMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': FLATHEAD_CATFISH, 'rarity': COMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 12, 'max_length': 60, 'min_weight_factor': 0.30, 'max_weight_factor': 0.80,
      'base_value': 70, 'rage_factor': 0.85, 'speed': 0.65, 'strength': 1.90, 'max_stamina': 120,
      'preferred_bait': [b.MINNOW, b.CRAY, b.WORM, b.RATTLER],
@@ -601,7 +601,7 @@ Fish_Species = [
      'description': 'The world\'s longest living bony fish.'
      },
 
-    {'name': GIANT_OCTOPUS, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': GIANT_OCTOPUS, 'rarity': UNCOMMON, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 36, 'max_length': 180, 'min_weight_factor': 0.25, 'max_weight_factor': 0.90,
      'base_value': 120, 'rage_factor': 0.45, 'speed': 0.60, 'strength': 1.75, 'max_stamina': 140,
      'preferred_bait': [b.CRAB, b.SHRIMP, b.SQUID, b.MEAT, b.GLOW_LURE],
@@ -625,7 +625,7 @@ Fish_Species = [
      'description': 'A colossal freshwater ray that hugs the river bottom and can weigh well over a thousand pounds.',
      },
 
-    {'name': GIANT_TREVALLY, 'rarity': RARE, 'areas': [BAY, OCEAN], 'time': [DAY], 'moon': None,
+    {'name': GIANT_TREVALLY, 'rarity': UNCOMMON, 'areas': [BAY, OCEAN], 'time': [DAY], 'moon': None,
      'min_length': 24, 'max_length': 72, 'min_weight_factor': 0.30, 'max_weight_factor': 0.85,
      'base_value': 120, 'rage_factor': 1.25, 'speed': 1.55, 'strength': 1.85, 'max_stamina': 140,
      'preferred_bait': [b.SQUID, b.MINNOW, b.CRAB, b.SPOON],
@@ -673,7 +673,7 @@ Fish_Species = [
      'description': 'A ferocious African predator armed with dagger-like teeth and explosive speed.',
      },
 
-    {'name': GOONCH_CATFISH, 'rarity': RARE, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': GOONCH_CATFISH, 'rarity': UNCOMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 24, 'max_length': 84, 'min_weight_factor': 0.35, 'max_weight_factor': 0.90,
      'base_value': 85, 'rage_factor': 0.85, 'speed': 0.70, 'strength': 2.00, 'max_stamina': 140,
      'preferred_bait': [b.MEAT, b.CRAY, b.WORM, b.RATTLER],
@@ -705,7 +705,7 @@ Fish_Species = [
      'description': 'A large marine turtle that spends much of its life grazing on seagrass and algae in coastal waters.',
      },
 
-    {'name': HALIBUT, 'rarity': UNCOMMON, 'areas': [BAY, OCEAN], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': HALIBUT, 'rarity': COMMON, 'areas': [BAY, OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 18, 'max_length': 108, 'min_weight_factor': 0.30, 'max_weight_factor': 1.00,
      'base_value': 90, 'rage_factor': 0.45, 'speed': 0.50, 'strength': 1.90, 'max_stamina': 140,
      'preferred_bait': [b.SQUID, b.CRAB, b.SHRIMP, b.RATTLER],
@@ -737,7 +737,7 @@ Fish_Species = [
      'description': 'A colorful reef fish that uses its pig-like snout to root through sand and rubble for prey.',
      },
 
-    {'name': HORSESHOE_CRAB, 'rarity': UNCOMMON, 'areas': [BAY], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': HORSESHOE_CRAB, 'rarity': COMMON, 'areas': [BAY], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 10, 'max_length': 30, 'min_weight_factor': 0.15, 'max_weight_factor': 0.40,
      'base_value': 25, 'rage_factor': 0.10, 'speed': 0.10, 'strength': 0.80, 'max_stamina': 70,
      'preferred_bait': [b.SHRIMP, b.CRAB, b.KRILL, b.MEAT],
@@ -785,7 +785,7 @@ Fish_Species = [
      'description': 'A sleek pelagic predator capable of blistering runs and lightning-fast strikes.',
      },
 
-    {'name': KING_SALMON, 'rarity': RARE, 'areas': [BAY], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': KING_SALMON, 'rarity': UNCOMMON, 'areas': [BAY], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 18, 'max_length': 60, 'min_weight_factor': 0.60, 'max_weight_factor': 1.60,
      'base_value': 50, 'rage_factor': 1.15, 'speed': 1.90, 'strength': 1.80, 'max_stamina': 120,
      'preferred_bait': [b.MINNOW, b.SPOON, b.FLY, b.SHRIMP],
@@ -801,7 +801,7 @@ Fish_Species = [
      'description': 'A cold-water char that can grow to impressive sizes in deep lakes and northern waters.',
      },
 
-    {'name': LAMPREY, 'rarity': UNCOMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': LAMPREY, 'rarity': COMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 8, 'max_length': 30, 'min_weight_factor': 0.08, 'max_weight_factor': 0.18,
      'base_value': 15, 'rage_factor': 1.35, 'speed': 1.45, 'strength': 0.75, 'max_stamina': 45,
      'preferred_bait': [b.WORM, b.CRAY, b.MEAT],
@@ -849,7 +849,7 @@ Fish_Species = [
      'description': 'A streamlined gar with an exceptionally long snout built for snatching fish near the surface.',
      },
 
-    {'name': MAHI_MAHI, 'rarity': UNCOMMON, 'areas': [OCEAN], 'time': [DAY], 'moon': None,
+    {'name': MAHI_MAHI, 'rarity': COMMON, 'areas': [OCEAN], 'time': [DAY], 'moon': None,
      'min_length': 20, 'max_length': 60, 'min_weight_factor': 0.15, 'max_weight_factor': 0.35,
      'base_value': 90, 'rage_factor': 1.30, 'speed': 1.50, 'strength': 0.90, 'max_stamina': 85,
      'preferred_bait': [b.MINNOW, b.SQUID, b.SHRIMP, b.FLY],
@@ -881,7 +881,7 @@ Fish_Species = [
      'description': 'A brilliantly colored reef fish often considered one of the most beautiful fish in the ocean.',
      },
 
-    {'name': MANTA_RAY, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': MANTA_RAY, 'rarity': UNCOMMON, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 48, 'max_length': 180, 'min_weight_factor': 0.20, 'max_weight_factor': 0.70,
      'base_value': 120, 'rage_factor': 0.25, 'speed': 0.70, 'strength': 1.40, 'max_stamina': 120,
      'preferred_bait': [b.KRILL, b.SHRIMP, b.SQUID],
@@ -1121,7 +1121,7 @@ Fish_Species = [
      'description': 'A powerful fish with human-like teeth built for crushing shells and mussels.',
      },
 
-    {'name': SMALLMOUTH_BASS, 'rarity': UNCOMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': SMALLMOUTH_BASS, 'rarity': COMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 10, 'max_length': 26, 'min_weight_factor': 0.25, 'max_weight_factor': 0.55,
      'base_value': 30, 'rage_factor': 1.25, 'speed': 1.55, 'strength': 1.35, 'max_stamina': 65,
      'preferred_bait': [b.MINNOW, b.CRAY, b.CRICKET, b.FROG, b.SPOON],
