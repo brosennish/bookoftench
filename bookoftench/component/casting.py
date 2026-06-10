@@ -1,12 +1,13 @@
 import random
 
-from bookoftench.audio import play_sound
+from bookoftench.audio import play_sound, stop_music, play_music
 from bookoftench.component.base import functional_component, GatekeepingComponent, \
     LabeledSelectionComponent, ReprBinding, SelectionBinding, Component, NoOpComponent, LinearComponent, \
     TextDisplayingComponent
-from bookoftench.data.audio import COINS, CATCH_FISH, GOLF_CLAP, FISH_ON, CAST
+from bookoftench.data.audio import COINS, CATCH_FISH, GOLF_CLAP, FISH_ON, CAST, ENEMY_APPEARS, BATTLE_THEME, \
+    OCEAN_THEME, BAY_THEME, SHALLOWS_THEME, FISH
 from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED, \
-    possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, RAGE_FACTOR, RARITY, STAMINA
+    possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, RAGE_FACTOR, RARITY, STAMINA, SHALLOWS, BAY
 from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL
 from bookoftench.data.fishing_areas import WET_SEASON_BITE_CHANCE_EFFECT, DRY_SEASON_BITE_CHANCE_EFFECT, WET_SEASON
 from bookoftench.model import GameState
@@ -95,7 +96,9 @@ class SpawnFish(LinearComponent):
                 fishing_area.max_hook_distance
             )
             self.game_state.current_fish = selection
+            stop_music()
             play_sound(FISH_ON)
+            play_sound(ENEMY_APPEARS)
             print_and_sleep(orange("Fish on!"), 1.5)
             self.game_state.current_fishing_area.casts -= 1
         else:
@@ -156,8 +159,14 @@ class FishBattle(LabeledSelectionComponent):
         self.leave = False
 
     def play_theme(self) -> None:
-        pass
-        # play_music(FISHING_THEME)
+        play_sound(FISH)
+
+        if self.game_state.current_fishing_area == SHALLOWS:
+            play_music(SHALLOWS_THEME)
+        elif self.game_state.current_fishing_area == BAY:
+            play_music(BAY_THEME)
+        else:
+            play_music(OCEAN_THEME)
 
     def _return(self):
         self.leave = True
@@ -309,6 +318,8 @@ class FishTurn(NoOpComponent):
         if fish.lost:
             EndFishBattle(self.game_state).run()
         else:
+            if random.random() < 0.15:
+                play_sound(FISH)
             self.adrenaline_rush(fish)
             return
 
