@@ -71,7 +71,7 @@ class Fish:
         # --- core characteristics ---
         self.base_name = self.name
         self.age = random.randint(1, self.max_age)
-        self.sex = random.choice([f.MALE, f.FEMALE])
+        self.sex = random.choice([f.MALE, f.FEMALE, f.HERMAPHRODITE])
 
         # --- size and value ---
         self.length = random.randint(self.min_length, self.max_length)

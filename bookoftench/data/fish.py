@@ -106,6 +106,7 @@ OPAH = "Opah"
 PADDLEFISH = "Paddlefish"
 PARROTFISH = "Parrot Fish"
 PIKE = "Pike"
+POMPANO = "Pompano"
 RAINBOW_TROUT = "Rainbow Trout"
 RED_BELLIED_PIRANHA = "Red Bellied Piranha"
 RED_DRUM = "Red Drum"
@@ -1028,7 +1029,7 @@ Fish_Species = [
      'spit_hook_chance': 0.001, 'protected': False, 'max_age': 35,
      'description': 'A slow-moving bottom-dwelling shark known for its strength and stubborn endurance.',
      },
-    
+
     {'name': OPAH, 'rarity': UNCOMMON, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 24, 'max_length': 72, 'min_weight_factor': 0.35, 'max_weight_factor': 0.90,
      'base_value': 105, 'rage_factor': 1.05, 'speed': 1.35, 'strength': 1.60, 'max_stamina': 120,
