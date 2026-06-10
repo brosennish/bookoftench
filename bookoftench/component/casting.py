@@ -271,7 +271,7 @@ class EndFishBattle(NoOpComponent):
         from bookoftench.component import OfficerEncounter
 
         if self.game_state.current_fish.protected:
-            if random.random() < 0.5:
+            if random.random() < 0.25:
                 OfficerEncounter(self.game_state).run()
         self.game_state.current_fish = None
 
