@@ -135,10 +135,11 @@ class BoatComponent(LabeledSelectionComponent):
 class TackleBox(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
+
         available = [i for i in player.tackle_box.values() if i.casts > 0 and i != player.current_bait]
 
         tackle_box_bindings = [ReprBinding(str(i + 1), bait.name,
-                                           self._handle_selection_component(bait), bait) for
+                                           self._handle_selection_component(bait, self), bait) for
                                i, bait in enumerate(available)]
 
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
@@ -158,9 +159,9 @@ class TackleBox(LabeledSelectionComponent):
         ]
         self.leave = False
 
+
     def play_theme(self) -> None:
         pass
-        # play_music(FISHMONGER_THEME)
 
     def _return(self):
         self.leave = True
@@ -175,7 +176,7 @@ class TackleBox(LabeledSelectionComponent):
 # ================================================================================================
 
     @staticmethod
-    def _handle_selection_component(selection: Bait) -> type[Component]:
+    def _handle_selection_component(selection: Bait, parent) -> type[Component]:
         @functional_component(state_dependent=True)
         def selection_component(game_state: GameState):
             player = game_state.player
@@ -183,6 +184,7 @@ class TackleBox(LabeledSelectionComponent):
             player.equip_bait(selection)
             play_sound(EQUIP_WEAPON)
             print_and_sleep(f"{cyan(selection.name)} equipped.", 1)
+            parent.leave = True
 
         return selection_component
 

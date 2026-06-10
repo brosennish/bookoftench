@@ -19,9 +19,11 @@ BIGMOUTH_BUFFALO = "Bigmouth Buffalo"
 BLACK_MARLIN = "Black Marlin"
 BLACK_SEA_TURTLE = "Black Sea Turtle"
 BLACKTIP_SHARK = "Blacktip Shark"
+BLOBFISH = "Blobfish"
 BLUE_CATFISH = "Blue Catfish"
 BLUEFIN_TUNA = "Bluefin Tuna"
 BLUEGILL = "Bluegill"
+BLUEFISH = "Bluefish"
 BLUE_MARLIN = "Blue Marlin"
 BLUE_RINGED_OCTOPUS = "Blue-ringed Octopus"
 BLUE_WHALE = "Blue Whale"
@@ -29,12 +31,14 @@ BONEFISH = "Bonefish"
 BOTTLENOSE_DOLPHIN = "Bottlenose Dolphin"
 BOWFIN = "Bowfin"
 BROOK_TROUT = "Brook Trout"
+BURBOT = "Burbot"
 BROWN_TROUT ="Brown Trout"
 BULL_SHARK = "Bull Shark"
 CHANNEL_CATFISH = "Channel Catfish"
 CHINOOK_SALMON = "Chinook Salmon"
 CLIONE = "Clione"
 CLOWNFISH = "Clownfish"
+COBIA = "Cobia"
 COELACANTH = "Coelacanth"
 COLOSSAL_SQUID = "Colossal Squid"
 COMMON_CARP = "Common Carp"
@@ -54,6 +58,7 @@ GIANT_OCTOPUS = "Giant Octopus"
 GIANT_SQUID = "Giant Squid"
 GIANT_STINGRAY = "Giant Stingray"
 GIANT_TREVALLY = "Giant Trevally"
+GIZZARD_SHAD = "Gizzard Shad"
 GOBLIN_SHARK = "Goblin Shark"
 GOLDEN_TENCH = "Golden Tench"
 GOLDFISH = "Goldfish"
@@ -74,6 +79,7 @@ KILLER_WHALE = "Killer Whale"
 KING_CRAB = "King Crab"
 KING_MACKEREL = "King Mackerel"
 KING_SALMON = "King Salmon"
+LAKE_STURGEON = "Lake Sturgeon"
 LAKE_TROUT = "Lake Trout"
 LAMPREY = "Lamprey"
 LARGEMOUTH_BASS = "Largemouth Bass"
@@ -96,6 +102,7 @@ MULLET = "Mullet"
 MUSKIE = "Muskie"
 NARWHAL = "Narwhal"
 NURSE_SHARK = "Nurse Shark"
+OPAH = "Opah"
 PADDLEFISH = "Paddlefish"
 PARROTFISH = "Parrot Fish"
 PIKE = "Pike"
@@ -105,13 +112,16 @@ RED_DRUM = "Red Drum"
 REDEAR_SUNFISH = "Redear Sunfish"
 RED_SNAPPER = "Red Snapper"
 RIVER_DOLPHIN = "River Dolphin"
+ROCK_BASS = "Rock Bass"
 ROCKFISH = "Rockfish"
+ROOSTERFISH = "Roosterfish"
 ROUND_GOBY = "Round Goby"
 SAILFISH = "Sailfish"
 SAND_TIGER_SHARK = "Sand Tiger Shark"
 SARDINE = "Sardine"
 SAWFISH = "Sawfish"
 SEA_BASS = "Sea Bass"
+SEA_CUCUMBER = "Sea Cucumber"
 SEAHORSE = "Seahorse"
 SEA_PIG ="Sea Pig"
 SHEEPSHEAD = "Sheepshead"
@@ -132,8 +142,10 @@ VAMPIRE_SQUID = "Vampire Squid"
 WAHOO ="Wahoo"
 WALLEYE = "Walleye"
 WHALE_SHARK = "Whale Shark"
+WHITE_CRAPPIE = "White Crappie"
 WHITE_SIDED_DOLPHIN ="White-sided Dolphin"
 WHITE_STURGEON = "White Sturgeon"
+WHITE_SUCKER = "White Sucker"
 WOBBEGONG = "Wobbegong"
 WOLF_EEL = "Wolf Eel"
 WOLF_FISH = "Wolf Fish"
@@ -329,14 +341,6 @@ Fish_Species = [
      'description': 'A massive native sucker fish capable of living for more than a century.',
      },
 
-    {'name': BLACKTIP_SHARK, 'rarity': COMMON, 'areas': [BAY, OCEAN], 'time': [DAY, NIGHT], 'moon': None,
-     'min_length': 24, 'max_length': 72, 'min_weight_factor': 0.20, 'max_weight_factor': 0.60,
-     'base_value': 120, 'rage_factor': 1.20, 'speed': 1.60, 'strength': 1.30, 'max_stamina': 110,
-     'preferred_bait': [b.MEAT, b.SQUID, b.RATTLER, b.SHRIMP],
-     'spit_hook_chance': 0.002, 'protected': False, 'max_age': 15,
-     'description': 'A fast coastal shark famous for spectacular leaps and explosive feeding frenzies.',
-     },
-
     {'name': BLACK_MARLIN, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY], 'moon': None,
      'min_length': 72, 'max_length': 180, 'min_weight_factor': 0.40, 'max_weight_factor': 1.10,
      'base_value': 170, 'rage_factor': 1.10, 'speed': 1.70, 'strength': 2.10, 'max_stamina': 230,
@@ -352,6 +356,22 @@ Fish_Species = [
      'spit_hook_chance': 0.003, 'protected': True, 'max_age': 80,
      'description': 'A dark-colored sea turtle found primarily in the eastern Pacific, known for its long migrations and coastal feeding grounds.',
      },
+
+    {'name': BLACKTIP_SHARK, 'rarity': COMMON, 'areas': [BAY, OCEAN], 'time': [DAY, NIGHT], 'moon': None,
+     'min_length': 24, 'max_length': 72, 'min_weight_factor': 0.20, 'max_weight_factor': 0.60,
+     'base_value': 120, 'rage_factor': 1.20, 'speed': 1.60, 'strength': 1.30, 'max_stamina': 110,
+     'preferred_bait': [b.MEAT, b.SQUID, b.RATTLER, b.SHRIMP],
+     'spit_hook_chance': 0.002, 'protected': False, 'max_age': 15,
+     'description': 'A fast coastal shark famous for spectacular leaps and explosive feeding frenzies.',
+     },
+
+    {'name': BLOBFISH, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
+     'min_length': 10, 'max_length': 24, 'min_weight_factor': 0.18, 'max_weight_factor': 0.45,
+     'base_value': 85, 'rage_factor': 0.40, 'speed': 0.25, 'strength': 0.50, 'max_stamina': 35,
+     'preferred_bait': [b.SHRIMP, b.SQUID, b.KRILL],
+     'spit_hook_chance': 0.001, 'protected': False, 'max_age': 20,
+     'description': 'A deep-sea fish famous for its unusual appearance when brought to the surface.',
+    },
 
     {'name': BLUEFIN_TUNA, 'rarity': UNCOMMON, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 36, 'max_length': 144, 'min_weight_factor': 0.35, 'max_weight_factor': 1.00,
@@ -376,6 +396,14 @@ Fish_Species = [
      'spit_hook_chance': 0.003, 'protected': False, 'max_age': 25,
      'description': 'The largest catfish in North America, capable of reaching enormous sizes in major rivers.',
      },
+
+    {'name': BLUEFISH, 'rarity': COMMON, 'areas': [BAY, OCEAN], 'time': [DAY], 'moon': None,
+     'min_length': 12, 'max_length': 40, 'min_weight_factor': 0.22, 'max_weight_factor': 0.55,
+     'base_value': 40, 'rage_factor': 1.55, 'speed': 1.75, 'strength': 1.05, 'max_stamina': 55,
+     'preferred_bait': [b.MINNOW, b.SHRIMP, b.SPOON],
+     'spit_hook_chance': 0.006, 'protected': False, 'max_age': 12,
+     'description': 'An aggressive schooling predator with razor-sharp teeth and explosive strikes.',
+    },
 
     {'name': BLUE_MARLIN, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY], 'moon': None,
      'min_length': 72, 'max_length': 168, 'min_weight_factor': 0.30, 'max_weight_factor': 0.85,
@@ -449,6 +477,14 @@ Fish_Species = [
      'description': 'A large, aggressive shark that can enter freshwater.',
      },
 
+    {'name': BURBOT, 'rarity': UNCOMMON, 'areas': [SHALLOWS], 'time': [NIGHT], 'moon': None,
+     'min_length': 12, 'max_length': 40, 'min_weight_factor': 0.22, 'max_weight_factor': 0.55,
+     'base_value': 45, 'rage_factor': 0.85, 'speed': 0.85, 'strength': 1.15, 'max_stamina': 75,
+     'preferred_bait': [b.MINNOW, b.CRAY, b.MEAT],
+     'spit_hook_chance': 0.003, 'protected': False, 'max_age': 20,
+     'description': 'A freshwater cod that prowls the depths at night and fights with stubborn determination.',
+    },
+
     {'name': CHANNEL_CATFISH, 'rarity': COMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 12, 'max_length': 42, 'min_weight_factor': 0.22, 'max_weight_factor': 0.50,
      'base_value': 45, 'rage_factor': 1.05, 'speed': 0.75, 'strength': 1.55, 'max_stamina': 80,
@@ -480,6 +516,14 @@ Fish_Species = [
      'spit_hook_chance': 0.012, 'protected': False, 'max_age': 10,
      'description': 'A brightly colored reef fish that lives among the protective tentacles of sea anemones.',
      },
+
+    {'name': COBIA, 'rarity': UNCOMMON, 'areas': [BAY, OCEAN], 'time': [DAY], 'moon': None,
+     'min_length': 24, 'max_length': 78, 'min_weight_factor': 0.28, 'max_weight_factor': 0.80,
+     'base_value': 95, 'rage_factor': 1.10, 'speed': 1.25, 'strength': 1.70, 'max_stamina': 110,
+     'preferred_bait': [b.CRAB, b.SHRIMP, b.SQUID, b.MEAT],
+     'spit_hook_chance': 0.003, 'protected': False, 'max_age': 18,
+     'description': 'A powerful coastal predator famous for stubborn fights and broad, muscular builds.',
+    },
 
     {'name': COELACANTH, 'rarity': LEGENDARY, 'areas': [OCEAN], 'time': [NIGHT], 'moon': None,
      'min_length': 48, 'max_length': 78, 'min_weight_factor': 0.50, 'max_weight_factor': 1.20,
@@ -632,6 +676,14 @@ Fish_Species = [
      'spit_hook_chance': 0.002, 'protected': False, 'max_age': 25,
      'description': 'A powerful reef predator renowned for explosive strikes and extraordinary fighting ability.',
      },
+
+    {'name': GIZZARD_SHAD, 'rarity': COMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY], 'moon': None,
+     'min_length': 6, 'max_length': 20, 'min_weight_factor': 0.10, 'max_weight_factor': 0.25,
+     'base_value': 8, 'rage_factor': 0.90, 'speed': 1.30, 'strength': 0.55, 'max_stamina': 25,
+     'preferred_bait': [b.WORM, b.DOUGH_BALL, b.FLY],
+     'spit_hook_chance': 0.008, 'protected': False, 'max_age': 8,
+     'description': 'A common forage fish that travels in massive schools and darts erratically when hooked.',
+    },
 
     {'name': GOBLIN_SHARK, 'rarity': LEGENDARY, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 48, 'max_length': 180, 'min_weight_factor': 0.35, 'max_weight_factor': 1.00,
@@ -817,6 +869,14 @@ Fish_Species = [
      'description': 'An aggressive freshwater predator known for explosive strikes and fierce fights.',
      },
 
+    {'name': LAKE_STURGEON, 'rarity': RARE, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
+     'min_length': 36, 'max_length': 120, 'min_weight_factor': 0.45, 'max_weight_factor': 1.25,
+     'base_value': 140, 'rage_factor': 0.75, 'speed': 0.70, 'strength': 2.50, 'max_stamina': 220,
+     'preferred_bait': [b.WORM, b.CRAY, b.MEAT],
+     'spit_hook_chance': 0.001, 'protected': True, 'max_age': 80,
+     'description': 'A prehistoric giant capable of living for decades and overpowering inexperienced anglers.',
+    },
+
     {'name': LEATHERBACK_SEA_TURTLE, 'rarity': LEGENDARY, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 48, 'max_length': 96, 'min_weight_factor': 0.60, 'max_weight_factor': 1.80,
      'base_value': 180, 'rage_factor': 0.15, 'speed': 0.40, 'strength': 2.20, 'max_stamina': 180,
@@ -968,6 +1028,14 @@ Fish_Species = [
      'spit_hook_chance': 0.001, 'protected': False, 'max_age': 35,
      'description': 'A slow-moving bottom-dwelling shark known for its strength and stubborn endurance.',
      },
+    
+    {'name': OPAH, 'rarity': UNCOMMON, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
+     'min_length': 24, 'max_length': 72, 'min_weight_factor': 0.35, 'max_weight_factor': 0.90,
+     'base_value': 105, 'rage_factor': 1.05, 'speed': 1.35, 'strength': 1.60, 'max_stamina': 120,
+     'preferred_bait': [b.SQUID, b.KRILL, b.MEAT],
+     'spit_hook_chance': 0.002, 'protected': False, 'max_age': 15,
+     'description': 'A large, colorful open-ocean fish and one of the few warm-blooded fish species.',
+    },
 
     {'name': PADDLEFISH, 'rarity': RARE, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 24, 'max_length': 84, 'min_weight_factor': 0.25, 'max_weight_factor': 0.80,
@@ -992,6 +1060,14 @@ Fish_Species = [
      'spit_hook_chance': 0.007, 'protected': False, 'max_age': 25,
      'description': 'A lightning-fast ambush predator armed with rows of razor-sharp teeth.',
      },
+
+    {'name': POMPANO, 'rarity': COMMON, 'areas': [BAY], 'time': [DAY], 'moon': None,
+     'min_length': 8, 'max_length': 24, 'min_weight_factor': 0.18, 'max_weight_factor': 0.40,
+     'base_value': 28, 'rage_factor': 1.20, 'speed': 1.45, 'strength': 0.90, 'max_stamina': 45,
+     'preferred_bait': [b.SHRIMP, b.CRAB, b.SPOON],
+     'spit_hook_chance': 0.005, 'protected': False, 'max_age': 12,
+     'description': 'A sleek coastal fish prized for its speed, flavor, and spirited fight.',
+    },
 
     {'name': RAINBOW_TROUT, 'rarity': UNCOMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY], 'moon': None,
      'min_length': 8, 'max_length': 36, 'min_weight_factor': 0.18, 'max_weight_factor': 0.55,
@@ -1041,6 +1117,14 @@ Fish_Species = [
      'description': 'A pink freshwater dolphin that navigates flooded forests and winding river channels with ease.',
      },
 
+    {'name': ROCK_BASS, 'rarity': COMMON, 'areas': [SHALLOWS], 'time': [DAY], 'moon': None,
+     'min_length': 4, 'max_length': 12, 'min_weight_factor': 0.12, 'max_weight_factor': 0.25,
+     'base_value': 10, 'rage_factor': 1.05, 'speed': 1.00, 'strength': 0.75, 'max_stamina': 30,
+     'preferred_bait': [b.WORM, b.CRICKET, b.MINNOW],
+     'spit_hook_chance': 0.006, 'protected': False, 'max_age': 10,
+     'description': 'A feisty sunfish relative that punches above its weight when hooked.',
+    },
+
     {'name': ROCKFISH, 'rarity': COMMON, 'areas': [BAY, OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 6, 'max_length': 36, 'min_weight_factor': 0.15, 'max_weight_factor': 0.50,
      'base_value': 20, 'rage_factor': 0.60, 'speed': 0.55, 'strength': 1.00, 'max_stamina': 65,
@@ -1048,6 +1132,14 @@ Fish_Species = [
      'spit_hook_chance': 0.004, 'protected': False, 'max_age': 80,
      'description': 'A hardy reef fish that thrives around rocky bottoms, wrecks, and underwater structure.',
      },
+
+    {'name': ROOSTERFISH, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY], 'moon': None,
+     'min_length': 24, 'max_length': 72, 'min_weight_factor': 0.30, 'max_weight_factor': 0.75,
+     'base_value': 110, 'rage_factor': 1.40, 'speed': 1.95, 'strength': 1.40, 'max_stamina': 95,
+     'preferred_bait': [b.MINNOW, b.SQUID, b.SPOON, b.RATTLER],
+     'spit_hook_chance': 0.003, 'protected': False, 'max_age': 15,
+     'description': 'A spectacular game fish recognized by its dramatic comb-like dorsal fin and blistering runs.',
+    },
 
     {'name': ROUND_GOBY, 'rarity': COMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 3, 'max_length': 10, 'min_weight_factor': 0.08, 'max_weight_factor': 0.18,
@@ -1088,6 +1180,14 @@ Fish_Species = [
      'spit_hook_chance': 0.001, 'protected': True, 'max_age': 50,
      'description': 'A critically endangered ray armed with a long saw-like snout used to detect and slash at prey.',
      },
+
+    {'name': SEA_CUCUMBER, 'rarity': COMMON, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
+     'min_length': 4, 'max_length': 20, 'min_weight_factor': 0.15, 'max_weight_factor': 0.45,
+     'base_value': 20, 'rage_factor': 0.20, 'speed': 0.10, 'strength': 0.20, 'max_stamina': 15,
+     'preferred_bait': [b.SHRIMP, b.KRILL],
+     'spit_hook_chance': 0.000, 'protected': False, 'max_age': 10,
+     'description': 'A slow-moving echinoderm that crawls across the seafloor feeding on organic debris.',
+    },
 
     {'name': SEAHORSE, 'rarity': UNCOMMON, 'areas': [BAY], 'time': [DAY], 'moon': None,
      'min_length': 1, 'max_length': 8, 'min_weight_factor': 0.03, 'max_weight_factor': 0.10,
@@ -1249,12 +1349,28 @@ Fish_Species = [
      'description': 'The largest fish in the ocean, a gentle giant that filters tiny prey from the water.',
      },
 
+    {'name': WHITE_CRAPPIE, 'rarity': COMMON, 'areas': [SHALLOWS], 'time': [DAY], 'moon': None,
+     'min_length': 5, 'max_length': 18, 'min_weight_factor': 0.12, 'max_weight_factor': 0.28,
+     'base_value': 12, 'rage_factor': 1.00, 'speed': 1.10, 'strength': 0.70, 'max_stamina': 35,
+     'preferred_bait': [b.MINNOW, b.WORM, b.CRICKET],
+     'spit_hook_chance': 0.006, 'protected': False, 'max_age': 10,
+     'description': 'A popular panfish known for its silvery color, schooling behavior, and excellent table fare.',
+    },
+
     {'name': WHITE_SIDED_DOLPHIN, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 60, 'max_length': 108, 'min_weight_factor': 0.45, 'max_weight_factor': 1.20,
      'base_value': 120, 'rage_factor': 0.85, 'speed': 1.70, 'strength': 1.60, 'max_stamina': 130,
      'preferred_bait': [b.SQUID, b.MINNOW, b.SHRIMP, b.KRILL],
      'spit_hook_chance': 0.002, 'protected': True, 'max_age': 45,
      'description': 'A fast and highly social dolphin known for its acrobatic leaps, playful behavior, and striking white markings along its sides.',
+    },
+
+    {'name': WHITE_SUCKER, 'rarity': COMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
+     'min_length': 8, 'max_length': 24, 'min_weight_factor': 0.18, 'max_weight_factor': 0.40,
+     'base_value': 15, 'rage_factor': 0.80, 'speed': 0.85, 'strength': 0.90, 'max_stamina': 50,
+     'preferred_bait': [b.WORM, b.DOUGH_BALL, b.CRAY],
+     'spit_hook_chance': 0.004, 'protected': False, 'max_age': 15,
+     'description': 'A hardy bottom-feeder often overlooked by anglers despite its surprising resilience.',
     },
 
     {'name': WHITE_STURGEON, 'rarity': RARE, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': None,
