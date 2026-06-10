@@ -268,8 +268,12 @@ class EndFishBattle(NoOpComponent):
         self.game_state.player.caught_fish.append(fish)
 
     def reset_state(self):
-        self.game_state.current_fish = None
+        from bookoftench.component import OfficerEncounter
 
+        if self.game_state.current_fish.protected:
+            if random.random() < 0.5:
+                OfficerEncounter(self.game_state).run()
+        self.game_state.current_fish = None
 
 # ================================================================================================
 # ================================================================================================

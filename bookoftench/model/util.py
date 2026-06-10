@@ -15,7 +15,7 @@ from .game_state import GameState
 from ..data.areas import CAVE, CITY, FOREST, SWAMP
 from ..data.enemies import CONTAGIOUS, BOSS, SPECIAL_BOSS, FINAL_BOSS, NORMAL
 from ..data.enviroment import DAY
-from ..data.fish import AGITATED, SPOOKED, CALM, SHALLOWS, BAY, OCEAN, Fish_Species, MALE
+from ..data.fish import AGITATED, SPOOKED, CALM, SHALLOWS, BAY, OCEAN, Fish_Species, MALE, FEMALE
 from ..data.fishing_areas import WET_SEASON
 
 
@@ -758,14 +758,16 @@ def display_shallows_fish(game_state: GameState) -> None:
     weight_width = max(len(str(fish.weight)) for fish in shallows)
 
     for fish in sorted(shallows, key=lambda fish: fish.base_name):
-        sex_color = blue if fish.sex == MALE else purple
+        sex_color = blue if fish.sex == MALE else purple if fish.sex == FEMALE else orange
+
         print_and_sleep(
             dim(" | ").join([
                 blue(f"{fish.name:<{name_width}}"),
                 f"{fish.get_rarity():<{rarity_width}}",
+                f"{sex_color(fish.sex[0])}",
                 f"{yellow(f'{fish.length:>{length_width}}')} in",
                 f"{yellow(f'{fish.weight:>{weight_width}}')} lbs",
-                f"{sex_color(fish.sex)}",
+                f"{yellow(f'{get_percentile_text(fish.size_percentile)}')}",
             ])
         )
 
@@ -803,16 +805,20 @@ def display_bay_fish(game_state: GameState) -> None:
     weight_width = max(len(str(fish.weight)) for fish in bay)
 
     for fish in sorted(bay, key=lambda fish: fish.base_name):
-        sex_color = blue if fish.sex == MALE else purple
+        sex_color = blue if fish.sex == MALE else purple if fish.sex == FEMALE else orange
+
         print_and_sleep(
             dim(" | ").join([
                 blue(f"{fish.name:<{name_width}}"),
                 f"{fish.get_rarity():<{rarity_width}}",
+                f"{sex_color(fish.sex[0])}",
                 f"{yellow(f'{fish.length:>{length_width}}')} in",
                 f"{yellow(f'{fish.weight:>{weight_width}}')} lbs",
-                f"{sex_color(fish.sex)}",
+                f"{yellow(f'{get_percentile_text(fish.size_percentile)}')}",
             ])
         )
+
+        print("")
 
     print("")
 
@@ -848,15 +854,31 @@ def display_ocean_fish(game_state: GameState) -> None:
     rarity_width = max(len(fish.get_rarity()) for fish in ocean)
 
     for fish in sorted(ocean, key=lambda fish: fish.base_name):
-        sex_color = blue if fish.sex == MALE else purple
+        sex_color = blue if fish.sex == MALE else purple if fish.sex == FEMALE else orange
+
         print_and_sleep(
             dim(" | ").join([
                 blue(f"{fish.name:<{name_width}}"),
                 f"{fish.get_rarity():<{rarity_width}}",
+                f"{sex_color(fish.sex[0])}",
                 f"{yellow(f'{fish.length:>{length_width}}')} in",
                 f"{yellow(f'{fish.weight:>{weight_width}}')} lbs",
-                f"{sex_color(fish.sex)}",
+                f"{yellow(f'{get_percentile_text(fish.size_percentile)}')}",
             ])
         )
 
+        print("")
+
     print("")
+
+# ================================================================================================
+
+def get_percentile_text(percentile):
+    text = f"{percentile}th percentile"
+
+    if percentile >= 90:
+        return green(f"Trophy Specimen ({text})")
+    elif percentile >= 50:
+        return yellow(text)
+    else:
+        return red(text)

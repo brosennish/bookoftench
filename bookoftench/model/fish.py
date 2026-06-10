@@ -22,7 +22,7 @@ class Fish:
 
     min_weight_factor: float
     max_weight_factor: float
-    value_for_size: float
+    base_value: int
 
     rage_factor: float
     speed: float
@@ -31,6 +31,7 @@ class Fish:
     preferred_bait: list[str]
     spit_hook_chance: float
     max_age: int
+    protected: bool
 
     distance: int = 0
     stamina: int = 0
@@ -41,6 +42,7 @@ class Fish:
     weight: int | float | None = None
     value: int | None = None
     size: int | None = None
+    size_percentile: int | None = None
     sex: str | None = None
     state: str | None = None
     variant: str | None = None
@@ -71,9 +73,8 @@ class Fish:
         self.length = random.randint(self.min_length, self.max_length)
         weight_factor = random.uniform(self.min_weight_factor, self.max_weight_factor)
         self.weight = round(((self.length ** 2) * weight_factor) / 144, 2)
-        size = self.length * self.weight
-        self.size = int(size)
-        self.value = max(1, round(size * self.value_for_size))
+        self.get_size()
+        self.get_value(weight_factor)
 
         # --- state, variant, and related variables ---
         self.get_state()
@@ -84,6 +85,26 @@ class Fish:
         self.rage = random.randint(5, 15)
 
 # ================================================================================================
+
+    def get_size(self):
+        size = self.length * self.weight
+        self.size = int(size)
+
+    def get_value(self, weight_factor):
+        length_pct = (
+                (self.length - self.min_length) / (self.max_length - self.min_length)
+        )
+
+        weight_pct = (
+                (weight_factor - self.min_weight_factor) / (self.max_weight_factor - self.min_weight_factor)
+        )
+
+        size_pct = (length_pct + weight_pct) / 2
+        modifier = 0.80 + (size_pct * 0.4)
+        value = round(self.base_value * modifier)
+
+        self.size_percentile = round(size_pct * 100) # log size percentile
+        self.value = value
 
     def get_state(self):
         roll = random.random()
@@ -108,7 +129,7 @@ class Fish:
 
     def init_variant_effects(self):
         if self.variant == ALBINO:
-            self.value *= 1.4
+            self.value *= 1.2
 
         elif self.variant == GLOWING:
             self.value *= 1.8
@@ -119,7 +140,7 @@ class Fish:
             self.max_stamina *= 1.1
 
         elif self.variant == ONE_EYED:
-            self.value *= 1.25
+            self.value *= 1.3
             self.speed *= 0.9
 
         elif self.variant == RADIOACTIVE:
