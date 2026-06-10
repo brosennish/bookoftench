@@ -23,17 +23,17 @@ Fishing_Areas = [
 
     {'name': SHALLOWS, 'bite_chance': 0.35, 'hook_chance': 0.75,
      'travel_cost': 15, 'casts': 15, 'lvl': 1,
-     'min_hook_distance': 10, 'max_hook_distance': 50,
-     'escape_distance': 100},
+     'min_hook_distance': 15, 'max_hook_distance': 45,
+     'escape_distance': 75},
 
     {'name': BAY, 'bite_chance': 0.30, 'hook_chance': 0.65,
      'travel_cost': 35, 'casts': 12, 'lvl': 1,
-     'min_hook_distance': 50, 'max_hook_distance': 100,
-     'escape_distance': 200},
+     'min_hook_distance': 35, 'max_hook_distance': 85,
+     'escape_distance': 125},
 
     {'name': OCEAN, 'bite_chance': 0.25, 'hook_chance': 0.55,
      'travel_cost': 60, 'casts': 10, 'lvl': 1,
-     'min_hook_distance': 100, 'max_hook_distance': 200,
-     'escape_distance': 350},
+     'min_hook_distance': 50, 'max_hook_distance': 110,
+     'escape_distance': 150},
 
 ]

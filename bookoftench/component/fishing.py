@@ -12,7 +12,7 @@ from bookoftench.model import GameState
 from bookoftench.model.bait import Bait
 from bookoftench.model.util import display_boat_header, display_tackle_box_header, display_fish_log_header, \
     display_fishing_stats, display_area_log, display_area_compendium
-from bookoftench.ui import blue
+from bookoftench.ui import blue, cyan
 from bookoftench.util import print_and_sleep
 
 # ================================================================================================
@@ -161,7 +161,7 @@ class TackleBox(LabeledSelectionComponent):
 
             player.equip_bait(selection)
             play_sound(EQUIP_WEAPON)
-            print_and_sleep(f"{selection.name} equipped.", 1)
+            print_and_sleep(f"{cyan(selection.name)} equipped.", 1)
 
         return selection_component
 

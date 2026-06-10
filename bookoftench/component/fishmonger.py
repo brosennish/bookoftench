@@ -103,7 +103,7 @@ class Fishmonger(LabeledSelectionComponent):
                 print_and_sleep(yellow(f"Need more coin"), 2)
                 return None
             elif not player.current_bait:
-                print_and_sleep(yellow(f"Need some bait"), 2)
+                print_and_sleep(yellow(f"Equip some bait"), 2)
                 return None
             else:
                 player.coins -= fishing_area.travel_cost

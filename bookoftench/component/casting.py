@@ -4,7 +4,7 @@ from bookoftench.audio import play_sound
 from bookoftench.component.base import functional_component, GatekeepingComponent, \
     LabeledSelectionComponent, ReprBinding, SelectionBinding, Component, NoOpComponent, LinearComponent, \
     TextDisplayingComponent
-from bookoftench.data.audio import COINS, CATCH_FISH, GOLF_CLAP, FISH_ON
+from bookoftench.data.audio import COINS, CATCH_FISH, GOLF_CLAP, FISH_ON, CAST
 from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED, \
     possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, RAGE_FACTOR, RARITY, STAMINA
 from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL
@@ -51,6 +51,7 @@ class DryCastCheck(NoOpComponent):
 
     @staticmethod
     def waiting_display(value: int):
+        play_sound(CAST)
         for i in range(value):
             print_and_sleep(blue("..."), 0.8)
 
@@ -95,7 +96,6 @@ class SpawnFish(LinearComponent):
             )
             self.game_state.current_fish = selection
             play_sound(FISH_ON)
-            play_sound(REEL)
             print_and_sleep(orange("Fish on!"), 1.5)
             self.game_state.current_fishing_area.casts -= 1
         else:

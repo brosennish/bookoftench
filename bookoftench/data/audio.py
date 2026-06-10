@@ -61,6 +61,7 @@ WHIFF = "whiff.mp3"
 # Misc Sounds
 ACHIEVEMENT = "achievement.mp3"
 BOOMERANG_SFX = "boomerang.mp3"
+CAST = "cast.mp3"
 CATCH_FISH = "catch_fish.mp3"
 CLICK = "click.mp3"
 COINS = "coins.wav"

@@ -711,10 +711,10 @@ def display_fishing_stats(game_state: GameState) -> None:
         print_and_sleep(yellow("Go catch some fish fool."))
     else:
         print_and_sleep("\n".join([
-            f"Total:          {(len(caught))}",
-            f"Shallows:       {(len(shallows_fish))}",
-            f"Bay:            {(len(bay_fish))}",
-            f"Ocean:          {(len(ocean_fish))}",
+            f"Total:          {orange(len(caught))}",
+            f"Shallows:       {green(len(shallows_fish))}",
+            f"Bay:            {(cyan(bay_fish))}",
+            f"Ocean:          {(blue(ocean_fish))}",
             "",
             f"Largest:        {blue(f'{largest.name:<{space}}')} {pipe} {yellow(largest.weight)} lbs, {yellow(largest.length)} in",
             f"Smallest:       {blue(f'{smallest.name:<{space}}')} {pipe} {yellow(smallest.weight)} lbs, {yellow(smallest.length)} in",
@@ -840,7 +840,7 @@ def display_area_compendium(game_state: GameState, area: str) -> None:
         discovered = species['name'] in caught_species
 
         name = species['name'] if discovered else "Unknown Creature"
-        name_color = blue if discovered else dim
+        name_color = cyan if discovered else dim
 
         area_text = ", ".join(species['areas'])
         bait_text = ", ".join(
