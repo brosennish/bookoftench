@@ -13,6 +13,7 @@ from bookoftench.ui import dim, cyan, orange, yellow, green, red, blue, purple
 class FishingItem(Buyable):
     name: str
     description: str
+    type: str
     cost: int
     min_turns: int
     max_turns: int
@@ -37,7 +38,7 @@ class FishingItem(Buyable):
             orange(f"{self.cost}c"),
         ])
 
-    def __repr__(self):
+    def _effect_text(self):
         effects = []
 
         if self.speed_reduction:
@@ -55,18 +56,33 @@ class FishingItem(Buyable):
         if self.spit_hook_prevention:
             effects.append(blue("No Spit Hook"))
 
-        turns = (
+        return ", ".join(effects)
+
+    def _turn_text(self):
+        return (
             str(self.min_turns)
             if self.min_turns == self.max_turns
             else f"{self.min_turns}-{self.max_turns}"
         )
 
+    def shop_repr(self):
         return dim(' | ').join([
             cyan(f"{self.name:<16}"),
             f"Cost: {orange(self.cost)}",
-            f"Turns: {purple(f'{turns:<3}')}",
-            ", ".join(effects)
+            f"Turns: {purple(f'{self._turn_text():<3}')}",
+            self._effect_text()
         ])
+
+    def inventory_repr(self):
+        return dim(' | ').join([
+            cyan(f"{self.name:<16}"),
+            f"Count: {cyan(str(self.count))}",
+            f"Turns: {purple(f'{self._turn_text():<3}')}",
+            self._effect_text()
+        ])
+
+    def __repr__(self):
+        return self.shop_repr()
 
 # ================================================================================================
 

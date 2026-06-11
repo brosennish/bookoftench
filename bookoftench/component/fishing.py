@@ -201,12 +201,23 @@ class FishingItemBox(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
 
-        available = [i for i in player.fishing_item_box.values() if i.count > 0 and
-                     i not in player.active_fishing_items]
+        available = sorted(
+            [i for i in player.fishing_item_box.values() if i.count > 0],
+            key=lambda x: (
+                x.type,
+                -(x.speed_reduction + x.stamina_reduction + x.rage_reduction + x.strength_reduction)
+            )
+        )
 
-        item_box_bindings = [ReprBinding(str(i + 1), item.name,
-                                           self._handle_selection_component(item, self), item) for
-                               i, item in enumerate(available)]
+        item_box_bindings = [
+            ReprBinding(
+                str(i + 1),
+                item.name,
+                self._handle_selection_component(item, self),
+                item.inventory_repr()
+            )
+            for i, item in enumerate(available)
+        ]
 
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
 
@@ -278,19 +289,7 @@ class FishingItemBox(LabeledSelectionComponent):
 
 def item_stack_conflict(player, item) -> bool:
     for active in player.active_fishing_items:
-        if active.name == LEECHES and item.name == LAMPREYS:
-            print_and_sleep(yellow(f"{active.name} is already active."), 1)
-            return True
-
-        if active.name == LAMPREYS and item.name == LEECHES:
-            print_and_sleep(yellow(f"{active.name} is already active."), 1)
-            return True
-
-        if active.name == REEFER and item.name == SEA_WEED:
-            print_and_sleep(yellow(f"{active.name} is already active."), 1)
-            return True
-
-        if active.name == SEA_WEED and item.name == REEFER:
+        if active.type == item.type:
             print_and_sleep(yellow(f"{active.name} is already active."), 1)
             return True
 
