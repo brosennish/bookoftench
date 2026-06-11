@@ -118,6 +118,7 @@ class Player(Combatant):
     fishing_xp_needed: int = 10
     fishing_lvl: int = 1
     rod_lvl: int = 1
+    max_active_fishing_items: int = 3
     caught_fish: list[Fish] = field(default_factory=list)
     tackle_box: Dict[str, Bait] = field(default_factory=dict)
     fishing_item_box: Dict[str, FishingItem] = field(default_factory=dict)

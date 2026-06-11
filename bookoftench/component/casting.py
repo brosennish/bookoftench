@@ -10,7 +10,7 @@ from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMO
     possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, RAGE_FACTOR, RARITY, STAMINA, SHALLOWS, BAY, MYTHIC
 from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL, USE_ITEM
 from bookoftench.data.fishing_areas import WET_SEASON_BITE_CHANCE_EFFECT, DRY_SEASON_BITE_CHANCE_EFFECT, WET_SEASON
-from bookoftench.data.fishing_items import BARB_HOOK, LAMPREYS, LEECHES, REEFER, SEA_WEED, MOTION_POTION
+from bookoftench.data.fishing_items import BARB_HOOK, LAMPREYS, LEECHES, REEFER, SEA_WEED, MOTION_POTION, RAGE
 from bookoftench.model import GameState
 from bookoftench.model.fish import load_fishes
 from bookoftench.model.player import Player
@@ -426,7 +426,7 @@ class FishTurn(NoOpComponent):
     @staticmethod
     def stamina_items(player, fish):
         for item in player.active_fishing_items:
-            if item.name in (LAMPREYS, LEECHES):
+            if item.type == STAMINA:
                 item.turns -= 1
 
                 if item.turns <= 0:
@@ -438,7 +438,7 @@ class FishTurn(NoOpComponent):
     @staticmethod
     def rage_items(player, fish):
         for item in player.active_fishing_items:
-            if item.name in (REEFER, SEA_WEED):
+            if item.type == RAGE:
                 item.turns -= 1
 
                 if item.turns <= 0:
@@ -450,7 +450,7 @@ class FishTurn(NoOpComponent):
     @staticmethod
     def speed_items(player, fish):
         for item in player.active_fishing_items:
-            if item.name == MOTION_POTION:
+            if item.type == SPEED:
                 item.turns -= 1
 
                 if item.turns <= 0:

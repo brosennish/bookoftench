@@ -4,7 +4,7 @@ from typing import List
 
 from bookoftench.data import fish as f
 from bookoftench.data.fish import VARIANTS, Fish_Species, TWO_HEADED, TRANSLUCENT, THREE_EYED, TELEPATHIC, SCARRED, \
-    SAPIENT, RADIOACTIVE, ONE_EYED, IRIDESCENT, GLOWING, ALBINO
+    SAPIENT, RADIOACTIVE, ONE_EYED, IRIDESCENT, GLOWING, ALBINO, PREGNANT
 from bookoftench.ui import dim, cyan, orange, green, yellow, blue, purple
 
 
@@ -166,6 +166,11 @@ class Fish:
 
         elif self.variant == ONE_EYED:
             self.value *= 0.95
+            self.speed *= 0.9
+            self.rage_factor *= 1.2
+
+        elif self.variant == PREGNANT and self.sex != f.MALE:
+            self.value *= 1.1
             self.speed *= 0.9
             self.rage_factor *= 1.2
 

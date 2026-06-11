@@ -276,6 +276,9 @@ class FishingItemBox(LabeledSelectionComponent):
                 return
             if item_stack_conflict(player, item):
                 return
+            if len(player.active_fishing_items) == 3:
+                max_active = player.max_active_fishing_items
+                print_and_sleep(yellow(f"Maximum active items reached ({max_active})."), 1)
 
             # --- use item ---
             player.use_fishing_item(fish, item)

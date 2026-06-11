@@ -210,6 +210,7 @@ ALBINO = "Albino"
 GLOWING = "Glowing"
 IRIDESCENT = "Iridescent"
 ONE_EYED = "One-eyed"
+PREGNANT = "Pregnant"
 RADIOACTIVE = "Radioactive"
 SAPIENT = "Sapient"
 SCARRED = "Scarred"
@@ -223,6 +224,7 @@ VARIANTS = [
     {'name': GLOWING,     'chance': 0.01},
     {'name': IRIDESCENT,  'chance': 0.01},
     {'name': ONE_EYED,    'chance': 0.02},
+    {'name': PREGNANT,    'chance': 0.04},
     {'name': RADIOACTIVE, 'chance': 0.005},
     {'name': SAPIENT,     'chance': 0.001},
     {'name': SCARRED,     'chance': 0.03},
