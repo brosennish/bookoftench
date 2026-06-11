@@ -7,11 +7,11 @@ from bookoftench.component.base import functional_component, GatekeepingComponen
 from bookoftench.data.audio import COINS, CATCH_FISH, GOLF_CLAP, FISH_ON, CAST, ENEMY_APPEARS, BATTLE_THEME, \
     OCEAN_THEME, BAY_THEME, SHALLOWS_THEME, FISH
 from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED, \
-    possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, RAGE_FACTOR, RARITY, STAMINA, SHALLOWS, BAY
+    possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, RAGE_FACTOR, RARITY, STAMINA, SHALLOWS, BAY, MYTHIC
 from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL
 from bookoftench.data.fishing_areas import WET_SEASON_BITE_CHANCE_EFFECT, DRY_SEASON_BITE_CHANCE_EFFECT, WET_SEASON
 from bookoftench.model import GameState
-from bookoftench.model.fish import load_fishes
+from bookoftench.model.fish import load_fishes, Fish
 from bookoftench.model.player import Player
 from bookoftench.model.util import display_fishing_battle_header, display_fishing_actions, display_fishing_info
 from bookoftench.ui import yellow, dim, blue, white, green, red, purple, cyan, orange
@@ -78,8 +78,6 @@ class SpawnFish(LinearComponent):
         player = self.game_state.player
         fishing_area = self.game_state.current_fishing_area
         all_fish = self.game_state.all_fish
-        time = self.game_state.time_of_day
-        moon = self.game_state.moon
         bait = self.game_state.player.current_bait
 
         if bait.casts == 0:
@@ -92,18 +90,22 @@ class SpawnFish(LinearComponent):
             caught = [i.name for i in player.caught_fish]
             valid = [i for i in Fish_Species if i['name'] not in caught]
 
-        filtered = [
-            i['name']
-            for i in valid
-            if fishing_area.name in i['areas']
-               and time in i['time']
-               and (i['moon'] is None or moon in i['moon'])
-               and bait.name in i['preferred_bait']
-        ]
-
+        filtered = self.get_filtered(valid)
         fishes = load_fishes(filtered)
-        rarity = self.get_rarity(self.game_state.player.luck)
-        available = [i for i in fishes if i.rarity == rarity]
+
+        rarity = self.get_rarity(player.luck)
+        available = [fish for fish in fishes if fish.rarity == rarity]
+
+        # --- check lower rarities for match if needed ---
+        if not available:
+            rarity_order = [MYTHIC, LEGENDARY, RARE, UNCOMMON, COMMON]
+            start_index = rarity_order.index(rarity)
+
+            for fallback_rarity in rarity_order[start_index:]:
+                available = [fish for fish in fishes if fish.rarity == fallback_rarity]
+
+                if available:
+                    break
 
         if not available:
             self.game_state.current_fish = None
@@ -125,6 +127,23 @@ class SpawnFish(LinearComponent):
 
         return None
 
+    def get_filtered(self, valid: list[dict]) -> list[str]:
+        fishing_area = self.game_state.current_fishing_area
+        time = self.game_state.time_of_day
+        bait = self.game_state.player.current_bait
+        moon = self.game_state.moon
+
+        filtered =  [
+            i['name']
+            for i in valid
+            if fishing_area.name in i['areas']
+               and time in i['time']
+               and (i['moon'] is None or moon in i['moon'])
+               and bait.name in i['preferred_bait']
+        ]
+
+
+
 # ================================================================================================
 
     @staticmethod
@@ -132,6 +151,8 @@ class SpawnFish(LinearComponent):
         roll = random.random()
         luck_bonus = min((luck - 1) / 100, 0.08)
 
+        if roll < 0.001 + luck_bonus:
+            return MYTHIC
         if roll < 0.02 + luck_bonus:
             return LEGENDARY
         if roll < 0.10 + luck_bonus:

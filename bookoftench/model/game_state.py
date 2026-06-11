@@ -145,6 +145,7 @@ class GameState:
         self.liberated_enemies = []
         self.set_moon()
         self.set_time_of_day()
+        self.set_season()
         event_logger.set_counter(self.event_counter)
         set_achievement_cache(self.achievement_cache)
         set_perk_cache(self.perk_cache)
@@ -155,6 +156,10 @@ class GameState:
         self._subscribe_listeners()
 
 # ================================================================================================
+
+    def set_season(self):
+        seasons = [DRY_SEASON, WET_SEASON]
+        self.season = random.choice(seasons)
 
     def update_season(self):
         if self.season == DRY_SEASON:

@@ -5,7 +5,8 @@ from typing import List
 from bookoftench.data import fish as f
 from bookoftench.data.fish import VARIANTS, Fish_Species, TWO_HEADED, TRANSLUCENT, THREE_EYED, TELEPATHIC, SCARRED, \
     SAPIENT, RADIOACTIVE, ONE_EYED, IRIDESCENT, GLOWING, ALBINO
-from bookoftench.ui import dim, cyan, orange, green, yellow, blue
+from bookoftench.ui import dim, cyan, orange, green, yellow, blue, purple
+
 
 # ================================================================================================
 
@@ -71,7 +72,7 @@ class Fish:
         # --- core characteristics ---
         self.base_name = self.name
         self.age = random.randint(1, self.max_age)
-        self.sex = random.choice([f.MALE, f.FEMALE, f.HERMAPHRODITE])
+        self.sex = self.get_sex()
 
         # --- size and value ---
         self.length = random.randint(self.min_length, self.max_length)
@@ -90,6 +91,15 @@ class Fish:
         self.rage = random.randint(5, 15)
 
 # ================================================================================================
+
+    @staticmethod
+    def get_sex() -> str:
+        if random.random() < 0.45:
+            return f.MALE
+        elif random.random() < 0.9:
+            return f.FEMALE
+        else:
+            return f.HERMAPHRODITE
 
     def get_size(self) -> float | int:
         size = self.length * self.weight
@@ -129,15 +139,16 @@ class Fish:
     def get_variant(self):
         variants = VARIANTS.copy()
         random.shuffle(variants)
-        for i in variants:
-            if random.random() < i['chance']:
-                self.variant = i['name']
-                self.init_variant_effects()
-                break
+        if random.random() < 0.5:
+            for i in variants:
+                if random.random() < i['chance']:
+                    self.variant = i['name']
+                    self.init_variant_effects()
+                    break
 
     def init_variant_effects(self):
         if self.variant == ALBINO:
-            self.value *= 1.2
+            self.value *= 1.1
 
         elif self.variant == GLOWING:
             self.value *= 1.8
@@ -148,11 +159,12 @@ class Fish:
             self.max_stamina *= 1.1
 
         elif self.variant == ONE_EYED:
-            self.value *= 1.3
+            self.value *= 0.95
             self.speed *= 0.9
+            self.rage_factor *= 1.2
 
         elif self.variant == RADIOACTIVE:
-            self.value *= 3.0
+            self.value *= 0.75
             self.rage_factor *= 1.4
             self.strength *= 1.15
             self.max_stamina *= 1.15
@@ -163,12 +175,11 @@ class Fish:
             self.max_stamina *= 1.2
 
         elif self.variant == SCARRED:
-            self.value *= 1.3
             self.strength *= 1.2
             self.max_stamina *= 1.15
 
         elif self.variant == TELEPATHIC:
-            self.value *= 4.0
+            self.value *= 3.0
             self.rage_factor *= 0.7
             self.speed *= 1.2
 
@@ -178,12 +189,12 @@ class Fish:
             self.speed *= 1.1
 
         elif self.variant == TRANSLUCENT:
-            self.value *= 1.6
+            self.value *= 1.5
             self.strength *= 0.9
             self.speed *= 1.15
 
         elif self.variant == TWO_HEADED:
-            self.value *= 3.5
+            self.value *= 2.0
             self.rage_factor *= 1.35
             self.strength *= 1.25
             self.max_stamina *= 1.2
@@ -199,8 +210,10 @@ class Fish:
             return green(self.rarity)
         elif self.rarity == f.RARE:
             return blue(self.rarity)
-        else:
+        elif self.rarity == f.LEGENDARY:
             return orange(self.rarity)
+        else:
+            return purple(self.rarity)
 
     def get_rarity_color(self):
         if self.rarity == f.COMMON:

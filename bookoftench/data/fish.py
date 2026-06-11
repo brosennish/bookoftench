@@ -79,6 +79,7 @@ KILLER_WHALE = "Killer Whale"
 KING_CRAB = "King Crab"
 KING_MACKEREL = "King Mackerel"
 KING_SALMON = "King Salmon"
+KRAKEN = "Kraken"
 LAKE_STURGEON = "Lake Sturgeon"
 LAKE_TROUT = "Lake Trout"
 LAMPREY = "Lamprey"
@@ -161,6 +162,7 @@ COMMON = "Common"
 UNCOMMON = "Uncommon"
 RARE = "Rare"
 LEGENDARY = "Legendary"
+MYTHIC = "Mythic"
 
 # Areas
 SHALLOWS = "Shallows"
@@ -846,6 +848,14 @@ Fish_Species = [
      'description': 'A powerful migratory salmon capable of blistering runs and exhausting battles.',
      },
 
+    {'name': KRAKEN, 'rarity': MYTHIC, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
+     'min_length': 300, 'max_length': 1200, 'min_weight_factor': 2.00, 'max_weight_factor': 5.00,
+     'base_value': 500, 'rage_factor': 2.50, 'speed': 0.60, 'strength': 3.00, 'max_stamina': 1000,
+     'preferred_bait': [b.SQUID, b.MEAT, b.KRILL, b.GLOW_LURE],
+     'spit_hook_chance': 0.0001, 'protected': False, 'max_age': 500,
+     'description': 'A colossal sea monster of legend whose massive tentacles can take down entire ships.'
+     },
+
     {'name': LAKE_TROUT, 'rarity': UNCOMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 10, 'max_length': 50, 'min_weight_factor': 0.15, 'max_weight_factor': 0.50,
      'base_value': 30, 'rage_factor': 0.95, 'speed': 1.05, 'strength': 1.25, 'max_stamina': 85,
@@ -958,9 +968,9 @@ Fish_Species = [
      'description': 'A colorful crustacean capable of delivering one of the fastest and most powerful strikes in nature.',
     },
 
-    {'name': MEGALODON, 'rarity': LEGENDARY, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
+    {'name': MEGALODON, 'rarity': MYTHIC, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 480, 'max_length': 720, 'min_weight_factor': 1.50, 'max_weight_factor': 4.00,
-     'base_value': 250, 'rage_factor': 0.60, 'speed': 1.30, 'strength': 5.00, 'max_stamina': 500,
+     'base_value': 500, 'rage_factor': 0.60, 'speed': 1.30, 'strength': 3.00, 'max_stamina': 500,
      'preferred_bait': [b.MEAT, b.SQUID, b.RATTLER, b.GLOW_LURE],
      'spit_hook_chance': 0.000, 'protected': False, 'max_age': 100,
      'description': 'A colossal prehistoric shark believed to have been one of the largest predators ever to live.',
