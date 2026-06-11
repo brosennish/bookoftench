@@ -1,4 +1,5 @@
 import random
+from copy import deepcopy
 
 from bookoftench.audio import play_music, play_sound, stop_music
 from bookoftench.component import BoatComponent, TackleBox, FishingLog
@@ -9,9 +10,11 @@ from bookoftench.data.audio import PURCHASE, TRAVEL_THEME, FISHMONGER_THEME_1, F
 from bookoftench.data.bait import Bait_And_Lures
 from bookoftench.data.fishing_areas import Fishing_Areas
 from bookoftench.data.components import FISHMONGER
+from bookoftench.data.fishing_items import Fishing_Items
 from bookoftench.model import GameState
-from bookoftench.model.FishingArea import load_fishing_areas, FishingArea
+from bookoftench.model.fishing_area import load_fishing_areas, FishingArea
 from bookoftench.model.bait import load_baits, Bait
+from bookoftench.model.fishing_item import load_fishing_items, FishingItem
 from bookoftench.model.util import display_fishmonger_header, display_bait_shop_header
 from bookoftench.ui import blue, yellow, cyan, orange
 from bookoftench.util import print_and_sleep
@@ -112,6 +115,7 @@ class Fishmonger(LabeledSelectionComponent):
                 print_and_sleep(cyan(f'Traveling by boat to the {fishing_area.name}...'), 4)
                 stop_music() # todo - remove this once boat component has theme
                 BoatComponent(game_state).run()
+                return None
 
             # event_logger.log_event(FishingEvent())
 
@@ -136,10 +140,12 @@ class BaitShop(LabeledSelectionComponent):
 
         upgrade_rod_binding = SelectionBinding('U', f"Upgrade Rod ({cost_display})",
                                                functional_component()(lambda: upgrade_rod(player, cost)))
+        fishing_item_shop_binding = SelectionBinding('I', "Item Shop",
+                                                     functional_component()(lambda: self.launch_fishing_item_shop()))
         return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
 
         super().__init__(game_state, refresh_menu=True,
-                         bindings=[*bait_bindings, upgrade_rod_binding, return_binding])
+                         bindings=[*bait_bindings, upgrade_rod_binding, fishing_item_shop_binding, return_binding])
         self.selection_components = [
             LabeledSelectionComponent(
                 game_state,
@@ -148,7 +154,7 @@ class BaitShop(LabeledSelectionComponent):
             ),
             LabeledSelectionComponent(
                 game_state,
-                [upgrade_rod_binding, return_binding]
+                [upgrade_rod_binding, fishing_item_shop_binding, return_binding]
             ),
         ]
         self.leave = False
@@ -156,6 +162,9 @@ class BaitShop(LabeledSelectionComponent):
     def play_theme(self) -> None:
         pass
         # play_music(FISHMONGER_THEME)
+
+    def launch_fishing_item_shop(self) -> None:
+        FishingItemShop(self.game_state).run()
 
     def _return(self):
         self.leave = True
@@ -176,20 +185,102 @@ class BaitShop(LabeledSelectionComponent):
             player = game_state.player
 
             if bait.cost > player.coins:
-                print_and_sleep(yellow(f"Need more coin"), 1.5)
-            else:
-                if bait.name in player.tackle_box:
-                    player.tackle_box[bait.name].casts += bait.casts
-                else:
-                    player.tackle_box[bait.name] = bait
-                play_sound(PURCHASE)
-                player.coins -= bait.cost
-                print_and_sleep(cyan(f"{bait.name} added to tackle box."), 1.5)
+                print_and_sleep(yellow("Need more coin"), 1.5)
+                return
 
-            # BoatComponent(game_state).run() (not sure if it will return to Fishmonger)
-            # event_logger.log_event(FishingEvent())
+            if bait.name in player.tackle_box:
+                player.tackle_box[bait.name].casts += bait.casts
+            else:
+                purchased_bait = deepcopy(bait)
+
+                if not player.tackle_box:
+                    player.current_bait = purchased_bait
+
+                player.tackle_box[purchased_bait.name] = purchased_bait
+
+            play_sound(PURCHASE)
+            player.coins -= bait.cost
+            print_and_sleep(cyan(f"{bait.name} added to tackle box."), 1)
 
         return purchase_component
+
+# ================================================================================================
+# ================================================================================================
+
+class FishingItemShop(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState):
+        player = game_state.player
+
+        cost = get_rod_upgrade_cost(player)
+        cost_display = orange(f"{cost}")
+
+        valid = [i['name'] for i in Fishing_Items]
+        available = load_fishing_items(valid)
+
+        fishing_item_bindings = [ReprBinding(str(i + 1), fishing_item.name,
+                                       self._make_purchase_component(fishing_item), fishing_item) for
+                          i, fishing_item in enumerate(available)]
+
+        upgrade_rod_binding = SelectionBinding('U', f"Upgrade Rod ({cost_display})",
+                                               functional_component()(lambda: upgrade_rod(player, cost)))
+        bait_shop_binding = SelectionBinding('B', "Bait Shop", functional_component()(lambda: self.launch_bait_shop()))
+        return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
+
+        super().__init__(game_state, refresh_menu=True,
+                         bindings=[*fishing_item_bindings, upgrade_rod_binding, bait_shop_binding, return_binding])
+        self.selection_components = [
+            LabeledSelectionComponent(
+                game_state,
+                fishing_item_bindings,
+                top_level_prompt_callback=display_bait_shop_header,
+            ),
+            LabeledSelectionComponent(
+                game_state,
+                [upgrade_rod_binding, bait_shop_binding, return_binding]
+            ),
+        ]
+        self.leave = False
+
+    def play_theme(self) -> None:
+        pass
+
+    def launch_bait_shop(self):
+        BaitShop(self.game_state).run()
+
+    def _return(self):
+        self.leave = True
+
+    def can_exit(self) -> bool:
+        return self.leave
+
+    def display_options(self) -> None:
+        for component in self.selection_components:
+            component.display_options()
+
+# ================================================================================================
+
+    @staticmethod
+    def _make_purchase_component(fishing_item: FishingItem) -> type[Component]:
+        @functional_component(state_dependent=True)
+        def purchase_component(game_state: GameState):
+            player = game_state.player
+
+            if fishing_item.cost > player.coins:
+                print_and_sleep(yellow("Need more coin"), 1.5)
+                return
+
+            if fishing_item.name in player.fishing_item_box:
+                player.fishing_item_box[fishing_item.name].count += 1
+            else:
+                player.fishing_item_box[fishing_item.name] = deepcopy(fishing_item)
+
+            play_sound(PURCHASE)
+            player.coins -= fishing_item.cost
+            print_and_sleep(cyan(f"{fishing_item.name} added to fishing items."), 1)
+
+        return purchase_component
+
+# ================================================================================================
 
 def get_rod_upgrade_cost(player) -> int:
     cost = 25 * (player.rod_lvl ** 1.8)

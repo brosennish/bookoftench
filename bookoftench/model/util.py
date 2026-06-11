@@ -102,6 +102,44 @@ def display_tackle_box_header(game_state: GameState) -> None:
 
 # ================================================================================================
 
+def display_fishing_item_box_header(game_state: GameState) -> None:
+    player = game_state.player
+    active = player.active_fishing_items
+
+    if not active:
+        print_and_sleep("Active: None")
+        return
+
+    effects = []
+
+    for item in active:
+        if item.spit_hook_prevention:
+            effects.append(
+                f"{blue(item.name)} {purple(f'({item.turns})')}"
+            )
+        elif item.rage_reduction:
+            effects.append(
+                f"{red(item.name)} {purple(f'({item.turns})')}"
+            )
+        elif item.stamina_reduction:
+            effects.append(
+                f"{yellow(item.name)} {purple(f'({item.turns})')}"
+            )
+        elif item.speed_reduction:
+            effects.append(
+                f"{cyan(item.name)} {purple(f'({item.turns})')}"
+            )
+        elif item.strength_reduction:
+            effects.append(
+                f"{orange(item.name)} {purple(f'({item.turns})')}"
+            )
+
+    print_and_sleep(
+        f"Active: {dim(' | ').join(effects)}"
+    )
+
+# ================================================================================================
+
 def display_fish_log_header(game_state: GameState) -> None:
     player = game_state.player
 
@@ -163,6 +201,7 @@ def fishing_distance_color(game_state: GameState) -> Callable[[str], str]:
 
 def display_fishing_battle_header(game_state: GameState) -> None:
     fish = game_state.current_fish
+    player = game_state.player
     fishing_area = game_state.current_fishing_area
 
     if fish is None:
@@ -171,11 +210,9 @@ def display_fishing_battle_header(game_state: GameState) -> None:
     name = fish.name if fish.species_known else "Unknown Creature"
     stamina_percentage = round((fish.stamina / fish.max_stamina) * 100)
 
-    # --- get colors ---
     state_color = fishing_state_color(game_state)
     distance_color = fishing_distance_color(game_state)
 
-    # --- print ---
     top_row = dim(' | ').join([
         blue(name),
         state_color(fish.state),
@@ -187,10 +224,32 @@ def display_fishing_battle_header(game_state: GameState) -> None:
         f"Rage: {red(f'{fish.rage}%')}",
     ])
 
-    print_and_sleep("\n".join([
-        top_row,
-        second_row,
-    ]))
+    rows = [top_row, second_row]
+
+    if player.active_fishing_items:
+        active_items = []
+
+        for item in player.active_fishing_items:
+            if item.spit_hook_prevention:
+                item_color = blue
+            elif item.rage_reduction:
+                item_color = red
+            elif item.stamina_reduction:
+                item_color = yellow
+            elif item.speed_reduction:
+                item_color = cyan
+            elif item.strength_reduction:
+                item_color = orange
+            else:
+                item_color = white
+
+            active_items.append(
+                f"{item_color(item.name)} {purple(f'({item.turns})')}"
+            )
+
+        rows.append(dim(' | ').join(active_items))
+
+    print_and_sleep("\n".join(rows))
 
 # ================================================================================================
 
@@ -800,7 +859,16 @@ def display_area_log(game_state: GameState, area: str) -> None:
 # ================================================================================================
 
 def get_percentile_text(percentile):
-    text = f"{percentile}th percentile"
+    if 10 <= percentile % 100 <= 20:
+        end = "th"
+    else:
+        end = {
+            1: "st",
+            2: "nd",
+            3: "rd"
+        }.get(percentile % 10, "th")
+
+    text = f"{percentile}{end} percentile"
 
     if percentile >= 90:
         return green(f"Trophy Specimen ({text})")

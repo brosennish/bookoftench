@@ -2,8 +2,7 @@ from dataclasses import dataclass
 from typing import List
 
 from bookoftench.data.fishing_areas import Fishing_Areas
-from bookoftench.ui import dim, orange, green, blue, cyan
-
+from bookoftench.ui import dim, orange, blue, cyan
 
 # ================================================================================================
 

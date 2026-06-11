@@ -21,10 +21,12 @@ PULL = "Pull"
 REEL = "Reel"
 GIVE_LINE = "Give Line"
 OBSERVE = "Observe"
+USE_ITEM = "Use Item"
 
 FISHING_BATTLE_OPTIONS = [
     {'name': PULL, 'color': red},
     {'name': REEL, 'color': blue},
     {'name': GIVE_LINE, 'color': yellow},
     {'name': OBSERVE, 'color': purple},
+    {'name': USE_ITEM, 'color': cyan},
 ]

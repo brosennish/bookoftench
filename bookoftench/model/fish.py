@@ -55,7 +55,6 @@ class Fish:
     catch_location: str | None = None # assigned when caught
     lost: bool = False
 
-
     # --- ObserveFish ---
     observed_characteristics: list[str] = field(default_factory=list)
     species_observed: bool = False
@@ -65,6 +64,13 @@ class Fish:
     speed_observed: bool = False
     rage_factor_observed: bool = False
     species_known: bool = False
+
+    # --- FishingItems ---
+    barb_hook_active: bool = False
+    speed_multiplier: float | None = 1
+    stamina_multiplier: float | None = 1
+    rage_multiplier: float | None = 1
+    strength_multiplier: float | None = 1
 
 # ================================================================================================
 

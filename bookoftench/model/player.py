@@ -22,6 +22,7 @@ from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, 
     SwapWeaponEvent, WeaponBrokeEvent, HitEvent, PlayerDeathEvent, StealItemEvent, StealWeaponEvent, StealPerkEvent, \
     GenericStealEvent
 from .fish import Fish
+from .fishing_item import FishingItem
 from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
 from .trait import Trait
@@ -30,6 +31,7 @@ from bookoftench.data.enviroment import DAY, NIGHT, FULL, WETTING, DRYING
 from bookoftench.data.areas import CAVE
 from bookoftench.data.enemies import EMPATH
 from ..data.audio import XP, GREAT_JOB, GOLF_CLAP
+from ..data.fishing_items import BARB_HOOK
 
 
 # ================================================================================================
@@ -110,10 +112,17 @@ class Player(Combatant):
     acc: float = 1
     luck: float = 1
     trait: Trait = None
+
+    # --- fishing ---
     fishing_xp: int = 0
     fishing_xp_needed: int = 10
     fishing_lvl: int = 1
     rod_lvl: int = 1
+    caught_fish: list[Fish] = field(default_factory=list)
+    tackle_box: Dict[str, Bait] = field(default_factory=dict)
+    fishing_item_box: Dict[str, FishingItem] = field(default_factory=dict)
+    current_bait: Bait | None = None
+    active_fishing_items: list[FishingItem] = field(default_factory=list)
 
     illness: Optional[Illness] = None
     illness_death_lvl: Optional[int] = None
@@ -135,9 +144,6 @@ class Player(Combatant):
 
     _blind = False
 
-    caught_fish: list[Fish] = field(default_factory=list)
-    tackle_box: Dict[str, Bait] = field(default_factory=dict)
-    current_bait: Bait | None = None
     items: Dict[str, Item] = field(default_factory=item_defaults)
     weapon_dict: Dict[str, PlayerWeapon] = field(default_factory=weapon_defaults)
     current_weapon: Weapon = None
@@ -219,6 +225,28 @@ class Player(Combatant):
         if has_bait:
             return True
         return False
+
+    def use_fishing_item(self, fish: Fish, item: FishingItem):
+        if item.spit_hook_prevention:
+            fish.barb_hook_active = True
+
+        if item.speed_reduction:
+            fish.speed_multiplier *= (1 - item.speed_reduction)
+
+        if item.stamina_reduction:
+            fish.stamina_multiplier *= (1 + item.stamina_reduction)
+
+        if item.rage_reduction:
+            fish.rage_multiplier *= (1 - item.rage_reduction)
+
+        if item.strength_reduction:
+            fish.strength_multiplier *= (1 - item.strength_reduction)
+
+        item.count -= 1
+        self.active_fishing_items.append(item)
+
+        if item.count <= 0:
+            self.fishing_item_box.pop(item.name, None)
 
 # ================================================================================================
 

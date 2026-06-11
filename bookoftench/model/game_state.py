@@ -12,7 +12,7 @@ from bookoftench.event_logger import subscribe_function
 from bookoftench.settings import Settings, set_settings
 from bookoftench.ui import green, red, yellow
 from bookoftench.util import print_and_sleep
-from .FishingArea import FishingArea
+from .fishing_area import FishingArea
 from .achievement import AchievementEvent, set_achievement_cache, load_achievements, Achievement
 from .area import Area, load_areas
 from .bank import Bank

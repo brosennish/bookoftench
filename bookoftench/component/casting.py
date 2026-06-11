@@ -5,13 +5,14 @@ from bookoftench.component.base import functional_component, GatekeepingComponen
     LabeledSelectionComponent, ReprBinding, SelectionBinding, Component, NoOpComponent, LinearComponent, \
     TextDisplayingComponent
 from bookoftench.data.audio import COINS, CATCH_FISH, GOLF_CLAP, FISH_ON, CAST, ENEMY_APPEARS, BATTLE_THEME, \
-    OCEAN_THEME, BAY_THEME, SHALLOWS_THEME, FISH
+    OCEAN_THEME, BAY_THEME, SHALLOWS_THEME, FISH, WHIFF
 from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED, \
     possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, RAGE_FACTOR, RARITY, STAMINA, SHALLOWS, BAY, MYTHIC
-from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL
+from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL, USE_ITEM
 from bookoftench.data.fishing_areas import WET_SEASON_BITE_CHANCE_EFFECT, DRY_SEASON_BITE_CHANCE_EFFECT, WET_SEASON
+from bookoftench.data.fishing_items import BARB_HOOK, LAMPREYS, LEECHES, REEFER, SEA_WEED, MOTION_POTION
 from bookoftench.model import GameState
-from bookoftench.model.fish import load_fishes, Fish
+from bookoftench.model.fish import load_fishes
 from bookoftench.model.player import Player
 from bookoftench.model.util import display_fishing_battle_header, display_fishing_actions, display_fishing_info
 from bookoftench.ui import yellow, dim, blue, white, green, red, purple, cyan, orange
@@ -27,8 +28,13 @@ class DryCastCheck(NoOpComponent):
         if self.game_state.current_fishing_area.casts == 0:
             return self.game_state
 
-        # Spend exactly one cast immediately.
+        player = self.game_state.player
+
+        if not player.current_bait or player.current_bait.casts == 0:
+            return self.game_state
+
         self.game_state.current_fishing_area.casts -= 1
+        player.current_bait.casts -= 1
 
         dry = self.dry_check()
 
@@ -142,6 +148,8 @@ class SpawnFish(LinearComponent):
                and bait.name in i['preferred_bait']
         ]
 
+        return filtered
+
 
 
 # ================================================================================================
@@ -231,6 +239,7 @@ class FishBattle(LabeledSelectionComponent):
     def _handle_selection_component(selection: str) -> type[Component]:
         @functional_component(state_dependent=True)
         def selection_component(game_state: GameState):
+            from bookoftench.component import FishingItemBox
 
             if selection == PULL:
                 Pull(game_state).run()
@@ -240,6 +249,8 @@ class FishBattle(LabeledSelectionComponent):
                 GiveLine(game_state).run()
             elif selection == OBSERVE:
                 ObserveFish(game_state).run()
+            elif selection == USE_ITEM:
+                FishingItemBox(game_state).run()
             else:
                 return selection_component(game_state)
 
@@ -349,17 +360,26 @@ class FishTurn(NoOpComponent):
         player = self.game_state.player
         fishing_area = self.game_state.current_fishing_area
 
-        self.spit_hook(fish, player)
+        # --- did the fish spit the hook ---
+        self.spit_hook(player, fish)
 
+        # --- did player lose the fish ---
         if fish.lost:
             EndFishBattle(self.game_state).run()
             return
 
+        # --- fish turn and outcome ---
         run = self.fish_runs(fish, fishing_area)
         self.fish_gains_rage(fish, run)
         self.update_fish_state(fish)
         self.apply_fish_turn_outcome()
 
+        # --- fishing items ---
+        self.stamina_items(player, fish)
+        self.rage_items(player, fish)
+        self.speed_items(player, fish)
+
+        # --- check if fish got away after its turn ---
         if fish.lost:
             EndFishBattle(self.game_state).run()
         else:
@@ -367,6 +387,8 @@ class FishTurn(NoOpComponent):
                 play_sound(FISH)
             self.adrenaline_rush(fish)
             return
+
+# ================================================================================================
 
     @staticmethod
     def adrenaline_rush(fish):
@@ -381,11 +403,63 @@ class FishTurn(NoOpComponent):
                 fish.adrenaline_ready = False
 
     @staticmethod
-    def spit_hook(fish, player):
+    def spit_hook(player, fish):
+        if fish.barb_hook_active:
+            for i in player.active_fishing_items:
+                if i.name == BARB_HOOK:
+                    i.turns -= 1
+                    if i.turns <= 0:
+                        player.active_fishing_items.remove(i)
+                        fish.barb_hook_active = False
+
+                    return
+
         if random.random() < fish.spit_hook_chance:
             name = fish.name if fish.species_known else "Unknown Fish"
+            play_sound(WHIFF)
+            play_sound(FISH)
             print_and_sleep(yellow(f"The {name} dropped the hook and swam away!"))
             fish.lost = True
+
+# ================================================================================================
+
+    @staticmethod
+    def stamina_items(player, fish):
+        for item in player.active_fishing_items:
+            if item.name in (LAMPREYS, LEECHES):
+                item.turns -= 1
+
+                if item.turns <= 0:
+                    player.active_fishing_items.remove(item)
+                    fish.stamina_multiplier = 1
+
+                return
+
+    @staticmethod
+    def rage_items(player, fish):
+        for item in player.active_fishing_items:
+            if item.name in (REEFER, SEA_WEED):
+                item.turns -= 1
+
+                if item.turns <= 0:
+                    player.active_fishing_items.remove(item)
+                    fish.rage_multiplier = 1
+
+                return
+
+    @staticmethod
+    def speed_items(player, fish):
+        for item in player.active_fishing_items:
+            if item.name == MOTION_POTION:
+                item.turns -= 1
+
+                if item.turns <= 0:
+                    player.active_fishing_items.remove(item)
+                    fish.speed_multiplier = 1
+
+                return
+
+# ================================================================================================
 
     @staticmethod
     def fish_runs(fish, fishing_area) -> int:
@@ -411,7 +485,7 @@ class FishTurn(NoOpComponent):
             state_modifier = 1
 
         # --- burst ---
-        burst_chance = min(0.15, fish.speed * 0.08)
+        burst_chance = min(0.15, (fish.speed * fish.speed_multiplier) * 0.08)
         if random.random() < burst_chance:
             burst = True
         else:
@@ -426,9 +500,10 @@ class FishTurn(NoOpComponent):
         if burst:
             total_run = max(1, round(run * 2))
             if total_run > 5:
+                play_sound(WHIFF)
                 print_and_sleep(yellow(f"The fish had a burst of speed!"))
         else:
-            total_run = max(1, round(run))
+            total_run = max(1, round(run * fish.speed_multiplier))
 
         fish.distance += total_run
 
@@ -460,7 +535,7 @@ class FishTurn(NoOpComponent):
         rage_gain *= fish.rage_factor
         rage_gain *= state_modifier
         rage_gain *= stamina_modifier
-        fish.rage += round(rage_gain)
+        fish.rage += round(rage_gain * fish.rage_multiplier)
         fish.rage = min(100, fish.rage)
         rage_delta = fish.rage - original_rage
 
@@ -563,13 +638,13 @@ class Pull(NoOpComponent):
 
         # --- stamina ---
         original_stamina = fish.stamina
-        fish.stamina -= stamina_loss
+        fish.stamina -= round(stamina_loss * fish.stamina_multiplier)
         fish.stamina = max(0, fish.stamina)
 
         # --- rage ---
         original_rage = fish.rage
         rage_gain *= fish.rage_factor
-        fish.rage += round(rage_gain)
+        fish.rage += round(rage_gain * fish.rage_multiplier)
         fish.rage = min(100, fish.rage)
         FishTurn.update_fish_state(fish)
 
@@ -646,13 +721,13 @@ class Reel(NoOpComponent):
 
         # --- stamina ---
         original_stamina = fish.stamina
-        fish.stamina -= stamina_loss
+        fish.stamina -= round(stamina_loss * fish.stamina_multiplier)
         fish.stamina = max(0, fish.stamina)
 
         # --- rage ---
         original_rage = fish.rage
         rage_gain *= fish.rage_factor
-        fish.rage += round(rage_gain)
+        fish.rage += round(rage_gain * fish.rage_multiplier)
         fish.rage = min(100, fish.rage)
         FishTurn.update_fish_state(fish)
 
@@ -697,7 +772,7 @@ class GiveLine(NoOpComponent):
     @staticmethod
     def get_give_line(fish) -> int:
         line = random.randint(2, 4)
-        line *= fish.speed
+        line *= round(fish.speed * fish.speed_multiplier)
 
         if fish.state == AGITATED:
             line += 1
