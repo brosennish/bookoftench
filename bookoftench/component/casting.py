@@ -150,8 +150,6 @@ class SpawnFish(LinearComponent):
 
         return filtered
 
-
-
 # ================================================================================================
 
     @staticmethod
