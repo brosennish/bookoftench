@@ -97,25 +97,24 @@ class SpawnFish(LinearComponent):
             valid = [i for i in Fish_Species if i['name'] not in caught]
 
         filtered = self.get_filtered(valid)
+
         fishes = load_fishes(filtered)
 
         rarity = self.get_rarity(player.luck)
         available = [fish for fish in fishes if fish.rarity == rarity]
 
-        # --- check lower rarities for match if needed ---
+        # --- check one lower rarity for match if needed ---
         if not available:
             rarity_order = [MYTHIC, LEGENDARY, RARE, UNCOMMON, COMMON]
-            start_index = rarity_order.index(rarity)
+            current_index = rarity_order.index(rarity)
 
-            for fallback_rarity in rarity_order[start_index:]:
+            if current_index < len(rarity_order) - 1:
+                fallback_rarity = rarity_order[current_index + 1]
                 available = [fish for fish in fishes if fish.rarity == fallback_rarity]
-
-                if available:
-                    break
 
         if not available:
             self.game_state.current_fish = None
-            print_and_sleep(dim("You came up dry."), 1)
+            print_and_sleep(dim("You got a bite, but nothing took the bait."), 1)
             return None
 
         selection = random.choice(available)
@@ -149,8 +148,6 @@ class SpawnFish(LinearComponent):
         ]
 
         return filtered
-
-
 
 # ================================================================================================
 
