@@ -477,6 +477,7 @@ class Search(RandomChoiceComponent):
 
 # ================================================================================================
 
+    # todo - refactor
     @staticmethod
     @register_component(DISCOVER_DISCOVERABLE)
     @functional_component(state_dependent=True)
@@ -574,7 +575,8 @@ class Search(RandomChoiceComponent):
     def _discover_item(game_state: GameState):
         available = [i for i in load_items()
                      if i.name not in game_state.player.items
-                     and game_state.current_area in i.areas]
+                     and i.areas is not None
+                     and game_state.current_area.name in i.areas]
         if available:
             item = random.choice(available)
         else:
@@ -604,13 +606,14 @@ class Search(RandomChoiceComponent):
         if len(available) == 0:  # shouldn't ever be the case in actual gameplay, but need this in debug mode
             available = load_discoverable_weapons()
         weapon = random.choice(available)
-        game_state.found_weapon = weapon
 
         if weapon.type not in [BLIND, SPECIAL]:
             if random.random() < 0.10:
                 weapon = make_elite_weapon(weapon)
             if random.random() < 0.05:
                 weapon = make_autographed_weapon(weapon)
+
+        game_state.found_weapon = weapon
 
         play_sound(POSITIVE)
         print_and_sleep(cyan(f"You found {'an' if weapon.name[0].lower() in 'aeiou' else 'a'} {weapon.name}!"),
