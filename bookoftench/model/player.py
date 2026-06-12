@@ -14,19 +14,25 @@ from bookoftench.event_logger import subscribe_function
 from bookoftench.model.illness import Illness
 from bookoftench.ui import yellow, dim, green, cyan, purple, red
 from bookoftench.util import print_and_sleep
+from bookoftench.model.bait import Bait
 from .base import Combatant, Buyable
 from .build import Build
 from .enemy import Enemy
 from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, BuyPerkEvent, LevelUpEvent, \
     SwapWeaponEvent, WeaponBrokeEvent, HitEvent, PlayerDeathEvent, StealItemEvent, StealWeaponEvent, StealPerkEvent, \
     GenericStealEvent
+from .fish import Fish
+from .fishing_item import FishingItem
 from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
 from .trait import Trait
 from .weapon import load_weapons, Weapon
-from bookoftench.data.enviroment import DAYTIME, NIGHTTIME, FULL, WETTING, DRYING
+from bookoftench.data.enviroment import DAY, NIGHT, FULL, WETTING, DRYING
 from bookoftench.data.areas import CAVE
-from ..data.enemies import EMPATH
+from bookoftench.data.enemies import EMPATH
+from ..data.audio import XP, GREAT_JOB, GOLF_CLAP
+from ..data.fishing_items import BARB_HOOK
+
 
 # ================================================================================================
 
@@ -81,7 +87,7 @@ def build_weapon_defaults(build: Build | None) -> Dict[str, PlayerWeapon]:
     # Clean out bad data first (temporary safety net)
     build.weapons = [w for w in build.weapons if hasattr(w, "name")]
 
-    filtered = [i.name for i in build.weapons if i.name in [BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF]]
+    filtered = [w.name for w in build.weapons if w.name in [BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF]]
 
     if filtered:
         build.weapons.extend(load_weapons(filtered))
@@ -107,6 +113,18 @@ class Player(Combatant):
     luck: float = 1
     trait: Trait = None
 
+    # --- fishing ---
+    fishing_xp: int = 0
+    fishing_xp_needed: int = 10
+    fishing_lvl: int = 1
+    rod_lvl: int = 1
+    max_active_fishing_items: int = 3
+    caught_fish: list[Fish] = field(default_factory=list)
+    tackle_box: Dict[str, Bait] = field(default_factory=dict)
+    fishing_item_box: Dict[str, FishingItem] = field(default_factory=dict)
+    current_bait: Bait | None = None
+    active_fishing_items: list[FishingItem] = field(default_factory=list)
+
     illness: Optional[Illness] = None
     illness_death_lvl: Optional[int] = None
 
@@ -126,7 +144,7 @@ class Player(Combatant):
     _max_weapons: int = 4
 
     _blind = False
-    # TODO maybe add starting items/weapons to config file
+
     items: Dict[str, Item] = field(default_factory=item_defaults)
     weapon_dict: Dict[str, PlayerWeapon] = field(default_factory=weapon_defaults)
     current_weapon: Weapon = None
@@ -196,6 +214,40 @@ class Player(Combatant):
     @attach_perks(p.HEALTH_NUT, p.DOCTOR_FISH, value_description="hp gained")
     def _apply_hp_bonus(base: int) -> int:
         return base
+
+# ================================================================================================
+
+    def equip_bait(self, bait: Bait):
+        self.current_bait = bait
+
+    @property
+    def has_usable_bait(self) -> bool:
+        has_bait = any(bait.casts > 0 for bait in self.tackle_box.values())
+        if has_bait:
+            return True
+        return False
+
+    def use_fishing_item(self, fish: Fish, item: FishingItem):
+        if item.spit_hook_prevention:
+            fish.barb_hook_active = True
+
+        if item.speed_reduction:
+            fish.speed_multiplier *= (1 - item.speed_reduction)
+
+        if item.stamina_reduction:
+            fish.stamina_multiplier *= (1 + item.stamina_reduction)
+
+        if item.rage_reduction:
+            fish.rage_multiplier *= (1 - item.rage_reduction)
+
+        if item.strength_reduction:
+            fish.strength_multiplier *= (1 - item.strength_reduction)
+
+        item.count -= 1
+        self.active_fishing_items.append(item)
+
+        if item.count <= 0:
+            self.fishing_item_box.pop(item.name, None)
 
 # ================================================================================================
 
@@ -286,7 +338,7 @@ class Player(Combatant):
             print_and_sleep(red(f"You lost {original_hp - self.hp} HP."), 1)
             return None
         elif item.name == i.PHOTOSYNTHOPHYL:
-            if time == DAYTIME and game_state.current_area.name != CAVE:
+            if time == DAY and game_state.current_area.name != CAVE:
                 amount = self.max_hp - self.hp
                 self.hp = self.max_hp
                 play_sound(a.POSITIVE)
@@ -311,7 +363,7 @@ class Player(Combatant):
                 play_sound(a.SPRAY)
                 print_and_sleep(purple(f"You doused {enemy.name} with Flaccid Acid! Strength: "
                                        f"{original} -> {enemy.strength}"), 1)
-            elif item.name == i.MOON_RUNE and time == NIGHTTIME and game_state.current_area.name != CAVE:
+            elif item.name == i.MOON_RUNE and time == NIGHT and game_state.current_area.name != CAVE:
                 damage = 10 # dry moon
                 if moon == DRYING:
                     damage = 25
@@ -466,6 +518,51 @@ class Player(Combatant):
         if self.luck > 10:
             self.luck = 10
 
+# ================================================================================================
+
+    def gain_fishing_xp(self, xp: int) -> None:
+        self.fishing_xp += xp
+        fishing_xp = self.fishing_xp
+        original_fishing_lvl = self.fishing_lvl
+
+        play_sound(XP)
+        print_and_sleep(cyan(f"You gained {xp} XP!"), 1)
+
+        if fishing_xp >= 550:
+            fishing_lvl = 8
+            xp_needed = 880
+        elif fishing_xp >= 360:
+            xp_needed = 550
+            fishing_lvl = 7
+        elif fishing_xp >= 250:
+            xp_needed = 360
+            fishing_lvl = 6
+        elif fishing_xp >= 160:
+            xp_needed = 250
+            fishing_lvl = 5
+        elif fishing_xp >= 90:
+            xp_needed = 160
+            fishing_lvl = 4
+        elif fishing_xp >= 40:
+            xp_needed = 90
+            fishing_lvl = 3
+        elif fishing_xp >= 10:
+            xp_needed = 40
+            fishing_lvl = 2
+        else:
+            xp_needed = 10
+            fishing_lvl = 1
+
+        self.fishing_lvl = fishing_lvl
+        self.fishing_xp_needed = xp_needed
+
+        if original_fishing_lvl != fishing_lvl:
+            play_sound(GOLF_CLAP)
+            play_sound(GREAT_JOB)
+            print_and_sleep(cyan(f"You have reached fishing level {self.fishing_lvl}!"), 1)
+
+# ================================================================================================
+
     @staticmethod
     @attach_perk(p.INTRO_TO_TENCH, value_description="xp gained")
     @attach_perk(p.AP_TENCH_STUDIES, p.WrapperIndices.ApTenchStudies.BATTLE_XP, value_description="xp gained")
@@ -492,10 +589,6 @@ class Player(Combatant):
         # handles cases where a big XP chunk might give multiple levels
         while self.xp >= self.xp_needed:
             self.level_up()
-
-    @attach_perk(p.TENCH_GENES, p.WrapperIndices.TenchGenes.SURVIVAL, value_description="illness survival chance")
-    def get_illness_survival_probability(self) -> float:
-        return 0.0
 
 # ================================================================================================
 
@@ -553,6 +646,12 @@ class Player(Combatant):
         self.illness = None
         self.illness_death_lvl = None
         self._max_plays = 10
+
+# ================================================================================================
+
+    @attach_perk(p.TENCH_GENES, p.WrapperIndices.TenchGenes.SURVIVAL, value_description="illness survival chance")
+    def get_illness_survival_probability(self) -> float:
+        return 0.0
 
 # ================================================================================================
 

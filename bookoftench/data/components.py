@@ -7,12 +7,15 @@ from bookoftench.ui import purple
 ACHIEVEMENTS = "Achievements"
 AREA_BOSS_FIGHT = "Fight Boss"
 ATTRIBUTES = "Attributes"
+BAIT_SHOP = "Bait Shop"
 BANK = "Bank"
 BLACKSMITH = "Blacksmith"
+BOAT = "Boat"
 BUILD = "Build"
 BUILD_SELECTION = "Build Selection"
 CASINO = "Casino"
 COFFEE_SHOP = "Coffee Shop"
+COMPENDIUM = "Compendium"
 # CRYPTO_EXCHANGE = "Crypto Exchange (Experimental)"
 DISCOVER_DISCOVERABLE = "Discover Discoverable"
 DISCOVER_ITEM = "Discover Item"
@@ -25,6 +28,8 @@ ENCOUNTERS = "Encounters"
 EQUIP_WEAPON = "Equip Weapon"
 FIGHT_BOSS_OTHER = "Fight Boss Other"
 FINAL_BOSS_FIGHT = purple("BATTLE DENNY BILTMORE")
+FISHING_LOG = "Fishing Log"
+FISHMONGER = "Fishmonger"
 GREEDY_BASTARD = "Greedy Bastard"
 HOSPITAL = "Hospital"
 INFO = "Info"
@@ -45,6 +50,7 @@ SHEBOKKEN_ROULETTE = "Shebokken Roulette"
 SHOP = "Shop"
 SPAWN_ENEMY = "Spawn Enemy"
 STATS = "Stats"
+TACKLE_BOX = "Tackle Box"
 THREE_HOLES = "Three Holes"
 TRAVEL = "Travel"
 TRIPLE_TENCH_DARE = "Triple Tench Dare"
@@ -64,7 +70,8 @@ class ActionMenuDefaults:
 
 
 class OverviewMenuDefaults:
-    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, DISCOVERIES, ENCOUNTERS, KILLS, PERKS, STATS]
+    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, DISCOVERIES, ENCOUNTERS,
+                           FISHING_LOG, KILLS, PERKS, STATS]
 
 
 class InGameMenuDefaults:

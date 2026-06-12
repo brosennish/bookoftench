@@ -7,7 +7,7 @@ from bookoftench.component.base import LabeledSelectionComponent, SelectionBindi
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import WIZARD_THEME, PURCHASE
 from bookoftench.data.components import WIZARD
-from bookoftench.data.enviroment import DAYTIME
+from bookoftench.data.enviroment import DAY
 from bookoftench.data.spells import Wizard_Lines, WEAPON, ITEM
 from bookoftench.model import GameState
 from bookoftench.model.events import WizardEvent
@@ -42,7 +42,7 @@ class WizardBouncer(GatekeepingComponent):
 
 class WizardSleeping(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: game_state.time_of_day == DAYTIME,
+        super().__init__(game_state, decision_function=lambda: game_state.time_of_day == DAY,
                          accept_component=WizardComponent,
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("The Wizard sleeps at night."), 1.5)))

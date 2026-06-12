@@ -95,5 +95,5 @@ Builds = [
      'weapons': [],
      'perks': [],
      'illness': None,
-     'notes': 'Randomization at its finest.'},
+     'notes': 'Unexpect the expected.'},
 ]

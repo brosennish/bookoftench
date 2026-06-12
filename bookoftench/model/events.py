@@ -253,13 +253,16 @@ class OfficerEvent(Event):
     def __init__(self, event_type: EventType):
         super().__init__(event_type, callback=self.paid if event_type == event_type.OFFICER_PAID else self.unpaid)
 
-    def paid(self) -> None:
+    @staticmethod
+    def paid() -> None:
+        play_sound(COINS)
         print_and_sleep(f"{blue("Thanks for the coin ther'.")}", 1.5)
         print_and_sleep(f"{blue("Unfortunately, uh... I got some bad news for ya's.")}", 1.5)
         print_and_sleep(f"{blue("Your whole family was, uh... dragged down.")}", 1.5)
         print_and_sleep(f"{blue("The whole bunch.")}", 1.5)
 
-    def unpaid(self) -> None:
+    @staticmethod
+    def unpaid() -> None:
         print_and_sleep(f"{blue("...")}", 1.5)
         print_and_sleep(f"{blue("This is Officer Hohkken.")}", 1.5)
 

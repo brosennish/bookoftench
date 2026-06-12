@@ -1,6 +1,5 @@
 import random
 from dataclasses import dataclass, field
-from typing import Dict
 
 from bookoftench import event_logger
 from bookoftench.audio import play_music, play_sound
@@ -16,7 +15,7 @@ from bookoftench.model.enemy import Enemy
 from bookoftench.model.events import OfficerEvent
 from bookoftench.model.perk import attach_perk
 from bookoftench.model.util import p_color
-from bookoftench.model.weapon import Weapon, load_weapons
+from bookoftench.model.weapon import Weapon
 from bookoftench.ui import dim, yellow, green, purple, blue
 from bookoftench.util import print_and_sleep
 
@@ -27,7 +26,8 @@ from bookoftench.util import print_and_sleep
 @register_component(OFFICER)
 class OfficerEncounterDecision(ConditionalComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=is_officer_lurking,
+        super().__init__(game_state, decision_function=lambda:
+        OfficerEncounter(game_state).is_officer_lurking(),
                          component=OfficerEncounter)
 
 # ================================================================================================
@@ -71,13 +71,19 @@ class OfficerEncounter(BinarySelectionComponent):
 
 # ================================================================================================
 
-@attach_perk(BROWNMAIL)
-def is_officer_lurking() -> bool:
-    return random.random() < 0.08
+    @attach_perk(BROWNMAIL)
+    def is_officer_lurking(self) -> bool:
+        if self.game_state.current_fish and self.game_state.current_fish.protected:
+            return True
+        else:
+            return random.random() < 0.08
 
 
 def calculate_bribe(game_state: GameState) -> int:
-    return min(game_state.player.lvl * 10, 50)
+    if game_state.current_fish and game_state.current_fish.protected:
+        return round(game_state.current_fish.base_value / 2)
+    else:
+        return game_state.player.lvl * 10
 
 # ================================================================================================
 
@@ -96,7 +102,7 @@ def obey_officer(game_state: GameState):
 @functional_component(state_dependent=True)
 def disobey_officer(game_state: GameState):
     player = game_state.player
-    OfficerHohkken(calculate_bribe(game_state)).handle_hit(player)
+    OfficerHohkken(bribe=calculate_bribe(game_state)).handle_hit(player)
     event_logger.log_event(OfficerEvent(EventType.OFFICER_UNPAID))
 
 # ================================================================================================
@@ -119,15 +125,26 @@ class PoliceBrutality(Weapon):
 
 # ================================================================================================
 
+@dataclass
 class OfficerHohkken(Enemy):
-    def __init__(self, bribe: int):
-        super().__init__()
-        self.name: str = 'Officer Hohkken'
-        self.hp: int = 100
-        self.weapon_dict: Dict[str, Weapon] = field(init=False)
-        self.current_weapon.damage = random.randint(round(bribe / 2), bribe)
-        self.random_dialogue = []  # TODO maybe add some here?
+    name: str = 'Officer Hohkken'
+    bribe: int = 10
+    hp: int = 100
+    current_weapon: Weapon = field(default_factory=PoliceBrutality)
 
     def __post_init__(self):
-        self.current_weapon: Weapon = PoliceBrutality()
-        self.weapon_dict = dict((w.name, w) for w in load_weapons([self.current_weapon.name]))
+        self.current_weapon.damage = random.randint(
+            max(10, round(self.bribe / 2)),
+            max(10, self.bribe)
+        )
+        self.weapon_dict = {self.current_weapon.name: self.current_weapon}
+
+
+
+
+
+
+
+
+
+

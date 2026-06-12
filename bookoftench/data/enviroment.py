@@ -1,7 +1,7 @@
 # Constants
-DAYTIME = "Daytime"
+DAY = "Day"
 DRY = "Dry"
 DRYING = "Drying"
 FULL = "Full"
-NIGHTTIME = "Nighttime"
+NIGHT = "Night"
 WETTING = "Wetting"

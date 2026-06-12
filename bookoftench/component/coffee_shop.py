@@ -7,7 +7,7 @@ from bookoftench.component.base import LabeledSelectionComponent, ReprBinding, S
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import PURCHASE, DRINK, COFFEE_THEME
 from bookoftench.data.components import COFFEE_SHOP
-from bookoftench.data.enviroment import DAYTIME
+from bookoftench.data.enviroment import DAY
 from bookoftench.model import GameState
 from bookoftench.model.coffee_item import CoffeeItem
 from bookoftench.model.coffee_shop import CoffeeShop
@@ -36,7 +36,7 @@ class CoffeeOpen(GatekeepingComponent):
 
 class CoffeeSleeping(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: game_state.time_of_day == DAYTIME,
+        super().__init__(game_state, decision_function=lambda: game_state.time_of_day == DAY,
                          accept_component=CoffeeBouncer,
                          deny_component=functional_component()(lambda: print_and_sleep(
                              red(f"Coughy is trying to sleep.\n"), 1.5)))

@@ -8,7 +8,7 @@ from bookoftench.component.registry import register_component
 from bookoftench.data.audio import PURCHASE, BLACKSMITH_THEME
 from bookoftench.data.blacksmith import Blacksmith_Lines
 from bookoftench.data.components import BLACKSMITH
-from bookoftench.data.enviroment import DAYTIME
+from bookoftench.data.enviroment import DAY
 from bookoftench.data.weapons import BLIND, MELEE, RANGED
 from bookoftench.model import GameState
 from bookoftench.model.events import BlacksmithEvent
@@ -40,7 +40,7 @@ class BlacksmithOpen(GatekeepingComponent):
 
 class BlacksmithSleeping(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: game_state.time_of_day == DAYTIME,
+        super().__init__(game_state, decision_function=lambda: game_state.time_of_day == DAY,
                          accept_component=BlacksmithComponent,
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("Sledge Jr. is resting his scaly muscles."), 1.5)))

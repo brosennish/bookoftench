@@ -7,7 +7,7 @@ from bookoftench.component import RandomChoiceComponent, register_component, Pro
 from bookoftench.data.audio import PISTOL, ROULETTE_THEME, PUNCH, POSITIVE, MONSTER_ATTACK
 from bookoftench.data.components import DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, \
     ZONKED, GREEDY_BASTARD
-from bookoftench.data.enviroment import NIGHTTIME
+from bookoftench.data.enviroment import NIGHT
 from bookoftench.data.perks import BEER_GOGGLES
 from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent
@@ -183,7 +183,7 @@ class DiscoverSpecial(RandomChoiceComponent):
                     wager = int(choice)
                     print_and_sleep(green(f"You wagered {wager} coins.\n"), 2)
                     break
-            elif choice == "n":
+            elif choice in ["n", "r"]:
                 print_and_sleep(purple("You decide against your better judgement."), 2)
                 return None
             else:
@@ -200,6 +200,9 @@ class DiscoverSpecial(RandomChoiceComponent):
             elif pick == "t":
                 print_and_sleep(purple("You chose tails."), 2)
                 break
+            elif pick == "r":
+                print_and_sleep(purple("You decide against your better judgement."), 2)
+                return None
             else:
                 print_and_sleep(yellow("Invalid choice.\n"), 1)
                 continue
@@ -230,10 +233,10 @@ class DiscoverSpecial(RandomChoiceComponent):
                     return None
                 else:  # You suffer 1, calc damage and lose your wager (death if applicable)
                     damage = random.randint(1, min(wager, 40))
-                    original = player.hp
-                    player.hp -= min(damage, original)
+                    actual_damage = min(damage, player.hp)
+                    player.hp -= actual_damage
                     play_sound(PISTOL)
-                    print_and_sleep(red(f"The man shot you for {damage} damage!"), 3)
+                    print_and_sleep(red(f"The man shot you for {actual_damage} damage!"), 3)
                     print_and_sleep(yellow(f"You lost your wager of {wager} coins."), 2)
                     player.coins -= wager
                     player.gain_xp_other(damage)
@@ -299,9 +302,17 @@ Choose wisely.\n\n"""), 3)
         elif choice == "3":
             choice = hole_3
 
-        if choice == "good":  # Find a random item from area and not in your items
-            item = random.choice([i for i in load_items() if game_state.current_area.name in i.areas
-                                  and i.name not in player.items])
+        if choice == "good":  # Find a random item from the current area
+            available_items = [
+                i for i in load_items()
+                if i.areas is not None and game_state.current_area.name in i.areas
+            ]
+
+            if not available_items:
+                print_and_sleep(dim("You came up dry."), 1)
+                return None
+
+            item = random.choice(available_items)
             play_sound(POSITIVE)
             player.gain_or_lose_luck(0.05)
             print_and_sleep(cyan(f"You found {'an' if item.name[0].lower() in 'aeiou' else 'a'} {item.name}!"), 1)
@@ -335,7 +346,7 @@ Choose wisely.\n\n"""), 3)
     @functional_component(state_dependent=True)
     def _triple_tench_dare(game_state: GameState):
         player = game_state.player
-        if perk_is_active(BEER_GOGGLES) or game_state.time_of_day == NIGHTTIME:
+        if perk_is_active(BEER_GOGGLES) or game_state.time_of_day == NIGHT:
             print_and_sleep(dim(f"You came up dry."), 1)
             return None
 
@@ -352,11 +363,11 @@ What do you say?\n\n"""), 3)
                 f"[#] Yes (enter # of seconds)\n[M] Maybe next time"
                 f"\n\nPlease enter a selection{veg}").strip().lower()
             if choice.isdigit():
-               if int(choice) > 20 or int(choice) < 1:
-                   print_and_sleep(yellow("Please enter a value between 1-20.\n"), 1)
-               else:
-                   seconds = int(choice)
-                   break
+                if int(choice) > 20 or int(choice) < 1:
+                    print_and_sleep(yellow("Please enter a value between 1-20.\n"), 1)
+                else:
+                    seconds = int(choice)
+                    break
             elif choice == "m":
                 print_and_sleep(purple("You decide against your better judgement."), 2)
                 return None
