@@ -9,8 +9,8 @@ from bookoftench.data import Areas
 from bookoftench.data.areas import EncounterType
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
-    SPAWN_ENEMY, DISCOVER_SPECIAL, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD, \
-    ENCOUNTER_BOSS
+    SPAWN_ENEMY, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD, \
+    ENCOUNTER_BOSS, SPECIAL_EVENT
 from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, CONTAGIOUS, NIGHT_OWL, HOHKKEN, BOSS, \
     NORMAL, SPECIAL_BOSS
 from bookoftench.ui import purple, yellow, blue
@@ -31,21 +31,27 @@ from ..data.audio import ENEMY_APPEARS, OWL_SFX, WEREWOLF_SFX
 # ================================================================================================
 
 _search_defaults = {
+    DISCOVER_PERK: 0,
+    DISCOVER_WEAPON: 0,
+    DISCOVER_ITEM: 0,
+    ENCOUNTER_BOSS: 0,
+    DISCOVER_DISCOVERABLE: 0,
+    SPECIAL_EVENT: 100,
+    SPAWN_ENEMY: 0
+}
+
+"""_search_defaults = {
     DISCOVER_PERK: 1,
     DISCOVER_WEAPON: 2,
     DISCOVER_ITEM: 3,
     ENCOUNTER_BOSS: 3,
     DISCOVER_DISCOVERABLE: 45,
-    DISCOVER_SPECIAL: 8,
+    SPECIAL_EVENT: 8,
     SPAWN_ENEMY: 30
-}
+} """
 
 _event_defaults = {
-    GREEDY_BASTARD: 27,
-    SHEBOKKEN_ROULETTE: 24,
-    THREE_HOLES: 29,
-    TRIPLE_TENCH_DARE: 8,
-    ZONKED: 12
+    SPECIAL_EVENT: 100,
 }
 
 # ================================================================================================
@@ -71,7 +77,7 @@ class Area:
     enemies: list[str]
     boss_name: str
     theme: str
-    enemy_count: int = field(default_factory=lambda: random.randint(7, 8))
+    enemy_count: int = field(default_factory=lambda: random.randint(7, 9))
     enemies_killed: int = 0
     enemies_seen: Set[str] = field(default_factory=set)
     boss_defeated: bool = False
