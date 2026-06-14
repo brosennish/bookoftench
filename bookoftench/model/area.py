@@ -10,7 +10,7 @@ from bookoftench.data.areas import EncounterType
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
     SPAWN_ENEMY, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD, \
-    ENCOUNTER_BOSS, SPECIAL_EVENT
+    ENCOUNTER_SUB_BOSS, SPECIAL_EVENT
 from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, CONTAGIOUS, NIGHT_OWL, HOHKKEN, BOSS, \
     NORMAL, SPECIAL_BOSS
 from bookoftench.ui import purple, yellow, blue
@@ -31,24 +31,14 @@ from ..data.audio import ENEMY_APPEARS, OWL_SFX, WEREWOLF_SFX
 # ================================================================================================
 
 _search_defaults = {
-    DISCOVER_PERK: 0,
-    DISCOVER_WEAPON: 0,
-    DISCOVER_ITEM: 0,
-    ENCOUNTER_BOSS: 0,
-    DISCOVER_DISCOVERABLE: 0,
-    SPECIAL_EVENT: 100,
-    SPAWN_ENEMY: 0
-}
-
-"""_search_defaults = {
     DISCOVER_PERK: 1,
     DISCOVER_WEAPON: 2,
     DISCOVER_ITEM: 3,
-    ENCOUNTER_BOSS: 3,
+    ENCOUNTER_SUB_BOSS: 3,
     DISCOVER_DISCOVERABLE: 45,
     SPECIAL_EVENT: 8,
     SPAWN_ENEMY: 30
-} """
+}
 
 _event_defaults = {
     SPECIAL_EVENT: 100,

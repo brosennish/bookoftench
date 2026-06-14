@@ -4,9 +4,9 @@ from bookoftench.audio import play_music
 from bookoftench.component import functional_component, Component, \
     LabeledSelectionComponent, ReprBinding, NoOpComponent, SelectionBinding, register_component
 from bookoftench.data.components import SPECIAL_EVENT
-from bookoftench.data.special_events import FRIENDLY_ALIENS, Special_Events
+from bookoftench.data.special_events import Special_Events
 from bookoftench.model import GameState
-from bookoftench.model.special_event import SpecialEvent, load_special_event, load_special_events
+from bookoftench.model.special_event import SpecialEvent, load_special_event
 from bookoftench.util import print_and_sleep
 
 # ================================================================================================

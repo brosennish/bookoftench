@@ -5,9 +5,9 @@ from bookoftench.ui import green, purple, yellow
 # ================================================================================================
 
 # Special Events
-FRIENDLY_ALIENS = "Friendly Aliens"
 GREEDY_BASTARD = "Greedy Bastard"
 HERPES_KISS = "Herpes Kiss"
+PROBING = "Probing"
 SHEBOKKEN_ROULETTE = "Shebokken Roulette"
 STINGY_BASTARD = "Stingy Bastard"
 THREE_HOLES = "Three Holes"
@@ -21,15 +21,9 @@ NIGHT = "Nighttime"
 # ================================================================================================
 
 # if moon in moon or if moon == None
+# if not replayable, add to game_state list and filter to not select again
 
 Special_Events = [
-
-    {'name': FRIENDLY_ALIENS, 'color': green, 'sleep': 3, 'theme': None,
-     'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [NIGHT], 'moon': None, 'season': None,
-     'text': "You were abducted by aliens!\nThey wish to be of assistance.\nWhat can they do for you?",
-     'choices': ['Increase strength by 0.03', 'Increase accuracy by 0.03', 'Increase luck by 2'],
-     'optional': True, 'method': 'friendly_aliens'},
-
 
     {'name': GREEDY_BASTARD, 'color': purple, 'sleep': 5, 'theme': None,
      'areas': [a.CAVE, a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
@@ -37,7 +31,16 @@ Special_Events = [
             "Hey! You there! I have coin...\n"
             "How much do you want? Hehehe.",
      'choices': ['10', '20', '30', '40', '50'],
-     'optional': True, 'method': 'greedy_bastard'},
+     'optional': True, 'method': 'greedy_bastard', 'replayable': True},
+
+
+    {'name': PROBING, 'color': green, 'sleep': 3, 'theme': None,
+     'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [NIGHT], 'moon': None, 'season': None,
+     'text': "You were abducted by aliens!\n"
+             "They ask you if you are ready for your probing.\n"
+             "What do you do?",
+     'choices': ['Accept Probe', 'Attempt to Probe the Aliens', 'Try to Escape'],
+     'optional': False, 'method': 'probing', 'replayable': True},
 
 
     {'name': SHEBOKKEN_ROULETTE, 'color': purple, 'sleep': 5, 'theme': ROULETTE_THEME,
@@ -47,7 +50,7 @@ Special_Events = [
              "One bullet, two blindfolds.\n"
              "What's your wager?",
      'choices': ['10', '20', '30', '40', '50'],
-     'optional': False, 'method': 'shebokken_roulette'},
+     'optional': False, 'method': 'shebokken_roulette', 'replayable': True},
 
 
     {'name': STINGY_BASTARD, 'color': purple, 'sleep': 5, 'theme': None,
@@ -56,7 +59,7 @@ Special_Events = [
             "Hey! You there! I need coin...\n"
             "How much will you give me? Hehehe.",
      'choices': ['10', '20', '30', '40', '50'],
-     'optional': True, 'method': 'stingy_bastard'},
+     'optional': True, 'method': 'stingy_bastard', 'replayable': True},
 
 
     {'name': THREE_HOLES, 'color': purple, 'sleep': 5, 'theme': None,
@@ -67,7 +70,7 @@ Special_Events = [
              "Extending its elastic lips deep into your earhole,\n"
              "It whispers that you may only reach into one of the holes.",
      'choices': ['Hole 1', 'Hole 2', 'Hole 3'],
-     'optional': True, 'method': 'three_holes'},
+     'optional': True, 'method': 'three_holes', 'replayable': True},
 
 
     {'name': TRIPLE_TENCH_DARE, 'color': yellow, 'sleep': 4, 'theme': None,
@@ -77,21 +80,23 @@ Special_Events = [
              "For every second, he will give you 5 of coin.\n"
              "How many seconds will you do?",
      'choices': ['5', '10', '15', '20'],
-     'optional': True, 'method': 'triple_tench_dare'},
+     'optional': True, 'method': 'triple_tench_dare', 'replayable': True},
 
 
     {'name': ZONKED, 'color': purple, 'sleep': 4, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': "You come across a man who is totally zonked...\n"
-             "His 1977 Slade shirt is caked with drool.\n"
+             "His Slade shirt is caked with drool.\n"
              "You've never seen someone so zonked in your whole dang life.\n"
              "HWhat will you do?",
      'choices': ['Wake Him Up', 'Bury Him Alive'],
-     'optional': True, 'method': 'zonked'},
+     'optional': True, 'method': 'zonked', 'replayable': True},
 
 ]
 
 # ================================================================================================
+
+# Just in case
 
 Special_Event_Adjectives = [
     "ancient", "angry", "bald", "blind",
