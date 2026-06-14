@@ -1,12 +1,14 @@
 from bookoftench.data import areas as a
 from bookoftench.data.audio import ROULETTE_THEME
-from bookoftench.ui import green, purple, yellow
+from bookoftench.ui import green, purple, yellow, blue, red
 
 # ================================================================================================
 
 # Special Events
 GREEDY_BASTARD = "Greedy Bastard"
 HERPES_KISS = "Herpes Kiss"
+LOST_GOLD_P1 = "Lost Gold P1"
+LOST_GOLD_P2 = "Lost Gold P2"
 PROBING = "Probing"
 SHEBOKKEN_ROULETTE = "Shebokken Roulette"
 STINGY_BASTARD = "Stingy Bastard"
@@ -26,13 +28,36 @@ NIGHT = "Nighttime"
 Special_Events = [
 
     {'name': GREEDY_BASTARD, 'color': purple, 'sleep': 5, 'theme': None,
-     'areas': [a.CAVE, a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
-     'text': "An old woman with wrinkled eyeballs wearing a homemade cloak approaches you.\n"
+     'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': "An old woman with wrinkled eyeballs wearing a soiled cloak approaches you.\n"
             "Hey! You there! I have coin...\n"
             "How much do you want? Hehehe.",
      'choices': ['10', '20', '30', '40', '50'],
      'optional': True, 'method': 'greedy_bastard', 'replayable': True},
 
+# ================================================================================================
+
+    {'name': LOST_GOLD_P1, 'stage': 1, 'color': blue, 'sleep': 5, 'theme': None,
+     'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': "You smell the overwhelming stench of brine-soaked jines...\n"
+             "Pirate: Argh! I lost me gold.\n"
+             "Tell me, wher' can I find me gold?",
+     'choices': ['CAVE', 'CITY', 'FOREST', 'SWAMP'],
+     'optional': False, 'method': 'lost_gold_p1', 'replayable': False,
+     'related': [LOST_GOLD_P2]},
+
+    {'name': LOST_GOLD_P2, 'stage': 2, 'color': red, 'sleep': 5, 'theme': None,
+     'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': "You smell a familiar stench...\n"
+             "Pirate: Argh! You lied to me, matey.\n"
+             "I searched for me gold and came up dry!\n",
+             "Give me coin or I'll shoot ya right in yer' jines.\n"
+             "Aye, if yer' dry, a tench filet would also do."
+     'choices': ['Give Coin (50), Give Tench Filet, Beg for Mercy'],
+     'optional': False, 'method': 'lost_gold_p2', 'replayable': False,
+     'related': [LOST_GOLD_P1]},
+
+# ================================================================================================
 
     {'name': PROBING, 'color': green, 'sleep': 3, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [NIGHT], 'moon': None, 'season': None,

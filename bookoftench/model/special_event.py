@@ -31,46 +31,8 @@ class SpecialEvent:
     optional: bool
     method: str
     replayable: bool
-    stage: int | None
     related: list[str] | None
-
-# ================================================================================================
-
-    @staticmethod
-    def probing(game_state: GameState, choice: int):
-        player = game_state.player
-
-        if choice == 1: # Accept Probe
-            if random.random() < 0.5 * player.luck:
-                print_and_sleep(green("The aliens went easy on you.\n"), 1.5)
-                player.hp -= random.randint(5, 10)
-            else:
-                print_and_sleep(yellow("The aliens didn't hold back...\n"), 1.5)
-                player.hp -= random.randint(11, 20)
-        elif choice == 2: # Attempt to Probe the Aliens
-            if random.random() < 0.5 * player.strength:
-                print_and_sleep(green("You probed the aliens!"), 1.5)
-                print_and_sleep(green("They gave you a perk to thank you for the pleasure."), 1.5)
-                valid = [i for i in load_perks() if not i.active]
-                perk = random.choice(valid)
-                player.add_perk(perk)
-            else:
-                print_and_sleep(yellow("You were unable to probe the aliens...\n"), 1.5)
-                print_and_sleep(yellow("They probed you extra hard as punishment.\n"), 1.5)
-                player.hp -= random.randint(21, 30)
-        elif choice == 3: # Try to Escape
-            if random.random() < 0.5 + (player.luck * 0.1):
-                damage = random.randint(5, 10)
-                print_and_sleep(green("You were able to find the exit and jump from the ship!"), 1.5)
-                print_and_sleep(red(f"You lost {damage} hp upon landing."), 1.5)
-                player.hp -= damage
-            else:
-                damage = random.randint(21, 30)
-                print_and_sleep(green("You were unable to evade the aliens..."), 1.5)
-                print_and_sleep(red("They probed you extra hard for trying to escape.\n"), 1.5)
-                player.hp -= damage
-
-        special_event_death_check(player)
+    stage: int | None = 1
 
 # ================================================================================================
 
@@ -94,6 +56,44 @@ class SpecialEvent:
             print_and_sleep(purple(f"That's for being a greedy bastard!\n"), 2)
             player.gain_or_lose_luck(-0.1)
             special_event_death_check(player)
+
+# ================================================================================================
+
+    @staticmethod
+    def probing(game_state: GameState, choice: int):
+        player = game_state.player
+
+        if choice == 1:  # Accept Probe
+            if random.random() < 0.5 + (player.luck * 0.1):
+                print_and_sleep(green("The aliens went easy on you.\n"), 1.5)
+                player.hp -= random.randint(5, 10)
+            else:
+                print_and_sleep(yellow("The aliens didn't hold back...\n"), 1.5)
+                player.hp -= random.randint(11, 20)
+        elif choice == 2:  # Attempt to Probe the Aliens
+            if random.random() < 0.5 * player.strength:
+                print_and_sleep(green("You probed the aliens!"), 1.5)
+                print_and_sleep(green("They gave you a perk to thank you for the pleasure."), 1.5)
+                valid = [i for i in load_perks() if not i.active]
+                perk = random.choice(valid)
+                player.add_perk(perk)
+            else:
+                print_and_sleep(yellow("You were unable to probe the aliens...\n"), 1.5)
+                print_and_sleep(yellow("They probed you extra hard as punishment.\n"), 1.5)
+                player.hp -= random.randint(21, 30)
+        elif choice == 3:  # Try to Escape
+            if random.random() < 0.5 + (player.luck * 0.1):
+                damage = random.randint(5, 10)
+                print_and_sleep(green("You were able to find the exit and jump from the ship!"), 1.5)
+                print_and_sleep(red(f"You lost {damage} hp upon landing."), 1.5)
+                player.hp -= damage
+            else:
+                damage = random.randint(21, 30)
+                print_and_sleep(green("You were unable to evade the aliens..."), 1.5)
+                print_and_sleep(red("They probed you extra hard for trying to escape.\n"), 1.5)
+                player.hp -= damage
+
+        special_event_death_check(player)
 
 # ================================================================================================
 
