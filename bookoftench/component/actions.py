@@ -281,7 +281,7 @@ class BuildLuckSelection(LinearComponent):
                 player.luck = 10
                 return self.game_state
             else:
-                player.luck = round(float(luck), 3)
+                player.luck = round(float(luck), 2)
                 return self.game_state
 
 # ================================================================================================
@@ -513,7 +513,7 @@ class BuildComponent(LabeledSelectionComponent):
 
                 player.lvl = random.randint(1, 3)
                 player.fishing_lvl = random.randint(0, 3)
-                player.rod = random.randint(0, 3)
+                player.rod_lvl = random.randint(0, 3)
 
                 player.max_hp = random.randint(80, 120)
                 hp_deficit = random.randint(1, 40)
@@ -566,6 +566,7 @@ class BuildComponent(LabeledSelectionComponent):
 
             else:
                 player.lives = build.lives
+                player.lvl = build.lvl
                 player.max_hp = build.hp
                 player.hp = build.hp
                 player.strength = build.str
@@ -573,7 +574,7 @@ class BuildComponent(LabeledSelectionComponent):
                 player.coins = build.coins
                 player.luck = build.luck
                 player.fishing_lvl = build.fishing_lvl
-                player.rod = build.rod_lvl
+                player.rod_lvl = build.rod_lvl
 
                 if build.illness:
                     player.illness = build.illness

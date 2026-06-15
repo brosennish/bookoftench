@@ -41,7 +41,7 @@ class Build:
             f"Accuracy: {yellow(accuracy)}",
             f"Luck: {purple(self.luck)}",
             f"Fishing: {blue(self.fishing_lvl)}",
-            f"Rod: {orange(self.rod_lvl)}",
+            f"Rod: {cyan(self.rod_lvl)}",
             f"Coins: {green(self.coins)}",
         ])
 

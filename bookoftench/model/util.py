@@ -609,7 +609,7 @@ def display_player_attributes(game_state: GameState) -> None:
 
     print_and_sleep(f"\n{dim('Strength |')} {red(round(player.strength, 2))}"
         f"\n{dim('Accuracy |')} {yellow(round(player.acc, 2))}"
-        f"\n{dim('Luck     |')} {purple(round(player.luck, 3))}")
+        f"\n{dim('Luck     |')} {purple(round(player.luck, 2))}")
 
 # ================================================================================================
 
