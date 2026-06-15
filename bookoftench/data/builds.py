@@ -30,7 +30,7 @@ Builds = [
      'weapons': [w.HARPOON],
      'perks': [p.TENCH_GENES, p.TENCH_EYES],
      'illness': None,
-     'notes': 'While not an Old Salt - a salt, nonetheless.'},
+     'notes': 'Not an Old Salt - but a salt, nonetheless.'},
 
 # ================================================================================================
 

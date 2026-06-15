@@ -24,7 +24,6 @@ class Build:
     luck: float | int
     fishing_lvl: int
     rod_lvl: int
-    perk_lvl: int
     items: List[Item]
     weapons: List[Weapon]
     perks: List[Perk]

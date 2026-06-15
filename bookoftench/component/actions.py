@@ -571,6 +571,10 @@ class BuildComponent(LabeledSelectionComponent):
                 player.strength = build.str
                 player.acc = build.acc
                 player.coins = build.coins
+                player.luck = build.luck
+                player.fishing_lvl = build.fishing_lvl
+                player.rod = build.rod_lvl
+
                 if build.illness:
                     player.illness = build.illness
                     player.illness_death_lvl = 1 + build.illness.levels_until_death
@@ -823,7 +827,7 @@ class Travel(LabeledSelectionComponent):
     def _make_travel_component(area_name: str):
         @functional_component(state_dependent=True)
         def travel_component(game_state: GameState):
-            game_state.update_current_area(area_name)
+            game_state.update_current_area(area_name, game_state.season)
 
             if getattr(game_state, "pending_boss", False):
                 game_state.pending_boss = False

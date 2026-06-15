@@ -208,16 +208,29 @@ class GameState:
         self.wanted = enemy_choice.name
         self.bounty = enemy_choice.bounty
 
-    def update_current_area(self, area_name: str) -> None:
+    def update_current_area(self, area_name: str, season: str) -> None:
         for area in self.areas:
             if area.name == area_name:
                 self.current_area = area
                 event_logger.log_event(TravelEvent(area_name))
                 if not perk_is_active(NEPTUNE) and self.hohkken_is_alive:
-                    if self.time_of_day == DAY and random.random() < 0.04:
+
+                    if self.time_of_day == DAY:
+                        if season == DRY_SEASON:
+                            odds = 0.06
+                        else:
+                            odds = 0.02
                         event_logger.log_event(HohkkenEvent())
-                    elif self.time_of_day == NIGHT and random.random() < 0.08:
+
+                    else:
+                        if season == DRY_SEASON:
+                            odds = 0.10
+                        else:
+                            odds = 0.06
+
+                    if random.random() < odds:
                         event_logger.log_event(HohkkenEvent())
+
                 return
 
         raise KeyError(f"Area '{area_name}' not found")
