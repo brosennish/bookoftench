@@ -5,13 +5,15 @@ from typing import Callable, List
 from bookoftench import event_logger
 from bookoftench.audio import play_sound
 from bookoftench.component import SwapFoundItemYN, OfficerEncounter
-from bookoftench.data.audio import MONSTER_ATTACK, POSITIVE, PUNCH, PISTOL
-from bookoftench.data.special_events import Special_Events
+from bookoftench.data.areas import CITY, CAVE, FOREST, SWAMP
+from bookoftench.data.audio import MONSTER_ATTACK, POSITIVE, PUNCH, PISTOL, BLADE
+from bookoftench.data.items import TENCH_FILET
+from bookoftench.data.special_events import Special_Events, LOST_GOLD_P2
 from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent
 from bookoftench.model.item import load_items
 from bookoftench.model.perk import load_perks
-from bookoftench.ui import green, red, yellow, cyan, purple
+from bookoftench.ui import green, red, yellow, cyan, purple, blue
 from bookoftench.util import print_and_sleep
 
 # ================================================================================================
@@ -27,7 +29,7 @@ class SpecialEvent:
     moon: list[str] | None
     season: list[str] | None
     text: str
-    choices: list[str]
+    choices: list[str] | None
     optional: bool
     method: str
     replayable: bool
@@ -58,6 +60,68 @@ class SpecialEvent:
             special_event_death_check(player)
 
 # ================================================================================================
+
+    @staticmethod
+    def lost_gold_p1(game_state: GameState, choice: int):
+        gold_location = random.choice([CAVE, CITY, FOREST, SWAMP])
+
+        if choice == 1:
+            choice = CAVE
+        elif choice == 2:
+            choice = CITY
+        elif choice == 3:
+            choice = FOREST
+        else:
+            choice = SWAMP
+
+        if choice == gold_location: # Remove part two if player is correct
+            lost_gold_p2 = load_special_event(LOST_GOLD_P2)
+            game_state.expired_special_events.append(lost_gold_p2)
+
+    @staticmethod
+    def lost_gold_p2(game_state: GameState, choice: int):
+        player = game_state.player
+        if choice == 1: # Give Coin
+            if player.coins >= 50: # Give 50 Coin
+                player.coins -= 50
+                print_and_sleep(yellow("You gave 50 of coin to the pirate.\n"), 1.5)
+                return
+
+            if player.coins > 1: # Give 1-49 Coin
+                coins = player.coins
+                player.coins -= player.coins
+                print_and_sleep(yellow(f"You forfeited {coins} of coin to the pirate.\n"), 1.5)
+
+            # Make Up Diff w/ HP
+            play_sound(BLADE)
+            hp = player.hp
+            player.hp -= min(hp, 50)
+            print_and_sleep(red(f"The Pirate slashed you with his cutlass for {hp - player.hp} damage!\n"), 1.5)
+            print_and_sleep(red(f"Pirate: Argh, that's for comin' up dry on me, matey.\n"), 1.5)
+
+        elif choice == 2: # Give Tench Filet
+            if TENCH_FILET in player.items:
+                del player.items[TENCH_FILET]
+                print_and_sleep(blue(f"Pirate: Aye, we're square, matey.\n"), 1.5)
+            else:
+                play_sound(BLADE)
+                hp = player.hp
+                player.hp -= min(hp, 50)
+                print_and_sleep(red(f"Pirate: Argh, that's for comin' up dry on me, matey.\n"), 1.5)
+
+        else: # Beg for Mercy
+            if random.random() < 0.25:
+                print_and_sleep(blue(f"Pirate: Argh, yer' off the hook this time, matey."
+                                    f"Me wench tells me I need to be kinder to folks.\n"), 1.5)
+            else:
+                hp = player.hp
+                damage = random.randint(25, 50)
+                player.hp -= min(hp, damage)
+                print_and_sleep(red(f"Pirate: Argh, that's for comin' up dry on me, matey.\n"), 1.5)
+
+        special_event_death_check(player)
+
+    # ================================================================================================
 
     @staticmethod
     def probing(game_state: GameState, choice: int):

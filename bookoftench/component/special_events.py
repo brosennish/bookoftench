@@ -17,7 +17,8 @@ class DiscoverSpecial(NoOpComponent):
         super().__init__(game_state)
 
     def run(self):
-        special_events = [i['name'] for i in Special_Events]
+        expired = [i.name for i in self.game_state.expired_special_events]
+        special_events = [i['name'] for i in Special_Events if i['name'] not in expired]
         selection = random.choice(special_events)
         special_event = load_special_event(selection)
         return SpecialEventComponent(self.game_state, special_event).run()
@@ -47,6 +48,13 @@ class SpecialEventComponent(LabeledSelectionComponent):
                 functional_component()(lambda: self._return())
             )
             bindings = [*special_event_bindings, return_binding]
+        elif not event.choices:
+            return_binding = SelectionBinding(
+                "R",
+                "Return",
+                functional_component()(lambda: self._return())
+            )
+            bindings = [return_binding]
         else:
             bindings = special_event_bindings
 

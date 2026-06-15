@@ -52,7 +52,7 @@ Special_Events = [
              "Pirate: Argh! You lied to me, matey.\n"
              "I searched for me gold and came up dry!\n",
              "Give me coin or I'll shoot ya right in yer' jines.\n"
-             "Aye, if yer' dry, a tench filet would also do."
+             "Aye, and if yer' dry, a tench filet would also do."
      'choices': ['Give Coin (50), Give Tench Filet, Beg for Mercy'],
      'optional': False, 'method': 'lost_gold_p2', 'replayable': False,
      'related': [LOST_GOLD_P1]},
