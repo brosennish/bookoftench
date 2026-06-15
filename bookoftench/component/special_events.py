@@ -40,7 +40,7 @@ class DiscoverSpecial(NoOpComponent):
             if i['name'] not in expired_names
         ]
 
-        # --- filter by conditions ---
+        # --- filter by criteria ---
         filtered = [
             i for i in fresh
             if area in i['areas']
