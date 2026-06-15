@@ -73,6 +73,8 @@ class GameState:
     wanted: str = ''
     _bounty: int = 0
 
+    status_view: int = 1
+
     victory = False
 
     achievement_cache: Dict[str, Achievement] = field(default_factory=dict)

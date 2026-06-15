@@ -6,7 +6,7 @@ from bookoftench.data.components import SEARCH, AREA_BOSS_FIGHT, FINAL_BOSS_FIGH
 from bookoftench.globals import is_debug_mode
 from bookoftench.model import GameState
 from bookoftench.model.area import AreaActions
-from bookoftench.model.util import get_player_status_view
+from bookoftench.model.util import get_player_status_view_1
 from bookoftench.util import print_and_sleep
 from .registry import get_registered_component
 
@@ -24,7 +24,7 @@ class StartMenu(PaginatedMenuComponent):
 
 class ActionMenu(PaginatedMenuComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, top_level_prompt_callback=lambda gs: print_and_sleep(get_player_status_view(gs)),
+        super().__init__(game_state, top_level_prompt_callback=lambda gs: print_and_sleep(get_player_status_view_1(gs)),
                          main_menu_component=InGameMenu)
 
     def construct_pages(self) -> List[List[SelectionBinding]]:
