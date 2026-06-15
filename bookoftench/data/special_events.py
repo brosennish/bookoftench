@@ -58,9 +58,9 @@ Special_Events = [
         "\nReporter: Behind me is the aftermath of a once-in-a-lifetime event.\n"
         "The Hohkken, a legendary sea monster, emerged from the ocean and entered the city.\n"
         "Despite the immeasurable destruction of the city, no lives were lost.\n"
-        "Our experts believe this this to be a sign that it was searching for something\n"
-        "Or, someone, specifically.\n"
-        "Whoever you are you, wherever you are, just know, the Hohkken is coming for you.\n"
+        "Our experts believe this to be a sign that it was searching for something -\n"
+        "- or someone, specifically.\n"
+        "Whoever you are, wherever you are, just know, the Hohkken is coming for you.\n"
         "\nThis is Shannon O'Shanahan, reporting live from downtown Shebokken.\n",
      'choices': None,
      'optional': True, 'method': None, 'replayable': False},

@@ -364,7 +364,7 @@ class FishTurn(NoOpComponent):
         # --- did player lose the fish ---
         if fish.lost:
             EndFishBattle(self.game_state).run()
-            return
+            return self.game_state
 
         # --- fish turn and outcome ---
         run = self.fish_runs(fish, fishing_area)
@@ -380,11 +380,12 @@ class FishTurn(NoOpComponent):
         # --- check if fish got away after its turn ---
         if fish.lost:
             EndFishBattle(self.game_state).run()
+            return self.game_state
         else:
             if random.random() < 0.15:
                 play_sound(FISH)
             self.adrenaline_rush(fish)
-            return
+            return self.game_state
 
 # ================================================================================================
 
