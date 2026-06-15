@@ -27,6 +27,7 @@ from .item import Item, load_items
 from .perk import attach_perk, Perk, set_perk_cache, load_perk, perk_is_active
 from .player import Player
 from .shop import Shop
+from .special_event import SpecialEvent
 from .weapon import Weapon, load_weapons
 from ..data.audio import COINS
 from ..data.builds import Builds
@@ -79,6 +80,7 @@ class GameState:
     discoveries: List[Discoverable] = field(default_factory=list)
     encountered_enemies: List[dict] = field(default_factory=list)
     event_counter: Counter = field(default_factory=Counter)
+    expired_special_events: List[SpecialEvent] = field(default_factory=list)
     liberated_enemies: List[Enemy] = field(default_factory=list)
     perk_cache: Dict[str, Perk] = field(default_factory=dict)
     settings: Settings = field(default_factory=Settings.defaults)

@@ -199,9 +199,13 @@ BOOK OF TENCH - GENERAL OVERVIEW
     
     MAIN MENU
     - Save your game, load your game, and adjust sound and sfx
+    
+    FISHING
+    - Oh, and there's a whole fishing game too
+    - Go see the Fishmonger in the Swamp yo
 """))
 
-
+# todo - make this binary selection
 class Intro(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
@@ -210,8 +214,7 @@ class Intro(TextDisplayingComponent):
 You wash up on a deserted beach outside of Shebokken.
 The champion tells you that his mother, Chula, was taken in the night.
 He consecrates you as the chosen spawn who will rescue his Tench maiden.
-Fulfill the prophecy, lest Chula's life run dry...
-""")))
+Fulfill the prophecy, lest Chula's life run dry...""")))
 
     def play_theme(self) -> None:
         play_music(INTRO_THEME)
