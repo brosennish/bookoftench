@@ -23,6 +23,7 @@ class Build:
     coins: int
     luck: float | int
     fishing_lvl: int
+    rod_lvl: int
     items: List[Item]
     weapons: List[Weapon]
     perks: List[Perk]
@@ -40,6 +41,7 @@ class Build:
             f"Accuracy: {yellow(accuracy)}",
             f"Luck: {purple(self.luck)}",
             f"Fishing: {blue(self.fishing_lvl)}",
+            f"Rod: {cyan(self.rod_lvl)}",
             f"Coins: {green(self.coins)}",
         ])
 

@@ -17,7 +17,7 @@ from ..data.enemies import CONTAGIOUS, BOSS, SPECIAL_BOSS, FINAL_BOSS, NORMAL
 from ..data.enviroment import DAY
 from ..data.fish import AGITATED, SPOOKED, CALM, SHALLOWS, BAY, OCEAN, Fish_Species, MALE, FEMALE, COMMON, UNCOMMON, \
     RARE, LEGENDARY
-from ..data.fishing_areas import WET_SEASON
+from ..data.fishing_areas import WET_SEASON, DRY_SEASON
 
 
 # ================================================================================================
@@ -383,13 +383,23 @@ def display_shop_header(game_state: GameState):
 
 # ================================================================================================
 
-def get_player_status_view(game_state: GameState) -> str:
+# --- standard view ---
+def get_player_status_view_1(game_state: GameState) -> str:
     player = game_state.player
     player_color = p_color(player.hp, player.max_hp)
 
     tod = game_state.time_of_day
     tod_display = "Day" if tod == DAY else "Night"
     moon = game_state.moon
+
+    killed_remaining = [
+        f"Killed: {red(game_state.current_area.enemies_killed)}"
+    ]
+
+    if perk_is_active(CROWS_NEST):
+        killed_remaining.append(
+            f"Left: {yellow(game_state.current_area.enemies_remaining)}"
+        )
 
     hp_display = (
         f"HP: {player_color(f'{player.hp}/{player.max_hp}' if player.hp != player.max_hp else player.hp)}"
@@ -398,9 +408,11 @@ def get_player_status_view(game_state: GameState) -> str:
     player_status = (
         f"{dim(' | ').join([
             blue(game_state.current_area.name),
+            *killed_remaining,
             yellow(tod_display) if tod == DAY else purple(tod_display),
             f'{moon} Moon',
             f'Wanted: {purple(game_state.wanted)}',
+            f'Bounty: {purple(game_state.bounty)}',
         ])}"
         f"\n"
         f"{dim(' | ').join([
@@ -409,6 +421,145 @@ def get_player_status_view(game_state: GameState) -> str:
             hp_display,
             f'Coins: {green(player.coins)}',
             f'Lives: {yellow(player.lives)}',
+        ])}"
+    )
+
+    if player.illness:
+        illness_status = dim(' | ').join([
+            f"\nIllness: {yellow(player.illness.name)}",
+            f"Death Lvl: {red(player.illness_death_lvl)}",
+        ])
+
+        return "\n".join([
+            player_status,
+            illness_status,
+        ])
+
+    return player_status
+
+# ================================================================================================
+
+# --- detailed view ---
+def get_player_status_view_2(game_state: GameState) -> str:
+    player = game_state.player
+    player_color = p_color(player.hp, player.max_hp)
+
+    tod = game_state.time_of_day
+    moon = game_state.moon
+    season = game_state.season
+
+    hp_display = (
+        f"HP: {player_color(f'{player.hp}/{player.max_hp}' if player.hp != player.max_hp else player.hp)}"
+    )
+
+    player_status = (
+        f"{dim(' | ').join([
+            blue(game_state.current_area.name),
+            yellow(season) if season == DRY_SEASON else blue(season),
+            yellow(tod) if tod == DAY else purple(tod),
+            f'{moon} Moon',
+            f'Wanted: {purple(game_state.wanted)}',
+            f'Bounty: {purple(game_state.bounty)}',
+        ])}"
+        f"\n"
+        f"{dim(' | ').join([
+            f'\n{orange(player.name)} {dim("-")} Lvl: {cyan(player.lvl)}',
+            f'XP: {cyan(f"{player.xp}/{player.xp_needed}")}',
+            hp_display,
+            f'Coins: {green(player.coins)}',
+            f'Lives: {yellow(player.lives)}',
+            f'Str: {red(player.strength)}',
+            f'Acc: {yellow(player.acc)}',
+            f'Luck: {purple(player.luck)}',
+        ])}"
+    )
+
+    if player.illness:
+        illness_status = dim(' | ').join([
+            f"\nIllness: {yellow(player.illness.name)}",
+            f"Death Lvl: {red(player.illness_death_lvl)}",
+        ])
+
+        return "\n".join([
+            player_status,
+            illness_status,
+        ])
+
+    return player_status
+
+# ================================================================================================
+
+# --- simple view ---
+def get_player_status_view_3(game_state: GameState) -> str:
+    player = game_state.player
+    player_color = p_color(player.hp, player.max_hp)
+
+    tod = game_state.time_of_day
+    moon = game_state.moon
+    season = game_state.season
+
+    hp_display = (
+        f"HP: {player_color(f'{player.hp}/{player.max_hp}' if player.hp != player.max_hp else player.hp)}"
+    )
+
+    player_status = (
+        f"{dim(' | ').join([
+            blue(game_state.current_area.name),
+            yellow(season) if season == DRY_SEASON else blue(season),
+            yellow(tod) if tod == DAY else purple(tod),
+            f'{moon} Moon',
+            f'{purple(game_state.wanted)}',
+            f'{purple(game_state.bounty)}',
+        ])}"
+        f"\n"
+        f"{dim(' | ').join([
+            f'\n{orange(player.name)} {dim("-")} Lvl: {cyan(player.lvl)}',
+            f'XP: {cyan(f"{player.xp}/{player.xp_needed}")}',
+            hp_display,
+            f'Coins: {green(player.coins)}',
+            f'Lives: {yellow(player.lives)}',
+        ])}"
+    )
+
+    if player.illness:
+        illness_status = dim(' | ').join([
+            f"\nIllness: {yellow(player.illness.name)}",
+            f"Death Lvl: {red(player.illness_death_lvl)}",
+        ])
+
+        return "\n".join([
+            player_status,
+            illness_status,
+        ])
+
+    return player_status
+
+# ================================================================================================
+
+# --- fishing view ---
+def get_player_status_view_4(game_state: GameState) -> str:
+    player = game_state.player
+    player_color = p_color(player.hp, player.max_hp)
+
+    tod = game_state.time_of_day
+    moon = game_state.moon
+    season = game_state.season
+
+    player_status = (
+        f"{dim(' | ').join([
+            blue(game_state.current_area.name),
+            yellow(season) if season == DRY_SEASON else blue(season),
+            yellow(tod) if tod == DAY else purple(tod),
+            f'{moon} Moon',
+        ])}"
+        f"\n"
+        f"{dim(' | ').join([
+            f'\n{orange(player.name)} {dim("-")} Fishing Lvl: {cyan(player.fishing_lvl)}',
+            f'XP: {cyan(f"{player.fishing_xp}/{player.fishing_xp_needed}")}',
+            f'Rod: {cyan(player.rod_lvl)}',
+            f'Caught: {blue(len(player.caught_fish))}',
+            f'Bait: {cyan(sum(i.casts for i in player.tackle_box.values()))}',
+            f'Items: {purple(sum(i.count for i in player.fishing_item_box.values()))}'
         ])}"
     )
 
@@ -458,7 +609,7 @@ def display_player_attributes(game_state: GameState) -> None:
 
     print_and_sleep(f"\n{dim('Strength |')} {red(round(player.strength, 2))}"
         f"\n{dim('Accuracy |')} {yellow(round(player.acc, 2))}"
-        f"\n{dim('Luck     |')} {purple(round(player.luck, 3))}")
+        f"\n{dim('Luck     |')} {purple(round(player.luck, 2))}")
 
 # ================================================================================================
 

@@ -104,7 +104,7 @@ class BuildFishingLevelSelection(LinearComponent):
     def execute_current(self) -> None:
         player = self.game_state.player
         while True:
-            fishing_level = safe_input("Fishing Level:")
+            fishing_level = safe_input("Fishing Level [0-10]:")
             if not fishing_level.isdigit():
                 print_and_sleep(yellow("Fishing Level must be a numeric value between 0 and 10."))
             elif int(fishing_level) < 0:
@@ -115,6 +115,28 @@ class BuildFishingLevelSelection(LinearComponent):
                 return self.game_state
             else:
                 player.fishing_lvl = int(fishing_level)
+                return self.game_state
+
+# ================================================================================================
+
+class BuildRodLevelSelection(LinearComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildLivesSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        while True:
+            fishing_level = safe_input("Fishing Rod Level [0-10]:")
+            if not fishing_level.isdigit():
+                print_and_sleep(yellow("Fishing Rod Level must be a numeric value between 0 and 10."))
+            elif int(fishing_level) < 0:
+                player.fishing_lvl = 0
+                return self.game_state
+            elif int(fishing_level) > 10:
+                player.fishing_lvl = 10
+                return self.game_state
+            else:
+                player.rod_lvl = int(fishing_level)
                 return self.game_state
 
 # ================================================================================================
@@ -259,7 +281,7 @@ class BuildLuckSelection(LinearComponent):
                 player.luck = 10
                 return self.game_state
             else:
-                player.luck = round(float(luck), 3)
+                player.luck = round(float(luck), 2)
                 return self.game_state
 
 # ================================================================================================
@@ -490,7 +512,8 @@ class BuildComponent(LabeledSelectionComponent):
                 player.lives = random.randint(1, 3)
 
                 player.lvl = random.randint(1, 3)
-                player.fishing_lvl = random.randint(0, 2)
+                player.fishing_lvl = random.randint(0, 3)
+                player.rod_lvl = random.randint(0, 3)
 
                 player.max_hp = random.randint(80, 120)
                 hp_deficit = random.randint(1, 40)
@@ -543,11 +566,16 @@ class BuildComponent(LabeledSelectionComponent):
 
             else:
                 player.lives = build.lives
+                player.lvl = build.lvl
                 player.max_hp = build.hp
                 player.hp = build.hp
                 player.strength = build.str
                 player.acc = build.acc
                 player.coins = build.coins
+                player.luck = build.luck
+                player.fishing_lvl = build.fishing_lvl
+                player.rod_lvl = build.rod_lvl
+
                 if build.illness:
                     player.illness = build.illness
                     player.illness_death_lvl = 1 + build.illness.levels_until_death
@@ -800,7 +828,7 @@ class Travel(LabeledSelectionComponent):
     def _make_travel_component(area_name: str):
         @functional_component(state_dependent=True)
         def travel_component(game_state: GameState):
-            game_state.update_current_area(area_name)
+            game_state.update_current_area(area_name, game_state.season)
 
             if getattr(game_state, "pending_boss", False):
                 game_state.pending_boss = False
