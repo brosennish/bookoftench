@@ -455,7 +455,7 @@ def display_player_attributes(game_state: GameState) -> None:
 
     print_and_sleep(f"\n{dim('Strength |')} {red(round(player.strength, 2))}"
         f"\n{dim('Accuracy |')} {yellow(round(player.acc, 2))}"
-        f"\n{dim('Luck     |')} {green(round(player.luck, 3))}")
+        f"\n{dim('Luck     |')} {purple(round(player.luck, 3))}")
 
 # ================================================================================================
 
@@ -525,15 +525,24 @@ def display_player_achievements(_: GameState) -> None:
 # ================================================================================================
 
 def display_active_perks(game_state: GameState) -> None:
-    active_perks = [p for p in load_perks() if p.active]
-    if len(active_perks) == 0:
+    active_perks = sorted(
+        [p for p in load_perks() if p.active],
+        key=lambda p: p.name.lower()
+    )
+
+    if not active_perks:
         print_and_sleep(yellow("Your perks are dry."), 1)
-    else:
-        print_and_sleep(f"Your Perks:")
-        for perk in sorted(active_perks, key=lambda a: a.name):
-            print_and_sleep(purple(perk.name) + dim(" | ") + purple(perk.description))
-        if perk_is_active(WENCH_LOCATION):
-            print_and_sleep(f'Wench Location: {blue(game_state.wench_area.name)}')
+        return
+
+    print_and_sleep("Your Perks:\n")
+
+    for perk in active_perks:
+        print_and_sleep(purple(perk.name))
+        print_and_sleep(dim(perk.description))
+        print()
+
+    if perk_is_active(WENCH_LOCATION):
+        print_and_sleep(f"Wench Location: {blue(game_state.wench_area.name)}")
 
 # ================================================================================================
 

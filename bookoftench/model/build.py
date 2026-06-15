@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from bookoftench.data.builds import Builds
+from bookoftench.data.builds import Builds, BRO
 from bookoftench.model.illness import Illness
 from bookoftench.model.item import Item
 from bookoftench.model.perk import Perk
@@ -28,42 +28,52 @@ class Build:
     perks: List[Perk]
 
     def __repr__(self) -> str:
-        spacing = " " if self.hp < 100 else ""
+        strength = f"{self.str:g}"
+        accuracy = f"{self.acc:g}"
 
-        header = f"{orange(self.name)}\n"
-        values = dim(' | ').join([
-            f"Lives: {cyan(self.lives)}",
-            f"HP: {green(self.hp)}{spacing}",
-            f"Strength: {red(f'{self.str:<3}')}",
-            f"Accuracy: {yellow(f'{self.acc:<3}')}",
-            f"Coins: {green(f'{self.coins:<3}')}\n"
-        ])
+        label_width = 9
 
-        items = dim(', ').join(f"{cyan(p.name)}" for p in self.items)
-        weapons = dim(', ').join(f"{cyan(p.name)}" for p in self.weapons)
-        perks_str = dim(', ').join(f"{purple(p.name)}" for p in self.perks)
+        stat_rows = [
+            f"{'Lvl':<{label_width}} {dim('|')} {cyan(self.lvl)}",
+            f"{'Lives':<{label_width}} {dim('|')} {yellow(self.lives)}",
+            f"{'HP':<{label_width}} {dim('|')} {green(self.hp)}",
+            f"{'Strength':<{label_width}} {dim('|')} {red(strength)}",
+            f"{'Accuracy':<{label_width}} {dim('|')} {yellow(accuracy)}",
+            f"{'Luck':<{label_width}} {dim('|')} {purple(self.luck)}",
+            f"{'Fishing':<{label_width}} {dim('|')} {blue(self.fishing_lvl)}",
+            f"{'Coins':<{label_width}} {dim('|')} {green(self.coins)}",
+        ]
+
+        detail_rows = []
 
         if self.illness:
-            return "\n".join([
-                header,
-                values,
-                f"{'Illness'}  {dim('|')} {yellow(self.illness.name)}",
-                f"{'Items'}    {dim('|')} {items}",
-                f"{'Weapons'}  {dim('|')} {weapons}",
-                f"{'Perks'}    {dim('|')} {perks_str}",
-                f"{'Notes'}    {dim('|')} {blue(f"{self.notes}")}",
-                "\n",
-            ])
-        else:
-            return "\n".join([
-                header,
-                values,
-                f"{'Items'}    {dim('|')} {items}",
-                f"{'Weapons'}  {dim('|')} {weapons}",
-                f"{'Perks'}    {dim('|')} {perks_str}",
-                f"{'Notes'}    {dim('|')} {blue(f"{self.notes}")}",
-                "\n",
-            ])
+            detail_rows.append(f"{'Illness':<{label_width}} {dim('|')} {yellow(self.illness.name)}")
+
+        if self.name != BRO:
+            items = dim(', ').join(cyan(i.name) for i in self.items)
+            weapons = dim(', ').join(red(w.name) for w in self.weapons)
+            perks = dim(', ').join(purple(p.name) for p in self.perks)
+
+            if self.items:
+                detail_rows.append(f"{'Items':<{label_width}} {dim('|')} {items}")
+
+            if self.weapons:
+                detail_rows.append(f"{'Weapons':<{label_width}} {dim('|')} {weapons}")
+
+            if self.perks:
+                detail_rows.append(f"{'Perks':<{label_width}} {dim('|')} {perks}")
+
+        if self.notes:
+            detail_rows.append(f"{'Notes':<{label_width}} {dim('|')} {blue(self.notes)}")
+
+        return "\n".join([
+            orange(self.name),
+            "",
+            *stat_rows,
+            "",
+            *detail_rows,
+            "",
+        ])
 
 def load_builds(restriction: List[str] = None):
     return [Build(**d) for d in Builds if restriction is None or d['name'] in restriction]
