@@ -30,8 +30,8 @@ Special_Events = [
     {'name': GREEDY_BASTARD, 'color': purple, 'sleep': 5, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': "An old woman with wrinkled eyeballs wearing a soiled cloak approaches you.\n"
-            "Hey! You there! I have coin...\n"
-            "How much do you want? Hehehe.",
+             "Old Woman: Hey! You there! I have coin...\n"
+             "How much do you want? Hehehe.",
      'choices': ['10', '20', '30', '40', '50'],
      'optional': True, 'method': 'greedy_bastard', 'replayable': True},
 
@@ -71,7 +71,7 @@ Special_Events = [
     {'name': SHEBOKKEN_ROULETTE, 'color': purple, 'sleep': 5, 'theme': ROULETTE_THEME,
      'areas': [a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': "A leather-skinned man approaches you, revolver in hand.\n"
-             "Might I interest you in a round of Shebokken Roulette?\n"
+             "Man: Might I interest you in a round of Shebokken Roulette?\n"
              "One bullet, two blindfolds.\n"
              "What's your wager?",
      'choices': ['10', '20', '30', '40', '50'],
@@ -80,9 +80,9 @@ Special_Events = [
 
     {'name': STINGY_BASTARD, 'color': purple, 'sleep': 5, 'theme': None,
      'areas': [a.CAVE, a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
-     'text': "An old woman with three nostrils and two noses approaches you.\n"
-            "Hey! You there! I need coin...\n"
-            "How much will you give me? Hehehe.",
+     'text': "An old woman with two noses and three nostrils approaches you.\n"
+             "Old Woman: Hey! You there! I need coin...\n"
+             "How much will you give me? Hehehe.",
      'choices': ['10', '20', '30', '40', '50'],
      'optional': True, 'method': 'stingy_bastard', 'replayable': True},
 
@@ -113,7 +113,7 @@ Special_Events = [
      'text': "You come across a man who is totally zonked...\n"
              "His Slade shirt is caked with drool.\n"
              "You've never seen someone so zonked in your whole dang life.\n"
-             "HWhat will you do?",
+             "What will you do?",
      'choices': ['Wake Him Up', 'Bury Him Alive'],
      'optional': True, 'method': 'zonked', 'replayable': True},
 

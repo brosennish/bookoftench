@@ -17,10 +17,48 @@ class DiscoverSpecial(NoOpComponent):
         super().__init__(game_state)
 
     def run(self):
-        expired = [i.name for i in self.game_state.expired_special_events]
-        special_events = [i['name'] for i in Special_Events if i['name'] not in expired]
-        selection = random.choice(special_events)
-        special_event = load_special_event(selection)
+        game_state = self.game_state
+        area = game_state.current_area
+        season = game_state.season
+        time = game_state.time_of_day
+        moon = game_state.moon
+
+        # --- filter out expired special events ---
+        expired_names = [i.name for i in game_state.expired_special_events]
+
+        fresh = [
+            i for i in Special_Events
+            if i['name'] not in expired_names
+        ]
+
+        # --- filter by conditions ---
+        filtered = [
+            i for i in fresh
+            if area.name in i['areas']
+               and time in i['time']
+               and (i['moon'] is None or moon in i['moon'])
+               and (i['season'] is None or season in i['season'])
+        ]
+
+        if not filtered:
+            return game_state
+
+        # --- select special event ---
+        selected_data = random.choice(filtered)
+        selected_event = load_special_event(selected_data['name'])
+
+        # --- force sequential stage order ---
+        if selected_event.stage > 1:
+            for related_name in selected_event.related:
+                related_event = load_special_event(related_name)
+
+                if related_event.stage == selected_event.stage - 1:
+                    if related_event.name not in expired_names:
+                        selected_event = related_event
+                    break
+
+        special_event = selected_event
+
         return SpecialEventComponent(self.game_state, special_event).run()
 
 # ================================================================================================
