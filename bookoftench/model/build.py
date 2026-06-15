@@ -20,6 +20,7 @@ class Build:
     str: float
     acc: float
     coins: int
+    luck: float | int
     items: List[Item]
     weapons: List[Weapon]
     perks: List[Perk]

@@ -192,6 +192,22 @@ class BuildCoinsSelection(LinearComponent):
                 player.coins = int(coins)
                 return self.game_state
 
+class BuildLuckSelection(LinearComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildLuckSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        while True:
+            luck = safe_input("Luck:")
+            if not luck.isdigit():
+                print_and_sleep(yellow("Luck must be a numeric value."))
+            elif luck < 0 or luck > 10:
+                print_and_sleep(yellow("Luck must be between 0 and 10."))
+            else:
+                player.luck = round(luck, 3)
+                return self.game_state
+
 class BuildIllnessSelection(LinearComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, BuildBlindSelection)
