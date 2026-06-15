@@ -344,6 +344,7 @@ class EndFishBattle(NoOpComponent):
             if random.random() < 0.25:
                 OfficerEncounter(self.game_state).run()
         self.game_state.current_fish = None
+        self.game_state.player.active_fishing_items.clear()
 
 # ================================================================================================
 # ================================================================================================

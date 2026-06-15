@@ -9,8 +9,7 @@ from bookoftench.data import Areas
 from bookoftench.data.areas import EncounterType
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
-    SPAWN_ENEMY, THREE_HOLES, TRIPLE_TENCH_DARE, SHEBOKKEN_ROULETTE, ZONKED, GREEDY_BASTARD, \
-    ENCOUNTER_SUB_BOSS, SPECIAL_EVENT
+    SPAWN_ENEMY, ENCOUNTER_SUB_BOSS, SPECIAL_EVENT
 from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, CONTAGIOUS, NIGHT_OWL, HOHKKEN, BOSS, \
     NORMAL, SPECIAL_BOSS
 from bookoftench.ui import purple, yellow, blue

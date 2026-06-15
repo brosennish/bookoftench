@@ -17,8 +17,8 @@ TRIPLE_TENCH_DARE = "Triple Tench Dare"
 ZONKED = "Zonked"
 
 # Time
-DAY = "Daytime"
-NIGHT = "Nighttime"
+DAY = "Day"
+NIGHT = "Night"
 
 # ================================================================================================
 
@@ -30,8 +30,8 @@ Special_Events = [
     {'name': GREEDY_BASTARD, 'color': purple, 'sleep': 5, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': "An old woman with wrinkled eyeballs wearing a soiled cloak approaches you.\n"
-             "Old Woman: Hey! You there! I have coin...\n"
-             "How much do you want? Hehehe.",
+        "\nOld Woman: Hey! You there! I have coin...\n"
+        "\nHow much do you want? Hehehe.",
      'choices': ['10', '20', '30', '40', '50'],
      'optional': True, 'method': 'greedy_bastard', 'replayable': True},
 
@@ -40,19 +40,19 @@ Special_Events = [
     {'name': LOST_GOLD_P1, 'stage': 1, 'color': blue, 'sleep': 5, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': "You smell the overwhelming stench of brine-soaked jines...\n"
-             "Pirate: Argh! I lost me gold.\n"
-             "Tell me, wher' can I find me gold?",
-     'choices': ['CAVE', 'CITY', 'FOREST', 'SWAMP'],
+        "\nPirate: Argh! I lost me gold.\n"
+        "\nTell me, wher' can I find me gold?",
+     'choices': ['Cave', 'City', 'Forest', 'Swamp'],
      'optional': False, 'method': 'lost_gold_p1', 'replayable': False,
      'related': [LOST_GOLD_P2]},
 
     {'name': LOST_GOLD_P2, 'stage': 2, 'color': red, 'sleep': 5, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': "You smell a familiar stench...\n"
-             "Pirate: Argh! You lied to me, matey.\n"
-             "I searched for me gold and came up dry!\n",
-             "Give me coin or I'll shoot ya right in yer' jines.\n"
-             "Aye, and if yer' dry, a tench filet would also do."
+        "\nPirate: Argh! You lied to me, matey.\n"
+        "I searched for me gold and came up dry!\n"
+        "\nGive me coin or I'll shoot ya right in yer' jines.\n"
+        "Aye, and if yer' dry, a tench filet would also do.",
      'choices': ['Give Coin (50), Give Tench Filet, Beg for Mercy'],
      'optional': False, 'method': 'lost_gold_p2', 'replayable': False,
      'related': [LOST_GOLD_P1]},
@@ -62,8 +62,8 @@ Special_Events = [
     {'name': PROBING, 'color': green, 'sleep': 3, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': "You were abducted by aliens!\n"
-             "They ask you if you are ready for your probing.\n"
-             "What do you do?",
+        "\nPerverto: Are you ready for your probing?\n"
+        "\nWhat do you do?",
      'choices': ['Accept Probe', 'Attempt to Probe the Aliens', 'Try to Escape'],
      'optional': False, 'method': 'probing', 'replayable': True},
 
@@ -71,9 +71,9 @@ Special_Events = [
     {'name': SHEBOKKEN_ROULETTE, 'color': purple, 'sleep': 5, 'theme': ROULETTE_THEME,
      'areas': [a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': "A leather-skinned man approaches you, revolver in hand.\n"
-             "Man: Might I interest you in a round of Shebokken Roulette?\n"
-             "One bullet, two blindfolds.\n"
-             "What's your wager?",
+        "\nMan: Might I interest you in a round of Shebokken Roulette?\n"
+        "One bullet, two blindfolds.\n"
+        "\nWhat's your wager?",
      'choices': ['10', '20', '30', '40', '50'],
      'optional': False, 'method': 'shebokken_roulette', 'replayable': True},
 
@@ -81,8 +81,8 @@ Special_Events = [
     {'name': STINGY_BASTARD, 'color': purple, 'sleep': 5, 'theme': None,
      'areas': [a.CAVE, a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': "An old woman with two noses and three nostrils approaches you.\n"
-             "Old Woman: Hey! You there! I need coin...\n"
-             "How much will you give me? Hehehe.",
+        "\nOld Woman: Hey! You there! I need coin...\n"
+        "\nHow much will you give me? Hehehe.",
      'choices': ['10', '20', '30', '40', '50'],
      'optional': True, 'method': 'stingy_bastard', 'replayable': True},
 
@@ -90,10 +90,10 @@ Special_Events = [
     {'name': THREE_HOLES, 'color': purple, 'sleep': 5, 'theme': None,
      'areas': [a.CAVE, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': "You come upon three holes in the ground...\n"
-             "They are far too deep - and too dark - to see what's inside.\n"
-             "A ghastly being with an upside down face rushes towards you.\n"
-             "Extending its elastic lips deep into your earhole,\n"
-             "It whispers that you may only reach into one of the holes.",
+        "They are far too deep - and too dark - to see what's inside.\n"
+        "\nA ghastly being with an upside down face rushes towards you.\n"
+        "Extending its elastic lips deep into your earhole,\n"
+        "\nIt whispers that you may only reach into one of the holes.",
      'choices': ['Hole 1', 'Hole 2', 'Hole 3'],
      'optional': True, 'method': 'three_holes', 'replayable': True},
 
@@ -101,9 +101,9 @@ Special_Events = [
     {'name': TRIPLE_TENCH_DARE, 'color': yellow, 'sleep': 4, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY], 'moon': None, 'season': None,
      'text': "A rambunctious boy approaches you, dad's wallet in hand...\n"
-             "He triple-tench-dares you to stare at the sun.\n"
-             "For every second, he will give you 5 of coin.\n"
-             "How many seconds will you do?",
+        "\nHe triple-tench-dares you to stare at the sun.\n"
+        "For every second, he will give you 5 of coin.\n"
+        "\nHow many seconds will you do?",
      'choices': ['5', '10', '15', '20'],
      'optional': True, 'method': 'triple_tench_dare', 'replayable': True},
 
@@ -111,9 +111,9 @@ Special_Events = [
     {'name': ZONKED, 'color': purple, 'sleep': 4, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': "You come across a man who is totally zonked...\n"
-             "His Slade shirt is caked with drool.\n"
-             "You've never seen someone so zonked in your whole dang life.\n"
-             "What will you do?",
+        "\nHis Slade shirt is caked with drool.\n"
+        "You've never seen someone so zonked in your whole dang life.\n"
+        "\nWhat will you do?",
      'choices': ['Wake Him Up', 'Bury Him Alive'],
      'optional': True, 'method': 'zonked', 'replayable': True},
 
