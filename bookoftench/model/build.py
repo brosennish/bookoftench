@@ -16,6 +16,7 @@ class Build:
     illness: Illness | None
     name: str
     lives: int
+    lvl: int
     hp: int
     str: float
     acc: float

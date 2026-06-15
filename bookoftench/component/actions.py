@@ -486,11 +486,20 @@ class BuildComponent(LabeledSelectionComponent):
 
             if build.name == RANDOM:
                 player.lives = random.randint(1, 3)
+
+                player.lvl = random.randint(1, 3)
+                player.fishing_lvl = random.randint(0, 2)
+
                 player.max_hp = random.randint(80, 120)
-                player.hp = player.max_hp
+                hp_deficit = random.randint(1, 40)
+                player.hp = player.max_hp - hp_deficit if random.random() < 0.5 else player.max_hp
+
                 player.strength = round(random.uniform(0.8, 1.2), 2)
                 player.acc = round(random.uniform(0.9, 1.1), 2)
-                player.coins = random.randint(0, 500)
+
+                player.coins = random.randint(0, 250)
+                player.luck = random.randint(0, 5)
+
                 if random.random() < 0.5:
                     list1 = [i['name'] for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
                     options = load_illnesses(list1)
@@ -510,12 +519,6 @@ class BuildComponent(LabeledSelectionComponent):
                         player.items = dict((it.name, it) for it in selections)
 
                     # --- weapons ---
-                    # add Bare Hands
-                    hands = [i['name'] for i in Weapons if i['name'] in [BARE_HANDS]]
-                    hands_options = load_weapons(hands)
-                    player.weapon_dict = {it.name: PlayerWeapon.from_weapon(it) for it in hands_options}
-                    player.current_weapon = next(i for i in player.weapon_dict.values())
-                    # additional weapons to be added
                     weapons_count = random.randint(0, 3)
                     if weapons_count >= 1:
                         weapons = [i['name'] for i in Weapons if i['name'] not in [BARE_HANDS]]

@@ -213,7 +213,7 @@ class Intro(BinarySelectionComponent):
             query=(
                 "You wash up on a deserted beach outside of Shebokken.\n"
                 "The champion tells you that his mother, Chula, was taken in the night.\n"
-                "He consecrates you as the chosen spawn who will rescue his Tench maiden.\n"
+                "He consecrates you as the chosen spawn who shall rescue his Tench maiden.\n"
                 "Fulfill the prophecy, lest Chula's life run dry...\n\n"
                 "Do you accept the mission?"
         ),

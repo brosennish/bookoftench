@@ -18,9 +18,10 @@ SHOPAHOLIC = "Shopaholic"
 TENCH = "Tench"
 
 # ================================================================================================
+# ================================================================================================
 
 Builds = [
-    {'name': DENNY, 'lives': 2, 'hp': 100, 'str': 1, 'acc': 1, 'coins': 25, 'luck': 0,
+    {'name': DENNY, 'lives': 2, 'lvl': 1, 'hp': 100, 'str': 1, 'acc': 1, 'coins': 25, 'luck': 0,
      'fishing_lvl': 1,
      'items': [i.TENCH_FILET],
      'weapons': [w.KNIFE],
@@ -28,7 +29,9 @@ Builds = [
      'illness': None,
      'notes': 'Denny, Jeffrey, Jasper. Son of Mayor - The Chosen Spawn.'},
 
-    {'name': BRO, 'lives': 99, 'hp': 9999, 'str': 999, 'acc': 999, 'coins': 9999, 'luck': 9,
+# ================================================================================================
+
+    {'name': BRO, 'lives': 99, 'lvl': 99, 'hp': 9999, 'str': 999, 'acc': 999, 'coins': 9999, 'luck': 9,
      'fishing_lvl': 99,
      'items': [b['name'] for b in Items],
      'weapons': [b['name'] for b in Weapons],
@@ -36,7 +39,9 @@ Builds = [
      'illness': None,
      'notes': "Bro... really bro?"},
 
-    {'name': RANDOM, 'lives': 0, 'hp': 0, 'str': 0, 'acc': 0, 'coins': 0, 'luck': 0,
+# ================================================================================================
+
+    {'name': RANDOM, 'lives': 0, 'lvl': 0, 'hp': 0, 'str': 0, 'acc': 0, 'coins': 0, 'luck': 0,
      'fishing_lvl': 0,
      'items': [],
      'weapons': [],
