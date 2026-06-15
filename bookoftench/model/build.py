@@ -21,6 +21,7 @@ class Build:
     acc: float
     coins: int
     luck: float | int
+    fishing_lvl: int
     items: List[Item]
     weapons: List[Weapon]
     perks: List[Perk]

@@ -76,21 +76,48 @@ class BuildNameSelection(LinearComponent):
                 break
         return self.game_state
 
+# ================================================================================================
+
 class BuildLevelSelection(LinearComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, BuildLivesSelection)
+        super().__init__(game_state, BuildFishingLevelSelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
         while True:
             level = safe_input("Level:")
             if not level.isdigit():
-                print_and_sleep(yellow("Level must be an integer."))
+                print_and_sleep(yellow("Level must be a numeric value."))
             elif int(level) < 1:
-                print_and_sleep(yellow("Level must be greater than 0."))
+                player.lvl = 1
+                return self.game_state
             else:
                 player.lvl = int(level)
                 return self.game_state
+
+# ================================================================================================
+
+class BuildFishingLevelSelection(LinearComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildLivesSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        while True:
+            fishing_level = safe_input("Fishing Level:")
+            if not fishing_level.isdigit():
+                print_and_sleep(yellow("Fishing Level must be a numeric value between 0 and 10."))
+            elif int(fishing_level) < 0:
+                player.fishing_lvl = 0
+                return self.game_state
+            elif int(fishing_level) > 10:
+                player.fishing_lvl = 10
+                return self.game_state
+            else:
+                player.fishing_lvl = int(fishing_level)
+                return self.game_state
+
+# ================================================================================================
 
 class BuildLivesSelection(LinearComponent):
     def __init__(self, game_state: GameState):
@@ -101,12 +128,15 @@ class BuildLivesSelection(LinearComponent):
         while True:
             lives = safe_input("Lives:")
             if not lives.isdigit():
-                print_and_sleep(yellow("Lives must be an integer."))
+                print_and_sleep(yellow("Lives must be a numeric value."))
             elif int(lives) < 1:
-                print_and_sleep(yellow("Lives must be greater than 0."))
+                player.lives = 1
+                return self.game_state
             else:
                 player.lives = int(lives)
                 return self.game_state
+
+# ================================================================================================
 
 class BuildMaxHPSelection(LinearComponent):
     def __init__(self, game_state: GameState):
@@ -117,12 +147,15 @@ class BuildMaxHPSelection(LinearComponent):
         while True:
             max_hp = safe_input("Max HP:")
             if not max_hp.isdigit():
-                print_and_sleep(yellow("Max HP must be an integer."))
+                print_and_sleep(yellow("Max HP must be a numeric value."))
             elif int(max_hp) < 1:
-                print_and_sleep(yellow("Max HP must be greater than 0."))
+                player.max_hp = 1
+                return self.game_state
             else:
                 player.max_hp = int(max_hp)
                 return self.game_state
+
+# ================================================================================================
 
 class BuildHPSelection(LinearComponent):
     def __init__(self, game_state: GameState):
@@ -133,12 +166,18 @@ class BuildHPSelection(LinearComponent):
         while True:
             hp = safe_input(f"HP:")
             if not hp.isdigit():
-                print_and_sleep(yellow("HP must be an integer."))
-            elif int(hp) < 1 or int(hp) > player.max_hp:
-                print_and_sleep(yellow(f"HP must be between 1 and {player.max_hp}."))
+                print_and_sleep(yellow("HP must be a numeric value."))
+            elif int(hp) < 1:
+                player.hp = 1
+                return self.game_state
+            elif int(hp) > player.max_hp:
+                player.hp = player.max_hp
+                return self.game_state
             else:
                 player.hp = int(hp)
                 return self.game_state
+
+# ================================================================================================
 
 class BuildStrengthSelection(LinearComponent):
     def __init__(self, game_state: GameState):
@@ -147,16 +186,20 @@ class BuildStrengthSelection(LinearComponent):
     def execute_current(self) -> None:
         player = self.game_state.player
         while True:
-            strength = safe_input("Strength [1-125]:")
+            strength = safe_input("Strength [0-125]:")
             if not strength.isdigit():
-                print_and_sleep(yellow("Strength must be an integer."))
-            elif int(strength) < 1:
-                print_and_sleep(yellow("Strength must be between 1 and 125."))
+                print_and_sleep(yellow("Strength must be a numeric value between 0 and 125."))
+            elif int(strength) < 0:
+                player.strength = 0
+                return self.game_state
             elif int(strength) > 125:
-                print_and_sleep(yellow("Strength must be between 1 and 125."))
+                player.strength = 125
+                return self.game_state
             else:
                 player.strength = round(int(strength) * 0.01, 2)
                 return self.game_state
+
+# ================================================================================================
 
 class BuildAccuracySelection(LinearComponent):
     def __init__(self, game_state: GameState):
@@ -165,48 +208,61 @@ class BuildAccuracySelection(LinearComponent):
     def execute_current(self) -> None:
         player = self.game_state.player
         while True:
-            accuracy = safe_input("Accuracy [1-110]:")
+            accuracy = safe_input("Accuracy [0-110]:")
             if not accuracy.isdigit():
-                print_and_sleep(yellow("Accuracy must be an integer."))
-            elif int(accuracy) < 1:
-                print_and_sleep(yellow("Accuracy must be between 1 and 110."))
+                print_and_sleep(yellow("Accuracy must be a numeric value between 0 and 110."))
+            elif int(accuracy) < 0:
+                player.acc = 0
+                return self.game_state
             elif int(accuracy) > 110:
-                print_and_sleep(yellow("Accuracy must be between 1 and 110."))
+                player.acc = 110
+                return self.game_state
             else:
                 player.acc = round(int(accuracy) * 0.01, 2)
                 return self.game_state
 
+# ================================================================================================
+
 class BuildCoinsSelection(LinearComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state, BuildIllnessSelection)
-
-    def execute_current(self) -> None:
-        player = self.game_state.player
-        while True:
-            coins = safe_input("Coins:")
-            if not coins.isdigit():
-                print_and_sleep(yellow("Coins must be an integer."))
-            elif int(coins) < 1:
-                print_and_sleep(yellow("Coins must be a positive integer."))
-            else:
-                player.coins = int(coins)
-                return self.game_state
-
-class BuildLuckSelection(LinearComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, BuildLuckSelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
         while True:
-            luck = safe_input("Luck:")
-            if not luck.isdigit():
-                print_and_sleep(yellow("Luck must be a numeric value."))
-            elif luck < 0 or luck > 10:
-                print_and_sleep(yellow("Luck must be between 0 and 10."))
-            else:
-                player.luck = round(luck, 3)
+            coins = safe_input("Coins:")
+            if not coins.isdigit():
+                print_and_sleep(yellow("Coins must be a numeric value."))
+            elif int(coins) < 0:
+                player.coins = 0
                 return self.game_state
+            else:
+                player.coins = int(coins)
+                return self.game_state
+
+# ================================================================================================
+
+class BuildLuckSelection(LinearComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildIllnessSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        while True:
+            luck = safe_input("Luck [0-10]:")
+            if not luck.isdigit():
+                print_and_sleep(yellow("Luck must be a numeric value between 0 and 10."))
+            elif float(luck) < 0:
+                player.luck = 0
+                return self.game_state
+            elif float(luck) > 10:
+                player.luck = 10
+                return self.game_state
+            else:
+                player.luck = round(float(luck), 3)
+                return self.game_state
+
+# ================================================================================================
 
 class BuildIllnessSelection(LinearComponent):
     def __init__(self, game_state: GameState):
@@ -232,12 +288,16 @@ class BuildIllnessSelection(LinearComponent):
                 player.illness_death_lvl = 1 + player.illness.levels_until_death
                 return self.game_state
 
+# ================================================================================================
+
 class BuildBlindSelection(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
-                         query="Are you blind",
+                         query="Are you blind?",
                          yes_component=BuildBlindEffectSelection,
                          no_component=BuildItemsSelection)
+
+# ================================================================================================
 
 class BuildBlindEffectSelection(LinearComponent):
     def __init__(self, game_state: GameState):
@@ -247,14 +307,20 @@ class BuildBlindEffectSelection(LinearComponent):
         player = self.game_state.player
         player.blind = True
         while True:
-            effect = safe_input("How blind are you (1-100)?")
+            effect = safe_input("Blindness [1-100]:")
             if not effect.isdigit():
-                print_and_sleep(yellow("Effect must be an integer."))
-            elif int(effect) < 1 or int(effect) > 100:
-                print_and_sleep(yellow("Effect must be between 1 and 100."))
+                print_and_sleep(yellow("Effect must be a numeric value between 1 and 100."))
+            elif int(effect) < 1:
+                player.blind_effect = 1
+                return self.game_state
+            elif int(effect) > 100:
+                player.blind_effect = 100
+                return self.game_state
             else:
                 player.blind_effect = int(effect) * 0.01
                 return self.game_state
+
+# ================================================================================================
 
 class BuildBlindTurnsSelection(LinearComponent):
     def __init__(self, game_state: GameState):
@@ -266,12 +332,15 @@ class BuildBlindTurnsSelection(LinearComponent):
         while True:
             turns = safe_input("How many turns?")
             if not turns.isdigit():
-                print_and_sleep(yellow("Turns must be an integer."))
+                print_and_sleep(yellow("Turns must be a numeric value."))
             elif int(turns) < 1:
-                print_and_sleep(yellow("Turns must be a positive integer."))
+                player.blind_turns = 1
+                return self.game_state
             else:
                 player.blind_turns = int(turns)
                 return self.game_state
+
+# ================================================================================================
 
 class BuildItemsSelection(LinearComponent):
     def __init__(self, game_state: GameState):
@@ -305,6 +374,8 @@ class BuildItemsSelection(LinearComponent):
                     final_picks = load_items(selections)
                     player.items = dict((it.name, it) for it in final_picks)
                     return self.game_state
+
+# ================================================================================================
 
 class BuildWeaponsSelection(LinearComponent):
     def __init__(self, game_state: GameState):
@@ -351,6 +422,8 @@ class BuildWeaponsSelection(LinearComponent):
                     player.build.weapons.extend(final_picks) # add to build weapons
                     return self.game_state
 
+# ================================================================================================
+
 class BuildPerksSelection(LinearComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, NoOpComponent)
@@ -381,6 +454,7 @@ class BuildPerksSelection(LinearComponent):
                 if len(selections) == len(perks):
                     return self.game_state
 
+# ================================================================================================
 # ================================================================================================
 
 # --- standard build path ---

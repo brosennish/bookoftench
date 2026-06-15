@@ -326,7 +326,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
                 player.gain_xp_other(offer - woman_desired_coins)
             player.gain_or_lose_luck(0.05)
         else:
-            damage = min(offer - woman_desired_coins, player.hp)
+            damage = min(woman_desired_coins - offer, player.hp)
             player.hp -= damage
             play_sound(PUNCH)
             print_and_sleep(red(f"The woman slapped you for {damage} damage!"), 1)
