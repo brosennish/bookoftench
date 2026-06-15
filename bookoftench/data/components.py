@@ -70,8 +70,8 @@ class ActionMenuDefaults:
 
 
 class OverviewMenuDefaults:
-    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, DISCOVERIES, ENCOUNTERS,
-                           FISHING_LOG, KILLS, PERKS, STATS]
+    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, DISCOVERIES, ENCOUNTERS, FISHING_LOG]
+    page_two: List[str] = [KILLS, PERKS, STATS]
 
 
 class InGameMenuDefaults:

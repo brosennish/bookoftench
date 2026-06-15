@@ -70,8 +70,18 @@ class OverviewMenu(PaginatedMenuComponent):
         super().__init__(game_state, returnable=True)
 
     def construct_pages(self) -> List[List[SelectionBinding]]:
-        page = [c for c in OverviewMenuDefaults.page_one]
-        if is_debug_mode():
-            page += []
-        return [[SelectionBinding(str(i), name, get_registered_component(name))
-                 for i, name in enumerate(page, 1)]]
+        pages = [
+            OverviewMenuDefaults.page_one,
+            OverviewMenuDefaults.page_two,
+        ]
+
+        return [
+            [
+                SelectionBinding(str(i), name, get_registered_component(name))
+                for i, name in enumerate(page, 1)
+            ]
+            for page in pages
+        ]
+
+    def can_exit(self) -> bool:
+        return self.return_selected

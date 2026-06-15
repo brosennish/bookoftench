@@ -553,9 +553,18 @@ class BuildComponent(LabeledSelectionComponent):
                     player.illness_death_lvl = 1 + build.illness.levels_until_death
 
                 player.items = dict((it.name, it) for it in build.items)
-                player.weapon_dict = {it.name: PlayerWeapon.from_weapon(it) for it in build.weapons}
-                player.current_weapon = next(i for i in player.weapon_dict.values()
-                                             if i.name in [BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF])
+                player.weapon_dict.clear()
+
+                for weapon in build.weapons:
+                    player.weapon_dict[weapon.name] = PlayerWeapon.from_weapon(weapon)
+
+                if player.weapon_dict:
+                    player.current_weapon = next(iter(player.weapon_dict.values()))
+                else:
+                    bare_hands = next(iter(load_weapons([BARE_HANDS])))
+                    player.weapon_dict[BARE_HANDS] = PlayerWeapon.from_weapon(bare_hands)
+                    player.current_weapon = player.weapon_dict[BARE_HANDS]
+
                 for p in build.perks:
                     activate_perk(p.name)
 

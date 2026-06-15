@@ -30,19 +30,18 @@ class Build:
     def __repr__(self) -> str:
         strength = f"{self.str:g}"
         accuracy = f"{self.acc:g}"
-
         label_width = 9
 
-        stat_rows = [
-            f"{'Lvl':<{label_width}} {dim('|')} {cyan(self.lvl)}",
-            f"{'Lives':<{label_width}} {dim('|')} {yellow(self.lives)}",
-            f"{'HP':<{label_width}} {dim('|')} {green(self.hp)}",
-            f"{'Strength':<{label_width}} {dim('|')} {red(strength)}",
-            f"{'Accuracy':<{label_width}} {dim('|')} {yellow(accuracy)}",
-            f"{'Luck':<{label_width}} {dim('|')} {purple(self.luck)}",
-            f"{'Fishing':<{label_width}} {dim('|')} {blue(self.fishing_lvl)}",
-            f"{'Coins':<{label_width}} {dim('|')} {green(self.coins)}",
-        ]
+        stats = dim(' | ').join([
+            f"Lvl: {cyan(self.lvl)}",
+            f"Lives: {yellow(self.lives)}",
+            f"HP: {green(self.hp)}",
+            f"Strength: {red(strength)}",
+            f"Accuracy: {yellow(accuracy)}",
+            f"Luck: {purple(self.luck)}",
+            f"Fishing: {blue(self.fishing_lvl)}",
+            f"Coins: {green(self.coins)}",
+        ])
 
         detail_rows = []
 
@@ -69,7 +68,7 @@ class Build:
         return "\n".join([
             orange(self.name),
             "",
-            *stat_rows,
+            stats,
             "",
             *detail_rows,
             "",
