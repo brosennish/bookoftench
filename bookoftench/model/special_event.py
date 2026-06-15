@@ -18,7 +18,7 @@ class SpecialEvent:
     text: str
     choices: list[str] | None
     optional: bool
-    method: str
+    method: str | None
     replayable: bool
     related: list[str] = field(default_factory=list)
     stage: int | None = 1

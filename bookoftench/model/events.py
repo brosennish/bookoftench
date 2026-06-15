@@ -187,7 +187,7 @@ class FleeEvent(Event):
 class FailedFleeEvent(Event):
     def __init__(self):
         super().__init__(EventType.FAILED_FLEE,
-                         callback=lambda: print_and_sleep(yellow("Couldn't escape!")))
+                         callback=lambda: print_and_sleep(yellow("Couldn't escape!"), 0.5))
 
 
 class PlayerDeathEvent(Event):
