@@ -556,7 +556,7 @@ def get_player_status_view_4(game_state: GameState) -> str:
         f"{dim(' | ').join([
             f'\n{orange(player.name)} {dim("-")} Fishing Lvl: {cyan(player.fishing_lvl)}',
             f'XP: {cyan(f"{player.fishing_xp}/{player.fishing_xp_needed}")}',
-            f'Rod: {orange(player.rod_lvl)}',
+            f'Rod: {cyan(player.rod_lvl)}',
             f'Caught: {blue(len(player.caught_fish))}',
             f'Bait: {cyan(sum(i.casts for i in player.tackle_box.values()))}',
             f'Items: {purple(sum(i.count for i in player.fishing_item_box.values()))}'
