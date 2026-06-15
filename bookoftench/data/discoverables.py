@@ -28,10 +28,6 @@ Search_Discoverables = [
      "areas": [FOREST, SWAMP], "count": 0,
      "desc": "The perfect appetizer for any formal occasion."},
 
-    {"pre": "a", "name": "Leather Boot", "value": 5, "hp": 0, "rarity": COMMON,
-     "areas": [FOREST, SWAMP], "count": 0,
-     "desc": "Should be taken to the Shebokken Leathermeister post haste."},
-
     {"pre": "a", "name": "Broken Compass", "value": 2, "hp": 0, "rarity": COMMON,
      "areas": [FOREST, SWAMP], "count": 0,
      "desc": "Hm... it only points towards my jines?"},
@@ -44,13 +40,13 @@ Search_Discoverables = [
      "areas": [FOREST, SWAMP], "count": 0,
      "desc": "Swallow it whole if you know what's good for ya's."},
 
+    {"pre": "a", "name": "Camel Toad", "value": 5, "hp": 0, "rarity": COMMON,
+     "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,
+     "desc": "Manifests in multiple shapes and sizes."},
+
     {"pre": "some", "name": "Cattails", "value": 0, "hp": 1, "rarity": COMMON,
      "areas": [SWAMP], "count": 0,
      "desc": "The locusts add an exquisite flavor that complements the texture."},
-
-    {"pre": "a", "name": "Used Chapstick", "value": 1, "hp": 1, "rarity": COMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,
-     "desc": "Made in Preston, Idaho?"},
 
     {"pre": "a", "name": "Cigarette Butt", "value": 1, "hp": 1, "rarity": COMMON,
      "areas": [CITY, FOREST, SWAMP], "count": 0,
@@ -107,6 +103,10 @@ Search_Discoverables = [
     {"pre": "a", "name": "Hot Dog Burger", "value": 5, "hp": 8, "rarity": COMMON,
      "areas": [CITY], "count": 0,
      "desc": "The most American thing imaginable."},
+
+    {"pre": "a", "name": "Leather Boot", "value": 5, "hp": 0, "rarity": COMMON,
+     "areas": [FOREST, SWAMP], "count": 0,
+     "desc": "Should be taken to the Shebokken Leathermeister post haste."},
 
     {"pre": "a", "name": "Mobile Dump Coupon", "value": 3, "hp": 0, "rarity": COMMON,
      "areas": [CITY], "count": 0,
@@ -176,6 +176,10 @@ Search_Discoverables = [
      "areas": [CITY], "count": 0,
      "desc": "Made for a man with three legs."},
 
+    {"pre": "a", "name": "Toast Roaster", "value": 8, "hp": 0, "rarity": COMMON,
+     "areas": [CITY], "count": 0,
+     "desc": "Roasts your toast."},
+
     {"pre": "a", "name": "Tooth", "value": 5, "hp": 1, "rarity": COMMON,
      "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,
      "desc": "Not a mouth tooth."},
@@ -187,6 +191,10 @@ Search_Discoverables = [
     {"pre": "a", "name": "Turtle Shell", "value": 5, "hp": 0, "rarity": COMMON,
      "areas": [FOREST, SWAMP], "count": 0,
      "desc": "A plain yet beautiful shell of a local pond turtle."},
+
+    {"pre": "a", "name": "Used Chapstick", "value": 1, "hp": 1, "rarity": COMMON,
+     "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,
+     "desc": "Made in Preston, Idaho?"},
 
     {"pre": "a", "name": "Vibrator", "value": 5, "hp": 0, "rarity": COMMON,
      "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,
@@ -533,6 +541,10 @@ Search_Discoverables = [
     # ============================
     #      UNCOMMON / NEUTRAL
     # ============================
+
+    {"pre": "a", "name": "Bag of Snow", "value": 0, "hp": 0, "rarity": UNCOMMON,
+     "areas": [CAVE], "count": 0, "quest_item": True,
+     "desc": "\"Property of Santa\" is scribbled on the bag."},
 
     {"pre": "a", "name": "Cannibals Anonymous Flyer", "value": 0, "hp": 0, "rarity": UNCOMMON,
      "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,

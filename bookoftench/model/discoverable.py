@@ -17,6 +17,7 @@ class Discoverable:
     areas: List[str]
     count: int
     desc: str | None
+    quest_item: bool = False
 
 # ================================================================================================
 
