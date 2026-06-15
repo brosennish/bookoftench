@@ -998,7 +998,7 @@ def display_area_log(game_state: GameState, area: str) -> None:
     print_and_sleep(f"Caught: {caught}/{total} ({percentage}%)", 2)
 
     name_width = max(len(fish.name) for fish in all_catches_in_area)
-    rarity_width = max(len(fish.get_rarity_text()) for fish in all_catches_in_area)
+    rarity_width = max(len(fish.rarity) for fish in all_catches_in_area)
 
     length_width = max(len(str(fish.length)) for fish in all_catches_in_area)
     weight_width = max(len(str(fish.weight)) for fish in all_catches_in_area)
@@ -1008,12 +1008,15 @@ def display_area_log(game_state: GameState, area: str) -> None:
 
         print_and_sleep(
             dim(" | ").join([
-                blue(f"{fish.name:<{name_width}}"),
-                f"{fish.get_rarity_text():<{rarity_width}}",
-                f"{sex_color(fish.sex[0])}",
+                cyan(f"{fish.name:<{name_width}}"),
+                fish.get_rarity_text().replace(
+                    fish.rarity,
+                    f"{fish.rarity:<{rarity_width}}"
+                ),
+                sex_color(fish.sex[0]),
                 f"{yellow(f'{fish.length:>{length_width}}')} in",
                 f"{yellow(f'{fish.weight:>{weight_width}}')} lbs",
-                f"{yellow(f'{get_percentile_text(fish.size_percentile)}')}",
+                yellow(get_percentile_text(fish.size_percentile)),
             ])
         )
 
