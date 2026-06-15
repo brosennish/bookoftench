@@ -164,6 +164,7 @@ class BaitShop(LabeledSelectionComponent):
         # play_music(FISHMONGER_THEME)
 
     def launch_fishing_item_shop(self) -> None:
+        self.leave = True
         FishingItemShop(self.game_state).run()
 
     def _return(self):
@@ -245,6 +246,7 @@ class FishingItemShop(LabeledSelectionComponent):
         pass
 
     def launch_bait_shop(self):
+        self.leave = True
         BaitShop(self.game_state).run()
 
     def _return(self):
