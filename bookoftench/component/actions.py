@@ -677,26 +677,36 @@ class Search(RandomChoiceComponent):
     @register_component(DISCOVER_ITEM)
     @functional_component(state_dependent=True)
     def _discover_item(game_state: GameState):
-        available = [i for i in load_items()
-                     if i.name not in game_state.player.items
-                     and i.areas is not None
-                     and game_state.current_area.name in i.areas]
-        if available:
-            item = random.choice(available)
-        else:
-            all_unowned_items = [i for i in load_items()
-                                 if i.name not in game_state.player.items]
-            item = random.choice(all_unowned_items)
+        player = game_state.player
 
+        available = [
+            i for i in load_items()
+            if i.name not in player.items
+               and i.areas is not None
+               and game_state.current_area.name in i.areas
+        ]
+
+        if not available:
+            available = [
+                i for i in load_items()
+                if i.name not in player.items
+            ]
+
+        if not available:
+            print_and_sleep(yellow("You found nothing new."), 1)
+            return game_state
+
+        item = random.choice(available)
         game_state.found_item = item
+
         play_sound(POSITIVE)
         print_and_sleep(cyan(f"You found {'an' if item.name[0].lower() in 'aeiou' else 'a'} {item.name}!"), 2)
 
-        if game_state.player.add_item(item):
+        if player.add_item(item):
             print_and_sleep(cyan(f"{item.name} added to sack."), 1)
             return game_state
-        else:
-            return SwapFoundItemYN(game_state).run()
+
+        return SwapFoundItemYN(game_state).run()
 
 # ================================================================================================
 
@@ -704,11 +714,24 @@ class Search(RandomChoiceComponent):
     @register_component(DISCOVER_WEAPON)
     @functional_component(state_dependent=True)
     def _discover_weapon(game_state: GameState):
-        available = [w for w in load_discoverable_weapons() if game_state.current_area.name in w.areas
-                    and w.name not in game_state.player.weapon_dict]
+        player = game_state.player
 
-        if len(available) == 0:  # shouldn't ever be the case in actual gameplay, but need this in debug mode
-            available = load_discoverable_weapons()
+        available = [
+            w for w in load_discoverable_weapons()
+            if game_state.current_area.name in w.areas
+               and w.name not in player.weapon_dict
+        ]
+
+        if not available:
+            available = [
+                w for w in load_discoverable_weapons()
+                if w.name not in player.weapon_dict
+            ]
+
+        if not available:
+            print_and_sleep(yellow("You found nothing new."), 1)
+            return game_state
+
         weapon = random.choice(available)
 
         if weapon.type not in [BLIND, SPECIAL]:
@@ -720,14 +743,16 @@ class Search(RandomChoiceComponent):
         game_state.found_weapon = weapon
 
         play_sound(POSITIVE)
-        print_and_sleep(cyan(f"You found {'an' if weapon.name[0].lower() in 'aeiou' else 'a'} {weapon.name}!"),
-                        2)
+        print_and_sleep(
+            cyan(f"You found {'an' if weapon.name[0].lower() in 'aeiou' else 'a'} {weapon.name}!"),
+            2
+        )
 
-        if game_state.player.add_weapon(weapon):
+        if player.add_weapon(weapon):
             print_and_sleep(cyan(f"{weapon.name} added to sack."), 1)
             return game_state
-        else:
-            return SwapFoundWeaponYN(game_state).run()
+
+        return SwapFoundWeaponYN(game_state).run()
 
 # ================================================================================================
 
@@ -963,6 +988,7 @@ class Attack(Component):
             if trait_name == CONTAGIOUS and random.random() < 0.15:
                 EnemyInfect(self.game_state).run()
             if trait_name == COWARD and random.random() < 0.15:
+                print_and_sleep(yellow(f"{enemy.name} fled like a bozo baby coward!"), 1.5)
                 player.can_flee = True
                 return
             if (trait_name == ACHILLES and enemy.current_weapon.base_name != TENCH_CANNON
@@ -980,7 +1006,6 @@ class FailedFlee(Attack):
         self.failed_flee: bool = True
 
     def run(self) -> GameState:
-        print_and_sleep(yellow("Couldn't escape!"), 0.5)
         event_logger.log_event(FailedFleeEvent())
         return super().run()
 

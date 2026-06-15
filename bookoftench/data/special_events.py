@@ -1,6 +1,6 @@
 from bookoftench.data import areas as a
-from bookoftench.data.audio import ROULETTE_THEME
-from bookoftench.ui import green, purple, yellow, blue, red
+from bookoftench.data.audio import ROULETTE_THEME, HOHKKEN_THEME
+from bookoftench.ui import green, purple, yellow, blue, red, white
 
 # ================================================================================================
 
@@ -9,6 +9,7 @@ GREEDY_BASTARD = "Greedy Bastard"
 HERPES_KISS = "Herpes Kiss"
 LOST_GOLD_P1 = "Lost Gold P1"
 LOST_GOLD_P2 = "Lost Gold P2"
+NEWS_HOHKKEN_ENTERS_CITY = "Hohkken Enters City"
 PROBING = "Probing"
 SHEBOKKEN_ROULETTE = "Shebokken Roulette"
 STINGY_BASTARD = "Stingy Bastard"
@@ -50,6 +51,22 @@ Special_Events = [
 
 # ================================================================================================
 
+    {'name': NEWS_HOHKKEN_ENTERS_CITY, 'color': white, 'sleep': 8, 'theme': HOHKKEN_THEME,
+     'areas': [a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': "Your flip phone buzzes with a news alert...\n"
+        "\n*** BREAKING NEWS ***\n"
+        "\nReporter: Behind me is the aftermath of a once-in-a-lifetime event.\n"
+        "The Hohkken, a legendary sea monster, emerged from the ocean and entered the city.\n"
+        "Despite the immeasurable destruction of the city, no lives were lost.\n"
+        "Our experts believe this this to be a sign that it was searching for something\n"
+        "Or, someone, specifically.\n"
+        "Whoever you are you, wherever you are, just know, the Hohkken is coming for you.\n"
+        "\nThis is Shannon O'Shanahan, reporting live from downtown Shebokken.\n",
+     'choices': None,
+     'optional': True, 'method': None, 'replayable': False},
+
+# ================================================================================================
+
     {'name': LOST_GOLD_P1, 'stage': 1, 'color': blue, 'sleep': 5, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': "You smell the overwhelming stench of brine-soaked jines...\n"
@@ -80,6 +97,7 @@ Special_Events = [
      'choices': ['Accept Probe', 'Attempt to Probe the Aliens', 'Try to Escape'],
      'optional': False, 'method': 'probing', 'replayable': True},
 
+# ================================================================================================
 
     {'name': SHEBOKKEN_ROULETTE, 'color': purple, 'sleep': 5, 'theme': ROULETTE_THEME,
      'areas': [a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
@@ -90,6 +108,7 @@ Special_Events = [
      'choices': ['10', '20', '30', '40', '50'],
      'optional': False, 'method': 'shebokken_roulette', 'replayable': True},
 
+# ================================================================================================
 
     {'name': STINGY_BASTARD, 'color': purple, 'sleep': 5, 'theme': None,
      'areas': [a.CAVE, a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
@@ -99,6 +118,7 @@ Special_Events = [
      'choices': ['10', '20', '30', '40', '50'],
      'optional': True, 'method': 'stingy_bastard', 'replayable': True},
 
+# ================================================================================================
 
     {'name': THREE_HOLES, 'color': purple, 'sleep': 5, 'theme': None,
      'areas': [a.CAVE, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
@@ -110,6 +130,7 @@ Special_Events = [
      'choices': ['Hole 1', 'Hole 2', 'Hole 3'],
      'optional': True, 'method': 'three_holes', 'replayable': True},
 
+# ================================================================================================
 
     {'name': TRIPLE_TENCH_DARE, 'color': yellow, 'sleep': 5, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY], 'moon': None, 'season': None,
@@ -120,6 +141,7 @@ Special_Events = [
      'choices': ['5', '10', '15', '20'],
      'optional': True, 'method': 'triple_tench_dare', 'replayable': True},
 
+# ================================================================================================
 
     {'name': ZONKED, 'color': purple, 'sleep': 5, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,

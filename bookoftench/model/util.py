@@ -386,41 +386,44 @@ def display_shop_header(game_state: GameState):
 def get_player_status_view(game_state: GameState) -> str:
     player = game_state.player
     player_color = p_color(player.hp, player.max_hp)
+
     tod = game_state.time_of_day
     tod_display = "Day" if tod == DAY else "Night"
     moon = game_state.moon
-    killed_remaining = [f"Killed: {red(f"{game_state.current_area.enemies_killed}")}"]
-    if perk_is_active(CROWS_NEST):
-        killed_remaining.append(f"Left: {yellow(f"{game_state.current_area.enemies_remaining}")}")
 
-    hp_display = f"HP: {player_color(f"{player.hp}/{player.max_hp}" if player.hp != player.max_hp else
-                                     f"{player.hp}")}"
-    player_status = (f"{dim(' | ').join([
-        f"{blue(game_state.current_area.name)}",
-        *killed_remaining,
-        f"{yellow(tod_display) if tod == DAY else purple(tod_display)}",
-        f"{moon} Moon",
-        f"Wanted: {purple(game_state.wanted)}",
-        f"Bounty: {purple(f"{game_state.bounty}")}"])}"
-                     f"\n{dim(' | ').join([
-                         f"\n{orange(player.name)} {dim('-')} Level: {cyan(f"{player.lvl}")}",
-                         f"XP: {cyan(f"{player.xp}/{player.xp_needed}")}",
-                         f"{hp_display}",
-                         f"Coins: {green(f"{player.coins}")}",
-                         f"Lives: {yellow(f"{player.lives}")}"])}")
+    hp_display = (
+        f"HP: {player_color(f'{player.hp}/{player.max_hp}' if player.hp != player.max_hp else player.hp)}"
+    )
+
+    player_status = (
+        f"{dim(' | ').join([
+            blue(game_state.current_area.name),
+            yellow(tod_display) if tod == DAY else purple(tod_display),
+            f'{moon} Moon',
+            f'Wanted: {purple(game_state.wanted)}',
+        ])}"
+        f"\n"
+        f"{dim(' | ').join([
+            f'\n{orange(player.name)} {dim("-")} Lvl: {cyan(player.lvl)}',
+            f'XP: {cyan(f"{player.xp}/{player.xp_needed}")}',
+            hp_display,
+            f'Coins: {green(player.coins)}',
+            f'Lives: {yellow(player.lives)}',
+        ])}"
+    )
 
     if player.illness:
-        illness_status = (f"{dim(' | ').join([
-            f"\nIllness: {yellow(f"{player.illness.name}")}",
-            f"Death Level: {red(f"{player.illness_death_lvl}")}",
-        ])}")
+        illness_status = dim(' | ').join([
+            f"\nIllness: {yellow(player.illness.name)}",
+            f"Death Lvl: {red(player.illness_death_lvl)}",
+        ])
 
         return "\n".join([
             player_status,
             illness_status,
         ])
-    else:
-        return player_status
+
+    return player_status
 
 # ================================================================================================
 

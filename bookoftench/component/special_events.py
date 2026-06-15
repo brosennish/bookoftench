@@ -2,7 +2,7 @@ import random
 
 from bookoftench import event_logger
 from bookoftench.audio import play_music, play_sound
-from bookoftench.component import functional_component, Component, \
+from bookoftench.component import functional_component, \
     LabeledSelectionComponent, ReprBinding, NoOpComponent, SelectionBinding, register_component, SwapFoundItemYN, \
     OfficerEncounter
 from bookoftench.data.audio import PUNCH, POSITIVE, MONSTER_ATTACK, PISTOL, BLADE, COINS
@@ -12,7 +12,6 @@ from bookoftench.data.items import TENCH_FILET, SWAMP, FOREST, CITY, CAVE
 from bookoftench.data.special_events import Special_Events, LOST_GOLD_P2
 from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent
-from bookoftench.model.illness import load_illness
 from bookoftench.model.item import load_items
 from bookoftench.model.perk import load_perks
 from bookoftench.model.special_event import SpecialEvent, load_special_event
@@ -124,15 +123,26 @@ class SpecialEventComponent(LabeledSelectionComponent):
         return self.leave or not self.game_state.player.is_alive()
 
     def display_options(self) -> None:
-        print_and_sleep(self.special_event.color(self.special_event.text), self.special_event.sleep)
-        super().display_options()
+        print_and_sleep(
+            self.special_event.color(self.special_event.text),
+            self.special_event.sleep
+        )
+
+        for binding in self.binding_map.values():
+            if binding.key.lower() == "r":
+                print()
+
+            print(f"[{binding.key}] : {binding.name}")
+
+        print("\nPlease enter a selection")
 
 # ============================================================================================
 
     def _handle_selection_component(self, special_event: SpecialEvent, choice: int):
         def selection_component():
-            method = getattr(self, special_event.method)
-            method(self.game_state, choice)
+            if special_event.method:
+                method = getattr(self, special_event.method)
+                method(self.game_state, choice)
             self.leave = True
             return self.game_state
 
