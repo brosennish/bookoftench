@@ -37,6 +37,19 @@ Special_Events = [
 
 # ================================================================================================
 
+    {'name': HERPES_KISS, 'color': purple, 'sleep': 5, 'theme': None,
+     'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': "A sensuous being with mealy lips and a hint of humanity approaches.\n"
+        "\nSensuous Being: Your lips...\n"
+        "They are no nice, so luscious.\n"
+        "Oh, I've just been so lonely since I lost my imaginary lover.\n"
+        "Might I have a quick taste?\n"
+        "I will give you of 10 coin for each kiss... hehehe.\n",
+     'choices': ['Kiss 1x', 'Kiss 3x', 'Kiss 5x', 'Kiss 10x'],
+     'optional': True, 'method': 'herpes_kiss', 'replayable': True},
+
+# ================================================================================================
+
     {'name': LOST_GOLD_P1, 'stage': 1, 'color': blue, 'sleep': 5, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': "You smell the overwhelming stench of brine-soaked jines...\n"
@@ -59,7 +72,7 @@ Special_Events = [
 
 # ================================================================================================
 
-    {'name': PROBING, 'color': green, 'sleep': 3, 'theme': None,
+    {'name': PROBING, 'color': green, 'sleep': 5, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': "You were abducted by aliens!\n"
         "\nPerverto: Are you ready for your probing?\n"
@@ -98,7 +111,7 @@ Special_Events = [
      'optional': True, 'method': 'three_holes', 'replayable': True},
 
 
-    {'name': TRIPLE_TENCH_DARE, 'color': yellow, 'sleep': 4, 'theme': None,
+    {'name': TRIPLE_TENCH_DARE, 'color': yellow, 'sleep': 5, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY], 'moon': None, 'season': None,
      'text': "A rambunctious boy approaches you, dad's wallet in hand...\n"
         "\nHe triple-tench-dares you to stare at the sun.\n"
@@ -108,7 +121,7 @@ Special_Events = [
      'optional': True, 'method': 'triple_tench_dare', 'replayable': True},
 
 
-    {'name': ZONKED, 'color': purple, 'sleep': 4, 'theme': None,
+    {'name': ZONKED, 'color': purple, 'sleep': 5, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': "You come across a man who is totally zonked...\n"
         "\nHis Slade shirt is caked with drool.\n"

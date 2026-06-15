@@ -1112,9 +1112,7 @@ class EnemyInfect(NoOpComponent):
 
         if not player.illness:
             illness_name = enemy.illness.name
-            illness_dict = next(i for i in Illnesses if i['name'] == illness_name)
-            player.illness = load_illness(illness_dict)
-            player.illness_death_lvl = player.lvl + player.illness.levels_until_death
+            player.acquire_illness(illness_name)
             print_and_sleep(yellow(f"You caught {player.illness.name} from {enemy.name}!"), 2)
         return self.game_state
 

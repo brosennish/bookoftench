@@ -11,7 +11,7 @@ from bookoftench.data import items as i
 from bookoftench.data import perks as p
 from bookoftench.data.weapons import BARE_HANDS, MELEE, RANGED, BLADED, LASER_BEAMS, VOODOO_STAFF, CLAWS, KNIFE
 from bookoftench.event_logger import subscribe_function
-from bookoftench.model.illness import Illness
+from bookoftench.model.illness import Illness, load_illness
 from bookoftench.ui import yellow, dim, green, cyan, purple, red
 from bookoftench.util import print_and_sleep
 from bookoftench.model.bait import Bait
@@ -32,6 +32,7 @@ from bookoftench.data.areas import CAVE
 from bookoftench.data.enemies import EMPATH
 from ..data.audio import XP, GREAT_JOB, GOLF_CLAP
 from ..data.fishing_items import BARB_HOOK
+from ..data.illnesses import Illnesses
 
 
 # ================================================================================================
@@ -517,6 +518,11 @@ class Player(Combatant):
             self.luck = 0
         if self.luck > 10:
             self.luck = 10
+
+    def acquire_illness(self, illness_name) -> None:
+        illness_dict = next(i for i in Illnesses if i['name'] == illness_name)
+        self.illness = load_illness(illness_dict)
+        self.illness_death_lvl = self.lvl + self.illness.levels_until_death
 
 # ================================================================================================
 

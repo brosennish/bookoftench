@@ -7,10 +7,12 @@ from bookoftench.component import functional_component, Component, \
     OfficerEncounter
 from bookoftench.data.audio import PUNCH, POSITIVE, MONSTER_ATTACK, PISTOL, BLADE, COINS
 from bookoftench.data.components import SPECIAL_EVENT
+from bookoftench.data.illnesses import HERPES
 from bookoftench.data.items import TENCH_FILET, SWAMP, FOREST, CITY, CAVE
 from bookoftench.data.special_events import Special_Events, LOST_GOLD_P2
 from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent
+from bookoftench.model.illness import load_illness
 from bookoftench.model.item import load_items
 from bookoftench.model.perk import load_perks
 from bookoftench.model.special_event import SpecialEvent, load_special_event
@@ -125,7 +127,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
         print_and_sleep(self.special_event.color(self.special_event.text), self.special_event.sleep)
         super().display_options()
 
-    # ============================================================================================
+# ============================================================================================
 
     def _handle_selection_component(self, special_event: SpecialEvent, choice: int):
         def selection_component():
@@ -161,7 +163,45 @@ class SpecialEventComponent(LabeledSelectionComponent):
             player.gain_or_lose_luck(-0.1)
             special_event_death_check(player)
 
-    # ================================================================================================
+# ================================================================================================
+
+    @staticmethod
+    def herpes_kiss(game_state: GameState, choice: int):
+        player = game_state.player
+
+        if player.illness:
+            print_and_sleep(purple("Sensuous Being: Wait... are you sick?"), 1.5)
+            print_and_sleep(purple(f"Do you have... {player.illness.name}?"), 1.5)
+            print_and_sleep(purple("GROSS! I can't believe I almost let you kiss me."), 1.5)
+            return game_state
+
+        if choice == 1:
+            kisses = 1
+        elif choice == 2:
+            kisses = 3
+        elif choice == 3:
+            kisses = 5
+        else:
+            kisses = 10
+
+        for i in range(kisses):
+            if i == 0:
+                print_and_sleep("You kiss the sensuous being...", 1.5)
+            else:
+                print_and_sleep("You kiss the sensuous being again...", 1.5)
+
+            player.gain_coins(10)
+
+            if random.random() < 0.10:
+                print_and_sleep(yellow("Your lips feel tingly all of a sudden..."), 1.5)
+                print_and_sleep(yellow("The Sensuous Being covers its mouth and giggles..."), 1.5)
+                print_and_sleep(yellow("The Sensuous Being gave you Herpes!"), 1.5)
+                player.acquire_illness(HERPES)
+                break
+
+        return game_state
+
+# ================================================================================================
 
     @staticmethod
     def lost_gold_p1(game_state: GameState, choice: int):
@@ -223,7 +263,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
 
         special_event_death_check(player)
 
-    # ================================================================================================
+# ================================================================================================
 
     @staticmethod
     def probing(game_state: GameState, choice: int):
@@ -261,7 +301,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
 
         special_event_death_check(player)
 
-    # ================================================================================================
+# ================================================================================================
 
     @staticmethod
     def shebokken_roulette(game_state: GameState, choice: int):
@@ -308,7 +348,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
             elif shooter == "man":
                 shooter = player
 
-    # ================================================================================================
+# ================================================================================================
 
     @staticmethod
     def stingy_bastard(game_state: GameState, choice: int):
@@ -334,7 +374,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
             player.gain_or_lose_luck(-0.05)
             special_event_death_check(player)
 
-    # ================================================================================================
+# ================================================================================================
 
     @staticmethod
     def three_holes(game_state: GameState, choice: int):
@@ -378,7 +418,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
         else:
             print_and_sleep(yellow("Your hole was dry."), 1)
 
-    # ================================================================================================
+# ================================================================================================
 
     @staticmethod
     def triple_tench_dare(game_state: GameState, choice: int):
@@ -408,7 +448,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
         player.gain_or_lose_luck(luck)
         player.gain_coins(payment)
 
-    # ================================================================================================
+# ================================================================================================
 
     @staticmethod
     def zonked(game_state: GameState, choice: int):
