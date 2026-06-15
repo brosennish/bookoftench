@@ -104,7 +104,7 @@ class BuildFishingLevelSelection(LinearComponent):
     def execute_current(self) -> None:
         player = self.game_state.player
         while True:
-            fishing_level = safe_input("Fishing Level:")
+            fishing_level = safe_input("Fishing Level [0-10]:")
             if not fishing_level.isdigit():
                 print_and_sleep(yellow("Fishing Level must be a numeric value between 0 and 10."))
             elif int(fishing_level) < 0:
@@ -115,6 +115,28 @@ class BuildFishingLevelSelection(LinearComponent):
                 return self.game_state
             else:
                 player.fishing_lvl = int(fishing_level)
+                return self.game_state
+
+# ================================================================================================
+
+class BuildRodLevelSelection(LinearComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, BuildLivesSelection)
+
+    def execute_current(self) -> None:
+        player = self.game_state.player
+        while True:
+            fishing_level = safe_input("Fishing Rod Level [0-10]:")
+            if not fishing_level.isdigit():
+                print_and_sleep(yellow("Fishing Rod Level must be a numeric value between 0 and 10."))
+            elif int(fishing_level) < 0:
+                player.fishing_lvl = 0
+                return self.game_state
+            elif int(fishing_level) > 10:
+                player.fishing_lvl = 10
+                return self.game_state
+            else:
+                player.rod_lvl = int(fishing_level)
                 return self.game_state
 
 # ================================================================================================
@@ -490,7 +512,8 @@ class BuildComponent(LabeledSelectionComponent):
                 player.lives = random.randint(1, 3)
 
                 player.lvl = random.randint(1, 3)
-                player.fishing_lvl = random.randint(0, 2)
+                player.fishing_lvl = random.randint(0, 3)
+                player.rod = random.randint(0, 3)
 
                 player.max_hp = random.randint(80, 120)
                 hp_deficit = random.randint(1, 40)

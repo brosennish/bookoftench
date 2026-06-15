@@ -117,6 +117,7 @@ class GameState:
                 coins=d["coins"],
                 luck=d["luck"],
                 fishing_lvl=d["fishing_lvl"],
+                rod_lvl=d["rod_lvl"],
                 illness=illness,
                 items=items,
                 weapons=weapons,
