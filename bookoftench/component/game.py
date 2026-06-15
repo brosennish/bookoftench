@@ -205,16 +205,21 @@ BOOK OF TENCH - GENERAL OVERVIEW
     - Go see the Fishmonger in the Swamp yo
 """))
 
-# todo - make this binary selection
-class Intro(TextDisplayingComponent):
+
+class Intro(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state,
-                         next_component=ActionMenu,
-                         display_callback=lambda _: print_and_sleep(red("""
-You wash up on a deserted beach outside of Shebokken.
-The champion tells you that his mother, Chula, was taken in the night.
-He consecrates you as the chosen spawn who will rescue his Tench maiden.
-Fulfill the prophecy, lest Chula's life run dry...""")))
+        super().__init__(
+            game_state,
+            query=(
+                "You wash up on a deserted beach outside of Shebokken.\n"
+                "The champion tells you that his mother, Chula, was taken in the night.\n"
+                "He consecrates you as the chosen spawn who will rescue his Tench maiden.\n"
+                "Fulfill the prophecy, lest Chula's life run dry...\n\n"
+                "Do you accept the mission?"
+        ),
+            yes_component=ActionMenu,
+            no_component=GameOver
+        )
 
     def play_theme(self) -> None:
         play_music(INTRO_THEME)
