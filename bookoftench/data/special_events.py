@@ -1,5 +1,5 @@
 from bookoftench.data import areas as a
-from bookoftench.data.audio import ROULETTE_THEME, HOHKKEN_THEME, HOSPITAL_THEME
+from bookoftench.data.audio import ROULETTE_THEME, HOHKKEN_THEME, HOSPITAL_THEME, BATTLE_THEME
 from bookoftench.data.enemies import OILY_DOILY
 from bookoftench.data.enviroment import DAY, NIGHT
 from bookoftench.ui import green, purple, yellow, blue, red, white, orange
@@ -25,7 +25,9 @@ NEWS_WHALE_MAN = "News Whale Man" # formatted
 WEDNESDAY_NEWS = "Wednesday News"
 
 # Boss Introductions
+BASTA_DEAL ="Basta Deal"
 OILY_PROPOSAL = "Oily Introduction"
+SLENDER_INTRO = "Slender Intro"
 
 # Investment Opportunities
 
@@ -40,7 +42,7 @@ Special_Events = [
     {'name': GREEDY_BASTARD, 'color': purple, 'sleep': 5, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """An old woman with wrinkled eyeballs wearing a soiled cloak approaches you.
-        
+
 Old Woman: Hey! You there! 
 
 I have coin...
@@ -55,7 +57,7 @@ How much do you want? Hehehe.
     {'name': HERPES_KISS, 'color': purple, 'sleep': 5, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """A sensuous being with mealy lips and a hint of humanity approaches.
-     
+
 Sensuous Being: Your lips...
 They are so nice... so luscious.
 Oh, I've just been so lonely since I lost my imaginary lover.
@@ -72,7 +74,7 @@ I will give you 8 of coin for each kiss... hehehe.
     {'name': LOST_GOLD_P1, 'stage': 1, 'color': blue, 'sleep': 5, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You smell the overwhelming stench of brine-soaked jines...
-     
+
 Pirate: Argh! I lost me gold.
 Tell me matey, wher' can I find me gold?
 """,
@@ -80,26 +82,28 @@ Tell me matey, wher' can I find me gold?
      'optional': False, 'method': 'lost_gold_p1', 'replayable': False,
      'related': [LOST_GOLD_P2]},
 
+# ================================================================================================
+
     {'name': LOST_GOLD_P2, 'stage': 2, 'color': red, 'sleep': 5, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You smell a familiar stench...
-        
+
 Pirate: Argh! You lied to me, matey.
 I searched for me gold and came up dry!
 
 Give me coin or I'll shoot ya right in yer jines.
 Aye, and if yer dry, a tench filet would also do.
 """,
-     'choices': ['Give Coin (50), Give Tench Filet, Beg for Mercy'],
+     'choices': ['Give Coin (50)', 'Give Tench Filet', 'Beg for Mercy'],
      'optional': False, 'method': 'lost_gold_p2', 'replayable': False,
      'related': [LOST_GOLD_P1]},
 
 # ================================================================================================
 
-    {'name': NEWS_HEADLESS_WHORES_MAN, 'color': white, 'sleep': 8, 'theme': None,
+    {'name': NEWS_HEADLESS_WHORES_MAN, 'color': white, 'sleep': 0, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
-        
+
 *** BREAKING NEWS ***
 
 Reporter: Police have found a headless body in Shebokken's swamp region.
@@ -111,10 +115,12 @@ Reporting live from the Swamp, I'm Shannon O'Shanahan, Shebokken News.
      'choices': [],
      'optional': True, 'method': None, 'replayable': False},
 
-    {'name': NEWS_HOHKKEN_ENTERS_CITY, 'color': white, 'sleep': 8, 'theme': HOHKKEN_THEME,
+# ================================================================================================
+
+    {'name': NEWS_HOHKKEN_ENTERS_CITY, 'color': white, 'sleep': 0, 'theme': HOHKKEN_THEME,
      'areas': [a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
-     
+
 *** BREAKING NEWS ***
 
 Reporter: Behind me is the aftermath of a once-in-a-lifetime event.
@@ -131,10 +137,12 @@ Reporting live from Shebokken, I'm Shannon O'Shanahan, Shebokken News.
      'choices': [],
      'optional': True, 'method': None, 'replayable': False},
 
-    {'name': NEWS_WHALE_MAN, 'color': white, 'sleep': 8, 'theme': None,
+# ================================================================================================
+
+    {'name': NEWS_WHALE_MAN, 'color': white, 'sleep': 0, 'theme': None,
      'areas': [a.FOREST], 'time': [DAY], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
-     
+
 *** BREAKING NEWS ***
 
 Reporter: Behind me is the home of a spectacular creature
@@ -163,10 +171,12 @@ Reporting live from Shebokken, I'm Shannon O'Shanahan, Shebokken News.
      'choices': [],
      'optional': True, 'method': None, 'replayable': False},
 
-    {'name': WEDNESDAY_NEWS, 'color': orange, 'sleep': 8, 'theme': None,
+# ================================================================================================
+
+    {'name': WEDNESDAY_NEWS, 'color': orange, 'sleep': 0, 'theme': None,
      'areas': [a.FOREST, a.SWAMP], 'time': [DAY], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
-        
+
 *** BREAKING NEWS ***
 
 Wednesday Wednesday: Good morning, Shebokken.
@@ -188,7 +198,7 @@ Wednesday Wednesday's Wednesday News, only on Wednesdays.
     {'name': PROBING, 'color': green, 'sleep': 5, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """You were abducted by aliens!
-     
+
 Perverto: Are you ready for your probing?
 
 What do you do?
@@ -201,7 +211,7 @@ What do you do?
     {'name': SANTAS_SNOW, 'color': white, 'sleep': 5, 'theme': None,
      'areas': [a.CITY], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """A sad, old, fat man with a huge bulge descends from the sky.
-        
+
 Santa: The only thing better than a hole in the sled...
 Is a hole in the head.
 
@@ -215,7 +225,7 @@ I think I left my Snow in the Cave...
     {'name': SHEBOKKEN_ROULETTE, 'color': purple, 'sleep': 5, 'theme': ROULETTE_THEME,
      'areas': [a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """A leather-skinned man approaches you, revolver in hand.
-     
+
 Man: I reckon it's high time for a round of Shebokken Roulette.
 One bullet, two blindfolds.
 
@@ -229,9 +239,9 @@ What's your wager?
     {'name': STINGY_BASTARD, 'color': purple, 'sleep': 5, 'theme': None,
      'areas': [a.CAVE, a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """An old woman with two noses and three nostrils approaches you.
-     
+
 Old Woman: Hey! You there!
- 
+
 I need coin...
 
 How much will you give me? Hehehe.
@@ -264,7 +274,7 @@ it whispers that you may only reach into one of the holes.
 He triple-tench-dares you to stare at the sun.
 For every second, he will give you 5 of coin.
 
-How many seconds will you do?
+How many seconds?
 """,
      'choices': ['5', '10', '15', '20'],
      'optional': True, 'method': 'triple_tench_dare', 'replayable': True},
@@ -286,7 +296,7 @@ What do you do?
 
 # ================================================================================================
 
-{'name': OILY_PROPOSAL, 'color': red, 'sleep': 8, 'theme': HOSPITAL_THEME,
+{'name': OILY_PROPOSAL, 'color': red, 'sleep': 5, 'theme': HOSPITAL_THEME,
      'areas': [a.CITY], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """You turn and see a giant balloon floating towards you...
 
@@ -306,6 +316,55 @@ What do you do?
 """,
     'choices': ['Grab Jines', 'Run Away'],
     'optional': False, 'method': 'oily_proposal', 'replayable': False},
+
+# ================================================================================================
+
+    {'name': BASTA_DEAL, 'color': red, 'sleep': 5, 'theme': BATTLE_THEME,
+     'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': """A pair of hands clutches your shirt and pulls you into an alleyway...
+
+As your eyes adjust, it becomes apparent that it is a man with tench eyes.
+
+Basta Sherman: Look, your dad, The Mayor, hired me to kill you.
+He propositioned me immediately after the Crispy Daniels murder trial.
+
+The thing is, he only offered me a measly 50 coins... 
+I guess Biltmore must have tightened the purse strings on him.
+
+Anyway, being that he's your dad, and that him putting a hit on you
+is pretty fucked up, I will spare you this time if you can match his offer.
+
+What's it gonna be, Mr. Son of Mayor? 
+""",
+    'choices': ['Pay Up', 'Run Away'],
+    'optional': False, 'method': 'basta_deal', 'replayable': False},
+
+# ================================================================================================
+
+    {'name': SLENDER_INTRO, 'color': red, 'sleep': 5, 'theme': HOSPITAL_THEME,
+     'areas': [a.FOREST], 'time': [NIGHT], 'moon': None, 'season': None,
+     'text': """Stumbling through the dark forest, you feel you're being followed...
+
+You turn around, but nothing is there.
+
+You turn around again - nothing.
+
+You fake turn around, and then suddenly fully turn around, and there it is.
+
+A faceless, 10-foot tall creature in a tailored suit stands before you -
+its interests and motivations perfectly ambiguous.
+
+Suddenly, an array of pitch-black tentacles emerge from its back and
+begin wriggling violently.
+
+What do you do?
+""",
+     'choices': ['Fill Dipe', 'Bail'],
+     'optional': False, 'method': 'slender_intro', 'replayable': False},
+
+# ================================================================================================
+
+
 
 ]
 

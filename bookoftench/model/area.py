@@ -6,12 +6,12 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Set
 
 from bookoftench.data import Areas
-from bookoftench.data.areas import EncounterType, CAVE, CITY, FOREST
+from bookoftench.data.areas import EncounterType
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
     SPAWN_ENEMY, ENCOUNTER_SUB_BOSS, SPECIAL_EVENT
 from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, CONTAGIOUS, NIGHT_OWL, HOHKKEN, BOSS, \
-    NORMAL, SPECIAL_BOSS, Cave_Special_Bosses, City_Special_Bosses, Swamp_Special_Bosses
+    NORMAL, SPECIAL_BOSS
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss, load_special_boss, SpecialBoss
@@ -104,6 +104,7 @@ class Area:
 
 # ================================================================================================
 
+    # todo - refactor
     def spawn_enemy(self, gs, player_level: int, wanted: str, time: str, moon: str) -> Enemy:
         enemy_name = self.handle_enemy_selection(wanted)  # select enemy name
 
@@ -163,12 +164,14 @@ class Area:
             if random.random() < min(0.15, 0.01 * len(self.enemies_seen)):  # If random < scaling float value
                 enemy_name = random.choice(tuple(self.enemies_seen))  # Select enemy from seen
 
+        # --- if Sherlock Tench, 15% chance of wanted if correct area ---
         if perk_is_active(SHERLOCK_TENCH):
             if self.name in wanted_obj.areas and random.random() < 0.15:
                 enemy_name = wanted
 
         return enemy_name
 
+# ================================================================================================
 
     @staticmethod
     def handle_stat_adjustments(enemy: Enemy, player_level: int):
@@ -325,6 +328,8 @@ def handle_trait_and_illness(enemy) -> Enemy:
         illness_list = load_illnesses([illness_name])
         enemy.illness = next(i for i in illness_list)
     return enemy
+
+# ================================================================================================
 
 def load_areas() -> List[Area]:
     res = []
