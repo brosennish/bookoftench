@@ -1075,17 +1075,11 @@ class EncounterBoss(GatekeepingComponent):
                              yellow("All bosses in this area are now in Hell.\n"), 1.5)))
 
     def execute_current(self) -> bool:
-        area = self.game_state.current_area.name
+        area = self.game_state.current_area
         time = self.game_state.time_of_day
         
-        if area == CAVE:
-            options = [i for i in Cave_Special_Bosses]
-        elif area == CITY:
-            options = [i for i in City_Special_Bosses]
-        elif area == FOREST:
-            options = [i for i in Forest_Special_Bosses]
-        else:
-            options = [i for i in Swamp_Special_Bosses]
+        options = [i for i in area.special_bosses]
+
         liberated = [i.name for i in self.game_state.liberated_enemies]
         available = [i for i in options if i not in liberated]
 

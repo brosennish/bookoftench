@@ -16,7 +16,7 @@ class SpecialEvent:
     moon: list[str] | None
     season: list[str] | None
     text: str
-    choices: list[str] | None
+    choices: list[str]
     optional: bool
     method: str | None
     replayable: bool

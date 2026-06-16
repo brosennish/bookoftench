@@ -69,6 +69,9 @@ class DiscoverSpecial(NoOpComponent):
 
         special_event = selected_event
 
+        if not special_event.replayable:
+            game_state.expired_special_events.append(special_event)
+
         return SpecialEventComponent(self.game_state, special_event).run()
 
 # ================================================================================================
@@ -134,8 +137,6 @@ class SpecialEventComponent(LabeledSelectionComponent):
 
             print(f"[{binding.key}] : {binding.name}")
 
-        print("\nPlease enter a selection")
-
 # ============================================================================================
 
     def _handle_selection_component(self, special_event: SpecialEvent, choice: int):
@@ -200,7 +201,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
             else:
                 print_and_sleep("You kiss the sensuous being again...", 1.5)
 
-            player.gain_coins(10)
+            player.gain_coins(8)
 
             if random.random() < 0.10:
                 print_and_sleep(yellow("Your lips feel tingly all of a sudden..."), 1.5)
