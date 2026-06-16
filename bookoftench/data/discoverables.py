@@ -1,4 +1,5 @@
 from bookoftench.data.areas import CAVE, CITY, FOREST, SWAMP
+from bookoftench.data.special_events import SANTAS_SNOW
 
 # ================================================================================================
 
@@ -543,7 +544,7 @@ Search_Discoverables = [
     # ============================
 
     {"pre": "a", "name": "Bag of Snow", "value": 0, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CAVE], "count": 0, "quest_item": True,
+     "areas": [CAVE], "count": 0, "event_item": True, "related_event": SANTAS_SNOW,
      "desc": "\"Property of Santa\" is scribbled on the bag."},
 
     {"pre": "a", "name": "Cannibals Anonymous Flyer", "value": 0, "hp": 0, "rarity": UNCOMMON,

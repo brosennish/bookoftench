@@ -11,6 +11,7 @@ LOST_GOLD_P1 = "Lost Gold P1"
 LOST_GOLD_P2 = "Lost Gold P2"
 NEWS_HOHKKEN_ENTERS_CITY = "Hohkken Enters City"
 PROBING = "Probing"
+SANTAS_SNOW = "Santa's Snow"
 SHEBOKKEN_ROULETTE = "Shebokken Roulette"
 STINGY_BASTARD = "Stingy Bastard"
 THREE_HOLES = "Three Holes"
@@ -96,6 +97,17 @@ Special_Events = [
         "\nWhat do you do?",
      'choices': ['Accept Probe', 'Attempt to Probe the Aliens', 'Try to Escape'],
      'optional': False, 'method': 'probing', 'replayable': True},
+
+# ================================================================================================
+
+    {'name': SANTAS_SNOW, 'color': white, 'sleep': 5, 'theme': None,
+     'areas': [a.CITY], 'time': [NIGHT], 'moon': None, 'season': None,
+     'text': "A sad, old, fat man with a huge bulge descends from the sky.\n"
+        "\nSanta: The only thing better than a hole in the sled...\n"
+        "Is a hole in the head.\n"
+        "\nYou don't happen to have any snow, do you?",
+     'choices': ['Yes', 'No'],
+     'optional': False, 'method': 'santas_snow', 'replayable': False},
 
 # ================================================================================================
 

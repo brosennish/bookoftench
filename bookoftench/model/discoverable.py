@@ -18,6 +18,8 @@ class Discoverable:
     count: int
     desc: str | None
     quest_item: bool = False
+    event_item: bool = False
+    related_event: str | None = None
 
 # ================================================================================================
 
