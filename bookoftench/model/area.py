@@ -35,7 +35,7 @@ _search_defaults = {
     DISCOVER_ITEM: 3,
     ENCOUNTER_SUB_BOSS: 3,
     DISCOVER_DISCOVERABLE: 45,
-    SPECIAL_EVENT: 8,
+    SPECIAL_EVENT: 9,
     SPAWN_ENEMY: 30
 }
 
@@ -138,7 +138,7 @@ class Area:
     # ================================================================================================
 
     def handle_enemy_selection(self, wanted: str):
-        wanted = load_enemy(wanted)
+        wanted_obj = load_enemy(wanted)
         available = [i for i in self.enemies if i not in self.enemies_seen]
 
         if not available:
@@ -151,8 +151,8 @@ class Area:
             if random.random() < min(0.15, 0.01 * len(self.enemies_seen)):  # If random < scaling float value
                 enemy_name = random.choice(tuple(self.enemies_seen))  # Select enemy from seen
 
-        if perk_is_active(SHERLOCK_TENCH):  # 10% chance of wanted enemy encounter if perk is active
-            if self.name in wanted.areas and random.random() < 0.15:
+        if perk_is_active(SHERLOCK_TENCH):
+            if self.name in wanted_obj.areas and random.random() < 0.15:
                 enemy_name = wanted
 
         return enemy_name
