@@ -15,9 +15,8 @@ class Discoverable:
     hp: int
     rarity: str
     areas: List[str]
-    count: int
     desc: str | None
-    quest_item: bool = False
+    count: int = 0
 
 # ================================================================================================
 

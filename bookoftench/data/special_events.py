@@ -9,8 +9,10 @@ GREEDY_BASTARD = "Greedy Bastard"
 HERPES_KISS = "Herpes Kiss"
 LOST_GOLD_P1 = "Lost Gold P1"
 LOST_GOLD_P2 = "Lost Gold P2"
+NEWS_HEADLESS_WHORES_MAN = "News Headless Whore's Man"
 NEWS_HOHKKEN_ENTERS_CITY = "Hohkken Enters City"
 PROBING = "Probing"
+SANTAS_SNOW = "Santa's Snow"
 SHEBOKKEN_ROULETTE = "Shebokken Roulette"
 STINGY_BASTARD = "Stingy Bastard"
 THREE_HOLES = "Three Holes"
@@ -42,28 +44,12 @@ Special_Events = [
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': "A sensuous being with mealy lips and a hint of humanity approaches.\n"
         "\nSensuous Being: Your lips...\n"
-        "They are no nice, so luscious.\n"
+        "They are so nice... so luscious.\n"
         "Oh, I've just been so lonely since I lost my imaginary lover.\n"
         "Might I have a quick taste?\n"
         "I will give you of 10 coin for each kiss... hehehe.\n",
      'choices': ['Kiss 1x', 'Kiss 3x', 'Kiss 5x', 'Kiss 10x'],
      'optional': True, 'method': 'herpes_kiss', 'replayable': True},
-
-# ================================================================================================
-
-    {'name': NEWS_HOHKKEN_ENTERS_CITY, 'color': white, 'sleep': 8, 'theme': HOHKKEN_THEME,
-     'areas': [a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
-     'text': "Your flip phone buzzes with a news alert...\n"
-        "\n*** BREAKING NEWS ***\n"
-        "\nReporter: Behind me is the aftermath of a once-in-a-lifetime event.\n"
-        "The Hohkken, a legendary sea monster, emerged from the ocean and entered the city.\n"
-        "Despite the immeasurable destruction of the city, no lives were lost.\n"
-        "Our experts believe this to be a sign that it was searching for something -\n"
-        "- or someone, specifically.\n"
-        "Whoever you are, wherever you are, just know, the Hohkken is coming for you.\n"
-        "\nThis is Shannon O'Shanahan, reporting live from downtown Shebokken.\n",
-     'choices': None,
-     'optional': True, 'method': None, 'replayable': False},
 
 # ================================================================================================
 
@@ -81,11 +67,38 @@ Special_Events = [
      'text': "You smell a familiar stench...\n"
         "\nPirate: Argh! You lied to me, matey.\n"
         "I searched for me gold and came up dry!\n"
-        "\nGive me coin or I'll shoot ya right in yer' jines.\n"
-        "Aye, and if yer' dry, a tench filet would also do.",
+        "\nGive me coin or I'll shoot ya right in yer jines.\n"
+        "Aye, and if yer dry, a tench filet would also do.",
      'choices': ['Give Coin (50), Give Tench Filet, Beg for Mercy'],
      'optional': False, 'method': 'lost_gold_p2', 'replayable': False,
      'related': [LOST_GOLD_P1]},
+
+# ================================================================================================
+
+    {'name': NEWS_HEADLESS_WHORES_MAN, 'color': white, 'sleep': 8, 'theme': None,
+     'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': "Your flip phone buzzes with a news alert...\n"
+        "\n*** BREAKING NEWS ***\n"
+        "\nReporter: Police have found a headless body in Shebokken's swamp region.\n"
+        "Forensics believe the body belongs to the late husband of a beloved local prostitute.\n"
+        "He has already become affectionately known as the \"Headless Whore's Man\"."
+        "\nReporting live from the Swamp, I'm Shannon O'Shanahan, Shebokken News.\n",
+     'choices': None,
+     'optional': True, 'method': None, 'replayable': False},
+
+    {'name': NEWS_HOHKKEN_ENTERS_CITY, 'color': white, 'sleep': 8, 'theme': HOHKKEN_THEME,
+     'areas': [a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': "Your flip phone buzzes with a news alert...\n"
+        "\n*** BREAKING NEWS ***\n"
+        "\nReporter: Behind me is the aftermath of a once-in-a-lifetime event.\n"
+        "The Hohkken, a legendary sea monster, emerged from the ocean and entered the city.\n"
+        "Despite the immeasurable destruction of the city, no lives were lost.\n"
+        "Our experts believe this to be a sign that it was searching for something -\n"
+        "- or someone, specifically.\n"
+        "Whoever you are, wherever you are, just know, the Hohkken is coming for you.\n"
+        "\nReporting live from Shebokken, I'm Shannon O'Shanahan, Shebokken News.\n",
+     'choices': None,
+     'optional': True, 'method': None, 'replayable': False},
 
 # ================================================================================================
 
@@ -96,6 +109,16 @@ Special_Events = [
         "\nWhat do you do?",
      'choices': ['Accept Probe', 'Attempt to Probe the Aliens', 'Try to Escape'],
      'optional': False, 'method': 'probing', 'replayable': True},
+
+# ================================================================================================
+
+    {'name': SANTAS_SNOW, 'color': white, 'sleep': 5, 'theme': None,
+     'areas': [a.CITY], 'time': [NIGHT], 'moon': None, 'season': None,
+     'text': "A sad, old, fat man with a huge bulge descends from the sky.\n"
+        "\nSanta: The only thing better than a hole in the sled...\n"
+        "Is a hole in the head.\n",
+     'choices': None,
+     'optional': True, 'method': 'santas_snow', 'replayable': False},
 
 # ================================================================================================
 
@@ -124,7 +147,7 @@ Special_Events = [
      'areas': [a.CAVE, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': "You come upon three holes in the ground...\n"
         "They are far too deep - and too dark - to see what's inside.\n"
-        "\nA ghastly being with an upside down face rushes towards you.\n"
+        "\nA ghastly being with an upside-down face rushes towards you.\n"
         "Extending its elastic lips deep into your earhole,\n"
         "\nIt whispers that you may only reach into one of the holes.",
      'choices': ['Hole 1', 'Hole 2', 'Hole 3'],
