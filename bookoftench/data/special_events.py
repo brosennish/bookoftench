@@ -104,10 +104,9 @@ Special_Events = [
      'areas': [a.CITY], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': "A sad, old, fat man with a huge bulge descends from the sky.\n"
         "\nSanta: The only thing better than a hole in the sled...\n"
-        "Is a hole in the head.\n"
-        "\nYou don't happen to have any snow, do you?",
-     'choices': ['Yes', 'No'],
-     'optional': False, 'method': 'santas_snow', 'replayable': False},
+        "Is a hole in the head.\n",
+     'choices': None,
+     'optional': True, 'method': 'santas_snow', 'replayable': False},
 
 # ================================================================================================
 

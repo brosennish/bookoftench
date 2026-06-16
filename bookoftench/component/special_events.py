@@ -314,12 +314,6 @@ class SpecialEventComponent(LabeledSelectionComponent):
 # ================================================================================================
 
     @staticmethod
-    def santas_snow(game_state: GameState, choice: int):
-        player = game_state.player
-
-# ================================================================================================
-
-    @staticmethod
     def shebokken_roulette(game_state: GameState, choice: int):
         print_and_sleep(purple("You have the honors, partner."), 1.5)
 
