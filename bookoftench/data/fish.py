@@ -44,6 +44,7 @@ COLOSSAL_SQUID = "Colossal Squid"
 COMMON_CARP = "Common Carp"
 COMMON_STINGRAY = "Common Stingray"
 COOKIECUTTER_SHARK = "Cookiecutter Shark"
+CONGER_EEL = "Conger Eel"
 CRAPPIE = "Crappie"
 CROCODILE = "Crocodile"
 CUTTLEFISH = "Cuttlefish"
@@ -55,6 +56,7 @@ FRILLED_SHARK = "Frilled Shark"
 GIANT_ISOPOD = "Giant Isopod"
 GIANT_OARFISH = "Giant Oarfish"
 GIANT_OCTOPUS = "Giant Octopus"
+GIANT_SALAMANDER = "Giant Salamander"
 GIANT_SQUID = "Giant Squid"
 GIANT_STINGRAY = "Giant Stingray"
 GIANT_TREVALLY = "Giant Trevally"
@@ -68,9 +70,11 @@ GOONCH_CATFISH = "Goonch Catfish"
 GREAT_WHITE_SHARK = "Great White Shark"
 GREENLAND_SHARK = "Greenland Shark"
 GREEN_SEA_TURTLE = "Green Sea Turtle"
+GREEN_SUNFISH = "Green Sunfish"
 HALIBUT = "Halibut"
 HAMMERHEAD_SHARK = "Hammerhead Shark"
 HAWKSBILL_SEA_TURTLE = "Hawksbill Sea Turtle"
+HELLBENDER = "Hellbender"
 HOGFISH = "Hogfish"
 HORSESHOE_CRAB = "Horseshoe Crab"
 HUMBOLDT_SQUID = "Humboldt Squid"
@@ -88,6 +92,7 @@ LEATHERBACK_SEA_TURTLE = "Leatherback Sea Turtle"
 LEOPARD_SHARK = "Leopard Shark"
 LIONFISH = "Lionfish"
 LONGNOSE_GAR = "Longnose Gar"
+LUNGFISH = "Lungfish"
 MAHI_MAHI = "Mahi Mahi"
 MAKO_SHARK = "Mako Shark"
 MANATEE = "Manatee"
@@ -127,18 +132,22 @@ SEA_CUCUMBER = "Sea Cucumber"
 SEAHORSE = "Seahorse"
 SEA_PIG ="Sea Pig"
 SHEEPSHEAD = "Sheepshead"
+SHORTNOSE_GAR = "Shortnose Gar"
 SMALLMOUTH_BASS = "Smallmouth Bass"
 SNAKEHEAD = "Snakehead"
 SNOOK = "Snook"
 SNOW_CRAB = "Snow Crab"
+SOFTSHELL_TURTLE = "Softshell Turtle"
 SPINY_LOBSTER = "Spiny Lobster"
 SPOTTED_PUFFER = "Spotted Puffer"
 SPOTTED_GAR = "Spotted Gar"
+STRIPED_BASS = "Striped Bass"
 SWORDFISH = "Swordfish"
 TARPON = "Tarpon"
 TENCH = "Tench"
 THRESHER_SHARK = "Thresher Shark"
 TIGER_SHARK = "Tiger Shark"
+TILAPIA = "Tilapia"
 TRIGGERFISH = "Triggerfish"
 VAMPIRE_SQUID = "Vampire Squid"
 WAHOO ="Wahoo"
@@ -570,6 +579,14 @@ Fish_Species = [
      'description': 'A small deep-sea shark that removes circular plugs of flesh from much larger animals.',
      },
 
+    {'name': CONGER_EEL, 'rarity': UNCOMMON, 'areas': [BAY, OCEAN], 'time': [NIGHT], 'moon': None,
+     'min_length': 24, 'max_length': 120, 'min_weight_factor': 0.18, 'max_weight_factor': 0.60,
+     'base_value': 85, 'rage_factor': 0.95, 'speed': 1.10, 'strength': 1.60, 'max_stamina': 115,
+     'preferred_bait': [b.SQUID, b.SHRIMP, b.MEAT, b.GLOW_LURE],
+     'spit_hook_chance': 0.004, 'protected': False, 'max_age': 20,
+     'description': 'A powerful nocturnal eel that lurks among rocks and wrecks before ambushing prey.',
+    },
+
     {'name': CRAPPIE, 'rarity': COMMON, 'areas': [SHALLOWS], 'time': [DAY], 'moon': None,
      'min_length': 4, 'max_length': 18, 'min_weight_factor': 0.10, 'max_weight_factor': 0.25,
      'base_value': 10, 'rage_factor': 0.80, 'speed': 0.90, 'strength': 0.55, 'max_stamina': 30,
@@ -657,6 +674,14 @@ Fish_Species = [
      'spit_hook_chance': 0.008, 'protected': False, 'max_age': 5,
      'description': 'An enormous octopus capable of remarkable intelligence, camouflage, and crushing strength.',
      },
+
+    {'name': GIANT_SALAMANDER, 'rarity': RARE, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
+     'min_length': 24, 'max_length': 72, 'min_weight_factor': 0.40, 'max_weight_factor': 1.20,
+     'base_value': 90, 'rage_factor': 0.20, 'speed': 0.40, 'strength': 1.80, 'max_stamina': 150,
+     'preferred_bait': [b.CRAY, b.WORM, b.MINNOW, b.MEAT],
+     'spit_hook_chance': 0.002, 'protected': True, 'max_age': 70,
+     'description': 'A massive aquatic amphibian that spends most of its life hidden beneath rocks in cold rivers.',
+    },
 
     {'name': GIANT_SQUID, 'rarity': LEGENDARY, 'areas': [OCEAN], 'time': [NIGHT], 'moon': None,
      'min_length': 120, 'max_length': 480, 'min_weight_factor': 0.8, 'max_weight_factor': 2.5,
@@ -762,6 +787,14 @@ Fish_Species = [
      'description': 'A large marine turtle that spends much of its life grazing on seagrass and algae in coastal waters.',
      },
 
+    {'name': GREEN_SUNFISH, 'rarity': COMMON, 'areas': [SHALLOWS], 'time': [DAY], 'moon': None,
+     'min_length': 3, 'max_length': 12, 'min_weight_factor': 0.10, 'max_weight_factor': 0.25,
+     'base_value': 7, 'rage_factor': 1.00, 'speed': 1.00, 'strength': 0.50, 'max_stamina': 28,
+     'preferred_bait': [b.WORM, b.CRICKET, b.FLY, b.DOUGH_BALL],
+     'spit_hook_chance': 0.010, 'protected': False, 'max_age': 8,
+     'description': 'A hardy sunfish with a surprisingly aggressive attitude for its small size.',
+    },
+
     {'name': HALIBUT, 'rarity': COMMON, 'areas': [BAY, OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 18, 'max_length': 108, 'min_weight_factor': 0.30, 'max_weight_factor': 1.00,
      'base_value': 90, 'rage_factor': 0.45, 'speed': 0.50, 'strength': 1.90, 'max_stamina': 140,
@@ -785,6 +818,14 @@ Fish_Species = [
      'spit_hook_chance': 0.003, 'protected': True, 'max_age': 60,
      'description': 'A critically endangered sea turtle recognized by its narrow beak and beautifully patterned shell.',
      },
+
+    {'name': HELLBENDER, 'rarity': RARE, 'areas': [SHALLOWS], 'time': [NIGHT], 'moon': None,
+     'min_length': 12, 'max_length': 30, 'min_weight_factor': 0.30, 'max_weight_factor': 0.80,
+     'base_value': 70, 'rage_factor': 0.15, 'speed': 0.35, 'strength': 1.20, 'max_stamina': 95,
+     'preferred_bait': [b.CRAY, b.WORM, b.MINNOW, b.MEAT],
+     'spit_hook_chance': 0.003, 'protected': True, 'max_age': 30,
+     'description': 'A strange fully aquatic salamander that hides beneath large rocks in clean streams.',
+    },
 
     {'name': HOGFISH, 'rarity': UNCOMMON, 'areas': [BAY], 'time': [DAY], 'moon': None,
      'min_length': 8, 'max_length': 36, 'min_weight_factor': 0.18, 'max_weight_factor': 0.50,
@@ -921,6 +962,14 @@ Fish_Species = [
      'spit_hook_chance': 0.004, 'protected': False, 'max_age': 25,
      'description': 'A streamlined gar with an exceptionally long snout built for snatching fish near the surface.',
      },
+
+    {'name': LUNGFISH, 'rarity': RARE, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
+     'min_length': 24, 'max_length': 72, 'min_weight_factor': 0.20, 'max_weight_factor': 0.65,
+     'base_value': 85, 'rage_factor': 0.35, 'speed': 0.45, 'strength': 1.50, 'max_stamina': 140,
+     'preferred_bait': [b.WORM, b.MINNOW, b.CRAY, b.MEAT],
+     'spit_hook_chance': 0.002, 'protected': False, 'max_age': 50,
+     'description': 'An ancient fish capable of breathing air and surviving droughts by burying itself in mud.',
+    },
 
     {'name': MAHI_MAHI, 'rarity': COMMON, 'areas': [OCEAN], 'time': [DAY], 'moon': None,
      'min_length': 20, 'max_length': 60, 'min_weight_factor': 0.15, 'max_weight_factor': 0.35,
@@ -1234,6 +1283,14 @@ Fish_Species = [
      'description': 'A powerful fish with human-like teeth built for crushing shells and mussels.',
      },
 
+    {'name': SHORTNOSE_GAR, 'rarity': UNCOMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
+     'min_length': 12, 'max_length': 36, 'min_weight_factor': 0.18, 'max_weight_factor': 0.50,
+     'base_value': 35, 'rage_factor': 0.75, 'speed': 1.00, 'strength': 1.10, 'max_stamina': 75,
+     'preferred_bait': [b.MINNOW, b.FROG, b.CRAY, b.RATTLER],
+     'spit_hook_chance': 0.006, 'protected': False, 'max_age': 25,
+     'description': 'A smaller relative of the alligator gar with an elongated snout and armored scales.',
+    },
+
     {'name': SMALLMOUTH_BASS, 'rarity': COMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 10, 'max_length': 26, 'min_weight_factor': 0.25, 'max_weight_factor': 0.55,
      'base_value': 30, 'rage_factor': 1.25, 'speed': 1.55, 'strength': 1.35, 'max_stamina': 65,
@@ -1266,6 +1323,14 @@ Fish_Species = [
      'description': 'A commercially valuable deep-water crab adapted to frigid northern oceans.',
     },
 
+    {'name': SOFTSHELL_TURTLE, 'rarity': UNCOMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
+     'min_length': 8, 'max_length': 30, 'min_weight_factor': 0.30, 'max_weight_factor': 1.00,
+     'base_value': 40, 'rage_factor': 0.10, 'speed': 0.60, 'strength': 1.40, 'max_stamina': 110,
+     'preferred_bait': [b.MINNOW, b.CRAY, b.WORM, b.MEAT],
+     'spit_hook_chance': 0.003, 'protected': False, 'max_age': 40,
+     'description': 'A flat, leathery turtle that can move surprisingly quickly both in water and on land.',
+    },
+
     {'name': SPOTTED_GAR, 'rarity': UNCOMMON, 'areas': [SHALLOWS], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 12, 'max_length': 36, 'min_weight_factor': 0.18, 'max_weight_factor': 0.45,
      'base_value': 40, 'rage_factor': 0.95, 'speed': 1.10, 'strength': 1.20, 'max_stamina': 75,
@@ -1281,6 +1346,14 @@ Fish_Species = [
      'spit_hook_chance': 0.012, 'protected': False, 'max_age': 10,
      'description': 'A small pufferfish covered in dark spots that can inflate itself when threatened.',
      },
+
+    {'name': STRIPED_BASS, 'rarity': COMMON, 'areas': [SHALLOWS, BAY], 'time': [DAY, NIGHT], 'moon': None,
+     'min_length': 12, 'max_length': 60, 'min_weight_factor': 0.20, 'max_weight_factor': 0.70,
+     'base_value': 65, 'rage_factor': 1.15, 'speed': 1.35, 'strength': 1.60, 'max_stamina': 120,
+     'preferred_bait': [b.MINNOW, b.SPOON, b.MEAT, b.RATTLER],
+     'spit_hook_chance': 0.003, 'protected': False, 'max_age': 30,
+     'description': 'A powerful migratory game fish prized for strong runs and aggressive strikes.',
+    },
 
     {'name': SWORDFISH, 'rarity': RARE, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 48, 'max_length': 180, 'min_weight_factor': 0.25, 'max_weight_factor': 0.75,
@@ -1321,6 +1394,14 @@ Fish_Species = [
      'spit_hook_chance': 0.001, 'protected': False, 'max_age': 50,
      'description': 'A massive ocean predator famous for its broad diet and distinctive striped markings.',
      },
+
+    {'name': TILAPIA, 'rarity': COMMON, 'areas': [SHALLOWS], 'time': [DAY], 'moon': None,
+     'min_length': 6, 'max_length': 24, 'min_weight_factor': 0.20, 'max_weight_factor': 0.65,
+     'base_value': 18, 'rage_factor': 0.75, 'speed': 0.70, 'strength': 0.90, 'max_stamina': 60,
+     'preferred_bait': [b.WORM, b.DOUGH_BALL, b.CRICKET, b.KRILL],
+     'spit_hook_chance': 0.006, 'protected': False, 'max_age': 12,
+     'description': 'A hardy freshwater fish that thrives in warm waters and has become one of the most widely farmed fish on Earth.',
+    },
 
     {'name': TRIGGERFISH, 'rarity': UNCOMMON, 'areas': [BAY], 'time': [DAY], 'moon': None,
      'min_length': 8, 'max_length': 30, 'min_weight_factor': 0.18, 'max_weight_factor': 0.45,

@@ -40,6 +40,7 @@ FAIRY_CODMOTHER = "Fairy Codmother"
 FUGITIVE = "Fugitive"
 GATOR_WRESTLER = "Gator Wrestler"
 GIANT_MUTANT_RAT = "Giant Mutant Rat"
+GIGOLO = "Gigolo"
 GOON = "Goon"
 GRAVE_ROBBER = "Grave Robber"
 HAND_FISHERMAN = "Hand Fisherman"
@@ -180,6 +181,8 @@ Enemies = [
      'bounty': 220, 'coins': 0, 'type': NORMAL, 'flee': 0.85, 'strength': 1.11, 'acc': 1.11, 'areas': [CITY]},
     {'name': SLEEPWALKER, 'trait': '', 'illness': None, 'hp': 95, 'weapons': [w.PILLOW, w.SHOTGUN],
      'bounty': 135, 'coins': 20, 'type': NORMAL, 'flee': 1.20, 'strength': 1, 'acc': 0.75, 'areas': [CITY]},
+    {'name': GIGOLO, 'trait': '', 'illness': '', 'hp': 100, 'weapons': [w.INJECTION_NEEDLE, w.PISTOL],
+     'bounty': 145, 'coins': 50, 'type': NORMAL, 'flee': 1.05, 'strength': 1.05, 'acc': 0.95, 'areas': [CITY]},
 
     # --- original ---
     {'name': BODY_BUILDER, 'trait': '', 'illness': None, 'hp': 110, 'weapons': [w.BASEBALL_BAT, w.INJECTION_NEEDLE, w.DUMBBELL],
@@ -615,6 +618,11 @@ Enemy_Lines = {
     # ============================
     #            CITY
     # ============================
+
+    GIGOLO: [
+        "Being a gigolo isn't for everyone.",
+        "If I could do anything... I'd still be a gigolo.",
+    ],
 
     CARD_JOCKEY: [
         "If I don't collect your bounty the goons at the casino are gonna cut off my jines.",
