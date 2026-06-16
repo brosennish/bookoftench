@@ -543,9 +543,9 @@ Search_Discoverables = [
     #      UNCOMMON / NEUTRAL
     # ============================
 
-    {"pre": "a", "name": "Bag of Snow", "value": 0, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CAVE], "count": 0, "event_item": True, "related_event": SANTAS_SNOW,
-     "desc": "\"Property of Santa\" is scribbled on the bag."},
+    {"pre": "a", "name": "Bag of Snow", "value": 15, "hp": 0, "rarity": UNCOMMON,
+     "areas": [CAVE], "count": 0,
+     "desc": "\"Property of Santa\" is scribbled on the side."},
 
     {"pre": "a", "name": "Cannibals Anonymous Flyer", "value": 0, "hp": 0, "rarity": UNCOMMON,
      "areas": [CAVE, CITY, FOREST, SWAMP], "count": 0,
