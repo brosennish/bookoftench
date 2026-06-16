@@ -1,11 +1,12 @@
 from bookoftench.data import areas as a
-from bookoftench.data.audio import ROULETTE_THEME, HOHKKEN_THEME
+from bookoftench.data.audio import ROULETTE_THEME, HOHKKEN_THEME, HOSPITAL_THEME
+from bookoftench.data.enemies import OILY_DOILY
 from bookoftench.data.enviroment import DAY, NIGHT
 from bookoftench.ui import green, purple, yellow, blue, red, white, orange
 
 # ================================================================================================
 
-# Special Events
+# Standard Events
 GREEDY_BASTARD = "Greedy Bastard" # formatted
 HERPES_KISS = "Herpes Kiss" # formatted
 LOST_GOLD_P1 = "Lost Gold P1"
@@ -23,6 +24,9 @@ NEWS_HOHKKEN_ENTERS_CITY = "Hohkken Enters City"
 NEWS_WHALE_MAN = "News Whale Man" # formatted
 WEDNESDAY_NEWS = "Wednesday News"
 
+# Boss Introductions
+OILY_PROPOSAL = "Oily Introduction"
+
 # Investment Opportunities
 
 
@@ -30,9 +34,6 @@ WEDNESDAY_NEWS = "Wednesday News"
 SANTAS_SNOW = "Santa's Snow"
 
 # ================================================================================================
-
-# if moon in moon or if moon == None
-# if not replayable, add to game_state list and filter to not select again
 
 Special_Events = [
 
@@ -282,6 +283,29 @@ What do you do?
 """,
      'choices': ['Wake Him Up', 'Bury Him Alive'],
      'optional': False, 'method': 'zonked', 'replayable': True},
+
+# ================================================================================================
+
+{'name': OILY_PROPOSAL, 'color': red, 'sleep': 8, 'theme': HOSPITAL_THEME,
+     'areas': [a.CITY], 'time': [NIGHT], 'moon': None, 'season': None,
+     'text': """You turn and see a giant balloon floating towards you...
+
+As it nears, you notice that it is actually a sub-human man in a helium suit.
+
+Oily Doily: Why... hello, to you's... hehehe, hohoho.
+
+You know... you know? You know that I have a store in Shebokken,
+and it's just around that corner... hehehe, hohoho.
+
+Why don't you grab ahold of my jines, and I will float us in through
+the tallest window of the shortest tower?
+
+Hehehe, hohoho.
+
+What do you do?
+""",
+    'choices': ['Grab Jines', 'Run Away'],
+    'optional': False, 'method': 'oily_proposal', 'replayable': False},
 
 ]
 

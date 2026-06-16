@@ -1076,8 +1076,7 @@ class EncounterBoss(GatekeepingComponent):
 
     def execute_current(self) -> bool:
         area = self.game_state.current_area
-        time = self.game_state.time_of_day
-        
+
         options = [i for i in area.special_bosses]
 
         liberated = [i.name for i in self.game_state.liberated_enemies]
@@ -1087,9 +1086,16 @@ class EncounterBoss(GatekeepingComponent):
             return False
         else:
             choice = random.choice(available)
-            special_boss = self.game_state.current_area.spawn_special_boss(choice, time, self.game_state)
-            self.game_state.current_area.current_enemy = special_boss
+            set_special_boss(self.game_state, choice)
             return True
+
+# ================================================================================================
+
+def set_special_boss(game_state: GameState, name: str):
+    time = game_state.time_of_day
+
+    special_boss = game_state.current_area.spawn_special_boss(name, time, game_state)
+    game_state.current_area.current_enemy = special_boss
 
 # ================================================================================================
 

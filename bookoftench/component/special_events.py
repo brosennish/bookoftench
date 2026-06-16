@@ -4,9 +4,10 @@ from bookoftench import event_logger
 from bookoftench.audio import play_music, play_sound
 from bookoftench.component import functional_component, \
     LabeledSelectionComponent, ReprBinding, NoOpComponent, SelectionBinding, register_component, SwapFoundItemYN, \
-    OfficerEncounter
+    OfficerEncounter, set_special_boss, Battle
 from bookoftench.data.audio import PUNCH, POSITIVE, MONSTER_ATTACK, PISTOL, BLADE, COINS
 from bookoftench.data.components import SPECIAL_EVENT
+from bookoftench.data.enemies import OILY_DOILY
 from bookoftench.data.illnesses import HERPES
 from bookoftench.data.items import TENCH_FILET, SWAMP, FOREST, CITY, CAVE
 from bookoftench.data.special_events import Special_Events, LOST_GOLD_P2
@@ -201,6 +202,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
             else:
                 print_and_sleep("You kiss the sensuous being again...", 1.5)
 
+            player.gain_or_lose_luck(0.1)
             player.gain_coins(8)
 
             if random.random() < 0.10:
@@ -208,7 +210,10 @@ class SpecialEventComponent(LabeledSelectionComponent):
                 print_and_sleep(yellow("The Sensuous Being covers its mouth and giggles..."), 1.5)
                 print_and_sleep(yellow("The Sensuous Being gave you Herpes!"), 1.5)
                 player.acquire_illness(HERPES)
+                player.gain_or_lose_luck(-0.5)
                 break
+
+        print_and_sleep(purple("You kiss like a fish... hehehe."), 1.5)
 
         return game_state
 
@@ -489,6 +494,26 @@ class SpecialEventComponent(LabeledSelectionComponent):
             if random.random() < 0.25:
                 player.gain_or_lose_luck(-0.1)
                 OfficerEncounter(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def oily_proposal(game_state: GameState, choice: int):
+        player = game_state.player
+        game_state.current_area.special_bosses.append(OILY_DOILY)
+
+        if choice == 1:
+            print_and_sleep(red(f"Oily floats you into his tower..."), 1.5)
+            set_special_boss(game_state, OILY_DOILY)
+            Battle(game_state).run()
+        else:
+            if random.random() < 0.5:
+                print_and_sleep(red(f"You turn and run, but oily floats much faster..."), 1.5)
+                set_special_boss(game_state, OILY_DOILY)
+                Battle(game_state).run()
+            else:
+                print_and_sleep(yellow(f"You manage to escape, for now..."), 1.5)
+                player.luck += 0.5
 
 # ================================================================================================
 

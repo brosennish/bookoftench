@@ -93,14 +93,6 @@ class Area:
 
     def __post_init__(self):
         self.boss = load_boss(self.boss_name)
-        if self.name == CAVE:
-            self.special_bosses = [i for i in Cave_Special_Bosses]
-        elif self.name == CITY:
-            self.special_bosses = [i for i in City_Special_Bosses]
-        elif self.name == FOREST:
-            self.special_bosses = [i for i in Swamp_Special_Bosses]
-        else:
-            self.special_bosses = [i for i in Swamp_Special_Bosses]
 
     @property
     def post_kill_components(self) -> List[str]:
