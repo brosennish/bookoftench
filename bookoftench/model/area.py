@@ -59,6 +59,7 @@ class AreaEncounter:
     type: EncounterType
     component: str
 
+# ================================================================================================
 
 @dataclass
 class Area:
@@ -72,6 +73,7 @@ class Area:
     boss_defeated: bool = False
     boss: Boss = None
     current_enemy = None
+    special_bosses: list[str] = field(default_factory=list)
 
     shop: Shop = field(default_factory=Shop)
     search_probabilities: Dict[str, int] = field(default_factory=lambda: _search_defaults)
@@ -92,6 +94,7 @@ class Area:
 
 # ================================================================================================
 
+    # todo - refactor
     def spawn_enemy(self, gs, player_level: int, wanted: str, time: str, moon: str) -> Enemy:
         enemy_name = self.handle_enemy_selection(wanted)  # select enemy name
 
@@ -151,12 +154,14 @@ class Area:
             if random.random() < min(0.15, 0.01 * len(self.enemies_seen)):  # If random < scaling float value
                 enemy_name = random.choice(tuple(self.enemies_seen))  # Select enemy from seen
 
+        # --- if Sherlock Tench, 15% chance of wanted if correct area ---
         if perk_is_active(SHERLOCK_TENCH):
             if self.name in wanted_obj.areas and random.random() < 0.15:
                 enemy_name = wanted
 
         return enemy_name
 
+# ================================================================================================
 
     @staticmethod
     def handle_stat_adjustments(enemy: Enemy, player_level: int):
@@ -313,6 +318,8 @@ def handle_trait_and_illness(enemy) -> Enemy:
         illness_list = load_illnesses([illness_name])
         enemy.illness = next(i for i in illness_list)
     return enemy
+
+# ================================================================================================
 
 def load_areas() -> List[Area]:
     res = []

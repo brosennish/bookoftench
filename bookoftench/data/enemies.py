@@ -15,6 +15,7 @@ SWAMP = "Swamp"
 # Names
 ANCIENT_MAN = "Ancient Man"
 ARCHAEOLOGIST = "Archaeologist"
+BASTA_SHERMAN = "Basta Sherman"
 BAYOU_BILL = "Bayou Bill"
 BAYOU_MAN = "Bayou Man"
 BIGFOOT_IMPERSONATOR = "Bigfoot Impersonator"
@@ -82,7 +83,7 @@ SKIN_COLLECTOR = "Skin Collector"
 SKUNK_APE = "Skunk Ape"
 SLEDGE_HAMMOND = "Sledge Hammond"
 SLEEPWALKER = "Sleepwalker"
-SLENDERMAN = "Slenderman"
+SLENDERMAN = "Slender Man"
 SMUGGLER = "Smuggler"
 SPELUNKER = "Spelunker"
 SURVIVALIST = "Survivalist"
@@ -353,16 +354,16 @@ Bosses = [
     # ------ Special Bosses by Area ------
 
 Cave_Special_Bosses = [
-    CYCLOPS, DEATH_WORM, MINOTAUR, SABERTOOTH_LIGER, TROLL]
+    CYCLOPS, DEATH_WORM, SABERTOOTH_LIGER]
 
 City_Special_Bosses = [
-    GIANT_MUTANT_RAT, KNOBGOBLIN, OILY_DOILY, SEWER_GATOR, VAMPIRE_OVERLORD]
+    GIANT_MUTANT_RAT, KNOBGOBLIN, SEWER_GATOR]
 
 Forest_Special_Bosses = [
-    CENTAUR, FAIRY_CODMOTHER, LUCKY_THE_LEPRECHAUN, MOTHMAN, SASQUATCH, SLENDERMAN, WENDIGO]
+    FAIRY_CODMOTHER, LUCKY_THE_LEPRECHAUN, MOTHMAN, SASQUATCH, SLENDERMAN]
 
 Swamp_Special_Bosses = [
-    HODAG, HYDRA, OGRE, ROUGAROU, SKUNK_APE]
+    HODAG, OGRE, SKUNK_APE]
 
 # ================================================================================================
 
@@ -401,6 +402,11 @@ Special_Bosses = [
     # ============================
     #            CITY
     # ============================
+
+    {'name': BASTA_SHERMAN, 'hp': 155, 'coins': 35, 'trait': CHEATER,
+     'weapons': [w.BARE_HANDS, w.BONE_SAW, w.MEAT_CLEAVER],
+     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.9, 'strength': 1.05, 'acc': 1,
+     'item': i.CRISPY_DANIELS_BLOOD_SOAKED_BANDANA},
 
     {'name': GIANT_MUTANT_RAT, 'hp': 175, 'coins': 0, 'trait': CONTAGIOUS,
      'weapons': [w.CLAWS, w.FANGS, w.TAIL],

@@ -4,9 +4,10 @@ from bookoftench import event_logger
 from bookoftench.audio import play_music, play_sound
 from bookoftench.component import functional_component, \
     LabeledSelectionComponent, ReprBinding, NoOpComponent, SelectionBinding, register_component, SwapFoundItemYN, \
-    OfficerEncounter
+    OfficerEncounter, set_special_boss, Battle
 from bookoftench.data.audio import PUNCH, POSITIVE, MONSTER_ATTACK, PISTOL, BLADE, COINS
 from bookoftench.data.components import SPECIAL_EVENT
+from bookoftench.data.enemies import OILY_DOILY, BASTA_SHERMAN, SLENDERMAN
 from bookoftench.data.illnesses import HERPES
 from bookoftench.data.items import TENCH_FILET, SWAMP, FOREST, CITY, CAVE
 from bookoftench.data.special_events import Special_Events, LOST_GOLD_P2
@@ -68,6 +69,9 @@ class DiscoverSpecial(NoOpComponent):
                     break
 
         special_event = selected_event
+
+        if not special_event.replayable:
+            game_state.expired_special_events.append(special_event)
 
         return SpecialEventComponent(self.game_state, special_event).run()
 
@@ -134,8 +138,6 @@ class SpecialEventComponent(LabeledSelectionComponent):
 
             print(f"[{binding.key}] : {binding.name}")
 
-        print("\nPlease enter a selection")
-
 # ============================================================================================
 
     def _handle_selection_component(self, special_event: SpecialEvent, choice: int):
@@ -200,14 +202,18 @@ class SpecialEventComponent(LabeledSelectionComponent):
             else:
                 print_and_sleep("You kiss the sensuous being again...", 1.5)
 
-            player.gain_coins(10)
+            player.gain_or_lose_luck(0.1)
+            player.gain_coins(8)
 
             if random.random() < 0.10:
                 print_and_sleep(yellow("Your lips feel tingly all of a sudden..."), 1.5)
                 print_and_sleep(yellow("The Sensuous Being covers its mouth and giggles..."), 1.5)
                 print_and_sleep(yellow("The Sensuous Being gave you Herpes!"), 1.5)
                 player.acquire_illness(HERPES)
+                player.gain_or_lose_luck(-0.5)
                 break
+
+        print_and_sleep(purple("You kiss like a fish... hehehe."), 1.5)
 
         return game_state
 
@@ -239,15 +245,14 @@ class SpecialEventComponent(LabeledSelectionComponent):
                 print_and_sleep(yellow("You gave 50 of coin to the pirate.\n"), 1.5)
                 return
 
-            if player.coins > 1:  # Give 1-49 Coin
-                coins = player.coins
-                player.coins -= player.coins
-                print_and_sleep(yellow(f"You forfeited {coins} of coin to the pirate.\n"), 1.5)
+            coins = player.coins
+            player.coins -= player.coins
+            print_and_sleep(yellow(f"You forfeited {coins} of coin to the pirate.\n"), 1.5)
 
             # Make Up Diff w/ HP
             play_sound(BLADE)
             hp = player.hp
-            player.hp -= min(hp, 50)
+            player.hp -= min(hp, 50 - coins)
             print_and_sleep(red(f"The Pirate slashed you with his cutlass for {hp - player.hp} damage!\n"), 1.5)
             print_and_sleep(red(f"Pirate: Argh, that's for comin' up dry on me, matey.\n"), 1.5)
 
@@ -289,10 +294,14 @@ class SpecialEventComponent(LabeledSelectionComponent):
         elif choice == 2:  # Attempt to Probe the Aliens
             if random.random() < 0.5 * player.strength:
                 print_and_sleep(green("You probed the aliens!"), 1.5)
-                print_and_sleep(green("They gave you a perk to thank you for the pleasure."), 1.5)
                 valid = [i for i in load_perks() if not i.active]
-                perk = random.choice(valid)
-                player.add_perk(perk)
+                if valid:
+                    print_and_sleep(green("They gave you a perk to thank you for the pleasure."), 1.5)
+                    perk = random.choice(valid)
+                    player.add_perk(perk)
+                else:
+                    print_and_sleep(green("They gave you some coin to thank you for the pleasure."), 1.5)
+                    player.gain_coins(25)
             else:
                 print_and_sleep(yellow("You were unable to probe the aliens...\n"), 1.5)
                 print_and_sleep(yellow("They probed you extra hard as punishment.\n"), 1.5)
@@ -488,6 +497,74 @@ class SpecialEventComponent(LabeledSelectionComponent):
             if random.random() < 0.25:
                 player.gain_or_lose_luck(-0.1)
                 OfficerEncounter(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def oily_proposal(game_state: GameState, choice: int):
+        player = game_state.player
+        game_state.current_area.special_bosses.append(OILY_DOILY)
+
+        if choice == 1:
+            print_and_sleep(red(f"Oily floats you into his tower..."), 1.5)
+            set_special_boss(game_state, OILY_DOILY)
+            Battle(game_state).run()
+        else:
+            if random.random() < 0.5:
+                print_and_sleep(yellow(f"You manage to escape, for now..."), 1.5)
+                player.luck += 0.5
+            else:
+                print_and_sleep(red(f"You turn and run, but oily floats much faster..."), 1.5)
+                player.luck -= 0.5
+                set_special_boss(game_state, OILY_DOILY)
+                Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def basta_deal(game_state: GameState, choice: int):
+        player = game_state.player
+        game_state.current_area.special_bosses.append(BASTA_SHERMAN)
+
+        if choice == 1:
+            if player.coins >= 50:
+                player.coins -= 50
+                play_sound(COINS)
+                print_and_sleep(green(f"Basta Sherman: Smooth move, boy. You're free to live, for now."), 1.5)
+            else:
+                print_and_sleep(yellow(f"Basta Sherman: Oh, you're dry? The Mayor won't miss you anyway."), 1.5)
+                set_special_boss(game_state, BASTA_SHERMAN)
+                Battle(game_state).run()
+        else:
+            if random.random() < 0.5:
+                print_and_sleep(yellow(f"You manage to escape, for now..."), 1.5)
+                player.luck += 0.5
+            else:
+                print_and_sleep(yellow(f"You try to run, but Basta is much too fast..."), 1.5)
+                player.luck -= 0.5
+                set_special_boss(game_state, BASTA_SHERMAN)
+                Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def slender_intro(game_state: GameState, choice: int):
+        player = game_state.player
+        game_state.current_area.special_bosses.append(SLENDERMAN)
+
+        if choice == 1:
+            print_and_sleep(yellow(f"Slender Man seems perfectly unfazed by your soiled dipe..."), 1.5)
+            set_special_boss(game_state, SLENDERMAN)
+            Battle(game_state).run()
+        else:
+            if random.random() < 0.25:
+                print_and_sleep(yellow(f"Somehow, you manage to escape. For now..."), 1.5)
+                player.luck += 0.75
+            else:
+                print_and_sleep(yellow(f"You could not outpace Slender Man's lengthy strides..."), 1.5)
+                player.luck -= 0.25
+                set_special_boss(game_state, SLENDERMAN)
+                Battle(game_state).run()
 
 # ================================================================================================
 

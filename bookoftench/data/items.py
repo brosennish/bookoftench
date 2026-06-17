@@ -27,6 +27,7 @@ CATFISH_FILET = "Catfish Filet"
 CENTAURIAN_HOOF = "Centaurian Hoof"
 CRABS_ON_RYE = "Crabs on Rye"
 CRAY = "Cray"
+CRISPY_DANIELS_BLOOD_SOAKED_BANDANA = "Crispy Daniels Blood-soaked Bandana"
 CRITICAL_BASS = "Critical Bass"
 CUSTOM_INFLATABLE_SUIT = "Custom Inflatable Suit"
 CYCLOPS_EYE = "Cyclops Eye"
@@ -271,6 +272,8 @@ Items = [
      'desc': 'Cloak obtained by the Vampire Overlord in ancient times', 'sound': WHIFF},
     {'name': CENTAURIAN_HOOF, 'type': BOSS, 'hp': 50, 'cost': 0, 'sell_value': 100, 'areas': None,
      'desc': 'One of the four hooves previously utilized by the mighty Centaur', 'sound': EAT},
+    {'name': CRISPY_DANIELS_BLOOD_SOAKED_BANDANA, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 100, 'areas': None,
+     'desc': 'The bandana Crispy Daniels was wearing when he was assassinated aboard the S.S. Biltmore.', 'sound': WHIFF},
     {'name': CUSTOM_INFLATABLE_SUIT, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 80, 'areas': None,
      'desc': 'Used by Oily Doily to float in the air', 'sound': WHIFF},
     {'name': CYCLOPS_EYE, 'type': BOSS, 'hp': 50, 'cost': 0, 'sell_value': 110, 'areas': None,

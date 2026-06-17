@@ -31,9 +31,7 @@ from bookoftench.data.enviroment import DAY, NIGHT, FULL, WETTING, DRYING
 from bookoftench.data.areas import CAVE
 from bookoftench.data.enemies import EMPATH
 from ..data.audio import XP, GREAT_JOB, GOLF_CLAP
-from ..data.fishing_items import BARB_HOOK
 from ..data.illnesses import Illnesses
-
 
 # ================================================================================================
 
