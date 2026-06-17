@@ -6,12 +6,13 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Set
 
 from bookoftench.data import Areas
-from bookoftench.data.areas import EncounterType
+from bookoftench.data.areas import EncounterType, FOREST, CITY, CAVE
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
     SPAWN_ENEMY, ENCOUNTER_SUB_BOSS, SPECIAL_EVENT
 from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, CONTAGIOUS, NIGHT_OWL, HOHKKEN, BOSS, \
-    NORMAL, SPECIAL_BOSS
+    NORMAL, SPECIAL_BOSS, Special_Bosses, SLENDERMAN, Cave_Special_Bosses, City_Special_Bosses, Forest_Special_Bosses, \
+    Swamp_Special_Bosses
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss, load_special_boss, SpecialBoss
@@ -83,6 +84,14 @@ class Area:
 
     def __post_init__(self):
         self.boss = load_boss(self.boss_name)
+        if self.name == CAVE:
+            self.special_bosses = [i for i in Cave_Special_Bosses]
+        elif self.name == CITY:
+            self.special_bosses = [i for i in City_Special_Bosses]
+        elif self.name == FOREST:
+            self.special_bosses = [i for i in Forest_Special_Bosses]
+        else:
+            self.special_bosses = [i for i in Swamp_Special_Bosses]
 
     @property
     def post_kill_components(self) -> List[str]:

@@ -354,16 +354,20 @@ Bosses = [
     # ------ Special Bosses by Area ------
 
 Cave_Special_Bosses = [
-    CYCLOPS, DEATH_WORM, SABERTOOTH_LIGER]
+    CYCLOPS, DEATH_WORM, SABERTOOTH_LIGER
+]
 
 City_Special_Bosses = [
-    GIANT_MUTANT_RAT, KNOBGOBLIN, SEWER_GATOR]
+    GIANT_MUTANT_RAT, KNOBGOBLIN, SEWER_GATOR
+]
 
 Forest_Special_Bosses = [
-    FAIRY_CODMOTHER, LUCKY_THE_LEPRECHAUN, MOTHMAN, SASQUATCH, SLENDERMAN]
+    FAIRY_CODMOTHER, LUCKY_THE_LEPRECHAUN, MOTHMAN, SASQUATCH
+]
 
 Swamp_Special_Bosses = [
-    HODAG, OGRE, SKUNK_APE]
+    HODAG, OGRE, SKUNK_APE
+]
 
 # ================================================================================================
 
