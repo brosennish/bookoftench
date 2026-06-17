@@ -14,8 +14,7 @@ from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEM
     DISCOVER_PERK, \
     OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER, KILLS, DISCOVERIES, ENCOUNTERS, ENCOUNTER_SUB_BOSS
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER, HOHKKEN, \
-    Cave_Special_Bosses, City_Special_Bosses, Swamp_Special_Bosses, \
-    Forest_Special_Bosses, SPECIAL_BOSS
+    SPECIAL_BOSS
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL
 from bookoftench.data.perks import DEATH_CAN_WAIT, Perks, NEPTUNE
 from bookoftench.event_logger import subscribe_function
@@ -39,12 +38,11 @@ from .registry import register_component, get_registered_component
 from bookoftench.data.builds import RANDOM, DENNY
 from bookoftench.data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE
 from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
-from bookoftench.data.weapons import BARE_HANDS, CLAWS, LASER_BEAMS, VOODOO_STAFF, Weapons, TENCH_CANNON, SPECIAL, BLIND
+from bookoftench.data.weapons import BARE_HANDS, Weapons, TENCH_CANNON, SPECIAL, BLIND
 from bookoftench.event_base import EventType
 from bookoftench.model.build import Build, load_builds
-from bookoftench.model.illness import load_illnesses, load_illness
+from bookoftench.model.illness import load_illnesses
 from bookoftench.model.player import PlayerWeapon
-from ..data.areas import FOREST, CAVE, CITY
 
 # ================================================================================================
 

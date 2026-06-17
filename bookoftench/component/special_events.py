@@ -294,10 +294,14 @@ class SpecialEventComponent(LabeledSelectionComponent):
         elif choice == 2:  # Attempt to Probe the Aliens
             if random.random() < 0.5 * player.strength:
                 print_and_sleep(green("You probed the aliens!"), 1.5)
-                print_and_sleep(green("They gave you a perk to thank you for the pleasure."), 1.5)
                 valid = [i for i in load_perks() if not i.active]
-                perk = random.choice(valid)
-                player.add_perk(perk)
+                if valid:
+                    print_and_sleep(green("They gave you a perk to thank you for the pleasure."), 1.5)
+                    perk = random.choice(valid)
+                    player.add_perk(perk)
+                else:
+                    print_and_sleep(green("They gave you some coin to thank you for the pleasure."), 1.5)
+                    player.gain_coins(25)
             else:
                 print_and_sleep(yellow("You were unable to probe the aliens...\n"), 1.5)
                 print_and_sleep(yellow("They probed you extra hard as punishment.\n"), 1.5)

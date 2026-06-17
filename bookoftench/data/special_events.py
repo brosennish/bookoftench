@@ -39,7 +39,7 @@ SANTAS_SNOW = "Santa's Snow"
 
 Special_Events = [
 
-    {'name': GREEDY_BASTARD, 'color': purple, 'sleep': 5, 'theme': None,
+    {'name': GREEDY_BASTARD, 'color': purple, 'sleep': 0, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """An old woman with wrinkled eyeballs wearing a soiled cloak approaches you.
 
@@ -54,7 +54,7 @@ How much do you want? Hehehe.
 
 # ================================================================================================
 
-    {'name': HERPES_KISS, 'color': purple, 'sleep': 5, 'theme': None,
+    {'name': HERPES_KISS, 'color': purple, 'sleep': 0, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """A sensuous being with mealy lips and a hint of humanity approaches.
 
@@ -71,7 +71,7 @@ I will give you 8 of coin for each kiss... hehehe.
 
 # ================================================================================================
 
-    {'name': LOST_GOLD_P1, 'stage': 1, 'color': blue, 'sleep': 5, 'theme': None,
+    {'name': LOST_GOLD_P1, 'stage': 1, 'color': blue, 'sleep': 0, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You smell the overwhelming stench of brine-soaked jines...
 
@@ -84,7 +84,7 @@ Tell me matey, wher' can I find me gold?
 
 # ================================================================================================
 
-    {'name': LOST_GOLD_P2, 'stage': 2, 'color': red, 'sleep': 5, 'theme': None,
+    {'name': LOST_GOLD_P2, 'stage': 2, 'color': red, 'sleep': 0, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You smell a familiar stench...
 
@@ -100,7 +100,7 @@ Aye, and if yer dry, a tench filet would also do.
 
 # ================================================================================================
 
-    {'name': NEWS_HEADLESS_WHORES_MAN, 'color': white, 'sleep': 0, 'theme': None,
+    {'name': NEWS_HEADLESS_WHORES_MAN, 'color': orange, 'sleep': 0, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
 
@@ -117,7 +117,7 @@ Reporting live from the Swamp, I'm Shannon O'Shanahan, Shebokken News.
 
 # ================================================================================================
 
-    {'name': NEWS_HOHKKEN_ENTERS_CITY, 'color': white, 'sleep': 0, 'theme': HOHKKEN_THEME,
+    {'name': NEWS_HOHKKEN_ENTERS_CITY, 'color': orange, 'sleep': 0, 'theme': None,
      'areas': [a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
 
@@ -139,7 +139,7 @@ Reporting live from Shebokken, I'm Shannon O'Shanahan, Shebokken News.
 
 # ================================================================================================
 
-    {'name': NEWS_WHALE_MAN, 'color': white, 'sleep': 0, 'theme': None,
+    {'name': NEWS_WHALE_MAN, 'color': orange, 'sleep': 0, 'theme': None,
      'areas': [a.FOREST], 'time': [DAY], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
 
@@ -195,7 +195,7 @@ Wednesday Wednesday's Wednesday News, only on Wednesdays.
 
 # ================================================================================================
 
-    {'name': PROBING, 'color': green, 'sleep': 5, 'theme': None,
+    {'name': PROBING, 'color': green, 'sleep': 0, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """You were abducted by aliens!
 
@@ -208,7 +208,7 @@ What do you do?
 
 # ================================================================================================
 
-    {'name': SANTAS_SNOW, 'color': white, 'sleep': 5, 'theme': None,
+    {'name': SANTAS_SNOW, 'color': white, 'sleep': 0, 'theme': None,
      'areas': [a.CITY], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """A sad, old, fat man with a huge bulge descends from the sky.
 
@@ -222,7 +222,7 @@ I think I left my Snow in the Cave...
 
 # ================================================================================================
 
-    {'name': SHEBOKKEN_ROULETTE, 'color': purple, 'sleep': 5, 'theme': ROULETTE_THEME,
+    {'name': SHEBOKKEN_ROULETTE, 'color': purple, 'sleep': 0, 'theme': ROULETTE_THEME,
      'areas': [a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """A leather-skinned man approaches you, revolver in hand.
 
@@ -236,7 +236,7 @@ What's your wager?
 
 # ================================================================================================
 
-    {'name': STINGY_BASTARD, 'color': purple, 'sleep': 5, 'theme': None,
+    {'name': STINGY_BASTARD, 'color': purple, 'sleep': 0, 'theme': None,
      'areas': [a.CAVE, a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """An old woman with two noses and three nostrils approaches you.
 
@@ -251,7 +251,7 @@ How much will you give me? Hehehe.
 
 # ================================================================================================
 
-    {'name': THREE_HOLES, 'color': purple, 'sleep': 5, 'theme': None,
+    {'name': THREE_HOLES, 'color': purple, 'sleep': 0, 'theme': None,
      'areas': [a.CAVE, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You come upon three holes in the ground...
         
@@ -267,7 +267,7 @@ it whispers that you may only reach into one of the holes.
 
 # ================================================================================================
 
-    {'name': TRIPLE_TENCH_DARE, 'color': yellow, 'sleep': 5, 'theme': None,
+    {'name': TRIPLE_TENCH_DARE, 'color': yellow, 'sleep': 0, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY], 'moon': None, 'season': None,
      'text': """A rambunctious boy approaches you, dad's wallet in hand...
      
@@ -281,7 +281,7 @@ How many seconds?
 
 # ================================================================================================
 
-    {'name': ZONKED, 'color': purple, 'sleep': 5, 'theme': None,
+    {'name': ZONKED, 'color': purple, 'sleep': 0, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You come across a man who is totally zonked...
 
@@ -296,7 +296,7 @@ What do you do?
 
 # ================================================================================================
 
-{'name': OILY_PROPOSAL, 'color': red, 'sleep': 5, 'theme': HOSPITAL_THEME,
+{'name': OILY_PROPOSAL, 'color': red, 'sleep': 0, 'theme': HOSPITAL_THEME,
      'areas': [a.CITY], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """You turn and see a giant balloon floating towards you...
 
@@ -319,7 +319,7 @@ What do you do?
 
 # ================================================================================================
 
-    {'name': BASTA_DEAL, 'color': red, 'sleep': 5, 'theme': BATTLE_THEME,
+    {'name': BASTA_DEAL, 'color': red, 'sleep': 0, 'theme': BATTLE_THEME,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """A pair of hands clutches your shirt and pulls you into an alleyway...
 
@@ -341,7 +341,7 @@ What's it gonna be, Mr. Son of Mayor?
 
 # ================================================================================================
 
-    {'name': SLENDER_INTRO, 'color': red, 'sleep': 5, 'theme': HOSPITAL_THEME,
+    {'name': SLENDER_INTRO, 'color': red, 'sleep': 0, 'theme': HOSPITAL_THEME,
      'areas': [a.FOREST], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """Stumbling through the dark forest, you feel you're being followed...
 
