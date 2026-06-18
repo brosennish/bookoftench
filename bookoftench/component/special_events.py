@@ -731,6 +731,7 @@ I'm scheduled to be buried alive at 6... or was it 8?"""), 3)
 
             invest_obj.maturity_lvl = player.lvl + invest_obj.levels_to_maturity
             invest_obj.value = buy_in
+            invest_obj.active = True
 
             player.investments.append(invest_obj)
             print_and_sleep(green(f"You invested {buy_in} of coin in {invest_obj.name}."), 1.5)

@@ -18,6 +18,7 @@ from ..data.enviroment import DAY
 from ..data.fish import AGITATED, SPOOKED, CALM, SHALLOWS, BAY, OCEAN, Fish_Species, MALE, FEMALE, COMMON, UNCOMMON, \
     RARE, LEGENDARY
 from ..data.fishing_areas import WET_SEASON, DRY_SEASON
+from ..data.investments import LOW_RISK, MEDIUM_RISK, HIGH_RISK
 
 
 # ================================================================================================
@@ -778,9 +779,19 @@ def display_investments(game_state: GameState) -> None:
         abc = sorted(investments, key=lambda a: a.name)
 
         for i in abc:
+            if i.risk_level == LOW_RISK:
+                r_color = green
+            elif i.risk_level == MEDIUM_RISK:
+                r_color = yellow
+            elif i.risk_level == HIGH_RISK:
+                r_color = orange
+            else:
+                r_color = red
+
             print_and_sleep(
                 f"{cyan(i.name)}"
                 f"\n{i.description}"
+                f"\nRisk Level: {r_color(i.risk_level)}"
                 f"\nInvested: {green(f'{i.value} coins')}"
                 f"\nMaturity: Level {cyan(i.maturity_lvl)}"
                 f"\nStatus: {green('Active') if i.active else cyan('Resolved')}"

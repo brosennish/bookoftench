@@ -23,7 +23,7 @@ class Investment:
     levels_to_maturity: int = 0
     maturity_lvl: int | None = None
     active: bool = False
-    bankrupt: bool = False
+    resolved: bool = False
 
 # ================================================================================================
 

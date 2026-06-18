@@ -3,20 +3,20 @@ SEMEN_CANDLE = "Semen Candle"
 SUN_SUITS = "Sun Suits"
 
 # Risk Levels
-LOW_RISK = "Low-Risk"
-MEDIUM_RISK = "Medium-Risk"
-HIGH_RISK = "High-Risk"
-MAX_RISK = "Max-Risk"
+LOW_RISK = "Low"
+MEDIUM_RISK = "Medium"
+HIGH_RISK = "High"
+MAX_RISK = "Max"
 
 Investment_Opportunities = [
     {'name': SEMEN_CANDLE,
-     'description': 'A normal candle with the essence of man.',
+     'description': 'A suspicious candle with a masculine, seedy aroma.',
      'risk_level': MEDIUM_RISK,
      'success_text': "Semen Candle has become the #1 selling candle in the Shebokken.",
      'failure_text': "Semen Candle has gone under following a unanimous lack of interest."
      },
     {'name': SUN_SUITS,
-     'description': 'Wearable. Washable. Sun Suits.',
+     'description': 'Wearable. Washable. Fully transparent. Sun Suits.',
      'risk_level': MEDIUM_RISK,
      'success_text': "Sun Suits have taken over as the preferred method of UV protection.",
      'failure_text': "Sun Suits have been discontinued after chemical leeching has lured\n"
