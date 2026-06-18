@@ -81,11 +81,11 @@ def conduct_experiment(game_state):
         if original != player.strength:
             if amount > 0:
                 print_and_sleep(green(f"Strength: {original} -> {player.strength}"), 1)
-                player.gain_or_lose_luck(0.01)
+                player.gain_or_lose_luck(0.05)
                 mutation = True
             elif amount < 0:
                 print_and_sleep(yellow(f"Strength: {original} -> {player.strength}"), 1)
-                player.gain_or_lose_luck(-0.01)
+                player.gain_or_lose_luck(-0.05)
                 mutation = True
 
     # ============================
@@ -99,11 +99,11 @@ def conduct_experiment(game_state):
         if original != player.acc:
             if amount > 0:
                 print_and_sleep(green(f"Accuracy: {original} -> {player.acc}"), 1)
-                player.gain_or_lose_luck(0.01)
+                player.gain_or_lose_luck(0.05)
                 mutation = True
             elif amount < 0:
                 print_and_sleep(yellow(f"Accuracy: {original} -> {player.acc}"), 1)
-                player.gain_or_lose_luck(-0.01)
+                player.gain_or_lose_luck(-0.05)
                 mutation = True
 
     # ============================
@@ -118,11 +118,11 @@ def conduct_experiment(game_state):
             player.hp = player.max_hp
         if amount > 0:
             print_and_sleep(green(f"Max HP: {original} -> {player.max_hp}"), 1)
-            player.gain_or_lose_luck(0.01)
+            player.gain_or_lose_luck(0.05)
             mutation = True
         elif amount < 0:
             print_and_sleep(yellow(f"Max HP: {original} -> {player.max_hp}"), 1)
-            player.gain_or_lose_luck(-0.01)
+            player.gain_or_lose_luck(-0.05)
             mutation = True
 
     # ============================
@@ -140,11 +140,11 @@ def conduct_experiment(game_state):
         if original != player.lvl:
             if amount > 0:
                 print_and_sleep(cyan(f"Level: {original} -> {player.lvl}"), 1)
-                player.gain_or_lose_luck(0.01)
+                player.gain_or_lose_luck(0.05)
                 mutation = True
             elif amount < 0:
                 print_and_sleep(cyan(f"Level: {original} -> {player.lvl}"), 1)
-                player.gain_or_lose_luck(-0.01)
+                player.gain_or_lose_luck(-0.05)
                 mutation = True
         if player.lvl == player.illness_death_lvl:
             player.lives -= 1
@@ -162,10 +162,10 @@ def conduct_experiment(game_state):
         original = player.lives
         amount = 1
         if random.random() < 0.60 - (min(player.luck, 10) / 100):
-            player.gain_or_lose_luck(-0.01)
+            player.gain_or_lose_luck(-0.5)
             amount = -1
         else:
-            player.gain_or_lose_luck(0.01)
+            player.gain_or_lose_luck(0.5)
             if player.lives == 5:
                 amount = 0
         player.lives += amount

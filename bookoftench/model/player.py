@@ -514,8 +514,8 @@ class Player(Combatant):
         self.luck += round(amount, 3)
         if self.luck < 0:
             self.luck = 0
-        if self.luck > 10:
-            self.luck = 10
+        if self.luck > 5:
+            self.luck = 5
 
     def acquire_illness(self, illness_name) -> None:
         illness_dict = next(i for i in Illnesses if i['name'] == illness_name)

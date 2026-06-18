@@ -126,7 +126,8 @@ class BuyOrStealDecision(LabeledSelectionComponent):
     @attach_perk(CATFISH_BURGLAR, value_description="shoplifting odds")
     def calculate_success_chance(buyable: Buyable, luck: float) -> int:
         upper_bound = max(_max_steal_chance - buyable.cost, _steal_spread)
-        return random.randint(max(1, upper_bound - _steal_spread + int(luck)), upper_bound)
+        base_lower_bound = max(1, upper_bound - _steal_spread + int(luck))
+        return random.randint(min(base_lower_bound, upper_bound), upper_bound)
 
     @staticmethod
     def _make_purchase_component(buyable: Buyable):

@@ -210,7 +210,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
                 print_and_sleep(yellow("The Sensuous Being covers its mouth and giggles..."), 1.5)
                 print_and_sleep(yellow("The Sensuous Being gave you Herpes!"), 1.5)
                 player.acquire_illness(HERPES)
-                player.gain_or_lose_luck(-0.5)
+                player.gain_or_lose_luck(-0.1)
                 break
 
         print_and_sleep(purple("You kiss like a fish... hehehe."), 1.5)
@@ -383,14 +383,14 @@ class SpecialEventComponent(LabeledSelectionComponent):
             player.coins -= offer - woman_desired_coins
             if offer > woman_desired_coins:
                 player.gain_xp_other(offer - woman_desired_coins)
-            player.gain_or_lose_luck(0.05)
+            player.gain_or_lose_luck(0.1)
         else:
             damage = min(woman_desired_coins - offer, player.hp)
             player.hp -= damage
             play_sound(PUNCH)
             print_and_sleep(red(f"The woman slapped you for {damage} damage!"), 1)
             print_and_sleep(purple(f"That's for being a stingy bastard!\n"), 2)
-            player.gain_or_lose_luck(-0.05)
+            player.gain_or_lose_luck(-0.1)
             special_event_death_check(player)
 
 # ================================================================================================
@@ -414,7 +414,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
 
             item = random.choice(available_items)
             play_sound(POSITIVE)
-            player.gain_or_lose_luck(0.05)
+            player.gain_or_lose_luck(0.1)
             print_and_sleep(cyan(f"You found {'an' if item.name[0].lower() in 'aeiou' else 'a'} {item.name}!"), 1)
 
             if player.add_item(item):
@@ -429,7 +429,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
             player.hp -= damage
             play_sound(MONSTER_ATTACK)
             print_and_sleep(red(f"You were ravaged by an unseen creature."), 2)
-            player.gain_or_lose_luck(-0.05)
+            player.gain_or_lose_luck(-0.1)
 
             special_event_death_check(player)
 
