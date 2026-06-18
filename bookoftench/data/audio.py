@@ -1,4 +1,6 @@
 import os
+import sys
+from pathlib import Path
 from typing import AnyStr
 
 # ================================================================================================
@@ -93,4 +95,9 @@ XP = "xp.mp3"
 
 # TODO make sure this works regardless of cwd
 def get_audio_path(filename) -> AnyStr:
-    return os.path.abspath(os.path.join('bookoftench/data/audio', filename))
+    if getattr(sys, "frozen", False):
+        base_dir = Path(sys.executable).resolve().parent / "_internal"
+    else:
+        base_dir = Path(__file__).resolve().parents[2]
+
+    return str(base_dir / "bookoftench" / "data" / "audio" / filename)
