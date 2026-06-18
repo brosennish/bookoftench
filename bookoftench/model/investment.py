@@ -3,28 +3,26 @@ from dataclasses import dataclass
 from typing import List
 
 from bookoftench.data.investments import Investment_Opportunities, Risk_Levels
-from bookoftench.model.base import Buyable
-from bookoftench.ui import dim, cyan, orange, green, red, white
+from bookoftench.ui import dim, cyan, orange, green, white
 
 # ================================================================================================
 
 @dataclass
-class Investment(Buyable):
+class Investment:
     name: str
     description: str
     risk_level: str
-    buy_ins: list | None
-
-    success_rate: float | None
     success_text: str
     failure_text: str
-    multiplier: float | None
 
-    levels_to_maturity: int | None
+    cost: int = 0
+    buy_ins: list | None = None
+    success_rate: float = 0
+    multiplier: float = 0
+    levels_to_maturity: int = 0
     maturity_lvl: int | None = None
-
-    buy_in: int = 0
-    resolved: bool = False
+    active: bool = False
+    bankrupt: bool = False
 
 # ================================================================================================
 

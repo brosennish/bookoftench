@@ -254,6 +254,8 @@ class SpecialEventComponent(LabeledSelectionComponent):
         else:
             choice = SWAMP
 
+        print_and_sleep(yellow(f"You tell the pirate that he will find his gold in the {choice}..."), 1.5)
+
         if choice == gold_location:  # Remove part two if player is correct
             lost_gold_p2 = load_special_event(LOST_GOLD_P2)
             game_state.expired_special_events.append(lost_gold_p2)

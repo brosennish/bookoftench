@@ -2,7 +2,7 @@ from bookoftench.data import areas as a
 from bookoftench.data.audio import ROULETTE_THEME, HOHKKEN_THEME, HOSPITAL_THEME, BATTLE_THEME
 from bookoftench.data.enemies import OILY_DOILY
 from bookoftench.data.enviroment import DAY, NIGHT
-from bookoftench.data.investments import SEMEN_CANDLE
+from bookoftench.data.investments import SEMEN_CANDLE, SUN_SUITS
 from bookoftench.ui import green, purple, yellow, blue, red, white, orange
 
 # ================================================================================================
@@ -692,6 +692,44 @@ Maturity: 2-3 Levels
      'choices': ['Invest 10', 'Invest 25', 'Invest 50'],
      'investment': SEMEN_CANDLE,
      'optional': True, 'method': 'make_investment', 'replayable': False},
+
+# ================================================================================================
+
+{'name': SUN_SUITS_PROPOSAL, 'color': '', 'sleep': 3, 'theme': None,
+     'areas': [a.CITY], 'time': [DAY], 'moon': None, 'season': None,
+     'text': """You encounter a man who appears to be completely naked...
+
+Sun Suits Rep: Don't be alarmed! I am fully clothed, so there is no need for alarm.
+
+You point to the man's jines, clearly visible in the beating sun.
+
+Sun Suits Rep: Are you tired of spraying sunscreen on your tasty little arms?
+Are you sick of having to ask strangers to rub lotion on your jines and rump,
+just because it's such a chore for you to do it yourself?
+
+You hesitate, then nod.
+
+Sun Suits Rep: Well fret no more! My company has invented a revolutionary new way
+to protect yourself from those pesky UV rays.
+
+You raise an eyebrow in curiosity.
+
+Sun Suits Rep: The answer to your problem is what I am wearing at this very moment...
+Sun Suits! Sun Suits are transparent, elastic, and washable. 
+
+Stop burning through gallons of sunblock and join us as an early investor today! 
+
+We have three investment options, and remember, it's now or never, boy.
+
+Investment: Sun Suits
+Risk: Medium
+Potential Return: 2x-4x
+Maturity: 2-3 Levels
+""",
+     'choices': ['Invest 10', 'Invest 25', 'Invest 50'],
+     'investment': SUN_SUITS,
+     'optional': True, 'method': 'make_investment', 'replayable': False},
+
 
 
 ]
