@@ -25,8 +25,20 @@ NEWS_WHALE_MAN = "News Whale Man" # formatted
 WEDNESDAY_NEWS = "Wednesday News"
 
 # Boss Introductions
-BASTA_DEAL ="Basta Deal"
-OILY_PROPOSAL = "Oily Introduction"
+BASTA_INTRO = "Basta Intro"
+CYCLOPS_INTRO = "Cyclops Intro"
+DEATH_WORM_INTRO = "Death Worm Intro"
+FAIRY_CODMOTHER_INTRO = "Fairy Codmother Intro"
+GIANT_MUTANT_RAT_INTRO = "Giant Mutant Rat Intro"
+HODAG_INTRO = "Hodag Intro"
+LUCKY_THE_LEPRECHAUN_INTRO = "Lucky The Leprechaun Intro"
+MOTHMAN_INTRO = "Mothman Intro"
+OGRE_INTRO = "Ogre Intro"
+OILY_DOILY_INTRO = "Oily Intro"
+SABERTOOTH_LIGER_INTRO = "Sabertooth Liger Intro"
+SASQUATCH_INTRO = "Sasquatch Intro"
+SEWER_GATOR_INTRO = "Sewer Gator Intro"
+SKUNK_APE_INTRO = "Skunk Ape Intro"
 SLENDER_INTRO = "Slender Intro"
 
 # Investment Opportunities
@@ -39,7 +51,7 @@ SANTAS_SNOW = "Santa's Snow"
 
 Special_Events = [
 
-    {'name': GREEDY_BASTARD, 'color': purple, 'sleep': 0, 'theme': None,
+    {'name': GREEDY_BASTARD, 'color': purple, 'sleep': 3, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """An old woman with wrinkled eyeballs wearing a soiled cloak approaches you.
 
@@ -54,7 +66,7 @@ How much do you want? Hehehe.
 
 # ================================================================================================
 
-    {'name': HERPES_KISS, 'color': purple, 'sleep': 0, 'theme': None,
+    {'name': HERPES_KISS, 'color': purple, 'sleep': 3, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """A sensuous being with mealy lips and a hint of humanity approaches.
 
@@ -71,7 +83,7 @@ I will give you 8 of coin for each kiss... hehehe.
 
 # ================================================================================================
 
-    {'name': LOST_GOLD_P1, 'stage': 1, 'color': blue, 'sleep': 0, 'theme': None,
+    {'name': LOST_GOLD_P1, 'stage': 1, 'color': blue, 'sleep': 3, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You smell the overwhelming stench of brine-soaked jines...
 
@@ -84,7 +96,7 @@ Tell me matey, wher' can I find me gold?
 
 # ================================================================================================
 
-    {'name': LOST_GOLD_P2, 'stage': 2, 'color': red, 'sleep': 0, 'theme': None,
+    {'name': LOST_GOLD_P2, 'stage': 2, 'color': red, 'sleep': 3, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You smell a familiar stench...
 
@@ -100,7 +112,7 @@ Aye, and if yer dry, a tench filet would also do.
 
 # ================================================================================================
 
-    {'name': NEWS_HEADLESS_WHORES_MAN, 'color': orange, 'sleep': 0, 'theme': None,
+    {'name': NEWS_HEADLESS_WHORES_MAN, 'color': orange, 'sleep': 3, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
 
@@ -117,7 +129,7 @@ Reporting live from the Swamp, I'm Shannon O'Shanahan, Shebokken News.
 
 # ================================================================================================
 
-    {'name': NEWS_HOHKKEN_ENTERS_CITY, 'color': orange, 'sleep': 0, 'theme': None,
+    {'name': NEWS_HOHKKEN_ENTERS_CITY, 'color': orange, 'sleep': 3, 'theme': None,
      'areas': [a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
 
@@ -139,7 +151,7 @@ Reporting live from Shebokken, I'm Shannon O'Shanahan, Shebokken News.
 
 # ================================================================================================
 
-    {'name': NEWS_WHALE_MAN, 'color': orange, 'sleep': 0, 'theme': None,
+    {'name': NEWS_WHALE_MAN, 'color': orange, 'sleep': 3, 'theme': None,
      'areas': [a.FOREST], 'time': [DAY], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
 
@@ -173,7 +185,7 @@ Reporting live from Shebokken, I'm Shannon O'Shanahan, Shebokken News.
 
 # ================================================================================================
 
-    {'name': WEDNESDAY_NEWS, 'color': orange, 'sleep': 0, 'theme': None,
+    {'name': WEDNESDAY_NEWS, 'color': orange, 'sleep': 3, 'theme': None,
      'areas': [a.FOREST, a.SWAMP], 'time': [DAY], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
 
@@ -195,7 +207,7 @@ Wednesday Wednesday's Wednesday News, only on Wednesdays.
 
 # ================================================================================================
 
-    {'name': PROBING, 'color': green, 'sleep': 0, 'theme': None,
+    {'name': PROBING, 'color': green, 'sleep': 3, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """You were abducted by aliens!
 
@@ -208,7 +220,7 @@ What do you do?
 
 # ================================================================================================
 
-    {'name': SANTAS_SNOW, 'color': white, 'sleep': 0, 'theme': None,
+    {'name': SANTAS_SNOW, 'color': white, 'sleep': 3, 'theme': None,
      'areas': [a.CITY], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """A sad, old, fat man with a huge bulge descends from the sky.
 
@@ -222,7 +234,7 @@ I think I left my Snow in the Cave...
 
 # ================================================================================================
 
-    {'name': SHEBOKKEN_ROULETTE, 'color': purple, 'sleep': 0, 'theme': ROULETTE_THEME,
+    {'name': SHEBOKKEN_ROULETTE, 'color': purple, 'sleep': 3, 'theme': ROULETTE_THEME,
      'areas': [a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """A leather-skinned man approaches you, revolver in hand.
 
@@ -236,7 +248,7 @@ What's your wager?
 
 # ================================================================================================
 
-    {'name': STINGY_BASTARD, 'color': purple, 'sleep': 0, 'theme': None,
+    {'name': STINGY_BASTARD, 'color': purple, 'sleep': 3, 'theme': None,
      'areas': [a.CAVE, a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """An old woman with two noses and three nostrils approaches you.
 
@@ -251,7 +263,7 @@ How much will you give me? Hehehe.
 
 # ================================================================================================
 
-    {'name': THREE_HOLES, 'color': purple, 'sleep': 0, 'theme': None,
+    {'name': THREE_HOLES, 'color': purple, 'sleep': 3, 'theme': None,
      'areas': [a.CAVE, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You come upon three holes in the ground...
         
@@ -267,7 +279,7 @@ it whispers that you may only reach into one of the holes.
 
 # ================================================================================================
 
-    {'name': TRIPLE_TENCH_DARE, 'color': yellow, 'sleep': 0, 'theme': None,
+    {'name': TRIPLE_TENCH_DARE, 'color': yellow, 'sleep': 3, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY], 'moon': None, 'season': None,
      'text': """A rambunctious boy approaches you, dad's wallet in hand...
      
@@ -281,7 +293,7 @@ How many seconds?
 
 # ================================================================================================
 
-    {'name': ZONKED, 'color': purple, 'sleep': 0, 'theme': None,
+    {'name': ZONKED, 'color': purple, 'sleep': 3, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You come across a man who is totally zonked...
 
@@ -296,7 +308,7 @@ What do you do?
 
 # ================================================================================================
 
-{'name': OILY_PROPOSAL, 'color': red, 'sleep': 0, 'theme': HOSPITAL_THEME,
+{'name': OILY_DOILY_INTRO, 'color': red, 'sleep': 3, 'theme': HOSPITAL_THEME,
      'areas': [a.CITY], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """You turn and see a giant balloon floating towards you...
 
@@ -314,12 +326,12 @@ Hehehe, hohoho.
 
 What do you do?
 """,
-    'choices': ['Grab Jines', 'Run Away'],
-    'optional': False, 'method': 'oily_proposal', 'replayable': False},
+ 'choices': ['Grab Jines', 'Run Away'],
+ 'optional': False, 'method': 'oily_doily_intro', 'replayable': False},
 
 # ================================================================================================
 
-    {'name': BASTA_DEAL, 'color': red, 'sleep': 0, 'theme': BATTLE_THEME,
+    {'name': BASTA_INTRO, 'color': red, 'sleep': 3, 'theme': BATTLE_THEME,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """A pair of hands clutches your shirt and pulls you into an alleyway...
 
@@ -336,12 +348,12 @@ is pretty fucked up, I will spare you this time if you can match his offer.
 
 What's it gonna be, Mr. Son of Mayor? 
 """,
-    'choices': ['Pay Up', 'Run Away'],
-    'optional': False, 'method': 'basta_deal', 'replayable': False},
+     'choices': ['Pay Up', 'Run Away'],
+     'optional': False, 'method': 'basta_intro', 'replayable': False},
 
 # ================================================================================================
 
-    {'name': SLENDER_INTRO, 'color': red, 'sleep': 0, 'theme': HOSPITAL_THEME,
+    {'name': SLENDER_INTRO, 'color': red, 'sleep': 3, 'theme': HOSPITAL_THEME,
      'areas': [a.FOREST], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """Stumbling through the dark forest, you feel you're being followed...
 
@@ -364,46 +376,284 @@ What do you do?
 
 # ================================================================================================
 
+{'name': DEATH_WORM_INTRO, 'color': red, 'sleep': 3, 'theme': None,
+     'areas': [a.CAVE], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': """You feel the damp floor of the cave begin to shake...
 
+Stalactites fall and crumble...
 
-]
+Worms and mole people scurry back to their holes...
+
+You jump aside as the ceiling caves in, allowing for a blinding ray of light to shine down.
+
+Bursting through the ground, illuminated by the light, is the very thing your demented grandma
+would never shut up about.
+
+You adjust your jines and prepare for the inevitable...
+""",
+     'choices': ['Battle Death Worm'],
+     'optional': False, 'method': 'death_worm_intro', 'replayable': False},
 
 # ================================================================================================
 
-# Just in case
+{'name': CYCLOPS_INTRO, 'color': red, 'sleep': 3, 'theme': None,
+     'areas': [a.CAVE], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': """You feel something off about the latest tunnel you ventured into...
 
-Special_Event_Adjectives = [
-    "ancient", "angry", "bald", "blind",
-    "bloody", "bony", "bored", "brainwashed",
-    "braindead", "child-sized", "closeted", "confused",
-    "cool", "crazed", "creepy", "cross-eyed",
-    "curious", "dead-eyed", "degenerate", "delirious",
-    "denim", "deplorable", "deranged", "dirty",
-    "disfigured", "disgruntled", "disillusioned", "drug-fueled",
-    "drunken", "elderly", "enormous", "felonious",
-    "feral", "filthy", "giggly", "gruntled",
-    "hairless", "hallucinating", "holy", "hollow",
-    "homicidal", "horny", "hungry", "idolatrous",
-    "inbred", "insane", "inside-out", "invisible",
-    "lazy-eyed", "lonely", "lost", "mealy",
-    "misguided", "moralless", "mysterious", "nervous",
-    "obscene", "one-eyed", "pale", "peculiar",
-    "radioactive", "rancid", "reanimated", "rotten",
-    "satanic", "screaming", "sleepy", "sloppy",
-    "soaked", "soggy", "soulless", "strange",
-    "suspicious", "three-eyed", "tiny", "toothless",
-    "two-headed", "uncool", "undead", "unholy",
-    "unsettling", "unstable", "upside-down", "vile",
-    "wrinkled", "wretched", "zombified"
-]
+Like there is someone, or something, watching your every movement -
 
-Special_Event_Characters = [
-    "man", "woman", "elder", "elderly man",
-    "elderly woman", "lady", "guy", "fellow",
-    "stranger", "drifter", "traveler", "wanderer",
-    "visitor", "boy", "girl", "child",
-    "gentleman", "ghost", "creature", "entity",
-    "figure", "thing", "being", "presence",
-    "apparition", "phantom", "soul", "spirit",
-    "individual", "person"
+Listening to your every thought like its music.
+
+You rotate your head as far as you can, straining your neck, to scan your pitch-black surroundings.
+
+Suddenly, you see movement... you see... a giant, bloodshot eyeball, slowly revealed by the opening
+of two enormous eyelids. 
+
+The creature quickly rises to its feet and begins charging towards you.
+
+What do you do?
+""",
+     'choices': ['Battle Cyclops', 'Try to Escape'],
+     'optional': False, 'method': 'death_worm_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': SABERTOOTH_LIGER_INTRO, 'color': red, 'sleep': 3, 'theme': None,
+     'areas': [a.CAVE], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': """Something tackles you from behind...
+
+You flip over and a pair of claws digs into your jines.
+
+Before your eyes can make out what it is that's attacking you...
+
+It lets out an Earth-shaking roar that can only be from one thing -
+a Sabertooth Liger. 
+""",
+     'choices': ['Battle Sabertooth Liger'],
+     'optional': False, 'method': 'sabertooth_liger_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': GIANT_MUTANT_RAT_INTRO, 'color': red, 'sleep': 3, 'theme': None,
+     'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': """Searching for Chula in the back of Renaldo's Pizzeria -
+
+an establishment you have dreamt of one day calling your own -
+
+you hear the unmistakable sound of giant feet shuffling behind the kitchen door...
+
+Suddenly, an gigantic rodent bursts into the room, throwing you into the pizza oven.
+
+The creature itself is covered in pizza residue, so you cannot help but suspect that it 
+wishes to bake you into a pizza pie for its consumption.
+
+It tries to speak, and nearly does, but its rodent vocal chords haven't mutated enough
+for that level of communication.
+
+Nonetheless, this monstrosity has been waiting for someone to cook and eat,
+and you arrived right on time.
+""",
+     'choices': ['Battle Giant Mutant Rat'],
+     'optional': False, 'method': 'giant_mutant_rat_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': SEWER_GATOR_INTRO, 'color': green, 'sleep': 3, 'theme': None,
+     'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': """Swimming through the sewers underneath the streets of Shebokken,
+
+you begin to smell something especially rotten...
+
+it's neither poop, nor trash, nor a decaying human body.
+
+Everyone in Shebokken knows those smells well, and this particular smell is 
+definitely something different... something new.
+
+You swim a little more and feel something large brush against your jines.
+
+You've brushed against enough poop, trash, and decaying human bodies to 
+know that this was something different... something new.
+
+You feel sharp teeth latch onto your jines, and in an instant, you are submerged
+beneath the chunky surface.
+
+Struggling, you manage to break free, now resting on the metal platform.
+
+A creature bursts from the water and joins you, clearly ready for its next meal.
+""",
+     'choices': ['Battle Sewer Gator'],
+     'optional': False, 'method': 'sewer_gator_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': LUCKY_THE_LEPRECHAUN_INTRO, 'color': green, 'sleep': 3, 'theme': None,
+     'areas': [a.FOREST], 'time': [DAY], 'moon': None, 'season': None,
+     'text': """Lucky the Leprechaun: Suck me jines,
+
+I'm a leprechaun!
+
+Yer not gettin' a drop of me precious gold!'
+
+Tehehehehehehe.
+
+If yer lucky, ye won't end up in Hell when I'm through with ya!
+
+And ye know what else?
+
+Ye can suck me jines,
+'cause I'm a leprechaun!
+""",
+     'choices': ['Battle Lucky the Leprechaun'],
+     'optional': False, 'method': 'lucky_the_leprechaun_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': FAIRY_CODMOTHER_INTRO, 'color': purple, 'sleep': 3, 'theme': None,
+     'areas': [a.FOREST], 'time': [DAY], 'moon': None, 'season': None,
+     'text': """Walking through the quiet forest,
+
+You begin to hear the faint sound of whistling in the distance.
+
+Looking and searching for the source, it suddenly becomes deafening,
+as if it someone is whistling through a megaphone directly into your earhole.
+
+After a moment, it's even quieter than it was to begin with. 
+
+A moment later, it is the loudest its been, with you covering your ears in
+excruciating pain.
+
+Then, silence.
+
+A mist of sparkles appears before you.
+
+From the sparkly mist emerges an unfamiliar being...
+
+Fairy Codmother: Mm... hehe. You think you's comin' into my forest,
+
+and you's not gettin' a piece of me?
+
+Mm... hehe. 
+
+Come on, now. I have very important things to attend to... 
+
+Mmmm... hehehe.
+""",
+     'choices': ['Battle Fairy Codmother'],
+     'optional': False, 'method': 'fairy_codmother_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': MOTHMAN_INTRO, 'color': purple, 'sleep': 3, 'theme': None,
+     'areas': [a.FOREST], 'time': [NIGHT], 'moon': None, 'season': None,
+     'text': """Walking down a lonesome forest road,
+
+You hear a loud flapping sound behind you, and it sounds like it's growing closer.
+
+Turning around, you are snatched up by a large, muscular man with insectoid 
+features and large, webbed wings.
+
+You bite into its strong hands, causing it to drop you into the adjacent field.
+
+Without saying a word, it quickly circles back and lands before you, ready for combat.
+""",
+     'choices': ['Battle Mothman'],
+     'optional': False, 'method': 'mothman_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': SASQUATCH_INTRO, 'color': purple, 'sleep': 3, 'theme': None,
+     'areas': [a.FOREST], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': """You stop to relieve yourself next to a batch of toadstools...
+
+While squeezing, you hear the pleasing sound of a saxophone being played from the bush.
+
+Curious, you make your way over to see who is playing the funky music.
+
+As you pull the bush open to look through, the music suddenly stops.
+
+Before you can think of your next move, a large, smelly, hairy brown head 
+pops up on the other side,
+
+and it does not look happy...
+""",
+     'choices': ['Battle Sasquatch'],
+     'optional': False, 'method': 'sasquatch_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': SKUNK_APE_INTRO, 'color': purple, 'sleep': 3, 'theme': None,
+     'areas': [a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': """You sit down for a quick rest...
+
+You'll find Chula eventually, nothing wrong with a quick break.
+
+Simultaneously, you've overcome by both an atrocious stench and 
+horrible sound, the sound of someone - or something - trying
+to play the saxophone and failing miserably.
+
+Before you can go to investigate, a large, shaggy being rips through
+the bush and charges at you.
+
+It has an absolutely bewildered look in its eye, like its capable of
+any wrongdoing without any risk of later remorse.
+""",
+     'choices': ['Battle Skunk Ape'],
+     'optional': False, 'method': 'skunk_ape_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': OGRE_INTRO, 'color': green, 'sleep': 3, 'theme': None,
+     'areas': [a.SWAMP], 'time': [DAY], 'moon': None, 'season': None,
+     'text': """Bushwhacking through a section of especially dense bush...
+
+You take a wrong step and lose your balance.
+
+Unable to brace your fall, your head bumps against a small boulder
+and you lose consciousness.
+
+After an uncertain amount of time, you awaken. 
+
+Looking around, you are on a small bed in a small cottage with a large pot of
+boiling water over an open flame.
+
+Before you can look for the door and try to leave,
+a towering being enters the room.
+
+As you search for words to navigate the situation,
+the being becomes increasingly distressed.
+
+Then, without warning, it lets out a mighty roar, rip off its handmade shirt,
+and aggressively stomps towards you.
+""",
+     'choices': ['Battle Ogre'],
+     'optional': False, 'method': 'ogre_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': HODAG_INTRO, 'color': red, 'sleep': 3, 'theme': None,
+     'areas': [a.SWAMP], 'time': [NIGHT], 'moon': None, 'season': None,
+     'text': """Trying to spot Chula in the swampy dead of night,
+
+an intimidating silhouette emerges from the brush.
+
+Tired of confrontation, you turn away and hope that, whatever
+it is, it loses interest.
+
+Moments later, you hear loud trampling heading towards you from behind. 
+
+Before you can turn around, it knocks you to the muck and jumps on top of you.
+
+Your headlamp flickers on and reveals a massive set of razor sharp teeth
+and a large set of eyes, each looking in a different direction.
+
+It roars and attempts to bite off your head, and just as it does so, 
+you seize an opportunity to roll over and escape.
+
+It immediately recovers and tramples at you again.
+""",
+     'choices': ['Battle Hodag'],
+     'optional': False, 'method': 'hodag_intro', 'replayable': False},
+
+
+
 ]

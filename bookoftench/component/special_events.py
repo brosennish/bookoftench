@@ -7,14 +7,16 @@ from bookoftench.component import functional_component, \
     OfficerEncounter, set_special_boss, Battle
 from bookoftench.data.audio import PUNCH, POSITIVE, MONSTER_ATTACK, PISTOL, BLADE, COINS
 from bookoftench.data.components import SPECIAL_EVENT
-from bookoftench.data.enemies import OILY_DOILY, BASTA_SHERMAN, SLENDERMAN
+from bookoftench.data.enemies import OILY_DOILY, BASTA_SHERMAN, SLENDERMAN, DEATH_WORM, CYCLOPS, SABERTOOTH_LIGER, \
+    GIANT_MUTANT_RAT, SEWER_GATOR, LUCKY_THE_LEPRECHAUN, FAIRY_CODMOTHER, MOTHMAN, SASQUATCH, SKUNK_APE, OGRE
 from bookoftench.data.illnesses import HERPES
 from bookoftench.data.items import TENCH_FILET, SWAMP, FOREST, CITY, CAVE
+from bookoftench.data.perks import BEER_GOGGLES
 from bookoftench.data.special_events import Special_Events, LOST_GOLD_P2
 from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent
 from bookoftench.model.item import load_items
-from bookoftench.model.perk import load_perks
+from bookoftench.model.perk import load_perks, perk_is_active
 from bookoftench.model.special_event import SpecialEvent, load_special_event
 from bookoftench.ui import red, purple, cyan, yellow, green, blue
 from bookoftench.util import print_and_sleep
@@ -127,10 +129,16 @@ class SpecialEventComponent(LabeledSelectionComponent):
         return self.leave or not self.game_state.player.is_alive()
 
     def display_options(self) -> None:
-        print_and_sleep(
-            self.special_event.color(self.special_event.text),
-            self.special_event.sleep
-        )
+        if self.special_event.color:
+            print_and_sleep(
+                self.special_event.color(self.special_event.text),
+                self.special_event.sleep
+            )
+        else:
+            print_and_sleep(
+                self.special_event.text,
+                self.special_event.sleep
+            )
 
         for binding in self.binding_map.values():
             if binding.key.lower() == "r":
@@ -210,7 +218,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
                 print_and_sleep(yellow("The Sensuous Being covers its mouth and giggles..."), 1.5)
                 print_and_sleep(yellow("The Sensuous Being gave you Herpes!"), 1.5)
                 player.acquire_illness(HERPES)
-                player.gain_or_lose_luck(-0.5)
+                player.gain_or_lose_luck(-0.1)
                 break
 
         print_and_sleep(purple("You kiss like a fish... hehehe."), 1.5)
@@ -383,14 +391,14 @@ class SpecialEventComponent(LabeledSelectionComponent):
             player.coins -= offer - woman_desired_coins
             if offer > woman_desired_coins:
                 player.gain_xp_other(offer - woman_desired_coins)
-            player.gain_or_lose_luck(0.05)
+            player.gain_or_lose_luck(0.1)
         else:
             damage = min(woman_desired_coins - offer, player.hp)
             player.hp -= damage
             play_sound(PUNCH)
             print_and_sleep(red(f"The woman slapped you for {damage} damage!"), 1)
             print_and_sleep(purple(f"That's for being a stingy bastard!\n"), 2)
-            player.gain_or_lose_luck(-0.05)
+            player.gain_or_lose_luck(-0.1)
             special_event_death_check(player)
 
 # ================================================================================================
@@ -414,7 +422,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
 
             item = random.choice(available_items)
             play_sound(POSITIVE)
-            player.gain_or_lose_luck(0.05)
+            player.gain_or_lose_luck(0.1)
             print_and_sleep(cyan(f"You found {'an' if item.name[0].lower() in 'aeiou' else 'a'} {item.name}!"), 1)
 
             if player.add_item(item):
@@ -429,7 +437,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
             player.hp -= damage
             play_sound(MONSTER_ATTACK)
             print_and_sleep(red(f"You were ravaged by an unseen creature."), 2)
-            player.gain_or_lose_luck(-0.05)
+            player.gain_or_lose_luck(-0.1)
 
             special_event_death_check(player)
 
@@ -441,6 +449,10 @@ class SpecialEventComponent(LabeledSelectionComponent):
 
     @staticmethod
     def triple_tench_dare(game_state: GameState, choice: int):
+        if perk_is_active(BEER_GOGGLES):
+            print_and_sleep(yellow("Nice try, cheater. I know Beer Goggles when I see 'em'."), 1)
+            return
+
         player = game_state.player
         seconds = choice * 5
 
@@ -501,7 +513,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
 # ================================================================================================
 
     @staticmethod
-    def oily_proposal(game_state: GameState, choice: int):
+    def oily_doily_intro(game_state: GameState, choice: int):
         player = game_state.player
         game_state.current_area.special_bosses.append(OILY_DOILY)
 
@@ -512,17 +524,17 @@ class SpecialEventComponent(LabeledSelectionComponent):
         else:
             if random.random() < 0.5:
                 print_and_sleep(yellow(f"You manage to escape, for now..."), 1.5)
-                player.luck += 0.5
+                player.gain_or_lose_luck(0.25)
             else:
                 print_and_sleep(red(f"You turn and run, but oily floats much faster..."), 1.5)
-                player.luck -= 0.5
+                player.gain_or_lose_luck(-0.25)
                 set_special_boss(game_state, OILY_DOILY)
                 Battle(game_state).run()
 
 # ================================================================================================
 
     @staticmethod
-    def basta_deal(game_state: GameState, choice: int):
+    def basta_intro(game_state: GameState, choice: int):
         player = game_state.player
         game_state.current_area.special_bosses.append(BASTA_SHERMAN)
 
@@ -538,10 +550,10 @@ class SpecialEventComponent(LabeledSelectionComponent):
         else:
             if random.random() < 0.5:
                 print_and_sleep(yellow(f"You manage to escape, for now..."), 1.5)
-                player.luck += 0.5
+                player.gain_or_lose_luck(0.25)
             else:
                 print_and_sleep(yellow(f"You try to run, but Basta is much too fast..."), 1.5)
-                player.luck -= 0.5
+                player.gain_or_lose_luck(-0.25)
                 set_special_boss(game_state, BASTA_SHERMAN)
                 Battle(game_state).run()
 
@@ -565,6 +577,127 @@ class SpecialEventComponent(LabeledSelectionComponent):
                 player.luck -= 0.25
                 set_special_boss(game_state, SLENDERMAN)
                 Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def death_worm_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(DEATH_WORM)
+            set_special_boss(game_state, DEATH_WORM)
+            Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def cyclops_intro(game_state: GameState, choice: int):
+        player = game_state.player
+        game_state.current_area.special_bosses.append(CYCLOPS)
+
+        if choice == 1:
+            set_special_boss(game_state, CYCLOPS)
+            Battle(game_state).run()
+        else:
+            if random.random() < 0.5:
+                print_and_sleep(yellow(f"You throw a rock and hit it directly in its pupil..."), 1.5)
+                print_and_sleep(yellow(f"It flinches just long enough for you to escape."), 1.5)
+                print_and_sleep(yellow(f"You have a feeling that it is not done with you..."), 1.5)
+                player.gain_or_lose_luck(0.25)
+            else:
+                print_and_sleep(yellow(f"You throw a rock at its eye but its just a bit outside..."), 1.5)
+                player.gain_or_lose_luck(-0.25)
+                set_special_boss(game_state, CYCLOPS)
+                Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def sabertooth_liger_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(SABERTOOTH_LIGER)
+            set_special_boss(game_state, SABERTOOTH_LIGER)
+            Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def giant_mutant_rat_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(GIANT_MUTANT_RAT)
+            set_special_boss(game_state, GIANT_MUTANT_RAT)
+            Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def sewer_gator_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(SEWER_GATOR)
+            set_special_boss(game_state, SEWER_GATOR)
+            Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def lucky_the_leprechaun_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(LUCKY_THE_LEPRECHAUN)
+            set_special_boss(game_state, LUCKY_THE_LEPRECHAUN)
+            Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def fairy_codmother_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(FAIRY_CODMOTHER)
+            set_special_boss(game_state, FAIRY_CODMOTHER)
+            Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def mothman_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(MOTHMAN)
+            set_special_boss(game_state, MOTHMAN)
+            Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def sasquatch_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(SASQUATCH)
+            set_special_boss(game_state, SASQUATCH)
+            Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def skunk_ape_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(SKUNK_APE)
+            set_special_boss(game_state, SKUNK_APE)
+            Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def ogre_intro(game_state: GameState, choice: int):
+         if choice:
+            game_state.current_area.special_bosses.append(OGRE)
+            set_special_boss(game_state, OGRE)
+            Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def hodag_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(OGRE)
+            set_special_boss(game_state, OGRE)
+            Battle(game_state).run()
 
 # ================================================================================================
 
