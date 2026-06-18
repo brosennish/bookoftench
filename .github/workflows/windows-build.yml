@@ -1,0 +1,30 @@
+name: Build Windows EXE
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pygame colorama pyinstaller
+
+      - name: Build
+        run: |
+          python -m PyInstaller --onedir --name "Book of Tench" --add-data "bookoftench\data;bookoftench\data" main.py
+
+      - name: Upload Windows Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Book-of-Tench-Windows
+          path: dist/Book of Tench
