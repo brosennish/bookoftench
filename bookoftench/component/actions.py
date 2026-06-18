@@ -284,29 +284,65 @@ class BuildLuckSelection(LinearComponent):
 
 # ================================================================================================
 
-class BuildIllnessSelection(LinearComponent):
+class BuildIllnessSelection(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, BuildBlindSelection)
-
-    def execute_current(self) -> None:
-        player = self.game_state.player
-        illnesses = [i for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
-        illness_names = [i['name'] for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
+        illnesses = [i for i in Illnesses if i['name'] != LATE_ONSET_SIDS]
         illnesses_sorted = sorted(illnesses, key=lambda i: i['name'])
-        for i in illnesses_sorted:
-            print_and_sleep(yellow(i['name']))
 
-        while True:
-            illness = safe_input(f"Add an illness or c to continue:")
-            if illness == "c":
-                return self.game_state
-            elif illness not in illness_names: # if it's not an illness
-                print_and_sleep(yellow("Illness not found - Please try again (case-sensitive)."))
-            else:
-                sickness = load_illnesses([illness])
-                player.illness = next(i for i in sickness)
-                player.illness_death_lvl = 1 + player.illness.levels_until_death
-                return self.game_state
+        illness_bindings = [
+            ReprBinding(
+                str(i + 1),
+                illness['name'],
+                self._handle_selection_component(illness['name']),
+                yellow(illness['name'])
+            )
+            for i, illness in enumerate(illnesses_sorted)
+        ]
+
+        continue_binding = SelectionBinding(
+            "C",
+            "Continue",
+            functional_component()(lambda: BuildBlindSelection(game_state).run())
+        )
+
+        super().__init__(
+            game_state,
+            refresh_menu=True,
+            bindings=[*illness_bindings, continue_binding]
+        )
+
+        self.selection_components = [
+            LabeledSelectionComponent(game_state, illness_bindings),
+            LabeledSelectionComponent(game_state, [continue_binding]),
+        ]
+
+    def display_options(self) -> None:
+        for component in self.selection_components:
+            component.display_options()
+
+    @staticmethod
+    def _handle_selection_component(illness_name: str) -> type[Component]:
+        @functional_component(state_dependent=True)
+        def selection_component(game_state: GameState):
+            valid_illness_names = [
+                illness['name']
+                for illness in Illnesses
+                if illness['name'] != LATE_ONSET_SIDS
+            ]
+
+            if illness_name not in valid_illness_names:
+                print_and_sleep(yellow("Illness not found - Please try again."))
+                return game_state
+
+            illness = load_illnesses([illness_name])
+            player = game_state.player
+
+            player.illness = next(i for i in illness)
+            player.illness_death_lvl = player.lvl + player.illness.levels_until_death
+
+            return BuildBlindSelection(game_state).run()
+
+        return selection_component
 
 # ================================================================================================
 
@@ -372,9 +408,9 @@ class BuildItemsSelection(LinearComponent):
         items = random.sample([i for i in Items], k=10)
         for i in items:
             if i['type'] == NORMAL:
-                print_and_sleep(cyan(f"{i['name']:<24}") + (dim(' | ')) + "HP: +" + (green(i['hp'])))
+                print_and_sleep(cyan(f"{i['name']:<24}") + (dim('\n')) + "HP: +" + (green(i['hp'])))
             else:
-                print_and_sleep(cyan(f"{i['name']:<24}") + (dim(' | ')) + (i['desc']))
+                print_and_sleep(cyan(f"{i['name']:<24}") + (dim('\n')) + (i['desc']))
 
         selections = []
         while True:
