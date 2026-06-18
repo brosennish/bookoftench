@@ -8,7 +8,7 @@ from bookoftench.component import functional_component, \
 from bookoftench.data.audio import PUNCH, POSITIVE, MONSTER_ATTACK, PISTOL, BLADE, COINS
 from bookoftench.data.components import SPECIAL_EVENT
 from bookoftench.data.enemies import OILY_DOILY, BASTA_SHERMAN, SLENDERMAN, DEATH_WORM, CYCLOPS, SABERTOOTH_LIGER, \
-    GIANT_MUTANT_RAT, SEWER_GATOR
+    GIANT_MUTANT_RAT, SEWER_GATOR, LUCKY_THE_LEPRECHAUN, FAIRY_CODMOTHER, MOTHMAN, SASQUATCH, SKUNK_APE, OGRE
 from bookoftench.data.illnesses import HERPES
 from bookoftench.data.items import TENCH_FILET, SWAMP, FOREST, CITY, CAVE
 from bookoftench.data.special_events import Special_Events, LOST_GOLD_P2
@@ -625,6 +625,62 @@ class SpecialEventComponent(LabeledSelectionComponent):
     def sewer_gator_intro(game_state: GameState):
         game_state.current_area.special_bosses.append(SEWER_GATOR)
         set_special_boss(game_state, SEWER_GATOR)
+        Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def lucky_the_leprechaun_intro(game_state: GameState):
+        game_state.current_area.special_bosses.append(LUCKY_THE_LEPRECHAUN)
+        set_special_boss(game_state, LUCKY_THE_LEPRECHAUN)
+        Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def fairy_codmother_intro(game_state: GameState):
+        game_state.current_area.special_bosses.append(FAIRY_CODMOTHER)
+        set_special_boss(game_state, FAIRY_CODMOTHER)
+        Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def mothman_intro(game_state: GameState):
+        game_state.current_area.special_bosses.append(MOTHMAN)
+        set_special_boss(game_state, MOTHMAN)
+        Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def sasquatch_intro(game_state: GameState):
+        game_state.current_area.special_bosses.append(SASQUATCH)
+        set_special_boss(game_state, SASQUATCH)
+        Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def skunk_ape_intro(game_state: GameState):
+        game_state.current_area.special_bosses.append(SKUNK_APE)
+        set_special_boss(game_state, SKUNK_APE)
+        Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def ogre_intro(game_state: GameState):
+        game_state.current_area.special_bosses.append(OGRE)
+        set_special_boss(game_state, OGRE)
+        Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def hodag_intro(game_state: GameState):
+        game_state.current_area.special_bosses.append(OGRE)
+        set_special_boss(game_state, OGRE)
         Battle(game_state).run()
 
 # ================================================================================================

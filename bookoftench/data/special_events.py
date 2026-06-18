@@ -28,10 +28,17 @@ WEDNESDAY_NEWS = "Wednesday News"
 BASTA_INTRO = "Basta Intro"
 CYCLOPS_INTRO = "Cyclops Intro"
 DEATH_WORM_INTRO = "Death Worm Intro"
+FAIRY_CODMOTHER_INTRO = "Fairy Codmother Intro"
 GIANT_MUTANT_RAT_INTRO = "Giant Mutant Rat Intro"
+HODAG_INTRO = "Hodag Intro"
+LUCKY_THE_LEPRECHAUN_INTRO = "Lucky The Leprechaun Intro"
+MOTHMAN_INTRO = "Mothman Intro"
+OGRE_INTRO = "Ogre Intro"
 OILY_DOILY_INTRO = "Oily Intro"
 SABERTOOTH_LIGER_INTRO = "Sabertooth Liger Intro"
+SASQUATCH_INTRO = "Sasquatch Intro"
 SEWER_GATOR_INTRO = "Sewer Gator Intro"
+SKUNK_APE_INTRO = "Skunk Ape Intro"
 SLENDER_INTRO = "Slender Intro"
 
 # Investment Opportunities
@@ -384,7 +391,7 @@ would never shut up about.
 
 You adjust your jines and prepare for the inevitable...
 """,
-     'choices': ['Battle the Death Worm'],
+     'choices': ['Battle Death Worm'],
      'optional': False, 'method': 'death_worm_intro', 'replayable': False},
 
 # ================================================================================================
@@ -406,7 +413,7 @@ The creature quickly rises to its feet and begins charging towards you.
 
 What do you do?
 """,
-     'choices': ['Battle the Cyclops', 'Try to Escape'],
+     'choices': ['Battle Cyclops', 'Try to Escape'],
      'optional': False, 'method': 'death_worm_intro', 'replayable': False},
 
 # ================================================================================================
@@ -422,7 +429,7 @@ Before your eyes can make out what it is that's attacking you...
 It lets out an Earth-shaking roar that can only be from one thing -
 a Sabertooth Liger. 
 """,
-     'choices': ['Battle the Sabertooth Liger'],
+     'choices': ['Battle Sabertooth Liger'],
      'optional': False, 'method': 'sabertooth_liger_intro', 'replayable': False},
 
 # ================================================================================================
@@ -446,7 +453,7 @@ for that level of communication.
 Nonetheless, this monstrosity has been waiting for someone to cook and eat,
 and you arrived right on time.
 """,
-     'choices': ['Battle the Giant Mutant Rat'],
+     'choices': ['Battle Giant Mutant Rat'],
      'optional': False, 'method': 'giant_mutant_rat_intro', 'replayable': False},
 
 # ================================================================================================
@@ -474,7 +481,179 @@ Struggling, you manage to break free, now resting on the metal platform.
 
 A creature bursts from the water and joins you, clearly ready for its next meal.
 """,
-     'choices': ['Battle the Sewer Gator'],
+     'choices': ['Battle Sewer Gator'],
      'optional': False, 'method': 'sewer_gator_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': LUCKY_THE_LEPRECHAUN_INTRO, 'color': green, 'sleep': 3, 'theme': None,
+     'areas': [a.FOREST], 'time': [DAY], 'moon': None, 'season': None,
+     'text': """Lucky the Leprechaun: Suck me jines,
+
+I'm a leprechaun!
+
+Yer not gettin' a drop of me precious gold!'
+
+Tehehehehehehe.
+
+If yer lucky, ye won't end up in Hell when I'm through with ya!
+
+And ye know what else?
+
+Ye can suck me jines,
+'cause I'm a leprechaun!
+""",
+     'choices': ['Battle Lucky the Leprechaun'],
+     'optional': False, 'method': 'lucky_the_leprechaun_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': FAIRY_CODMOTHER_INTRO, 'color': purple, 'sleep': 3, 'theme': None,
+     'areas': [a.FOREST], 'time': [DAY], 'moon': None, 'season': None,
+     'text': """Walking through the quiet forest,
+
+You begin to hear the faint sound of whistling in the distance.
+
+Looking and searching for the source, it suddenly becomes deafening,
+as if it someone is whistling through a megaphone directly into your earhole.
+
+After a moment, it's even quieter than it was to begin with. 
+
+A moment later, it is the loudest its been, with you covering your ears in
+excruciating pain.
+
+Then, silence.
+
+A mist of sparkles appears before you.
+
+From the sparkly mist emerges an unfamiliar being...
+
+Fairy Codmother: Mm... hehe. You think you's comin' into my forest,
+
+and you's not gettin' a piece of me?
+
+Mm... hehe. 
+
+Come on, now. I have very important things to attend to... 
+
+Mmmm... hehehe.
+""",
+     'choices': ['Battle Fairy Codmother'],
+     'optional': False, 'method': 'fairy_codmother_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': MOTHMAN_INTRO, 'color': purple, 'sleep': 3, 'theme': None,
+     'areas': [a.FOREST], 'time': [NIGHT], 'moon': None, 'season': None,
+     'text': """Walking down a lonesome forest road,
+
+You hear a loud flapping sound behind you, and it sounds like it's growing closer.
+
+Turning around, you are snatched up by a large, muscular man with insectoid 
+features and large, webbed wings.
+
+You bite into its strong hands, causing it to drop you into the adjacent field.
+
+Without saying a word, it quickly circles back and lands before you, ready for combat.
+""",
+     'choices': ['Battle Mothman'],
+     'optional': False, 'method': 'mothman_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': SASQUATCH_INTRO, 'color': purple, 'sleep': 3, 'theme': None,
+     'areas': [a.FOREST], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': """You stop to relieve yourself next to a batch of toadstools...
+
+While squeezing, you hear the pleasing sound of a saxophone being played from the bush.
+
+Curious, you make your way over to see who is playing the funky music.
+
+As you pull the bush open to look through, the music suddenly stops.
+
+Before you can think of your next move, a large, smelly, hairy brown head 
+pops up on the other side,
+
+and it does not look happy...
+""",
+     'choices': ['Battle Sasquatch'],
+     'optional': False, 'method': 'sasquatch_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': SKUNK_APE_INTRO, 'color': purple, 'sleep': 3, 'theme': None,
+     'areas': [a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': """You sit down for a quick rest...
+
+You'll find Chula eventually, nothing wrong with a quick break.
+
+Simultaneously, you've overcome by both an atrocious stench and 
+horrible sound, the sound of someone - or something - trying
+to play the saxophone and failing miserably.
+
+Before you can go to investigate, a large, shaggy being rips through
+the bush and charges at you.
+
+It has an absolutely bewildered look in its eye, like its capable of
+any wrongdoing without any risk of later remorse.
+""",
+     'choices': ['Battle Skunk Ape'],
+     'optional': False, 'method': 'skunk_ape_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': OGRE_INTRO, 'color': green, 'sleep': 3, 'theme': None,
+     'areas': [a.SWAMP], 'time': [DAY], 'moon': None, 'season': None,
+     'text': """Bushwhacking through a section of especially dense bush...
+
+You take a wrong step and lose your balance.
+
+Unable to brace your fall, your head bumps against a small boulder
+and you lose consciousness.
+
+After an uncertain amount of time, you awaken. 
+
+Looking around, you are on a small bed in a small cottage with a large pot of
+boiling water over an open flame.
+
+Before you can look for the door and try to leave,
+a towering being enters the room.
+
+As you search for words to navigate the situation,
+the being becomes increasingly distressed.
+
+Then, without warning, it lets out a mighty roar, rip off its handmade shirt,
+and aggressively stomps towards you.
+""",
+     'choices': ['Battle Ogre'],
+     'optional': False, 'method': 'ogre_intro', 'replayable': False},
+
+# ================================================================================================
+
+{'name': HODAG_INTRO, 'color': red, 'sleep': 3, 'theme': None,
+     'areas': [a.SWAMP], 'time': [NIGHT], 'moon': None, 'season': None,
+     'text': """Trying to spot Chula in the swampy dead of night,
+
+an intimidating silhouette emerges from the brush.
+
+Tired of confrontation, you turn away and hope that, whatever
+it is, it loses interest.
+
+Moments later, you hear loud trampling heading towards you from behind. 
+
+Before you can turn around, it knocks you to the muck and jumps on top of you.
+
+Your headlamp flickers on and reveals a massive set of razor sharp teeth
+and a large set of eyes, each looking in a different direction.
+
+It roars and attempts to bite off your head, and just as it does so, 
+you seize an opportunity to roll over and escape.
+
+It immediately recovers and tramples at you again.
+""",
+     'choices': ['Battle Hodag'],
+     'optional': False, 'method': 'hodag_intro', 'replayable': False},
+
+
 
 ]

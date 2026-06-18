@@ -357,13 +357,9 @@ Cave_Special_Bosses = []
 
 City_Special_Bosses = []
 
-Forest_Special_Bosses = [
-    FAIRY_CODMOTHER, LUCKY_THE_LEPRECHAUN, MOTHMAN, SASQUATCH,
-]
+Forest_Special_Bosses = []
 
-Swamp_Special_Bosses = [
-    HODAG, OGRE, SKUNK_APE
-]
+Swamp_Special_Bosses = []
 
 # ================================================================================================
 
