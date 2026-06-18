@@ -46,7 +46,7 @@ class Achievement:
                 filtered: List[Perk] = load_perks(lambda p: not p.active)
                 if len(filtered) > 0:
                     reward: Perk = random.choice(filtered)
-                    reward_callback = lambda: reward.activate()
+                    reward_callback = lambda: reward.activate_print()
                     reward_str = f"{reward.name} | {reward.description}"
             case _:
                 raise NotImplementedError(f"No reward type: {self.reward_type}")

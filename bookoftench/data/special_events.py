@@ -2,7 +2,8 @@ from bookoftench.data import areas as a
 from bookoftench.data.audio import ROULETTE_THEME, HOHKKEN_THEME, HOSPITAL_THEME, BATTLE_THEME
 from bookoftench.data.enemies import OILY_DOILY
 from bookoftench.data.enviroment import DAY, NIGHT
-from bookoftench.ui import green, purple, yellow, blue, red, white, orange
+from bookoftench.data.investments import SEMEN_CANDLE, SUN_SUITS, BOBS_BOXES
+from bookoftench.ui import green, purple, yellow, blue, red, white, orange, cyan
 
 # ================================================================================================
 
@@ -42,7 +43,10 @@ SKUNK_APE_INTRO = "Skunk Ape Intro"
 SLENDER_INTRO = "Slender Intro"
 
 # Investment Opportunities
-
+BOB_ROBERTSON_PROPOSAL = "Bob Robertson Proposal"
+MAIL_ORDER_EGGS = "Mail Order Eggs"
+SEMEN_CANDLE_PROPOSAL = "Semen Candle Proposal"
+SUN_SUITS_PROPOSAL = "Sun Suits Proposal"
 
 # Text-Only
 SANTAS_SNOW = "Santa's Snow"
@@ -51,7 +55,7 @@ SANTAS_SNOW = "Santa's Snow"
 
 Special_Events = [
 
-    {'name': GREEDY_BASTARD, 'color': purple, 'sleep': 3, 'theme': None,
+    {'name': GREEDY_BASTARD, 'color': purple, 'sleep': 0, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """An old woman with wrinkled eyeballs wearing a soiled cloak approaches you.
 
@@ -66,7 +70,7 @@ How much do you want? Hehehe.
 
 # ================================================================================================
 
-    {'name': HERPES_KISS, 'color': purple, 'sleep': 3, 'theme': None,
+    {'name': HERPES_KISS, 'color': purple, 'sleep': 0, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """A sensuous being with mealy lips and a hint of humanity approaches.
 
@@ -83,7 +87,7 @@ I will give you 8 of coin for each kiss... hehehe.
 
 # ================================================================================================
 
-    {'name': LOST_GOLD_P1, 'stage': 1, 'color': blue, 'sleep': 3, 'theme': None,
+    {'name': LOST_GOLD_P1, 'stage': 1, 'color': blue, 'sleep': 0, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You smell the overwhelming stench of brine-soaked jines...
 
@@ -96,7 +100,7 @@ Tell me matey, wher' can I find me gold?
 
 # ================================================================================================
 
-    {'name': LOST_GOLD_P2, 'stage': 2, 'color': red, 'sleep': 3, 'theme': None,
+    {'name': LOST_GOLD_P2, 'stage': 2, 'color': red, 'sleep': 0, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You smell a familiar stench...
 
@@ -112,7 +116,7 @@ Aye, and if yer dry, a tench filet would also do.
 
 # ================================================================================================
 
-    {'name': NEWS_HEADLESS_WHORES_MAN, 'color': orange, 'sleep': 3, 'theme': None,
+    {'name': NEWS_HEADLESS_WHORES_MAN, 'color': orange, 'sleep': 0, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
 
@@ -129,7 +133,7 @@ Reporting live from the Swamp, I'm Shannon O'Shanahan, Shebokken News.
 
 # ================================================================================================
 
-    {'name': NEWS_HOHKKEN_ENTERS_CITY, 'color': orange, 'sleep': 3, 'theme': None,
+    {'name': NEWS_HOHKKEN_ENTERS_CITY, 'color': orange, 'sleep': 0, 'theme': None,
      'areas': [a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
 
@@ -151,7 +155,7 @@ Reporting live from Shebokken, I'm Shannon O'Shanahan, Shebokken News.
 
 # ================================================================================================
 
-    {'name': NEWS_WHALE_MAN, 'color': orange, 'sleep': 3, 'theme': None,
+    {'name': NEWS_WHALE_MAN, 'color': orange, 'sleep': 0, 'theme': None,
      'areas': [a.FOREST], 'time': [DAY], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
 
@@ -185,7 +189,7 @@ Reporting live from Shebokken, I'm Shannon O'Shanahan, Shebokken News.
 
 # ================================================================================================
 
-    {'name': WEDNESDAY_NEWS, 'color': orange, 'sleep': 3, 'theme': None,
+    {'name': WEDNESDAY_NEWS, 'color': orange, 'sleep': 0, 'theme': None,
      'areas': [a.FOREST, a.SWAMP], 'time': [DAY], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
 
@@ -207,7 +211,7 @@ Wednesday Wednesday's Wednesday News, only on Wednesdays.
 
 # ================================================================================================
 
-    {'name': PROBING, 'color': green, 'sleep': 3, 'theme': None,
+    {'name': PROBING, 'color': green, 'sleep': 0, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """You were abducted by aliens!
 
@@ -220,7 +224,7 @@ What do you do?
 
 # ================================================================================================
 
-    {'name': SANTAS_SNOW, 'color': white, 'sleep': 3, 'theme': None,
+    {'name': SANTAS_SNOW, 'color': blue, 'sleep': 0, 'theme': None,
      'areas': [a.CITY], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """A sad, old, fat man with a huge bulge descends from the sky.
 
@@ -234,7 +238,7 @@ I think I left my Snow in the Cave...
 
 # ================================================================================================
 
-    {'name': SHEBOKKEN_ROULETTE, 'color': purple, 'sleep': 3, 'theme': ROULETTE_THEME,
+    {'name': SHEBOKKEN_ROULETTE, 'color': purple, 'sleep': 0, 'theme': ROULETTE_THEME,
      'areas': [a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """A leather-skinned man approaches you, revolver in hand.
 
@@ -248,7 +252,7 @@ What's your wager?
 
 # ================================================================================================
 
-    {'name': STINGY_BASTARD, 'color': purple, 'sleep': 3, 'theme': None,
+    {'name': STINGY_BASTARD, 'color': purple, 'sleep': 0, 'theme': None,
      'areas': [a.CAVE, a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """An old woman with two noses and three nostrils approaches you.
 
@@ -263,7 +267,7 @@ How much will you give me? Hehehe.
 
 # ================================================================================================
 
-    {'name': THREE_HOLES, 'color': purple, 'sleep': 3, 'theme': None,
+    {'name': THREE_HOLES, 'color': purple, 'sleep': 0, 'theme': None,
      'areas': [a.CAVE, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You come upon three holes in the ground...
         
@@ -279,7 +283,7 @@ it whispers that you may only reach into one of the holes.
 
 # ================================================================================================
 
-    {'name': TRIPLE_TENCH_DARE, 'color': yellow, 'sleep': 3, 'theme': None,
+    {'name': TRIPLE_TENCH_DARE, 'color': yellow, 'sleep': 0, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY], 'moon': None, 'season': None,
      'text': """A rambunctious boy approaches you, dad's wallet in hand...
      
@@ -293,7 +297,7 @@ How many seconds?
 
 # ================================================================================================
 
-    {'name': ZONKED, 'color': purple, 'sleep': 3, 'theme': None,
+    {'name': ZONKED, 'color': purple, 'sleep': 0, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You come across a man who is totally zonked...
 
@@ -308,7 +312,7 @@ What do you do?
 
 # ================================================================================================
 
-{'name': OILY_DOILY_INTRO, 'color': red, 'sleep': 3, 'theme': HOSPITAL_THEME,
+{'name': OILY_DOILY_INTRO, 'color': red, 'sleep': 0, 'theme': HOSPITAL_THEME,
      'areas': [a.CITY], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """You turn and see a giant balloon floating towards you...
 
@@ -331,7 +335,7 @@ What do you do?
 
 # ================================================================================================
 
-    {'name': BASTA_INTRO, 'color': red, 'sleep': 3, 'theme': BATTLE_THEME,
+    {'name': BASTA_INTRO, 'color': red, 'sleep': 0, 'theme': BATTLE_THEME,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """A pair of hands clutches your shirt and pulls you into an alleyway...
 
@@ -353,7 +357,7 @@ What's it gonna be, Mr. Son of Mayor?
 
 # ================================================================================================
 
-    {'name': SLENDER_INTRO, 'color': red, 'sleep': 3, 'theme': HOSPITAL_THEME,
+    {'name': SLENDER_INTRO, 'color': red, 'sleep': 0, 'theme': HOSPITAL_THEME,
      'areas': [a.FOREST], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """Stumbling through the dark forest, you feel you're being followed...
 
@@ -376,7 +380,7 @@ What do you do?
 
 # ================================================================================================
 
-{'name': DEATH_WORM_INTRO, 'color': red, 'sleep': 3, 'theme': None,
+{'name': DEATH_WORM_INTRO, 'color': red, 'sleep': 0, 'theme': BATTLE_THEME,
      'areas': [a.CAVE], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You feel the damp floor of the cave begin to shake...
 
@@ -396,7 +400,7 @@ You adjust your jines and prepare for the inevitable...
 
 # ================================================================================================
 
-{'name': CYCLOPS_INTRO, 'color': red, 'sleep': 3, 'theme': None,
+{'name': CYCLOPS_INTRO, 'color': red, 'sleep': 0, 'theme': BATTLE_THEME,
      'areas': [a.CAVE], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You feel something off about the latest tunnel you ventured into...
 
@@ -418,7 +422,7 @@ What do you do?
 
 # ================================================================================================
 
-{'name': SABERTOOTH_LIGER_INTRO, 'color': red, 'sleep': 3, 'theme': None,
+{'name': SABERTOOTH_LIGER_INTRO, 'color': red, 'sleep': 0, 'theme': BATTLE_THEME,
      'areas': [a.CAVE], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """Something tackles you from behind...
 
@@ -434,7 +438,7 @@ a Sabertooth Liger.
 
 # ================================================================================================
 
-{'name': GIANT_MUTANT_RAT_INTRO, 'color': red, 'sleep': 3, 'theme': None,
+{'name': GIANT_MUTANT_RAT_INTRO, 'color': red, 'sleep': 0, 'theme': BATTLE_THEME,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """Searching for Chula in the back of Renaldo's Pizzeria -
 
@@ -458,7 +462,7 @@ and you arrived right on time.
 
 # ================================================================================================
 
-{'name': SEWER_GATOR_INTRO, 'color': green, 'sleep': 3, 'theme': None,
+{'name': SEWER_GATOR_INTRO, 'color': green, 'sleep': 0, 'theme': BATTLE_THEME,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """Swimming through the sewers underneath the streets of Shebokken,
 
@@ -486,7 +490,7 @@ A creature bursts from the water and joins you, clearly ready for its next meal.
 
 # ================================================================================================
 
-{'name': LUCKY_THE_LEPRECHAUN_INTRO, 'color': green, 'sleep': 3, 'theme': None,
+{'name': LUCKY_THE_LEPRECHAUN_INTRO, 'color': green, 'sleep': 0, 'theme': BATTLE_THEME,
      'areas': [a.FOREST], 'time': [DAY], 'moon': None, 'season': None,
      'text': """Lucky the Leprechaun: Suck me jines,
 
@@ -508,7 +512,7 @@ Ye can suck me jines,
 
 # ================================================================================================
 
-{'name': FAIRY_CODMOTHER_INTRO, 'color': purple, 'sleep': 3, 'theme': None,
+{'name': FAIRY_CODMOTHER_INTRO, 'color': purple, 'sleep': 0, 'theme': BATTLE_THEME,
      'areas': [a.FOREST], 'time': [DAY], 'moon': None, 'season': None,
      'text': """Walking through the quiet forest,
 
@@ -543,7 +547,7 @@ Mmmm... hehehe.
 
 # ================================================================================================
 
-{'name': MOTHMAN_INTRO, 'color': purple, 'sleep': 3, 'theme': None,
+{'name': MOTHMAN_INTRO, 'color': purple, 'sleep': 0, 'theme': BATTLE_THEME,
      'areas': [a.FOREST], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """Walking down a lonesome forest road,
 
@@ -561,7 +565,7 @@ Without saying a word, it quickly circles back and lands before you, ready for c
 
 # ================================================================================================
 
-{'name': SASQUATCH_INTRO, 'color': purple, 'sleep': 3, 'theme': None,
+{'name': SASQUATCH_INTRO, 'color': purple, 'sleep': 0, 'theme': BATTLE_THEME,
      'areas': [a.FOREST], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You stop to relieve yourself next to a batch of toadstools...
 
@@ -581,7 +585,7 @@ and it does not look happy...
 
 # ================================================================================================
 
-{'name': SKUNK_APE_INTRO, 'color': purple, 'sleep': 3, 'theme': None,
+{'name': SKUNK_APE_INTRO, 'color': purple, 'sleep': 0, 'theme': BATTLE_THEME,
      'areas': [a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You sit down for a quick rest...
 
@@ -602,7 +606,7 @@ any wrongdoing without any risk of later remorse.
 
 # ================================================================================================
 
-{'name': OGRE_INTRO, 'color': green, 'sleep': 3, 'theme': None,
+{'name': OGRE_INTRO, 'color': green, 'sleep': 0, 'theme': BATTLE_THEME,
      'areas': [a.SWAMP], 'time': [DAY], 'moon': None, 'season': None,
      'text': """Bushwhacking through a section of especially dense bush...
 
@@ -630,7 +634,7 @@ and aggressively stomps towards you.
 
 # ================================================================================================
 
-{'name': HODAG_INTRO, 'color': red, 'sleep': 3, 'theme': None,
+{'name': HODAG_INTRO, 'color': red, 'sleep': 0, 'theme': BATTLE_THEME,
      'areas': [a.SWAMP], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """Trying to spot Chula in the swampy dead of night,
 
@@ -654,6 +658,152 @@ It immediately recovers and tramples at you again.
      'choices': ['Battle Hodag'],
      'optional': False, 'method': 'hodag_intro', 'replayable': False},
 
+# ================================================================================================
+
+{'name': SEMEN_CANDLE_PROPOSAL, 'color': cyan, 'sleep': 0, 'theme': None,
+     'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
+     'text': """You encounter a man in a condom costume with a fake flame on his head...
+
+Semen Candle Rep: What's your name, there?
+
+You tell him your name.
+
+Semen Candle Rep: No matter, I'll just call you Jeffrey if that's alright.
+
+You nod.
+
+Semen Candle Rep: Let me ask you, old sport, if a candle were to smell like you,
+would it smell like your hair? Maybe your pits? Your seed?
+
+You shrug.
+
+Semen Candle Rep: Very good, it would smell of your seed, and, indeed, it is your
+lucky day, as I wish to cordially invite you to get in on the ground floor of 
+Shebokken's next and last favorite candle - Semen Candle!
+
+Soon, the scent of man, the stench of potential offspring, and the sweet smell of jines
+will fill every room in this terrible city.
+
+So, we have four investment opportunities...
+
+Investment: Semen Candle
+Risk: High
+Potential Return: 4x-8x
+Maturity: 3-4 Levels
+""",
+     'choices': ['Invest 10', 'Invest 25', 'Invest 50', 'Invest 100'],
+     'investment': SEMEN_CANDLE,
+     'optional': True, 'method': 'make_investment', 'replayable': False},
+
+# ================================================================================================
+
+{'name': SUN_SUITS_PROPOSAL, 'color': cyan, 'sleep': 0, 'theme': None,
+     'areas': [a.CITY], 'time': [DAY], 'moon': None, 'season': None,
+     'text': """You encounter a man who appears to be completely naked...
+
+Sun Suits Rep: Don't be alarmed! I am fully clothed, so there is no need for alarm.
+
+You point to the man's jines, clearly visible in the beating sun.
+
+Sun Suits Rep: Are you tired of spraying sunscreen on your tasty little arms?
+Are you sick of having to ask strangers to rub lotion on your jines and rump,
+just because it's such a chore for you to do it yourself?
+
+You hesitate, then nod.
+
+Sun Suits Rep: Well fret no more! My company has invented a revolutionary new way
+to protect yourself from those pesky UV rays.
+
+You raise an eyebrow in curiosity.
+
+Sun Suits Rep: The answer to your problem is what I am wearing at this very moment...
+Sun Suits! Sun Suits are transparent, elastic, and washable. 
+
+Stop burning through gallons of sunblock and join us as an early investor today! 
+
+We have four investment options, and remember, it's now or never, boy.
+
+Investment: Sun Suits
+Risk: Medium
+Potential Return: 2x-4x
+Maturity: 2-3 Levels
+""",
+     'choices': ['Invest 10', 'Invest 25', 'Invest 50', 'Invest 100'],
+     'investment': SUN_SUITS,
+     'optional': True, 'method': 'make_investment', 'replayable': False},
+
+# ================================================================================================
+
+{'name': BOB_ROBERTSON_PROPOSAL, 'color': cyan, 'sleep': 0, 'theme': None,
+     'areas': [a.CITY], 'time': [DAY], 'moon': None, 'season': None,
+     'text': """A gangly, nervous man with 70's glasses and a Goodwill button-up approaches you...
+
+Bob Robertson: Hi there. I'm, uh, Bob Robertson.
+
+So, yes. Uh... recently, I started up my own door-to-door, uh, cardboard box delivery business.
+
+However, I'm... uh... having some difficulties, both financial and otherwise.
+
+You know, I don't have a, uh, car, so... I have to delivery on foot, yes.
+
+Many times, folks have pulled knives and related weaponry on me when I've knocked on their entryways.
+
+I'm looking for investors to provide funding that I can use to, uh, buy a new pair of shoes, as well as
+a bladed weapon of sorts in order to protect myself and my, uh, jines, yes.
+
+Anyway, if you could invest any of the following amounts, I will do my best to give you a, uh, 
+real good return on investment there, yes.
+
+Investment: Bob Robertson's Door-to-Door Cardboard Box Delivery Business
+Risk: High
+Potential Return: 4x-8x
+Maturity: 3-4 Levels
+""",
+     'choices': ['Invest 10', 'Invest 25', 'Invest 50', 'Invest 100'],
+     'investment': BOBS_BOXES,
+     'optional': True, 'method': 'make_investment', 'replayable': False},
+
+# ================================================================================================
+
+{'name': MAIL_ORDER_EGGS, 'color': cyan, 'sleep': 0, 'theme': None,
+     'areas': [a.CITY], 'time': [DAY], 'moon': None, 'season': None,
+     'text': """A man in an Vladymir Georgina suit approaches you...
+
+Mail Order Egg Rep: What's more trustworthy than the Shebokken Postal Service?
+Your local green grocer? I don't fuckin' think so.
+
+I mean, don't you just fuckin' hate your local green grocer?
+
+You know I do. 
+
+Look, are you tired of having some drunk piece of shit delivery bozo 
+smashing up the cases of eggs that you worked your tail off just to afford
+so you can feed your gut hut?
+
+You're looking out the window, so happy they finally came, until you see this
+behemoth lift up sixteen cases of eggs and carelessly drop them right on your
+driveway. Then, when you confront him about it, he threatens to rip your limbs
+off, and there's nothing you can do - and you know it.
+
+So what's the answer to that? Mail Order Eggs, of course!
+
+On-time, white-glove delivery, a refined, elegant man or woman will arrive 
+to your mailbox and place the eggs inside with the same care and tact they would
+if it were a golden tench.
+
+We are seeking investors to get in on this before it becomes the biggest thing
+since Crabs on Rye.
+
+What do you say?
+
+Investment: Mail Order Eggs
+Risk: Medium
+Potential Return: 2x-4x
+Maturity: 2-3 Levels
+""",
+     'choices': ['Invest 10', 'Invest 25', 'Invest 50', 'Invest 100'],
+     'investment': MAIL_ORDER_EGGS,
+     'optional': True, 'method': 'make_investment', 'replayable': False},
 
 
 ]

@@ -23,8 +23,9 @@ from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, 
     GenericStealEvent
 from .fish import Fish
 from .fishing_item import FishingItem
+from .investment import Investment
 from .item import Item, load_items
-from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
+from .perk import attach_perk, perk_is_active, Perk, activate_perk_print, attach_perks
 from .trait import Trait
 from .weapon import load_weapons, Weapon
 from bookoftench.data.enviroment import DAY, NIGHT, FULL, WETTING, DRYING
@@ -147,6 +148,11 @@ class Player(Combatant):
     items: Dict[str, Item] = field(default_factory=item_defaults)
     weapon_dict: Dict[str, PlayerWeapon] = field(default_factory=weapon_defaults)
     current_weapon: Weapon = None
+
+    investments: List[Investment] = field(default_factory=list)
+    expired_investment_opportunities: List[str] = field(default_factory=list)
+
+# ================================================================================================
 
     def __post_init__(self):
         self.current_weapon = self.weapon_dict[BARE_HANDS]
@@ -494,7 +500,7 @@ class Player(Combatant):
         if perk_is_active(perk.name):
             print_and_sleep(yellow(f"You already have this perk."), 1)
             return False
-        activate_perk(perk.name)
+        activate_perk_print(perk.name)
         return True
 
     def gain_coins(self, amount: int) -> None:
@@ -691,6 +697,23 @@ class Player(Combatant):
                     gain = min(3, self.max_hp - self.hp)
                     self.gain_hp(gain)
                     print_and_sleep(purple(f"Restored {gain} HP with Vampiric Sperm!"), 1)
+
+        @subscribe_function(LevelUpEvent)
+        def handle_investments():
+            for v in self.investments:
+                if not v.active:
+                    continue
+                if v.maturity_lvl == self.lvl:
+                    if random.random() < v.success_rate:
+                        payout = round(v.value * v.multiplier)
+                        v.value = payout
+                        print_and_sleep(green(f"{v.success_text}"), 1.5)
+                        self.gain_coins(payout)
+                    else:
+                        print_and_sleep(yellow(f"{v.failure_text}"), 1.5)
+                        print_and_sleep(yellow(f"Your investment of {v.value} ran dry."), 1.5)
+                        v.value = 0
+                    v.active = False
 
     # for loading from save file
     def __setstate__(self, state):

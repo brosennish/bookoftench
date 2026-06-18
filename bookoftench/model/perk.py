@@ -109,8 +109,11 @@ class Perk[T](Buyable):
     def active(self) -> bool:
         return self._active
 
-    def activate(self) -> None:
+    def activate_print(self) -> None:
         print_and_sleep(purple(f"{self.name} added to perks."), 1)
+        self._active = True
+
+    def activate_no_print(self) -> None:
         self._active = True
 
     def get_wrapper(self, index: int) -> Callable[[T, str, bool], T]:
@@ -183,8 +186,11 @@ def load_perk(perk_name: str) -> Perk:
 
 # ================================================================================================
 
-def activate_perk(perk_name: str) -> None:
-    load_perk(perk_name).activate()
+def activate_perk_print(perk_name: str) -> None:
+    load_perk(perk_name).activate_print()
+
+def activate_perk_no_print(perk_name: str) -> None:
+    load_perk(perk_name).activate_no_print()
 
 # ================================================================================================
 

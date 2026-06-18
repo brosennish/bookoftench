@@ -18,6 +18,7 @@ from ..data.enviroment import DAY
 from ..data.fish import AGITATED, SPOOKED, CALM, SHALLOWS, BAY, OCEAN, Fish_Species, MALE, FEMALE, COMMON, UNCOMMON, \
     RARE, LEGENDARY
 from ..data.fishing_areas import WET_SEASON, DRY_SEASON
+from ..data.investments import LOW_RISK, MEDIUM_RISK, HIGH_RISK
 
 
 # ================================================================================================
@@ -752,7 +753,7 @@ def display_liberated(game_state: GameState) -> None:
                 f"{yellow(f'{round(i.acc, 2)}{white(f'{pipe}')}')}"
                 f"{purple(f'{i.trait.name if i.trait else ''}')}\n")
     else:
-        print_and_sleep(yellow("Go liberate some enemies fool."), 1)
+        print_and_sleep(yellow("Go liberate some enemies, fool."), 1)
 
 # ================================================================================================
 
@@ -767,7 +768,37 @@ def display_discoveries(game_state: GameState) -> None:
                 f"\n{color(f'{i.desc}')}"
                 f"\nCount: {i.count}")
     else:
-        print_and_sleep(yellow("Go make some discoveries fool."), 1)
+        print_and_sleep(yellow("Go make some discoveries, fool."), 1)
+
+# ================================================================================================
+
+def display_investments(game_state: GameState) -> None:
+    investments = game_state.player.investments
+
+    if investments:
+        abc = sorted(investments, key=lambda a: a.name)
+
+        for i in abc:
+            if i.risk_level == LOW_RISK:
+                r_color = green
+            elif i.risk_level == MEDIUM_RISK:
+                r_color = yellow
+            elif i.risk_level == HIGH_RISK:
+                r_color = orange
+            else:
+                r_color = red
+
+            print_and_sleep(
+                f"{cyan(i.name)}"
+                f"\n{i.description}"
+                f"\nRisk Level: {r_color(i.risk_level)}"
+                f"\nInvested: {green(f'{i.value} coins')}"
+                f"\nMaturity: Level {cyan(i.maturity_lvl)}"
+                f"\nStatus: {green('Active') if i.active else cyan('Resolved')}"
+                f"\n"
+            )
+    else:
+        print_and_sleep(yellow("Go make some investments, fool."), 1)
 
 # ================================================================================================
 
@@ -834,83 +865,83 @@ def display_fishing_actions(game_state: GameState) -> None:
         cyan("Fishing Actions"),
         "",
         yellow("Pull Rod"),
-        "An aggressive move.",
-        "Brings the fish closer and drains stamina quickly.",
-        "Also increases rage quickly.",
-        "Best used when the fish is tired or when you want to end the fight.",
+        "Apply heavy pressure to the fish.",
+        "Reduces distance and drains stamina significantly.",
+        "Also generates a large amount of rage.",
+        "Most effective against tired fish.",
         "",
         green("Reel In"),
-        "A safe and steady move.",
-        "Makes progress while slowly wearing the fish down.",
+        "Apply steady pressure.",
+        "Reduces distance while causing moderate stamina loss.",
         "Generates less rage than Pull Rod.",
-        "Best used when the fish is calm and you want consistent progress.",
+        "A reliable option throughout most encounters.",
         "",
         blue("Give Line"),
-        "A defensive move.",
-        "Allows the fish to gain distance but lowers rage.",
-        "Useful when the fish is becoming angry.",
-        "Best used to prevent the fish from breaking free.",
+        "Relieve pressure on the fish.",
+        "The fish gains distance, but rage is reduced.",
+        "Useful when the fish is becoming dangerous.",
+        "Can prevent escapes caused by excessive rage.",
         "",
         purple("Observe"),
-        "A tactical move.",
-        "Reveals information about the fish.",
-        "May uncover its species, variant, strength, speed, or temperament.",
-        "Best used when you are unsure how to approach the fight.",
+        "Study the fish.",
+        "May reveal information such as species, rarity,",
+        "strength, speed, stamina, or temperament.",
+        "Useful when facing an unfamiliar catch.",
         "",
         orange("General Strategy"),
-        dim("Reel In to make safe progress."),
-        dim("Pull Rod to finish the fight."),
+        dim("Reel In for steady progress."),
+        dim("Pull Rod when the fish is tired."),
         dim("Give Line when rage becomes dangerous."),
-        dim("Observe to learn more about the fish."),
+        dim("Observe to learn the fish's strengths and weaknesses."),
     ]), )
 
 def display_fishing_info(game_state: GameState) -> None:
     print_and_sleep("\n".join([
         cyan("Understanding Fish"),
         "",
-        green("Stamina"),
-        "Represents how much energy the fish has left.",
-        "Tired fish are easier to catch and do not fight as effectively.",
-        "If a fish's stamina reaches 0, it can no longer continue the fight.",
-        "",
-        yellow("Distance"),
+        green("Distance"),
         "Represents how far the fish is from you.",
-        "Bring the distance down to 0 to land the fish.",
-        "If the fish reaches the area's escape distance, it escapes.",
+        "Reduce distance to 0 to land the fish.",
+        "If distance reaches the area's escape limit, the fish escapes.",
+        "",
+        yellow("Stamina"),
+        "Represents the fish's remaining energy.",
+        "Lower stamina reduces the fish's ability to fight.",
+        "Tired fish run shorter distances and are easier to land.",
         "",
         red("Rage"),
         "Represents how agitated the fish has become.",
-        "Rage rises when pressure is applied and falls when you Give Line.",
-        "If rage reaches 100%, the fish may break free and escape.",
+        "Rage increases when pressure is applied.",
+        "If rage reaches 100%, the fish immediately escapes.",
         "",
         white("Spit Hook Chance"),
-        "Some fish can shake the hook loose on their own.",
+        "Some fish may shake the hook loose.",
         "This chance is usually very small.",
-        "Aggressive and energetic fish tend to have higher values.",
+        "A Barb Hook can temporarily prevent this.",
         "",
         cyan("Fish States"),
         "",
         blue("Calm"),
         "The fish is under control.",
-        "It fights normally and is less dangerous.",
+        "It fights normally.",
         "",
         yellow("Agitated"),
-        "The fish is becoming annoyed.",
-        "Its behavior becomes less predictable.",
+        "The fish is becoming irritated.",
+        "It fights somewhat harder.",
         "",
         purple("Spooked"),
         "The fish senses danger.",
-        "It may fight harder and become more difficult to manage.",
+        "It becomes more difficult to control.",
         "",
         red("Enraged"),
         "The fish is in a panic.",
-        "It becomes much more dangerous and may break free if not calmed down.",
+        "It fights aggressively and becomes extremely volatile.",
         "",
         orange("General Strategy"),
-        dim("Wear the fish down while keeping rage under control."),
-        dim("Bring distance to 0 before the fish reaches the escape distance."),
+        dim("Manage both Distance and Rage."),
+        dim("Wear the fish down before applying heavy pressure."),
         dim("A tired fish is easier to catch."),
-        dim("An angry fish is more likely to get away."),
+        dim("An enraged fish is more likely to escape."),
     ]), )
 
 # ================================================================================================
@@ -955,11 +986,11 @@ def display_fishing_stats(game_state: GameState) -> None:
         print_and_sleep(yellow("Go catch some fish fool."))
     else:
         print_and_sleep("\n".join([
-            f"Total Caught:   {blue(len(caught))}",
+            f"Total Caught:   {cyan(len(caught))}",
 
-            f"Shallows:       {blue(len(shallows_fish))}",
-            f"Bay:            {(blue(len(bay_fish)))}",
-            f"Ocean:          {(blue(len(ocean_fish)))}",
+            f"Shallows:       {cyan(len(shallows_fish))}",
+            f"Bay:            {cyan(len(bay_fish))}",
+            f"Ocean:          {cyan(len(ocean_fish))}",
             "",
             f"Largest:        {blue(f'{largest.name:<{space}}')} {pipe} {yellow(largest.weight)} lbs, {yellow(largest.length)} in",
             f"Smallest:       {blue(f'{smallest.name:<{space}}')} {pipe} {yellow(smallest.weight)} lbs, {yellow(smallest.length)} in",
@@ -995,7 +1026,7 @@ def display_area_log(game_state: GameState, area: str) -> None:
     caught = len(caught_species)
     percentage = round((caught / total) * 100)
 
-    print_and_sleep(f"Caught: {caught}/{total} ({percentage}%)", 2)
+    print_and_sleep(f"{area} Species Caught: {caught}/{total} ({percentage}%)", 2)
 
     name_width = max(len(fish.name) for fish in all_catches_in_area)
     rarity_width = max(len(fish.rarity) for fish in all_catches_in_area)

@@ -22,6 +22,7 @@ class SpecialEvent:
     replayable: bool
     related: list[str] = field(default_factory=list)
     stage: int | None = 1
+    investment: str | None = None
 
 # ================================================================================================
 

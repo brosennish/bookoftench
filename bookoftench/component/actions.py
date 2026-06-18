@@ -12,7 +12,7 @@ from bookoftench.data.audio import BATTLE_THEME, DEVIL_THUNDER, PISTOL, MENSCH_T
 from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEMENTS, PERKS, STATS, TRAVEL, \
     AREA_BOSS_FIGHT, FINAL_BOSS_FIGHT, DISCOVER_ITEM, SPAWN_ENEMY, DISCOVER_WEAPON, DISCOVER_DISCOVERABLE, \
     DISCOVER_PERK, \
-    OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER, KILLS, DISCOVERIES, ENCOUNTERS, ENCOUNTER_SUB_BOSS
+    OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER, KILLS, DISCOVERIES, ENCOUNTERS, ENCOUNTER_SUB_BOSS, INVESTMENTS
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER, HOHKKEN, \
     SPECIAL_BOSS
 from bookoftench.data.items import TENCH_FILET, Items, NORMAL, BOSS
@@ -24,10 +24,10 @@ from bookoftench.model.events import KillEvent, FleeEvent, PlayerDeathEvent, Bou
     FailedFleeEvent, DefeatHohkkenEvent
 from bookoftench.model.game_state import GameState
 from bookoftench.model.item import load_items, load_boss_item
-from bookoftench.model.perk import load_perks, Perk, perk_is_active, activate_perk
+from bookoftench.model.perk import load_perks, Perk, perk_is_active, activate_perk_print, activate_perk_no_print
 from bookoftench.model.util import get_battle_status_view, display_player_achievements, \
     display_game_stats, calculate_flee, display_active_perks, display_battle_info, display_player_attributes, \
-    display_liberated, display_discoveries, display_encountered
+    display_liberated, display_discoveries, display_encountered, display_investments
 from bookoftench.model.weapon import load_discoverable_weapons, load_weapons, make_elite_weapon, make_autographed_weapon
 from bookoftench.ui import green, purple, yellow, dim, red, cyan, blue
 from bookoftench.util import print_and_sleep, safe_input
@@ -35,7 +35,7 @@ from .base import LabeledSelectionComponent, SelectionBinding
 from .encounters import PostKillEncounters
 from .menu import OverviewMenu
 from .registry import register_component, get_registered_component
-from bookoftench.data.builds import RANDOM, DENNY
+from bookoftench.data.builds import RANDOM, DENNY, BRO
 from bookoftench.data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE
 from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
 from bookoftench.data.weapons import BARE_HANDS, Weapons, TENCH_CANNON, SPECIAL, BLIND
@@ -498,7 +498,7 @@ class BuildPerksSelection(LinearComponent):
             elif perk == "a":
                 for p in perks:
                     if p not in selections:
-                        activate_perk(p['name'])
+                        activate_perk_print(p['name'])
                 return self.game_state
             elif perk in selections: # if it's already been selected
                 print_and_sleep(yellow(f"You already have {perk}."))
@@ -506,7 +506,7 @@ class BuildPerksSelection(LinearComponent):
                 print_and_sleep(yellow("Perk not found - Please try again (case-sensitive)."))
             else:
                 selections.append(perk)
-                activate_perk(perk) # add to list for counting
+                activate_perk_print(perk) # add to list for counting
                 if len(selections) == len(perks):
                     return self.game_state
 
@@ -595,7 +595,7 @@ class BuildComponent(LabeledSelectionComponent):
                         perks = [i['name'] for i in Perks]
                         for i in range(perks_count):
                             perk = random.choice(perks)
-                            activate_perk(perk)
+                            activate_perk_print(perk)
                             perks.remove(perk)
 
             else:
@@ -628,7 +628,10 @@ class BuildComponent(LabeledSelectionComponent):
                     player.current_weapon = player.weapon_dict[BARE_HANDS]
 
                 for p in build.perks:
-                    activate_perk(p.name)
+                    if build.name == BRO:
+                        activate_perk_no_print(p.name)
+                    else:
+                        activate_perk_print(p.name)
 
         return selection_component
 
@@ -829,7 +832,7 @@ class Search(RandomChoiceComponent):
             print_and_sleep(purple("You sense a noble presence..."), 3)
             print_and_sleep(purple("It's a mensch!"), 3)
             print_and_sleep(purple(f"He's gifted you the {reward.name} perk!\n{reward.description}"), 4)
-            reward.activate()
+            reward.activate_print()
         else:
             print_and_sleep(dim("You came up dry."), 1)
 
@@ -1243,7 +1246,7 @@ class BattleEnd(NoOpComponent):
         # --- Hohkken ---
         if enemy.name == HOHKKEN:
             event_logger.log_event(DefeatHohkkenEvent())
-            activate_perk(NEPTUNE)
+            activate_perk_print(NEPTUNE)
             self.game_state.hohkken_is_alive = False
 
         # --- wanted / bounty ---
@@ -1374,6 +1377,12 @@ class Encounters(TextDisplayingComponent):
 class DisplayInfo(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, display_callback=display_battle_info)
+
+
+@register_component(INVESTMENTS)
+class Investments(TextDisplayingComponent):
+    def __init__(self, game_state: GameState):
+        super().__init__(game_state, display_callback=display_investments)
 
 
 @register_component(KILLS)
