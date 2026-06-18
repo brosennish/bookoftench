@@ -1,43 +1,35 @@
 name: Build Windows EXE
 
 on:
-workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
-build-windows:
-runs-on: windows-latest
+  build-windows:
+    runs-on: windows-latest
 
-```
-steps:
-  - name: Checkout
-    uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  - name: Setup Python
-    uses: actions/setup-python@v5
-    with:
-      python-version: "3.12"
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
-  - name: Install dependencies
-    run: |
-      python -m pip install --upgrade pip
-      pip install pygame colorama pyinstaller
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pygame colorama pyinstaller
 
-  - name: Build EXE
-    run: |
-      python -m PyInstaller ^
-        --onedir ^
-        --name "Book of Tench" ^
-        --add-data "bookoftench\data;bookoftench\data" ^
-        main.py
+      - name: Build EXE
+        run: python -m PyInstaller --onedir --name "Book of Tench" --add-data "bookoftench\data;bookoftench\data" main.py
 
-  - name: Show build contents
-    run: |
-      dir "dist\Book of Tench" /s
+      - name: Show build contents
+        run: dir "dist\Book of Tench" /s
 
-  - name: Upload Windows Build
-    uses: actions/upload-artifact@v4
-    with:
-      name: Book-of-Tench-Windows
-      path: dist/Book of Tench/
-      if-no-files-found: error
-```
+      - name: Upload Windows Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Book-of-Tench-Windows
+          path: dist/Book of Tench/
+          if-no-files-found: error
