@@ -13,7 +13,7 @@ from bookoftench.data.illnesses import HERPES
 from bookoftench.data.items import TENCH_FILET, SWAMP, FOREST, CITY, CAVE
 from bookoftench.data.perks import BEER_GOGGLES
 from bookoftench.data.special_events import Special_Events, LOST_GOLD_P2
-from bookoftench.model import GameState, investment
+from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent
 from bookoftench.model.investment import load_investment, Investment
 from bookoftench.model.item import load_items

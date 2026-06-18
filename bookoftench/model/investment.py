@@ -23,12 +23,11 @@ class Investment:
     levels_to_maturity: int = 0
     maturity_lvl: int | None = None
     active: bool = False
-    resolved: bool = False
 
 # ================================================================================================
 
     def __post_init__(self):
-        self.buy_ins = [10, 25, 50]
+        self.buy_ins = [10, 25, 50, 100]
 
         risk_dict = next(i for i in Risk_Levels if i['name'] == self.risk_level)
         self.get_success_rate(risk_dict)

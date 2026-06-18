@@ -2,7 +2,7 @@ from bookoftench.data import areas as a
 from bookoftench.data.audio import ROULETTE_THEME, HOHKKEN_THEME, HOSPITAL_THEME, BATTLE_THEME
 from bookoftench.data.enemies import OILY_DOILY
 from bookoftench.data.enviroment import DAY, NIGHT
-from bookoftench.data.investments import SEMEN_CANDLE, SUN_SUITS
+from bookoftench.data.investments import SEMEN_CANDLE, SUN_SUITS, BOBS_BOXES
 from bookoftench.ui import green, purple, yellow, blue, red, white, orange, cyan
 
 # ================================================================================================
@@ -43,6 +43,8 @@ SKUNK_APE_INTRO = "Skunk Ape Intro"
 SLENDER_INTRO = "Slender Intro"
 
 # Investment Opportunities
+BOB_ROBERTSON_PROPOSAL = "Bob Robertson Proposal"
+MAIL_ORDER_EGGS = "Mail Order Eggs"
 SEMEN_CANDLE_PROPOSAL = "Semen Candle Proposal"
 SUN_SUITS_PROPOSAL = "Sun Suits Proposal"
 
@@ -659,7 +661,7 @@ It immediately recovers and tramples at you again.
 # ================================================================================================
 
 {'name': SEMEN_CANDLE_PROPOSAL, 'color': cyan, 'sleep': 0, 'theme': None,
-     'areas': [a.CITY], 'time': [DAY], 'moon': None, 'season': None,
+     'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You encounter a man in a condom costume with a fake flame on his head...
 
 Semen Candle Rep: What's your name, there?
@@ -682,14 +684,14 @@ Shebokken's next and last favorite candle - Semen Candle!
 Soon, the scent of man, the stench of potential offspring, and the sweet smell of jines
 will fill every room in this terrible city.
 
-So, we have three investment options, and remember, it's now or never, my boy.
+So, we have four investment opportunities...
 
 Investment: Semen Candle
-Risk: Medium
-Potential Return: 2x-4x
-Maturity: 2-3 Levels
+Risk: High
+Potential Return: 4x-8x
+Maturity: 3-4 Levels
 """,
-     'choices': ['Invest 10', 'Invest 25', 'Invest 50'],
+     'choices': ['Invest 10', 'Invest 25', 'Invest 50', 'Invest 100'],
      'investment': SEMEN_CANDLE,
      'optional': True, 'method': 'make_investment', 'replayable': False},
 
@@ -719,17 +721,89 @@ Sun Suits! Sun Suits are transparent, elastic, and washable.
 
 Stop burning through gallons of sunblock and join us as an early investor today! 
 
-We have three investment options, and remember, it's now or never, boy.
+We have four investment options, and remember, it's now or never, boy.
 
 Investment: Sun Suits
 Risk: Medium
 Potential Return: 2x-4x
 Maturity: 2-3 Levels
 """,
-     'choices': ['Invest 10', 'Invest 25', 'Invest 50'],
+     'choices': ['Invest 10', 'Invest 25', 'Invest 50', 'Invest 100'],
      'investment': SUN_SUITS,
      'optional': True, 'method': 'make_investment', 'replayable': False},
 
+# ================================================================================================
+
+{'name': BOB_ROBERTSON_PROPOSAL, 'color': cyan, 'sleep': 0, 'theme': None,
+     'areas': [a.CITY], 'time': [DAY], 'moon': None, 'season': None,
+     'text': """A gangly, nervous man with 70's glasses and a Goodwill button-up approaches you...
+
+Bob Robertson: Hi there. I'm, uh, Bob Robertson.
+
+So, yes. Uh... recently, I started up my own door-to-door, uh, cardboard box delivery business.
+
+However, I'm... uh... having some difficulties, both financial and otherwise.
+
+You know, I don't have a, uh, car, so... I have to delivery on foot, yes.
+
+Many times, folks have pulled knives and related weaponry on me when I've knocked on their entryways.
+
+I'm looking for investors to provide funding that I can use to, uh, buy a new pair of shoes, as well as
+a bladed weapon of sorts in order to protect myself and my, uh, jines, yes.
+
+Anyway, if you could invest any of the following amounts, I will do my best to give you a, uh, 
+real good return on investment there, yes.
+
+Investment: Bob Robertson's Door-to-Door Cardboard Box Delivery Business
+Risk: High
+Potential Return: 4x-8x
+Maturity: 3-4 Levels
+""",
+     'choices': ['Invest 10', 'Invest 25', 'Invest 50', 'Invest 100'],
+     'investment': BOBS_BOXES,
+     'optional': True, 'method': 'make_investment', 'replayable': False},
+
+# ================================================================================================
+
+{'name': MAIL_ORDER_EGGS, 'color': cyan, 'sleep': 0, 'theme': None,
+     'areas': [a.CITY], 'time': [DAY], 'moon': None, 'season': None,
+     'text': """A man in an Vladymir Georgina suit approaches you...
+
+Mail Order Egg Rep: What's more trustworthy than the Shebokken Postal Service?
+Your local green grocer? I don't fuckin' think so.
+
+I mean, don't you just fuckin' hate your local green grocer?
+
+You know I do. 
+
+Look, are you tired of having some drunk piece of shit delivery bozo 
+smashing up the cases of eggs that you worked your tail off just to afford
+so you can feed your gut hut?
+
+You're looking out the window, so happy they finally came, until you see this
+behemoth lift up sixteen cases of eggs and carelessly drop them right on your
+driveway. Then, when you confront him about it, he threatens to rip your limbs
+off, and there's nothing you can do - and you know it.
+
+So what's the answer to that? Mail Order Eggs, of course!
+
+On-time, white-glove delivery, a refined, elegant man or woman will arrive 
+to your mailbox and place the eggs inside with the same care and tact they would
+if it were a golden tench.
+
+We are seeking investors to get in on this before it becomes the biggest thing
+since Crabs on Rye.
+
+What do you say?
+
+Investment: Mail Order Eggs
+Risk: Medium
+Potential Return: 2x-4x
+Maturity: 2-3 Levels
+""",
+     'choices': ['Invest 10', 'Invest 25', 'Invest 50', 'Invest 100'],
+     'investment': MAIL_ORDER_EGGS,
+     'optional': True, 'method': 'make_investment', 'replayable': False},
 
 
 ]
