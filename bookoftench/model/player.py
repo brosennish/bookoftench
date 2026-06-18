@@ -23,6 +23,7 @@ from .events import ItemUsedEvent, ItemSoldEvent, BuyWeaponEvent, BuyItemEvent, 
     GenericStealEvent
 from .fish import Fish
 from .fishing_item import FishingItem
+from .investment import Investment
 from .item import Item, load_items
 from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
 from .trait import Trait
@@ -147,6 +148,11 @@ class Player(Combatant):
     items: Dict[str, Item] = field(default_factory=item_defaults)
     weapon_dict: Dict[str, PlayerWeapon] = field(default_factory=weapon_defaults)
     current_weapon: Weapon = None
+
+    investments: List[Investment] = field(default_factory=list)
+    expired_investment_opportunities: List[str] = field(default_factory=list)
+
+# ================================================================================================
 
     def __post_init__(self):
         self.current_weapon = self.weapon_dict[BARE_HANDS]

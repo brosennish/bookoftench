@@ -5,7 +5,7 @@ from bookoftench.audio import play_music, play_sound
 from bookoftench.component import functional_component, \
     LabeledSelectionComponent, ReprBinding, NoOpComponent, SelectionBinding, register_component, SwapFoundItemYN, \
     OfficerEncounter, set_special_boss, Battle
-from bookoftench.data.audio import PUNCH, POSITIVE, MONSTER_ATTACK, PISTOL, BLADE, COINS
+from bookoftench.data.audio import PUNCH, POSITIVE, MONSTER_ATTACK, PISTOL, BLADE, COINS, PURCHASE
 from bookoftench.data.components import SPECIAL_EVENT
 from bookoftench.data.enemies import OILY_DOILY, BASTA_SHERMAN, SLENDERMAN, DEATH_WORM, CYCLOPS, SABERTOOTH_LIGER, \
     GIANT_MUTANT_RAT, SEWER_GATOR, LUCKY_THE_LEPRECHAUN, FAIRY_CODMOTHER, MOTHMAN, SASQUATCH, SKUNK_APE, OGRE
@@ -13,8 +13,9 @@ from bookoftench.data.illnesses import HERPES
 from bookoftench.data.items import TENCH_FILET, SWAMP, FOREST, CITY, CAVE
 from bookoftench.data.perks import BEER_GOGGLES
 from bookoftench.data.special_events import Special_Events, LOST_GOLD_P2
-from bookoftench.model import GameState
+from bookoftench.model import GameState, investment
 from bookoftench.model.events import PlayerDeathEvent
+from bookoftench.model.investment import load_investment, Investment
 from bookoftench.model.item import load_items
 from bookoftench.model.perk import load_perks, perk_is_active
 from bookoftench.model.special_event import SpecialEvent, load_special_event
@@ -30,6 +31,7 @@ class DiscoverSpecial(NoOpComponent):
 
     def run(self):
         game_state = self.game_state
+        player = self.game_state.player
         area = game_state.current_area.name
         season = game_state.season
         time = game_state.time_of_day
@@ -44,12 +46,14 @@ class DiscoverSpecial(NoOpComponent):
         ]
 
         # --- filter by criteria ---
+        expired_opps = player.expired_investment_opportunities
         filtered = [
             i for i in fresh
             if area in i['areas']
                and time in i['time']
                and (i['moon'] is None or moon in i['moon'])
-               and (i['season'] is None or season in i['season'])
+               and (i['season'] is None or season in i['season']
+               and i['investment'] is None or i['investment'] not in expired_opps)
         ]
 
         if not filtered:
@@ -71,19 +75,25 @@ class DiscoverSpecial(NoOpComponent):
                     break
 
         special_event = selected_event
+        if special_event.investment:
+            invest_obj = load_investment(special_event.investment)
+        else:
+            invest_obj = None
 
         if not special_event.replayable:
             game_state.expired_special_events.append(special_event)
 
-        return SpecialEventComponent(self.game_state, special_event).run()
+        return SpecialEventComponent(self.game_state, special_event, invest_obj).run()
 
 # ================================================================================================
 
 class SpecialEventComponent(LabeledSelectionComponent):
-    def __init__(self, game_state: GameState, event: SpecialEvent):
+    def __init__(self, game_state: GameState, event: SpecialEvent,
+                 invest_obj: Investment | None):
 
         self.special_event = event
         self.leave = False
+        self.investment = invest_obj
 
         special_event_bindings = [
             ReprBinding(
@@ -151,8 +161,12 @@ class SpecialEventComponent(LabeledSelectionComponent):
     def _handle_selection_component(self, special_event: SpecialEvent, choice: int):
         def selection_component():
             if special_event.method:
-                method = getattr(self, special_event.method)
-                method(self.game_state, choice)
+                if self.investment:
+                    method = getattr(self, special_event.method)
+                    method(self.game_state, choice, self.investment)
+                else:
+                    method = getattr(self, special_event.method)
+                    method(self.game_state, choice)
             self.leave = True
             return self.game_state
 
@@ -698,6 +712,24 @@ class SpecialEventComponent(LabeledSelectionComponent):
             game_state.current_area.special_bosses.append(OGRE)
             set_special_boss(game_state, OGRE)
             Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def make_investment(game_state: GameState, choice: int, invest_obj: Investment):
+        player = game_state.player
+        buy_in = invest_obj.buy_ins[choice - 1]
+
+        if player.coins >= buy_in:
+            player.coins -= buy_in
+            play_sound(PURCHASE)
+            invest_obj.maturity_lvl = player.lvl + invest_obj.levels_to_maturity
+            player.investments.append(invest_obj)
+            print_and_sleep(green(f"You invested {buy_in} of coin in {invest_obj.name}."), 1.5)
+        else:
+            print_and_sleep(yellow("You don't have enough coin."), 1.5)
+
+        player.expired_investment_opportunities.append(invest_obj.name)
 
 # ================================================================================================
 

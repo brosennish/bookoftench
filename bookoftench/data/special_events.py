@@ -2,6 +2,7 @@ from bookoftench.data import areas as a
 from bookoftench.data.audio import ROULETTE_THEME, HOHKKEN_THEME, HOSPITAL_THEME, BATTLE_THEME
 from bookoftench.data.enemies import OILY_DOILY
 from bookoftench.data.enviroment import DAY, NIGHT
+from bookoftench.data.investments import SEMEN_CANDLE
 from bookoftench.ui import green, purple, yellow, blue, red, white, orange
 
 # ================================================================================================
@@ -42,7 +43,8 @@ SKUNK_APE_INTRO = "Skunk Ape Intro"
 SLENDER_INTRO = "Slender Intro"
 
 # Investment Opportunities
-
+SEMEN_CANDLE_PROPOSAL = "Semen Candle Proposal"
+SUN_SUITS_PROPOSAL = "Sun Suits Proposal"
 
 # Text-Only
 SANTAS_SNOW = "Santa's Snow"
@@ -654,6 +656,42 @@ It immediately recovers and tramples at you again.
      'choices': ['Battle Hodag'],
      'optional': False, 'method': 'hodag_intro', 'replayable': False},
 
+# ================================================================================================
+
+{'name': SEMEN_CANDLE_PROPOSAL, 'color': '', 'sleep': 3, 'theme': None,
+     'areas': [a.CITY], 'time': [DAY], 'moon': None, 'season': None,
+     'text': """You encounter a man in a condom costume with a fake flame on his head...
+
+Semen Candle Rep: What's your name, there?
+
+You tell him your name.
+
+Semen Candle Rep: No matter, I'll just call you Jeffrey if that's alright.
+
+You nod.
+
+Semen Candle Rep: Let me ask you, old sport, if a candle were to smell like you,
+would it smell like your hair? Maybe your pits? Your seed?
+
+You shrug.
+
+Semen Candle Rep: Very good, it would smell of your seed, and, indeed, it is your
+lucky day, as I wish to cordially invite you to get in on the ground floor of 
+Shebokken's next and last favorite candle - Semen Candle!
+
+Soon, the scent of man, the stench of potential offspring, and the sweet smell of jines
+will fill every room in this terrible city.
+
+So, we have three investment options, and remember, it's now or never, my boy.
+
+Investment: Semen Candle
+Risk: Medium
+Potential Return: 2x-4x
+Maturity: 2-3 Levels
+""",
+     'choices': ['Invest 10', 'Invest 25', 'Invest 50'],
+     'investment': SEMEN_CANDLE,
+     'optional': True, 'method': 'make_investment', 'replayable': False},
 
 
 ]
