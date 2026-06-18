@@ -22,14 +22,11 @@ jobs:
           python -m pip install pygame colorama pyinstaller
 
       - name: Build EXE
-        run: python -m PyInstaller --onedir --name "Book of Tench" --add-data "bookoftench\data;bookoftench\data" main.py
-
-      - name: Show build contents
-        run: dir "dist\Book of Tench" /s
+        run: |
+          python -m PyInstaller --onedir --name "Book of Tench" --add-data "bookoftench\data;bookoftench\data" main.py
 
       - name: Upload Windows Build
         uses: actions/upload-artifact@v4
         with:
           name: Book-of-Tench-Windows
-          path: dist/Book of Tench/
-          if-no-files-found: error
+          path: dist/Book of Tench
