@@ -11,11 +11,12 @@ from bookoftench.data.enemies import OILY_DOILY, BASTA_SHERMAN, SLENDERMAN, DEAT
     GIANT_MUTANT_RAT, SEWER_GATOR, LUCKY_THE_LEPRECHAUN, FAIRY_CODMOTHER, MOTHMAN, SASQUATCH, SKUNK_APE, OGRE
 from bookoftench.data.illnesses import HERPES
 from bookoftench.data.items import TENCH_FILET, SWAMP, FOREST, CITY, CAVE
+from bookoftench.data.perks import BEER_GOGGLES
 from bookoftench.data.special_events import Special_Events, LOST_GOLD_P2
 from bookoftench.model import GameState
 from bookoftench.model.events import PlayerDeathEvent
 from bookoftench.model.item import load_items
-from bookoftench.model.perk import load_perks
+from bookoftench.model.perk import load_perks, perk_is_active
 from bookoftench.model.special_event import SpecialEvent, load_special_event
 from bookoftench.ui import red, purple, cyan, yellow, green, blue
 from bookoftench.util import print_and_sleep
@@ -448,6 +449,10 @@ class SpecialEventComponent(LabeledSelectionComponent):
 
     @staticmethod
     def triple_tench_dare(game_state: GameState, choice: int):
+        if perk_is_active(BEER_GOGGLES):
+            print_and_sleep(yellow("Nice try, cheater. I know Beer Goggles when I see 'em'."), 1)
+            return
+
         player = game_state.player
         seconds = choice * 5
 
@@ -576,10 +581,11 @@ class SpecialEventComponent(LabeledSelectionComponent):
 # ================================================================================================
 
     @staticmethod
-    def death_worm_intro(game_state: GameState):
-        game_state.current_area.special_bosses.append(DEATH_WORM)
-        set_special_boss(game_state, DEATH_WORM)
-        Battle(game_state).run()
+    def death_worm_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(DEATH_WORM)
+            set_special_boss(game_state, DEATH_WORM)
+            Battle(game_state).run()
 
 # ================================================================================================
 
@@ -606,82 +612,92 @@ class SpecialEventComponent(LabeledSelectionComponent):
 # ================================================================================================
 
     @staticmethod
-    def sabertooth_liger_intro(game_state: GameState):
-        game_state.current_area.special_bosses.append(SABERTOOTH_LIGER)
-        set_special_boss(game_state, SABERTOOTH_LIGER)
-        Battle(game_state).run()
+    def sabertooth_liger_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(SABERTOOTH_LIGER)
+            set_special_boss(game_state, SABERTOOTH_LIGER)
+            Battle(game_state).run()
 
 # ================================================================================================
 
     @staticmethod
-    def giant_mutant_rat_intro(game_state: GameState):
-        game_state.current_area.special_bosses.append(GIANT_MUTANT_RAT)
-        set_special_boss(game_state, GIANT_MUTANT_RAT)
-        Battle(game_state).run()
+    def giant_mutant_rat_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(GIANT_MUTANT_RAT)
+            set_special_boss(game_state, GIANT_MUTANT_RAT)
+            Battle(game_state).run()
 
 # ================================================================================================
 
     @staticmethod
-    def sewer_gator_intro(game_state: GameState):
-        game_state.current_area.special_bosses.append(SEWER_GATOR)
-        set_special_boss(game_state, SEWER_GATOR)
-        Battle(game_state).run()
+    def sewer_gator_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(SEWER_GATOR)
+            set_special_boss(game_state, SEWER_GATOR)
+            Battle(game_state).run()
 
 # ================================================================================================
 
     @staticmethod
-    def lucky_the_leprechaun_intro(game_state: GameState):
-        game_state.current_area.special_bosses.append(LUCKY_THE_LEPRECHAUN)
-        set_special_boss(game_state, LUCKY_THE_LEPRECHAUN)
-        Battle(game_state).run()
+    def lucky_the_leprechaun_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(LUCKY_THE_LEPRECHAUN)
+            set_special_boss(game_state, LUCKY_THE_LEPRECHAUN)
+            Battle(game_state).run()
 
 # ================================================================================================
 
     @staticmethod
-    def fairy_codmother_intro(game_state: GameState):
-        game_state.current_area.special_bosses.append(FAIRY_CODMOTHER)
-        set_special_boss(game_state, FAIRY_CODMOTHER)
-        Battle(game_state).run()
+    def fairy_codmother_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(FAIRY_CODMOTHER)
+            set_special_boss(game_state, FAIRY_CODMOTHER)
+            Battle(game_state).run()
 
 # ================================================================================================
 
     @staticmethod
-    def mothman_intro(game_state: GameState):
-        game_state.current_area.special_bosses.append(MOTHMAN)
-        set_special_boss(game_state, MOTHMAN)
-        Battle(game_state).run()
+    def mothman_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(MOTHMAN)
+            set_special_boss(game_state, MOTHMAN)
+            Battle(game_state).run()
 
 # ================================================================================================
 
     @staticmethod
-    def sasquatch_intro(game_state: GameState):
-        game_state.current_area.special_bosses.append(SASQUATCH)
-        set_special_boss(game_state, SASQUATCH)
-        Battle(game_state).run()
+    def sasquatch_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(SASQUATCH)
+            set_special_boss(game_state, SASQUATCH)
+            Battle(game_state).run()
 
 # ================================================================================================
 
     @staticmethod
-    def skunk_ape_intro(game_state: GameState):
-        game_state.current_area.special_bosses.append(SKUNK_APE)
-        set_special_boss(game_state, SKUNK_APE)
-        Battle(game_state).run()
+    def skunk_ape_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(SKUNK_APE)
+            set_special_boss(game_state, SKUNK_APE)
+            Battle(game_state).run()
 
 # ================================================================================================
 
     @staticmethod
-    def ogre_intro(game_state: GameState):
-        game_state.current_area.special_bosses.append(OGRE)
-        set_special_boss(game_state, OGRE)
-        Battle(game_state).run()
+    def ogre_intro(game_state: GameState, choice: int):
+         if choice:
+            game_state.current_area.special_bosses.append(OGRE)
+            set_special_boss(game_state, OGRE)
+            Battle(game_state).run()
 
 # ================================================================================================
 
     @staticmethod
-    def hodag_intro(game_state: GameState):
-        game_state.current_area.special_bosses.append(OGRE)
-        set_special_boss(game_state, OGRE)
-        Battle(game_state).run()
+    def hodag_intro(game_state: GameState, choice: int):
+        if choice:
+            game_state.current_area.special_bosses.append(OGRE)
+            set_special_boss(game_state, OGRE)
+            Battle(game_state).run()
 
 # ================================================================================================
 

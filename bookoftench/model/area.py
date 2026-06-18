@@ -11,7 +11,7 @@ from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABL
     DISCOVER_WEAPON, \
     SPAWN_ENEMY, ENCOUNTER_SUB_BOSS, SPECIAL_EVENT
 from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, CONTAGIOUS, NIGHT_OWL, HOHKKEN, BOSS, \
-    NORMAL, SPECIAL_BOSS, Special_Bosses, SLENDERMAN, Cave_Special_Bosses, City_Special_Bosses, Forest_Special_Bosses, \
+    NORMAL, SPECIAL_BOSS, Cave_Special_Bosses, City_Special_Bosses, Forest_Special_Bosses, \
     Swamp_Special_Bosses
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
