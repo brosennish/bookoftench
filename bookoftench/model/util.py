@@ -986,11 +986,11 @@ def display_fishing_stats(game_state: GameState) -> None:
         print_and_sleep(yellow("Go catch some fish fool."))
     else:
         print_and_sleep("\n".join([
-            f"Total Caught:   {blue(len(caught))}",
+            f"Total Caught:   {cyan(len(caught))}",
 
-            f"Shallows:       {blue(len(shallows_fish))}",
-            f"Bay:            {(blue(len(bay_fish)))}",
-            f"Ocean:          {(blue(len(ocean_fish)))}",
+            f"Shallows:       {cyan(len(shallows_fish))}",
+            f"Bay:            {cyan(len(bay_fish))}",
+            f"Ocean:          {cyan(len(ocean_fish))}",
             "",
             f"Largest:        {blue(f'{largest.name:<{space}}')} {pipe} {yellow(largest.weight)} lbs, {yellow(largest.length)} in",
             f"Smallest:       {blue(f'{smallest.name:<{space}}')} {pipe} {yellow(smallest.weight)} lbs, {yellow(smallest.length)} in",
@@ -1026,7 +1026,7 @@ def display_area_log(game_state: GameState, area: str) -> None:
     caught = len(caught_species)
     percentage = round((caught / total) * 100)
 
-    print_and_sleep(f"Caught: {caught}/{total} ({percentage}%)", 2)
+    print_and_sleep(f"{area} Species Caught: {caught}/{total} ({percentage}%)", 2)
 
     name_width = max(len(fish.name) for fish in all_catches_in_area)
     rarity_width = max(len(fish.rarity) for fish in all_catches_in_area)
