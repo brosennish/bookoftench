@@ -15,7 +15,7 @@ from bookoftench.data.components import SEARCH, USE_ITEM, EQUIP_WEAPON, ACHIEVEM
     OVERVIEW, INFO, BUILD, ATTRIBUTES, FIGHT_BOSS_OTHER, KILLS, DISCOVERIES, ENCOUNTERS, ENCOUNTER_SUB_BOSS
 from bookoftench.data.enemies import CAPTAIN_HOLE, FINAL_BOSS, ACHILLES, COWARD, CONTAGIOUS, CHEATER, HOHKKEN, \
     SPECIAL_BOSS
-from bookoftench.data.items import TENCH_FILET, Items, NORMAL
+from bookoftench.data.items import TENCH_FILET, Items, NORMAL, BOSS
 from bookoftench.data.perks import DEATH_CAN_WAIT, Perks, NEPTUNE
 from bookoftench.event_logger import subscribe_function
 from bookoftench.model.discoverable import load_discoverables, search_discoverable_rarity, rarity_color
@@ -405,12 +405,12 @@ class BuildItemsSelection(LinearComponent):
     def execute_current(self) -> None:
         player = self.game_state.player
         player.items.clear()
-        items = random.sample([i for i in Items], k=10)
+        items = random.sample([i for i in Items if i['type'] != BOSS], k=10)
         for i in items:
             if i['type'] == NORMAL:
-                print_and_sleep(cyan(f"{i['name']:<24}") + (dim('\n')) + "HP: +" + (green(i['hp'])))
+                print_and_sleep(cyan(f"{i['name']:<24}") + (dim(' | ')) + "HP: +" + (green(i['hp'])))
             else:
-                print_and_sleep(cyan(f"{i['name']:<24}") + (dim('\n')) + (i['desc']))
+                print_and_sleep(cyan(f"{i['name']:<24}") + (dim(' | ')) + (i['desc']))
 
         selections = []
         while True:
