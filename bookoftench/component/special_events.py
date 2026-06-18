@@ -266,11 +266,13 @@ class SpecialEventComponent(LabeledSelectionComponent):
         if choice == 1:  # Give Coin
             if player.coins >= 50:  # Give 50 Coin
                 player.coins -= 50
+                play_sound(COINS)
                 print_and_sleep(yellow("You gave 50 of coin to the pirate.\n"), 1.5)
                 return
 
             coins = player.coins
             player.coins -= player.coins
+            play_sound(COINS)
             print_and_sleep(yellow(f"You forfeited {coins} of coin to the pirate.\n"), 1.5)
 
             # Make Up Diff w/ HP
@@ -334,6 +336,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
             if random.random() < 0.5 + (player.luck * 0.1):
                 damage = random.randint(5, 10)
                 print_and_sleep(green("You were able to find the exit and jump from the ship!"), 1.5)
+                play_sound(PUNCH)
                 print_and_sleep(red(f"You lost {damage} hp upon landing."), 1.5)
                 player.hp -= damage
             else:
@@ -514,8 +517,8 @@ class SpecialEventComponent(LabeledSelectionComponent):
 
             else:
                 print_and_sleep(purple(f"""Thanks for waking me up, man.
-                I have an appointment today and would've totally bricked.
-                I'm scheduled to be buried alive at 6... or was it 8?"""), 3)
+I have an appointment today and would've totally bricked.
+I'm scheduled to be buried alive at 6... or was it 8?"""), 3)
                 print_and_sleep(green(f"He pays you {amount} of coin and immediately zonks back out."), 3)
                 player.gain_coins(amount)
                 player.gain_or_lose_luck(0.1)
@@ -725,7 +728,10 @@ class SpecialEventComponent(LabeledSelectionComponent):
         if player.coins >= buy_in:
             player.coins -= buy_in
             play_sound(PURCHASE)
+
             invest_obj.maturity_lvl = player.lvl + invest_obj.levels_to_maturity
+            invest_obj.value = buy_in
+
             player.investments.append(invest_obj)
             print_and_sleep(green(f"You invested {buy_in} of coin in {invest_obj.name}."), 1.5)
         else:

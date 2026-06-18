@@ -16,6 +16,7 @@ class Investment:
     failure_text: str
 
     cost: int = 0
+    value: int = 0
     buy_ins: list | None = None
     success_rate: float = 0
     multiplier: float = 0

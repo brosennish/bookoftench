@@ -32,6 +32,7 @@ FISHMONGER = "Fishmonger"
 GREEDY_BASTARD = "Greedy Bastard"
 HOSPITAL = "Hospital"
 INFO = "Info"
+INVESTMENTS = "Investments"
 KILLS = "Kills"
 LAB = "Lab"
 LOAD_GAME = "Load Game"
@@ -70,8 +71,8 @@ class ActionMenuDefaults:
 
 
 class OverviewMenuDefaults:
-    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, DISCOVERIES, ENCOUNTERS, FISHING_LOG]
-    page_two: List[str] = [KILLS, PERKS, STATS]
+    page_one: List[str] = [ACHIEVEMENTS, ATTRIBUTES, ENCOUNTERS, FISHING_LOG, INVESTMENTS]
+    page_two: List[str] = [DISCOVERIES, KILLS, PERKS, STATS]
 
 
 class InGameMenuDefaults:

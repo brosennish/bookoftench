@@ -752,7 +752,7 @@ def display_liberated(game_state: GameState) -> None:
                 f"{yellow(f'{round(i.acc, 2)}{white(f'{pipe}')}')}"
                 f"{purple(f'{i.trait.name if i.trait else ''}')}\n")
     else:
-        print_and_sleep(yellow("Go liberate some enemies fool."), 1)
+        print_and_sleep(yellow("Go liberate some enemies, fool."), 1)
 
 # ================================================================================================
 
@@ -767,7 +767,27 @@ def display_discoveries(game_state: GameState) -> None:
                 f"\n{color(f'{i.desc}')}"
                 f"\nCount: {i.count}")
     else:
-        print_and_sleep(yellow("Go make some discoveries fool."), 1)
+        print_and_sleep(yellow("Go make some discoveries, fool."), 1)
+
+# ================================================================================================
+
+def display_investments(game_state: GameState) -> None:
+    investments = game_state.player.investments
+
+    if investments:
+        abc = sorted(investments, key=lambda a: a.name)
+
+        for i in abc:
+            print_and_sleep(
+                f"{cyan(i.name)}"
+                f"\n{i.description}"
+                f"\nInvested: {green(f'{i.value} coins')}"
+                f"\nMaturity: Level {cyan(i.maturity_lvl)}"
+                f"\nStatus: {green('Active') if i.active else cyan('Resolved')}"
+                f"\n"
+            )
+    else:
+        print_and_sleep(yellow("Go make some investments, fool."), 1)
 
 # ================================================================================================
 

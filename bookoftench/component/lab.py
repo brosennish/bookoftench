@@ -60,14 +60,13 @@ class ExperimentRisks(TextDisplayingComponent):
 Strength : 23%
 Accuracy : 23%
 Max HP   : 21%
-Level    : 8%
-Lives    : 6%\n""")))
+Lives    : 7%\n""")))
 
 # ================================================================================================
 
 def conduct_experiment(game_state):
     player = game_state.player
-    player.coins += 1
+    player.gain_coins(1)
     mutation = False
 
     # ============================
@@ -76,7 +75,7 @@ def conduct_experiment(game_state):
 
     if random.random() < 0.23:
         original = player.strength
-        amount = random.uniform(-0.02, 0.02)
+        amount = random.uniform(-0.03, 0.03)
         player.strength = round(player.strength + amount, 2)
         if original != player.strength:
             if amount > 0:
@@ -94,7 +93,7 @@ def conduct_experiment(game_state):
 
     if random.random() < 0.23:
         original = player.acc
-        amount = random.uniform(-0.02, 0.02)
+        amount = random.uniform(-0.03, 0.03)
         player.acc = round(player.acc + amount, 2)
         if original != player.acc:
             if amount > 0:
@@ -126,39 +125,10 @@ def conduct_experiment(game_state):
             mutation = True
 
     # ============================
-    #            LEVEL
-    # ============================
-
-    if random.random() < 0.08:
-        original = player.lvl
-        amount = -1
-        if random.random() < (min(player.luck, 10) / 100):
-            amount = 1
-        player.lvl += amount
-        if player.lvl <= 0:
-            player.lvl = 1
-        if original != player.lvl:
-            if amount > 0:
-                print_and_sleep(cyan(f"Level: {original} -> {player.lvl}"), 1)
-                player.gain_or_lose_luck(0.05)
-                mutation = True
-            elif amount < 0:
-                print_and_sleep(cyan(f"Level: {original} -> {player.lvl}"), 1)
-                player.gain_or_lose_luck(-0.05)
-                mutation = True
-        if player.lvl == player.illness_death_lvl:
-            player.lives -= 1
-            event_logger.log_event(PlayerDeathEvent(player.lives))
-            if player.lives > 0:
-                ContinueGame.run(game_state)
-            else:
-                DeathHandler.run(game_state)
-
-    # ============================
     #            LIVES
     # ============================
 
-    if random.random() < 0.06:
+    if random.random() < 0.07:
         original = player.lives
         amount = 1
         if random.random() < 0.60 - (min(player.luck, 10) / 100):
