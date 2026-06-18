@@ -119,90 +119,92 @@ class Tutorial(TextDisplayingComponent):
         super().__init__(game_state,
                          next_component=Intro,
                          display_callback=lambda _: print_and_sleep("""
-BOOK OF TENCH - GENERAL OVERVIEW 
+BOOK OF TENCH - OVERVIEW
 
-    MISSION
-    - Your mission is to find and rescue Chula
-    - She is being held in one of four areas and is guarded by
-      a number of enemies and bosses
-    - Find Chula and defeat everyone who stands in your way
-      to fulfill the prophecy and win the game
-      
-    GAMEPLAY
-    - Travel between areas as needed
-    - You may encounter the Hohkken while traveling,
-      especially at night
-    - Track and take out wanted enemies to collect bounties
-    - Search to find discoverables, items, weapons, perks,
-      special events, and enemies
-    - Shop to buy/sell items and weapons or purchase perks;
-      shoplifting is also an option
-    - Respect Officer Hohkken
-      
-    CITY
-    - The Casino offers two games where you can take a chance
-      and push your luck
-    - Visit the Coffee Shop for a cheap HP boost at the risk
-      of catching what the owner has
-    - You may visit the Hospital when sick to purchase 
-      treatments of questionable efficacy
-    - The Bank provides a safe place for your coins to grow
-      without the risk of being lost
-    
-    FOREST
-    - Visit the Blacksmith to upgrade your weapons
-    - Pay the Wizard to conjure a random item or weapon
-    
-    SWAMP
-    - The Shaman offers special items to heal HP, 
-      blindness, and illness 
-      
-    CAVE
-    - Earn coins at the Lab for participating in experiments 
-    - The Occultist can perform ritual sacrifices, potentially 
-      to your benefit
+MISSION
+- Rescue Chula and fulfill the prophecy
+- Chula is hidden in one of four regions and protected by
+  enemies, bosses, and powerful special bosses
+- Defeat Denny Biltmore and anyone standing in your way to win
 
-    ELEMENTS
-    - HP represents your health
-    - If you run out of HP, they die and lose
-      a Life
-    - If you run out of Lives, the game is over
-    - You level up as XP (experience) is gained 
-    - Coins are the game's currency
-    - Weapons are used to battle enemies
-    - Items are either used to heal, become stronger,
-      or assist in battle
-    - Perks are permanent upgrades that have special benefits
-    
-    WEAPON
-    - Dmg represents the base weapon damage 
-    - Acc represents the base weapon accuracy
-    - Var represents the weapon's variance or spread
-      Ex. Dmg: 10, Var: 5 - Damage will be between 5-15
-    - Crit represents the weapon's odds for delivering a 
-      critical hit (1.5x damage)
-    - Uses represents the number of attacks the weapon is
-      able to deliver (misses don't count)
-    - When no uses remain, the weapon breaks and is removed
-      from your inventory
-      
-    BATTLE
-    - You and the enemy take turns attacking during battle
-    - You always go first in the turn
-    - Each turn, you have the option to either: 
-      Attack, Use an Item, Switch your Weapon, Flee,
-      or View player and enemy info
-    - If you win, you are awarded coins and xp,
-      and you may receive the enemy's weapon
-    - Battles may be affected by enemy Traits, which
-      can be seen in View during battle
-    
-    MAIN MENU
-    - Save your game, load your game, and adjust sound and sfx
-    
-    FISHING
-    - Oh, and there's a whole fishing game too
-    - Go see the Fishmonger in the Swamp yo
+GAMEPLAY
+- Travel between the City, Forest, Swamp, and Cave
+- Search locations to discover enemies, items, weapons,
+  perks, discoverables, special events, and bosses
+- Hunt wanted enemies for bounties
+- Make choices during special events, some of which may
+  have lasting consequences
+- Invest in questionable opportunities and hope they pay off
+- Beware of the Hohkken while traveling, especially at night
+- Respect Officer Hohkken
+
+LOCATIONS
+
+CITY
+- Casino games offer high-risk ways to earn coins
+- The Coffee Shop restores HP, but illness is always possible
+- The Hospital sells treatments of varying effectiveness
+- The Bank provides a safe place to store coins
+
+FOREST
+- The Blacksmith upgrades weapons
+- The Wizard conjures random items and weapons
+
+SWAMP
+- The Shaman sells rare healing items and remedies
+- The Fishmonger provides access to fishing supplies
+
+CAVE
+- The Lab pays volunteers for experiments
+- The Occultist performs rituals with unpredictable outcomes
+
+CHARACTER
+- HP represents health
+- Losing all HP costs a Life
+- Losing all Lives ends the game
+- Gain XP to level up and become stronger
+- Coins are used to purchase goods and services
+- Weapons are used in combat
+- Items provide healing, utility, and combat effects
+- Perks grant permanent bonuses and abilities
+
+COMBAT
+- Battles are turn-based and you always act first
+- During your turn you may:
+  Attack, Use an Item, Switch Weapons, Flee, or View Info
+- Winning battles grants XP, coins, and sometimes loot
+- Enemies may possess unique Traits that affect combat
+
+WEAPONS
+- Dmg: Base damage
+- Acc: Base accuracy
+- Var: Damage variance
+  Example: Dmg 10, Var 5 = 5-15 damage
+- Crit: Chance to deal 1.5x damage
+- Uses: Number of attacks before the weapon breaks
+
+FISHING
+- Visit the Fishmonger to begin fishing
+- Travel to different fishing areas to find unique species
+- Use bait, tackle, and strategy to catch over 150 creatures
+- Build your Fishing Level and complete your Fishing Log
+- Rare and legendary catches can be worth a fortune
+
+SPECIAL BOSSES
+- Powerful optional enemies with unique encounters
+- Often tied to special events, rumors, or discoveries
+- Defeating them can yield valuable rewards and bragging rights
+
+INVESTMENTS
+- Special events may offer investment opportunities
+- Choose how much to invest and wait for the outcome
+- Some investments generate large profits
+- Others fail spectacularly
+
+MAIN MENU
+- Save and load games
+- Adjust music and sound effects
+- View achievements, statistics, logs, and discoveries
 """))
 
 
@@ -282,7 +284,7 @@ class PlayAgainDecision(BinarySelectionComponent):
 class NewGameReset(LinearComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
-                         next_component=BuildTypeSelection)
+                         next_component=NewGame)
 
     def execute_current(self) -> GameState:
         new_game_state = GameState()

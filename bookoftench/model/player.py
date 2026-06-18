@@ -25,7 +25,7 @@ from .fish import Fish
 from .fishing_item import FishingItem
 from .investment import Investment
 from .item import Item, load_items
-from .perk import attach_perk, perk_is_active, Perk, activate_perk, attach_perks
+from .perk import attach_perk, perk_is_active, Perk, activate_perk_print, attach_perks
 from .trait import Trait
 from .weapon import load_weapons, Weapon
 from bookoftench.data.enviroment import DAY, NIGHT, FULL, WETTING, DRYING
@@ -500,7 +500,7 @@ class Player(Combatant):
         if perk_is_active(perk.name):
             print_and_sleep(yellow(f"You already have this perk."), 1)
             return False
-        activate_perk(perk.name)
+        activate_perk_print(perk.name)
         return True
 
     def gain_coins(self, amount: int) -> None:

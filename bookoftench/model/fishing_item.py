@@ -48,7 +48,7 @@ class FishingItem(Buyable):
             effects.append(f"Stamina Loss {yellow(f'+{int(self.stamina_reduction * 100)}%')}")
 
         if self.rage_reduction:
-            effects.append(f"Rage {red(f'-{int(self.rage_reduction * 100)}%')}")
+            effects.append(f"Rage Gain {red(f'-{int(self.rage_reduction * 100)}%')}")
 
         if self.strength_reduction:
             effects.append(f"Strength {orange(f'-{int(self.strength_reduction * 100)}%')}")
