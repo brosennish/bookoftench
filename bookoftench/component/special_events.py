@@ -7,7 +7,8 @@ from bookoftench.component import functional_component, \
     OfficerEncounter, set_special_boss, Battle
 from bookoftench.data.audio import PUNCH, POSITIVE, MONSTER_ATTACK, PISTOL, BLADE, COINS
 from bookoftench.data.components import SPECIAL_EVENT
-from bookoftench.data.enemies import OILY_DOILY, BASTA_SHERMAN, SLENDERMAN
+from bookoftench.data.enemies import OILY_DOILY, BASTA_SHERMAN, SLENDERMAN, DEATH_WORM, CYCLOPS, SABERTOOTH_LIGER, \
+    GIANT_MUTANT_RAT, SEWER_GATOR
 from bookoftench.data.illnesses import HERPES
 from bookoftench.data.items import TENCH_FILET, SWAMP, FOREST, CITY, CAVE
 from bookoftench.data.special_events import Special_Events, LOST_GOLD_P2
@@ -507,7 +508,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
 # ================================================================================================
 
     @staticmethod
-    def oily_proposal(game_state: GameState, choice: int):
+    def oily_doily_intro(game_state: GameState, choice: int):
         player = game_state.player
         game_state.current_area.special_bosses.append(OILY_DOILY)
 
@@ -518,17 +519,17 @@ class SpecialEventComponent(LabeledSelectionComponent):
         else:
             if random.random() < 0.5:
                 print_and_sleep(yellow(f"You manage to escape, for now..."), 1.5)
-                player.luck += 0.5
+                player.gain_or_lose_luck(0.25)
             else:
                 print_and_sleep(red(f"You turn and run, but oily floats much faster..."), 1.5)
-                player.luck -= 0.5
+                player.gain_or_lose_luck(-0.25)
                 set_special_boss(game_state, OILY_DOILY)
                 Battle(game_state).run()
 
 # ================================================================================================
 
     @staticmethod
-    def basta_deal(game_state: GameState, choice: int):
+    def basta_intro(game_state: GameState, choice: int):
         player = game_state.player
         game_state.current_area.special_bosses.append(BASTA_SHERMAN)
 
@@ -544,10 +545,10 @@ class SpecialEventComponent(LabeledSelectionComponent):
         else:
             if random.random() < 0.5:
                 print_and_sleep(yellow(f"You manage to escape, for now..."), 1.5)
-                player.luck += 0.5
+                player.gain_or_lose_luck(0.25)
             else:
                 print_and_sleep(yellow(f"You try to run, but Basta is much too fast..."), 1.5)
-                player.luck -= 0.5
+                player.gain_or_lose_luck(-0.25)
                 set_special_boss(game_state, BASTA_SHERMAN)
                 Battle(game_state).run()
 
@@ -571,6 +572,60 @@ class SpecialEventComponent(LabeledSelectionComponent):
                 player.luck -= 0.25
                 set_special_boss(game_state, SLENDERMAN)
                 Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def death_worm_intro(game_state: GameState):
+        game_state.current_area.special_bosses.append(DEATH_WORM)
+        set_special_boss(game_state, DEATH_WORM)
+        Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def cyclops_intro(game_state: GameState, choice: int):
+        player = game_state.player
+        game_state.current_area.special_bosses.append(CYCLOPS)
+
+        if choice == 1:
+            set_special_boss(game_state, CYCLOPS)
+            Battle(game_state).run()
+        else:
+            if random.random() < 0.5:
+                print_and_sleep(yellow(f"You throw a rock and hit it directly in its pupil..."), 1.5)
+                print_and_sleep(yellow(f"It flinches just long enough for you to escape."), 1.5)
+                print_and_sleep(yellow(f"You have a feeling that it is not done with you..."), 1.5)
+                player.gain_or_lose_luck(0.25)
+            else:
+                print_and_sleep(yellow(f"You throw a rock at its eye but its just a bit outside..."), 1.5)
+                player.gain_or_lose_luck(-0.25)
+                set_special_boss(game_state, CYCLOPS)
+                Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def sabertooth_liger_intro(game_state: GameState):
+        game_state.current_area.special_bosses.append(SABERTOOTH_LIGER)
+        set_special_boss(game_state, SABERTOOTH_LIGER)
+        Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def giant_mutant_rat_intro(game_state: GameState):
+        game_state.current_area.special_bosses.append(GIANT_MUTANT_RAT)
+        set_special_boss(game_state, GIANT_MUTANT_RAT)
+        Battle(game_state).run()
+
+# ================================================================================================
+
+    @staticmethod
+    def sewer_gator_intro(game_state: GameState):
+        game_state.current_area.special_bosses.append(SEWER_GATOR)
+        set_special_boss(game_state, SEWER_GATOR)
+        Battle(game_state).run()
 
 # ================================================================================================
 
