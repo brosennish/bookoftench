@@ -127,10 +127,16 @@ class SpecialEventComponent(LabeledSelectionComponent):
         return self.leave or not self.game_state.player.is_alive()
 
     def display_options(self) -> None:
-        print_and_sleep(
-            self.special_event.color(self.special_event.text),
-            self.special_event.sleep
-        )
+        if self.special_event.color:
+            print_and_sleep(
+                self.special_event.color(self.special_event.text),
+                self.special_event.sleep
+            )
+        else:
+            print_and_sleep(
+                self.special_event.text,
+                self.special_event.sleep
+            )
 
         for binding in self.binding_map.values():
             if binding.key.lower() == "r":

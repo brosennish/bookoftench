@@ -100,7 +100,7 @@ Aye, and if yer dry, a tench filet would also do.
 
 # ================================================================================================
 
-    {'name': NEWS_HEADLESS_WHORES_MAN, 'color': orange, 'sleep': 0, 'theme': None,
+    {'name': NEWS_HEADLESS_WHORES_MAN, 'color': '', 'sleep': 0, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
 
@@ -117,7 +117,7 @@ Reporting live from the Swamp, I'm Shannon O'Shanahan, Shebokken News.
 
 # ================================================================================================
 
-    {'name': NEWS_HOHKKEN_ENTERS_CITY, 'color': orange, 'sleep': 0, 'theme': None,
+    {'name': NEWS_HOHKKEN_ENTERS_CITY, 'color': '', 'sleep': 0, 'theme': None,
      'areas': [a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
 
@@ -139,7 +139,7 @@ Reporting live from Shebokken, I'm Shannon O'Shanahan, Shebokken News.
 
 # ================================================================================================
 
-    {'name': NEWS_WHALE_MAN, 'color': orange, 'sleep': 0, 'theme': None,
+    {'name': NEWS_WHALE_MAN, 'color': '', 'sleep': 0, 'theme': None,
      'areas': [a.FOREST], 'time': [DAY], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
 
@@ -173,7 +173,7 @@ Reporting live from Shebokken, I'm Shannon O'Shanahan, Shebokken News.
 
 # ================================================================================================
 
-    {'name': WEDNESDAY_NEWS, 'color': orange, 'sleep': 0, 'theme': None,
+    {'name': WEDNESDAY_NEWS, 'color': '', 'sleep': 0, 'theme': None,
      'areas': [a.FOREST, a.SWAMP], 'time': [DAY], 'moon': None, 'season': None,
      'text': """Your flip phone buzzes with a news alert...
 
