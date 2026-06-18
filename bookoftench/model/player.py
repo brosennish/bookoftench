@@ -701,11 +701,14 @@ class Player(Combatant):
         @subscribe_function(LevelUpEvent)
         def handle_investments():
             for v in self.investments:
+                if not v.active:
+                    continue
                 if v.maturity_lvl == self.lvl:
                     if random.random() < v.success_rate:
-                        v.value *= v.multiplier
+                        payout = round(v.value * v.multiplier)
+                        v.value = payout
                         print_and_sleep(green(f"{v.success_text}"), 1.5)
-                        self.gain_coins(v.value)
+                        self.gain_coins(payout)
                     else:
                         print_and_sleep(yellow(f"{v.failure_text}"), 1.5)
                         print_and_sleep(yellow(f"Your investment of {v.value} ran dry."), 1.5)
