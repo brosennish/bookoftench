@@ -269,14 +269,14 @@ class BuildLuckSelection(LinearComponent):
     def execute_current(self) -> None:
         player = self.game_state.player
         while True:
-            luck = safe_input("Luck [0-10]:")
+            luck = safe_input("Luck [0-7]:")
             if not luck.isdigit():
-                print_and_sleep(yellow("Luck must be a numeric value between 0 and 10."))
+                print_and_sleep(yellow("Luck must be a numeric value between 0 and 7."))
             elif float(luck) < 0:
                 player.luck = 0
                 return self.game_state
-            elif float(luck) > 10:
-                player.luck = 10
+            elif float(luck) > 7:
+                player.luck = 7
                 return self.game_state
             else:
                 player.luck = round(float(luck), 2)
