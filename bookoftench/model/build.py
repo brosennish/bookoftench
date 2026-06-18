@@ -29,22 +29,24 @@ class Build:
     perks: List[Perk]
 
     def __repr__(self) -> str:
-        strength = f"{self.str:g}"
-        accuracy = f"{self.acc:g}"
-        label_width = 9
-
-        stats = dim(' | ').join([
-            f"Lvl: {cyan(self.lvl)}",
-            f"Lives: {yellow(self.lives)}",
-            f"HP: {green(self.hp)}",
-            f"Strength: {red(strength)}",
-            f"Accuracy: {yellow(accuracy)}",
-            f"Luck: {purple(self.luck)}",
-            f"Fishing: {blue(self.fishing_lvl)}",
-            f"Rod: {cyan(self.rod_lvl)}",
-            f"Coins: {green(self.coins)}",
+        row_1 = dim(' | ').join([
+            f"{'Lvl: ':<11}{cyan(f'{self.lvl:<3}')}",
+            f"{'Lives: ':<11}{yellow(f'{self.lives:<3}')}",
+            f"{'HP: ':<11}{green(f'{self.hp:<3}')}",
+            f"{'Strength: ':<11}{red(f'{self.str:<4g}')}",
+            f"{'Accuracy: ':<11}{yellow(f'{self.acc:<4g}')}",
         ])
 
+        row_2 = dim(' | ').join([
+            f"{'Luck: ':<11}{purple(f'{self.luck:<3}')}",
+            f"{'Fishing: ':<11}{blue(f'{self.fishing_lvl:<3}')}",
+            f"{'Rod: ':<11}{cyan(f'{self.rod_lvl:<3}')}",
+            f"{'Coins: ':<11}{green(f'{self.coins:<3}')}",
+        ])
+
+        stats = f"{row_1}\n{row_2}"
+
+        label_width = 9
         detail_rows = []
 
         if self.illness:

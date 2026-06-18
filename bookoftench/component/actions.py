@@ -449,10 +449,10 @@ class BuildPerksSelection(LinearComponent):
         super().__init__(game_state, NoOpComponent)
 
     def execute_current(self) -> None:
-        perks = [p for p in Perks]
+        perks = random.sample(Perks, k=10)
         perks_sorted = sorted(perks, key=lambda p: p['name'])
         for p in perks_sorted:
-            print_and_sleep(purple(p['name']) + dim(" | ") + purple(p['description']))
+            print_and_sleep(purple(p['name']) + dim("\n") + p['description'])
 
         selections = []
         while True:
