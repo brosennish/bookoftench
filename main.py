@@ -1,11 +1,10 @@
 import argparse
+import os
+from colorama import just_fix_windows_console
 
 from bookoftench import SaveTheWenchGame
-
 from bookoftench.audio import preload_all_audio
 from bookoftench.data.audio import get_audio_path
-
-import os
 
 
 def load_component(class_name):
@@ -28,6 +27,8 @@ def load_component(class_name):
 
 
 if __name__ == '__main__':
+    just_fix_windows_console()
+
     parser = argparse.ArgumentParser(description="Save The Wench Game")
     parser.add_argument("-d", "--debug", action="store_true")
     parser.add_argument("-c", "--component", default="DebugInit")
@@ -42,7 +43,6 @@ if __name__ == '__main__':
         import random
 
         random.seed(args.seed)
-        # noinspection PyTypeChecker
         SaveTheWenchGame.debug_from(load_component(args.component))
     else:
         SaveTheWenchGame.run()
