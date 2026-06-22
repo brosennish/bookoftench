@@ -707,10 +707,16 @@ class Player(Combatant):
                     print_and_sleep(purple(f"Restored {gain} HP with Vampiric Sperm!"), 1)
 
         @subscribe_function(LevelUpEvent)
-        def handle_investments():
-            for v in self.investments:
+        def handle_investments(_event):
+            investments = getattr(self, "investments", None)
+
+            if not investments:
+                return
+
+            for v in investments:
                 if not v.active:
                     continue
+
                 if v.maturity_lvl == self.lvl:
                     if random.random() < v.success_rate:
                         payout = round(v.value * v.multiplier)
@@ -721,6 +727,7 @@ class Player(Combatant):
                         print_and_sleep(yellow(f"{v.failure_text}"), 1.5)
                         print_and_sleep(yellow(f"Your investment of {v.value} ran dry."), 1.5)
                         v.value = 0
+
                     v.active = False
 
     # for loading from save file
