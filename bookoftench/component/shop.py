@@ -15,7 +15,7 @@ from bookoftench.model import GameState
 from bookoftench.model.base import Buyable
 from bookoftench.model.perk import attach_perk
 from bookoftench.model.util import display_active_perk_count, display_shop_header
-from bookoftench.ui import blue, yellow
+from bookoftench.ui import blue, yellow, orange
 from bookoftench.util import print_and_sleep
 
 # ================================================================================================
@@ -108,7 +108,7 @@ class ShopComponent(LabeledSelectionComponent):
 def refresh_cost(game_state) -> str:
     player = game_state.player
     cost = min(4 + (1 * player.lvl), 10)
-    return f"Refresh ({cost})"
+    return f"Refresh ({orange(cost)})"
 
 # ================================================================================================
 

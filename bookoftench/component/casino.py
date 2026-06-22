@@ -155,13 +155,13 @@ class KrillOrCray(CasinoGame):
             play_sound(GOLF_CLAP)
             print_and_sleep(green(f"Lucky guess, bozo! You won {payout} coins."), 1)
             player.gain_xp_other(1)
-            player.gain_or_lose_luck(0.05)
+            player.gain_or_lose_luck(0.01)
         else:
             print_and_sleep(
                 blue("Bozo's blunder. Classic. Could've seen that coming from six or eight miles away."), 1)
             player.coins -= wager
             player.casino_lost += wager
-            player.gain_or_lose_luck(-0.05)
+            player.gain_or_lose_luck(-0.01)
         player.games_played += 1
         return self.game_state
 
