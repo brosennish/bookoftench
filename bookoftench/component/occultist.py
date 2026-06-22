@@ -89,7 +89,7 @@ class OccultistComponent(LabeledSelectionComponent):
         def purchase_component(game_state: GameState):
             player = game_state.player
             if player.coins < ritual.cost:
-                print_and_sleep(yellow(f"Need more coin"), 1)
+                print_and_sleep(yellow(f"Need more coin."), 1)
             else:
                 play_sound(PURCHASE)
                 player.coins -= ritual.cost

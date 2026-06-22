@@ -93,7 +93,7 @@ class ShopComponent(LabeledSelectionComponent):
             play_sound(WHIFF)
             self.game_state.current_area.shop.reset_inventory()
         else:
-            print_and_sleep(yellow("Need more coin"), 2)
+            print_and_sleep(yellow("Need more coin."), 2)
 
     @staticmethod
     def _make_buy_or_steal_component(buyable: Buyable):

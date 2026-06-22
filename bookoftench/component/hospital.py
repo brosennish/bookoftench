@@ -76,7 +76,7 @@ def treatment_component(game_state: GameState) -> None:
         raise RuntimeError("Player should not be able to purchase treatment without an illness.")
 
     if player.coins < illness.cost:
-        print_and_sleep(yellow(f"Need more coin"), 1)
+        print_and_sleep(yellow(f"Need more coin."), 1)
         return
 
     if random.random() < illness.success_rate + (min(player.luck, 10) / 100):

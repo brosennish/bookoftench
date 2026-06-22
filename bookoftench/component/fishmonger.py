@@ -15,7 +15,7 @@ from bookoftench.model import GameState
 from bookoftench.model.fishing_area import load_fishing_areas, FishingArea
 from bookoftench.model.bait import load_baits, Bait
 from bookoftench.model.fishing_item import load_fishing_items, FishingItem
-from bookoftench.model.util import display_fishmonger_header, display_bait_shop_header
+from bookoftench.model.util import display_fishmonger_header, display_bait_shop_header, display_fishing_item_shop_header
 from bookoftench.ui import blue, yellow, cyan, orange
 from bookoftench.util import print_and_sleep
 
@@ -74,7 +74,7 @@ class Fishmonger(LabeledSelectionComponent):
 
     def _return(self):
         self.leave = True
-        print_and_sleep(f"{blue("Aye.")}", 1)
+        print_and_sleep(blue("Aye."), 1)
 
     def bait_shop(self):
         BaitShop(self.game_state).run()
@@ -103,17 +103,16 @@ class Fishmonger(LabeledSelectionComponent):
             player = game_state.player
 
             if fishing_area.travel_cost > player.coins:
-                print_and_sleep(yellow(f"Need more coin"), 2)
+                print_and_sleep(yellow(f"Need more coin."), 2)
                 return None
             elif not player.current_bait:
-                print_and_sleep(yellow(f"Equip some bait"), 2)
+                print_and_sleep(yellow(f"Equip some bait."), 2)
                 return None
             else:
                 player.coins -= fishing_area.travel_cost
                 game_state.current_fishing_area = fishing_area
                 play_music(TRAVEL_THEME)
-                print_and_sleep(cyan(f'Traveling by boat to the {fishing_area.name}...'), 4)
-                stop_music() # todo - remove this once boat component has theme
+                print_and_sleep(cyan(f"Traveling by boat to the {fishing_area.name}..."), 4)
                 BoatComponent(game_state).run()
                 return None
 
@@ -161,7 +160,6 @@ class BaitShop(LabeledSelectionComponent):
 
     def play_theme(self) -> None:
         pass
-        # play_music(FISHMONGER_THEME)
 
     def launch_fishing_item_shop(self) -> None:
         self.leave = True
@@ -186,7 +184,7 @@ class BaitShop(LabeledSelectionComponent):
             player = game_state.player
 
             if bait.cost > player.coins:
-                print_and_sleep(yellow("Need more coin"), 1.5)
+                print_and_sleep(yellow("Need more coin."), 1.5)
                 return
 
             if bait.name in player.tackle_box:
@@ -233,7 +231,7 @@ class FishingItemShop(LabeledSelectionComponent):
             LabeledSelectionComponent(
                 game_state,
                 fishing_item_bindings,
-                top_level_prompt_callback=display_bait_shop_header,
+                top_level_prompt_callback=display_fishing_item_shop_header,
             ),
             LabeledSelectionComponent(
                 game_state,
@@ -289,11 +287,11 @@ def get_rod_upgrade_cost(player) -> int:
     return round(cost / 5) * 5
 
 def upgrade_rod(player, cost):
-    if player.coins > cost:
+    if player.coins >= cost:
         original = player.rod_lvl
         player.rod_lvl += 1
         play_sound(PURCHASE)
         player.coins -= cost
         print_and_sleep(cyan(f"Rod Level: {original} -> {player.rod_lvl}"), 1)
     else:
-        print_and_sleep(yellow(f"Need more coin."), 1)
+        print_and_sleep(yellow("Need more coin."), 1)

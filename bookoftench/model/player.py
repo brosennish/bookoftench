@@ -384,7 +384,7 @@ class Player(Combatant):
 
     def make_purchase(self, buyable: Buyable) -> bool:
         if self.coins < buyable.cost:
-            print_and_sleep(yellow(f"Need more coin"), 1)
+            print_and_sleep(yellow(f"Need more coin."), 1)
             return False
         if isinstance(buyable, Item) and self.add_item(buyable):
             event_logger.log_event(BuyItemEvent(buyable.name, buyable.cost))

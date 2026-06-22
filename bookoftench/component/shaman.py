@@ -103,7 +103,7 @@ class ShamanComponent(LabeledSelectionComponent):
             player = game_state.player
 
             if player.coins < rite.cost:
-                print_and_sleep(yellow(f"Need more coin"), 1)
+                print_and_sleep(yellow(f"Need more coin."), 1)
             else:
                 play_sound(PURCHASE)
                 player.coins -= rite.cost

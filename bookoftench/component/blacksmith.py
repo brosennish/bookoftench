@@ -105,17 +105,17 @@ class BlacksmithComponent(LabeledSelectionComponent):
                 return
             if weapon.uses == -1:
                 if player.coins < 400:
-                    print_and_sleep(yellow(f"Need more coin"), 2)
+                    print_and_sleep(yellow(f"Need more coin."), 2)
                     return
                 cost = 400
             elif weapon.type == MELEE:
                 if player.coins < 125:
-                    print_and_sleep(yellow(f"Need more coin"), 2)
+                    print_and_sleep(yellow(f"Need more coin."), 2)
                     return
                 cost = 125
             elif weapon.type == RANGED:
                 if player.coins < 150:
-                    print_and_sleep(yellow(f"Need more coin"), 2)
+                    print_and_sleep(yellow(f"Need more coin."), 2)
                     return
                 cost = 150
             else:

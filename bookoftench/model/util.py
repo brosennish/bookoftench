@@ -172,6 +172,23 @@ def display_bait_shop_header(game_state: GameState) -> None:
 
 # ================================================================================================
 
+def display_fishing_item_shop_header(game_state: GameState) -> None:
+    player = game_state.player
+    season = game_state.season
+    season_color = blue if season == WET_SEASON else yellow
+    tod = game_state.time_of_day
+    tod_display = "Day" if tod == DAY else "Night"
+    moon = game_state.moon
+
+    print_and_sleep(f"{dim(' | ').join([
+        f"{season_color(f"{season}")}",
+        f"{yellow(tod_display) if tod == DAY else purple(tod_display)}",
+        f"{moon} Moon",
+        f"Coins: {green(f"{player.coins}")}",
+    ])}")
+
+# ================================================================================================
+
 def fishing_state_color(game_state: GameState) -> Callable[[str], str]:
     fish = game_state.current_fish
 
