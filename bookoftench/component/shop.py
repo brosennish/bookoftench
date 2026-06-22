@@ -70,15 +70,15 @@ class ShopComponent(LabeledSelectionComponent):
     def _return(self):
         self.exit_shop = True
         print_and_sleep(blue("Until next time!"), 1)
+        return self.game_state
 
     def can_exit(self) -> bool:
         return self.game_state.shop.player_is_banned or self.exit_shop
 
     def display_options(self) -> None:
         area = self.game_state.current_area.name
-        message = f"Welcome to the {area} Shop!"
-        print_and_sleep(f"{blue(f'{message}')}")
 
+        print_and_sleep(blue(f"Welcome to the {area} Shop!"))
         display_shop_header(self.game_state)
 
         for component in self.selection_components:
@@ -86,20 +86,23 @@ class ShopComponent(LabeledSelectionComponent):
 
     def _refresh(self):
         player = self.game_state.player
-        cost = min(4 + (1 * player.lvl), 10)
+        cost = min(4 + player.lvl, 10)
 
-        if player.coins >= cost:
-            player.coins -= cost
-            play_sound(WHIFF)
-            self.game_state.current_area.shop.reset_inventory()
-        else:
+        if player.coins < cost:
             print_and_sleep(yellow("Need more coin."), 2)
+            return self.game_state
+
+        player.coins -= cost
+        play_sound(WHIFF)
+        self.game_state.current_area.shop.reset_inventory()
+
+        return self.game_state
 
     @staticmethod
     def _make_buy_or_steal_component(buyable: Buyable):
         @functional_component(state_dependent=True)
         def buy_or_steal_component(game_state: GameState):
-            BuyOrStealDecision(game_state, buyable).run()
+            return BuyOrStealDecision(game_state, buyable).run()
 
         return buy_or_steal_component
 
@@ -116,11 +119,17 @@ class BuyOrStealDecision(LabeledSelectionComponent):
     def __init__(self, game_state: GameState, buyable: Buyable):
         luck = min(game_state.player.luck, 7)
         success_chance = self.calculate_success_chance(buyable, luck)
-        super().__init__(game_state, bindings=[
-            SelectionBinding('B', f"Buy ({buyable.cost})", self._make_purchase_component(buyable)),
-            SelectionBinding('S', f"Steal ({success_chance}% chance)",
-                             self._make_steal_component(buyable, success_chance))
-        ], quittable=True)
+        success_chance = max(0, min(100, success_chance))
+
+        super().__init__(
+            game_state,
+            bindings=[
+                SelectionBinding('B', f"Buy ({buyable.cost})", self._make_purchase_component(buyable)),
+                SelectionBinding('S', f"Steal ({success_chance}% chance)",
+                                 self._make_steal_component(buyable, success_chance)),
+            ],
+            quittable=True
+        )
 
     @staticmethod
     @attach_perk(CATFISH_BURGLAR, value_description="shoplifting odds")
@@ -135,6 +144,8 @@ class BuyOrStealDecision(LabeledSelectionComponent):
         def purchase_component(game_state: GameState):
             if game_state.player.make_purchase(buyable):
                 game_state.shop.remove_listing(buyable)
+
+            return game_state
 
         return purchase_component
 
@@ -164,6 +175,8 @@ class StealItem(RandomChoiceComponent):
                 game_state.player.gain_or_lose_luck(0.1)
                 game_state.shop.remove_listing(buyable)
 
+            return game_state
+
         return steal_component
 
     @staticmethod
@@ -171,23 +184,42 @@ class StealItem(RandomChoiceComponent):
     def busted_component(game_state: GameState):
         game_state.shop.ban_player()
         game_state.player.gain_or_lose_luck(-0.1)
+
         OfficerEncounter(game_state).run()
+
+        return game_state
 
 # ================================================================================================
 
 class SellItem(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        item_bindings = [ReprBinding(str(i), item.name,
-                                     functional_component()(partial(game_state.player.sell_item, item.name)),
-                                     item.to_sellable_item()) for
-                         i, item in enumerate(game_state.player.items.values())]
-        weapon_bindings = [ReprBinding(str(i), weapon.base_name,
-                                       functional_component()(partial(game_state.player.sell_weapon,
-                                                                      weapon.base_name)),
-                                       weapon.to_sellable_weapon()) for
-                           i, weapon in enumerate(
-                [w for w in game_state.player.weapon_dict.values() if w.sell_value > 0], len(item_bindings))]
-        super().__init__(game_state,
-                         bindings=[*item_bindings, *weapon_bindings],
-                         top_level_prompt_callback=lambda gs: print("\nYour Inventory (Sell Menu):"), quittable=True)
+        item_bindings = [
+            ReprBinding(
+                str(i),
+                item.name,
+                functional_component()(partial(game_state.player.sell_item, item.name)),
+                item.to_sellable_item()
+            )
+            for i, item in enumerate(game_state.player.items.values(), 1)
+        ]
+
+        weapon_bindings = [
+            ReprBinding(
+                str(i),
+                weapon.base_name,
+                functional_component()(partial(game_state.player.sell_weapon, weapon.base_name)),
+                weapon.to_sellable_weapon()
+            )
+            for i, weapon in enumerate(
+                [w for w in game_state.player.weapon_dict.values() if w.sell_value > 0],
+                len(item_bindings) + 1
+            )
+        ]
+
+        super().__init__(
+            game_state,
+            bindings=[*item_bindings, *weapon_bindings],
+            top_level_prompt_callback=lambda gs: print("\nYour Inventory (Sell Menu):"),
+            quittable=True
+        )
 
