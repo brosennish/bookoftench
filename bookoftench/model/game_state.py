@@ -64,6 +64,7 @@ class GameState:
     season: str = DRY_SEASON
     time_of_day: str = field(default=DAY)
     moon: str = field(default=DRY)
+    day: int = 1
 
     wench_area: Area = None
 
@@ -183,6 +184,7 @@ class GameState:
         if self.time_of_day == DAY:
             self.time_of_day = NIGHT
         elif self.time_of_day == NIGHT:
+            self.day += 1
             self.time_of_day = DAY
 
     def set_moon(self):
