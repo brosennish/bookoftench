@@ -223,7 +223,6 @@ class GameState:
                             odds = 0.06
                         else:
                             odds = 0.02
-                        event_logger.log_event(HohkkenEvent())
 
                     else:
                         if season == DRY_SEASON:

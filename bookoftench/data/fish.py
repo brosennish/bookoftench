@@ -933,7 +933,7 @@ Fish_Species = [
 
     {'name': LEATHERBACK_SEA_TURTLE, 'rarity': LEGENDARY, 'areas': [OCEAN], 'time': [DAY, NIGHT], 'moon': None,
      'min_length': 48, 'max_length': 96, 'min_weight_factor': 0.60, 'max_weight_factor': 1.80,
-     'base_value': 180, 'rage_factor': 0.15, 'speed': 0.40, 'strength': 2.20, 'max_stamina': 180,
+     'base_value': 180, 'rage_factor': 0.25, 'speed': 0.40, 'strength': 2.20, 'max_stamina': 180,
      'preferred_bait': [b.KRILL, b.GLOW_LURE],
      'spit_hook_chance': 0.001, 'protected': True, 'max_age': 70,
      'description': 'The largest sea turtle in the world, capable of crossing entire oceans during migration.',
