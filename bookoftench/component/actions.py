@@ -683,12 +683,29 @@ class Search(RandomChoiceComponent):
     @functional_component(state_dependent=True)
     def _discover_discoverable(game_state: GameState):
         player = game_state.player
+
         rarity = search_discoverable_rarity(player)
-        color = rarity_color(rarity)
-        available = [d for d in load_discoverables() if game_state.current_area.name
-                     in d.areas and d.rarity == rarity]
+
+        available = [
+            d for d in load_discoverables()
+            if game_state.current_area.name in d.areas
+               and d.rarity == rarity
+        ]
+
+        if not available:
+            available = [
+                d for d in load_discoverables()
+                if game_state.current_area.name in d.areas
+            ]
+
+        if not available:
+            print_and_sleep(dim("You came up dry."), 1)
+            return game_state
 
         find = random.choice(available)
+        rarity = find.rarity
+        color = rarity_color(rarity)
+
         if rarity == COMMON:
             time = 1
         elif rarity == UNCOMMON:
@@ -709,63 +726,77 @@ class Search(RandomChoiceComponent):
         elif rarity == LEGENDARY:
             play_sound(DISCOVERABLE_2)
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_LEGENDARY))
-        else:
+        elif rarity == MYTHIC:
             play_sound(DISCOVERABLE_2)
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_MYTHIC))
+        else:
+            play_sound(DISCOVERABLE)
+            print_and_sleep(yellow(f"Unknown discovery rarity: {rarity}"), 1)
 
         # add to discoveries and update count
-        if game_state.discoveries:
-            names = [i.name for i in game_state.discoveries]
+        discovered = next(
+            (d for d in game_state.discoveries if d.name == find.name),
+            None
+        )
 
-            if find.name not in names:
-                game_state.discoveries.append(find)
-            for i in game_state.discoveries:
-                if i.name == find.name:
-                    i.count += 1
+        if discovered:
+            discovered.count += 1
         else:
+            find.count += 1
             game_state.discoveries.append(find)
-            for i in game_state.discoveries:
-                i.count += 1
-
 
         # take damage if find.hp < 0
         if find.hp < 0:
             original_hp = player.hp
-            player.lose_hp(abs(find.hp - random.randint(0, 3)))
+            damage = abs(find.hp) + random.randint(0, 3)
+
+            player.lose_hp(damage)
+
             print_and_sleep(
                 f"You{f' {find.pre} ' if find.pre else ' '}{yellow(find.name)} "
-                f"{color(f"({find.rarity})")} and lost {red(original_hp - player.hp)} hp.",
-                time)
+                f"{color(f'({find.rarity})')} and lost {red(original_hp - player.hp)} hp.",
+                time
+            )
+
             if player.hp == 0:
                 player.lives -= 1
                 event_logger.log_event(PlayerDeathEvent(player.lives))
-            return
+
+            return game_state
 
         # heal if discoverable.hp and player.hp < max_hp
-        if player.hp < player.max_hp:
-            if find.hp > 0:
-                original_hp = player.hp
-                player.gain_hp(find.hp + random.randint(0, 3))
-                print_and_sleep(
-                    f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
-                    f"{color(f"({find.rarity})")} and restored {green(player.hp - original_hp)} hp.",
-                    time)
-                return
+        if player.hp < player.max_hp and find.hp > 0:
+            original_hp = player.hp
+
+            player.gain_hp(find.hp + random.randint(0, 3))
+
+            print_and_sleep(
+                f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
+                f"{color(f'({find.rarity})')} and restored {green(player.hp - original_hp)} hp.",
+                time
+            )
+
+            return game_state
 
         # gain coin if value greater than 0
         if find.value > 0:
             print_and_sleep(
                 f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
                 f"{color(f'({find.rarity})')} worth {green(find.value)} of coin.",
-                time)
+                time
+            )
+
             player.gain_coins(find.value)
-            return
+            return game_state
 
         # print found message if neutral
         print_and_sleep(
             f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
-            f"{color(f'({find.rarity})')}!", time)
-        return
+            f"{color(f'({find.rarity})')}!",
+            time
+        )
+
+        return game_state
 
 # ================================================================================================
 
