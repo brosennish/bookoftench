@@ -35,11 +35,14 @@ class ShamanOpen(GatekeepingComponent):
 class ShamanBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         player = game_state.player
-        super().__init__(game_state, decision_function=lambda: player.illness or player.blind
-                                                               or player.hp != player.max_hp,
-                         accept_component=ShamanSleeping,
-                         deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("There is nothing the Shaman can do you for you at this time.\n"), 1.5)))
+        super().__init__(
+            game_state,
+            decision_function=lambda: player.illness or player.blind or player.hp != player.max_hp,
+            accept_component=ShamanSleeping,
+            deny_component=functional_component()(lambda: print_and_sleep(
+                blue("There is nothing the Shaman can do for you at this time.\n"), 1.5
+            ))
+        )
 
 # ================================================================================================
 
@@ -81,16 +84,16 @@ class ShamanComponent(LabeledSelectionComponent):
 
     def _return(self):
         self.leave = True
-        print_and_sleep(f"{blue('Go now.')}", 1)
+        print_and_sleep(blue("Go now."), 1.5)
+        return self.game_state
 
     def can_exit(self) -> bool:
         return self.leave or not self.game_state.player.is_alive()
 
     def display_options(self) -> None:
         message = random.choice(Shaman_Lines)
-        print_and_sleep(
-            f"{blue(message)}\n", 1.5
-        )
+        print_and_sleep(blue(f"{message}\n"), 1.5)
+
         for component in self.selection_components:
             component.display_options()
 
@@ -103,11 +106,14 @@ class ShamanComponent(LabeledSelectionComponent):
             player = game_state.player
 
             if player.coins < rite.cost:
-                print_and_sleep(yellow(f"Need more coin."), 1)
-            else:
-                play_sound(PURCHASE)
-                player.coins -= rite.cost
-                event_logger.log_event(ShamanEvent())
-                rite.perform(player)
+                print_and_sleep(yellow("Need more coin."), 1)
+                return game_state
+
+            play_sound(PURCHASE)
+            player.coins -= rite.cost
+            event_logger.log_event(ShamanEvent())
+            rite.perform(player)
+
+            return game_state
 
         return purchase_component

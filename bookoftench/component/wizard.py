@@ -76,7 +76,8 @@ class WizardComponent(LabeledSelectionComponent):
 
     def _return(self):
         self.leave = True
-        print_and_sleep(f"{blue('Hush, mortal. Be gone with you.')}", 1)
+        print_and_sleep(blue("Hush, mortal. Be gone with you."), 1.5)
+        return self.game_state
 
     def can_exit(self) -> bool:
         return self.leave or not self.game_state.player.is_alive()
@@ -96,21 +97,24 @@ class WizardComponent(LabeledSelectionComponent):
         @functional_component(state_dependent=True)
         def purchase_component(game_state: GameState):
             player = game_state.player
+
             if player.coins < spell.cost:
-                print_and_sleep(yellow(f"Need more coin."), 1)
-                return
-            if spell.type == WEAPON:
-                if len(player.get_weapons()) == player.max_weapons:
-                    print_and_sleep(yellow(f"No room in sack."), 1)
-                    return
-            if spell.type == ITEM:
-                if len(player.items) == player.max_items:
-                    print_and_sleep(yellow(f"No room in sack."), 1)
-                    return
+                print_and_sleep(yellow("Need more coin."), 1)
+                return game_state
+
+            if spell.type == WEAPON and len(player.get_weapons()) == player.max_weapons:
+                print_and_sleep(yellow("No room in sack."), 1)
+                return game_state
+
+            if spell.type == ITEM and len(player.items) == player.max_items:
+                print_and_sleep(yellow("No room in sack."), 1)
+                return game_state
 
             play_sound(PURCHASE)
             player.coins -= spell.cost
             event_logger.log_event(WizardEvent())
             spell.cast(player)
+
+            return game_state
 
         return purchase_component
