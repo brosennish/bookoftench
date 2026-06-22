@@ -40,6 +40,7 @@ PHROGGER = "Phrogger"
 FAIRY_CODMOTHER = "Fairy Codmother"
 FUGITIVE = "Fugitive"
 GATOR_WRESTLER = "Gator Wrestler"
+GEM_ZOMBIE = "Gem Zombie"
 GIANT_MUTANT_RAT = "Giant Mutant Rat"
 GIGOLO = "Gigolo"
 GOON = "Goon"
@@ -346,6 +347,11 @@ Enemies = [
      'weapons': [w.SHIV, w.INJECTION_NEEDLE, w.PISTOL, w.POCKET_SAND],
      'bounty': 205, 'coins': 20, 'type': NORMAL, 'flee': 0.95, 'strength': 1.07, 'acc': 1.06,
      'areas': [CAVE, FOREST, SWAMP]},
+
+    {'name': GEM_ZOMBIE, 'trait': '', 'illness': None, 'hp': 105,
+     'weapons': [w.CHISEL, w.PICKAXE, w.STONE_SPEAR],
+     'bounty': 175, 'coins': 15, 'type': NORMAL, 'flee': 0.90, 'strength': 1.10, 'acc': 0.98,
+     'areas': [CAVE]},
 
     {'name': PROSPECTOR, 'trait': '', 'illness': None, 'hp': 90,
      'weapons': [w.FLASHLIGHT, w.PICKAXE, w.CHISEL],
@@ -729,6 +735,12 @@ Enemy_Lines = {
         "Did you know there's more than one of Officer Hohkken?",
         "He might look like a donut-eating slob of a cop. But Officer Hohkken has a dark side.",
         "I'm already facing life in Shebokken's underground jail, might as well collect your bounty.",
+    ],
+
+    GEM_ZOMBIE: [
+        "Gems... GEMS!",
+        "I couldn't afford the tanzanite marmalade on GSN, so I had to come find it myself.",
+        "Gold is lame, I'm only interested in the finest of fine gems.",
     ],
 
     PROSPECTOR: [
