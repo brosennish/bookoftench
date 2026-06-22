@@ -36,7 +36,7 @@ from .encounters import PostKillEncounters
 from .menu import OverviewMenu
 from .registry import register_component, get_registered_component
 from bookoftench.data.builds import RANDOM, DENNY, BRO
-from bookoftench.data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE
+from bookoftench.data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE, MYTHIC
 from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
 from bookoftench.data.weapons import BARE_HANDS, Weapons, TENCH_CANNON, SPECIAL, BLIND
 from bookoftench.event_base import EventType
@@ -942,11 +942,18 @@ class Travel(LabeledSelectionComponent):
 @register_component(USE_ITEM)
 class UseItem(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state,
-                         decision_function=lambda: len(game_state.player.items) > 0,
-                         accept_component=ItemSelectionComponent,
-                         deny_component=functional_component()(
-                             lambda: print_and_sleep(yellow(f"Your inventory is dry."), 1)))
+        super().__init__(
+            game_state,
+            decision_function=lambda: len(game_state.player.items) > 0,
+            accept_component=ItemSelectionComponent,
+            deny_component=self._no_items_component
+        )
+
+    @staticmethod
+    @functional_component(state_dependent=True)
+    def _no_items_component(game_state: GameState):
+        print_and_sleep(yellow("Your inventory is dry."), 1)
+        return game_state
 
 
 class ItemSelectionComponent(LabeledSelectionComponent):
@@ -977,8 +984,7 @@ class ItemSelectionComponent(LabeledSelectionComponent):
             quittable=True
         )
 
-    def _use_item_and_check(self, item, enemy: Enemy | None):
-        # Apply item
+    def _use_item_and_check(self, item, enemy: Enemy | None) -> GameState:
         self.game_state.player.use_item(
             item.name,
             enemy,
@@ -988,24 +994,38 @@ class ItemSelectionComponent(LabeledSelectionComponent):
         player = self.game_state.player
         current_enemy = self.game_state.current_area.current_enemy
 
-        # Check battle end
         if not player.is_alive() or (current_enemy and not current_enemy.is_alive()):
-            BattleEnd(self.game_state).run()
+            return BattleEnd(self.game_state).run()
+
+        return self.game_state
 
 # ================================================================================================
 
 @register_component(EQUIP_WEAPON)
 class EquipWeapon(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state,
-                         bindings=[SelectionBinding(
-                             key=str(i),
-                             name=weapon.get_complete_format(None, None),
-                             component=functional_component()(
-                                 partial(game_state.player.equip_weapon,
-                                         weapon.name, weapon.base_name)))
-                             for (i, weapon) in enumerate(game_state.player.get_weapons(), 1)],
-                         top_level_prompt_callback=lambda gs: gs.player.display_equip_header(), quittable=True)
+        super().__init__(
+            game_state,
+            bindings=[
+                SelectionBinding(
+                    key=str(i),
+                    name=weapon.get_complete_format(None, None),
+                    component=self._make_equip_component(weapon)
+                )
+                for i, weapon in enumerate(game_state.player.get_weapons(), 1)
+            ],
+            top_level_prompt_callback=lambda gs: gs.player.display_equip_header(),
+            quittable=True
+        )
+
+    @staticmethod
+    def _make_equip_component(weapon):
+        @functional_component(state_dependent=True)
+        def equip_component(game_state: GameState):
+            game_state.player.equip_weapon(weapon.name, weapon.base_name)
+            return game_state
+
+        return equip_component
 
 # ================================================================================================
 
@@ -1017,16 +1037,15 @@ class SwapFoundItemYN(BinarySelectionComponent):
                          no_component=NoOpComponent)
 
 
-# TODO Clean Up
 class SwapFoundItemMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         found = game_state.found_item
+        valid = list(game_state.player.items.values())
 
-        valid = list(i for i in game_state.player.items.values())
         length = 0
-        for i in game_state.player.items.keys():
-            if len(i) > length:
-                length = len(i) + 1
+        for item_name in game_state.player.items.keys():
+            if len(item_name) > length:
+                length = len(item_name) + 1
 
         super().__init__(
             game_state,
@@ -1034,18 +1053,25 @@ class SwapFoundItemMenu(LabeledSelectionComponent):
                 SelectionBinding(
                     key=str(i),
                     name=item.get_simple_format(length),
-                    component=functional_component()(
-                        partial(game_state.player.swap_found_item,
-                                item.name, found, game_state)
-                    )
+                    component=self._make_swap_component(item.name, found)
                 )
                 for i, item in enumerate(valid, 1)
             ],
-            top_level_prompt_callback=lambda gs: (
-                print_and_sleep(dim(gs.found_item.get_found_format()), 0),
-            )[-1],
+            top_level_prompt_callback=lambda gs: print_and_sleep(
+                dim(gs.found_item.get_found_format()),
+                0
+            ),
             quittable=True
         )
+
+    @staticmethod
+    def _make_swap_component(item_name, found):
+        @functional_component(state_dependent=True)
+        def swap_component(game_state: GameState):
+            game_state.player.swap_found_item(item_name, found, game_state)
+            return game_state
+
+        return swap_component
 
 
 class SwapFoundWeaponYN(BinarySelectionComponent):
@@ -1070,17 +1096,25 @@ class SwapFoundWeaponMenu(LabeledSelectionComponent):
                 SelectionBinding(
                     key=str(i),
                     name=weapon.get_complete_format(None, None),
-                    component=functional_component()(
-                        partial(game_state.player.swap_found_weapon, weapon.base_name, found)
-                    )
+                    component=self._make_swap_component(weapon.base_name, found)
                 )
                 for i, weapon in enumerate(valid, 1)
             ],
-            top_level_prompt_callback=lambda gs: (
-                print_and_sleep(dim(gs.found_weapon.get_complete_format(None, None)), 0),
-            )[-1],
+            top_level_prompt_callback=lambda gs: print_and_sleep(
+                dim(gs.found_weapon.get_complete_format(None, None)),
+                0
+            ),
             quittable=True
         )
+
+    @staticmethod
+    def _make_swap_component(weapon_base_name, found):
+        @functional_component(state_dependent=True)
+        def swap_component(game_state: GameState):
+            game_state.player.swap_found_weapon(weapon_base_name, found)
+            return game_state
+
+        return swap_component
 
 # ================================================================================================
 
@@ -1092,34 +1126,43 @@ class Attack(Component):
     def run(self) -> GameState:
         player, enemy = self.game_state.player, self.game_state.current_area.current_enemy
 
-        if not self.failed_flee:
-            if player.is_alive() and enemy.is_alive():
-                player.attack(enemy)
+        if not self.failed_flee and player.is_alive() and enemy.is_alive():
+            player.attack(enemy)
+
         if player.is_alive() and enemy.is_alive():
             enemy.attack(player)
-            if player.is_alive() and enemy.is_alive():
-                self.handle_trait_checks(player, enemy)
+
+        if player.is_alive() and enemy.is_alive():
+            self.handle_trait_checks(player, enemy)
 
         if not player.is_alive() or not enemy.is_alive():
-            BattleEnd(self.game_state).run()
+            return BattleEnd(self.game_state).run()
 
         return self.game_state
 
-    def handle_trait_checks(self, player, enemy):
+    def handle_trait_checks(self, player, enemy) -> None:
         if enemy.trait:
             trait_name = enemy.trait.name
+
             if trait_name == CHEATER and enemy.current_weapon.uses > 0 and random.random() < 0.15:
                 enemy.attack(player)
+
                 if not player.is_alive() or not enemy.is_alive():
                     return
-            if trait_name == CONTAGIOUS and random.random() < 0.15:
+
+            elif trait_name == CONTAGIOUS and random.random() < 0.15:
                 EnemyInfect(self.game_state).run()
-            if trait_name == COWARD and random.random() < 0.15:
+
+            elif trait_name == COWARD and random.random() < 0.15:
                 print_and_sleep(yellow(f"{enemy.name} fled like a bozo baby coward!"), 1.5)
                 player.can_flee = True
                 return
-            if (trait_name == ACHILLES and enemy.current_weapon.base_name != TENCH_CANNON
-                    and enemy.hp < 25):
+
+            elif (
+                    trait_name == ACHILLES
+                    and enemy.current_weapon.base_name != TENCH_CANNON
+                    and enemy.hp < 25
+            ):
                 enemy.current_weapon = enemy.enemy_switch_weapon(TENCH_CANNON)
 
         if random.random() < ENEMY_SWITCH_WEAPON_CHANCE and enemy.current_weapon.base_name != TENCH_CANNON:
@@ -1145,6 +1188,8 @@ class FleeSelectionBinding(SelectionBinding):
     def format(self) -> str:
         enemy = self.game_state.current_area.current_enemy
         calculation = int(round(calculate_flee() * enemy.flee, 2) * 100)
+        calculation = max(0, min(100, calculation))
+
         return f"Flee ({calculation}%)"
 
 
@@ -1152,6 +1197,8 @@ class TryFlee(RandomChoiceComponent):
     def __init__(self, game_state: GameState):
         enemy = game_state.current_area.current_enemy
         self.flee_chance = int(round(calculate_flee() * enemy.flee, 2) * 100)
+        self.flee_chance = max(0, min(100, self.flee_chance))
+
         super().__init__(game_state, bindings=[
             ProbabilityBinding(self.flee_chance, self._flee_success),
             ProbabilityBinding(100 - self.flee_chance, FailedFlee)
@@ -1163,38 +1210,52 @@ class TryFlee(RandomChoiceComponent):
         event_logger.log_event(FleeEvent(game_state.current_area.current_enemy.name))
         game_state.player.gain_xp_other(1)
 
+        return game_state
+
 # ================================================================================================
 
 @register_component(ENCOUNTER_SUB_BOSS)
 class EncounterBoss(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: self.execute_current(),
-                         accept_component=Battle,
-                         deny_component=functional_component()(lambda: print_and_sleep(
-                             yellow("All bosses in this area are now in Hell.\n"), 1.5)))
+        super().__init__(
+            game_state,
+            decision_function=lambda: self.execute_current(),
+            accept_component=Battle,
+            deny_component=self._all_bosses_dead_component
+        )
 
     def execute_current(self) -> bool:
         area = self.game_state.current_area
 
-        options = [i for i in area.special_bosses]
-
-        liberated = [i.name for i in self.game_state.liberated_enemies]
-        available = [i for i in options if i not in liberated]
+        liberated = [enemy.name for enemy in self.game_state.liberated_enemies]
+        available = [
+            boss_name for boss_name in area.special_bosses
+            if boss_name not in liberated
+        ]
 
         if not available:
             return False
-        else:
-            choice = random.choice(available)
-            set_special_boss(self.game_state, choice)
-            return True
+
+        choice = random.choice(available)
+        set_special_boss(self.game_state, choice)
+
+        return True
+
+    @staticmethod
+    @functional_component(state_dependent=True)
+    def _all_bosses_dead_component(game_state: GameState):
+        print_and_sleep(yellow("All bosses in this area are currently in Hell.\n"), 1.5)
+        return game_state
 
 # ================================================================================================
 
-def set_special_boss(game_state: GameState, name: str):
+def set_special_boss(game_state: GameState, name: str) -> GameState:
     time = game_state.time_of_day
 
     special_boss = game_state.current_area.spawn_special_boss(name, time, game_state)
     game_state.current_area.current_enemy = special_boss
+
+    return game_state
 
 # ================================================================================================
 
@@ -1216,16 +1277,17 @@ class SpawnEnemy(LinearComponent):
 
 class Battle(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        enemy = game_state.current_area.current_enemy
-        chance = int(round(calculate_flee() * enemy.flee, 2) * 100)
-        super().__init__(game_state, top_level_prompt_callback=lambda gs: print_and_sleep(get_battle_status_view(gs)),
-                         bindings=[
-                             SelectionBinding('A', "Attack", Attack),
-                             SelectionBinding('I', "Use Item", UseItem),
-                             SelectionBinding('S', "Switch Weapon", EquipWeapon),
-                             SelectionBinding('F', f"Flee ({chance}%)", TryFlee),
-                             SelectionBinding('V', "View", DisplayInfo)
-                         ])
+        super().__init__(
+            game_state,
+            top_level_prompt_callback=lambda gs: print_and_sleep(get_battle_status_view(gs)),
+            bindings=[
+                SelectionBinding('A', "Attack", Attack),
+                SelectionBinding('I', "Use Item", UseItem),
+                SelectionBinding('S', "Switch Weapon", EquipWeapon),
+                FleeSelectionBinding('F', "Flee", TryFlee, game_state),
+                SelectionBinding('V', "View", DisplayInfo),
+            ]
+        )
         self.player = self.game_state.player
         self.player.can_flee = False
         if perk_is_active(DEATH_CAN_WAIT):
@@ -1235,10 +1297,12 @@ class Battle(LabeledSelectionComponent):
         self._subscribe_listeners()
 
     def play_theme(self) -> None:
-        theme = BATTLE_THEME
         current_enemy = self.game_state.current_area.current_enemy
-        if type(current_enemy) == SpecialBoss:
-            theme = current_enemy.theme if len(current_enemy.theme) > 0 else HOHKKEN_THEME
+        theme = BATTLE_THEME
+
+        if isinstance(current_enemy, SpecialBoss):
+            theme = current_enemy.theme if current_enemy.theme else HOHKKEN_THEME
+
         play_music(theme)
 
     def can_exit(self) -> bool:
@@ -1256,16 +1320,20 @@ class EnemyInfect(NoOpComponent):
         super().__init__(game_state)
 
     def run(self):
-        self.execute()
+        return self.execute()
 
     def execute(self):
         player = self.game_state.player
         enemy = self.game_state.current_area.current_enemy
 
+        if not enemy or not enemy.illness:
+            return self.game_state
+
         if not player.illness:
             illness_name = enemy.illness.name
             player.acquire_illness(illness_name)
             print_and_sleep(yellow(f"You caught {player.illness.name} from {enemy.name}!"), 2)
+
         return self.game_state
 
 # ================================================================================================
@@ -1277,18 +1345,21 @@ class BattleEnd(NoOpComponent):
     def run(self):
         return self.check_battle_end()
 
-    def check_battle_end(self):
+    def check_battle_end(self) -> GameState:
         player = self.game_state.player
         enemy = self.game_state.current_area.current_enemy
         current_area = self.game_state.current_area
         wench_area = self.game_state.wench_area
 
-        if not enemy.is_alive():
+        if enemy and not enemy.is_alive():
             self.handle_enemy_death(player, enemy)
             self.game_state.current_area.kill_current_enemy(current_area, wench_area)
+            self.game_state = PostKillEncounters(self.game_state).run()
+
         if not player.is_alive():
             player.lives -= 1
             event_logger.log_event(PlayerDeathEvent(player.lives))
+
         return self.game_state
 
     # TODO - refactor
@@ -1341,9 +1412,7 @@ class BattleEnd(NoOpComponent):
             self.game_state.update_moon()
 
         # --- add enemy to list of liberated enemies ---
-        self.game_state.liberated_enemies.append(self.game_state.current_area.current_enemy)
-
-        PostKillEncounters(self.game_state).run()
+        self.game_state.liberated_enemies.append(enemy)
 
 # ================================================================================================
 
@@ -1354,7 +1423,8 @@ class FightBossOther(Battle):
         self.enemy = self.game_state.current_area.current_enemy
 
     def play_theme(self) -> None:
-        play_music(self.enemy.theme)
+        theme = self.enemy.theme if self.enemy.theme else BATTLE_THEME
+        play_music(theme)
 
     def run(self) -> GameState:
         self.play_theme()
@@ -1371,32 +1441,43 @@ class FightBoss(Battle):
         self.enemy = self.game_state.current_area.current_enemy
 
     def play_theme(self) -> None:
-        play_music(self.enemy.theme)
+        theme = self.enemy.theme if self.enemy.theme else BATTLE_THEME
+        play_music(theme)
 
     @staticmethod
     @functional_component(state_dependent=True)
     # TODO generalize this and get it out of component
-    def captain_hole_action(game_state: GameState) -> None:
-        del game_state.player.items[TENCH_FILET]
+    def captain_hole_action(game_state: GameState) -> GameState:
+        game_state.player.items.pop(TENCH_FILET, None)
+
         injury = random.randint(25, 50)
-        game_state.current_area.boss.hp -= injury
-        print_and_sleep('You hand your filet over to Captain Hole.', seconds=2)
+        game_state.current_area.current_enemy.hp -= injury
+
+        print_and_sleep("You hand your filet over to Captain Hole.", seconds=2)
         stop_music()
         play_sound(PISTOL)
-        print_and_sleep(f'He shoots himself in the jines, losing {injury} HP as a result.', 3)
+        print_and_sleep(f"He shoots himself in the jines, losing {injury} HP as a result.", 3)
+
+        return game_state
 
     def run(self) -> GameState:
         self.play_theme()
         self.enemy.do_preamble()
+
         # TODO generalize this and get it out of component
         if self.enemy.name == CAPTAIN_HOLE and TENCH_FILET in self.player.items:
-            BinarySelectionComponent(self.game_state,
-                                     query="Do you accept?",
-                                     yes_component=self.captain_hole_action,
-                                     no_component=NoOpComponent).run()
+            self.game_state = BinarySelectionComponent(
+                self.game_state,
+                query="Do you accept?",
+                yes_component=self.captain_hole_action,
+                no_component=NoOpComponent
+            ).run()
+
         self.game_state = super().run()
+
         if self.game_state.current_area.current_enemy is None and self.game_state.is_final_boss_available():
             return FightFinalBoss(self.game_state).run()
+
         return self.game_state
 
 # ================================================================================================
@@ -1404,8 +1485,12 @@ class FightBoss(Battle):
 @register_component(FINAL_BOSS_FIGHT)
 class FightFinalBoss(FightBoss):
     def __init__(self, game_state: GameState):
+        final_boss = game_state.current_area.summon_final_boss()
+        game_state.current_area.current_enemy = final_boss
+
         super().__init__(game_state)
-        self.enemy = self.game_state.current_area.summon_final_boss()
+
+        self.enemy = final_boss
 
 # ================================================================================================
 
