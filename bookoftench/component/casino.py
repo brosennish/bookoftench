@@ -40,11 +40,16 @@ def can_gamble(game_state: GameState) -> bool:
 
 
 @functional_component(state_dependent=True)
-def display_crapped_out_message(game_state: GameState) -> None:
+def display_crapped_out_message(game_state: GameState) -> GameState:
     player = game_state.player
-    message = "You're out of plays. Buy a perk or level up, bozo.\n" if player.remaining_plays == 0 else \
-        "Later, bozo.\n"
+
+    if player.remaining_plays == 0:
+        message = "You're out of plays. Buy a perk or level up, bozo.\n"
+    else:
+        message = "Later, bozo.\n"
+
     print_and_sleep(blue(message), 2)
+    return game_state
 
 
 class CasinoCheck(GatekeepingComponent):
@@ -68,6 +73,7 @@ class Casino(LabeledSelectionComponent):
 
     def _return(self):
         self.leave_casino = True
+        return self.game_state
 
     def can_exit(self) -> bool:
         return self.leave_casino
@@ -88,26 +94,33 @@ class CasinoGame(Component):
     def play_round(self, wager: int) -> GameState:
         pass
 
-    def get_wager_or_quit(self) -> int:
+    def get_wager_or_quit(self) -> int | None:
         player = self.game_state.player
-        print_and_sleep(f"Coins: {green(player.coins)} {dim('|')} Plays: {cyan(player.remaining_plays)}")
+
+        print_and_sleep(
+            f"Coins: {green(player.coins)} {dim('|')} Plays: {cyan(player.remaining_plays)}"
+        )
+
         while True:
             raw_wager = safe_input("[#] : Wager\n"
                                    "[R] : Return").strip().lower()
-            if raw_wager != 'r' and not raw_wager.isdigit():
-                print_and_sleep(yellow("Invalid choice."))
-            elif raw_wager.isdigit():
-                if int(raw_wager) < 5:
-                    print_and_sleep(
-                        blue("Minimum wager is 5 coins, bozo."), 1)
-                elif int(raw_wager) > self.game_state.player.coins:
-                    print_and_sleep(
-                        blue(f"Can't bet what ya don't have, bozo."), 1)
-                else:
-                    return int(raw_wager)
-            else:
+
+            if raw_wager == "r":
                 self.player_quit = True
-                return -1
+                return None
+
+            if not raw_wager.isdigit():
+                print_and_sleep(yellow("Invalid choice."))
+                continue
+
+            wager = int(raw_wager)
+
+            if wager < 5:
+                print_and_sleep(blue("Minimum wager is 5 coins, bozo."), 1)
+            elif wager > player.coins:
+                print_and_sleep(blue("Can't bet what ya don't have, bozo."), 1)
+            else:
+                return wager
 
     def run(self) -> GameState:
         if can_gamble(self.game_state):
@@ -214,22 +227,28 @@ class AboveOrBelow(CasinoGame):
         while True:
             call = safe_input("[A] : Above\n"
                               "[B] : Below").strip().lower()
-            if call not in ('a', 'b'):
-                print_and_sleep(yellow("Invalid choice."))
-            else:
-                break
-        comp: Callable[[int, int], bool] = lambda r1, r2: r2 > r1 if call == 'a' else r2 < r1
-        return comp
+
+            if call == "a":
+                return lambda r1, r2: r2 > r1
+
+            if call == "b":
+                return lambda r1, r2: r2 < r1
+
+            print_and_sleep(yellow("Invalid choice."))
 
     @staticmethod
     def should_cash_out() -> bool:
         while True:
             choice = safe_input("[C] : Continue\n"
-                                "[$] : Cash Out\n")
-            if choice not in ('c', '$'):
-                print_and_sleep(yellow("Invalid choice."))
-            else:
-                return choice == '$'
+                                "[$] : Cash Out\n").strip().lower()
+
+            if choice == "c":
+                return False
+
+            if choice == "$":
+                return True
+
+            print_and_sleep(yellow("Invalid choice."))
 
     def get_wager_or_quit(self) -> int:
         if self.turn == 0:
@@ -242,34 +261,47 @@ class AboveOrBelow(CasinoGame):
 
     def play_round(self, wager: int) -> GameState:
         player = self.game_state.player
+
         self.display_status()
+
         roll1 = roll_die()
         call_is_correct = self.get_eval_function()
         roll2 = roll_die()
+
         if call_is_correct(roll1, roll2):
             self.turn += 1
             payout = self.get_payout()
+
             print_and_sleep(blue(f"Lucky guess!\nPayout increased to {payout} coins.\n"))
-            player.gain_or_lose_luck(0.05)
-            if self.turn == len(self.ladder) - 1 or self.should_cash_out():
+            player.gain_or_lose_luck(0.01)
+
+            final_round_complete = self.turn == len(self.ladder) - 1
+
+            if final_round_complete or self.should_cash_out():
                 player.coins += payout
-                if self.turn == len(self.ladder):
-                    print_and_sleep(f"{blue("You completed the final round.")}")
+
+                if final_round_complete:
+                    print_and_sleep(blue("You completed the final round."))
                     player.gain_xp_other(3)
-                    player.gain_or_lose_luck(0.1)
+                    player.gain_or_lose_luck(0.5)
+
                 play_sound(COINS)
-                print_and_sleep(f"{green(f"You cashed out {payout} coins!")}")
+                print_and_sleep(green(f"You cashed out {payout} coins!"))
+
                 player.casino_won += payout
-                self.player_quit = True
                 player.games_played += 1
-                return self.game_state
-        else:
-            print_and_sleep(yellow("Your guess was dry."))
-            player.coins -= wager
-            player.casino_lost += wager
-            player.gain_or_lose_luck(-0.1)
-            self.turn = 0
-            player.games_played += 1
+                self.player_quit = True
+
+            return self.game_state
+
+        print_and_sleep(yellow("Your guess was dry."))
+
+        player.coins -= wager
+        player.casino_lost += wager
+        player.gain_or_lose_luck(-0.1)
+        player.games_played += 1
+
+        self.turn = 0
         return self.game_state
 
 
