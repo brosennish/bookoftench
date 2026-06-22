@@ -1,5 +1,4 @@
-from bookoftench.data.illnesses import MAD_TENCH_DISEASE, INWARD_HAIR_GROWTH_DISORDER, HERPES, RESTLESS_BUTT_SYNDROME
-from bookoftench.data import items as i, Perks, Weapons, Items
+\from bookoftench.data import items as i
 from bookoftench.data import perks as p
 from bookoftench.data import weapons as w
 
@@ -9,12 +8,17 @@ BRO = "Bro"
 DENNY = "Denny"
 RANDOM = "Random"
 YOUNG_SALT = "Young Salt"
+COWARD = "Coward"
+LEPRECHAUN = "Leprechaun"
+MERCENARY = "Mercenary"
+TENCH_PERSON = "Tench Person"
+MAKE_A_FISH = "Make a Fish"
 
 # ================================================================================================
 # ================================================================================================
 
 Builds = [
-    {'name': DENNY, 'lives': 2, 'lvl': 1, 'hp': 100, 'str': 1, 'acc': 1, 'coins': 25, 'luck': 0,
+    {'name': DENNY, 'lives': 2, 'lvl': 1, 'hp': 100, 'str': 1, 'acc': 1, 'coins': 25, 'luck': 1,
      'fishing_lvl': 1, 'rod_lvl': 1,
      'items': [i.TENCH_FILET],
      'weapons': [w.KNIFE],
@@ -24,23 +28,63 @@ Builds = [
 
 # ================================================================================================
 
-    {'name': YOUNG_SALT, 'lives': 2, 'lvl': 1, 'hp': 100, 'str': 1.03, 'acc': 0.97, 'coins': 25, 'luck': 3,
+    {'name': YOUNG_SALT, 'lives': 2, 'lvl': 1, 'hp': 100, 'str': 1, 'acc': 1, 'coins': 35, 'luck': 3,
      'fishing_lvl': 3, 'rod_lvl': 3,
      'items': [i.CRITICAL_BASS, i.OCEAN_MAN_LUNCH_BOX],
      'weapons': [w.HARPOON],
-     'perks': [p.TENCH_GENES, p.TENCH_EYES],
+     'perks': [],
      'illness': None,
      'notes': 'Not an Old Salt - but a salt, nonetheless.'},
 
 # ================================================================================================
 
-    {'name': BRO, 'lives': 99, 'lvl': 99, 'hp': 999, 'str': 10, 'acc': 10, 'coins': 999, 'luck': 9,
-     'fishing_lvl': 99, 'rod_lvl': 99,
-     'items': [b['name'] for b in Items],
-     'weapons': [b['name'] for b in Weapons],
-     'perks': [b['name'] for b in Perks],
+    {'name': COWARD, 'lives': 2, 'lvl': 1, 'hp': 90, 'str': 0.9, 'acc': 0.9, 'coins': 25, 'luck': 1,
+     'fishing_lvl': 1, 'rod_lvl': 1,
+     'items': [i.SMOKE_BOMB, i.WORMHOLE, i.IOU],
+     'weapons': [],
+     'perks': [p.USED_SNEAKERS, p.NEW_SNEAKERS],
      'illness': None,
-     'notes': "Bro... really bro?"},
+     'notes': "Little. Bozo. Baby. Coward."},
+
+# ================================================================================================
+
+    {'name': LEPRECHAUN, 'lives': 2, 'lvl': 1, 'hp': 77, 'str': 0.5, 'acc': 1, 'coins': 333, 'luck': 7,
+     'fishing_lvl': 1, 'rod_lvl': 1,
+     'items': [i.MOON_RUNE, i.PHOTOSYNTHOPHYL],
+     'weapons': [w.CANE],
+     'perks': [],
+     'illness': None,
+     'notes': "Luck of the dayng Irish."},
+
+# ================================================================================================
+
+    {'name': MERCENARY, 'lives': 2, 'lvl': 1, 'hp': 100, 'str': 1.05, 'acc': 1.05, 'coins': 25, 'luck': 1,
+     'fishing_lvl': 1, 'rod_lvl': 1,
+     'items': [i.MOONSHINE, i.CANNED_HORSE],
+     'weapons': [w.PISTOL],
+     'perks': [p.SHERLOCK_TENCH, p.TENCH_THE_BOUNTY_HUNTER],
+     'illness': None,
+     'notes': "Tench justice - plain and simple."},
+
+# ================================================================================================
+
+    {'name': TENCH_PERSON, 'lives': 2, 'lvl': 1, 'hp': 110, 'str': 1.05, 'acc': 0.8, 'coins': 0, 'luck': 1,
+     'fishing_lvl': 1, 'rod_lvl': 1,
+     'items': [i.TENCH_FILET, i.CARP_FILET],
+     'weapons': [w.TENCH_CANNON],
+     'perks': [p.TENCH_GENES, p.TENCH_EYES],
+     'illness': None,
+     'notes': "Human-tench hybridization - Satan's greatest work."},
+
+# ================================================================================================
+
+    {'name': MAKE_A_FISH, 'lives': 1, 'lvl': 1, 'hp': 80, 'str': 0.8, 'acc': 0.9, 'coins': 500, 'luck': 0,
+     'fishing_lvl': 1, 'rod_lvl': 1,
+     'items': [i.OCEAN_MAN_LUNCH_BOX],
+     'weapons': [w.POCKET_KNIFE, w.HARDCOVER_BOOK],
+     'perks': [p.DEATH_CAN_WAIT, p.SOLOMON_TRAIN, p.BROWNMAIL],
+     'illness': None,
+     'notes': "Tench-fed, foundationally sponsored."},
 
 # ================================================================================================
 
