@@ -108,6 +108,7 @@ class GameState:
 
             build_obj = Build(
                 name=d["name"],
+                label=d["label"],
                 notes=d.get("notes"),
                 lives=d["lives"],
                 lvl=d["lvl"],
@@ -176,7 +177,7 @@ class GameState:
             self.season = DRY_SEASON
 
     def set_time_of_day(self):
-        self.time_of_day = random.choice([DAY, NIGHT])
+        self.time_of_day = DAY
 
     def update_time_of_day(self) -> None:
         if self.time_of_day == DAY:
