@@ -83,7 +83,6 @@ SKIN_COLLECTOR = "Skin Collector"
 SKUNK_APE = "Skunk Ape"
 SLEDGE_HAMMOND = "Sledge Hammond"
 SLEEPWALKER = "Sleepwalker"
-SLENDERMAN = "Slender Man"
 SMUGGLER = "Smuggler"
 SPELUNKER = "Spelunker"
 SURVIVALIST = "Survivalist"
@@ -456,11 +455,6 @@ Special_Bosses = [
      'weapons': [w.BARE_HANDS, w.TEETH, w.WOODEN_CLUB],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1.1, 'acc': 1,
      'item': i.SASQUATCH_FOOT},
-
-    {'name': SLENDERMAN, 'hp': 230, 'coins': 0, 'trait': PLANT,
-     'weapons': [w.BARE_HANDS, w.TENTACLES],
-     'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.80, 'strength': 1.1, 'acc': 1,
-     'item': i.SLENDERMANS_SUIT},
 
     {'name': WENDIGO, 'hp': 235, 'coins': 0, 'trait': None,
      'weapons': [w.CLAWS, w.FANGS],

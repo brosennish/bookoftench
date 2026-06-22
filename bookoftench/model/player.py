@@ -517,11 +517,19 @@ class Player(Combatant):
         print_and_sleep(cyan(f"Your accuracy increased by {round(amount, 2)}!"), 1)
 
     def gain_or_lose_luck(self, amount: float):
-        self.luck += round(amount, 3)
-        if self.luck < 0:
-            self.luck = 0
-        if self.luck > 7:
-            self.luck = 7
+        old_luck = self.luck
+
+        new_luck = round(old_luck + amount, 2)
+        new_luck = max(0.0, min(new_luck, 7.0))
+
+        actual_change = round(new_luck - old_luck, 2)
+
+        if actual_change < 0:
+            print_and_sleep(yellow(f"Your luck decreased by {abs(actual_change)}."), 1)
+        elif actual_change > 0:
+            print_and_sleep(green(f"Your luck increased by {actual_change}!"), 1)
+
+        self.luck = new_luck
 
     def acquire_illness(self, illness_name) -> None:
         illness_dict = next(i for i in Illnesses if i['name'] == illness_name)

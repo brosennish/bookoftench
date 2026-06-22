@@ -40,7 +40,6 @@ SABERTOOTH_LIGER_INTRO = "Sabertooth Liger Intro"
 SASQUATCH_INTRO = "Sasquatch Intro"
 SEWER_GATOR_INTRO = "Sewer Gator Intro"
 SKUNK_APE_INTRO = "Skunk Ape Intro"
-SLENDER_INTRO = "Slender Intro"
 
 # Investment Opportunities
 BOB_ROBERTSON_PROPOSAL = "Bob Robertson Proposal"
@@ -354,29 +353,6 @@ What's it gonna be, Mr. Son of Mayor?
 """,
      'choices': ['Pay Up', 'Run Away'],
      'optional': False, 'method': 'basta_intro', 'replayable': False},
-
-# ================================================================================================
-
-    {'name': SLENDER_INTRO, 'color': red, 'sleep': 3, 'theme': HOSPITAL_THEME,
-     'areas': [a.FOREST], 'time': [NIGHT], 'moon': None, 'season': None,
-     'text': """Stumbling through the dark forest, you feel you're being followed...
-
-You turn around, but nothing is there.
-
-You turn around again - nothing.
-
-You fake turn around, and then suddenly fully turn around, and there it is.
-
-A faceless, 10-foot tall creature in a tailored suit stands before you -
-its interests and motivations perfectly ambiguous.
-
-Suddenly, an array of pitch-black tentacles emerge from its back and
-begin wriggling violently.
-
-What do you do?
-""",
-     'choices': ['Fill Dipe', 'Bail'],
-     'optional': False, 'method': 'slender_intro', 'replayable': False},
 
 # ================================================================================================
 

@@ -74,7 +74,6 @@ SABERTOOTH_LIGER_FILET = "Sabertooth Liger Filet"
 SASQUATCH_FOOT = "Sasquatch Foot"
 SEWER_GATOR_SKULL = "Sewer Gator Skull"
 SKUNK_APE_PELT = "Skunk Ape Pelt"
-SLENDERMANS_SUIT = "Slenderman's Suit"
 SMOKE_BOMB = "Smoke Bomb"
 SOMEWHAT_SPICY_NOODLES = "Somewhat Spicy Noodles"
 SOUR_MILK = "Sour Milk"
@@ -304,8 +303,6 @@ Items = [
      'desc': 'A big foot', 'sound': EAT},
     {'name': SEWER_GATOR_SKULL, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 100, 'areas': None,
      'desc': 'The skull of the notorious Sewer Gator', 'sound': WHIFF},
-    {'name': SLENDERMANS_SUIT, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 150, 'areas': None,
-     'desc': 'A suit, custom-made for Slenderman - origins unknown', 'sound': WHIFF},
     {'name': TALKING_DONKEY, 'type': BOSS, 'hp': 100, 'cost': 0, 'sell_value': 125, 'areas': None,
      'desc': 'Smells like onions', 'sound': EAT},
     {'name': TROLL_TOLL, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 100, 'areas': None,
