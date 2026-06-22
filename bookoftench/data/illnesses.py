@@ -9,6 +9,7 @@ PHANTOM_HIM_SYNDROME = "Phantom Him Syndrome"
 POST_SHARTUM_DEPRESSION = "Post-Shartum Depression"
 RESTLESS_BUTT_SYNDROME = "Restless Butt Syndrome"
 INWARD_HAIR_GROWTH_DISORDER = "Inward Hair Growth Disorder"
+TERMITE_INFESTATION = "Termite Infestation"
 
 # ================================================================================================
 
@@ -99,5 +100,11 @@ Illnesses = [
      'levels_until_death': 4,
      'cost': 100,
      'success_rate': 0.50},
+
+    {'name': TERMITE_INFESTATION,
+     'description': "A condition in which a rapidly growing termite colony voraciously devours you from the inside.",
+     'levels_until_death': 4,
+     'cost': 100,
+     'success_rate': 0.80},
 
 ]
