@@ -97,7 +97,7 @@ class BuildLevelSelection(LinearComponent):
 
 class BuildFishingLevelSelection(LinearComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, BuildLivesSelection)
+        super().__init__(game_state, BuildRodLevelSelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
@@ -123,18 +123,19 @@ class BuildRodLevelSelection(LinearComponent):
 
     def execute_current(self) -> None:
         player = self.game_state.player
+
         while True:
-            fishing_level = safe_input("Fishing Rod Level [0-10]:")
-            if not fishing_level.isdigit():
+            rod_level = safe_input("Fishing Rod Level [0-10]:")
+            if not rod_level.isdigit():
                 print_and_sleep(yellow("Fishing Rod Level must be a numeric value between 0 and 10."))
-            elif int(fishing_level) < 0:
-                player.fishing_lvl = 0
+            elif int(rod_level) < 0:
+                player.rod_lvl = 0
                 return self.game_state
-            elif int(fishing_level) > 10:
-                player.fishing_lvl = 10
+            elif int(rod_level) > 10:
+                player.rod_lvl = 10
                 return self.game_state
             else:
-                player.rod_lvl = int(fishing_level)
+                player.rod_lvl = int(rod_level)
                 return self.game_state
 
 # ================================================================================================
@@ -205,6 +206,7 @@ class BuildStrengthSelection(LinearComponent):
 
     def execute_current(self) -> None:
         player = self.game_state.player
+
         while True:
             strength = safe_input("Strength [0-125]:")
             if not strength.isdigit():
@@ -213,7 +215,7 @@ class BuildStrengthSelection(LinearComponent):
                 player.strength = 0
                 return self.game_state
             elif int(strength) > 125:
-                player.strength = 125
+                player.strength = 1.25
                 return self.game_state
             else:
                 player.strength = round(int(strength) * 0.01, 2)
@@ -227,6 +229,7 @@ class BuildAccuracySelection(LinearComponent):
 
     def execute_current(self) -> None:
         player = self.game_state.player
+
         while True:
             accuracy = safe_input("Accuracy [0-110]:")
             if not accuracy.isdigit():
@@ -235,7 +238,7 @@ class BuildAccuracySelection(LinearComponent):
                 player.acc = 0
                 return self.game_state
             elif int(accuracy) > 110:
-                player.acc = 110
+                player.acc = 1.10
                 return self.game_state
             else:
                 player.acc = round(int(accuracy) * 0.01, 2)
@@ -405,7 +408,7 @@ class BuildItemsSelection(LinearComponent):
     def execute_current(self) -> None:
         player = self.game_state.player
         player.items.clear()
-        items = random.sample([i for i in Items if i['type'] != BOSS], k=10)
+        items = random.sample([i for i in Items if i['type'] != BOSS], k=12)
         for i in items:
             if i['type'] == NORMAL:
                 print_and_sleep(cyan(f"{i['name']:<24}") + (dim(' | ')) + "HP: +" + (green(i['hp'])))
@@ -441,41 +444,52 @@ class BuildWeaponsSelection(LinearComponent):
         player = self.game_state.player
 
         player.weapon_dict.clear()
+
         load = load_weapons([BARE_HANDS])
         weapon = next(i for i in load)
         player.weapon_dict[BARE_HANDS] = PlayerWeapon.from_weapon(weapon)
+        player.current_weapon = player.weapon_dict[BARE_HANDS]
 
-        weapons = random.sample([w['name'] for w in Weapons if w['uses'] >= 0], k=10)
+        weapons = random.sample([w['name'] for w in Weapons if w['uses'] >= 0], k=12)
         weapon_options = load_weapons(weapons)
         weapons_sorted = sorted(weapon_options, key=lambda w: w.damage)
+
         for w in weapons_sorted:
             print_and_sleep(w.get_complete_format(None, None))
 
         selections = []
+
         while True:
             weapon = safe_input(f"Add a weapon ({len(selections)}/3 selected) or c to continue:")
+
             if weapon == "c":
-                if not selections:
-                    return self.game_state
-                else:
-                    final_picks = load_weapons(selections) # convert selections to Weapon objects
-                    for w in final_picks: # add each one to player weapon dict
+                if selections:
+                    final_picks = load_weapons(selections)
+
+                    for w in final_picks:
                         player.weapon_dict.update({w.name: PlayerWeapon.from_weapon(w)})
-                        player.current_weapon = next(i for i in player.weapon_dict.values())
-                        player.build.weapons.extend(final_picks)  # add to build weapons
+
+                    player.build.weapons.extend(final_picks)
+
                 return self.game_state
-            elif weapon in selections: # if it's already been selected
+
+            elif weapon in selections:
                 print_and_sleep(yellow(f"You already have {weapon}."))
-            elif weapon not in weapons: # if it's not a weapon
+
+            elif weapon not in weapons:
                 print_and_sleep(yellow("Weapon not found - Please try again (case-sensitive)."))
+
             else:
-                selections.append(weapon) # add to list for counting
-                if len(selections) == 3: # if max reached
-                    final_picks = load_weapons(selections) # convert selections to Weapon objects
-                    for w in final_picks: # add each one to player weapon dict
+                selections.append(weapon)
+
+                if len(selections) == 3:
+                    final_picks = load_weapons(selections)
+
+                    for w in final_picks:
                         player.weapon_dict.update({w.name: PlayerWeapon.from_weapon(w)})
-                        player.current_weapon = next(i for i in player.weapon_dict.values())
-                    player.build.weapons.extend(final_picks) # add to build weapons
+
+                    player.build.weapons.extend(final_picks)
+
                     return self.game_state
 
 # ================================================================================================
@@ -485,7 +499,7 @@ class BuildPerksSelection(LinearComponent):
         super().__init__(game_state, NoOpComponent)
 
     def execute_current(self) -> None:
-        perks = random.sample(Perks, k=10)
+        perks = random.sample(Perks, k=12)
         perks_sorted = sorted(perks, key=lambda p: p['name'])
         for p in perks_sorted:
             print_and_sleep(purple(p['name']) + dim("\n") + p['description'])
@@ -559,44 +573,61 @@ class BuildComponent(LabeledSelectionComponent):
                 player.coins = random.randint(0, 250)
                 player.luck = random.randint(0, 5)
 
+                player.weapon_dict.clear()
+                bare_hands = next(iter(load_weapons([BARE_HANDS])))
+                player.weapon_dict[BARE_HANDS] = PlayerWeapon.from_weapon(bare_hands)
+                player.current_weapon = player.weapon_dict[BARE_HANDS]
+
+                # --- illness ---
                 if random.random() < 0.5:
-                    list1 = [i['name'] for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
-                    options = load_illnesses(list1)
+                    illness_names = [
+                        i['name']
+                        for i in Illnesses
+                        if i['name'] != LATE_ONSET_SIDS
+                    ]
+
+                    options = load_illnesses(illness_names)
                     player.illness = random.choice(options)
-                    player.illness_death_lvl = 1 + player.illness.levels_until_death
+                    player.illness_death_lvl = player.lvl + player.illness.levels_until_death
 
-                    # --- items ---
-                    items_count = random.randint(0, 3)
-                    if items_count >= 1:
-                        items = [i['name'] for i in Items]
-                        item_options = load_items(items)
-                        selections = []
-                        for i in range(items_count):
-                            item = random.choice(item_options)
-                            selections.append(item)
-                            item_options.remove(item)
-                        player.items = dict((it.name, it) for it in selections)
+                # --- items ---
+                items_count = random.randint(0, 3)
+                if items_count >= 1:
+                    items = [
+                        i['name']
+                        for i in Items
+                        if i['type'] != BOSS
+                    ]
 
-                    # --- weapons ---
-                    weapons_count = random.randint(0, 3)
-                    if weapons_count >= 1:
-                        weapons = [i['name'] for i in Weapons if i['name'] not in [BARE_HANDS]]
-                        weapon_options = load_weapons(weapons)
-                        selections = []
-                        for i in range(weapons_count):
-                            weapon = random.choice(weapon_options)
-                            selections.append(weapon)
-                            weapon_options.remove(weapon)
-                            player.weapon_dict.update({weapon.base_name: PlayerWeapon.from_weapon(weapon)})
+                    item_options = load_items(items)
+                    selections = random.sample(item_options, k=items_count)
+                    player.items = dict((it.name, it) for it in selections)
 
-                    # --- perks ---
-                    perks_count = random.randint(0, 4)
-                    if perks_count >= 1:
-                        perks = [i['name'] for i in Perks]
-                        for i in range(perks_count):
-                            perk = random.choice(perks)
-                            activate_perk_print(perk)
-                            perks.remove(perk)
+                # --- weapons ---
+                weapons_count = random.randint(0, 3)
+                if weapons_count >= 1:
+                    weapons = [
+                        i['name']
+                        for i in Weapons
+                        if i['name'] != BARE_HANDS
+                    ]
+
+                    weapon_options = load_weapons(weapons)
+                    selections = random.sample(weapon_options, k=weapons_count)
+
+                    for weapon in selections:
+                        player.weapon_dict.update({
+                            weapon.name: PlayerWeapon.from_weapon(weapon)
+                        })
+
+                # --- perks ---
+                perks_count = random.randint(0, 4)
+                if perks_count >= 1:
+                    perks = [i['name'] for i in Perks]
+                    selections = random.sample(perks, k=perks_count)
+
+                    for perk in selections:
+                        activate_perk_print(perk)
 
             else:
                 player.lives = build.lives
@@ -612,7 +643,7 @@ class BuildComponent(LabeledSelectionComponent):
 
                 if build.illness:
                     player.illness = build.illness
-                    player.illness_death_lvl = 1 + build.illness.levels_until_death
+                    player.illness_death_lvl = player.lvl + build.illness.levels_until_death
 
                 player.items = dict((it.name, it) for it in build.items)
                 player.weapon_dict.clear()
