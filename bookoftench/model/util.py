@@ -328,7 +328,7 @@ def display_blacksmith_header(game_state: GameState) -> None:
         f"Melee: {orange(f"125")}",
         f"Ranged: {orange(f"150")}",
         f"Special (∞): {orange(f"400")}\n",
-    ])}\n")
+    ])}")
 
 # ================================================================================================
 
