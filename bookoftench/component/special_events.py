@@ -8,7 +8,7 @@ from bookoftench.component import functional_component, \
 from bookoftench.data.audio import PUNCH, POSITIVE, MONSTER_ATTACK, PISTOL, BLADE, COINS, PURCHASE
 from bookoftench.data.components import SPECIAL_EVENT
 from bookoftench.data.enemies import OILY_DOILY, BASTA_SHERMAN, DEATH_WORM, CYCLOPS, SABERTOOTH_LIGER, \
-    GIANT_MUTANT_RAT, SEWER_GATOR, LUCKY_THE_LEPRECHAUN, FAIRY_CODMOTHER, MOTHMAN, SASQUATCH, SKUNK_APE, OGRE
+    GIANT_MUTANT_RAT, SEWER_GATOR, LUCKY_THE_LEPRECHAUN, FAIRY_CODMOTHER, MOTHMAN, SASQUATCH, SKUNK_APE, OGRE, HODAG
 from bookoftench.data.illnesses import HERPES
 from bookoftench.data.items import TENCH_FILET, SWAMP, FOREST, CITY, CAVE
 from bookoftench.data.perks import BEER_GOGGLES
@@ -725,8 +725,8 @@ I'm scheduled to be buried alive at 6... or was it 8?"""), 3)
     @staticmethod
     def hodag_intro(game_state: GameState, choice: int):
         if choice:
-            game_state.current_area.special_bosses.append(OGRE)
-            set_special_boss(game_state, OGRE)
+            game_state.current_area.special_bosses.append(HODAG)
+            set_special_boss(game_state, HODAG)
             Battle(game_state).run()
 
 # ================================================================================================
