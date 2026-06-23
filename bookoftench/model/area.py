@@ -131,7 +131,7 @@ class Area:
             _search_defaults,
         ).copy()
 
-    # ================================================================================================
+# ================================================================================================
 
     @property
     def post_kill_components(self) -> list[str]:
@@ -140,6 +140,10 @@ class Area:
             for encounter in self.encounters
             if encounter.type == EncounterType.POST_KILL
         ]
+
+    @property
+    def enemies_remaining(self) -> int:
+        return max(0, self.enemy_count - self.enemies_killed)
 
 # ================================================================================================
 
