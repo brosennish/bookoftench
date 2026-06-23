@@ -26,9 +26,12 @@ from bookoftench.util import print_and_sleep
 @register_component(OFFICER)
 class OfficerEncounterDecision(ConditionalComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda:
-        OfficerEncounter(game_state).is_officer_lurking(),
+        super().__init__(game_state,
+                         decision_function=self._is_officer_lurking,
                          component=OfficerEncounter)
+
+    def _is_officer_lurking(self) -> bool:
+        return OfficerEncounter(self.game_state).is_officer_lurking()
 
 # ================================================================================================
 
@@ -46,10 +49,17 @@ class OfficerEncounter(BinarySelectionComponent):
 
     @staticmethod
     def _display_greeting() -> None:
-        lines = ["Hey ther'... uh...", "This is Officer Hohkken.", "I'm, uh...", "gonna need you to cough up some coin",
-                 "or else I'll, uh...", "have to rough you up a bit ther'.\n"]
-        for l in lines:
-            print_and_sleep(blue(l), random.choice([1, 1.5, 2]))
+        lines = [
+            "Hey ther'... uh...",
+            "This is Officer Hohkken.",
+            "I'm, uh...",
+            "gonna need you to cough up some coin",
+            "or else I'll, uh...",
+            "have to rough you up a bit ther'.\n",
+        ]
+
+        for line in lines:
+            print_and_sleep(blue(line), random.choice([1, 1.5, 2]))
 
     def _display_header(self) -> None:
         player = self.game_state.player
@@ -75,35 +85,41 @@ class OfficerEncounter(BinarySelectionComponent):
     def is_officer_lurking(self) -> bool:
         if self.game_state.current_fish and self.game_state.current_fish.protected:
             return True
-        else:
-            return random.random() < 0.08
+
+        return random.random() < 0.08
 
 
 def calculate_bribe(game_state: GameState) -> int:
     if game_state.current_fish and game_state.current_fish.protected:
         return round(game_state.current_fish.base_value / 2)
-    else:
-        return game_state.player.lvl * 10
+
+    return game_state.player.lvl * 10
 
 # ================================================================================================
 
 @functional_component(state_dependent=True)
-def obey_officer(game_state: GameState):
+def obey_officer(game_state: GameState) -> GameState:
     amount = calculate_bribe(game_state)
-    if game_state.player.coins >= amount:
-        game_state.player.coins -= amount
-        event_logger.log_event(OfficerEvent(EventType.OFFICER_PAID))
-        game_state.player.sum_of_bribes += amount
-    else:
-        disobey_officer(game_state).run()
+
+    if game_state.player.coins < amount:
+        return disobey_officer(game_state).run()
+
+    game_state.player.coins -= amount
+    game_state.player.sum_of_bribes += amount
+    event_logger.log_event(OfficerEvent(EventType.OFFICER_PAID))
+
+    return game_state
 
 # ================================================================================================
 
 @functional_component(state_dependent=True)
-def disobey_officer(game_state: GameState):
+def disobey_officer(game_state: GameState) -> GameState:
     player = game_state.player
+
     OfficerHohkken(bribe=calculate_bribe(game_state)).handle_hit(player)
     event_logger.log_event(OfficerEvent(EventType.OFFICER_UNPAID))
+
+    return game_state
 
 # ================================================================================================
 
@@ -127,15 +143,15 @@ class PoliceBrutality(Weapon):
 
 @dataclass
 class OfficerHohkken(Enemy):
-    name: str = 'Officer Hohkken'
+    name: str = "Officer Hohkken"
     bribe: int = 10
     hp: int = 100
     current_weapon: Weapon = field(default_factory=PoliceBrutality)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.current_weapon.damage = random.randint(
             max(10, round(self.bribe / 2)),
-            max(10, self.bribe)
+            max(10, self.bribe),
         )
         self.weapon_dict = {self.current_weapon.name: self.current_weapon}
 
