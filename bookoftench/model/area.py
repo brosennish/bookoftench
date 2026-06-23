@@ -3,7 +3,6 @@ from __future__ import annotations
 import copy
 import random
 from dataclasses import dataclass, field
-from typing import List, Dict, Set
 
 from bookoftench.data import Areas
 from bookoftench.data.areas import EncounterType, CAVE, CITY, FOREST, SWAMP
@@ -89,7 +88,7 @@ _event_defaults = {
 
 @dataclass
 class AreaActions:
-    pages: List[List[str]]
+    pages: list[list[str]]
 
     @classmethod
     def defaults(cls) -> AreaActions:
@@ -111,46 +110,46 @@ class Area:
     theme: str
     enemy_count: int = field(default_factory=lambda: random.randint(7, 9))
     enemies_killed: int = 0
-    enemies_seen: Set[str] = field(default_factory=set)
+    enemies_seen: set[str] = field(default_factory=set)
     boss_defeated: bool = False
-    boss: Boss = None
-    current_enemy = None
+    boss: Boss | None = None
+    current_enemy: Enemy | Boss | SpecialBoss | None = None
     special_bosses: list[str] = field(default_factory=list)
 
     shop: Shop = field(default_factory=Shop)
-    search_probabilities: Dict[str, int] = field(default_factory=lambda: _search_defaults.copy())
-    event_probabilities: Dict[str, int] = field(default_factory=lambda: _event_defaults.copy())
+    search_probabilities: dict[str, int] = field(default_factory=lambda: _search_defaults.copy())
+    event_probabilities: dict[str, int] = field(default_factory=lambda: _event_defaults.copy())
     actions_menu: AreaActions = field(default_factory=AreaActions.defaults)
-    encounters: List[AreaEncounter] = field(default_factory=list)
+    encounters: list[AreaEncounter] = field(default_factory=list)
 
 # ================================================================================================
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.boss = load_boss(self.boss_name)
         self.search_probabilities = _search_defaults_by_area.get(
             self.name,
-            _search_defaults
+            _search_defaults,
         ).copy()
 
-# ================================================================================================
+    # ================================================================================================
 
     @property
-    def post_kill_components(self) -> List[str]:
-        return [e.component for e in self.encounters if e.type == EncounterType.POST_KILL]
-
-    @property
-    def enemies_remaining(self) -> int:
-        return max(self.enemy_count - self.enemies_killed, 0)
+    def post_kill_components(self) -> list[str]:
+        return [
+            encounter.component
+            for encounter in self.encounters
+            if encounter.type == EncounterType.POST_KILL
+        ]
 
 # ================================================================================================
 
     # todo - refactor
-    def spawn_enemy(self, gs, player_level: int, wanted: str, time: str, moon: str) -> Enemy:
-        enemy_name = self.handle_enemy_selection(wanted)  # select enemy name
+    def spawn_enemy(self, game_state, player_level: int, wanted: str, time: str, moon: str) -> Enemy:
+        enemy_name = self.handle_enemy_selection(wanted)
 
         # --- load Enemy, log encounter, add to seen ---
         enemy = load_enemy(enemy_name)
-        self.log_encounter(enemy, gs)
+        self.log_encounter(enemy, game_state)
         self.enemies_seen.add(enemy_name)
 
         # --- trait and illness ---
@@ -174,10 +173,10 @@ class Area:
 
         # --- print enemy line, add adjective, and set current_enemy ---
         if enemy_line:
-            print_and_sleep(f"{blue(f'{enemy_line}')}", 3)
-        adj = random.choice(Enemy_Adjectives)
-        enemy.name = f"{adj} {enemy.name}"
+            print_and_sleep(blue(enemy_line), 3)
 
+        adjective = random.choice(Enemy_Adjectives)
+        enemy.name = f"{adjective} {enemy.name}"
         self.current_enemy = enemy
 
         # --- werewolf and night owl final initialization ---
@@ -190,23 +189,33 @@ class Area:
 
     # ================================================================================================
 
-    def handle_enemy_selection(self, wanted: str):
-        wanted_obj = load_enemy(wanted)
-        available = [i for i in self.enemies if i not in self.enemies_seen]
+    def handle_enemy_selection(self, wanted: str) -> str:
+        wanted_enemy = load_enemy(wanted)
+        available = [
+            enemy_name
+            for enemy_name in self.enemies
+            if enemy_name not in self.enemies_seen
+        ]
 
         if not available:
-            self.enemies_seen.clear()  # if all enemies seen, reset the pool
-            available = [i for i in self.enemies if i not in self.enemies_seen]
+            self.enemies_seen.clear()
+            available = [
+                enemy_name
+                for enemy_name in self.enemies
+                if enemy_name not in self.enemies_seen
+            ]
 
-        enemy_name = random.choice(available)  # Initial enemy selection
+        enemy_name = random.choice(available)
 
-        if len(self.enemies_seen) >= 1:  # Calculate odds of seeing a seen enemy if 1+ in enemies_seen
-            if random.random() < min(0.15, 0.01 * len(self.enemies_seen)):  # If random < scaling float value
-                enemy_name = random.choice(tuple(self.enemies_seen))  # Select enemy from seen
+        if self.enemies_seen:
+            seen_enemy_chance = min(0.15, 0.01 * len(self.enemies_seen))
+
+            if random.random() < seen_enemy_chance:
+                enemy_name = random.choice(tuple(self.enemies_seen))
 
         # --- if Sherlock Tench, 15% chance of wanted if correct area ---
         if perk_is_active(SHERLOCK_TENCH):
-            if self.name in wanted_obj.areas and random.random() < 0.15:
+            if self.name in wanted_enemy.areas and random.random() < 0.15:
                 enemy_name = wanted
 
         return enemy_name
@@ -214,21 +223,23 @@ class Area:
 # ================================================================================================
 
     @staticmethod
-    def handle_stat_adjustments(enemy: Enemy, player_level: int):
-        enemy.hp += random.randint(-2, 2)  # apply hp spread first
-        enemy.hp += round((enemy.hp * 0.03) * max(player_level - 1, 0))  # then apply hp scaling
+    def handle_stat_adjustments(enemy: Enemy, player_level: int) -> str | None:
+        enemy.hp += random.randint(-2, 2)
+        enemy.hp += round((enemy.hp * 0.03) * max(player_level - 1, 0))
         enemy.max_hp = enemy.hp
-        enemy.strength = enemy.strength + random.uniform(-0.03, 0.03)
-        enemy.acc = enemy.acc + random.uniform(-0.03, 0.03)
+
+        enemy.strength += random.uniform(-0.03, 0.03)
+        enemy.acc += random.uniform(-0.03, 0.03)
+
         enemy.coins = max(0, enemy.coins + random.randint(-10, 20))
+
         if random.random() < 0.20:
             enemy.coins += round(enemy.coins * random.uniform(0.05, 0.25))
-        enemy_line = enemy.get_enemy_encounter_line()
 
-        return enemy_line
+        return enemy.get_enemy_encounter_line()
 
     @staticmethod
-    def handle_trait_transformation(enemy: Enemy, time: str, moon: str):
+    def handle_trait_transformation(enemy: Enemy, time: str, moon: str) -> Enemy:
         if has_trait(enemy, NIGHT_OWL) and time == NIGHT:
             enemy = create_night_owl(enemy)
 
@@ -238,7 +249,7 @@ class Area:
         return enemy
 
     @staticmethod
-    def handle_elite_chance(enemy: Enemy, player_level: int):
+    def handle_elite_chance(enemy: Enemy, player_level: int) -> bool:
         elite_chance = min(0.15, max(0.0, (player_level - 1) * 0.03))
 
         if random.random() < elite_chance:
@@ -255,30 +266,31 @@ class Area:
 
         return False
 
-
-    def handle_final_trait_initialization(self, time: str):
+    def handle_final_trait_initialization(self, time: str) -> None:
         if WEREWOLF in self.current_enemy.name:
             self.current_enemy.current_weapon = load_weapon(CLAWS)
             play_sound(WEREWOLF_SFX)
         elif has_trait(self.current_enemy, NIGHT_OWL) and time == NIGHT:
             play_sound(OWL_SFX)
 
-
-    def handle_elite_weapon(self):
+    def handle_elite_weapon(self) -> None:
         if self.current_enemy.current_weapon.type not in [BLIND, SPECIAL] and random.random() < 0.15:
-            base = self.current_enemy.current_weapon
-            self.current_enemy.current_weapon = make_elite_weapon(base)
+            base_weapon = self.current_enemy.current_weapon
+            self.current_enemy.current_weapon = make_elite_weapon(base_weapon)
 
 # ================================================================================================
 
     def spawn_special_boss(self, name: str, time: str, gs) -> SpecialBoss:
-        special_boss = load_special_boss(name)  # convert selected special boss to Enemy type
-        self.enemies_seen.add(name)  # add selected enemy to enemies_seen
+        special_boss = load_special_boss(name)
+        self.enemies_seen.add(name)
 
         # --- assign Trait ---
         if special_boss.trait:
             if isinstance(special_boss.trait, str):
-                trait_dict = next((i for i in Traits if i['name'] == special_boss.trait), None)
+                trait_dict = next(
+                    (trait for trait in Traits if trait["name"] == special_boss.trait),
+                    None,
+                )
 
                 if trait_dict:
                     special_boss.trait = load_trait(trait_dict)
@@ -297,44 +309,55 @@ class Area:
 
         # --- elite weapon logic ---
         if self.current_enemy.current_weapon.type not in [BLIND, SPECIAL] and random.random() < 0.15:
-            base = self.current_enemy.current_weapon
-            self.current_enemy.current_weapon = make_elite_weapon(base)
+            base_weapon = self.current_enemy.current_weapon
+            self.current_enemy.current_weapon = make_elite_weapon(base_weapon)
 
         return self.current_enemy
 
-
     @staticmethod
-    def log_encounter(enemy: Enemy | SpecialBoss, game_state):
+    def log_encounter(enemy: Enemy | SpecialBoss, game_state) -> None:
         area = game_state.current_area.name
         game_state.encountered_enemies.append({"area": area, "enemy": enemy})
 
 # ================================================================================================
 
-    def set_boss_to_current_enemy(self, name: str):
+    def set_boss_to_current_enemy(self, name: str) -> Boss:
         self.current_enemy = load_boss(name)
+
         if self.current_enemy.name != HOHKKEN:
-            self.current_enemy.current_weapon = make_elite_weapon(self.current_enemy.current_weapon)
+            self.current_enemy.current_weapon = make_elite_weapon(
+                self.current_enemy.current_weapon
+            )
+
         return self.current_enemy
 
     def summon_boss(self) -> Boss:
         self.current_enemy = self.boss
-        self.current_enemy.current_weapon = make_elite_weapon(self.current_enemy.current_weapon)
+        self.current_enemy.current_weapon = make_elite_weapon(
+            self.current_enemy.current_weapon
+        )
+
         return self.current_enemy
 
     def summon_final_boss(self) -> Boss:
-        final_boss: Boss = load_final_boss()
-        self.current_enemy = final_boss
-        self.current_enemy.current_weapon = make_elite_weapon(self.current_enemy.current_weapon)
+        self.current_enemy = load_final_boss()
+        self.current_enemy.current_weapon = make_elite_weapon(
+            self.current_enemy.current_weapon
+        )
+
         return self.current_enemy
 
     def kill_current_enemy(self, current_area, wench_area) -> None:
         if self.current_enemy.type not in [BOSS, SPECIAL_BOSS]:
             self.enemies_killed += 1
+
         if self.current_enemy == self.boss:
             self.boss_defeated = True
+
             if current_area == wench_area:
                 self.current_enemy = load_final_boss()
                 return
+
         self.current_enemy = None
 
     def __hash__(self) -> int:
@@ -342,49 +365,65 @@ class Area:
 
 # ================================================================================================
 
-def has_trait(enemy, trait_name: str) -> bool:
+def has_trait(enemy: Enemy, trait_name: str) -> bool:
     return bool(enemy.trait and enemy.trait.name == trait_name)
 
-def create_night_owl(enemy) -> Enemy:
+
+def create_night_owl(enemy: Enemy) -> Enemy:
     enemy.max_hp += random.randint(5, 10)
     enemy.hp = enemy.max_hp
     enemy.strength += round(random.uniform(0.01, 0.1), 2)
     enemy.acc += round(random.uniform(0.01, 0.1), 2)
+
     return enemy
 
-def create_werewolf(enemy) -> Enemy:
+
+def create_werewolf(enemy: Enemy) -> Enemy:
     enemy.name = WEREWOLF
     enemy.hp += random.randint(10, 25)
     enemy.max_hp = enemy.hp
     enemy.strength = 1.50
     enemy.acc = 1.25
     enemy.coins = 0
+
     return enemy
 
-def handle_trait_and_illness(enemy) -> Enemy:
+def handle_trait_and_illness(enemy: Enemy) -> Enemy:
     if enemy.type == NORMAL:
-        valid = [i['name'] for i in Traits]
+        valid = [trait["name"] for trait in Traits]
         traits = load_traits(valid)
         enemy.trait = random.choice(traits)
 
     if has_trait(enemy, CONTAGIOUS):
-        valid = [i['name'] for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
+        valid = [
+            illness["name"]
+            for illness in Illnesses
+            if illness["name"] != LATE_ONSET_SIDS
+        ]
         illness_name = random.choice(valid)
         illness_list = load_illnesses([illness_name])
-        enemy.illness = next(i for i in illness_list)
+        enemy.illness = next(iter(illness_list))
 
     return enemy
 
 # ================================================================================================
 
-def load_areas() -> List[Area]:
-    res = []
-    for d in Areas:
-        data = copy.deepcopy(d)
-        data['shop'] = Shop(data['name'])
-        if 'actions_menu' in data:
-            data['actions_menu'] = AreaActions(**data['actions_menu'])
-        if 'encounters' in data:
-            data['encounters'] = [AreaEncounter(**d) for d in data['encounters']]
-        res.append(Area(**data))
-    return res
+def load_areas() -> list[Area]:
+    areas = []
+
+    for area_data in Areas:
+        data = copy.deepcopy(area_data)
+        data["shop"] = Shop(data["name"])
+
+        if "actions_menu" in data:
+            data["actions_menu"] = AreaActions(**data["actions_menu"])
+
+        if "encounters" in data:
+            data["encounters"] = [
+                AreaEncounter(**encounter)
+                for encounter in data["encounters"]
+            ]
+
+        areas.append(Area(**data))
+
+    return areas
