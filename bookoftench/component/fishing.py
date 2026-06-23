@@ -8,7 +8,6 @@ from bookoftench.data.boat import TACKLE_BOX, FISHING_OPTIONS, CAST, FISHING_LOG
 from bookoftench.data.components import BOAT, COMPENDIUM
 from bookoftench.data.enviroment import DAY
 from bookoftench.data.fish import SHALLOWS, OCEAN, BAY
-from bookoftench.data.fishing_items import LEECHES, LAMPREYS, SEA_WEED, REEFER
 from bookoftench.model import GameState
 from bookoftench.model.bait import Bait
 from bookoftench.model.fishing_item import FishingItem
@@ -78,10 +77,7 @@ class BoatComponent(LabeledSelectionComponent):
         )
 
     def toggle_fish(self):
-        if self.game_state.all_fish:
-            self.game_state.all_fish = False
-        else:
-            self.game_state.all_fish = True
+        self.game_state.all_fish = not self.game_state.all_fish
 
     def display_options(self) -> None:
         if self.can_exit():
@@ -247,8 +243,12 @@ class FishingItemBox(LabeledSelectionComponent):
         return self.leave or not self.game_state.player.is_alive()
 
     def display_options(self) -> None:
-        if not self.game_state.player.fishing_item_box:
-            print_and_sleep(f"{yellow('You\'re dry.')}", 1)
+        has_usable_items = any(
+            item.count > 0 for item in self.game_state.player.fishing_item_box.values()
+        )
+
+        if not has_usable_items:
+            print_and_sleep(yellow("You're dry."), 1)
             self.leave = True
             return
 
@@ -267,7 +267,7 @@ class FishingItemBox(LabeledSelectionComponent):
 
             # --- check if active fish ---
             if not game_state.current_fish:
-                print_and_sleep(yellow(f"Need a fish on the line."), 1)
+                print_and_sleep(yellow("Need a fish on the line."), 1)
                 return
 
             # --- check if item valid to use ---
@@ -276,9 +276,10 @@ class FishingItemBox(LabeledSelectionComponent):
                 return
             if item_stack_conflict(player, item):
                 return
-            if len(player.active_fishing_items) == 3:
+            if len(player.active_fishing_items) >= player.max_active_fishing_items:
                 max_active = player.max_active_fishing_items
                 print_and_sleep(yellow(f"Maximum active items reached ({max_active})."), 1)
+                return
 
             # --- use item ---
             player.use_fishing_item(fish, item)
@@ -331,7 +332,6 @@ class FishingLog(LabeledSelectionComponent):
 
     def play_theme(self) -> None:
         pass
-        # play_music(FISHMONGER_THEME)
 
     def _return(self):
         self.leave = True
@@ -352,18 +352,7 @@ class FishingLog(LabeledSelectionComponent):
     def _handle_selection_component(selection: str) -> type[Component]:
         @functional_component(state_dependent=True)
         def selection_component(game_state: GameState):
-
-            if selection == SHALLOWS:
-                AreaFishLog(game_state, SHALLOWS).run()
-                return None
-            elif selection == BAY:
-                AreaFishLog(game_state, BAY).run()
-                return None
-            elif selection == OCEAN:
-                AreaFishLog(game_state, OCEAN).run()
-                return None
-            else:
-                return None
+            AreaFishLog(game_state, selection).run()
 
         return selection_component
 
@@ -435,18 +424,7 @@ class Compendium(LabeledSelectionComponent):
     def _handle_selection_component(selection: str) -> type[Component]:
         @functional_component(state_dependent=True)
         def selection_component(game_state: GameState):
-
-            if selection == SHALLOWS:
-                AreaCompendium(game_state, SHALLOWS).run()
-                return None
-            elif selection == BAY:
-                AreaCompendium(game_state, BAY).run()
-                return None
-            elif selection == OCEAN:
-                AreaCompendium(game_state, OCEAN).run()
-                return None
-            else:
-                return None
+            AreaCompendium(game_state, selection).run()
 
         return selection_component
 

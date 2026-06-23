@@ -1,15 +1,14 @@
 from bookoftench.data import areas as a
-from bookoftench.data.audio import ROULETTE_THEME, HOHKKEN_THEME, HOSPITAL_THEME, BATTLE_THEME
-from bookoftench.data.enemies import OILY_DOILY
+from bookoftench.data.audio import ROULETTE_THEME, HOSPITAL_THEME, BATTLE_THEME
 from bookoftench.data.enviroment import DAY, NIGHT
 from bookoftench.data.investments import SEMEN_CANDLE, SUN_SUITS, BOBS_BOXES
-from bookoftench.ui import green, purple, yellow, blue, red, white, orange, cyan
+from bookoftench.ui import green, purple, yellow, blue, red, orange, cyan
 
 # ================================================================================================
 
 # Standard Events
-GREEDY_BASTARD = "Greedy Bastard" # formatted
-HERPES_KISS = "Herpes Kiss" # formatted
+GREEDY_BASTARD = "Greedy Bastard"
+HERPES_KISS = "Herpes Kiss"
 LOST_GOLD_P1 = "Lost Gold P1"
 LOST_GOLD_P2 = "Lost Gold P2"
 PROBING = "Probing"
@@ -22,7 +21,7 @@ ZONKED = "Zonked"
 # News
 NEWS_HEADLESS_WHORES_MAN = "News Headless Whore's Man"
 NEWS_HOHKKEN_ENTERS_CITY = "Hohkken Enters City"
-NEWS_WHALE_MAN = "News Whale Man" # formatted
+NEWS_WHALE_MAN = "News Whale Man"
 WEDNESDAY_NEWS = "Wednesday News"
 
 # Boss Introductions
@@ -35,12 +34,11 @@ HODAG_INTRO = "Hodag Intro"
 LUCKY_THE_LEPRECHAUN_INTRO = "Lucky The Leprechaun Intro"
 MOTHMAN_INTRO = "Mothman Intro"
 OGRE_INTRO = "Ogre Intro"
-OILY_DOILY_INTRO = "Oily Intro"
+OILY_DOILY_INTRO = "Oily Doily Intro"
 SABERTOOTH_LIGER_INTRO = "Sabertooth Liger Intro"
 SASQUATCH_INTRO = "Sasquatch Intro"
 SEWER_GATOR_INTRO = "Sewer Gator Intro"
 SKUNK_APE_INTRO = "Skunk Ape Intro"
-SLENDER_INTRO = "Slender Intro"
 
 # Investment Opportunities
 BOB_ROBERTSON_PROPOSAL = "Bob Robertson Proposal"
@@ -270,7 +268,7 @@ How much will you give me? Hehehe.
     {'name': THREE_HOLES, 'color': purple, 'sleep': 3, 'theme': None,
      'areas': [a.CAVE, a.FOREST, a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You come upon three holes in the ground...
-        
+
 They are far too deep - and too dark - to see what's inside.
 
 A ghastly being with an upside-down face rushes towards you.
@@ -286,7 +284,7 @@ it whispers that you may only reach into one of the holes.
     {'name': TRIPLE_TENCH_DARE, 'color': yellow, 'sleep': 3, 'theme': None,
      'areas': [a.CITY, a.FOREST, a.SWAMP], 'time': [DAY], 'moon': None, 'season': None,
      'text': """A rambunctious boy approaches you, dad's wallet in hand...
-     
+
 He triple-tench-dares you to stare at the sun.
 For every second, he will give you 5 of coin.
 
@@ -312,7 +310,7 @@ What do you do?
 
 # ================================================================================================
 
-{'name': OILY_DOILY_INTRO, 'color': red, 'sleep': 3, 'theme': HOSPITAL_THEME,
+    {'name': OILY_DOILY_INTRO, 'color': red, 'sleep': 3, 'theme': HOSPITAL_THEME,
      'areas': [a.CITY], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """You turn and see a giant balloon floating towards you...
 
@@ -330,8 +328,8 @@ Hehehe, hohoho.
 
 What do you do?
 """,
- 'choices': ['Grab Jines', 'Run Away'],
- 'optional': False, 'method': 'oily_doily_intro', 'replayable': False},
+     'choices': ['Grab Jines', 'Run Away'],
+     'optional': False, 'method': 'oily_doily_intro', 'replayable': False},
 
 # ================================================================================================
 
@@ -357,30 +355,7 @@ What's it gonna be, Mr. Son of Mayor?
 
 # ================================================================================================
 
-    {'name': SLENDER_INTRO, 'color': red, 'sleep': 3, 'theme': HOSPITAL_THEME,
-     'areas': [a.FOREST], 'time': [NIGHT], 'moon': None, 'season': None,
-     'text': """Stumbling through the dark forest, you feel you're being followed...
-
-You turn around, but nothing is there.
-
-You turn around again - nothing.
-
-You fake turn around, and then suddenly fully turn around, and there it is.
-
-A faceless, 10-foot tall creature in a tailored suit stands before you -
-its interests and motivations perfectly ambiguous.
-
-Suddenly, an array of pitch-black tentacles emerge from its back and
-begin wriggling violently.
-
-What do you do?
-""",
-     'choices': ['Fill Dipe', 'Bail'],
-     'optional': False, 'method': 'slender_intro', 'replayable': False},
-
-# ================================================================================================
-
-{'name': DEATH_WORM_INTRO, 'color': red, 'sleep': 3, 'theme': BATTLE_THEME,
+    {'name': DEATH_WORM_INTRO, 'color': red, 'sleep': 3, 'theme': BATTLE_THEME,
      'areas': [a.CAVE], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You feel the damp floor of the cave begin to shake...
 
@@ -400,7 +375,7 @@ You adjust your jines and prepare for the inevitable...
 
 # ================================================================================================
 
-{'name': CYCLOPS_INTRO, 'color': red, 'sleep': 3, 'theme': BATTLE_THEME,
+    {'name': CYCLOPS_INTRO, 'color': red, 'sleep': 3, 'theme': BATTLE_THEME,
      'areas': [a.CAVE], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You feel something off about the latest tunnel you ventured into...
 
@@ -418,11 +393,11 @@ The creature quickly rises to its feet and begins charging towards you.
 What do you do?
 """,
      'choices': ['Battle Cyclops', 'Try to Escape'],
-     'optional': False, 'method': 'death_worm_intro', 'replayable': False},
+     'optional': False, 'method': 'cyclops_intro', 'replayable': False},
 
 # ================================================================================================
 
-{'name': SABERTOOTH_LIGER_INTRO, 'color': red, 'sleep': 3, 'theme': BATTLE_THEME,
+    {'name': SABERTOOTH_LIGER_INTRO, 'color': red, 'sleep': 3, 'theme': BATTLE_THEME,
      'areas': [a.CAVE], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """Something tackles you from behind...
 
@@ -438,7 +413,7 @@ a Sabertooth Liger.
 
 # ================================================================================================
 
-{'name': GIANT_MUTANT_RAT_INTRO, 'color': red, 'sleep': 3, 'theme': BATTLE_THEME,
+    {'name': GIANT_MUTANT_RAT_INTRO, 'color': red, 'sleep': 3, 'theme': BATTLE_THEME,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """Searching for Chula in the back of Renaldo's Pizzeria -
 
@@ -462,7 +437,7 @@ and you arrived right on time.
 
 # ================================================================================================
 
-{'name': SEWER_GATOR_INTRO, 'color': green, 'sleep': 3, 'theme': BATTLE_THEME,
+    {'name': SEWER_GATOR_INTRO, 'color': green, 'sleep': 3, 'theme': BATTLE_THEME,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """Swimming through the sewers underneath the streets of Shebokken,
 
@@ -490,7 +465,7 @@ A creature bursts from the water and joins you, clearly ready for its next meal.
 
 # ================================================================================================
 
-{'name': LUCKY_THE_LEPRECHAUN_INTRO, 'color': green, 'sleep': 3, 'theme': BATTLE_THEME,
+    {'name': LUCKY_THE_LEPRECHAUN_INTRO, 'color': green, 'sleep': 3, 'theme': BATTLE_THEME,
      'areas': [a.FOREST], 'time': [DAY], 'moon': None, 'season': None,
      'text': """Lucky the Leprechaun: Suck me jines,
 
@@ -512,7 +487,7 @@ Ye can suck me jines,
 
 # ================================================================================================
 
-{'name': FAIRY_CODMOTHER_INTRO, 'color': purple, 'sleep': 3, 'theme': BATTLE_THEME,
+    {'name': FAIRY_CODMOTHER_INTRO, 'color': purple, 'sleep': 3, 'theme': BATTLE_THEME,
      'areas': [a.FOREST], 'time': [DAY], 'moon': None, 'season': None,
      'text': """Walking through the quiet forest,
 
@@ -547,7 +522,7 @@ Mmmm... hehehe.
 
 # ================================================================================================
 
-{'name': MOTHMAN_INTRO, 'color': purple, 'sleep': 3, 'theme': BATTLE_THEME,
+    {'name': MOTHMAN_INTRO, 'color': purple, 'sleep': 3, 'theme': BATTLE_THEME,
      'areas': [a.FOREST], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """Walking down a lonesome forest road,
 
@@ -565,7 +540,7 @@ Without saying a word, it quickly circles back and lands before you, ready for c
 
 # ================================================================================================
 
-{'name': SASQUATCH_INTRO, 'color': purple, 'sleep': 3, 'theme': BATTLE_THEME,
+    {'name': SASQUATCH_INTRO, 'color': purple, 'sleep': 3, 'theme': BATTLE_THEME,
      'areas': [a.FOREST], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You stop to relieve yourself next to a batch of toadstools...
 
@@ -585,7 +560,7 @@ and it does not look happy...
 
 # ================================================================================================
 
-{'name': SKUNK_APE_INTRO, 'color': purple, 'sleep': 3, 'theme': BATTLE_THEME,
+    {'name': SKUNK_APE_INTRO, 'color': purple, 'sleep': 3, 'theme': BATTLE_THEME,
      'areas': [a.SWAMP], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You sit down for a quick rest...
 
@@ -606,7 +581,7 @@ any wrongdoing without any risk of later remorse.
 
 # ================================================================================================
 
-{'name': OGRE_INTRO, 'color': green, 'sleep': 3, 'theme': BATTLE_THEME,
+    {'name': OGRE_INTRO, 'color': green, 'sleep': 3, 'theme': BATTLE_THEME,
      'areas': [a.SWAMP], 'time': [DAY], 'moon': None, 'season': None,
      'text': """Bushwhacking through a section of especially dense bush...
 
@@ -634,7 +609,7 @@ and aggressively stomps towards you.
 
 # ================================================================================================
 
-{'name': HODAG_INTRO, 'color': red, 'sleep': 3, 'theme': BATTLE_THEME,
+    {'name': HODAG_INTRO, 'color': red, 'sleep': 3, 'theme': BATTLE_THEME,
      'areas': [a.SWAMP], 'time': [NIGHT], 'moon': None, 'season': None,
      'text': """Trying to spot Chula in the swampy dead of night,
 
@@ -660,7 +635,7 @@ It immediately recovers and tramples at you again.
 
 # ================================================================================================
 
-{'name': SEMEN_CANDLE_PROPOSAL, 'color': cyan, 'sleep': 3, 'theme': None,
+    {'name': SEMEN_CANDLE_PROPOSAL, 'color': cyan, 'sleep': 3, 'theme': None,
      'areas': [a.CITY], 'time': [DAY, NIGHT], 'moon': None, 'season': None,
      'text': """You encounter a man in a condom costume with a fake flame on his head...
 
@@ -697,7 +672,7 @@ Maturity: 3-4 Levels
 
 # ================================================================================================
 
-{'name': SUN_SUITS_PROPOSAL, 'color': cyan, 'sleep': 3, 'theme': None,
+    {'name': SUN_SUITS_PROPOSAL, 'color': cyan, 'sleep': 3, 'theme': None,
      'areas': [a.CITY], 'time': [DAY], 'moon': None, 'season': None,
      'text': """You encounter a man who appears to be completely naked...
 
@@ -734,7 +709,7 @@ Maturity: 2-3 Levels
 
 # ================================================================================================
 
-{'name': BOB_ROBERTSON_PROPOSAL, 'color': cyan, 'sleep': 3, 'theme': None,
+    {'name': BOB_ROBERTSON_PROPOSAL, 'color': cyan, 'sleep': 3, 'theme': None,
      'areas': [a.CITY], 'time': [DAY], 'moon': None, 'season': None,
      'text': """A gangly, nervous man with 70's glasses and a Goodwill button-up approaches you...
 
@@ -765,7 +740,7 @@ Maturity: 3-4 Levels
 
 # ================================================================================================
 
-{'name': MAIL_ORDER_EGGS, 'color': cyan, 'sleep': 3, 'theme': None,
+    {'name': MAIL_ORDER_EGGS, 'color': cyan, 'sleep': 3, 'theme': None,
      'areas': [a.CITY], 'time': [DAY], 'moon': None, 'season': None,
      'text': """A man in an Vladymir Georgina suit approaches you...
 
@@ -804,6 +779,5 @@ Maturity: 2-3 Levels
      'choices': ['Invest 10', 'Invest 25', 'Invest 50', 'Invest 100'],
      'investment': MAIL_ORDER_EGGS,
      'optional': True, 'method': 'make_investment', 'replayable': False},
-
 
 ]

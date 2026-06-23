@@ -23,10 +23,10 @@ class InitGame(GatekeepingComponent):
                          accept_component=VictoryOrDeathHandler,
                          deny_component=StartMenu)
 
-    def _decision_function(self):
+    def _decision_function(self) -> bool:
         return self.game_state.victory or not self.game_state.player.is_alive()
 
-    def run(self) -> GameState:
+    def run(self):
         while True:
             self.game_state = super().run()
 
@@ -38,12 +38,16 @@ class VictoryOrDeathHandler(GatekeepingComponent):
                          accept_component=VictoryHandler,
                          deny_component=DeathHandler)
 
-    def _decision_function(self):
+    def _decision_function(self) -> bool:
         if self.game_state.victory:
             return True
+
         if not self.game_state.player.is_alive():
             return False
-        raise Exception(f"{VictoryOrDeathHandler} invoked but neither victory nor death occurred.")
+
+        raise RuntimeError(
+            f"{type(self).__name__} invoked but neither victory nor death occurred."
+        )
 
 
 class VictoryHandler(TextDisplayingComponent):
@@ -63,9 +67,12 @@ class VictoryHandler(TextDisplayingComponent):
 class DeathHandler(GatekeepingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
-                         decision_function=lambda: game_state.player.lives > 0,
+                         decision_function=self._has_lives_remaining,
                          accept_component=ContinueGame,
                          deny_component=GameOver)
+
+    def _has_lives_remaining(self) -> bool:
+        return self.game_state.player.lives > 0
 
 
 @register_component(NEW_GAME)
@@ -83,12 +90,14 @@ class BuildSelect(LinearComponent):
     def __init__(self, _: GameState):
         super().__init__(GameState(), TutorialDecision)
 
-    def execute_current(self) -> None:
+    def execute_current(self) -> GameState:
         stop_all_sounds()
         play_music(START_THEME)
+
         player = self.game_state.player
         while not player.name:
             player.name = safe_input("What is your name?")
+
         BuildTypeSelection(self.game_state).run()
         return self.game_state
 
@@ -269,23 +278,14 @@ class EndGameViewStats(LinearComponent):
         super().__init__(game_state,
                          next_component=PlayAgainDecision)
 
-    def execute_current(self):
+    def execute_current(self) -> GameState:
         display_game_stats(self.game_state)
+        return self.game_state
 
 
 class PlayAgainDecision(BinarySelectionComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state,
                          query="Would you like to play again?",
-                         yes_component=NewGameReset,
+                         yes_component=NewGame,
                          no_component=QuitGame)
-
-
-class NewGameReset(LinearComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state,
-                         next_component=NewGame)
-
-    def execute_current(self) -> GameState:
-        new_game_state = GameState()
-        return new_game_state

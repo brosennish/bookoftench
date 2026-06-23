@@ -14,7 +14,7 @@ from .discoverable import rarity_color
 from .game_state import GameState
 from ..data.areas import CAVE, CITY, FOREST, SWAMP
 from ..data.enemies import CONTAGIOUS, BOSS, SPECIAL_BOSS, FINAL_BOSS, NORMAL
-from ..data.enviroment import DAY
+from ..data.enviroment import DAY, NIGHT
 from ..data.fish import AGITATED, SPOOKED, CALM, SHALLOWS, BAY, OCEAN, Fish_Species, MALE, FEMALE, COMMON, UNCOMMON, \
     RARE, LEGENDARY
 from ..data.fishing_areas import WET_SEASON, DRY_SEASON
@@ -172,6 +172,23 @@ def display_bait_shop_header(game_state: GameState) -> None:
 
 # ================================================================================================
 
+def display_fishing_item_shop_header(game_state: GameState) -> None:
+    player = game_state.player
+    season = game_state.season
+    season_color = blue if season == WET_SEASON else yellow
+    tod = game_state.time_of_day
+    tod_display = "Day" if tod == DAY else "Night"
+    moon = game_state.moon
+
+    print_and_sleep(f"{dim(' | ').join([
+        f"{season_color(f"{season}")}",
+        f"{yellow(tod_display) if tod == DAY else purple(tod_display)}",
+        f"{moon} Moon",
+        f"Coins: {green(f"{player.coins}")}",
+    ])}")
+
+# ================================================================================================
+
 def fishing_state_color(game_state: GameState) -> Callable[[str], str]:
     fish = game_state.current_fish
 
@@ -311,7 +328,7 @@ def display_blacksmith_header(game_state: GameState) -> None:
         f"Melee: {orange(f"125")}",
         f"Ranged: {orange(f"150")}",
         f"Special (∞): {orange(f"400")}\n",
-    ])}\n")
+    ])}")
 
 # ================================================================================================
 
@@ -1081,6 +1098,21 @@ def display_area_compendium(game_state: GameState, area: str) -> None:
 
     print_and_sleep(cyan(f"=== {area.upper()} COMPENDIUM ==="))
 
+    def format_time(species: dict) -> str:
+        times = species['time']
+
+        has_day = DAY in times
+        has_night = NIGHT in times
+
+        if has_day and has_night:
+            return "Day/Night"
+        if has_day:
+            return "Day"
+        if has_night:
+            return "Night"
+
+        return "Unknown"
+
     # --- filtering ---
     area_species = [
         species for species in Fish_Species
@@ -1098,6 +1130,10 @@ def display_area_compendium(game_state: GameState, area: str) -> None:
 
     print_and_sleep(f"Discovered: {caught}/{total} ({percentage}%)", 2)
 
+    if not area_species:
+        print("")
+        return
+
     # --- spacing ---
     name_width = max(
         len(species['name']) if species['name'] in caught_species else len("Unknown Creature")
@@ -1114,6 +1150,11 @@ def display_area_compendium(game_state: GameState, area: str) -> None:
         for species in area_species
     )
 
+    time_width = max(
+        len(format_time(species))
+        for species in area_species
+    )
+
     bait_width = max(
         len(", ".join(
             b.name if hasattr(b, "name") else str(b)
@@ -1121,7 +1162,6 @@ def display_area_compendium(game_state: GameState, area: str) -> None:
         ))
         for species in area_species
     )
-
 
     # --- iterate and print ---
     for species in sorted(area_species, key=lambda species: species['name']):
@@ -1131,6 +1171,8 @@ def display_area_compendium(game_state: GameState, area: str) -> None:
         name_color = cyan if discovered else dim
 
         area_text = ", ".join(species['areas'])
+        time_text = format_time(species)
+
         bait_text = ", ".join(
             b.name if hasattr(b, "name") else str(b)
             for b in species['preferred_bait']
@@ -1143,11 +1185,30 @@ def display_area_compendium(game_state: GameState, area: str) -> None:
                 name_color(f"{name:<{name_width}}"),
                 get_rarity_text(f"{rarity:<{rarity_width}}"),
                 blue(f"{area_text:<{area_width}}"),
+                format_time_color(time_text, time_width),
                 cyan(f"{bait_text:<{bait_width}}"),
             ])
         )
 
     print("")
+
+# ================================================================================================
+
+def format_time_color(time_text: str, width: int) -> str:
+    padding = " " * (width - len(time_text))
+
+    if time_text == "Day":
+        return yellow(time_text) + padding
+
+    if time_text == "Night":
+        return purple(time_text) + padding
+
+    if time_text == "Day/Night":
+        return yellow("Day") + dim("/") + purple("Night") + padding
+
+    return time_text + padding
+
+# ================================================================================================
 
 def get_rarity_text(rarity: str) -> str:
     raw = rarity.strip()

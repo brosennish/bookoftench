@@ -36,7 +36,7 @@ from .encounters import PostKillEncounters
 from .menu import OverviewMenu
 from .registry import register_component, get_registered_component
 from bookoftench.data.builds import RANDOM, DENNY, BRO
-from bookoftench.data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE
+from bookoftench.data.discoverables import COMMON, UNCOMMON, LEGENDARY, RARE, MYTHIC
 from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
 from bookoftench.data.weapons import BARE_HANDS, Weapons, TENCH_CANNON, SPECIAL, BLIND
 from bookoftench.event_base import EventType
@@ -97,7 +97,7 @@ class BuildLevelSelection(LinearComponent):
 
 class BuildFishingLevelSelection(LinearComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, BuildLivesSelection)
+        super().__init__(game_state, BuildRodLevelSelection)
 
     def execute_current(self) -> None:
         player = self.game_state.player
@@ -123,18 +123,19 @@ class BuildRodLevelSelection(LinearComponent):
 
     def execute_current(self) -> None:
         player = self.game_state.player
+
         while True:
-            fishing_level = safe_input("Fishing Rod Level [0-10]:")
-            if not fishing_level.isdigit():
+            rod_level = safe_input("Fishing Rod Level [0-10]:")
+            if not rod_level.isdigit():
                 print_and_sleep(yellow("Fishing Rod Level must be a numeric value between 0 and 10."))
-            elif int(fishing_level) < 0:
-                player.fishing_lvl = 0
+            elif int(rod_level) < 0:
+                player.rod_lvl = 0
                 return self.game_state
-            elif int(fishing_level) > 10:
-                player.fishing_lvl = 10
+            elif int(rod_level) > 10:
+                player.rod_lvl = 10
                 return self.game_state
             else:
-                player.rod_lvl = int(fishing_level)
+                player.rod_lvl = int(rod_level)
                 return self.game_state
 
 # ================================================================================================
@@ -205,6 +206,7 @@ class BuildStrengthSelection(LinearComponent):
 
     def execute_current(self) -> None:
         player = self.game_state.player
+
         while True:
             strength = safe_input("Strength [0-125]:")
             if not strength.isdigit():
@@ -213,7 +215,7 @@ class BuildStrengthSelection(LinearComponent):
                 player.strength = 0
                 return self.game_state
             elif int(strength) > 125:
-                player.strength = 125
+                player.strength = 1.25
                 return self.game_state
             else:
                 player.strength = round(int(strength) * 0.01, 2)
@@ -227,6 +229,7 @@ class BuildAccuracySelection(LinearComponent):
 
     def execute_current(self) -> None:
         player = self.game_state.player
+
         while True:
             accuracy = safe_input("Accuracy [0-110]:")
             if not accuracy.isdigit():
@@ -235,7 +238,7 @@ class BuildAccuracySelection(LinearComponent):
                 player.acc = 0
                 return self.game_state
             elif int(accuracy) > 110:
-                player.acc = 110
+                player.acc = 1.10
                 return self.game_state
             else:
                 player.acc = round(int(accuracy) * 0.01, 2)
@@ -405,7 +408,7 @@ class BuildItemsSelection(LinearComponent):
     def execute_current(self) -> None:
         player = self.game_state.player
         player.items.clear()
-        items = random.sample([i for i in Items if i['type'] != BOSS], k=10)
+        items = random.sample([i for i in Items if i['type'] != BOSS], k=12)
         for i in items:
             if i['type'] == NORMAL:
                 print_and_sleep(cyan(f"{i['name']:<24}") + (dim(' | ')) + "HP: +" + (green(i['hp'])))
@@ -441,41 +444,52 @@ class BuildWeaponsSelection(LinearComponent):
         player = self.game_state.player
 
         player.weapon_dict.clear()
+
         load = load_weapons([BARE_HANDS])
         weapon = next(i for i in load)
         player.weapon_dict[BARE_HANDS] = PlayerWeapon.from_weapon(weapon)
+        player.current_weapon = player.weapon_dict[BARE_HANDS]
 
-        weapons = random.sample([w['name'] for w in Weapons if w['uses'] >= 0], k=10)
+        weapons = random.sample([w['name'] for w in Weapons if w['uses'] >= 0], k=12)
         weapon_options = load_weapons(weapons)
         weapons_sorted = sorted(weapon_options, key=lambda w: w.damage)
+
         for w in weapons_sorted:
             print_and_sleep(w.get_complete_format(None, None))
 
         selections = []
+
         while True:
             weapon = safe_input(f"Add a weapon ({len(selections)}/3 selected) or c to continue:")
+
             if weapon == "c":
-                if not selections:
-                    return self.game_state
-                else:
-                    final_picks = load_weapons(selections) # convert selections to Weapon objects
-                    for w in final_picks: # add each one to player weapon dict
+                if selections:
+                    final_picks = load_weapons(selections)
+
+                    for w in final_picks:
                         player.weapon_dict.update({w.name: PlayerWeapon.from_weapon(w)})
-                        player.current_weapon = next(i for i in player.weapon_dict.values())
-                        player.build.weapons.extend(final_picks)  # add to build weapons
+
+                    player.build.weapons.extend(final_picks)
+
                 return self.game_state
-            elif weapon in selections: # if it's already been selected
+
+            elif weapon in selections:
                 print_and_sleep(yellow(f"You already have {weapon}."))
-            elif weapon not in weapons: # if it's not a weapon
+
+            elif weapon not in weapons:
                 print_and_sleep(yellow("Weapon not found - Please try again (case-sensitive)."))
+
             else:
-                selections.append(weapon) # add to list for counting
-                if len(selections) == 3: # if max reached
-                    final_picks = load_weapons(selections) # convert selections to Weapon objects
-                    for w in final_picks: # add each one to player weapon dict
+                selections.append(weapon)
+
+                if len(selections) == 3:
+                    final_picks = load_weapons(selections)
+
+                    for w in final_picks:
                         player.weapon_dict.update({w.name: PlayerWeapon.from_weapon(w)})
-                        player.current_weapon = next(i for i in player.weapon_dict.values())
-                    player.build.weapons.extend(final_picks) # add to build weapons
+
+                    player.build.weapons.extend(final_picks)
+
                     return self.game_state
 
 # ================================================================================================
@@ -485,7 +499,7 @@ class BuildPerksSelection(LinearComponent):
         super().__init__(game_state, NoOpComponent)
 
     def execute_current(self) -> None:
-        perks = random.sample(Perks, k=10)
+        perks = random.sample(Perks, k=12)
         perks_sorted = sorted(perks, key=lambda p: p['name'])
         for p in perks_sorted:
             print_and_sleep(purple(p['name']) + dim("\n") + p['description'])
@@ -559,44 +573,61 @@ class BuildComponent(LabeledSelectionComponent):
                 player.coins = random.randint(0, 250)
                 player.luck = random.randint(0, 5)
 
+                player.weapon_dict.clear()
+                bare_hands = next(iter(load_weapons([BARE_HANDS])))
+                player.weapon_dict[BARE_HANDS] = PlayerWeapon.from_weapon(bare_hands)
+                player.current_weapon = player.weapon_dict[BARE_HANDS]
+
+                # --- illness ---
                 if random.random() < 0.5:
-                    list1 = [i['name'] for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
-                    options = load_illnesses(list1)
+                    illness_names = [
+                        i['name']
+                        for i in Illnesses
+                        if i['name'] != LATE_ONSET_SIDS
+                    ]
+
+                    options = load_illnesses(illness_names)
                     player.illness = random.choice(options)
-                    player.illness_death_lvl = 1 + player.illness.levels_until_death
+                    player.illness_death_lvl = player.lvl + player.illness.levels_until_death
 
-                    # --- items ---
-                    items_count = random.randint(0, 3)
-                    if items_count >= 1:
-                        items = [i['name'] for i in Items]
-                        item_options = load_items(items)
-                        selections = []
-                        for i in range(items_count):
-                            item = random.choice(item_options)
-                            selections.append(item)
-                            item_options.remove(item)
-                        player.items = dict((it.name, it) for it in selections)
+                # --- items ---
+                items_count = random.randint(0, 3)
+                if items_count >= 1:
+                    items = [
+                        i['name']
+                        for i in Items
+                        if i['type'] != BOSS
+                    ]
 
-                    # --- weapons ---
-                    weapons_count = random.randint(0, 3)
-                    if weapons_count >= 1:
-                        weapons = [i['name'] for i in Weapons if i['name'] not in [BARE_HANDS]]
-                        weapon_options = load_weapons(weapons)
-                        selections = []
-                        for i in range(weapons_count):
-                            weapon = random.choice(weapon_options)
-                            selections.append(weapon)
-                            weapon_options.remove(weapon)
-                            player.weapon_dict.update({weapon.base_name: PlayerWeapon.from_weapon(weapon)})
+                    item_options = load_items(items)
+                    selections = random.sample(item_options, k=items_count)
+                    player.items = dict((it.name, it) for it in selections)
 
-                    # --- perks ---
-                    perks_count = random.randint(0, 4)
-                    if perks_count >= 1:
-                        perks = [i['name'] for i in Perks]
-                        for i in range(perks_count):
-                            perk = random.choice(perks)
-                            activate_perk_print(perk)
-                            perks.remove(perk)
+                # --- weapons ---
+                weapons_count = random.randint(0, 3)
+                if weapons_count >= 1:
+                    weapons = [
+                        i['name']
+                        for i in Weapons
+                        if i['name'] != BARE_HANDS
+                    ]
+
+                    weapon_options = load_weapons(weapons)
+                    selections = random.sample(weapon_options, k=weapons_count)
+
+                    for weapon in selections:
+                        player.weapon_dict.update({
+                            weapon.name: PlayerWeapon.from_weapon(weapon)
+                        })
+
+                # --- perks ---
+                perks_count = random.randint(0, 4)
+                if perks_count >= 1:
+                    perks = [i['name'] for i in Perks]
+                    selections = random.sample(perks, k=perks_count)
+
+                    for perk in selections:
+                        activate_perk_print(perk)
 
             else:
                 player.lives = build.lives
@@ -612,7 +643,7 @@ class BuildComponent(LabeledSelectionComponent):
 
                 if build.illness:
                     player.illness = build.illness
-                    player.illness_death_lvl = 1 + build.illness.levels_until_death
+                    player.illness_death_lvl = player.lvl + build.illness.levels_until_death
 
                 player.items = dict((it.name, it) for it in build.items)
                 player.weapon_dict.clear()
@@ -652,12 +683,29 @@ class Search(RandomChoiceComponent):
     @functional_component(state_dependent=True)
     def _discover_discoverable(game_state: GameState):
         player = game_state.player
+
         rarity = search_discoverable_rarity(player)
-        color = rarity_color(rarity)
-        available = [d for d in load_discoverables() if game_state.current_area.name
-                     in d.areas and d.rarity == rarity]
+
+        available = [
+            d for d in load_discoverables()
+            if game_state.current_area.name in d.areas
+               and d.rarity == rarity
+        ]
+
+        if not available:
+            available = [
+                d for d in load_discoverables()
+                if game_state.current_area.name in d.areas
+            ]
+
+        if not available:
+            print_and_sleep(dim("You came up dry."), 1)
+            return game_state
 
         find = random.choice(available)
+        rarity = find.rarity
+        color = rarity_color(rarity)
+
         if rarity == COMMON:
             time = 1
         elif rarity == UNCOMMON:
@@ -678,63 +726,77 @@ class Search(RandomChoiceComponent):
         elif rarity == LEGENDARY:
             play_sound(DISCOVERABLE_2)
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_LEGENDARY))
-        else:
+        elif rarity == MYTHIC:
             play_sound(DISCOVERABLE_2)
             event_logger.log_event(DiscoveryEvent(EventType.DISCOVERY_MYTHIC))
+        else:
+            play_sound(DISCOVERABLE)
+            print_and_sleep(yellow(f"Unknown discovery rarity: {rarity}"), 1)
 
         # add to discoveries and update count
-        if game_state.discoveries:
-            names = [i.name for i in game_state.discoveries]
+        discovered = next(
+            (d for d in game_state.discoveries if d.name == find.name),
+            None
+        )
 
-            if find.name not in names:
-                game_state.discoveries.append(find)
-            for i in game_state.discoveries:
-                if i.name == find.name:
-                    i.count += 1
+        if discovered:
+            discovered.count += 1
         else:
+            find.count += 1
             game_state.discoveries.append(find)
-            for i in game_state.discoveries:
-                i.count += 1
-
 
         # take damage if find.hp < 0
         if find.hp < 0:
             original_hp = player.hp
-            player.lose_hp(abs(find.hp - random.randint(0, 3)))
+            damage = abs(find.hp) + random.randint(0, 3)
+
+            player.lose_hp(damage)
+
             print_and_sleep(
                 f"You{f' {find.pre} ' if find.pre else ' '}{yellow(find.name)} "
-                f"{color(f"({find.rarity})")} and lost {red(original_hp - player.hp)} hp.",
-                time)
+                f"{color(f'({find.rarity})')} and lost {red(original_hp - player.hp)} hp.",
+                time
+            )
+
             if player.hp == 0:
                 player.lives -= 1
                 event_logger.log_event(PlayerDeathEvent(player.lives))
-            return
+
+            return game_state
 
         # heal if discoverable.hp and player.hp < max_hp
-        if player.hp < player.max_hp:
-            if find.hp > 0:
-                original_hp = player.hp
-                player.gain_hp(find.hp + random.randint(0, 3))
-                print_and_sleep(
-                    f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
-                    f"{color(f"({find.rarity})")} and restored {green(player.hp - original_hp)} hp.",
-                    time)
-                return
+        if player.hp < player.max_hp and find.hp > 0:
+            original_hp = player.hp
+
+            player.gain_hp(find.hp + random.randint(0, 3))
+
+            print_and_sleep(
+                f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
+                f"{color(f'({find.rarity})')} and restored {green(player.hp - original_hp)} hp.",
+                time
+            )
+
+            return game_state
 
         # gain coin if value greater than 0
         if find.value > 0:
             print_and_sleep(
                 f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
                 f"{color(f'({find.rarity})')} worth {green(find.value)} of coin.",
-                time)
+                time
+            )
+
             player.gain_coins(find.value)
-            return
+            return game_state
 
         # print found message if neutral
         print_and_sleep(
             f"You found{f' {find.pre} ' if find.pre else ' '}{cyan(find.name)} "
-            f"{color(f'({find.rarity})')}!", time)
-        return
+            f"{color(f'({find.rarity})')}!",
+            time
+        )
+
+        return game_state
 
 # ================================================================================================
 
@@ -880,11 +942,18 @@ class Travel(LabeledSelectionComponent):
 @register_component(USE_ITEM)
 class UseItem(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state,
-                         decision_function=lambda: len(game_state.player.items) > 0,
-                         accept_component=ItemSelectionComponent,
-                         deny_component=functional_component()(
-                             lambda: print_and_sleep(yellow(f"Your inventory is dry."), 1)))
+        super().__init__(
+            game_state,
+            decision_function=lambda: len(game_state.player.items) > 0,
+            accept_component=ItemSelectionComponent,
+            deny_component=self._no_items_component
+        )
+
+    @staticmethod
+    @functional_component(state_dependent=True)
+    def _no_items_component(game_state: GameState):
+        print_and_sleep(yellow("Your inventory is dry."), 1)
+        return game_state
 
 
 class ItemSelectionComponent(LabeledSelectionComponent):
@@ -915,8 +984,7 @@ class ItemSelectionComponent(LabeledSelectionComponent):
             quittable=True
         )
 
-    def _use_item_and_check(self, item, enemy: Enemy | None):
-        # Apply item
+    def _use_item_and_check(self, item, enemy: Enemy | None) -> GameState:
         self.game_state.player.use_item(
             item.name,
             enemy,
@@ -926,24 +994,38 @@ class ItemSelectionComponent(LabeledSelectionComponent):
         player = self.game_state.player
         current_enemy = self.game_state.current_area.current_enemy
 
-        # Check battle end
         if not player.is_alive() or (current_enemy and not current_enemy.is_alive()):
-            BattleEnd(self.game_state).run()
+            return BattleEnd(self.game_state).run()
+
+        return self.game_state
 
 # ================================================================================================
 
 @register_component(EQUIP_WEAPON)
 class EquipWeapon(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state,
-                         bindings=[SelectionBinding(
-                             key=str(i),
-                             name=weapon.get_complete_format(None, None),
-                             component=functional_component()(
-                                 partial(game_state.player.equip_weapon,
-                                         weapon.name, weapon.base_name)))
-                             for (i, weapon) in enumerate(game_state.player.get_weapons(), 1)],
-                         top_level_prompt_callback=lambda gs: gs.player.display_equip_header(), quittable=True)
+        super().__init__(
+            game_state,
+            bindings=[
+                SelectionBinding(
+                    key=str(i),
+                    name=weapon.get_complete_format(None, None),
+                    component=self._make_equip_component(weapon)
+                )
+                for i, weapon in enumerate(game_state.player.get_weapons(), 1)
+            ],
+            top_level_prompt_callback=lambda gs: gs.player.display_equip_header(),
+            quittable=True
+        )
+
+    @staticmethod
+    def _make_equip_component(weapon):
+        @functional_component(state_dependent=True)
+        def equip_component(game_state: GameState):
+            game_state.player.equip_weapon(weapon.name, weapon.base_name)
+            return game_state
+
+        return equip_component
 
 # ================================================================================================
 
@@ -955,16 +1037,15 @@ class SwapFoundItemYN(BinarySelectionComponent):
                          no_component=NoOpComponent)
 
 
-# TODO Clean Up
 class SwapFoundItemMenu(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         found = game_state.found_item
+        valid = list(game_state.player.items.values())
 
-        valid = list(i for i in game_state.player.items.values())
         length = 0
-        for i in game_state.player.items.keys():
-            if len(i) > length:
-                length = len(i) + 1
+        for item_name in game_state.player.items.keys():
+            if len(item_name) > length:
+                length = len(item_name) + 1
 
         super().__init__(
             game_state,
@@ -972,18 +1053,25 @@ class SwapFoundItemMenu(LabeledSelectionComponent):
                 SelectionBinding(
                     key=str(i),
                     name=item.get_simple_format(length),
-                    component=functional_component()(
-                        partial(game_state.player.swap_found_item,
-                                item.name, found, game_state)
-                    )
+                    component=self._make_swap_component(item.name, found)
                 )
                 for i, item in enumerate(valid, 1)
             ],
-            top_level_prompt_callback=lambda gs: (
-                print_and_sleep(dim(gs.found_item.get_found_format()), 0),
-            )[-1],
+            top_level_prompt_callback=lambda gs: print_and_sleep(
+                dim(gs.found_item.get_found_format()),
+                0
+            ),
             quittable=True
         )
+
+    @staticmethod
+    def _make_swap_component(item_name, found):
+        @functional_component(state_dependent=True)
+        def swap_component(game_state: GameState):
+            game_state.player.swap_found_item(item_name, found, game_state)
+            return game_state
+
+        return swap_component
 
 
 class SwapFoundWeaponYN(BinarySelectionComponent):
@@ -1008,17 +1096,25 @@ class SwapFoundWeaponMenu(LabeledSelectionComponent):
                 SelectionBinding(
                     key=str(i),
                     name=weapon.get_complete_format(None, None),
-                    component=functional_component()(
-                        partial(game_state.player.swap_found_weapon, weapon.base_name, found)
-                    )
+                    component=self._make_swap_component(weapon.base_name, found)
                 )
                 for i, weapon in enumerate(valid, 1)
             ],
-            top_level_prompt_callback=lambda gs: (
-                print_and_sleep(dim(gs.found_weapon.get_complete_format(None, None)), 0),
-            )[-1],
+            top_level_prompt_callback=lambda gs: print_and_sleep(
+                dim(gs.found_weapon.get_complete_format(None, None)),
+                0
+            ),
             quittable=True
         )
+
+    @staticmethod
+    def _make_swap_component(weapon_base_name, found):
+        @functional_component(state_dependent=True)
+        def swap_component(game_state: GameState):
+            game_state.player.swap_found_weapon(weapon_base_name, found)
+            return game_state
+
+        return swap_component
 
 # ================================================================================================
 
@@ -1030,34 +1126,43 @@ class Attack(Component):
     def run(self) -> GameState:
         player, enemy = self.game_state.player, self.game_state.current_area.current_enemy
 
-        if not self.failed_flee:
-            if player.is_alive() and enemy.is_alive():
-                player.attack(enemy)
+        if not self.failed_flee and player.is_alive() and enemy.is_alive():
+            player.attack(enemy)
+
         if player.is_alive() and enemy.is_alive():
             enemy.attack(player)
-            if player.is_alive() and enemy.is_alive():
-                self.handle_trait_checks(player, enemy)
+
+        if player.is_alive() and enemy.is_alive():
+            self.handle_trait_checks(player, enemy)
 
         if not player.is_alive() or not enemy.is_alive():
-            BattleEnd(self.game_state).run()
+            return BattleEnd(self.game_state).run()
 
         return self.game_state
 
-    def handle_trait_checks(self, player, enemy):
+    def handle_trait_checks(self, player, enemy) -> None:
         if enemy.trait:
             trait_name = enemy.trait.name
+
             if trait_name == CHEATER and enemy.current_weapon.uses > 0 and random.random() < 0.15:
                 enemy.attack(player)
+
                 if not player.is_alive() or not enemy.is_alive():
                     return
-            if trait_name == CONTAGIOUS and random.random() < 0.15:
+
+            elif trait_name == CONTAGIOUS and random.random() < 0.15:
                 EnemyInfect(self.game_state).run()
-            if trait_name == COWARD and random.random() < 0.15:
+
+            elif trait_name == COWARD and random.random() < 0.15:
                 print_and_sleep(yellow(f"{enemy.name} fled like a bozo baby coward!"), 1.5)
                 player.can_flee = True
                 return
-            if (trait_name == ACHILLES and enemy.current_weapon.base_name != TENCH_CANNON
-                    and enemy.hp < 25):
+
+            elif (
+                    trait_name == ACHILLES
+                    and enemy.current_weapon.base_name != TENCH_CANNON
+                    and enemy.hp < 25
+            ):
                 enemy.current_weapon = enemy.enemy_switch_weapon(TENCH_CANNON)
 
         if random.random() < ENEMY_SWITCH_WEAPON_CHANCE and enemy.current_weapon.base_name != TENCH_CANNON:
@@ -1083,6 +1188,8 @@ class FleeSelectionBinding(SelectionBinding):
     def format(self) -> str:
         enemy = self.game_state.current_area.current_enemy
         calculation = int(round(calculate_flee() * enemy.flee, 2) * 100)
+        calculation = max(0, min(100, calculation))
+
         return f"Flee ({calculation}%)"
 
 
@@ -1090,6 +1197,8 @@ class TryFlee(RandomChoiceComponent):
     def __init__(self, game_state: GameState):
         enemy = game_state.current_area.current_enemy
         self.flee_chance = int(round(calculate_flee() * enemy.flee, 2) * 100)
+        self.flee_chance = max(0, min(100, self.flee_chance))
+
         super().__init__(game_state, bindings=[
             ProbabilityBinding(self.flee_chance, self._flee_success),
             ProbabilityBinding(100 - self.flee_chance, FailedFlee)
@@ -1101,38 +1210,52 @@ class TryFlee(RandomChoiceComponent):
         event_logger.log_event(FleeEvent(game_state.current_area.current_enemy.name))
         game_state.player.gain_xp_other(1)
 
+        return game_state
+
 # ================================================================================================
 
 @register_component(ENCOUNTER_SUB_BOSS)
 class EncounterBoss(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: self.execute_current(),
-                         accept_component=Battle,
-                         deny_component=functional_component()(lambda: print_and_sleep(
-                             yellow("All bosses in this area are now in Hell.\n"), 1.5)))
+        super().__init__(
+            game_state,
+            decision_function=lambda: self.execute_current(),
+            accept_component=Battle,
+            deny_component=self._all_bosses_dead_component
+        )
 
     def execute_current(self) -> bool:
         area = self.game_state.current_area
 
-        options = [i for i in area.special_bosses]
-
-        liberated = [i.name for i in self.game_state.liberated_enemies]
-        available = [i for i in options if i not in liberated]
+        liberated = [enemy.name for enemy in self.game_state.liberated_enemies]
+        available = [
+            boss_name for boss_name in area.special_bosses
+            if boss_name not in liberated
+        ]
 
         if not available:
             return False
-        else:
-            choice = random.choice(available)
-            set_special_boss(self.game_state, choice)
-            return True
+
+        choice = random.choice(available)
+        set_special_boss(self.game_state, choice)
+
+        return True
+
+    @staticmethod
+    @functional_component(state_dependent=True)
+    def _all_bosses_dead_component(game_state: GameState):
+        print_and_sleep(yellow("All bosses in this area are currently in Hell.\n"), 1.5)
+        return game_state
 
 # ================================================================================================
 
-def set_special_boss(game_state: GameState, name: str):
+def set_special_boss(game_state: GameState, name: str) -> GameState:
     time = game_state.time_of_day
 
     special_boss = game_state.current_area.spawn_special_boss(name, time, game_state)
     game_state.current_area.current_enemy = special_boss
+
+    return game_state
 
 # ================================================================================================
 
@@ -1154,16 +1277,17 @@ class SpawnEnemy(LinearComponent):
 
 class Battle(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
-        enemy = game_state.current_area.current_enemy
-        chance = int(round(calculate_flee() * enemy.flee, 2) * 100)
-        super().__init__(game_state, top_level_prompt_callback=lambda gs: print_and_sleep(get_battle_status_view(gs)),
-                         bindings=[
-                             SelectionBinding('A', "Attack", Attack),
-                             SelectionBinding('I', "Use Item", UseItem),
-                             SelectionBinding('S', "Switch Weapon", EquipWeapon),
-                             SelectionBinding('F', f"Flee ({chance}%)", TryFlee),
-                             SelectionBinding('V', "View", DisplayInfo)
-                         ])
+        super().__init__(
+            game_state,
+            top_level_prompt_callback=lambda gs: print_and_sleep(get_battle_status_view(gs)),
+            bindings=[
+                SelectionBinding('A', "Attack", Attack),
+                SelectionBinding('I', "Use Item", UseItem),
+                SelectionBinding('S', "Switch Weapon", EquipWeapon),
+                FleeSelectionBinding('F', "Flee", TryFlee, game_state),
+                SelectionBinding('V', "View", DisplayInfo),
+            ]
+        )
         self.player = self.game_state.player
         self.player.can_flee = False
         if perk_is_active(DEATH_CAN_WAIT):
@@ -1173,10 +1297,12 @@ class Battle(LabeledSelectionComponent):
         self._subscribe_listeners()
 
     def play_theme(self) -> None:
-        theme = BATTLE_THEME
         current_enemy = self.game_state.current_area.current_enemy
-        if type(current_enemy) == SpecialBoss:
-            theme = current_enemy.theme if len(current_enemy.theme) > 0 else HOHKKEN_THEME
+        theme = BATTLE_THEME
+
+        if isinstance(current_enemy, SpecialBoss):
+            theme = current_enemy.theme if current_enemy.theme else HOHKKEN_THEME
+
         play_music(theme)
 
     def can_exit(self) -> bool:
@@ -1194,16 +1320,20 @@ class EnemyInfect(NoOpComponent):
         super().__init__(game_state)
 
     def run(self):
-        self.execute()
+        return self.execute()
 
     def execute(self):
         player = self.game_state.player
         enemy = self.game_state.current_area.current_enemy
 
+        if not enemy or not enemy.illness:
+            return self.game_state
+
         if not player.illness:
             illness_name = enemy.illness.name
             player.acquire_illness(illness_name)
             print_and_sleep(yellow(f"You caught {player.illness.name} from {enemy.name}!"), 2)
+
         return self.game_state
 
 # ================================================================================================
@@ -1215,18 +1345,21 @@ class BattleEnd(NoOpComponent):
     def run(self):
         return self.check_battle_end()
 
-    def check_battle_end(self):
+    def check_battle_end(self) -> GameState:
         player = self.game_state.player
         enemy = self.game_state.current_area.current_enemy
         current_area = self.game_state.current_area
         wench_area = self.game_state.wench_area
 
-        if not enemy.is_alive():
+        if enemy and not enemy.is_alive():
             self.handle_enemy_death(player, enemy)
             self.game_state.current_area.kill_current_enemy(current_area, wench_area)
+            self.game_state = PostKillEncounters(self.game_state).run()
+
         if not player.is_alive():
             player.lives -= 1
             event_logger.log_event(PlayerDeathEvent(player.lives))
+
         return self.game_state
 
     # TODO - refactor
@@ -1279,9 +1412,7 @@ class BattleEnd(NoOpComponent):
             self.game_state.update_moon()
 
         # --- add enemy to list of liberated enemies ---
-        self.game_state.liberated_enemies.append(self.game_state.current_area.current_enemy)
-
-        PostKillEncounters(self.game_state).run()
+        self.game_state.liberated_enemies.append(enemy)
 
 # ================================================================================================
 
@@ -1292,7 +1423,8 @@ class FightBossOther(Battle):
         self.enemy = self.game_state.current_area.current_enemy
 
     def play_theme(self) -> None:
-        play_music(self.enemy.theme)
+        theme = self.enemy.theme if self.enemy.theme else BATTLE_THEME
+        play_music(theme)
 
     def run(self) -> GameState:
         self.play_theme()
@@ -1309,32 +1441,43 @@ class FightBoss(Battle):
         self.enemy = self.game_state.current_area.current_enemy
 
     def play_theme(self) -> None:
-        play_music(self.enemy.theme)
+        theme = self.enemy.theme if self.enemy.theme else BATTLE_THEME
+        play_music(theme)
 
     @staticmethod
     @functional_component(state_dependent=True)
     # TODO generalize this and get it out of component
-    def captain_hole_action(game_state: GameState) -> None:
-        del game_state.player.items[TENCH_FILET]
+    def captain_hole_action(game_state: GameState) -> GameState:
+        game_state.player.items.pop(TENCH_FILET, None)
+
         injury = random.randint(25, 50)
-        game_state.current_area.boss.hp -= injury
-        print_and_sleep('You hand your filet over to Captain Hole.', seconds=2)
+        game_state.current_area.current_enemy.hp -= injury
+
+        print_and_sleep("You hand your filet over to Captain Hole.", seconds=2)
         stop_music()
         play_sound(PISTOL)
-        print_and_sleep(f'He shoots himself in the jines, losing {injury} HP as a result.', 3)
+        print_and_sleep(f"He shoots himself in the jines, losing {injury} HP as a result.", 3)
+
+        return game_state
 
     def run(self) -> GameState:
         self.play_theme()
         self.enemy.do_preamble()
+
         # TODO generalize this and get it out of component
         if self.enemy.name == CAPTAIN_HOLE and TENCH_FILET in self.player.items:
-            BinarySelectionComponent(self.game_state,
-                                     query="Do you accept?",
-                                     yes_component=self.captain_hole_action,
-                                     no_component=NoOpComponent).run()
+            self.game_state = BinarySelectionComponent(
+                self.game_state,
+                query="Do you accept?",
+                yes_component=self.captain_hole_action,
+                no_component=NoOpComponent
+            ).run()
+
         self.game_state = super().run()
+
         if self.game_state.current_area.current_enemy is None and self.game_state.is_final_boss_available():
             return FightFinalBoss(self.game_state).run()
+
         return self.game_state
 
 # ================================================================================================
@@ -1342,8 +1485,12 @@ class FightBoss(Battle):
 @register_component(FINAL_BOSS_FIGHT)
 class FightFinalBoss(FightBoss):
     def __init__(self, game_state: GameState):
+        final_boss = game_state.current_area.summon_final_boss()
+        game_state.current_area.current_enemy = final_boss
+
         super().__init__(game_state)
-        self.enemy = self.game_state.current_area.summon_final_boss()
+
+        self.enemy = final_boss
 
 # ================================================================================================
 

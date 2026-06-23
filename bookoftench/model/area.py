@@ -6,13 +6,12 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Set
 
 from bookoftench.data import Areas
-from bookoftench.data.areas import EncounterType, FOREST, CITY, CAVE
+from bookoftench.data.areas import EncounterType, CAVE, CITY, FOREST, SWAMP
 from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABLE, DISCOVER_ITEM, DISCOVER_PERK, \
     DISCOVER_WEAPON, \
     SPAWN_ENEMY, ENCOUNTER_SUB_BOSS, SPECIAL_EVENT
 from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, CONTAGIOUS, NIGHT_OWL, HOHKKEN, BOSS, \
-    NORMAL, SPECIAL_BOSS, Cave_Special_Bosses, City_Special_Bosses, Forest_Special_Bosses, \
-    Swamp_Special_Bosses
+    NORMAL, SPECIAL_BOSS
 from bookoftench.ui import purple, yellow, blue
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss, load_special_boss, SpecialBoss
@@ -37,7 +36,49 @@ _search_defaults = {
     ENCOUNTER_SUB_BOSS: 3,
     DISCOVER_DISCOVERABLE: 45,
     SPECIAL_EVENT: 9,
-    SPAWN_ENEMY: 30
+    SPAWN_ENEMY: 30,
+}
+
+_search_defaults_by_area = {
+    CITY: {
+        DISCOVER_PERK: 1,
+        DISCOVER_WEAPON: 3,
+        DISCOVER_ITEM: 4,
+        ENCOUNTER_SUB_BOSS: 3,
+        DISCOVER_DISCOVERABLE: 35,
+        SPECIAL_EVENT: 10,
+        SPAWN_ENEMY: 35,
+    },
+
+    FOREST: {
+        DISCOVER_PERK: 2,
+        DISCOVER_WEAPON: 2,
+        DISCOVER_ITEM: 4,
+        ENCOUNTER_SUB_BOSS: 3,
+        DISCOVER_DISCOVERABLE: 42,
+        SPECIAL_EVENT: 10,
+        SPAWN_ENEMY: 30,
+    },
+
+    CAVE: {
+        DISCOVER_PERK: 1,
+        DISCOVER_WEAPON: 2,
+        DISCOVER_ITEM: 3,
+        ENCOUNTER_SUB_BOSS: 4,
+        DISCOVER_DISCOVERABLE: 38,
+        SPECIAL_EVENT: 8,
+        SPAWN_ENEMY: 36,
+    },
+
+    SWAMP: {
+        DISCOVER_PERK: 1,
+        DISCOVER_WEAPON: 2,
+        DISCOVER_ITEM: 4,
+        ENCOUNTER_SUB_BOSS: 4,
+        DISCOVER_DISCOVERABLE: 36,
+        SPECIAL_EVENT: 12,
+        SPAWN_ENEMY: 37,
+    },
 }
 
 _event_defaults = {
@@ -77,21 +118,21 @@ class Area:
     special_bosses: list[str] = field(default_factory=list)
 
     shop: Shop = field(default_factory=Shop)
-    search_probabilities: Dict[str, int] = field(default_factory=lambda: _search_defaults)
-    event_probabilities: Dict[str, int] = field(default_factory=lambda: _event_defaults)
+    search_probabilities: Dict[str, int] = field(default_factory=lambda: _search_defaults.copy())
+    event_probabilities: Dict[str, int] = field(default_factory=lambda: _event_defaults.copy())
     actions_menu: AreaActions = field(default_factory=AreaActions.defaults)
     encounters: List[AreaEncounter] = field(default_factory=list)
 
+# ================================================================================================
+
     def __post_init__(self):
         self.boss = load_boss(self.boss_name)
-        if self.name == CAVE:
-            self.special_bosses = [i for i in Cave_Special_Bosses]
-        elif self.name == CITY:
-            self.special_bosses = [i for i in City_Special_Bosses]
-        elif self.name == FOREST:
-            self.special_bosses = [i for i in Forest_Special_Bosses]
-        else:
-            self.special_bosses = [i for i in Swamp_Special_Bosses]
+        self.search_probabilities = _search_defaults_by_area.get(
+            self.name,
+            _search_defaults
+        ).copy()
+
+# ================================================================================================
 
     @property
     def post_kill_components(self) -> List[str]:
@@ -126,7 +167,7 @@ class Area:
         elite = self.handle_elite_chance(enemy, player_level)
 
         if elite:
-            print_and_sleep(f"{yellow("An enemy appears!")} {purple("(Elite enemy!)")}", 1)
+            print_and_sleep(f"{yellow('An enemy appears!')} {purple('(Elite enemy!)')}", 1)
         else:
             play_sound(ENEMY_APPEARS)
             print_and_sleep(yellow("An enemy appears!"), 1.5)
@@ -186,16 +227,15 @@ class Area:
 
         return enemy_line
 
-
     @staticmethod
     def handle_trait_transformation(enemy: Enemy, time: str, moon: str):
-        if enemy.trait.name == NIGHT_OWL and time == NIGHT:
+        if has_trait(enemy, NIGHT_OWL) and time == NIGHT:
             enemy = create_night_owl(enemy)
-        if enemy.trait.name == WEREWOLF and time == NIGHT and moon == FULL:
+
+        if has_trait(enemy, WEREWOLF) and time == NIGHT and moon == FULL:
             enemy = create_werewolf(enemy)
 
         return enemy
-
 
     @staticmethod
     def handle_elite_chance(enemy: Enemy, player_level: int):
@@ -206,18 +246,21 @@ class Area:
             enemy.hp = int(enemy.hp * 1.5)
             enemy.max_hp = int(enemy.max_hp * 1.5)
             enemy.strength += 0.1
-            enemy.acc += 0 if enemy.trait.name == WEREWOLF else 0.1
+
+            if not has_trait(enemy, WEREWOLF):
+                enemy.acc += 0.1
+
             enemy.coins = int(enemy.coins * 1.5)
             return True
-        else:
-            return False
+
+        return False
 
 
     def handle_final_trait_initialization(self, time: str):
         if WEREWOLF in self.current_enemy.name:
             self.current_enemy.current_weapon = load_weapon(CLAWS)
             play_sound(WEREWOLF_SFX)
-        elif self.current_enemy.trait.name == NIGHT_OWL and time == NIGHT:
+        elif has_trait(self.current_enemy, NIGHT_OWL) and time == NIGHT:
             play_sound(OWL_SFX)
 
 
@@ -241,11 +284,11 @@ class Area:
                     special_boss.trait = load_trait(trait_dict)
 
             # --- traits and illness ---
-            if special_boss.trait and special_boss.trait.name == CONTAGIOUS:
-                enemy = handle_trait_and_illness(special_boss)
+            if has_trait(special_boss, CONTAGIOUS):
+                special_boss = handle_trait_and_illness(special_boss)
 
             # --- night owl logic ---
-            if special_boss.trait.name == NIGHT_OWL and time == NIGHT:
+            if has_trait(special_boss, NIGHT_OWL) and time == NIGHT:
                 special_boss = create_night_owl(special_boss)
                 play_sound(OWL_SFX)
 
@@ -299,6 +342,9 @@ class Area:
 
 # ================================================================================================
 
+def has_trait(enemy, trait_name: str) -> bool:
+    return bool(enemy.trait and enemy.trait.name == trait_name)
+
 def create_night_owl(enemy) -> Enemy:
     enemy.max_hp += random.randint(5, 10)
     enemy.hp = enemy.max_hp
@@ -321,11 +367,12 @@ def handle_trait_and_illness(enemy) -> Enemy:
         traits = load_traits(valid)
         enemy.trait = random.choice(traits)
 
-    if enemy.trait.name == CONTAGIOUS:
+    if has_trait(enemy, CONTAGIOUS):
         valid = [i['name'] for i in Illnesses if i['name'] not in [LATE_ONSET_SIDS]]
         illness_name = random.choice(valid)
         illness_list = load_illnesses([illness_name])
         enemy.illness = next(i for i in illness_list)
+
     return enemy
 
 # ================================================================================================

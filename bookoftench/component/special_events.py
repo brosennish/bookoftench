@@ -7,8 +7,8 @@ from bookoftench.component import functional_component, \
     OfficerEncounter, set_special_boss, Battle
 from bookoftench.data.audio import PUNCH, POSITIVE, MONSTER_ATTACK, PISTOL, BLADE, COINS, PURCHASE
 from bookoftench.data.components import SPECIAL_EVENT
-from bookoftench.data.enemies import OILY_DOILY, BASTA_SHERMAN, SLENDERMAN, DEATH_WORM, CYCLOPS, SABERTOOTH_LIGER, \
-    GIANT_MUTANT_RAT, SEWER_GATOR, LUCKY_THE_LEPRECHAUN, FAIRY_CODMOTHER, MOTHMAN, SASQUATCH, SKUNK_APE, OGRE
+from bookoftench.data.enemies import OILY_DOILY, BASTA_SHERMAN, DEATH_WORM, CYCLOPS, SABERTOOTH_LIGER, \
+    GIANT_MUTANT_RAT, SEWER_GATOR, LUCKY_THE_LEPRECHAUN, FAIRY_CODMOTHER, MOTHMAN, SASQUATCH, SKUNK_APE, OGRE, HODAG
 from bookoftench.data.illnesses import HERPES
 from bookoftench.data.items import TENCH_FILET, SWAMP, FOREST, CITY, CAVE
 from bookoftench.data.perks import BEER_GOGGLES
@@ -285,11 +285,14 @@ class SpecialEventComponent(LabeledSelectionComponent):
         elif choice == 2:  # Give Tench Filet
             if TENCH_FILET in player.items:
                 del player.items[TENCH_FILET]
+                print_and_sleep(yellow(f"You forfeit your Tench Filet to the Pirate.\n"), 1.5)
                 print_and_sleep(blue(f"Pirate: Aye, we're square, matey.\n"), 1.5)
             else:
                 play_sound(BLADE)
                 hp = player.hp
                 player.hp -= min(hp, 50)
+                damage = hp - player.hp
+                print_and_sleep(red(f"The Pirate slashed you with his cutlass for {damage} damage!"), 1.5)
                 print_and_sleep(red(f"Pirate: Argh, that's for comin' up dry on me, matey.\n"), 1.5)
 
         else:  # Beg for Mercy
@@ -300,6 +303,8 @@ class SpecialEventComponent(LabeledSelectionComponent):
                 hp = player.hp
                 damage = random.randint(25, 50)
                 player.hp -= min(hp, damage)
+                actual_damage = hp - player.hp
+                print_and_sleep(red(f"The Pirate slashed you with his cutlass for {actual_damage} damage!"), 1.5)
                 print_and_sleep(red(f"Pirate: Argh, that's for comin' up dry on me, matey.\n"), 1.5)
 
         special_event_death_check(player)
@@ -313,10 +318,17 @@ class SpecialEventComponent(LabeledSelectionComponent):
         if choice == 1:  # Accept Probe
             if random.random() < 0.5 + (player.luck * 0.1):
                 print_and_sleep(green("The aliens went easy on you.\n"), 1.5)
-                player.hp -= random.randint(5, 10)
+                old_hp = player.hp
+                damage = random.randint(5, 10)
+                player.hp -= min(old_hp, damage)
+                print_and_sleep(red(f"You lost {old_hp - player.hp} HP."), 1.5)
             else:
                 print_and_sleep(yellow("The aliens didn't hold back...\n"), 1.5)
-                player.hp -= random.randint(11, 20)
+                old_hp = player.hp
+                damage = random.randint(5, 10)
+                player.hp -= min(old_hp, damage)
+                print_and_sleep(red(f"You lost {old_hp - player.hp} HP."), 1.5)
+
         elif choice == 2:  # Attempt to Probe the Aliens
             if random.random() < 0.5 * player.strength:
                 print_and_sleep(green("You probed the aliens!"), 1.5)
@@ -331,19 +343,30 @@ class SpecialEventComponent(LabeledSelectionComponent):
             else:
                 print_and_sleep(yellow("You were unable to probe the aliens...\n"), 1.5)
                 print_and_sleep(yellow("They probed you extra hard as punishment.\n"), 1.5)
-                player.hp -= random.randint(21, 30)
+                old_hp = player.hp
+                damage = random.randint(5, 10)
+                player.hp -= min(old_hp, damage)
+                print_and_sleep(red(f"You lost {old_hp - player.hp} HP."), 1.5)
+
         elif choice == 3:  # Try to Escape
             if random.random() < 0.5 + (player.luck * 0.1):
+                old_hp = player.hp
                 damage = random.randint(5, 10)
+
                 print_and_sleep(green("You were able to find the exit and jump from the ship!"), 1.5)
                 play_sound(PUNCH)
-                print_and_sleep(red(f"You lost {damage} hp upon landing."), 1.5)
-                player.hp -= damage
+
+                player.hp -= min(old_hp, damage)
+                actual_damage = old_hp - player.hp
+
+                print_and_sleep(red(f"You lost {actual_damage} HP upon landing."), 1.5)
             else:
-                damage = random.randint(21, 30)
                 print_and_sleep(green("You were unable to evade the aliens..."), 1.5)
                 print_and_sleep(red("They probed you extra hard for trying to escape.\n"), 1.5)
-                player.hp -= damage
+                old_hp = player.hp
+                damage = random.randint(5, 10)
+                player.hp -= min(old_hp, damage)
+                print_and_sleep(red(f"You lost {old_hp - player.hp} HP."), 1.5)
 
         special_event_death_check(player)
 
@@ -407,10 +430,16 @@ class SpecialEventComponent(LabeledSelectionComponent):
         if offer >= woman_desired_coins:
             play_sound(COINS)
             print_and_sleep(purple(f"You're not a stingy bastard. Good for you.\n"), 1.5)
-            player.coins -= offer - woman_desired_coins
-            if offer > woman_desired_coins:
-                player.gain_xp_other(offer - woman_desired_coins)
+
+            overpaid = offer - woman_desired_coins
+            player.coins -= overpaid
+
+            if overpaid > 0:
+                print_and_sleep(yellow(f"You handed over {overpaid} extra coins."), 1.5)
+                player.gain_xp_other(overpaid)
+
             player.gain_or_lose_luck(0.1)
+
         else:
             damage = min(woman_desired_coins - offer, player.hp)
             player.hp -= damage
@@ -456,6 +485,7 @@ class SpecialEventComponent(LabeledSelectionComponent):
             player.hp -= damage
             play_sound(MONSTER_ATTACK)
             print_and_sleep(red(f"You were ravaged by an unseen creature."), 2)
+            print_and_sleep(red(f"You took {damage} damage."), 1.5)
             player.gain_or_lose_luck(-0.1)
 
             special_event_death_check(player)
@@ -525,6 +555,7 @@ I'm scheduled to be buried alive at 6... or was it 8?"""), 3)
         else:
             print_and_sleep(purple(f"You bury the man alive..."), 3)
             player.gain_xp_other(amount)
+
             if random.random() < 0.25:
                 player.gain_or_lose_luck(-0.1)
                 OfficerEncounter(game_state).run()
@@ -561,6 +592,7 @@ I'm scheduled to be buried alive at 6... or was it 8?"""), 3)
             if player.coins >= 50:
                 player.coins -= 50
                 play_sound(COINS)
+                print_and_sleep(yellow("You handed over 50 coins."), 1.5)
                 print_and_sleep(green(f"Basta Sherman: Smooth move, boy. You're free to live, for now."), 1.5)
             else:
                 print_and_sleep(yellow(f"Basta Sherman: Oh, you're dry? The Mayor won't miss you anyway."), 1.5)
@@ -574,27 +606,6 @@ I'm scheduled to be buried alive at 6... or was it 8?"""), 3)
                 print_and_sleep(yellow(f"You try to run, but Basta is much too fast..."), 1.5)
                 player.gain_or_lose_luck(-0.25)
                 set_special_boss(game_state, BASTA_SHERMAN)
-                Battle(game_state).run()
-
-# ================================================================================================
-
-    @staticmethod
-    def slender_intro(game_state: GameState, choice: int):
-        player = game_state.player
-        game_state.current_area.special_bosses.append(SLENDERMAN)
-
-        if choice == 1:
-            print_and_sleep(yellow(f"Slender Man seems perfectly unfazed by your soiled dipe..."), 1.5)
-            set_special_boss(game_state, SLENDERMAN)
-            Battle(game_state).run()
-        else:
-            if random.random() < 0.25:
-                print_and_sleep(yellow(f"Somehow, you manage to escape. For now..."), 1.5)
-                player.luck += 0.75
-            else:
-                print_and_sleep(yellow(f"You could not outpace Slender Man's lengthy strides..."), 1.5)
-                player.luck -= 0.25
-                set_special_boss(game_state, SLENDERMAN)
                 Battle(game_state).run()
 
 # ================================================================================================
@@ -714,8 +725,8 @@ I'm scheduled to be buried alive at 6... or was it 8?"""), 3)
     @staticmethod
     def hodag_intro(game_state: GameState, choice: int):
         if choice:
-            game_state.current_area.special_bosses.append(OGRE)
-            set_special_boss(game_state, OGRE)
+            game_state.current_area.special_bosses.append(HODAG)
+            set_special_boss(game_state, HODAG)
             Battle(game_state).run()
 
 # ================================================================================================
@@ -735,6 +746,7 @@ I'm scheduled to be buried alive at 6... or was it 8?"""), 3)
 
             player.investments.append(invest_obj)
             print_and_sleep(green(f"You invested {buy_in} of coin in {invest_obj.name}."), 1.5)
+            print_and_sleep(green(f"It should mature around level {invest_obj.maturity_lvl}."), 1.5)
         else:
             print_and_sleep(yellow("You don't have enough coin."), 1.5)
 

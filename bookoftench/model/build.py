@@ -15,6 +15,7 @@ class Build:
     notes: str | None
     illness: Illness | None
     name: str
+    label: str
     lives: int
     lvl: int
     hp: int
@@ -69,8 +70,11 @@ class Build:
         if self.notes:
             detail_rows.append(f"{'Notes':<{label_width}} {dim('|')} {blue(self.notes)}")
 
+        label = getattr(self, "label", None)
+        title = f"{orange(self.name)} {dim(f'({label})')}" if label else orange(self.name)
+
         return "\n".join([
-            orange(self.name),
+            title,
             "",
             stats,
             "",

@@ -4,13 +4,13 @@ from bookoftench.audio import play_sound, stop_music, play_music
 from bookoftench.component.base import functional_component, GatekeepingComponent, \
     LabeledSelectionComponent, ReprBinding, SelectionBinding, Component, NoOpComponent, LinearComponent, \
     TextDisplayingComponent
-from bookoftench.data.audio import COINS, CATCH_FISH, GOLF_CLAP, FISH_ON, CAST, ENEMY_APPEARS, BATTLE_THEME, \
+from bookoftench.data.audio import COINS, CATCH_FISH, GOLF_CLAP, FISH_ON, CAST, ENEMY_APPEARS, \
     OCEAN_THEME, BAY_THEME, SHALLOWS_THEME, FISH, WHIFF
 from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED, \
-    possible_observations, SPECIES, VARIANT, STRENGTH, SPEED, RAGE_FACTOR, RARITY, STAMINA, SHALLOWS, BAY, MYTHIC
+    SPECIES, VARIANT, STRENGTH, SPEED, RAGE_FACTOR, RARITY, STAMINA, SHALLOWS, BAY, MYTHIC, possible_observations
 from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL, USE_ITEM
 from bookoftench.data.fishing_areas import WET_SEASON_BITE_CHANCE_EFFECT, DRY_SEASON_BITE_CHANCE_EFFECT, WET_SEASON
-from bookoftench.data.fishing_items import BARB_HOOK, LAMPREYS, LEECHES, REEFER, SEA_WEED, MOTION_POTION, RAGE
+from bookoftench.data.fishing_items import BARB_HOOK, RAGE
 from bookoftench.model import GameState
 from bookoftench.model.fish import load_fishes
 from bookoftench.model.player import Player
@@ -24,7 +24,7 @@ class DryCastCheck(NoOpComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
 
-    def run(self):
+    def run(self) -> GameState:
         if self.game_state.current_fishing_area.casts == 0:
             return self.game_state
 
@@ -36,9 +36,7 @@ class DryCastCheck(NoOpComponent):
         self.game_state.current_fishing_area.casts -= 1
         player.current_bait.casts -= 1
 
-        dry = self.dry_check()
-
-        if dry:
+        if self.dry_check():
             print_and_sleep("You came up dry.", 1)
             return self.game_state
 
@@ -80,24 +78,22 @@ class SpawnFish(LinearComponent):
         self.spawn_fish()
         return self.game_state
 
-    def spawn_fish(self) -> GameState | None:
+    def spawn_fish(self) -> None:
         player = self.game_state.player
         fishing_area = self.game_state.current_fishing_area
-        all_fish = self.game_state.all_fish
-        bait = self.game_state.player.current_bait
+        bait = player.current_bait
 
         if bait.casts == 0:
-            self.game_state.player.current_bait = None
-            return None
+            player.current_bait = None
+            return
 
-        if all_fish:
+        if self.game_state.all_fish:
             valid = Fish_Species
         else:
-            caught = [i.name for i in player.caught_fish]
-            valid = [i for i in Fish_Species if i['name'] not in caught]
+            caught = [fish.name for fish in player.caught_fish]
+            valid = [fish for fish in Fish_Species if fish["name"] not in caught]
 
         filtered = self.get_filtered(valid)
-
         fishes = load_fishes(filtered)
 
         rarity = self.get_rarity(player.luck)
@@ -115,12 +111,12 @@ class SpawnFish(LinearComponent):
         if not available:
             self.game_state.current_fish = None
             print_and_sleep(dim("You got a bite, but nothing took the bait."), 1)
-            return None
+            return
 
         selection = random.choice(available)
         selection.distance = random.randint(
             fishing_area.min_hook_distance,
-            fishing_area.max_hook_distance
+            fishing_area.max_hook_distance,
         )
 
         self.game_state.current_fish = selection
@@ -130,21 +126,19 @@ class SpawnFish(LinearComponent):
         play_sound(ENEMY_APPEARS)
         print_and_sleep(orange("Fish on!"), 1.5)
 
-        return None
-
     def get_filtered(self, valid: list[dict]) -> list[str]:
         fishing_area = self.game_state.current_fishing_area
-        time = self.game_state.time_of_day
+        time_of_day = self.game_state.time_of_day
         bait = self.game_state.player.current_bait
         moon = self.game_state.moon
 
-        filtered =  [
-            i['name']
-            for i in valid
-            if fishing_area.name in i['areas']
-               and time in i['time']
-               and (i['moon'] is None or moon in i['moon'])
-               and bait.name in i['preferred_bait']
+        filtered = [
+            fish["name"]
+            for fish in valid
+            if fishing_area.name in fish["areas"]
+               and time_of_day in fish["time"]
+               and (fish["moon"] is None or moon in fish["moon"])
+               and bait.name in fish["preferred_bait"]
         ]
 
         return filtered
@@ -166,11 +160,22 @@ class SpawnFish(LinearComponent):
             return UNCOMMON
         return COMMON
 
+# ================================================================================================
+
 class LaunchFishBattle(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: self.game_state.current_fish is not None,
+        super().__init__(game_state,
+                         decision_function=self._fish_is_hooked,
                          accept_component=FishBattle,
-                         deny_component=functional_component()(lambda: None))
+                         deny_component=no_fish_hooked)
+
+    def _fish_is_hooked(self) -> bool:
+        return self.game_state.current_fish is not None
+
+
+@functional_component(state_dependent=True)
+def no_fish_hooked(game_state: GameState) -> GameState:
+    return game_state
 
 # ================================================================================================
 # ================================================================================================
@@ -185,7 +190,11 @@ class FishBattle(LabeledSelectionComponent):
 
         view_actions_binding = SelectionBinding('V', "View Actions", ViewFishingActions)
         view_info_binding = SelectionBinding('M', "More Info", ViewFishingInfo)
-        return_binding = SelectionBinding('R', "Return", functional_component()(lambda: self._return()))
+        return_binding = SelectionBinding(
+            "R",
+            "Return",
+            self._make_return_component(),
+        )
 
         super().__init__(game_state, refresh_menu=True,
                          bindings=[*fishing_battle_option_bindings, view_actions_binding,
@@ -212,8 +221,16 @@ class FishBattle(LabeledSelectionComponent):
         else:
             play_music(OCEAN_THEME)
 
-    def _return(self):
+    def _return(self) -> GameState:
         self.leave = True
+        return self.game_state
+
+    def _make_return_component(self) -> type[Component]:
+        @functional_component()
+        def return_component() -> GameState:
+            return self._return()
+
+        return return_component
 
     def can_exit(self) -> bool:
         no_active_fish = self.game_state.current_fish is None
@@ -235,23 +252,25 @@ class FishBattle(LabeledSelectionComponent):
     @staticmethod
     def _handle_selection_component(selection: str) -> type[Component]:
         @functional_component(state_dependent=True)
-        def selection_component(game_state: GameState):
+        def selection_component(game_state: GameState) -> GameState:
             from bookoftench.component import FishingItemBox
 
             if selection == PULL:
-                Pull(game_state).run()
-            elif selection == REEL:
-                Reel(game_state).run()
-            elif selection == GIVE_LINE:
-                GiveLine(game_state).run()
-            elif selection == OBSERVE:
-                ObserveFish(game_state).run()
-            elif selection == USE_ITEM:
-                FishingItemBox(game_state).run()
-            else:
-                return selection_component(game_state)
+                return Pull(game_state).run()
 
-            return None
+            if selection == REEL:
+                return Reel(game_state).run()
+
+            if selection == GIVE_LINE:
+                return GiveLine(game_state).run()
+
+            if selection == OBSERVE:
+                return ObserveFish(game_state).run()
+
+            if selection == USE_ITEM:
+                return FishingItemBox(game_state).run()
+
+            return game_state
 
         return selection_component
 
@@ -268,18 +287,31 @@ class ViewFishingInfo(TextDisplayingComponent):
 # ================================================================================================
 
 class EndFishBattle(NoOpComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state)
-
-    def run(self):
+    def run(self) -> GameState:
         fish = self.game_state.current_fish
+
+        if fish is None:
+            return self.game_state
 
         if fish.caught:
             self.display_catch()
             self.award_xp()
             self.sell_fish()
             self.update_log()
-        self.reset_state()
+
+        self.game_state = self.reset_state()
+        return self.game_state
+
+    def reset_state(self) -> GameState:
+        from bookoftench.component import OfficerEncounter
+
+        if self.game_state.current_fish.protected:
+            if random.random() < 0.25:
+                self.game_state = OfficerEncounter(self.game_state).run()
+
+        self.game_state.current_fish = None
+        self.game_state.player.active_fishing_items.clear()
+
         return self.game_state
 
     def display_catch(self):
@@ -337,15 +369,6 @@ class EndFishBattle(NoOpComponent):
         fish.catch_location = self.game_state.current_fishing_area.name
         self.game_state.player.caught_fish.append(fish)
 
-    def reset_state(self):
-        from bookoftench.component import OfficerEncounter
-
-        if self.game_state.current_fish.protected:
-            if random.random() < 0.25:
-                OfficerEncounter(self.game_state).run()
-        self.game_state.current_fish = None
-        self.game_state.player.active_fishing_items.clear()
-
 # ================================================================================================
 # ================================================================================================
 
@@ -353,7 +376,7 @@ class FishTurn(NoOpComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
 
-    def run(self):
+    def run(self) -> GameState:
         fish = self.game_state.current_fish
         player = self.game_state.player
         fishing_area = self.game_state.current_fishing_area
@@ -363,8 +386,7 @@ class FishTurn(NoOpComponent):
 
         # --- did player lose the fish ---
         if fish.lost:
-            EndFishBattle(self.game_state).run()
-            return self.game_state
+            return EndFishBattle(self.game_state).run()
 
         # --- fish turn and outcome ---
         run = self.fish_runs(fish, fishing_area)
@@ -379,39 +401,52 @@ class FishTurn(NoOpComponent):
 
         # --- check if fish got away after its turn ---
         if fish.lost:
-            EndFishBattle(self.game_state).run()
-            return self.game_state
-        else:
-            if random.random() < 0.15:
-                play_sound(FISH)
-            self.adrenaline_rush(fish)
-            return self.game_state
+            return EndFishBattle(self.game_state).run()
+
+        if random.random() < 0.15:
+            play_sound(FISH)
+
+        self.adrenaline_rush(fish)
+        return self.game_state
 
 # ================================================================================================
 
     @staticmethod
-    def adrenaline_rush(fish):
-        if fish.adrenaline_ready:
-            stamina_percentage = (fish.stamina / fish.max_stamina) * 100
-            if stamina_percentage <= 10:
-                name = fish.name if fish.species_known else "Unknown Fish"
-                stamina_gain_pct = random.randint(10, 20)
-                stamina_gain = round(fish.max_stamina * stamina_gain_pct / 100)
-                fish.stamina += stamina_gain
-                print_and_sleep(yellow(f"The {name} found a second wind and gained {stamina_gain} stamina!"))
-                fish.adrenaline_ready = False
+    def adrenaline_rush(fish) -> None:
+        if not fish.adrenaline_ready:
+            return
+
+        stamina_percentage = (fish.stamina / fish.max_stamina) * 100
+        if stamina_percentage > 10:
+            return
+
+        name = fish.name if fish.species_known else "Unknown Fish"
+        stamina_gain_pct = random.randint(10, 20)
+        stamina_gain = round(fish.max_stamina * stamina_gain_pct / 100)
+
+        fish.stamina += stamina_gain
+        fish.adrenaline_ready = False
+
+        print_and_sleep(
+            yellow(f"The {name} found a second wind and gained {stamina_gain} stamina!")
+        )
 
     @staticmethod
-    def spit_hook(player, fish):
+    def spit_hook(player, fish) -> None:
         if fish.barb_hook_active:
-            for i in player.active_fishing_items:
-                if i.name == BARB_HOOK:
-                    i.turns -= 1
-                    if i.turns <= 0:
-                        player.active_fishing_items.remove(i)
-                        fish.barb_hook_active = False
+            barb_hook = next(
+                (item for item in player.active_fishing_items if item.name == BARB_HOOK),
+                None,
+            )
 
-                    return
+            if barb_hook:
+                barb_hook.turns -= 1
+
+                if barb_hook.turns <= 0:
+                    player.active_fishing_items.remove(barb_hook)
+                    fish.barb_hook_active = False
+
+                return
 
         if random.random() < fish.spit_hook_chance:
             name = fish.name if fish.species_known else "Unknown Fish"
@@ -423,40 +458,52 @@ class FishTurn(NoOpComponent):
 # ================================================================================================
 
     @staticmethod
-    def stamina_items(player, fish):
-        for item in player.active_fishing_items:
-            if item.type == STAMINA:
-                item.turns -= 1
+    def stamina_items(player, fish) -> None:
+        item = next(
+            (item for item in player.active_fishing_items if item.type == STAMINA),
+            None,
+        )
 
-                if item.turns <= 0:
-                    player.active_fishing_items.remove(item)
-                    fish.stamina_multiplier = 1
+        if item is None:
+            return
 
-                return
+        item.turns -= 1
 
-    @staticmethod
-    def rage_items(player, fish):
-        for item in player.active_fishing_items:
-            if item.type == RAGE:
-                item.turns -= 1
-
-                if item.turns <= 0:
-                    player.active_fishing_items.remove(item)
-                    fish.rage_multiplier = 1
-
-                return
+        if item.turns <= 0:
+            player.active_fishing_items.remove(item)
+            fish.stamina_multiplier = 1
 
     @staticmethod
-    def speed_items(player, fish):
-        for item in player.active_fishing_items:
-            if item.type == SPEED:
-                item.turns -= 1
+    def rage_items(player, fish) -> None:
+        item = next(
+            (item for item in player.active_fishing_items if item.type == RAGE),
+            None,
+        )
 
-                if item.turns <= 0:
-                    player.active_fishing_items.remove(item)
-                    fish.speed_multiplier = 1
+        if item is None:
+            return
 
-                return
+        item.turns -= 1
+
+        if item.turns <= 0:
+            player.active_fishing_items.remove(item)
+            fish.rage_multiplier = 1
+
+    @staticmethod
+    def speed_items(player, fish) -> None:
+        item = next(
+            (item for item in player.active_fishing_items if item.type == SPEED),
+            None,
+        )
+
+        if item is None:
+            return
+
+        item.turns -= 1
+
+        if item.turns <= 0:
+            player.active_fishing_items.remove(item)
+            fish.speed_multiplier = 1
 
 # ================================================================================================
 
@@ -485,10 +532,7 @@ class FishTurn(NoOpComponent):
 
         # --- burst ---
         burst_chance = min(0.15, (fish.speed * fish.speed_multiplier) * 0.08)
-        if random.random() < burst_chance:
-            burst = True
-        else:
-            burst = False
+        burst = random.random() < burst_chance
 
         # --- run ---
         run = random.randint(2, 5)
@@ -496,11 +540,13 @@ class FishTurn(NoOpComponent):
         run *= stamina_modifier
         run *= state_modifier
         run *= run_mult
+
         if burst:
             total_run = max(1, round(run * 2))
+
             if total_run > 5:
                 play_sound(WHIFF)
-                print_and_sleep(yellow(f"The fish had a burst of speed!"))
+                print_and_sleep(yellow("The fish had a burst of speed!"))
         else:
             total_run = max(1, round(run * fish.speed_multiplier))
 
@@ -509,10 +555,10 @@ class FishTurn(NoOpComponent):
         return total_run
 
     @staticmethod
-    def fish_gains_rage(fish, run):
-        rage_gain = random.randint(1, 3)
+    def fish_gains_rage(fish, run: int) -> None:
         stamina_ratio = fish.stamina / fish.max_stamina
 
+        # --- state ---
         if fish.state == AGITATED:
             state_modifier = 1.1
         elif fish.state == SPOOKED:
@@ -531,13 +577,17 @@ class FishTurn(NoOpComponent):
             stamina_modifier = 1
 
         original_rage = fish.rage
+
+        rage_gain = random.randint(1, 3)
         rage_gain *= fish.rage_factor
         rage_gain *= state_modifier
         rage_gain *= stamina_modifier
-        fish.rage += round(rage_gain * fish.rage_multiplier)
-        fish.rage = min(100, fish.rage)
-        rage_delta = fish.rage - original_rage
+        rage_gain *= fish.rage_multiplier
 
+        fish.rage += round(rage_gain)
+        fish.rage = min(100, fish.rage)
+
+        rage_delta = fish.rage - original_rage
         print_fish_turn_results(run, rage_delta)
 
     @staticmethod
@@ -551,33 +601,30 @@ class FishTurn(NoOpComponent):
         else:
             fish.state = CALM
 
-    def apply_fish_turn_outcome(self):
+    def apply_fish_turn_outcome(self) -> None:
         fish = self.game_state.current_fish
         area = self.game_state.current_fishing_area
         name = fish.name if fish.species_known else "Unknown Fish"
+
         break_chance = min(
             0.025,
             ((fish.weight / 1000) + (fish.strength * 0.01))
-            * (fish.rage / 100)
+            * (fish.rage / 100),
         )
 
         if fish.distance >= area.escape_distance:
             fish.lost = True
             print_and_sleep(red(f"The {name} gained too much distance and escaped!"), 1.5)
-            return self.game_state
-        elif fish.rage >= 100:
+            return
+
+        if fish.rage >= 100:
             fish.lost = True
             print_and_sleep(red(f"The enraged {name} broke free and escaped!"), 1.5)
-            return self.game_state
-        elif fish.rage >= 80:
-            if random.random() < break_chance:
-                fish.lost = True
-                print_and_sleep(red("The fish snapped the line and escaped!"), 1.5)
-                return self.game_state
-            return None
-        else:
-            return None
+            return
 
+        if fish.rage >= 80 and random.random() < break_chance:
+            fish.lost = True
+            print_and_sleep(red("The fish snapped the line and escaped!"), 1.5)
 
 # ================================================================================================
 # ================================================================================================
@@ -586,16 +633,17 @@ class Pull(NoOpComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
 
-    def run(self):
+    def run(self) -> GameState:
         fish = self.game_state.current_fish
-        
+
         pull = self.get_pull()
         self.apply_pull(pull)
         self.apply_pull_outcome()
+
         if fish.caught or fish.lost:
-            EndFishBattle(self.game_state).run()
-        else:
-            FishTurn(self.game_state).run()
+            return EndFishBattle(self.game_state).run()
+
+        return FishTurn(self.game_state).run()
 
     def get_pull(self) -> int:
         # --- variables ---
@@ -624,7 +672,7 @@ class Pull(NoOpComponent):
 
         return round(pull)
 
-    def apply_pull(self, pull: int):
+    def apply_pull(self, pull: int) -> None:
         fish = self.game_state.current_fish
 
         stamina_loss = pull + random.randint(1, 3)
@@ -647,10 +695,9 @@ class Pull(NoOpComponent):
         fish.rage = min(100, fish.rage)
         FishTurn.update_fish_state(fish)
 
-        action = PULL
-        print_action_results(fish, action, original_distance, original_stamina, original_rage)
+        print_action_results(fish, PULL, original_distance, original_stamina, original_rage)
 
-    def apply_pull_outcome(self):
+    def apply_pull_outcome(self) -> None:
         fish = self.game_state.current_fish
         location = self.game_state.current_fishing_area.name
         name = fish.name if fish.species_known else "Unknown Fish"
@@ -658,14 +705,16 @@ class Pull(NoOpComponent):
         if fish.distance <= 0:
             fish.caught = True
             fish.catch_location = location
-        elif fish.stamina <= 0:
+            return
+
+        if fish.stamina <= 0:
             fish.caught = True
             fish.catch_location = location
-        elif fish.rage >= 100:
+            return
+
+        if fish.rage >= 100:
             fish.lost = True
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
-        else:
-            pass
 
 # ================================================================================================
 # ================================================================================================
@@ -674,17 +723,18 @@ class Reel(NoOpComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
 
-    def run(self):
+    def run(self) -> GameState:
         fish = self.game_state.current_fish
         player = self.game_state.player
 
         reel = self.get_reel(fish, player)
         self.apply_reel(reel, fish)
         self.apply_reel_outcome(fish)
+
         if fish.caught or fish.lost:
-            EndFishBattle(self.game_state).run()
-        else:
-            FishTurn(self.game_state).run()
+            return EndFishBattle(self.game_state).run()
+
+        return FishTurn(self.game_state).run()
 
     @staticmethod
     def get_reel(fish, player) -> int:
@@ -709,7 +759,7 @@ class Reel(NoOpComponent):
         return round(reel)
 
     @staticmethod
-    def apply_reel(reel: int, fish):
+    def apply_reel(reel: int, fish) -> None:
         stamina_loss = max(1, round(reel / 2)) + random.randint(0, 1)
         rage_gain = random.randint(0, 1) + reel / 3
 
@@ -730,25 +780,25 @@ class Reel(NoOpComponent):
         fish.rage = min(100, fish.rage)
         FishTurn.update_fish_state(fish)
 
-        action = REEL
-        print_action_results(fish, action, original_distance, original_stamina, original_rage)
+        print_action_results(fish, REEL, original_distance, original_stamina, original_rage)
 
-    def apply_reel_outcome(self, fish):
-        player = self.game_state.player
+    def apply_reel_outcome(self, fish) -> None:
         location = self.game_state.current_fishing_area.name
         name = fish.name if fish.species_known else "Unknown Fish"
 
         if fish.distance <= 0:
             fish.caught = True
             fish.catch_location = location
-        elif fish.stamina <= 0:
+            return
+
+        if fish.stamina <= 0:
             fish.caught = True
             fish.catch_location = location
-        elif fish.rage >= 100:
+            return
+
+        if fish.rage >= 100:
             fish.lost = True
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
-        else:
-            pass
 
 # ================================================================================================
 
@@ -756,17 +806,18 @@ class GiveLine(NoOpComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
 
-    def run(self):
+    def run(self) -> GameState:
         fish = self.game_state.current_fish
         player = self.game_state.player
 
         line = self.get_give_line(fish)
         self.apply_give_line(fish, line, player)
         self.apply_give_line_outcome(fish)
+
         if fish.caught or fish.lost:
-            EndFishBattle(self.game_state).run()
-        else:
-            return
+            return EndFishBattle(self.game_state).run()
+
+        return self.game_state
 
     @staticmethod
     def get_give_line(fish) -> int:
@@ -783,7 +834,7 @@ class GiveLine(NoOpComponent):
         return round(line)
 
     @staticmethod
-    def apply_give_line(fish, line, player):
+    def apply_give_line(fish, line: int, player) -> None:
         # --- distance ---
         original_distance = fish.distance
         fish.distance += line
@@ -804,26 +855,25 @@ class GiveLine(NoOpComponent):
 
         rage_loss += min(player.fishing_lvl // 2, 3)
         rage_loss += min(player.rod_lvl - 1, 3)
+
         fish.rage -= rage_loss
         fish.rage = max(0, fish.rage)
         FishTurn.update_fish_state(fish)
 
-        action = GIVE_LINE
-        print_action_results(fish, action, original_distance, original_stamina, original_rage)
+        print_action_results(fish, GIVE_LINE, original_distance, original_stamina, original_rage)
 
-    def apply_give_line_outcome(self, fish):
+    def apply_give_line_outcome(self, fish) -> None:
         location = self.game_state.current_fishing_area.name
         name = fish.name if fish.species_known else "Unknown Fish"
 
         if fish.distance <= 0:
             fish.caught = True
             fish.catch_location = location
-        elif fish.rage >= 100:
+            return
+
+        if fish.rage >= 100:
             fish.lost = True
             print_and_sleep(red(f"The raging {name} got away!"), 1.5)
-        else:
-            # print_and_sleep(yellow("You let the fish go temporarily."))
-            pass
 
 # ================================================================================================
 
@@ -831,26 +881,33 @@ class ObserveFish(NoOpComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state)
 
-    def run(self):
+    def run(self) -> GameState:
         fish = self.game_state.current_fish
 
         # --- stamina can be checked multiple times ---
         observation = self.get_observation(fish)
         self.apply_observation(fish, observation)
-        FishTurn(self.game_state).run()
 
+        return FishTurn(self.game_state).run()
 
     @staticmethod
     def get_observation(fish) -> str | None:
-        valid = [i for i in possible_observations if i not in fish.observed_characteristics]
-        if valid:
-            observation = random.choice(valid)
-        else:
+        valid = [
+            observation
+            for observation in possible_observations
+            if observation not in fish.observed_characteristics
+        ]
+
+        if not valid:
             return None
 
-        return observation
+        return random.choice(valid)
 
-    def apply_observation(self, fish, observation):
+    def apply_observation(self, fish, observation: str | None) -> None:
+        if observation is None:
+            print_and_sleep(blue("There is nothing more to learn from observation."), 1.5)
+            return
+
         fish.observed_characteristics.append(observation)
 
         if observation == SPECIES:
@@ -895,13 +952,18 @@ class ObserveFish(NoOpComponent):
 
     @staticmethod
     def display_observation_result(color, word: str, value: str) -> None:
-
-        print_and_sleep(blue(f"You observe the fish to learn more..."), 1.5)
+        print_and_sleep(blue("You observe the fish to learn more..."), 1.5)
         print_and_sleep(f"{color(word)}: {value}", 1.5)
 
 # ================================================================================================
 
-def print_action_results(fish, action: str, original_distance, original_stamina, original_rage):
+def print_action_results(
+        fish,
+        action: str,
+        original_distance: int,
+        original_stamina: int,
+        original_rage: int,
+) -> None:
     distance_delta = fish.distance - original_distance
     stamina_delta = fish.stamina - original_stamina
     rage_delta = fish.rage - original_rage
@@ -925,18 +987,20 @@ def print_action_results(fish, action: str, original_distance, original_stamina,
         print_and_sleep(f"{action_display}: {' | '.join(parts)}", 1.5)
 
 
-def get_action_color(action) -> str:
+def get_action_color(action: str) -> str:
     if action == PULL:
         return orange(PULL)
-    elif action == REEL:
+
+    if action == REEL:
         return green(REEL)
-    elif action == GIVE_LINE:
+
+    if action == GIVE_LINE:
         return purple(GIVE_LINE)
-    else:
-        return white(action)
+
+    return white(action)
 
 
-def print_fish_turn_results(run: int, rage_delta: int):
+def print_fish_turn_results(run: int, rage_delta: int) -> None:
     fish = blue("Fish")
     parts = []
 
@@ -950,6 +1014,7 @@ def print_fish_turn_results(run: int, rage_delta: int):
 
     if parts:
         print_and_sleep(f"{fish}: {' | '.join(parts)}", 1.5)
+
 
 def get_rod_modifier(player: Player) -> float:
     return 1 + ((player.rod_lvl - 1) * 0.10)

@@ -68,16 +68,16 @@ class OccultistComponent(LabeledSelectionComponent):
 
     def _return(self):
         self.leave = True
-        print_and_sleep(f"{blue('Farewell.')}", 1)
+        print_and_sleep(blue("Farewell."), 1)
+        return self.game_state
 
     def can_exit(self) -> bool:
         return self.leave or not self.game_state.player.is_alive()
 
     def display_options(self) -> None:
         message = random.choice(Occultist_Lines)
-        print_and_sleep(
-            f"{blue(message)}\n", 1.5
-        )
+        print_and_sleep(blue(f"{message}\n"), 1.5)
+
         for component in self.selection_components:
             component.display_options()
 
@@ -88,13 +88,18 @@ class OccultistComponent(LabeledSelectionComponent):
         @functional_component(state_dependent=True)
         def purchase_component(game_state: GameState):
             player = game_state.player
+
             if player.coins < ritual.cost:
-                print_and_sleep(yellow(f"Need more coin"), 1)
-            else:
-                play_sound(PURCHASE)
-                player.coins -= ritual.cost
-                event_logger.log_event(OccultistEvent())
-                play_sound(RITUAL)
-                ritual.invoke(player)
+                print_and_sleep(yellow("Need more coin."), 1)
+                return game_state
+
+            play_sound(PURCHASE)
+            player.coins -= ritual.cost
+            event_logger.log_event(OccultistEvent())
+
+            play_sound(RITUAL)
+            ritual.invoke(player)
+
+            return game_state
 
         return purchase_component

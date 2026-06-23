@@ -72,6 +72,7 @@ SHOVEL = "Shovel"
 SICKLE = "Sickle"
 SLEDGEHAMMER = "Sledgehammer"
 SLINGSHOT = "Slingshot"
+STAFF = "Staff"
 STONE_SPEAR = "Stone Spear"
 SUITCASE = "Suitcase"
 SURVIVAL_KNIFE = "Survival Knife"
@@ -268,6 +269,10 @@ Weapons = [
     {'name': SHOVEL, 'damage': 22, 'uses': 8, 'accuracy': 0.79, 'var': 4, 'crit': 0.08,
      'cost': 38, 'sell_value': 19, 'type': MELEE, 'subtype': BLUNT, 'tier': 2, 'sound': audio.BLUNT,
      'areas': [CAVE, CITY, FOREST, SWAMP]},
+
+    {'name': STAFF, 'damage': 15, 'uses': 14, 'accuracy': 0.88, 'var': 3, 'crit': 0.04,
+     'cost': 20, 'sell_value': 10, 'type': MELEE, 'subtype': BLUNT, 'tier': 1, 'sound': audio.BLUNT,
+     'areas': [SWAMP, FOREST]},
 
     {'name': SWITCHBLADE, 'damage': 19, 'uses': 11, 'accuracy': 0.90, 'var': 3, 'crit': 0.13,
      'cost': 30, 'sell_value': 14, 'type': MELEE, 'subtype': BLADED, 'tier': 2, 'sound': audio.BLADE,

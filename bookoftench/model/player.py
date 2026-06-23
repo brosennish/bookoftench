@@ -384,7 +384,7 @@ class Player(Combatant):
 
     def make_purchase(self, buyable: Buyable) -> bool:
         if self.coins < buyable.cost:
-            print_and_sleep(yellow(f"Need more coin"), 1)
+            print_and_sleep(yellow(f"Need more coin."), 1)
             return False
         if isinstance(buyable, Item) and self.add_item(buyable):
             event_logger.log_event(BuyItemEvent(buyable.name, buyable.cost))
@@ -517,11 +517,19 @@ class Player(Combatant):
         print_and_sleep(cyan(f"Your accuracy increased by {round(amount, 2)}!"), 1)
 
     def gain_or_lose_luck(self, amount: float):
-        self.luck += round(amount, 3)
-        if self.luck < 0:
-            self.luck = 0
-        if self.luck > 7:
-            self.luck = 7
+        old_luck = self.luck
+
+        new_luck = round(old_luck + amount, 2)
+        new_luck = max(0.0, min(new_luck, 7.0))
+
+        actual_change = round(new_luck - old_luck, 2)
+
+        if actual_change < 0:
+            print_and_sleep(yellow(f"Your luck decreased by {abs(actual_change)}."), 1)
+        elif actual_change > 0:
+            print_and_sleep(green(f"Your luck increased by {actual_change}!"), 1)
+
+        self.luck = new_luck
 
     def acquire_illness(self, illness_name) -> None:
         illness_dict = next(i for i in Illnesses if i['name'] == illness_name)
@@ -699,10 +707,16 @@ class Player(Combatant):
                     print_and_sleep(purple(f"Restored {gain} HP with Vampiric Sperm!"), 1)
 
         @subscribe_function(LevelUpEvent)
-        def handle_investments():
-            for v in self.investments:
+        def handle_investments(_event):
+            investments = getattr(self, "investments", None)
+
+            if not investments:
+                return
+
+            for v in investments:
                 if not v.active:
                     continue
+
                 if v.maturity_lvl == self.lvl:
                     if random.random() < v.success_rate:
                         payout = round(v.value * v.multiplier)
@@ -713,6 +727,7 @@ class Player(Combatant):
                         print_and_sleep(yellow(f"{v.failure_text}"), 1.5)
                         print_and_sleep(yellow(f"Your investment of {v.value} ran dry."), 1.5)
                         v.value = 0
+
                     v.active = False
 
     # for loading from save file

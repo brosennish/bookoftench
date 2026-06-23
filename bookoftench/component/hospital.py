@@ -64,11 +64,12 @@ class HospitalComponent(BinarySelectionComponent):
     def _return(self):
         self.exit_hospital = True
         print_and_sleep(blue("You'll be back!"), 1)
+        return self.game_state
 
 # ================================================================================================
 
 @functional_component(state_dependent=True)
-def treatment_component(game_state: GameState) -> None:
+def treatment_component(game_state: GameState) -> GameState:
     player: Player = game_state.player
     illness: Illness = player.illness
 
@@ -76,20 +77,27 @@ def treatment_component(game_state: GameState) -> None:
         raise RuntimeError("Player should not be able to purchase treatment without an illness.")
 
     if player.coins < illness.cost:
-        print_and_sleep(yellow(f"Need more coin"), 1)
-        return
+        print_and_sleep(yellow("Need more coin."), 1)
+        return game_state
 
-    if random.random() < illness.success_rate + (min(player.luck, 10) / 100):
-        print_and_sleep(f"{cyan("Woah, I really didn't expect that to work.")}", 2)
+    success_chance = illness.success_rate + (min(player.luck, 10) / 100)
+
+    if random.random() < success_chance:
+        print_and_sleep(cyan("Woah, I really didn't expect that to work."), 2)
+
         player.illness = None
         player.illness_death_lvl = None
         player.gain_or_lose_luck(1 - illness.success_rate)
+
         event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_SUCCESS))
     else:
-        print_and_sleep(blue(
-            f"Shit didn't take. You owe me {illness.cost} of coin. Also - you into crypto?"),
-            2)
+        print_and_sleep(
+            blue(f"Shit didn't take. You owe me {illness.cost} of coin. Also - you into crypto?"),
+            2
+        )
+
         player.gain_or_lose_luck(illness.success_rate)
         event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_FAIL))
 
     player.coins -= illness.cost
+    return game_state

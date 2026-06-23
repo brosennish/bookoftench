@@ -64,6 +64,7 @@ class GameState:
     season: str = DRY_SEASON
     time_of_day: str = field(default=DAY)
     moon: str = field(default=DRY)
+    day: int = 1
 
     wench_area: Area = None
 
@@ -108,6 +109,7 @@ class GameState:
 
             build_obj = Build(
                 name=d["name"],
+                label=d["label"],
                 notes=d.get("notes"),
                 lives=d["lives"],
                 lvl=d["lvl"],
@@ -176,12 +178,13 @@ class GameState:
             self.season = DRY_SEASON
 
     def set_time_of_day(self):
-        self.time_of_day = random.choice([DAY, NIGHT])
+        self.time_of_day = DAY
 
     def update_time_of_day(self) -> None:
         if self.time_of_day == DAY:
             self.time_of_day = NIGHT
         elif self.time_of_day == NIGHT:
+            self.day += 1
             self.time_of_day = DAY
 
     def set_moon(self):
@@ -220,7 +223,6 @@ class GameState:
                             odds = 0.06
                         else:
                             odds = 0.02
-                        event_logger.log_event(HohkkenEvent())
 
                     else:
                         if season == DRY_SEASON:

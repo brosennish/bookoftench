@@ -36,10 +36,14 @@ class CoffeeOpen(GatekeepingComponent):
 
 class CoffeeSleeping(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: game_state.time_of_day == DAY,
-                         accept_component=CoffeeBouncer,
-                         deny_component=functional_component()(lambda: print_and_sleep(
-                             red(f"Coughy is trying to sleep.\n"), 1.5)))
+        super().__init__(
+            game_state,
+            decision_function=lambda: game_state.time_of_day == DAY,
+            accept_component=CoffeeBouncer,
+            deny_component=functional_component()(lambda: print_and_sleep(
+                red("Coughy is trying to sleep.\n"), 1.5
+            ))
+        )
 
 # ================================================================================================
 
@@ -47,10 +51,15 @@ class CoffeeSleeping(GatekeepingComponent):
 
 class CoffeeBouncer(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: game_state.player.illness is None,
-                         accept_component=CoffeeShopComponent,
-                         deny_component=functional_component()(lambda: print_and_sleep(
-                             blue(f"Get {yellow('*cough cough*')} {blue('lost. No sickos allowed.')}\n"), 1.5)))
+        super().__init__(
+            game_state,
+            decision_function=lambda: game_state.player.illness is None,
+            accept_component=CoffeeShopComponent,
+            deny_component=functional_component()(lambda: print_and_sleep(
+                f"{blue('Get')} {yellow('*cough cough*')} {blue('lost. No sickos allowed.')}\n",
+                1.5
+            ))
+        )
 
 # ================================================================================================
 
@@ -82,11 +91,11 @@ class CoffeeShopComponent(LabeledSelectionComponent):
 
     def _return(self):
         self.exit_shop = True
-        print_and_sleep((
-            f"{blue('Until')} "
-            f"{yellow('*cough cough*')} "
-            f"{blue('next time!')}\n"
-        ), 1)
+        print_and_sleep(
+            f"{blue('Until')} {yellow('*cough cough*')} {blue('next time!')}\n",
+            1
+        )
+        return self.game_state
 
     def can_exit(self) -> bool:
         return (self.exit_shop
@@ -95,10 +104,9 @@ class CoffeeShopComponent(LabeledSelectionComponent):
 
     def display_options(self) -> None:
         print_and_sleep(
-            f"{blue('Welcome to ')} "
-            f"{yellow('*cough cough* ')} "
-            f"{blue('Coughy\'s Coffee!')} "
+            f"{blue('Welcome to')} {yellow('*cough cough*')} {blue("Coughy's Coffee!")}"
         )
+
         for component in self.selection_components:
             component.display_options()
 
@@ -109,43 +117,58 @@ class CoffeeShopComponent(LabeledSelectionComponent):
         @functional_component(state_dependent=True)
         def purchase_component(game_state: GameState):
             player = game_state.player
+
             if player.coins < coffee_item.cost:
-                print_and_sleep(yellow(f"Need more coin"), 1)
-            else:
-                play_sound(PURCHASE)
-                player.coins -= coffee_item.cost
-                play_sound(DRINK)
-                apply_coffee_effect(coffee_item, player)
-                event_logger.log_event(CoffeeEvent())
+                print_and_sleep(yellow("Need more coin."), 1)
+                return game_state
+
+            play_sound(PURCHASE)
+            player.coins -= coffee_item.cost
+
+            play_sound(DRINK)
+            apply_coffee_effect(coffee_item, player)
+
+            event_logger.log_event(CoffeeEvent())
+            return game_state
 
         return purchase_component
 
 # ================================================================================================
 
-def apply_coffee_effect(item: CoffeeItem, player: Player):
+def apply_coffee_effect(item: CoffeeItem, player: Player) -> None:
     original_hp = player.hp
     player.gain_hp(item.hp)
+
     print_and_sleep(f"You restored {green(player.hp - original_hp)} hp!", 1)
+
+    if random.random() >= item.risk:
+        return
 
     illness = random.choice(load_illnesses())
 
-    if random.random() < item.risk:
-        if illness.causes_instant_death:
-            print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're just a worthless bag of bones."),
-                            2)
-            print_and_sleep(f"Cause of Death: {red(f'{illness.name}')}", 2)
-            print_and_sleep(f"{red(f'{illness.description}')}", 3)
-            player.hp = 0
-            player.lives -= 1
-            event_logger.log_event(PlayerDeathEvent(player.lives))
-        else:
-            player.illness = illness
-            player.illness_death_lvl = player.lvl + illness.levels_until_death
+    if illness.causes_instant_death:
+        print_and_sleep(
+            yellow("Coughy coughed on your coffee and now you're just a worthless bag of bones."),
+            2
+        )
+        print_and_sleep(f"Cause of Death: {red(illness.name)}", 2)
+        print_and_sleep(red(illness.description), 3)
 
-            print_and_sleep(yellow(f"Coughy coughed on your coffee and now you're sicker than Hell."), 2)
-            print_and_sleep(f"Illness: {yellow(f'{illness.name}')}", 2)
-            print_and_sleep(f"{yellow(f'{illness.description}')}", 2)
-            print_and_sleep(
-                f"Seek treatment or die at level {red(f'{player.illness_death_lvl}')}\n",
-                3
-            )
+        player.hp = 0
+        player.lives -= 1
+        event_logger.log_event(PlayerDeathEvent(player.lives))
+        return
+
+    player.illness = illness
+    player.illness_death_lvl = player.lvl + illness.levels_until_death
+
+    print_and_sleep(
+        yellow("Coughy coughed on your coffee and now you're sicker than Hell."),
+        2
+    )
+    print_and_sleep(f"Illness: {yellow(illness.name)}", 2)
+    print_and_sleep(yellow(illness.description), 2)
+    print_and_sleep(
+        f"Seek treatment or die at level {red(player.illness_death_lvl)}\n",
+        3
+    )
