@@ -1,22 +1,21 @@
 from dataclasses import dataclass, field
-from typing import List, TypeVar
 
 from bookoftench.data.coffee_items import Coffee_Items
-from bookoftench.data.perks import BARTER_SAUCE, TRADE_SHIP, TENCH_GENES, WrapperIndices
+from bookoftench.data.perks import BARTER_SAUCE, TENCH_GENES, TRADE_SHIP, WrapperIndices
 from .coffee_item import CoffeeItem
 from .perk import attach_perk, attach_perks
 
 # ================================================================================================
 
 @dataclass
-class CoffeeShop:  # class creation
-    _coffee_item_inventory: List[CoffeeItem] = field(init=False)  # nature of list
+class CoffeeShop:
+    _coffee_item_inventory: list[CoffeeItem] = field(init=False)
 
-    def __post_init__(self):
-        self._all_coffee_items = [i for i in Coffee_Items]  # creation of list with all items in that List
+    def __post_init__(self) -> None:
+        self._all_coffee_items = [item for item in Coffee_Items]
 
     @property
-    def coffee_inventory(self) -> List[CoffeeItem]:
+    def coffee_inventory(self) -> list[CoffeeItem]:
         return [
             CoffeeItem(**item_dict)
             for item_dict in Coffee_Items
@@ -24,20 +23,19 @@ class CoffeeShop:  # class creation
 
 # ================================================================================================
 
-    @attach_perks(BARTER_SAUCE, TRADE_SHIP, silent=True)  # apply perks to cost if owned
-    def _discounted_cost(self, cost):
+    @attach_perks(BARTER_SAUCE, TRADE_SHIP, silent=True)
+    def _discounted_cost(self, cost: int) -> int:
         return cost
 
-    @attach_perk(TENCH_GENES, WrapperIndices.TenchGenes.RISK, silent=True)  # apply perks to cost if owned
-    def _discounted_risk(self, risk):
+    @attach_perk(TENCH_GENES, WrapperIndices.TenchGenes.RISK, silent=True)
+    def _discounted_risk(self, risk: float) -> float:
         return risk
 
 # ================================================================================================
 
-    C = TypeVar("C", bound=CoffeeItem)
-
-    def apply_discounts(self, buyables: List[C]) -> List[C]:  # apply any discounts to get the updated costs
+    def apply_discounts(self, buyables: list[CoffeeItem]) -> list[CoffeeItem]:
         for buyable in buyables:
             buyable.cost = max(3, self._discounted_cost(buyable.cost))
             buyable.risk = max(0.05, self._discounted_risk(buyable.risk))
+
         return buyables

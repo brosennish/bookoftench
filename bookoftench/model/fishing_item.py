@@ -1,11 +1,9 @@
 import random
 from dataclasses import dataclass
-from typing import List
 
 from bookoftench.data.fishing_items import Fishing_Items
 from bookoftench.model.base import Buyable
-from bookoftench.ui import dim, cyan, orange, yellow, green, red, blue, purple
-
+from bookoftench.ui import blue, cyan, dim, orange, purple, red, yellow
 
 # ================================================================================================
 
@@ -27,13 +25,14 @@ class FishingItem(Buyable):
 
 # ================================================================================================
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
+        super().__post_init__()
         self.turns = random.randint(self.min_turns, self.max_turns)
 
 # ================================================================================================
 
     def get_simple_format(self) -> str:
-        return dim(' | ').join([
+        return dim(" | ").join([
             cyan(f"{self.name:<16}"),
             orange(f"{self.cost}c"),
         ])
@@ -88,9 +87,16 @@ class FishingItem(Buyable):
 
 def load_fishing_item(name: str) -> FishingItem:
     matches = load_fishing_items([name])
-    if len(matches) == 0:
+
+    if not matches:
         raise ValueError(f"Could not find fishing item data for {name}")
+
     return matches[0]
 
-def load_fishing_items(restriction: List[str] = None) -> List[FishingItem]:
-    return [FishingItem(**d) for d in Fishing_Items if restriction is None or d['name'] in restriction]
+
+def load_fishing_items(restriction: list[str] | None = None) -> list[FishingItem]:
+    return [
+        FishingItem(**data)
+        for data in Fishing_Items
+        if restriction is None or data["name"] in restriction
+    ]

@@ -16,7 +16,7 @@ from ..data.areas import CAVE, CITY, FOREST, SWAMP
 from ..data.enemies import CONTAGIOUS, BOSS, SPECIAL_BOSS, FINAL_BOSS, NORMAL
 from ..data.enviroment import DAY, NIGHT
 from ..data.fish import AGITATED, SPOOKED, CALM, SHALLOWS, BAY, OCEAN, Fish_Species, MALE, FEMALE, COMMON, UNCOMMON, \
-    RARE, LEGENDARY
+    RARE
 from ..data.fishing_areas import WET_SEASON, DRY_SEASON
 from ..data.investments import LOW_RISK, MEDIUM_RISK, HIGH_RISK
 
@@ -69,13 +69,19 @@ def display_fishmonger_header(game_state: GameState) -> None:
     season = game_state.season
     season_color = blue if season == WET_SEASON else yellow
 
-    top_row = f"{season_color(f"{season}")}"
+    fishing_xp_text = (
+        f"{player.fishing_xp}/{player.fishing_xp_needed}"
+        if player.fishing_lvl < 10
+        else f"{player.fishing_xp}"
+    )
 
-    second_row = dim(' | ').join([
-        f"Lvl: {cyan(f"{player.fishing_lvl}")}",
-        f"XP: {cyan(f"{player.fishing_xp}/{player.fishing_xp_needed}")}",
-        f"Rod: {cyan(f"{player.rod_lvl}")}",
-        f"Coins: {green(f"{player.coins}")}",
+    top_row = season_color(season)
+
+    second_row = dim(" | ").join([
+        f"Lvl: {cyan(player.fishing_lvl)}",
+        f"XP: {cyan(fishing_xp_text)}",
+        f"Rod: {cyan(player.rod_lvl)}",
+        f"Coins: {green(player.coins)}",
     ])
 
     print_and_sleep("\n".join([
@@ -149,8 +155,6 @@ def display_fish_log_header(game_state: GameState) -> None:
 # ================================================================================================
 
 def display_compendium_header(game_state: GameState) -> None:
-    player = game_state.player
-
     print_and_sleep(f"* Compendium *")
 
 # ================================================================================================
@@ -202,9 +206,9 @@ def fishing_state_color(game_state: GameState) -> Callable[[str], str]:
         return red
 
 def fishing_distance_color(game_state: GameState) -> Callable[[str], str]:
+    fish = game_state.current_fish
     fishing_area = game_state.current_fishing_area
-    remaining = fishing_area.escape_distance
-    ratio = remaining / fishing_area.escape_distance
+    ratio = fish.distance / fishing_area.escape_distance
 
     if ratio < 0.15:
         return red
@@ -280,7 +284,7 @@ def c_color(casts: int) -> Callable[[str], str]:
     else:
         return green
 
-def display_boat_header(game_state: GameState):
+def display_boat_header(game_state: GameState) -> None:
     player = game_state.player
     tod = game_state.time_of_day
     tod_display = "Day" if tod == DAY else "Night"
@@ -291,27 +295,30 @@ def display_boat_header(game_state: GameState):
     bait_color = yellow if bait == "None" else cyan
     casts = game_state.current_fishing_area.casts
     casts_color = c_color(casts)
-    if game_state.all_fish:
-        pref_text = "All"
-    else:
-        pref_text = "New"
+    pref_text = "All" if game_state.all_fish else "New"
+
+    fishing_xp_text = (
+        f"{player.fishing_xp}/{player.fishing_xp_needed}"
+        if player.fishing_lvl < 10
+        else f"{player.fishing_xp}"
+    )
 
     # --- top row ---
-    top_row = f"{dim(' | ').join([
-        f"{season_color(f"{season}")}",
-        f"{blue(f"{game_state.current_fishing_area.name}")}",
-        f"{yellow(tod_display) if tod == DAY else purple(tod_display)}",
+    top_row = dim(" | ").join([
+        season_color(season),
+        blue(game_state.current_fishing_area.name),
+        yellow(tod_display) if tod == DAY else purple(tod_display),
         f"{moon} Moon",
-        f"{purple(pref_text)}",
-    ])}\n"
+        purple(pref_text),
+    ])
 
     # --- bottom row ---
-    bottom_row = f"{dim(' | ').join([
-        f"Lvl: {cyan(f"{player.fishing_lvl}")}",
-        f"XP: {cyan(f"{player.fishing_xp}/{player.fishing_xp_needed}")}",  
-        f"Bait: {bait_color(f"{bait}")}",
-        f"Casts: {casts_color(f"{game_state.current_fishing_area.casts}")}",
-    ])}"
+    bottom_row = dim(" | ").join([
+        f"Lvl: {cyan(player.fishing_lvl)}",
+        f"XP: {cyan(fishing_xp_text)}",
+        f"Bait: {bait_color(bait)}",
+        f"Casts: {casts_color(str(casts))}",
+    ])
 
     print_and_sleep("\n".join([
         top_row,
@@ -557,11 +564,16 @@ def get_player_status_view_3(game_state: GameState) -> str:
 # --- fishing view ---
 def get_player_status_view_4(game_state: GameState) -> str:
     player = game_state.player
-    player_color = p_color(player.hp, player.max_hp)
 
     tod = game_state.time_of_day
     moon = game_state.moon
     season = game_state.season
+
+    fishing_xp_text = (
+        f"{player.fishing_xp}/{player.fishing_xp_needed}"
+        if player.fishing_lvl < 10
+        else str(player.fishing_xp)
+    )
 
     player_status = (
         f"{dim(' | ').join([
@@ -573,16 +585,16 @@ def get_player_status_view_4(game_state: GameState) -> str:
         f"\n"
         f"{dim(' | ').join([
             f'\n{orange(player.name)} {dim("-")} Fishing Lvl: {cyan(player.fishing_lvl)}',
-            f'XP: {cyan(f"{player.fishing_xp}/{player.fishing_xp_needed}")}',
+            f'XP: {cyan(fishing_xp_text)}',
             f'Rod: {cyan(player.rod_lvl)}',
             f'Caught: {blue(len(player.caught_fish))}',
-            f'Bait: {cyan(sum(i.casts for i in player.tackle_box.values()))}',
-            f'Items: {purple(sum(i.count for i in player.fishing_item_box.values()))}'
+            f'Bait: {cyan(sum(bait.casts for bait in player.tackle_box.values()))}',
+            f'Items: {purple(sum(item.count for item in player.fishing_item_box.values()))}',
         ])}"
     )
 
     if player.illness:
-        illness_status = dim(' | ').join([
+        illness_status = dim(" | ").join([
             f"\nIllness: {yellow(player.illness.name)}",
             f"Death Lvl: {red(player.illness_death_lvl)}",
         ])
@@ -830,29 +842,30 @@ def get_battle_info_view(game_state: GameState) -> str:
         word = "Day" if tod == DAY else "Night"
         return f"\n{color(word)} {dim('|')} {moon} Moon"
 
-
     def format_combatant_data(cmbt: Player | Enemy, name_color) -> str:
-        if cmbt.trait in ['', None]:
+        trait = getattr(cmbt, "trait", None)
+
+        if trait in ["", None]:
             return (f"\n{name_color(cmbt.name)}"
                     f"\n{dim('Strength |')} {red(round(cmbt.strength, 2))}"
                     f"\n{dim('Accuracy |')} {yellow(round(cmbt.acc, 2))}"
                     f"\n{dim('Coins    |')} {green(cmbt.coins)}")
-        elif cmbt.trait.name == CONTAGIOUS:
+        elif trait.name == CONTAGIOUS:
             return (f"\n{name_color(cmbt.name)}"
                     f"\n{dim('Strength |')} {red(round(cmbt.strength, 2))}"
                     f"\n{dim('Accuracy |')} {yellow(round(cmbt.acc, 2))}"
                     f"\n{dim('Coins    |')} {green(cmbt.coins)}"
                     f"\n{dim('Illness  |')} {yellow(cmbt.illness.name)}"
-                    f"\n{dim('Trait    |')} {purple(cmbt.trait.name)}"
-                    f"\n{dim('Ability  |')} {purple(cmbt.trait.desc)}"
+                    f"\n{dim('Trait    |')} {purple(trait.name)}"
+                    f"\n{dim('Ability  |')} {purple(trait.desc)}"
                     )
         else:
             return (f"\n{name_color(cmbt.name)}"
                     f"\n{dim('Strength |')} {red(round(cmbt.strength, 2))}"
                     f"\n{dim('Accuracy |')} {yellow(round(cmbt.acc, 2))}"
                     f"\n{dim('Coins    |')} {green(cmbt.coins)}"
-                    f"\n{dim('Trait    |')} {purple(cmbt.trait.name)}"
-                    f"\n{dim('Ability  |')} {purple(cmbt.trait.desc)}"
+                    f"\n{dim('Trait    |')} {purple(trait.name)}"
+                    f"\n{dim('Ability  |')} {purple(trait.desc)}"
                     )
 
     return (f"{format_world_data()}\n{format_combatant_data(player, orange)}\n"
@@ -866,7 +879,11 @@ def display_battle_info(game_state: GameState) -> None:
 # ================================================================================================
 
 def display_active_perk_count() -> None:
-    print_and_sleep(f"Perks {dim(f"({len(load_perks(lambda p: p.active))})")}")
+    active_perks = [
+        perk for perk in load_perks()
+        if perk.active
+    ]
+    print_and_sleep(f"Perks {dim(f'({len(active_perks)})')}")
 
 # ================================================================================================
 

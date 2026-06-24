@@ -1,16 +1,15 @@
 import random
 from dataclasses import dataclass
-from typing import List
 
 from bookoftench.audio import play_sound
 from bookoftench.data.audio import MAGIC
-from bookoftench.data.spells import ITEM_MAGIC, WEAPON_MAGIC, Spells
-from bookoftench.data.weapons import SPECIAL, BLIND
+from bookoftench.data.spells import ITEM_MAGIC, Spells, WEAPON_MAGIC
+from bookoftench.data.weapons import BLIND, SPECIAL
 from bookoftench.model.base import Buyable
 from bookoftench.model.item import load_items
 from bookoftench.model.player import Player
 from bookoftench.model.weapon import load_weapons, make_elite_weapon
-from bookoftench.ui import cyan, orange, dim, purple
+from bookoftench.ui import cyan, dim, orange, purple
 from bookoftench.util import print_and_sleep
 
 # ================================================================================================
@@ -22,25 +21,34 @@ class Spell(Buyable):
     cost: int
     type: str
 
-    def __repr__(self):
-        return dim(' | ').join([
+    def __repr__(self) -> str:
+        return dim(" | ").join([
             cyan(f"{self.name:<12}"),
             f"Cost: {orange(self.cost)}",
-            f"{purple(self.description)}",
+            purple(self.description),
         ])
 
-    def cast(self, player: Player):
+    def cast(self, player: Player) -> None:
         if self.name == ITEM_MAGIC:
-            filtered = [i for i in load_items() if i.name not in player.items]
+            filtered = [
+                item for item in load_items()
+                if item.name not in player.items
+            ]
             item = random.choice(filtered)
             player.add_item(item)
             play_sound(MAGIC)
-            print_and_sleep(f"{cyan(f'{item.name} magically added to sack.')}", 2)
+            print_and_sleep(cyan(f"{item.name} magically added to sack."), 2)
 
         elif self.name == WEAPON_MAGIC:
-            filtered = [w for w in load_weapons() if w.name not in [pw.name for pw in player.get_weapons()]
-                        and w.tier > 1
-                        and w.uses > 0]
+            player_weapon_names = [
+                weapon.name for weapon in player.get_weapons()
+            ]
+            filtered = [
+                weapon for weapon in load_weapons()
+                if weapon.name not in player_weapon_names
+                and weapon.tier > 1
+                and weapon.uses > 0
+            ]
             weapon = random.choice(filtered)
 
             low = min(5, weapon.uses)
@@ -52,11 +60,11 @@ class Spell(Buyable):
 
             player.add_weapon(weapon)
             play_sound(MAGIC)
-            print_and_sleep(f"{cyan(f'{weapon.name} magically added to sack.')}", 2)
+            print_and_sleep(cyan(f"{weapon.name} magically added to sack."), 2)
 
 # ================================================================================================
 
-def load_spells() -> List[Spell]:
+def load_spells() -> list[Spell]:
     return [
         Spell(**spell_dict)
         for spell_dict in Spells

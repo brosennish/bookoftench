@@ -1,9 +1,17 @@
 import random
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import List, Callable, Any
+from typing import Any
 
-from bookoftench.data.discoverables import Search_Discoverables, MYTHIC, LEGENDARY, RARE, UNCOMMON, COMMON
-from bookoftench.ui import purple, orange, blue, green, yellow
+from bookoftench.data.discoverables import (
+    COMMON,
+    LEGENDARY,
+    MYTHIC,
+    RARE,
+    Search_Discoverables,
+    UNCOMMON,
+)
+from bookoftench.ui import blue, green, orange, purple, yellow
 
 # ================================================================================================
 
@@ -14,7 +22,7 @@ class Discoverable:
     value: int
     hp: int
     rarity: str
-    areas: List[str]
+    areas: list[str]
     desc: str | None
     count: int = 0
 
@@ -25,32 +33,37 @@ def search_discoverable_rarity(player) -> str:
     luck = player.luck
 
     if roll < luck * 0.0004:
-        rarity = MYTHIC
-    elif roll < luck * 0.0014:
-        rarity = LEGENDARY
-    elif roll < luck * 0.08:
-        rarity = RARE
-    elif roll < luck * 0.3:
-        rarity = UNCOMMON
-    else:
-        rarity = COMMON
+        return MYTHIC
 
-    return rarity
+    if roll < luck * 0.0014:
+        return LEGENDARY
+
+    if roll < luck * 0.08:
+        return RARE
+
+    if roll < luck * 0.3:
+        return UNCOMMON
+
+    return COMMON
 
 # ================================================================================================
 
-def rarity_color(rarity: str) -> Callable[[Any], str] | Any:
+def rarity_color(rarity: str) -> Callable[[Any], str]:
     if rarity == MYTHIC:
         return orange
-    elif rarity == LEGENDARY:
+
+    if rarity == LEGENDARY:
         return purple
-    elif rarity == RARE:
+
+    if rarity == RARE:
         return blue
-    elif rarity == UNCOMMON:
+
+    if rarity == UNCOMMON:
         return green
-    else:
-        return yellow
 
+    return yellow
 
-def load_discoverables() -> List[Discoverable]:
-    return [Discoverable(**d) for d in Search_Discoverables]
+# ================================================================================================
+
+def load_discoverables() -> list[Discoverable]:
+    return [Discoverable(**data) for data in Search_Discoverables]

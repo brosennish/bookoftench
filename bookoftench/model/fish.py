@@ -1,12 +1,24 @@
 import random
 from dataclasses import dataclass, field
-from typing import List
 
 from bookoftench.data import fish as f
-from bookoftench.data.fish import VARIANTS, Fish_Species, TWO_HEADED, TRANSLUCENT, THREE_EYED, TELEPATHIC, SCARRED, \
-    SAPIENT, RADIOACTIVE, ONE_EYED, IRIDESCENT, GLOWING, ALBINO, PREGNANT
-from bookoftench.ui import dim, cyan, orange, green, yellow, blue, purple
-
+from bookoftench.data.fish import (
+    ALBINO,
+    Fish_Species,
+    GLOWING,
+    IRIDESCENT,
+    ONE_EYED,
+    PREGNANT,
+    RADIOACTIVE,
+    SAPIENT,
+    SCARRED,
+    TELEPATHIC,
+    THREE_EYED,
+    TRANSLUCENT,
+    TWO_HEADED,
+    VARIANTS,
+)
+from bookoftench.ui import blue, cyan, dim, green, orange, purple, yellow
 
 # ================================================================================================
 
@@ -52,7 +64,7 @@ class Fish:
     adrenaline_ready: bool = True
 
     caught: bool = False
-    catch_location: str | None = None # assigned when caught
+    catch_location: str | None = None  # assigned when caught
     lost: bool = False
 
     # --- ObserveFish ---
@@ -264,5 +276,5 @@ def load_fish(name: str) -> Fish:
         raise ValueError(f"Could not find fish data for {name}")
     return matches[0]
 
-def load_fishes(restriction: List[str] = None) -> List[Fish]:
+def load_fishes(restriction: list[str] = None) -> list[Fish]:
     return [Fish(**d) for d in Fish_Species if restriction is None or d['name'] in restriction]

@@ -3,12 +3,12 @@ from __future__ import annotations
 import copy
 import random
 from dataclasses import dataclass, field
-from typing import List, Optional, Dict, Self
+from typing import Self
 
 from bookoftench.audio import play_sound
 from bookoftench.data import Enemies
-from bookoftench.data.audio import AREA_BOSS_THEME, GATOR, EQUIP_WEAPON
-from bookoftench.data.enemies import Bosses, Final_Boss, BAYOU_BILL, Enemy_Lines, WEREWOLF, Special_Bosses
+from bookoftench.data.audio import AREA_BOSS_THEME, EQUIP_WEAPON, GATOR
+from bookoftench.data.enemies import BAYOU_BILL, Bosses, Enemy_Lines, Final_Boss, Special_Bosses, WEREWOLF
 from bookoftench.data.perks import RICKETY_PICKPOCKET
 from bookoftench.data.weapons import BARE_HANDS, BLIND, SPECIAL
 from bookoftench.ui import purple, cyan
@@ -28,33 +28,41 @@ ENEMY_SWITCH_WEAPON_CHANCE = 0.2
 
 @dataclass
 class Enemy(Combatant, NPC):
-    name: str = ''
-    trait: Trait = None
-    illness: Illness = None
+    name: str = ""
+    trait: Trait | None = None
+    illness: Illness | None = None
     hp: int = 0
-    weapons: List[str] = field(default_factory=list)
+    weapons: list[str] = field(default_factory=list)
     bounty: int = 0
     coins: int = 0
-    type: str = ''
+    type: str = ""
     flee: float = 0
     strength: float = 0
     acc: float = 0
-    areas: List[str] = field(default_factory=list)
-    items: List[str] = field(default_factory=list)
+    areas: list[str] = field(default_factory=list)
+    items: list[str] = field(default_factory=list)
     alive: bool = True
 
     current_weapon: Weapon = field(init=False)
-    weapon_dict: Dict[str, Weapon] = field(init=False)
+    weapon_dict: dict[str, Weapon] = field(init=False)
     max_hp: int = field(init=False)
 
-    def __post_init__(self):
-        self.weapon_dict = dict((w.name, w) for w in load_weapons(self.weapons))
-        self.current_weapon = random.choice(list(i for i in self.weapon_dict.values() if i.type != BLIND))
+    def __post_init__(self) -> None:
+        self.weapon_dict = {
+            weapon.name: weapon
+            for weapon in load_weapons(self.weapons)
+        }
+        self.current_weapon = random.choice([
+            weapon
+            for weapon in self.weapon_dict.values()
+            if weapon.type != BLIND
+        ])
         self.max_hp = self.hp
 
-    def drop_weapon(self) -> Optional[Weapon]:
+    def drop_weapon(self) -> Weapon | None:
         if self.current_weapon.sell_value > 0 and self.current_weapon.type != SPECIAL:
             return self.current_weapon
+
         return None
 
     @attach_perk(RICKETY_PICKPOCKET, value_description="coins dropped")
@@ -90,35 +98,49 @@ class Enemy(Combatant, NPC):
 
 def load_enemy(name: str) -> Enemy:
     matches = load_enemies([name])
-    if len(matches) == 0:
+
+    if not matches:
         raise ValueError(f"Could not find enemy data for {name}")
+
     return matches[0]
 
-def load_enemies(restriction: List[str] = None) -> List[Enemy]:
-    return [Enemy(**d) for d in Enemies if restriction is None or d['name'] in restriction]
+
+def load_enemies(restriction: list[str] | None = None) -> list[Enemy]:
+    return [
+        Enemy(**data)
+        for data in Enemies
+        if restriction is None or data["name"] in restriction
+    ]
 
 # ================================================================================================
 
 @dataclass
 class Boss(Enemy):
     theme: str = AREA_BOSS_THEME
-    preamble: List[DisplayableText] = field(default_factory=list)
+    preamble: list[DisplayableText] = field(default_factory=list)
 
     @classmethod
     def from_dict(cls, data: dict) -> Self:
         data = copy.deepcopy(data)
-        if 'preamble' in data:
-            data['preamble'] = [DisplayableText(**d) for d in data['preamble']]
+
+        if "preamble" in data:
+            data["preamble"] = [
+                DisplayableText(**preamble_data)
+                for preamble_data in data["preamble"]
+            ]
+
         return super().from_dict(data)
 
     def do_preamble(self) -> None:
-        for displayableText in self.preamble:
-            displayableText.display()
+        for displayable_text in self.preamble:
+            displayable_text.display()
 
     def handle_hit(self, other: "Combatant") -> None:
         super().handle_hit(other)
+
         if self.name == BAYOU_BILL:
             gator = random.random() < 0.20
+
             if gator:
                 bite = random.randint(1, 10)
                 play_sound(GATOR)
@@ -126,10 +148,17 @@ class Boss(Enemy):
                 other.take_damage(bite, self)
 
 def load_boss(name: str) -> Boss:
-    matches = [Boss.from_dict(d) for d in Bosses if d['name'] == name]
-    if len(matches) == 0:
+    matches = [
+        Boss.from_dict(data)
+        for data in Bosses
+        if data["name"] == name
+    ]
+
+    if not matches:
         raise ValueError(f"Could not find boss data for {name}")
+
     return matches[0]
+
 
 def load_final_boss() -> Boss:
     return Boss.from_dict(Final_Boss)
@@ -138,26 +167,38 @@ def load_final_boss() -> Boss:
 
 @dataclass
 class SpecialBoss(Enemy):
-    preamble: List[DisplayableText] = field(default_factory=list)
+    preamble: list[DisplayableText] = field(default_factory=list)
     theme: str = ""
     item: str = ""
 
     @classmethod
     def from_dict(cls, data: dict) -> Self:
         data = copy.deepcopy(data)
-        if 'preamble' in data:
-            data['preamble'] = [DisplayableText(**d) for d in data['preamble']]
+
+        if "preamble" in data:
+            data["preamble"] = [
+                DisplayableText(**preamble_data)
+                for preamble_data in data["preamble"]
+            ]
+
         return super().from_dict(data)
 
     def do_preamble(self) -> None:
-        for displayableText in self.preamble:
-            displayableText.display()
+        for displayable_text in self.preamble:
+            displayable_text.display()
 
 def load_special_boss(name: str) -> SpecialBoss:
     matches = load_special_bosses([name])
-    if len(matches) == 0:
+
+    if not matches:
         raise ValueError(f"Could not find special boss data for {name}")
+
     return matches[0]
 
-def load_special_bosses(restriction: List[str] = None) -> List[SpecialBoss]:
-    return [SpecialBoss(**d) for d in Special_Bosses if restriction is None or d['name'] in restriction]
+
+def load_special_bosses(restriction: list[str] | None = None) -> list[SpecialBoss]:
+    return [
+        SpecialBoss.from_dict(data)
+        for data in Special_Bosses
+        if restriction is None or data["name"] in restriction
+    ]

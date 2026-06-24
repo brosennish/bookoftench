@@ -133,6 +133,9 @@ class SpecialEventComponent(LabeledSelectionComponent):
             play_music(self.special_event.theme)
 
     def _return(self):
+        if self.investment:
+            self.game_state.player.expired_investment_opportunities.append(self.investment.name)
+
         self.leave = True
 
     def can_exit(self) -> bool:
@@ -162,15 +165,38 @@ class SpecialEventComponent(LabeledSelectionComponent):
         def selection_component():
             if special_event.method:
                 if self.investment:
-                    method = getattr(self, special_event.method)
-                    method(self.game_state, choice, self.investment)
+                    if self.can_afford_investment(choice):
+                        method = getattr(self, special_event.method)
+                        if method(self.game_state, choice, self.investment):
+                            self.leave = True
+                    else:
+                        print_and_sleep(yellow("Need more coin."), 1)
                 else:
                     method = getattr(self, special_event.method)
                     method(self.game_state, choice)
-            self.leave = True
+                    self.leave = True
             return self.game_state
 
         return functional_component()(selection_component)
+
+# ============================================================================================
+
+    def can_afford_investment(self, choice) -> bool:
+        player = self.game_state.player
+
+        if choice == 1:
+            investment = 10
+        elif choice == 2:
+            investment = 25
+        elif choice == 3:
+            investment = 50
+        else:
+            investment = 100
+
+        if player.coins >= investment:
+            return True
+
+        return False
 
 # ============================================================================================
 
@@ -732,25 +758,22 @@ I'm scheduled to be buried alive at 6... or was it 8?"""), 3)
 # ================================================================================================
 
     @staticmethod
-    def make_investment(game_state: GameState, choice: int, invest_obj: Investment):
+    def make_investment(game_state: GameState, choice: int, invest_obj: Investment) -> bool:
         player = game_state.player
         buy_in = invest_obj.buy_ins[choice - 1]
 
-        if player.coins >= buy_in:
-            player.coins -= buy_in
-            play_sound(PURCHASE)
+        player.coins -= buy_in
+        play_sound(PURCHASE)
 
-            invest_obj.maturity_lvl = player.lvl + invest_obj.levels_to_maturity
-            invest_obj.value = buy_in
-            invest_obj.active = True
+        invest_obj.maturity_lvl = player.lvl + invest_obj.levels_to_maturity
+        invest_obj.value = buy_in
+        invest_obj.active = True
 
-            player.investments.append(invest_obj)
-            print_and_sleep(green(f"You invested {buy_in} of coin in {invest_obj.name}."), 1.5)
-            print_and_sleep(green(f"It should mature around level {invest_obj.maturity_lvl}."), 1.5)
-        else:
-            print_and_sleep(yellow("You don't have enough coin."), 1.5)
-
+        player.investments.append(invest_obj)
         player.expired_investment_opportunities.append(invest_obj.name)
+
+        print_and_sleep(green(f"You invested {buy_in} of coin in {invest_obj.name}."), 1.5)
+        print_and_sleep(green(f"It should mature around level {invest_obj.maturity_lvl}."), 1.5)
 
 # ================================================================================================
 
