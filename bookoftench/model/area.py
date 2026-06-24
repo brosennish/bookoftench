@@ -44,9 +44,9 @@ _search_defaults_by_area = {
         DISCOVER_WEAPON: 3,
         DISCOVER_ITEM: 4,
         ENCOUNTER_SUB_BOSS: 3,
-        DISCOVER_DISCOVERABLE: 35,
-        SPECIAL_EVENT: 10,
-        SPAWN_ENEMY: 35,
+        DISCOVER_DISCOVERABLE: 45,
+        SPECIAL_EVENT: 11,
+        SPAWN_ENEMY: 30,
     },
 
     FOREST: {
@@ -54,29 +54,29 @@ _search_defaults_by_area = {
         DISCOVER_WEAPON: 2,
         DISCOVER_ITEM: 4,
         ENCOUNTER_SUB_BOSS: 3,
-        DISCOVER_DISCOVERABLE: 42,
+        DISCOVER_DISCOVERABLE: 45,
         SPECIAL_EVENT: 10,
-        SPAWN_ENEMY: 30,
+        SPAWN_ENEMY: 28,
     },
 
     CAVE: {
         DISCOVER_PERK: 1,
         DISCOVER_WEAPON: 2,
-        DISCOVER_ITEM: 3,
+        DISCOVER_ITEM: 2,
         ENCOUNTER_SUB_BOSS: 4,
-        DISCOVER_DISCOVERABLE: 38,
-        SPECIAL_EVENT: 8,
-        SPAWN_ENEMY: 36,
+        DISCOVER_DISCOVERABLE: 40,
+        SPECIAL_EVENT: 9,
+        SPAWN_ENEMY: 35,
     },
 
     SWAMP: {
         DISCOVER_PERK: 1,
         DISCOVER_WEAPON: 2,
-        DISCOVER_ITEM: 4,
+        DISCOVER_ITEM: 3,
         ENCOUNTER_SUB_BOSS: 4,
-        DISCOVER_DISCOVERABLE: 36,
-        SPECIAL_EVENT: 12,
-        SPAWN_ENEMY: 37,
+        DISCOVER_DISCOVERABLE: 40,
+        SPECIAL_EVENT: 10,
+        SPAWN_ENEMY: 32,
     },
 }
 
