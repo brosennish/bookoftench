@@ -560,8 +560,8 @@ class BuildComponent(LabeledSelectionComponent):
                 player.lives = random.randint(1, 3)
 
                 player.lvl = random.randint(1, 3)
-                player.fishing_lvl = random.randint(0, 3)
-                player.rod_lvl = random.randint(0, 3)
+                player.fishing_lvl = random.randint(1, 4)
+                player.rod_lvl = random.randint(1, 4)
 
                 player.max_hp = random.randint(80, 120)
                 hp_deficit = random.randint(1, 40)
