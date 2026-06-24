@@ -681,7 +681,7 @@ class Player(Combatant):
         # todo - add conditional fishing xp display based on max lvl
         if fishing_xp >= 1000:
             fishing_lvl = 10
-            xp_needed = None
+            xp_needed = self.fishing_xp
         elif fishing_xp >= 750:
             fishing_lvl = 9
             xp_needed = 1000
