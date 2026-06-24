@@ -16,7 +16,7 @@ from ..data.areas import CAVE, CITY, FOREST, SWAMP
 from ..data.enemies import CONTAGIOUS, BOSS, SPECIAL_BOSS, FINAL_BOSS, NORMAL
 from ..data.enviroment import DAY, NIGHT
 from ..data.fish import AGITATED, SPOOKED, CALM, SHALLOWS, BAY, OCEAN, Fish_Species, MALE, FEMALE, COMMON, UNCOMMON, \
-    RARE, LEGENDARY
+    RARE
 from ..data.fishing_areas import WET_SEASON, DRY_SEASON
 from ..data.investments import LOW_RISK, MEDIUM_RISK, HIGH_RISK
 
@@ -155,8 +155,6 @@ def display_fish_log_header(game_state: GameState) -> None:
 # ================================================================================================
 
 def display_compendium_header(game_state: GameState) -> None:
-    player = game_state.player
-
     print_and_sleep(f"* Compendium *")
 
 # ================================================================================================
@@ -208,9 +206,9 @@ def fishing_state_color(game_state: GameState) -> Callable[[str], str]:
         return red
 
 def fishing_distance_color(game_state: GameState) -> Callable[[str], str]:
+    fish = game_state.current_fish
     fishing_area = game_state.current_fishing_area
-    remaining = fishing_area.escape_distance
-    ratio = remaining / fishing_area.escape_distance
+    ratio = fish.distance / fishing_area.escape_distance
 
     if ratio < 0.15:
         return red
@@ -844,29 +842,30 @@ def get_battle_info_view(game_state: GameState) -> str:
         word = "Day" if tod == DAY else "Night"
         return f"\n{color(word)} {dim('|')} {moon} Moon"
 
-
     def format_combatant_data(cmbt: Player | Enemy, name_color) -> str:
-        if cmbt.trait in ['', None]:
+        trait = getattr(cmbt, "trait", None)
+
+        if trait in ["", None]:
             return (f"\n{name_color(cmbt.name)}"
                     f"\n{dim('Strength |')} {red(round(cmbt.strength, 2))}"
                     f"\n{dim('Accuracy |')} {yellow(round(cmbt.acc, 2))}"
                     f"\n{dim('Coins    |')} {green(cmbt.coins)}")
-        elif cmbt.trait.name == CONTAGIOUS:
+        elif trait.name == CONTAGIOUS:
             return (f"\n{name_color(cmbt.name)}"
                     f"\n{dim('Strength |')} {red(round(cmbt.strength, 2))}"
                     f"\n{dim('Accuracy |')} {yellow(round(cmbt.acc, 2))}"
                     f"\n{dim('Coins    |')} {green(cmbt.coins)}"
                     f"\n{dim('Illness  |')} {yellow(cmbt.illness.name)}"
-                    f"\n{dim('Trait    |')} {purple(cmbt.trait.name)}"
-                    f"\n{dim('Ability  |')} {purple(cmbt.trait.desc)}"
+                    f"\n{dim('Trait    |')} {purple(trait.name)}"
+                    f"\n{dim('Ability  |')} {purple(trait.desc)}"
                     )
         else:
             return (f"\n{name_color(cmbt.name)}"
                     f"\n{dim('Strength |')} {red(round(cmbt.strength, 2))}"
                     f"\n{dim('Accuracy |')} {yellow(round(cmbt.acc, 2))}"
                     f"\n{dim('Coins    |')} {green(cmbt.coins)}"
-                    f"\n{dim('Trait    |')} {purple(cmbt.trait.name)}"
-                    f"\n{dim('Ability  |')} {purple(cmbt.trait.desc)}"
+                    f"\n{dim('Trait    |')} {purple(trait.name)}"
+                    f"\n{dim('Ability  |')} {purple(trait.desc)}"
                     )
 
     return (f"{format_world_data()}\n{format_combatant_data(player, orange)}\n"
@@ -880,7 +879,11 @@ def display_battle_info(game_state: GameState) -> None:
 # ================================================================================================
 
 def display_active_perk_count() -> None:
-    print_and_sleep(f"Perks {dim(f"({len(load_perks(lambda p: p.active))})")}")
+    active_perks = [
+        perk for perk in load_perks()
+        if perk.active
+    ]
+    print_and_sleep(f"Perks {dim(f'({len(active_perks)})')}")
 
 # ================================================================================================
 

@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 import random
-from dataclasses import dataclass, field, asdict
-from typing import List
+from dataclasses import asdict, dataclass, field
 
 from bookoftench.data import Weapons
 from bookoftench.data.perks import BULLETPROOF
 from bookoftench.data.weapons import PISTOL, REVOLVER, RIFLE, SHOTGUN
-from bookoftench.model.base import WeaponBase, Buyable
+from bookoftench.model.base import Buyable, WeaponBase
 from bookoftench.model.perk import attach_perk
-from bookoftench.ui import dim, cyan, orange, red, yellow
+from bookoftench.ui import cyan, dim, orange, red, yellow
 
 # ================================================================================================
 
@@ -22,7 +21,7 @@ class Weapon(WeaponBase, Buyable):
     blind_turns_min: int = 0
     blind_turns_max: int = 0
 
-    def _is_gun(self):
+    def _is_gun(self) -> bool:
         return self.name in (PISTOL, REVOLVER, RIFLE, SHOTGUN)
 
     def calculate_base_damage_no_perk(self) -> int:
@@ -31,9 +30,12 @@ class Weapon(WeaponBase, Buyable):
     def calculate_base_damage(self) -> int:
         base_damage = self.calculate_base_damage_no_perk()
 
-        @attach_perk(BULLETPROOF, value_description="enemy bullet damage",
-                     condition=lambda: self._is_gun())
-        def apply_perks():
+        @attach_perk(
+            BULLETPROOF,
+            value_description="enemy bullet damage",
+            condition=lambda: self._is_gun(),
+        )
+        def apply_perks() -> int:
             return base_damage
 
         return int(apply_perks())
@@ -42,8 +44,7 @@ class Weapon(WeaponBase, Buyable):
         effect = self.blind_effect
         if effect > 0:
             return effect + random.uniform(-0.05, 0.05)
-        else:
-            return self.blind_effect
+        return effect
 
     def get_blind_turns(self) -> int:
         return random.randint(self.blind_turns_min, self.blind_turns_max)
@@ -52,14 +53,14 @@ class Weapon(WeaponBase, Buyable):
         return SellableWeapon.from_dict(asdict(self))
 
     def __repr__(self) -> str:
-        return dim(' | ').join([
+        return dim(" | ").join([
             cyan(f"{self.name:<24}"),
             f"Cost: {orange(self.cost):<18}",
-            f"{"Dmg:"} {red(f"{self.damage:<3}")}",
-            f"{"Acc:"} {yellow(f"{self.accuracy:<4}")}",
-            f"{"Var:"} {f"{red(f"{self.var}")}"}",
-            f"{"Crit:"} {yellow(f"{self.crit:<4}")}",
-            f"{"Uses:"} {self.format_uses()}",
+            f"Dmg: {red(f'{self.damage:<3}')}",
+            f"Acc: {yellow(f'{self.accuracy:<4}')}",
+            f"Var: {red(f'{self.var}')}",
+            f"Crit: {yellow(f'{self.crit:<4}')}",
+            f"Uses: {self.format_uses()}",
         ])
 
 # ================================================================================================
@@ -68,7 +69,7 @@ class Weapon(WeaponBase, Buyable):
 class SellableWeapon(Weapon):
     _sell_value: int = field(init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self._sell_value = self.sell_value
 
     @property
@@ -82,65 +83,65 @@ class SellableWeapon(Weapon):
         return max(int(price), 1)
 
     @sell_value.setter
-    def sell_value(self, value):
+    def sell_value(self, value: int) -> None:
         self._sell_value = value
 
     def __repr__(self) -> str:
-        return dim(' | ').join([
+        return dim(" | ").join([
             cyan(f"{self.name:<24}"),
             f"Value: {orange(self.sell_value):<18}",
-            f"{dim("Dmg:")} {red(f"{self.damage:<3}")}",
-            f"{dim("Acc:")} {yellow(f"{self.accuracy:<4}")}",
-            f"{dim("Var:")} {f"{red(f"{self.var}")}"}",
-            f"{dim("Crit:")} {yellow(f"{self.crit:<4}")}",
-            f"{dim("Uses:")} {self.format_uses()}",
+            f"{dim('Dmg:')} {red(f'{self.damage:<3}')}",
+            f"{dim('Acc:')} {yellow(f'{self.accuracy:<4}')}",
+            f"{dim('Var:')} {red(f'{self.var}')}",
+            f"{dim('Crit:')} {yellow(f'{self.crit:<4}')}",
+            f"{dim('Uses:')} {self.format_uses()}",
         ])
 
 # ================================================================================================
 
 def load_weapon(name: str) -> Weapon:
     matches = load_weapons([name])
-    if len(matches) == 0:
+    if not matches:
         raise ValueError(f"Could not find weapon data for {name}")
     return matches[0]
 
 
-def load_weapons(restriction: List[str] = None):
-    return [Weapon(**d) for d in Weapons if restriction is None or d['name'] in restriction]
+def load_weapons(restriction: list[str] | None = None) -> list[Weapon]:
+    return [
+        Weapon(**weapon_data)
+        for weapon_data in Weapons
+        if restriction is None or weapon_data["name"] in restriction
+    ]
 
 
-def load_discoverable_weapons():
-    return [w for w in load_weapons() if w.uses > 0]
+def load_discoverable_weapons() -> list[Weapon]:
+    return [
+        weapon for weapon in load_weapons()
+        if weapon.uses > 0
+    ]
 
 # ================================================================================================
 
 def make_elite_weapon(weapon: Weapon) -> Weapon:
-    # name
     name = weapon.name
     weapon.name = f"Elite {name}"
 
-    # damage
     weapon.damage += random.randint(4, 6)
 
-    # accuracy
-    og_accuracy = weapon.accuracy
+    original_accuracy = weapon.accuracy
     accuracy_gain = random.uniform(0.03, 0.06)
-    weapon.accuracy = round(min(accuracy_gain + og_accuracy, 1), 2)
+    weapon.accuracy = round(min(accuracy_gain + original_accuracy, 1), 2)
 
-    # crit
-    og_crit = weapon.crit
+    original_crit = weapon.crit
     crit_gain = random.uniform(0.03, 0.09)
-    weapon.crit = round(og_crit + crit_gain, 2)
+    weapon.crit = round(original_crit + crit_gain, 2)
 
-    # uses
     if weapon.uses > 0:
         weapon.uses += random.randint(3, 5)
 
-    # cost
     increase = round(weapon.cost * 0.12)
     weapon.cost += increase
 
-    # sell value
     if weapon.sell_value > 0:
         increase = round(weapon.sell_value * 0.12)
         weapon.sell_value += increase
@@ -151,11 +152,10 @@ def make_elite_weapon(weapon: Weapon) -> Weapon:
 # ================================================================================================
 
 def make_autographed_weapon(weapon: Weapon) -> Weapon:
-    # name
     name = weapon.name
     weapon.name = f"Autographed {name}"
 
-    # sell value
     if weapon.sell_value > 0:
         weapon.sell_value *= random.randint(3, 6)
+
     return weapon
