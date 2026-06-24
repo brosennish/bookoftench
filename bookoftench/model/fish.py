@@ -276,5 +276,5 @@ def load_fish(name: str) -> Fish:
         raise ValueError(f"Could not find fish data for {name}")
     return matches[0]
 
-def load_fishes(restriction: List[str] = None) -> List[Fish]:
+def load_fishes(restriction: list[str] = None) -> list[Fish]:
     return [Fish(**d) for d in Fish_Species if restriction is None or d['name'] in restriction]
