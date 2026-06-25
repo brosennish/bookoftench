@@ -210,14 +210,14 @@ def fishing_distance_color(game_state: GameState) -> Callable[[str], str]:
     fishing_area = game_state.current_fishing_area
     ratio = fish.distance / fishing_area.escape_distance
 
-    if ratio < 0.15:
-        return red
-    elif ratio < 0.35:
-        return orange
-    elif ratio < 0.60:
-        return yellow
-    else:
+    if ratio < 0.25:
         return green
+    elif ratio < 0.5:
+        return yellow
+    elif ratio < 0.75:
+        return orange
+    else:
+        return red
 
 # ================================================================================================
 
@@ -292,6 +292,7 @@ def display_boat_header(game_state: GameState) -> None:
     season = game_state.season
     season_color = blue if season == WET_SEASON else yellow
     bait = player.current_bait.name if player.current_bait else "None"
+    bait_casts = f"({player.current_bait.casts})"
     bait_color = yellow if bait == "None" else cyan
     casts = game_state.current_fishing_area.casts
     casts_color = c_color(casts)
@@ -316,7 +317,7 @@ def display_boat_header(game_state: GameState) -> None:
     bottom_row = dim(" | ").join([
         f"Lvl: {cyan(player.fishing_lvl)}",
         f"XP: {cyan(fishing_xp_text)}",
-        f"Bait: {bait_color(bait)}",
+        f"Bait: {bait_color(bait)} {bait_color(bait_casts)}" if bait else f"Bait: {bait_color(bait)}",
         f"Casts: {casts_color(str(casts))}",
     ])
 
