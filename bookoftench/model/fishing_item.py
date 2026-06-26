@@ -68,7 +68,7 @@ class FishingItem(Buyable):
         return dim(' | ').join([
             cyan(f"{self.name:<16}"),
             f"Cost: {orange(self.cost)}",
-            f"Turns: {purple(f'{self._turn_text():<3}')}",
+            f"Turns: {purple(f'{self._turn_text():<5}')}",
             self._effect_text()
         ])
 
@@ -76,7 +76,7 @@ class FishingItem(Buyable):
         return dim(' | ').join([
             cyan(f"{self.name:<16}"),
             f"Count: {cyan(str(self.count))}",
-            f"Turns: {purple(f'{self._turn_text():<3}')}",
+            f"Turns: {purple(f'{self._turn_text():<5}')}",
             self._effect_text()
         ])
 
