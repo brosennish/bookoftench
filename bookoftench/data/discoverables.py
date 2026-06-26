@@ -309,9 +309,9 @@ Search_Discoverables = [
      "areas": [CITY], 
      "desc": "The expiration date is before the issue date."},
 
-    {"pre": "a", "name": "Glory Hole", "value": 0, "hp": 0, "rarity": COMMON,
-     "areas": [CITY], 
-     "desc": "A secret portal created as a passageway for one to safely insert one's penis."},
+    {"pre": "a", "name": "Glorious Hole", "value": 0, "hp": 0, "rarity": COMMON,
+     "areas": [CITY, FOREST, SWAMP],
+     "desc": "Glory be to the holiest of holes."},
 
     {"pre": "a", "name": "Mud Bubble", "value": 0, "hp": 0, "rarity": COMMON,
      "areas": [SWAMP], 
