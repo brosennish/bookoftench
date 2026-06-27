@@ -47,6 +47,7 @@ class GameState:
     current_fishing_area: FishingArea | None = None
     current_fish: Fish | None = None
     all_fish: bool = True
+    player_went_fishing: bool = False
 
     pending_boss: bool = False
 
@@ -194,6 +195,8 @@ class GameState:
         else:
             self.day += 1
             self.time_of_day = DAY
+
+        self.player_went_fishing = False
 
     def set_moon(self) -> None:
         self.moon = random.choice([DRY, DRYING, WETTING, FULL])

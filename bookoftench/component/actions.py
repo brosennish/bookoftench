@@ -1404,11 +1404,12 @@ class BattleEnd(NoOpComponent):
                 if player.add_item(item):
                     print_and_sleep(cyan(f"{item.name} added to sack."), 1)
 
-        # --- logging and updates ---
+        # --- log kill event ---
         event_logger.log_event(KillEvent())
+
+        # --- time changes each kill, moon changes each day ---
+        self.game_state.update_time_of_day()
         if event_logger.get_count(EventType.KILL) % 2 == 0:
-            self.game_state.update_time_of_day()
-        if event_logger.get_count(EventType.KILL) % 4 == 0:
             self.game_state.update_moon()
 
         # --- add enemy to list of liberated enemies ---
