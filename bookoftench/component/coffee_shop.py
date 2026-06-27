@@ -159,8 +159,7 @@ def apply_coffee_effect(item: CoffeeItem, player: Player) -> None:
         event_logger.log_event(PlayerDeathEvent(player.lives))
         return
 
-    player.illness = illness
-    player.illness_death_lvl = player.lvl + illness.levels_until_death
+    player.acquire_illness(illness.name)
 
     print_and_sleep(
         yellow("Coughy coughed on your coffee and now you're sicker than Hell."),

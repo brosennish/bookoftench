@@ -87,6 +87,11 @@ def treatment_component(game_state: GameState) -> GameState:
 
         player.illness = None
         player.illness_death_lvl = None
+
+        diff = max(0, player.base_max_hp - player.max_hp)
+        player.max_hp = player.base_max_hp
+        player.hp = min(player.hp + diff, player.max_hp)
+
         player.gain_or_lose_luck(1 - illness.success_rate)
 
         event_logger.log_event(TreatmentEvent(illness, EventType.TREATMENT_SUCCESS))

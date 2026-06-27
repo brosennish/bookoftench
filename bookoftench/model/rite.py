@@ -61,6 +61,10 @@ class Rite(Buyable):
                 player.illness = None
                 player.illness_death_lvl = None
 
+                diff = max(0, player.base_max_hp - player.max_hp)
+                player.max_hp = player.base_max_hp
+                player.hp = min(player.hp + diff, player.max_hp)
+
         elif self.name == SHAMANS_CIGAR:
             gain = random.randint(0, 50)
             original_hp = player.hp

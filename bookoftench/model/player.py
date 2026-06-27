@@ -155,6 +155,7 @@ class Player(Combatant):
     lives: int = 3
     lvl: int = 1
     coins: int = 0
+    base_max_hp: int = 100
     max_hp: int = 100
     hp: int = 100
     xp: int = 0
@@ -413,7 +414,16 @@ class Player(Combatant):
         if item.name == i.nPnG:
             original_max = self.max_hp
             amount = random.randint(1, 5)
-            self.max_hp += amount
+
+            self.base_max_hp += amount
+
+            if self.illness:
+                self.max_hp = max(1, self.base_max_hp - self.illness.hp_loss)
+            else:
+                self.max_hp = self.base_max_hp
+
+            self.hp = min(self.hp + amount, self.max_hp)
+
             play_sound(a.POSITIVE)
             print_and_sleep(green(f"Max HP: {original_max} -> {self.max_hp}"), 1)
 
@@ -660,13 +670,20 @@ class Player(Combatant):
         self.luck = new_luck
 
     def acquire_illness(self, illness_name: str) -> None:
+        if self.illness:
+            return
+
         illness_data = next(
             illness
             for illness in Illnesses
             if illness["name"] == illness_name
         )
-        self.illness = load_illness(illness_data)
-        self.illness_death_lvl = self.lvl + self.illness.levels_until_death
+
+        illness = load_illness(illness_data)
+        self.illness = illness
+        self.illness_death_lvl = self.lvl + illness.levels_until_death
+        self.max_hp = max(1, self.base_max_hp - illness.hp_loss)
+        self.hp = min(self.hp, self.max_hp)
 
 # ================================================================================================
 
@@ -775,8 +792,13 @@ class Player(Combatant):
 
         old_max = self.max_hp
 
-        if self.max_hp < 150:
-            self.max_hp += 5
+        if self.base_max_hp < 150:
+            self.base_max_hp = min(150, self.base_max_hp + 5)
+
+            if self.illness:
+                self.max_hp = max(1, self.base_max_hp - self.illness.hp_loss)
+            else:
+                self.max_hp = self.base_max_hp
 
         self.hp = self.max_hp
 
@@ -815,13 +837,13 @@ class Player(Combatant):
             current_weapon = BARE_HANDS
 
         self.current_weapon = self.weapon_dict[current_weapon]
-        self.hp = self.max_hp
         self.xp = 0
         self.blind = False
         self.blind_turns = 0
         self.illness = None
         self.illness_death_lvl = None
-        self._max_plays = 10
+        self.max_hp = self.base_max_hp
+        self.hp = self.max_hp
 
 # ================================================================================================
 

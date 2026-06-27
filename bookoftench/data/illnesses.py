@@ -23,6 +23,7 @@ Illnesses = [
      'levels_until_death': 0,
      'cost': 0,
      'success_rate': 0,
+     'hp_loss': 0,
      'death_message': "You have succumbed to Late Onset SIDS."},
 
     # ============================
@@ -34,6 +35,7 @@ Illnesses = [
      'levels_until_death': 1,
      'cost': 60,
      'success_rate': 0.22,
+     'hp_loss': 15,
      'death_message': "You have succumbed to Mad Tench Disease."},
 
     # ============================
@@ -45,6 +47,7 @@ Illnesses = [
      'levels_until_death': 2,
      'cost': 105,
      'success_rate': 0.75,
+     'hp_loss': 10,
      'death_message': "You have succumbed to Heavy Head Syndrome."},
 
     {'name': PHANTOM_HIM_SYNDROME,
@@ -52,6 +55,7 @@ Illnesses = [
      'levels_until_death': 2,
      'cost': 120,
      'success_rate': 0.70,
+     'hp_loss': 12,
      'death_message': "You have succumbed to Phantom Him Syndrome."},
 
     {'name': RESTLESS_BUTT_SYNDROME,
@@ -59,6 +63,7 @@ Illnesses = [
      'levels_until_death': 2,
      'cost': 105,
      'success_rate': 0.75,
+     'hp_loss': 8,
      'death_message': "You have succumbed to Restless Butt Syndrome."},
 
     {'name': BABIES,
@@ -66,6 +71,7 @@ Illnesses = [
      'levels_until_death': 2,
      'cost': 95,
      'success_rate': 0.80,
+     'hp_loss': 8,
      'death_message': "You have succumbed to Babies."},
 
     # ============================
@@ -77,6 +83,7 @@ Illnesses = [
      'levels_until_death': 3,
      'cost': 130,
      'success_rate': 0.75,
+     'hp_loss': 7,
      'death_message': "You have succumbed to Fever Dreams."},
 
     {'name': HERPES,
@@ -84,6 +91,7 @@ Illnesses = [
      'levels_until_death': 3,
      'cost': 120,
      'success_rate': 0.80,
+     'hp_loss': 5,
      'death_message': "You have succumbed to Herpes."},
 
     {'name': MIND_EATING_BACTERIA_DISORDER,
@@ -91,6 +99,7 @@ Illnesses = [
      'levels_until_death': 3,
      'cost': 160,
      'success_rate': 0.65,
+     'hp_loss': 10,
      'death_message': "You have succumbed to Mind Eating Bacteria Disorder."},
 
     {'name': INWARD_HAIR_GROWTH_DISORDER,
@@ -98,6 +107,7 @@ Illnesses = [
      'levels_until_death': 3,
      'cost': 135,
      'success_rate': 0.70,
+     'hp_loss': 7,
      'death_message': "You have succumbed to Inward Hair Growth Disorder."},
 
     # ============================
@@ -109,6 +119,7 @@ Illnesses = [
      'levels_until_death': 4,
      'cost': 100,
      'success_rate': 0.50,
+     'hp_loss': 5,
      'death_message': "You have succumbed to Post Shartum Depression."},
 
 ]

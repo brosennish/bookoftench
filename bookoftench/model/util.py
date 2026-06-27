@@ -653,7 +653,7 @@ def get_player_status_view_4(game_state: GameState) -> str:
             f"Death Lvl: {red(player.illness_death_lvl)}",
         ])
 
-        return "\n".join([
+        return "\n\n".join([
             player_status,
             illness_status,
         ])
