@@ -8,7 +8,7 @@ from bookoftench.component.registry import register_component
 from bookoftench.data.audio import PURCHASE, BLACKSMITH_THEME
 from bookoftench.data.blacksmith import Blacksmith_Lines
 from bookoftench.data.components import BLACKSMITH
-from bookoftench.data.enviroment import DAY
+from bookoftench.data.environment import DAY
 from bookoftench.data.weapons import BLIND, MELEE, RANGED
 from bookoftench.model import GameState
 from bookoftench.model.events import BlacksmithEvent

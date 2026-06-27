@@ -8,7 +8,7 @@ from bookoftench.component.base import LabeledSelectionComponent, SelectionBindi
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import PURCHASE, TRAVEL_THEME, FISHMONGER_THEME_1, FISHMONGER_THEME_2, FISHMONGER_THEME_3
 from bookoftench.data.bait import Bait_And_Lures
-from bookoftench.data.enviroment import DAY
+from bookoftench.data.environment import DAY
 from bookoftench.data.fishing_areas import Fishing_Areas
 from bookoftench.data.components import FISHMONGER
 from bookoftench.data.fishing_items import Fishing_Items

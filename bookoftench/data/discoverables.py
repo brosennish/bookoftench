@@ -571,9 +571,9 @@ Search_Discoverables = [
      "areas": [CITY], 
      "desc": "The old bastard just kept on going."},
 
-    {"pre": "were", "name": "Wrongfully Slapped by an Elderly Person", "value": 0, "hp": -2, "rarity": UNCOMMON,
-     "areas": [CITY], 
-     "desc": "You did nothing wrong, but they thought you were their high school crush who just broke their heart."},
+    {"pre": "were", "name": "Wrongfully Slapped by a Righteous Assailant", "value": 0, "hp": -3, "rarity": UNCOMMON,
+     "areas": [CITY],
+     "desc": "So wrong yet so righteous."},
 
     # ============================
     #      UNCOMMON / NEUTRAL

@@ -7,7 +7,7 @@ from bookoftench.component.base import LabeledSelectionComponent, SelectionBindi
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import OCCULTIST_THEME, RITUAL, PURCHASE
 from bookoftench.data.components import OCCULTIST
-from bookoftench.data.enviroment import FULL
+from bookoftench.data.environment import FULL
 from bookoftench.data.rituals import Occultist_Lines
 from bookoftench.model import GameState
 from bookoftench.model.events import OccultistEvent

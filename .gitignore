@@ -210,3 +210,6 @@ __marimo__/
 .venv
 .idea
 .saves
+
+dist/
+build/
