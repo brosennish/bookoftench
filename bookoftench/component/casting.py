@@ -6,11 +6,9 @@ from bookoftench.component.base import functional_component, GatekeepingComponen
     TextDisplayingComponent
 from bookoftench.data.audio import COINS, CATCH_FISH, GOLF_CLAP, FISH_ON, CAST, ENEMY_APPEARS, \
     OCEAN_THEME, BAY_THEME, SHALLOWS_THEME, FISH, WHIFF
-from bookoftench.data.environment import CLEAR, MURKY
 from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED, \
     SPECIES, VARIANT, STRENGTH, SPEED, RAGE_FACTOR, RARITY, STAMINA, SHALLOWS, BAY, MYTHIC, possible_observations
 from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL, USE_ITEM
-from bookoftench.data.fishing_areas import WET_SEASON_BITE_CHANCE_EFFECT, DRY_SEASON_BITE_CHANCE_EFFECT, WET_SEASON
 from bookoftench.data.fishing_items import BARB_HOOK, RAGE
 from bookoftench.model import GameState
 from bookoftench.model.fish import load_fishes
