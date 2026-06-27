@@ -227,14 +227,18 @@ class GameState:
 # ================================================================================================
 
     def update_bait_shop_inventory(self) -> None:
-        selections = random.sample(Bait_And_Lures, 4)
-        inventory = load_baits(selections)
-        self.bait_shop_inventory = inventory
+        selections = random.sample(
+            [bait["name"] for bait in Bait_And_Lures],
+            min(4, len(Bait_And_Lures)),
+        )
+        self.bait_shop_inventory = load_baits(selections)
 
     def update_fishing_item_shop_inventory(self) -> None:
-        selections = random.sample(Fishing_Items, 4)
-        inventory = load_fishing_items(selections)
-        self.fishing_item_shop_inventory = inventory
+        selections = random.sample(
+            [item["name"] for item in Fishing_Items],
+            min(4, len(Fishing_Items)),
+        )
+        self.fishing_item_shop_inventory = load_fishing_items(selections)
 
 # ================================================================================================
 
