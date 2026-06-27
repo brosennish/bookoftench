@@ -155,6 +155,7 @@ class Player(Combatant):
     lives: int = 3
     lvl: int = 1
     coins: int = 0
+    base_max_hp: int = 100
     max_hp: int = 100
     hp: int = 100
     xp: int = 0

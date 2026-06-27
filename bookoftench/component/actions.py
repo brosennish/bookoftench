@@ -170,9 +170,11 @@ class BuildMaxHPSelection(LinearComponent):
             if not max_hp.isdigit():
                 print_and_sleep(yellow("Max HP must be a numeric value."))
             elif int(max_hp) < 1:
+                player.base_max_hp = 1
                 player.max_hp = 1
                 return self.game_state
             else:
+                player.base_max_hp = int(max_hp)
                 player.max_hp = int(max_hp)
                 return self.game_state
 
@@ -342,6 +344,8 @@ class BuildIllnessSelection(LabeledSelectionComponent):
 
             player.illness = next(i for i in illness)
             player.illness_death_lvl = player.lvl + player.illness.levels_until_death
+            player.max_hp = player.base_max_hp - player.illness.hp_loss
+            player.hp = min(player.hp, player.max_hp)
 
             return BuildBlindSelection(game_state).run()
 
@@ -563,7 +567,8 @@ class BuildComponent(LabeledSelectionComponent):
                 player.fishing_lvl = random.randint(1, 4)
                 player.rod_lvl = random.randint(1, 4)
 
-                player.max_hp = random.randint(80, 120)
+                player.base_max_hp = random.randint(80, 120)
+                player.max_hp = player.base_max_hp
                 hp_deficit = random.randint(1, 40)
                 player.hp = player.max_hp - hp_deficit if random.random() < 0.5 else player.max_hp
 
@@ -589,6 +594,8 @@ class BuildComponent(LabeledSelectionComponent):
                     options = load_illnesses(illness_names)
                     player.illness = random.choice(options)
                     player.illness_death_lvl = player.lvl + player.illness.levels_until_death
+                    player.max_hp = player.base_max_hp - player.illness.hp_loss
+                    player.hp = min(player.hp, player.max_hp)
 
                 # --- items ---
                 items_count = random.randint(0, 3)
@@ -632,6 +639,7 @@ class BuildComponent(LabeledSelectionComponent):
             else:
                 player.lives = build.lives
                 player.lvl = build.lvl
+                player.base_max_hp = build.hp
                 player.max_hp = build.hp
                 player.hp = build.hp
                 player.strength = build.str
@@ -643,7 +651,9 @@ class BuildComponent(LabeledSelectionComponent):
 
                 if build.illness:
                     player.illness = build.illness
-                    player.illness_death_lvl = player.lvl + build.illness.levels_until_death
+                    player.illness_death_lvl = player.lvl + player.illness.levels_until_death
+                    player.max_hp = player.base_max_hp - player.illness.hp_loss
+                    player.hp = min(player.hp, player.max_hp)
 
                 player.items = dict((it.name, it) for it in build.items)
                 player.weapon_dict.clear()

@@ -12,6 +12,7 @@ class Illness:
     levels_until_death: int
     cost: int
     success_rate: float
+    hp_loss: int
     death_message: str
 
     @property
