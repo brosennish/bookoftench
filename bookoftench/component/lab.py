@@ -11,7 +11,7 @@ from .. import event_logger
 from ..audio import play_music
 from ..data.audio import LAB_THEME
 from ..data.components import LAB
-from ..data.enviroment import NIGHT
+from ..data.environment import NIGHT
 from ..model.events import PlayerDeathEvent
 
 # ================================================================================================

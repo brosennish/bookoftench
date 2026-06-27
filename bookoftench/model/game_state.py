@@ -30,7 +30,7 @@ from .weapon import Weapon, load_weapons
 from ..data.audio import COINS
 from ..data.builds import Builds
 from ..data.enemies import HOHKKEN
-from ..data.enviroment import DAY, DRY, DRYING, FULL, NIGHT, WETTING
+from ..data.environment import DAY, DRY, DRYING, FULL, NIGHT, WETTING, Water_Conditions, CLEAR, CLOUDY, MURKY
 from ..data.fishing_areas import DRY_SEASON, WET_SEASON
 from ..data.illnesses import Illnesses
 
@@ -60,7 +60,8 @@ class GameState:
     fishmonger_is_open: bool = True
     hohkken_is_alive: bool = True
 
-    season: str = DRY_SEASON
+    season: str = field(default=DRY_SEASON)
+    water_condition: str = field(default=CLEAR)
     time_of_day: str = field(default=DAY)
     moon: str = field(default=DRY)
     day: int = 1
@@ -163,6 +164,7 @@ class GameState:
         self.set_moon()
         self.set_time_of_day()
         self.set_season()
+        self.set_water_condition()
 
         event_logger.set_counter(self.event_counter)
         set_achievement_cache(self.achievement_cache)
@@ -186,6 +188,37 @@ class GameState:
         else:
             self.season = DRY_SEASON
 
+    def set_water_condition(self):
+        self.water_condition = random.choice(Water_Conditions)
+
+    def get_bite_chance(self) -> float:
+        bite_chance = self.current_fishing_area.bite_chance
+        season = self.season
+        water_condition = self.water_condition
+
+        if season == WET_SEASON:
+            bite_chance += random.uniform(0.05, 0.10)
+        else:
+            bite_chance -= random.uniform(0.05, 0.10)
+
+        if water_condition == CLEAR:
+            bite_chance += random.uniform(0.03, 0.06)
+        elif water_condition == CLOUDY:
+            bite_chance += random.uniform(-0.03, 0.03)
+        elif water_condition == MURKY:
+            bite_chance -= random.uniform(0.03, 0.06)
+
+        bite_chance += min((self.player.fishing_lvl - 1) / 100, 0.05)
+
+        if bite_chance < 0.10:
+            bite_chance = 0.10
+        elif bite_chance > 0.45:
+            bite_chance = 0.45
+
+        return bite_chance
+
+# ================================================================================================
+
     def set_time_of_day(self) -> None:
         self.time_of_day = DAY
 
@@ -195,6 +228,7 @@ class GameState:
         else:
             self.day += 1
             self.time_of_day = DAY
+            self.set_water_condition()
 
         self.player_went_fishing = False
 
@@ -210,6 +244,8 @@ class GameState:
             self.moon = DRYING
         elif self.moon == DRYING:
             self.moon = DRY
+
+# ================================================================================================
 
     def refresh_bounty(self) -> None:
         valid_areas = [

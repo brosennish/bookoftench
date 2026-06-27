@@ -1,6 +1,6 @@
 from bookoftench.data import areas as a
 from bookoftench.data.audio import ROULETTE_THEME, HOSPITAL_THEME, BATTLE_THEME
-from bookoftench.data.enviroment import DAY, NIGHT
+from bookoftench.data.environment import DAY, NIGHT
 from bookoftench.data.investments import SEMEN_CANDLE, SUN_SUITS, BOBS_BOXES
 from bookoftench.ui import green, purple, yellow, blue, red, orange, cyan
 

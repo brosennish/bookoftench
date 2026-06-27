@@ -7,7 +7,7 @@ from bookoftench.component.base import LabeledSelectionComponent, SelectionBindi
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import WIZARD_THEME, PURCHASE
 from bookoftench.data.components import WIZARD
-from bookoftench.data.enviroment import DAY
+from bookoftench.data.environment import DAY
 from bookoftench.data.spells import Wizard_Lines, WEAPON, ITEM
 from bookoftench.model import GameState
 from bookoftench.model.events import WizardEvent

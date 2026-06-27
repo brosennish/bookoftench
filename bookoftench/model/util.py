@@ -14,7 +14,7 @@ from .discoverable import rarity_color
 from .game_state import GameState
 from ..data.areas import CAVE, CITY, FOREST, SWAMP
 from ..data.enemies import CONTAGIOUS, BOSS, SPECIAL_BOSS, FINAL_BOSS, NORMAL
-from ..data.enviroment import DAY, NIGHT
+from ..data.environment import DAY, NIGHT
 from ..data.fish import AGITATED, SPOOKED, CALM, SHALLOWS, BAY, OCEAN, Fish_Species, MALE, FEMALE, COMMON, UNCOMMON, \
     RARE
 from ..data.fishing_areas import WET_SEASON, DRY_SEASON

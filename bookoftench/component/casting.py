@@ -6,6 +6,7 @@ from bookoftench.component.base import functional_component, GatekeepingComponen
     TextDisplayingComponent
 from bookoftench.data.audio import COINS, CATCH_FISH, GOLF_CLAP, FISH_ON, CAST, ENEMY_APPEARS, \
     OCEAN_THEME, BAY_THEME, SHALLOWS_THEME, FISH, WHIFF
+from bookoftench.data.environment import CLEAR, MURKY
 from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED, \
     SPECIES, VARIANT, STRENGTH, SPEED, RAGE_FACTOR, RARITY, STAMINA, SHALLOWS, BAY, MYTHIC, possible_observations
 from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL, USE_ITEM
@@ -43,15 +44,7 @@ class DryCastCheck(NoOpComponent):
         return SpawnFish(self.game_state).run()
 
     def dry_check(self) -> bool:
-        bite_chance = self.game_state.current_fishing_area.bite_chance
-
-        season = self.game_state.season
-        if season == WET_SEASON:
-            bite_chance += WET_SEASON_BITE_CHANCE_EFFECT
-        else:
-            bite_chance -= DRY_SEASON_BITE_CHANCE_EFFECT
-
-        bite_chance += ((self.game_state.player.fishing_lvl - 1) / 100)
+        bite_chance = self.game_state.get_bite_chance()
 
         if random.random() < bite_chance:
             value = random.randint(1, 3)

@@ -6,7 +6,7 @@ from bookoftench.component.registry import register_component
 from bookoftench.data.audio import EQUIP_WEAPON, OCEAN_THEME, SHALLOWS_THEME, BAY_THEME
 from bookoftench.data.boat import TACKLE_BOX, FISHING_OPTIONS, CAST, FISHING_LOG, ALL_NEW_ONLY
 from bookoftench.data.components import BOAT, COMPENDIUM
-from bookoftench.data.enviroment import DAY
+from bookoftench.data.environment import DAY
 from bookoftench.data.fish import SHALLOWS, OCEAN, BAY
 from bookoftench.model import GameState
 from bookoftench.model.bait import Bait

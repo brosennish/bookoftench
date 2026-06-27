@@ -19,7 +19,7 @@ from .perk import perk_is_active
 from .shop import Shop
 from .trait import load_traits, load_trait
 from .weapon import load_weapon, make_elite_weapon
-from bookoftench.data.enviroment import NIGHT, FULL
+from bookoftench.data.environment import NIGHT, FULL
 from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
 from bookoftench.data.perks import SHERLOCK_TENCH
 from bookoftench.data.weapons import CLAWS, BLIND, SPECIAL

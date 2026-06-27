@@ -7,7 +7,7 @@ from bookoftench.component.base import LabeledSelectionComponent, ReprBinding, S
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import PURCHASE, DRINK, COFFEE_THEME
 from bookoftench.data.components import COFFEE_SHOP
-from bookoftench.data.enviroment import DAY
+from bookoftench.data.environment import DAY
 from bookoftench.model import GameState
 from bookoftench.model.coffee_item import CoffeeItem
 from bookoftench.model.coffee_shop import CoffeeShop

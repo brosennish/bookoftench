@@ -10,7 +10,7 @@ from bookoftench.data import items as i
 from bookoftench.data import perks as p
 from bookoftench.data.areas import CAVE
 from bookoftench.data.enemies import EMPATH
-from bookoftench.data.enviroment import DAY, DRYING, FULL, NIGHT, WETTING
+from bookoftench.data.environment import DAY, DRYING, FULL, NIGHT, WETTING
 from bookoftench.data.weapons import (
     BARE_HANDS,
     BLADED,
