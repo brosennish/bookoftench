@@ -58,9 +58,6 @@ class BoatComponent(LabeledSelectionComponent):
             play_music(OCEAN_THEME)
 
     def _return(self):
-        self.game_state.update_time_of_day()
-        if self.game_state.time_of_day == DAY:
-            self.game_state.update_moon()
         self.leave = True
 
     def can_exit(self) -> bool:

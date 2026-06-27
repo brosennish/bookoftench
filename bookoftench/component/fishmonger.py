@@ -8,6 +8,7 @@ from bookoftench.component.base import LabeledSelectionComponent, SelectionBindi
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import PURCHASE, TRAVEL_THEME, FISHMONGER_THEME_1, FISHMONGER_THEME_2, FISHMONGER_THEME_3
 from bookoftench.data.bait import Bait_And_Lures
+from bookoftench.data.enviroment import DAY
 from bookoftench.data.fishing_areas import Fishing_Areas
 from bookoftench.data.components import FISHMONGER
 from bookoftench.data.fishing_items import Fishing_Items
@@ -101,18 +102,25 @@ class Fishmonger(LabeledSelectionComponent):
         @functional_component(state_dependent=True)
         def purchase_component(game_state: GameState):
             player = game_state.player
+            when = "tonight" if game_state.time_of_day == DAY else "tomorrow"
 
-            if fishing_area.travel_cost > player.coins:
+            if game_state.player_went_fishing:
+                print_and_sleep(yellow(f"Boat's already been out. Come back {when}."), 2)
+                return None
+            elif fishing_area.travel_cost > player.coins:
                 print_and_sleep(yellow(f"Need more coin."), 2)
                 return None
             elif not player.current_bait:
                 print_and_sleep(yellow(f"Equip some bait."), 2)
                 return None
             else:
+                game_state.player_went_fishing = True
                 player.coins -= fishing_area.travel_cost
                 game_state.current_fishing_area = fishing_area
+
                 play_music(TRAVEL_THEME)
                 print_and_sleep(cyan(f"Traveling by boat to the {fishing_area.name}..."), 4)
+
                 BoatComponent(game_state).run()
                 return None
 
