@@ -661,13 +661,20 @@ class Player(Combatant):
         self.luck = new_luck
 
     def acquire_illness(self, illness_name: str) -> None:
+        if self.illness:
+            return
+
         illness_data = next(
             illness
             for illness in Illnesses
             if illness["name"] == illness_name
         )
-        self.illness = load_illness(illness_data)
-        self.illness_death_lvl = self.lvl + self.illness.levels_until_death
+
+        illness = load_illness(illness_data)
+        self.illness = illness
+        self.illness_death_lvl = self.lvl + illness.levels_until_death
+        self.max_hp = max(1, self.base_max_hp - illness.hp_loss)
+        self.hp = min(self.hp, self.max_hp)
 
 # ================================================================================================
 
