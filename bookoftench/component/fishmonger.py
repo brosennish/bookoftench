@@ -138,12 +138,11 @@ class BaitShop(LabeledSelectionComponent):
         cost = get_rod_upgrade_cost(player)
         cost_display = orange(f"{cost}")
 
-        valid = [i['name'] for i in Bait_And_Lures]
-        available = load_baits(valid)
+        inventory = game_state.bait_shop_inventory
 
         bait_bindings = [ReprBinding(str(i + 1), bait.name,
                                        self._make_purchase_component(bait), bait) for
-                          i, bait in enumerate(available)]
+                          i, bait in enumerate(inventory)]
 
         upgrade_rod_binding = SelectionBinding('U', f"Upgrade Rod ({cost_display})",
                                                functional_component()(lambda: upgrade_rod(player, cost)))
@@ -221,12 +220,11 @@ class FishingItemShop(LabeledSelectionComponent):
         cost = get_rod_upgrade_cost(player)
         cost_display = orange(f"{cost}")
 
-        valid = [i['name'] for i in Fishing_Items]
-        available = load_fishing_items(valid)
+        inventory = game_state.fishing_item_shop_inventory
 
         fishing_item_bindings = [ReprBinding(str(i + 1), fishing_item.name,
                                        self._make_purchase_component(fishing_item), fishing_item) for
-                          i, fishing_item in enumerate(available)]
+                          i, fishing_item in enumerate(inventory)]
 
         upgrade_rod_binding = SelectionBinding('U', f"Upgrade Rod ({cost_display})",
                                                functional_component()(lambda: upgrade_rod(player, cost)))

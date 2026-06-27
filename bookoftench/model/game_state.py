@@ -13,6 +13,7 @@ from bookoftench.ui import green, red, yellow
 from bookoftench.util import print_and_sleep
 from .achievement import Achievement, AchievementEvent, load_achievements, set_achievement_cache
 from .area import Area, load_areas
+from .bait import Bait, load_baits, Bait_And_Lures
 from .bank import Bank
 from .build import Build
 from .discoverable import Discoverable
@@ -20,6 +21,7 @@ from .enemy import Enemy, load_enemy
 from .events import BountyCollectedEvent, HohkkenEvent, LevelUpEvent, TravelEvent
 from .fish import Fish
 from .fishing_area import FishingArea
+from .fishing_item import load_fishing_items, FishingItem
 from .illness import load_illness
 from .item import Item, load_items
 from .perk import Perk, attach_perk, load_perk, perk_is_active, set_perk_cache
@@ -32,6 +34,7 @@ from ..data.builds import Builds
 from ..data.enemies import HOHKKEN
 from ..data.environment import DAY, DRY, DRYING, FULL, NIGHT, WETTING, Water_Conditions, CLEAR, CLOUDY, MURKY
 from ..data.fishing_areas import DRY_SEASON, WET_SEASON
+from ..data.fishing_items import Fishing_Items
 from ..data.illnesses import Illnesses
 
 # ================================================================================================
@@ -79,6 +82,8 @@ class GameState:
     victory: bool = False
 
     achievement_cache: dict[str, Achievement] = field(default_factory=dict)
+    bait_shop_inventory: list[Bait] = field(default_factory=list)
+    fishing_item_shop_inventory: list[FishingItem] = field(default_factory=list)
     # crypto_market_state = None
     discoveries: list[Discoverable] = field(default_factory=list)
     encountered_enemies: list[dict] = field(default_factory=list)
@@ -165,6 +170,8 @@ class GameState:
         self.set_time_of_day()
         self.set_season()
         self.set_water_condition()
+        self.update_bait_shop_inventory()
+        self.update_fishing_item_shop_inventory()
 
         event_logger.set_counter(self.event_counter)
         set_achievement_cache(self.achievement_cache)
@@ -219,6 +226,22 @@ class GameState:
 
 # ================================================================================================
 
+    def update_bait_shop_inventory(self) -> None:
+        selections = random.sample(
+            [bait["name"] for bait in Bait_And_Lures],
+            min(4, len(Bait_And_Lures)),
+        )
+        self.bait_shop_inventory = load_baits(selections)
+
+    def update_fishing_item_shop_inventory(self) -> None:
+        selections = random.sample(
+            [item["name"] for item in Fishing_Items],
+            min(4, len(Fishing_Items)),
+        )
+        self.fishing_item_shop_inventory = load_fishing_items(selections)
+
+# ================================================================================================
+
     def set_time_of_day(self) -> None:
         self.time_of_day = DAY
 
@@ -229,6 +252,8 @@ class GameState:
             self.day += 1
             self.time_of_day = DAY
             self.set_water_condition()
+            self.update_bait_shop_inventory()
+            self.update_fishing_item_shop_inventory()
 
         self.player_went_fishing = False
 
