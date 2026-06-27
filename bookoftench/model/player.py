@@ -791,8 +791,9 @@ class Player(Combatant):
                 print_and_sleep(purple("You survived death with Tench Genes!"), 1)
                 print_and_sleep(f"New Death Level: {red(f'{self.illness_death_lvl}')}", 1)
             else:
+
+                print_and_sleep(red(self.illness.death_message), 2)
                 self.hp = 0
-                self.lives -= 1
                 event_logger.log_event(PlayerDeathEvent(self.lives))
                 self.illness = None
                 self.illness_death_lvl = None
