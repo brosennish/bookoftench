@@ -12,6 +12,7 @@ class Illness:
     levels_until_death: int
     cost: int
     success_rate: float
+    death_message: str
 
     @property
     def causes_instant_death(self) -> bool:

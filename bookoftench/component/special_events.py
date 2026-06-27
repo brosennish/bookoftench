@@ -164,17 +164,21 @@ class SpecialEventComponent(LabeledSelectionComponent):
     def _handle_selection_component(self, special_event: SpecialEvent, choice: int):
         def selection_component():
             if special_event.method:
+                method = getattr(self, special_event.method)
+
                 if self.investment:
                     if self.can_afford_investment(choice):
-                        method = getattr(self, special_event.method)
                         if method(self.game_state, choice, self.investment):
                             self.leave = True
+                            return self.game_state
                     else:
                         print_and_sleep(yellow("Need more coin."), 1)
-                else:
-                    method = getattr(self, special_event.method)
-                    method(self.game_state, choice)
-                    self.leave = True
+
+                    return self.game_state
+
+                method(self.game_state, choice)
+                self.leave = True
+
             return self.game_state
 
         return functional_component()(selection_component)
