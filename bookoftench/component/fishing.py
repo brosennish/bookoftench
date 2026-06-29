@@ -70,7 +70,7 @@ class BoatComponent(LabeledSelectionComponent):
                 self.leave
                 or (no_casts_left and no_active_fish)
                 or player_dead
-                or no_bait
+                or (no_bait and no_active_fish)
         )
 
     def toggle_fish(self):
