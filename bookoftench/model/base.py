@@ -226,13 +226,16 @@ class Combatant(ABC):
 # ================================================================================================
 
     def get_crit_chance(self) -> float:
-        return self.current_weapon.crit
+        crit_chance = self.current_weapon.crit + max(self.acc - 1, 0) * 0.10
+        return min(crit_chance, 0.35)
 
     def handle_crit(self, is_crit: bool) -> None:
         if not is_crit:
             return
+
         self.current_weapon.play_sound()
         print_and_sleep(red("*** Critical hit ***"), 1)
+
         if not isinstance(self, NPC):
             event_logger.log_event(CritEvent())
 
@@ -281,7 +284,9 @@ class Combatant(ABC):
         if other.stunned:
             return
 
-        if random.random() >= self.current_weapon.stun:
+        stun_chance = self.current_weapon.stun / max(other.strength, 1)
+
+        if random.random() >= stun_chance:
             return
 
         other.stunned = True
@@ -312,6 +317,7 @@ class Combatant(ABC):
 
         # --- get calculated crit chance ---
         crit = random.random() < self.get_crit_chance()
+
         if self.crit_active:
             crit = True
             self.crit_active = False
@@ -352,13 +358,20 @@ class Combatant(ABC):
 # ================================================================================================
 
     def attack(self, other: "Combatant") -> None:
+        enemy_turn = not isinstance(other, NPC)
+
+        if enemy_turn and self.stunned:
+            print_and_sleep(yellow(f"{self.name} is stunned and unable to move."), 1)
+            self.stunned = False
+            return
+
         if random.random() > self.calculate_accuracy():
             self.handle_miss()
         else:
             self.handle_hit(other)
 
         # trait handling after enemy turn
-        if not isinstance(other, NPC):
+        if enemy_turn:
             if self.is_alive() and self.trait:
                 self.handle_traits(other)
 
