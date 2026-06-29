@@ -112,7 +112,9 @@ class BuildFishingLevelSelection(LinearComponent):
                 player.fishing_lvl = 10
                 return self.game_state
             else:
-                player.fishing_lvl = int(fishing_level)
+                value = int(fishing_level)
+                player.fishing_lvl = value
+                player.build.fishing_lvl = value
                 return self.game_state
 
 # ================================================================================================
@@ -135,7 +137,9 @@ class BuildRodLevelSelection(LinearComponent):
                 player.rod_lvl = 10
                 return self.game_state
             else:
-                player.rod_lvl = int(rod_level)
+                value = int(rod_level)
+                player.rod_lvl = value
+                player.build.rod_lvl = value
                 return self.game_state
 
 # ================================================================================================

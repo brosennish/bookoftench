@@ -101,7 +101,7 @@ class SpawnFish(LinearComponent):
 
         if not available:
             self.game_state.current_fish = None
-            print_and_sleep(dim("You got a bite, but nothing took the bait."), 1)
+            print_and_sleep(dim("You got a bite, but it came up dry."), 1)
             return
 
         selection = random.choice(available)
