@@ -71,11 +71,7 @@ def display_fishmonger_header(game_state: GameState) -> None:
     season_color = blue if season == WET_SEASON else yellow
     water_condition_color = get_water_condition_color(water_condition)
 
-    fishing_xp_text = (
-        f"{player.fishing_xp}/{player.fishing_xp_needed}"
-        if player.fishing_lvl < 10
-        else f"{player.fishing_xp}"
-    )
+    fishing_xp_text = get_fishing_xp_text(player)
 
     top_row = dim(" | ").join([
         season_color(season),
@@ -314,11 +310,7 @@ def display_boat_header(game_state: GameState) -> None:
     casts = fishing_area.casts
     pref_text = "All" if game_state.all_fish else "New"
 
-    fishing_xp_text = (
-        f"{player.fishing_xp}/{player.fishing_xp_needed}"
-        if player.fishing_lvl < 10
-        else str(player.fishing_xp)
-    )
+    fishing_xp_text = get_fishing_xp_text(player)
 
     bait_text = (
         f"{cyan(bait.name)}"
@@ -602,6 +594,14 @@ def get_player_status_view_3(game_state: GameState) -> str:
 
 # ================================================================================================
 
+def get_fishing_xp_text(player: Player) -> str:
+    if player.fishing_xp_needed is None:
+        return "Max"
+
+    return f"{player.fishing_xp}/{player.fishing_xp_needed}"
+
+# ================================================================================================
+
 # --- fishing view ---
 def get_player_status_view_4(game_state: GameState) -> str:
     player = game_state.player
@@ -614,11 +614,7 @@ def get_player_status_view_4(game_state: GameState) -> str:
     season_color = blue if season == WET_SEASON else yellow
     water_condition_color = get_water_condition_color(water_condition)
 
-    fishing_xp_text = (
-        f"{player.fishing_xp}/{player.fishing_xp_needed}"
-        if player.fishing_lvl < 10
-        else str(player.fishing_xp)
-    )
+    fishing_xp_text = get_fishing_xp_text(player)
 
     world_row = dim(" | ").join([
         blue(game_state.current_area.name),

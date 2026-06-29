@@ -10,7 +10,7 @@ from bookoftench.data.audio import PURCHASE, TRAVEL_THEME, FISHMONGER_THEME_1, F
 from bookoftench.data.environment import DAY
 from bookoftench.data.fishing_areas import Fishing_Areas
 from bookoftench.data.components import FISHMONGER
-from bookoftench.data.fishing_rod import ROD_UPGRADE_COSTS, ROD_NAMES
+from bookoftench.data.fishing import ROD_UPGRADE_COSTS, ROD_NAMES
 from bookoftench.model import GameState
 from bookoftench.model.fishing_area import load_fishing_areas, FishingArea
 from bookoftench.model.bait import Bait
