@@ -23,7 +23,7 @@ from bookoftench.util import print_and_sleep
 @register_component(OCCULTIST)
 class OccultistTime(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: game_state.moon == FULL,
+        super().__init__(game_state, decision_function=lambda: game_state.time_of_day == FULL,
                          accept_component=OccultistBouncer,
                          deny_component=functional_component()(lambda: print_and_sleep(
                              blue("The Occultist requires a Full Moon to perform rituals."), 1.5)))
@@ -37,7 +37,7 @@ class OccultistBouncer(GatekeepingComponent):
         super().__init__(game_state, decision_function=lambda: game_state.player.lives < 3,
                          accept_component=OccultistComponent,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("You have too much life to justify a sacrifice."), 1.5)))
+                             blue("You possess too much life to justify a sacrifice."), 1.5)))
 
 # ================================================================================================
 

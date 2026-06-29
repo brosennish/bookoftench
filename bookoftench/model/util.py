@@ -480,9 +480,9 @@ def get_player_status_view_1(game_state: GameState) -> str:
         return "\n\n".join([
             player_status,
             illness_status,
-        ])
+        ]) + "\n"
 
-    return player_status
+    return player_status + "\n"
 
 # ================================================================================================
 
@@ -541,9 +541,9 @@ def get_player_status_view_2(game_state: GameState) -> str:
         return "\n\n".join([
             player_status,
             illness_status,
-        ])
+        ]) + "\n"
 
-    return player_status
+    return player_status + "\n"
 
 # ================================================================================================
 
@@ -588,9 +588,9 @@ def get_player_status_view_3(game_state: GameState) -> str:
         return "\n".join([
             player_status,
             illness_status,
-        ])
+        ]) + "\n"
 
-    return player_status
+    return player_status + "\n"
 
 # ================================================================================================
 
@@ -651,9 +651,9 @@ def get_player_status_view_4(game_state: GameState) -> str:
         return "\n\n".join([
             player_status,
             illness_status,
-        ])
+        ]) + "\n"
 
-    return player_status
+    return player_status + "\n"
 
 # ================================================================================================
 
