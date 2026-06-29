@@ -53,6 +53,7 @@ from .perk import Perk, activate_perk_print, attach_perk, attach_perks, perk_is_
 from .trait import Trait
 from .weapon import Weapon, load_weapons
 from ..data.audio import GOLF_CLAP, GREAT_JOB, XP
+from ..data.fishing_rod import ROD_NAMES
 from ..data.illnesses import Illnesses
 
 # ================================================================================================
@@ -169,6 +170,7 @@ class Player(Combatant):
     fishing_xp_needed: int = 10
     fishing_lvl: int = 1
     rod_lvl: int = 1
+    rod_name: str = "Worm Rod"
     max_active_fishing_items: int = 3
     caught_fish: list[Fish] = field(default_factory=list)
     tackle_box: dict[str, Bait] = field(default_factory=dict)
@@ -695,7 +697,6 @@ class Player(Combatant):
         play_sound(XP)
         print_and_sleep(cyan(f"You gained {xp} XP!"), 1)
 
-        # todo - add conditional fishing xp display based on max lvl
         if fishing_xp >= 1000:
             fishing_lvl = 10
             xp_needed = self.fishing_xp
