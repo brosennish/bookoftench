@@ -71,11 +71,7 @@ def display_fishmonger_header(game_state: GameState) -> None:
     season_color = blue if season == WET_SEASON else yellow
     water_condition_color = get_water_condition_color(water_condition)
 
-    fishing_xp_text = (
-        f"{player.fishing_xp}/{player.fishing_xp_needed}"
-        if player.fishing_lvl < 10
-        else f"{player.fishing_xp}"
-    )
+    fishing_xp_text = get_fishing_xp_text(player)
 
     top_row = dim(" | ").join([
         season_color(season),
@@ -171,9 +167,12 @@ def display_bait_shop_header(game_state: GameState) -> None:
     tod = game_state.time_of_day
     tod_display = "Day" if tod == DAY else "Night"
     moon = game_state.moon
+    water_condition = game_state.water_condition
+    water_color = get_water_condition_color(water_condition)
 
     print_and_sleep(f"{dim(' | ').join([
         f"{season_color(f"{season}")}",
+        f"{water_color(water_condition)}",
         f"{yellow(tod_display) if tod == DAY else purple(tod_display)}",
         f"{moon} Moon",
         f"Coins: {green(f"{player.coins}")}",
@@ -188,9 +187,12 @@ def display_fishing_item_shop_header(game_state: GameState) -> None:
     tod = game_state.time_of_day
     tod_display = "Day" if tod == DAY else "Night"
     moon = game_state.moon
+    water_condition = game_state.water_condition
+    water_color = get_water_condition_color(water_condition)
 
     print_and_sleep(f"{dim(' | ').join([
         f"{season_color(f"{season}")}",
+        f"{water_color(water_condition)}",
         f"{yellow(tod_display) if tod == DAY else purple(tod_display)}",
         f"{moon} Moon",
         f"Coins: {green(f"{player.coins}")}",
@@ -281,14 +283,6 @@ def display_fishing_battle_header(game_state: GameState) -> None:
 # ================================================================================================
 
 # --- CASTS REMAINING COLOR CODING ---
-def c_color(casts: int) -> Callable[[str], str]:
-    if casts == 1:
-        return red
-    elif casts <= 3:
-        return yellow
-    else:
-        return green
-
 def get_water_condition_color(water_condition: str):
     if water_condition == CLEAR:
         return cyan
@@ -316,14 +310,10 @@ def display_boat_header(game_state: GameState) -> None:
     casts = fishing_area.casts
     pref_text = "All" if game_state.all_fish else "New"
 
-    fishing_xp_text = (
-        f"{player.fishing_xp}/{player.fishing_xp_needed}"
-        if player.fishing_lvl < 10
-        else str(player.fishing_xp)
-    )
+    fishing_xp_text = get_fishing_xp_text(player)
 
     bait_text = (
-        f"{cyan(bait.name)} {cyan(f'({bait.casts})')}"
+        f"{cyan(bait.name)}"
         if bait
         else yellow("None")
     )
@@ -340,8 +330,9 @@ def display_boat_header(game_state: GameState) -> None:
     bottom_row = dim(" | ").join([
         f"Lvl: {cyan(player.fishing_lvl)}",
         f"XP: {cyan(fishing_xp_text)}",
+        f"{green(player.rod_name)}",
         f"Bait: {bait_text}",
-        f"Casts: {c_color(casts)(str(casts))}",
+        f"Casts: {blue(str(casts))}",
     ])
 
     print_and_sleep("\n\n".join([
@@ -603,6 +594,14 @@ def get_player_status_view_3(game_state: GameState) -> str:
 
 # ================================================================================================
 
+def get_fishing_xp_text(player: Player) -> str:
+    if player.fishing_xp_needed is None:
+        return "Max"
+
+    return f"{player.fishing_xp}/{player.fishing_xp_needed}"
+
+# ================================================================================================
+
 # --- fishing view ---
 def get_player_status_view_4(game_state: GameState) -> str:
     player = game_state.player
@@ -615,11 +614,7 @@ def get_player_status_view_4(game_state: GameState) -> str:
     season_color = blue if season == WET_SEASON else yellow
     water_condition_color = get_water_condition_color(water_condition)
 
-    fishing_xp_text = (
-        f"{player.fishing_xp}/{player.fishing_xp_needed}"
-        if player.fishing_lvl < 10
-        else str(player.fishing_xp)
-    )
+    fishing_xp_text = get_fishing_xp_text(player)
 
     world_row = dim(" | ").join([
         blue(game_state.current_area.name),
@@ -632,7 +627,7 @@ def get_player_status_view_4(game_state: GameState) -> str:
     fishing_row = dim(" | ").join([
         f"{orange(player.name)} {dim('-')} Fishing Lvl: {cyan(player.fishing_lvl)}",
         f"XP: {cyan(fishing_xp_text)}",
-        f"Rod: {cyan(player.rod_lvl)}",
+        f"{green(player.rod_name)}",
         f"Caught: {blue(len(player.caught_fish))}",
     ])
 

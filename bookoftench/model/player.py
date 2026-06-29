@@ -53,6 +53,7 @@ from .perk import Perk, activate_perk_print, attach_perk, attach_perks, perk_is_
 from .trait import Trait
 from .weapon import Weapon, load_weapons
 from ..data.audio import GOLF_CLAP, GREAT_JOB, XP
+from ..data.fishing import ROD_NAMES, FISHING_LEVEL_XP_REQUIREMENTS, FISHING_XP_NEEDED
 from ..data.illnesses import Illnesses
 
 # ================================================================================================
@@ -169,6 +170,7 @@ class Player(Combatant):
     fishing_xp_needed: int = 10
     fishing_lvl: int = 1
     rod_lvl: int = 1
+    rod_name: str = "Worm Rod"
     max_active_fishing_items: int = 3
     caught_fish: list[Fish] = field(default_factory=list)
     tackle_box: dict[str, Bait] = field(default_factory=dict)
@@ -689,51 +691,29 @@ class Player(Combatant):
 
     def gain_fishing_xp(self, xp: int) -> None:
         self.fishing_xp += xp
-        fishing_xp = self.fishing_xp
         original_fishing_lvl = self.fishing_lvl
 
         play_sound(XP)
         print_and_sleep(cyan(f"You gained {xp} XP!"), 1)
 
-        # todo - add conditional fishing xp display based on max lvl
-        if fishing_xp >= 1000:
-            fishing_lvl = 10
-            xp_needed = self.fishing_xp
-        elif fishing_xp >= 750:
-            fishing_lvl = 9
-            xp_needed = 1000
-        elif fishing_xp >= 550:
-            fishing_lvl = 8
-            xp_needed = 750
-        elif fishing_xp >= 360:
-            xp_needed = 550
-            fishing_lvl = 7
-        elif fishing_xp >= 250:
-            xp_needed = 360
-            fishing_lvl = 6
-        elif fishing_xp >= 160:
-            xp_needed = 250
-            fishing_lvl = 5
-        elif fishing_xp >= 90:
-            xp_needed = 160
-            fishing_lvl = 4
-        elif fishing_xp >= 40:
-            xp_needed = 90
-            fishing_lvl = 3
-        elif fishing_xp >= 10:
-            xp_needed = 40
-            fishing_lvl = 2
-        else:
-            xp_needed = 10
-            fishing_lvl = 1
+        self.fishing_lvl = self.get_fishing_lvl(self.fishing_xp)
+        self.fishing_xp_needed = FISHING_XP_NEEDED[self.fishing_lvl]
 
-        self.fishing_lvl = fishing_lvl
-        self.fishing_xp_needed = xp_needed
-
-        if original_fishing_lvl != fishing_lvl:
+        if original_fishing_lvl != self.fishing_lvl:
             play_sound(GOLF_CLAP)
             play_sound(GREAT_JOB)
-            print_and_sleep(cyan(f"You have reached fishing level {self.fishing_lvl}!"), 1)
+            print_and_sleep(
+                cyan(f"You have reached fishing level {self.fishing_lvl}!"),
+                1,
+            )
+
+    @staticmethod
+    def get_fishing_lvl(fishing_xp: int) -> int:
+        return max(
+            lvl
+            for lvl, required_xp in FISHING_LEVEL_XP_REQUIREMENTS.items()
+            if fishing_xp >= required_xp
+        )
 
 # ================================================================================================
 
