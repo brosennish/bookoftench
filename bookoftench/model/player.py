@@ -90,7 +90,7 @@ class PlayerWeapon(Weapon):
             condition=lambda: self.type == RANGED,
         )
         def apply_perks() -> float:
-            return self.accuracy
+            return self.acc
 
         return apply_perks()
 
@@ -102,7 +102,7 @@ class PlayerWeapon(Weapon):
         return dim(" | ").join([
             cyan(f"{self.name:<24}"),
             f"Dmg: {red(f'{self.damage:<3}')}",
-            f"Acc: {yellow(f'{self.accuracy:<4}')}",
+            f"Acc: {yellow(f'{self.acc:<4}')}",
             f"Var: {red(self.var)}",
             f"Crit: {yellow(f'{self.crit:<4}')}",
             f"Uses: {self.format_uses()}",

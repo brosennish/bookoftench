@@ -43,12 +43,12 @@ class WeaponBase(ABC):
     name: str
     damage: int
     uses: int
-    accuracy: float
+    acc: float
     var: int
     crit: float
     sound: str
     type: str
-    stun_chance: float
+    stun: float = 0
     base_name: str = None
     subtype: str = MELEE
     areas: list[str] | None = None
@@ -63,7 +63,7 @@ class WeaponBase(ABC):
         return max(0, base)
 
     def get_accuracy(self) -> float:
-        return self.accuracy
+        return self.acc
 
     def play_sound(self) -> None:
         if len(self.sound) > 0:
@@ -90,7 +90,7 @@ class WeaponBase(ABC):
     def get_complete_format(self, strength: float | None, acc: float | None) -> str:
         return f"{cyan(self.name)}\n{dim(' | ').join([
             f"{dim("Dmg:")} {red(f"{round(self.damage * strength if strength and self.type == MELEE else self.damage):<2}")}",
-            f"{dim("Acc:")} {yellow(f"{round(self.accuracy * acc if acc and self.type == RANGED else self.accuracy, 2):<4}")}",
+            f"{dim("Acc:")} {yellow(f"{round(self.acc * acc if acc and self.type == RANGED else self.acc, 2):<4}")}",
             f"{dim("Var:")} {f"{red(f"{self.var}")}"}",
             f"{dim("Crit:")} {yellow(f"{self.crit:<4}")}",
             f"{dim("Uses:")} {self.format_uses()}",

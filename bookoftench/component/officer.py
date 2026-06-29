@@ -128,7 +128,7 @@ class PoliceBrutality(Weapon):
     name: str = "Police Brutality"
     damage: int = 0
     uses: int = -1
-    accuracy: float = 1.0
+    acc: float = 1.0
     var: int = 0
     crit: float = 0.0
     cost: int = 0
