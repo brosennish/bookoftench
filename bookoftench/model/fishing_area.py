@@ -23,9 +23,9 @@ class FishingArea:
 
     def get_simple_format(self) -> str:
         return dim(" | ").join([
-            blue(f"{self.name:<10}"),
+            blue(f"{self.name:<11}"),
             f"Cost: {orange(self.travel_cost)}",
-            f"Casts: {cyan(self.casts)}",
+            f"Casts: {blue(self.casts)}",
         ])
 
     def __repr__(self) -> str:
