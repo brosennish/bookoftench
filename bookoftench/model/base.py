@@ -48,6 +48,7 @@ class WeaponBase(ABC):
     crit: float
     sound: str
     type: str
+    stun_chance: float
     base_name: str = None
     subtype: str = MELEE
     areas: list[str] | None = None
