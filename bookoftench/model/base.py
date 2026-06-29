@@ -177,6 +177,8 @@ class Combatant(ABC):
     oracle_active: bool = True
     prepared_active: bool = True
 
+    stunned: bool = False
+
     blind: bool = False
     blinded_by: str = ''
     blind_effect: float = 0.0
@@ -193,11 +195,8 @@ class Combatant(ABC):
         self.hp -= damage
         if isinstance(self, NPC):
             self.do_random_dialogue()
-        # TODO generalize, get specific logic out of components
-        if self.name == SLEDGE_HAMMOND:
-            if self.hp > 0:
-                self.hp += 5
-                print_and_sleep(purple("Sledge Hammond took steroids and restored 5 HP!"), 1)
+        sledge_hammond_action(other)
+
         return damage
 
 # ================================================================================================
@@ -219,7 +218,10 @@ class Combatant(ABC):
         else:
             print_and_sleep(yellow(f"You missed!"), 1)
             event_logger.log_event(MissEvent())
-        self.current_weapon.use()
+
+        if self.current_weapon.type == MELEE:
+            if random.random() < 0.50:
+                self.current_weapon.use()
 
 # ================================================================================================
 
@@ -268,6 +270,25 @@ class Combatant(ABC):
                     purple(
                         f"{prefix} blinded by {self.current_weapon.name}. Accuracy down {round(blind_effect * 100)}% for "
                         f"{blind_turns} turns"), 1)
+
+# ================================================================================================
+
+    def handle_stun(self, other: "Combatant") -> None:
+        if self.stunned:
+            return
+
+        if random.random() >= other.current_weapon.stun:
+            return
+
+        self.stunned = True
+
+        stun_text = (
+            f"{self.name} was stunned by {other.current_weapon.name}."
+            if isinstance(self, NPC)
+            else f"You were stunned by the enemy's {other.current_weapon.name}."
+        )
+
+        print_and_sleep(yellow(stun_text), 1)
 
 # ================================================================================================
 
@@ -362,3 +383,12 @@ class Combatant(ABC):
                 self.hp += min(amount, self.max_hp - self.hp)
                 print_and_sleep(green(f"{self.name} used an item and restored {self.hp - original} HP."), time)
                 self.prepared_active = False
+
+# ================================================================================================
+
+def sledge_hammond_action(other: Combatant) -> None:
+    if other.name == SLEDGE_HAMMOND:
+        if other.hp > 0:
+            other.hp += 5
+            print_and_sleep(purple("Sledge Hammond took steroids and restored 5 HP!"), 1)
+    return None
