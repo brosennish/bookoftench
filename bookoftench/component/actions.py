@@ -1254,7 +1254,7 @@ class EncounterBoss(GatekeepingComponent):
     @staticmethod
     @functional_component(state_dependent=True)
     def _all_bosses_dead_component(game_state: GameState):
-        print_and_sleep(yellow("All bosses in this area are currently in Hell.\n"), 1.5)
+        print_and_sleep(yellow("You came up dry."), 1)
         return game_state
 
 # ================================================================================================
