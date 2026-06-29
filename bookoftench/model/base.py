@@ -218,6 +218,7 @@ class Combatant(ABC):
         else:
             print_and_sleep(yellow(f"You missed!"), 1)
             event_logger.log_event(MissEvent())
+        self.current_weapon.use()
 
 # ================================================================================================
 
