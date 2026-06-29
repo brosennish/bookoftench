@@ -459,7 +459,7 @@ class BuildWeaponsSelection(LinearComponent):
         weapons_sorted = sorted(weapon_options, key=lambda w: w.damage)
 
         for w in weapons_sorted:
-            print_and_sleep(w.get_complete_format(None, None))
+            print_and_sleep(w.get_build_format(None, None))
 
         selections = []
 
@@ -1346,6 +1346,17 @@ class Battle(LabeledSelectionComponent):
         @subscribe_function(FleeEvent)
         def handle_flee(_: FleeEvent):
             self.fled = True
+
+    def _toggle_battle_status_view(self):
+        if self.status_view == 1:
+            self.status_view = 2
+        elif self.status_view == 2:
+            self.status_view = 3
+        elif self.status_view == 3:
+            self.status_view = 4
+        else:
+            self.status_view = 1
+        return self.game_state
 
 # ================================================================================================
 

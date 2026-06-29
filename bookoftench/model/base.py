@@ -87,6 +87,19 @@ class WeaponBase(ABC):
         else:
             return f"{self.uses}"
 
+    def get_build_format(self, strength: float | None, acc: float | None) -> str:
+        crit_chance = round(self.crit + max(self.acc - 1, 0) * 0.10, 2)
+        crit_chance = min(crit_chance, 0.35)
+
+        return f"{cyan(self.name)}\n{dim(' | ').join([
+            f"{dim("Dmg:")} {red(f"{round(self.damage * strength if strength and self.type == MELEE else self.damage):<2}")}",
+            f"{dim("Acc:")} {yellow(f"{round(self.acc * acc if acc and self.type == RANGED else self.acc, 2):<4}")}",
+            f"{dim("Var:")} {f"{red(f"{self.var}")}"}",
+            f"{dim("Crit:")} {yellow(f"{crit_chance:<4}")}",
+            f"{dim("Stun:")} {yellow(f"{self.stun:<4}")}",
+            f"{dim("Uses:")} {self.format_uses()}",
+        ])}"
+
     def get_complete_format(self, strength: float | None, acc: float | None) -> str:
         crit_chance = round(self.crit + max(self.acc - 1, 0) * 0.10, 2)
         crit_chance = min(crit_chance, 0.35)

@@ -667,8 +667,21 @@ def get_battle_status_view(game_state: GameState) -> str:
     enemy: Enemy = game_state.current_area.current_enemy
     enemy_name_color = red if enemy.type in [SPECIAL_BOSS, BOSS] else purple
 
+    def get_weapon_display(cmbt: Combatant) -> str:
+        if game_state.weapon_format == 1:
+            return cmbt.current_weapon.get_complete_format(cmbt.strength, cmbt.acc)
+
+        if game_state.weapon_format == 2:
+            return cmbt.current_weapon.get_complete_unlabeled_format(cmbt.strength, cmbt.acc)
+
+        if game_state.weapon_format == 3:
+            return cmbt.current_weapon.get_simple_format()
+
+        return cmbt.current_weapon.get_complete_format(cmbt.strength, cmbt.acc)
+
     def format_combatant_data(cmbt: Combatant, name_color) -> str:
         blind_turns = f"{cmbt.blind_turns} turn{'s' if cmbt.blind_turns > 1 else ''}"
+        weapon_display = get_weapon_display(cmbt)
 
         return (f"\n{name_color(cmbt.name)}"
                 f"{yellow(' (stunned)') if cmbt.stunned else ''}"
@@ -677,7 +690,7 @@ def get_battle_status_view(game_state: GameState) -> str:
                 f"{red(' (crit)') if cmbt.crit_active else ''}"
                 f"{orange(' (wanted)') if game_state.is_wanted(cmbt) else ''} {dim('-')} "
                 f"{p_color(cmbt.hp, cmbt.max_hp)(f'{cmbt.hp} HP')}"
-                f"\n{cmbt.current_weapon.get_complete_format(cmbt.strength, cmbt.acc)}")
+                f"\n{weapon_display}")
 
     return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, enemy_name_color)}\n"
 
