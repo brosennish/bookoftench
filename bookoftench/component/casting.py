@@ -642,7 +642,7 @@ class Pull(NoOpComponent):
         pull_mult = self.game_state.current_fishing_area.pull_mult
         fish = self.game_state.current_fish
         missing_stamina_ratio = (fish.max_stamina - fish.stamina) / fish.max_stamina
-        pull_bonus = missing_stamina_ratio * 5
+        pull_bonus = missing_stamina_ratio * 4
 
         # --- logic ---
         pull = random.randint(2, 5)
@@ -728,6 +728,7 @@ class Reel(NoOpComponent):
         return FishTurn(self.game_state).run()
 
     @staticmethod
+    @staticmethod
     def get_reel(fish, player) -> int:
         reel = random.randint(1, 3)
         missing_stamina_ratio = (fish.max_stamina - fish.stamina) / fish.max_stamina
@@ -742,7 +743,7 @@ class Reel(NoOpComponent):
         elif fish.state == ENRAGED:
             reel -= 1
 
-        reel += min(player.fishing_lvl // 2, 3)
+        reel += min(player.fishing_lvl // 3, 2)
         reel *= min(player.strength, 1.15)
         reel *= get_rod_modifier(player)
         reel = max(1, reel)
@@ -825,6 +826,7 @@ class GiveLine(NoOpComponent):
         return round(line)
 
     @staticmethod
+    @staticmethod
     def apply_give_line(fish, line: int, player) -> None:
         # --- distance ---
         original_distance = fish.distance
@@ -845,7 +847,7 @@ class GiveLine(NoOpComponent):
             rage_loss += 4
 
         rage_loss += min(player.fishing_lvl // 2, 3)
-        rage_loss += min(player.rod_lvl - 1, 3)
+        rage_loss += min(player.rod_lvl // 3, 2)
 
         fish.rage -= rage_loss
         fish.rage = max(0, fish.rage)
@@ -1008,4 +1010,4 @@ def print_fish_turn_results(run: int, rage_delta: int) -> None:
 
 
 def get_rod_modifier(player: Player) -> float:
-    return 1 + ((player.rod_lvl - 1) * 0.10)
+    return 1 + ((player.rod_lvl - 1) * 0.04)
