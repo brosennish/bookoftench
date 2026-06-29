@@ -78,6 +78,7 @@ class GameState:
     _bounty: int = 0
 
     status_view: int = 1
+    weapon_format: int = 1
 
     victory: bool = False
 
