@@ -1284,20 +1284,50 @@ class SpawnEnemy(LinearComponent):
         return self.game_state
 
 # ================================================================================================
+# ================================================================================================
 
 class Battle(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
+        attack_binding = SelectionBinding('A', "Attack", Attack)
+        item_binding = SelectionBinding('I', "Use Item", UseItem)
+        switch_weapon_binding = SelectionBinding('S', "Switch Weapon", EquipWeapon)
+        flee_binding = FleeSelectionBinding('F', "Flee", TryFlee, game_state)
+        view_binding = SelectionBinding('V', "View", DisplayInfo)
+        toggle_binding = SelectionBinding(
+            'T',
+            "Toggle",
+            functional_component()(lambda: self._toggle_battle_status_view()),
+        )
+
+        main_bindings = [
+            attack_binding,
+            item_binding,
+            switch_weapon_binding,
+            flee_binding,
+            view_binding,
+        ]
+
+        toggle_bindings = [
+            toggle_binding,
+        ]
+
         super().__init__(
             game_state,
-            top_level_prompt_callback=lambda gs: print_and_sleep(get_battle_status_view(gs)),
-            bindings=[
-                SelectionBinding('A', "Attack", Attack),
-                SelectionBinding('I', "Use Item", UseItem),
-                SelectionBinding('S', "Switch Weapon", EquipWeapon),
-                FleeSelectionBinding('F', "Flee", TryFlee, game_state),
-                SelectionBinding('V', "View", DisplayInfo),
-            ]
+            bindings=[*main_bindings, *toggle_bindings],
         )
+
+        self.selection_components = [
+            LabeledSelectionComponent(
+                game_state,
+                main_bindings,
+                top_level_prompt_callback=lambda gs: print_and_sleep(get_battle_status_view(gs)),
+            ),
+            LabeledSelectionComponent(
+                game_state,
+                toggle_bindings,
+            ),
+        ]
+
         self.player = self.game_state.player
         self.enemy = self.game_state.current_area.current_enemy
         self.player.can_flee = False
@@ -1307,6 +1337,8 @@ class Battle(LabeledSelectionComponent):
 
         self.fled = False
         self._subscribe_listeners()
+
+# ================================================================================================
 
     def play_theme(self) -> None:
         current_enemy = self.game_state.current_area.current_enemy
@@ -1334,30 +1366,33 @@ class Battle(LabeledSelectionComponent):
 
         return True
 
+# ================================================================================================
+
     def display_options(self) -> None:
         self.handle_player_stun()
 
         if self.can_exit():
             return
 
-        super().display_options()
+        self.selection_components[0].display_options()
+        self.selection_components[1].display_options()
+
+    def _toggle_battle_status_view(self):
+        if self.game_state.weapon_format == 1:
+            self.game_state.weapon_format = 2
+            print_and_sleep(dim("Weapon display set to simple."), 1)
+        else:
+            self.game_state.weapon_format = 1
+            print_and_sleep(dim("Weapon display set to complete."), 1)
+
+        return self.game_state
 
     def _subscribe_listeners(self):
         @subscribe_function(FleeEvent)
         def handle_flee(_: FleeEvent):
             self.fled = True
 
-    def _toggle_battle_status_view(self):
-        if self.status_view == 1:
-            self.status_view = 2
-        elif self.status_view == 2:
-            self.status_view = 3
-        elif self.status_view == 3:
-            self.status_view = 4
-        else:
-            self.status_view = 1
-        return self.game_state
-
+# ================================================================================================
 # ================================================================================================
 
 class EnemyInfect(NoOpComponent):

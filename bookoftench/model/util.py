@@ -672,10 +672,7 @@ def get_battle_status_view(game_state: GameState) -> str:
             return cmbt.current_weapon.get_complete_format(cmbt.strength, cmbt.acc)
 
         if game_state.weapon_format == 2:
-            return cmbt.current_weapon.get_complete_unlabeled_format(cmbt.strength, cmbt.acc)
-
-        if game_state.weapon_format == 3:
-            return cmbt.current_weapon.get_simple_format()
+            return cmbt.current_weapon.get_simple_format(cmbt.strength, cmbt.acc)
 
         return cmbt.current_weapon.get_complete_format(cmbt.strength, cmbt.acc)
 
