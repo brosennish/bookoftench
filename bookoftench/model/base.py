@@ -257,9 +257,13 @@ class Combatant(ABC):
         self.blind_turns = blind_turns
 
     def handle_blinding(self, other: "Combatant") -> None:
+        if self.current_weapon.type != BLIND:
+            return
+
         if other.blind:
             print_and_sleep(yellow(f"{other.name} is already blinded!"), 1)
             return
+
         blind_effect = self.current_weapon.get_blind_effect()
         if blind_effect > 0:
             blind_turns = self.current_weapon.get_blind_turns()
@@ -274,18 +278,18 @@ class Combatant(ABC):
 # ================================================================================================
 
     def handle_stun(self, other: "Combatant") -> None:
-        if self.stunned:
+        if other.stunned:
             return
 
-        if random.random() >= other.current_weapon.stun:
+        if random.random() >= self.current_weapon.stun:
             return
 
-        self.stunned = True
+        other.stunned = True
 
         stun_text = (
-            f"{self.name} was stunned by {other.current_weapon.name}."
-            if isinstance(self, NPC)
-            else f"You were stunned by the enemy's {other.current_weapon.name}."
+            f"{other.name} was stunned by your {self.current_weapon.name}!"
+            if isinstance(other, NPC)
+            else f"You were stunned by the enemy's {self.current_weapon.name}!"
         )
 
         print_and_sleep(yellow(stun_text), 1)
@@ -295,35 +299,51 @@ class Combatant(ABC):
     # TODO - refactor
     def handle_hit(self, other: "Combatant") -> None:
         self.current_weapon.use()
+
         if not self.is_alive():  # solomon train
             return
-        base_damage = self.current_weapon.calculate_base_damage()  # calculate base damage
+
+        # --- calculate base damage ---
+        base_damage = self.current_weapon.calculate_base_damage()
+
+        # apply strength to melee
         if self.current_weapon.type == MELEE:
-            base_damage = round(base_damage * self.strength)  # apply strength to melee
-        crit = random.random() < self.get_crit_chance()  # get calculated crit chance
+            base_damage = round(base_damage * self.strength)
+
+        # --- get calculated crit chance ---
+        crit = random.random() < self.get_crit_chance()
         if self.crit_active:
             crit = True
             self.crit_active = False
         self.handle_crit(crit)
 
-        damage_inflicted = round(base_damage * 1.5) if crit else base_damage  # 1.5x damage if crit
+        # --- 1.5x damage if crit ---
+        damage_inflicted = round(base_damage * 1.5) if crit else base_damage
 
         if isinstance(other, NPC):
+            # --- double damage if item used ---
             if self.current_weapon.type == MELEE and self.double_damage_active == True:
-                damage_inflicted *= 2  # double damage if item used
+                damage_inflicted *= 2
                 self.double_damage_active = False
                 print_and_sleep(red("*** Double damage ***"), 1)
+
+            # --- print and log ---
             print_and_sleep(f"You attacked {other.name} with your {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
             event_logger.log_event(HitEvent(self.current_weapon.type))
+
         else:
             pronoun = "its" if self.name in It_Its else "their"
             print_and_sleep(f"{self.name} attacked you with {pronoun} {self.current_weapon.name} for "
                             f"{red(damage_inflicted)} damage!", 1)
 
         other.take_damage(damage_inflicted, self)
-        if self.current_weapon.type == BLIND:
-            self.handle_blinding(other)
+
+        # --- handle weapon effects ---
+        self.handle_blinding(other)
+        self.handle_stun(other)
+
+        # --- handle broken weapon ---
         if self.current_weapon.is_broken():
             play_sound(WEAPON_BROKE)
             print_and_sleep(yellow(f"{self.current_weapon.name} broke!"), 1)
@@ -344,37 +364,44 @@ class Combatant(ABC):
 
 # ================================================================================================
 
+    # todo - abstract trait logic and take time as parameter
     def handle_traits(self, other: "Combatant") -> None:
         time = 1
+
         if self.trait.name == BUTTERFINGERS:
             dropped = min(self.coins, random.randint(1, 10))
             self.coins -= dropped
             word = 'coin' if dropped == 1 else 'coins'
             if dropped > 0:
                 print_and_sleep(yellow(f"{self.name} dropped {dropped} {word}."), time)
+
         elif self.trait.name == INVESTOR:
             change = random.randint(-10, 10)
             if change != 0:
                 if change < 0 and self.coins < abs(change):
                     change = self.coins * -1
                 self.coins += change
+
         elif self.trait.name == JUNKIE:
             if self.hp < 50 and self.junkie_active:
                 amount = round(random.uniform(0.1, 0.25), 2)
                 self.strength += amount
                 print_and_sleep(green(f"{self.name} got yoked and increased strength by {amount}."), time)
                 self.junkie_active = False
+
         elif other.current_weapon.type == BLIND and self.trait.name == ORACLE and self.oracle_active:
             self.strength += round(random.uniform(0.03, 0.12), 2)
             self.acc += round(random.uniform(0.03, 0.12), 2)
             print_and_sleep(green(f"{self.name}'s strength and accuracy increased."), time)
             other.oracle_active = False
+
         elif self.trait.name == PLANT and self.hp < self.max_hp:
             amount = random.randint(1, 5)
             if (self.max_hp - self.hp) < amount:
                 amount = self.max_hp - self.hp
             self.hp += amount
             print_and_sleep(green(f"{self.name} regenerated {amount} HP."), time)
+
         elif self.trait.name == PREPARED:
             threshold = random.uniform(0.1, 0.5)
             if self.hp < (self.max_hp * threshold) and self.prepared_active:

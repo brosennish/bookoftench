@@ -163,21 +163,25 @@ class SpecialEventComponent(LabeledSelectionComponent):
 
     def _handle_selection_component(self, special_event: SpecialEvent, choice: int):
         def selection_component():
-            if special_event.method:
-                method = getattr(self, special_event.method)
+            if not special_event.method:
+                return self.game_state
 
-                if self.investment:
-                    if self.can_afford_investment(choice):
-                        if method(self.game_state, choice, self.investment):
-                            self.leave = True
-                            return self.game_state
-                    else:
-                        print_and_sleep(yellow("Need more coin."), 1)
+            method = getattr(self, special_event.method)
 
+            if self.investment:
+                if not self.can_afford_investment(choice):
+                    print_and_sleep(yellow("Need more coin."), 1)
                     return self.game_state
 
-                method(self.game_state, choice)
-                self.leave = True
+                purchased = method(self.game_state, choice, self.investment)
+
+                if purchased:
+                    self.leave = True
+
+                return self.game_state
+
+            method(self.game_state, choice)
+            self.leave = True
 
             return self.game_state
 
@@ -778,6 +782,8 @@ I'm scheduled to be buried alive at 6... or was it 8?"""), 3)
 
         print_and_sleep(green(f"You invested {buy_in} of coin in {invest_obj.name}."), 1.5)
         print_and_sleep(green(f"It should mature around level {invest_obj.maturity_lvl}."), 1.5)
+
+        return True
 
 # ================================================================================================
 
