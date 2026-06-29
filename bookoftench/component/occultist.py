@@ -7,7 +7,7 @@ from bookoftench.component.base import LabeledSelectionComponent, SelectionBindi
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import OCCULTIST_THEME, RITUAL, PURCHASE
 from bookoftench.data.components import OCCULTIST
-from bookoftench.data.environment import FULL, NIGHT
+from bookoftench.data.environment import FULL
 from bookoftench.data.rituals import Occultist_Lines
 from bookoftench.model import GameState
 from bookoftench.model.events import OccultistEvent
@@ -23,10 +23,10 @@ from bookoftench.util import print_and_sleep
 @register_component(OCCULTIST)
 class OccultistTime(GatekeepingComponent):
     def __init__(self, game_state: GameState):
-        super().__init__(game_state, decision_function=lambda: game_state.time_of_day == NIGHT,
+        super().__init__(game_state, decision_function=lambda: game_state.time_of_day == FULL,
                          accept_component=OccultistBouncer,
                          deny_component=functional_component()(lambda: print_and_sleep(
-                             blue("The Occultist only performs rituals at night."), 1.5)))
+                             blue("The Occultist requires a Full Moon to perform rituals."), 1.5)))
 
 # ================================================================================================
 
