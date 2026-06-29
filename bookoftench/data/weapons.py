@@ -74,6 +74,7 @@ SLEDGEHAMMER = "Sledgehammer"
 SLINGSHOT = "Slingshot"
 STAFF = "Staff"
 STONE_SPEAR = "Stone Spear"
+STUN_GUN = "Stun Gun"
 SUITCASE = "Suitcase"
 SURVIVAL_KNIFE = "Survival Knife"
 SWITCHBLADE = "Switchblade"
@@ -141,12 +142,18 @@ Weapons = [
      'sound': '', 'areas': NA},
 
     # =====================================================
-    #                       TIER 0 (STUN)
+    #                     TIER 0 (STUN)
     # =====================================================
+
+    {'name': STUN_GUN, 'type': MELEE, 'subtype': MELEE, 'tier': 0,
+     'damage': 4, 'uses': 2, 'acc': 0.82, 'var': 1, 'crit': 0.02, 'stun': 1.0,
+     'cost': 55, 'sell_value': 25,
+     'sound': audio.MAGIC, 'areas': [CITY]},
 
     # =====================================================
     #                       TIER 1
     # =====================================================
+
     {'name': FOAM_FINGER, 'type': MELEE, 'subtype': MELEE, 'tier': 1,
      'damage': 1, 'uses': -1, 'acc': 0.88, 'var': 0, 'crit': 0.10, 'stun': 0.01,
      'cost': 0, 'sell_value': 0,
@@ -221,10 +228,6 @@ Weapons = [
      'damage': 13, 'uses': 13, 'acc': 0.84, 'var': 2, 'crit': 0.06, 'stun': 0.06,
      'cost': 16, 'sell_value': 8,
      'sound': audio.BLUNT, 'areas': NA},
-
-    # =====================================================
-    #                       TIER 2
-    # =====================================================
 
     # =====================================================
     #                       TIER 2
@@ -406,6 +409,7 @@ Weapons = [
     # =====================================================
     #                 TIER 4 (PROJECTILE)
     # =====================================================
+
     {'name': COMPOUND_BOW, 'type': RANGED, 'subtype': RANGED, 'tier': 4,
      'damage': 29, 'uses': 13, 'acc': 0.75, 'var': 3, 'crit': 0.18, 'stun': 0,
      'cost': 75, 'sell_value': 37,
@@ -474,6 +478,7 @@ Weapons = [
     # =====================================================
     #                       TIER 5 (HEAVY)
     # =====================================================
+
     {'name': CHAINSAW, 'type': MELEE, 'subtype': MELEE, 'tier': 5,
      'damage': 40, 'uses': 8, 'acc': 0.71, 'var': 7, 'crit': 0.10, 'stun': 0.03,
      'cost': 100, 'sell_value': 50,
@@ -487,6 +492,7 @@ Weapons = [
     # =====================================================
     #                       SPECIAL
     # =====================================================
+
     {'name': TENCH_CANNON, 'type': RANGED, 'subtype': RANGED, 'tier': 5,
      'damage': 150, 'uses': 1, 'acc': 0.20, 'var': 1, 'crit': 0.10, 'stun': 0,
      'cost': 100, 'sell_value': 40,
@@ -495,6 +501,7 @@ Weapons = [
     # =====================================================
     #                NOT OBTAINABLE BY PLAYER
     # =====================================================
+
     {'name': BEAK, 'type': SPECIAL, 'subtype': MELEE, 'tier': 0,
      'damage': 40, 'uses': -1, 'acc': 0.66, 'var': 5, 'crit': 0.20, 'stun': 0.05,
      'cost': 0, 'sell_value': 0,
