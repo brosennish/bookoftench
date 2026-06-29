@@ -728,7 +728,7 @@ Fish_Species = [
      'base_value': 100, 'rage_factor': 0.95, 'speed': 1.0, 'strength': 1.0, 'max_stamina': 60,
      'preferred_bait': [b.WORM, b.DOUGH_BALL, b.CRICKET],
      'spit_hook_chance': 0.003, 'protected': False, 'max_age': 20,
-     'description': 'The holier fish.',
+     'description': 'The holiest of fish.',
      },
 
     {'name': GOLDFISH, 'rarity': COMMON, 'areas': [SHALLOWS], 'time': [DAY], 'moon': None,
