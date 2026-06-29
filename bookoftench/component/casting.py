@@ -504,12 +504,7 @@ class FishTurn(NoOpComponent):
         run_mult = fishing_area.run_mult
 
         # --- stamina ---
-        if stamina_ratio < 0.33:
-            stamina_modifier = 0.5
-        elif stamina_ratio < 0.67:
-            stamina_modifier = 0.75
-        else:
-            stamina_modifier = 1
+        stamina_modifier = get_stamina_modifier(stamina_ratio)
 
         # --- state ---
         if fish.state == AGITATED:
@@ -532,6 +527,8 @@ class FishTurn(NoOpComponent):
         run *= state_modifier
         run *= run_mult
 
+        run *= fish.speed_multiplier
+
         if burst:
             total_run = max(1, round(run * 2))
 
@@ -539,9 +536,7 @@ class FishTurn(NoOpComponent):
                 play_sound(WHIFF)
                 print_and_sleep(yellow("The fish had a burst of speed!"))
         else:
-            total_run = max(1, round(run * fish.speed_multiplier))
-
-        fish.distance += total_run
+            total_run = max(1, round(run))
 
         return total_run
 
@@ -560,12 +555,7 @@ class FishTurn(NoOpComponent):
             state_modifier = 1
 
         # --- stamina ---
-        if stamina_ratio < 0.33:
-            stamina_modifier = 1.5
-        elif stamina_ratio < 0.67:
-            stamina_modifier = 1.25
-        else:
-            stamina_modifier = 1
+        stamina_modifier = get_stamina_modifier(stamina_ratio)
 
         original_rage = fish.rage
 
@@ -728,7 +718,6 @@ class Reel(NoOpComponent):
         return FishTurn(self.game_state).run()
 
     @staticmethod
-    @staticmethod
     def get_reel(fish, player) -> int:
         reel = random.randint(1, 3)
         missing_stamina_ratio = (fish.max_stamina - fish.stamina) / fish.max_stamina
@@ -826,7 +815,6 @@ class GiveLine(NoOpComponent):
         return round(line)
 
     @staticmethod
-    @staticmethod
     def apply_give_line(fish, line: int, player) -> None:
         # --- distance ---
         original_distance = fish.distance
@@ -903,41 +891,49 @@ class ObserveFish(NoOpComponent):
 
         fish.observed_characteristics.append(observation)
 
+        # todo - refactor
         if observation == SPECIES:
             color = white
             word = SPECIES
             value = fish.base_name
             fish.species_observed = True
             fish.species_known = True
+
         elif observation == VARIANT:
             color = purple
             word = VARIANT
             value = fish.variant if fish.variant else "None"
             fish.variant_observed = True
+
         elif observation == RARITY:
             color = fish.get_rarity_color()
             word = RARITY
             value = fish.rarity
             fish.rarity_observed = True
+
         elif observation == STRENGTH:
             color = yellow
             word = STRENGTH
             value = str(round(fish.strength, 2))
             fish.strength_observed = True
+
         elif observation == STAMINA:
             color = yellow
             word = STAMINA
             value = yellow(f"{fish.stamina}/{fish.max_stamina}")
+
         elif observation == SPEED:
             color = cyan
             word = SPEED
             value = str(round(fish.speed, 2))
             fish.speed_observed = True
+
         elif observation == RAGE_FACTOR:
             color = red
             word = RAGE_FACTOR
             value = str(round(fish.rage_factor, 2))
             fish.rage_factor_observed = True
+
         else:
             return
 
@@ -1007,6 +1003,21 @@ def print_fish_turn_results(run: int, rage_delta: int) -> None:
 
     if parts:
         print_and_sleep(f"{fish}: {' | '.join(parts)}", 1.5)
+
+
+def get_stamina_modifier(stamina_ratio: float) -> float:
+    if stamina_ratio >= 0.67:
+        return 1.0
+
+    if stamina_ratio >= 0.25:
+        progress = (stamina_ratio - 0.25) / (0.67 - 0.25)
+        return 0.75 + (progress * 0.25)
+
+    if stamina_ratio >= 0.10:
+        progress = (stamina_ratio - 0.10) / (0.25 - 0.10)
+        return 0.5 + ((progress ** 2) * 0.25)
+
+    return 0.5
 
 
 def get_rod_modifier(player: Player) -> float:
