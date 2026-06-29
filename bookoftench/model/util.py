@@ -669,12 +669,14 @@ def get_battle_status_view(game_state: GameState) -> str:
 
     def format_combatant_data(cmbt: Combatant, name_color) -> str:
         blind_turns = f"{cmbt.blind_turns} turn{'s' if cmbt.blind_turns > 1 else ''}"
+
         return (f"\n{name_color(cmbt.name)}"
+                f"{yellow(' (stunned)') if cmbt.stunned else ''}"
                 f"{red(f' (blinded {int(cmbt.blind_effect * 100)}% for {blind_turns})') if cmbt.blind else ''}"
-                f"{red(f' (2x)') if cmbt.double_damage_active else ''}"
-                f"{red(f' (crit)') if cmbt.crit_active else ''}"
+                f"{red(' (2x)') if cmbt.double_damage_active else ''}"
+                f"{red(' (crit)') if cmbt.crit_active else ''}"
                 f"{orange(' (wanted)') if game_state.is_wanted(cmbt) else ''} {dim('-')} "
-                f"{p_color(cmbt.hp, cmbt.max_hp)(f"{cmbt.hp} HP")}"
+                f"{p_color(cmbt.hp, cmbt.max_hp)(f'{cmbt.hp} HP')}"
                 f"\n{cmbt.current_weapon.get_complete_format(cmbt.strength, cmbt.acc)}")
 
     return f"{format_combatant_data(player, orange)}\n{format_combatant_data(enemy, enemy_name_color)}\n"

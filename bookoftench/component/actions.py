@@ -1299,10 +1299,12 @@ class Battle(LabeledSelectionComponent):
             ]
         )
         self.player = self.game_state.player
+        self.enemy = self.game_state.current_area.current_enemy
         self.player.can_flee = False
+
         if perk_is_active(DEATH_CAN_WAIT):
             self.player.cheat_death_enabled = True
-        self.enemy = self.game_state.current_area.current_enemy
+
         self.fled = False
         self._subscribe_listeners()
 
@@ -1316,7 +1318,29 @@ class Battle(LabeledSelectionComponent):
         play_music(theme)
 
     def can_exit(self) -> bool:
-        return self.fled or self.player.can_flee or not (self.player.is_alive() and self.enemy.is_alive())
+        return self.fled or self.player.can_flee or not (
+            self.player.is_alive() and self.enemy.is_alive()
+        )
+
+    def handle_player_stun(self) -> bool:
+        if not self.player.stunned:
+            return False
+
+        print_and_sleep(yellow("You are stunned and unable to move!"), 2)
+        self.player.stunned = False
+
+        if self.enemy.is_alive() and self.player.is_alive():
+            self.enemy.attack(self.player)
+
+        return True
+
+    def display_options(self) -> None:
+        self.handle_player_stun()
+
+        if self.can_exit():
+            return
+
+        super().display_options()
 
     def _subscribe_listeners(self):
         @subscribe_function(FleeEvent)

@@ -57,7 +57,7 @@ class Weapon(WeaponBase, Buyable):
             cyan(f"{self.name:<24}"),
             f"Cost: {orange(self.cost):<18}",
             f"Dmg: {red(f'{self.damage:<3}')}",
-            f"Acc: {yellow(f'{self.accuracy:<4}')}",
+            f"Acc: {yellow(f'{self.acc:<4}')}",
             f"Var: {red(f'{self.var}')}",
             f"Crit: {yellow(f'{self.crit:<4}')}",
             f"Uses: {self.format_uses()}",
@@ -91,7 +91,7 @@ class SellableWeapon(Weapon):
             cyan(f"{self.name:<24}"),
             f"Value: {orange(self.sell_value):<18}",
             f"{dim('Dmg:')} {red(f'{self.damage:<3}')}",
-            f"{dim('Acc:')} {yellow(f'{self.accuracy:<4}')}",
+            f"{dim('Acc:')} {yellow(f'{self.acc:<4}')}",
             f"{dim('Var:')} {red(f'{self.var}')}",
             f"{dim('Crit:')} {yellow(f'{self.crit:<4}')}",
             f"{dim('Uses:')} {self.format_uses()}",
@@ -128,9 +128,9 @@ def make_elite_weapon(weapon: Weapon) -> Weapon:
 
     weapon.damage += random.randint(4, 6)
 
-    original_accuracy = weapon.accuracy
+    original_accuracy = weapon.acc
     accuracy_gain = random.uniform(0.03, 0.06)
-    weapon.accuracy = round(min(accuracy_gain + original_accuracy, 1), 2)
+    weapon.acc = round(min(accuracy_gain + original_accuracy, 1), 2)
 
     original_crit = weapon.crit
     crit_gain = random.uniform(0.03, 0.09)
