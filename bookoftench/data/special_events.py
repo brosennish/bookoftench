@@ -1,7 +1,7 @@
 from bookoftench.data import areas as a
 from bookoftench.data.audio import ROULETTE_THEME, HOSPITAL_THEME, BATTLE_THEME
 from bookoftench.data.environment import DAY, NIGHT
-from bookoftench.data.investments import SEMEN_CANDLE, SUN_SUITS, BOBS_BOXES
+from bookoftench.data.investments import SEMEN_CANDLE, SUN_SUITS, BOBS_BOXES, MAIL_ORDER_EGGS
 from bookoftench.ui import green, purple, yellow, blue, red, orange, cyan
 
 # ================================================================================================
@@ -51,7 +51,7 @@ SKUNK_APE_INTRO = "Skunk Ape Intro"
 
 # Investment
 BOB_ROBERTSON_PROPOSAL = "Bob Robertson Proposal"
-MAIL_ORDER_EGGS = "Mail Order Eggs"
+MAIL_ORDER_EGGS_PROPOSAL = "Mail Order Eggs Proposal"
 SEMEN_CANDLE_PROPOSAL = "Semen Candle Proposal"
 SUN_SUITS_PROPOSAL = "Sun Suits Proposal"
 
@@ -390,7 +390,7 @@ You adjust your jines and prepare for the inevitable...
 
 Like there is someone, or something, watching your every movement -
 
-Listening to your every thought like its music.
+Listening to your every thought like it's sad, dried out music.
 
 You rotate your head as far as you can, straining your neck, to scan your pitch-black surroundings.
 
@@ -728,7 +728,7 @@ So, yes. Uh... recently, I started up my own door-to-door, uh, cardboard box del
 
 However, I'm... uh... having some difficulties, both financial and otherwise.
 
-You know, I don't have a, uh, car, so... I have to delivery on foot, yes.
+You know, I don't have a, uh, car, so... I have to deliver on foot, yes.
 
 Many times, folks have pulled knives and related weaponry on me when I've knocked on their entryways.
 
@@ -749,7 +749,7 @@ Maturity: 3-4 Levels
 
 # ================================================================================================
 
-    {'name': MAIL_ORDER_EGGS, 'color': cyan, 'sleep': 3, 'theme': None, 'type': INVESTMENT,
+    {'name': MAIL_ORDER_EGGS_PROPOSAL, 'color': cyan, 'sleep': 3, 'theme': None, 'type': INVESTMENT,
      'areas': [a.CITY], 'time': [DAY], 'moon': None, 'season': None,
      'text': """A man in an Vladymir Georgina suit approaches you...
 

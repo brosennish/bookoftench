@@ -222,6 +222,11 @@ class Combatant(ABC):
         if self.current_weapon.type == MELEE:
             if random.random() < 0.50:
                 self.current_weapon.use()
+        else:
+            self.current_weapon.use()
+
+        # --- handle broken weapon ---
+        self.check_weapon_status()
 
 # ================================================================================================
 
@@ -244,6 +249,12 @@ class Combatant(ABC):
     @abstractmethod
     def handle_broken_weapon(self) -> None:
         pass
+
+    def check_weapon_status(self) -> None:
+        if self.current_weapon.is_broken():
+            play_sound(WEAPON_BROKE)
+            print_and_sleep(yellow(f"{self.current_weapon.name} broke!"), 1)
+            self.handle_broken_weapon()
 
 # ================================================================================================
 
@@ -301,7 +312,6 @@ class Combatant(ABC):
 
 # ================================================================================================
 
-    # TODO - refactor
     def handle_hit(self, other: "Combatant") -> None:
         self.current_weapon.use()
 
@@ -350,10 +360,7 @@ class Combatant(ABC):
         self.handle_stun(other)
 
         # --- handle broken weapon ---
-        if self.current_weapon.is_broken():
-            play_sound(WEAPON_BROKE)
-            print_and_sleep(yellow(f"{self.current_weapon.name} broke!"), 1)
-            self.handle_broken_weapon()
+        self.check_weapon_status()
 
 # ================================================================================================
 
@@ -361,7 +368,7 @@ class Combatant(ABC):
         enemy_turn = not isinstance(other, NPC)
 
         if enemy_turn and self.stunned:
-            print_and_sleep(yellow(f"{self.name} is stunned and unable to move."), 1)
+            print_and_sleep(yellow(f"{self.name} is stunned and unable to move!"), 2)
             self.stunned = False
             return
 

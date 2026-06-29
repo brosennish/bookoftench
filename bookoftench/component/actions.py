@@ -1326,7 +1326,7 @@ class Battle(LabeledSelectionComponent):
         if not self.player.stunned:
             return False
 
-        print_and_sleep(yellow("You are stunned and unable to move!"), 1)
+        print_and_sleep(yellow("You are stunned and unable to move!"), 2)
         self.player.stunned = False
 
         if self.enemy.is_alive() and self.player.is_alive():
@@ -1335,7 +1335,9 @@ class Battle(LabeledSelectionComponent):
         return True
 
     def display_options(self) -> None:
-        if self.handle_player_stun():
+        self.handle_player_stun()
+
+        if self.can_exit():
             return
 
         super().display_options()
