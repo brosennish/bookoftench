@@ -641,7 +641,7 @@ Special_Bosses = [
     {'name': OGRE, 'hp': 255, 'coins': 60, 'trait': JUNKIE,
      'weapons': [w.BARE_HANDS, w.WOODEN_CLUB, w.BONE_CLUB],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1.18, 'acc': 0.95,
-     'item': i.TALKING_DONKEY},
+     'item': i.SAPIENT_BURRO},
 
     {'name': ROUGAROU, 'hp': 235, 'coins': 0, 'trait': None,
      'weapons': [w.CLAWS, w.TEETH, w.FANGS],

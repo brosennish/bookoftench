@@ -13,7 +13,7 @@ COWARD = "Coward"
 LEPRECHAUN = "Leprechaun"
 MERCENARY = "Mercenary"
 TENCH_PERSON = "Tench Person"
-MAKE_A_FISH = "Make a Fish"
+LIZ = "Liz"
 
 # ================================================================================================
 # ================================================================================================
@@ -85,14 +85,14 @@ Builds = [
 
 # ================================================================================================
 
-    {'name': MAKE_A_FISH, 'label': "Comeback Kid",
-     'lives': 1, 'lvl': 1, 'hp': 80, 'str': 0.8, 'acc': 0.9, 'coins': 500, 'luck': 0,
+    {'name': LIZ, 'label': "Liz",
+     'lives': 100, 'lvl': 1, 'hp': 333, 'str': 100, 'acc': 100, 'coins': 10000, 'luck': 7,
      'fishing_lvl': 1, 'rod_lvl': 1,
-     'items': [i.OCEAN_MAN_LUNCH_BOX],
-     'weapons': [w.BARE_HANDS, w.POCKET_KNIFE, w.HARDCOVER_BOOK],
-     'perks': [p.DEATH_CAN_WAIT, p.SOLOMON_TRAIN, p.BROWNMAIL],
-     'illness': MAD_TENCH_DISEASE,
-     'notes': "Tench-fed, foundationally sponsored."},
+     'items': [i.IOU, i.PHOTOSYNTHOPHYL, i.MOON_RUNE, i.TENCH_FILET],
+     'weapons': [w.BARE_HANDS, w.CROSSBOW, w.RIFLE, w.SLEDGEHAMMER],
+     'perks': [p.WALLET_CHAIN],
+     'illness': None,
+     'notes': "It's Liz, boi!"},
 
 # ================================================================================================
 

@@ -233,116 +233,116 @@ Search_Discoverables = [
      "areas": [CITY, FOREST, SWAMP], 
      "desc": "It went for your nuts!"},
 
-    {"pre": None, "name": "Fell Down a Hole", "value": 0, "hp": -6, "rarity": COMMON,
-     "areas": [CAVE], 
+    {"pre": None, "name": "Fell Down a Dark Hole", "value": 0, "hp": -6, "rarity": COMMON,
+     "areas": [CAVE],
      "desc": "Like my proctologist once said, 'Damn, that's one deep hole.'"},
 
-    {"pre": None, "name": "Got Caught in a Bramble", "value": 0, "hp": -3, "rarity": COMMON,
-     "areas": [FOREST, SWAMP], 
+    {"pre": None, "name": "Got Caught in a Pokey Bush", "value": 0, "hp": -4, "rarity": COMMON,
+     "areas": [FOREST, SWAMP],
      "desc": "Poked my loins, poked my jines."},
 
-    {"pre": "were", "name": "Poked by a Thorn", "value": 0, "hp": -3, "rarity": COMMON,
-     "areas": [CITY, FOREST, SWAMP], 
+    {"pre": "were", "name": "Poked by a Thorn", "value": 0, "hp": -2, "rarity": COMMON,
+     "areas": [CITY, FOREST, SWAMP],
      "desc": "Right on the tip... right on the tip."},
 
-    {"pre": "were", "name": "Scratched by a Cat", "value": 0, "hp": -3, "rarity": COMMON,
-     "areas": [CITY], 
+    {"pre": "were", "name": "Clawed by a Cat", "value": 0, "hp": -3, "rarity": COMMON,
+     "areas": [CITY],
      "desc": "Narrowly missed my jugular."},
 
-    {"pre": None, "name": "Slipped on a Mud Pie", "value": 0, "hp": -1, "rarity": COMMON,
-     "areas": [FOREST, SWAMP], 
+    {"pre": None, "name": "Slipped on a Sloppy Mud Pie", "value": 0, "hp": -1, "rarity": COMMON,
+     "areas": [FOREST, SWAMP],
      "desc": "It wasn't mud..."},
 
     {"pre": None, "name": "Stubbed your Toe", "value": 0, "hp": -3, "rarity": COMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], 
+     "areas": [CAVE, CITY, FOREST, SWAMP],
      "desc": "Worse than death."},
 
     {"pre": "were", "name": "Stung by a Bee", "value": 0, "hp": -3, "rarity": COMMON,
-     "areas": [CITY, FOREST], 
+     "areas": [CITY, FOREST],
      "desc": "Right on the tip... of my nose. Call me bozo."},
 
     {"pre": "were", "name": "Stung by a Wasp", "value": 0, "hp": -5, "rarity": COMMON,
-     "areas": [CITY, FOREST], 
+     "areas": [CITY, FOREST],
      "desc": "Shouldn't have eaten it first..."},
 
     {"pre": None, "name": "Swallowed a Bug", "value": 0, "hp": -2, "rarity": COMMON,
-     "areas": [FOREST, SWAMP], 
-     "desc": "Worth it, so much gooey protein."},
+     "areas": [FOREST, SWAMP],
+     "desc": "Worth it, for now?"},
 
     {"pre": "were", "name": "Swarmed by Mosquitos", "value": 0, "hp": -3, "rarity": COMMON,
-     "areas": [FOREST, SWAMP], 
+     "areas": [FOREST, SWAMP],
      "desc": "Narrowly avoided mosquito-transmitted herpes."},
 
     {"pre": None, "name": "Tagged by a Bat", "value": 0, "hp": -3, "rarity": COMMON,
-     "areas": [CAVE], 
+     "areas": [CAVE],
      "desc": "Guess I'm it now!"},
 
-    {"pre": None, "name": "Tripped On the Curb", "value": 0, "hp": -2, "rarity": COMMON,
-     "areas": [CITY], 
-     "desc": "Yep, gotta watch my step."},
+    {"pre": None, "name": "Tripped On a Bloody, Crumbled Curb", "value": 0, "hp": -2, "rarity": COMMON,
+     "areas": [CITY],
+     "desc": "It's Shebokken, you can just say curb."},
 
-    {"pre": None, "name": "Tripped Over a Log", "value": 0, "hp": -3, "rarity": COMMON,
-     "areas": [FOREST, SWAMP], 
-     "desc": "That one's on me."},
+    {"pre": None, "name": "Tripped Over a Decaying Log", "value": 0, "hp": -3, "rarity": COMMON,
+     "areas": [FOREST, SWAMP],
+     "desc": "That one's on me, and now a trillion ants are too."},
 
     # ============================
     #       COMMON / NEUTRAL
     # ============================
 
     {"pre": "some", "name": "Bat Scat", "value": 0, "hp": 0, "rarity": COMMON,
-     "areas": [CAVE], 
+     "areas": [CAVE],
      "desc": "Droppings from above."},
 
     {"pre": "a", "name": "Chakra Specialist", "value": 0, "hp": 0, "rarity": COMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "A total fraud, scamming anyone they can trick into believing their pseudo-scientific bullshit."},
 
     {"pre": "a", "name": "Condom Brochure", "value": 0, "hp": 0, "rarity": COMMON,
-     "areas": [CAVE, FOREST, SWAMP], 
+     "areas": [CAVE, FOREST, SWAMP],
      "desc": "Short for \"Condominium\"."},
 
     {"pre": "a", "name": "Disillusioned Man", "value": 0, "hp": 0, "rarity": COMMON,
-     "areas": [CITY], 
-     "desc": "Sees the conventional world for what it is and does not care for it one bit."},
+     "areas": [CITY],
+     "desc": "Sees the conventional world for what it is and does not especially dig it."},
 
     {"pre": "an", "name": "Expired Riverboat Casino Voucher", "value": 0, "hp": 0, "rarity": COMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "The expiration date is before the issue date."},
 
     {"pre": "a", "name": "Glorious Hole", "value": 0, "hp": 0, "rarity": COMMON,
-     "areas": [CITY, FOREST, SWAMP],
-     "desc": "Glory be to the holiest of holes."},
+     "areas": [CITY],
+     "desc": "Glory be to this glorious hole."},
 
     {"pre": "a", "name": "Mud Bubble", "value": 0, "hp": 0, "rarity": COMMON,
-     "areas": [SWAMP], 
+     "areas": [SWAMP],
      "desc": "Just a big old bubbly brown mud bubble."},
 
     {"pre": "a", "name": "Mole Hole", "value": 0, "hp": 0, "rarity": COMMON,
-     "areas": [CAVE, FOREST], 
+     "areas": [CAVE, FOREST],
      "desc": "There's a mole in that hole... perhaps a multitude, even."},
 
     {"pre": "a", "name": "Noodle Man Wanted Poster", "value": 0, "hp": 0, "rarity": COMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "Noodle man arrested for eating his own bones. More at 11."},
 
     {"pre": "an", "name": "Orange Cat", "value": 0, "hp": 0, "rarity": COMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "Exactly what you're imagining."},
 
     {"pre": "a", "name": "Petition to Impeach The Mayor of Shebokken", "value": 0, "hp": 0, "rarity": COMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "Nearly every resident of Shebokken has signed this petition."},
 
     {"pre": "a", "name": "Religious Flyer", "value": 0, "hp": 0, "rarity": COMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "Ah, yes. The business of organized religion... pay us to save you."},
 
     {"pre": "some", "name": "Sheeple", "value": 0, "hp": 0, "rarity": COMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "They follow the herd and dare not do otherwise."},
 
     {"pre": "a", "name": "Slade CD", "value": 0, "hp": 0, "rarity": COMMON,
-     "areas": [CITY, FOREST, SWAMP], 
+     "areas": [CITY, FOREST, SWAMP],
      "desc": "Came pre-scratched to spare the purchaser from having to listen to it."},
 
 # ================================================================================================
@@ -352,163 +352,163 @@ Search_Discoverables = [
     # ============================
 
     {"pre": "a", "name": "Bag of Snow", "value": 15, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CAVE], 
+     "areas": [CAVE],
      "desc": "\"Property of Santa\" is scribbled on the side."},
 
     {"pre": "a", "name": "Balloon Man Comic Book", "value": 11, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], 
+     "areas": [CAVE, CITY, FOREST, SWAMP],
      "desc": "Balloon Man is a supervillain who kills people by tying large helium balloons to their ankles."},
 
     {"pre": "a", "name": "Blind Fish", "value": 3, "hp": 7, "rarity": UNCOMMON,
-     "areas": [CAVE], 
+     "areas": [CAVE],
      "desc": "The stench of unsuspecting snails is all it needs."},
 
     {"pre": "a", "name": "Blood Brothers DVD Box Set", "value": 11, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "Soap opera about two male friends who menstruate at the same time."},
 
     {"pre": "a", "name": "Blood Bucket", "value": 8, "hp": 8, "rarity": UNCOMMON,
-     "areas": [CITY, FOREST, SWAMP], 
+     "areas": [CITY, FOREST, SWAMP],
      "desc": "There are traces of at least ten individuals in here!?"},
 
     {"pre": "a", "name": "Blood Soaked Robe", "value": 3, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CAVE, FOREST, SWAMP], 
+     "areas": [CAVE, FOREST, SWAMP],
      "desc": "Why does this blood taste like ketchup? Oh yeah, ketchup is cheaper than toad juice."},
 
     {"pre": "a", "name": "Bloody Neighborhood Watch Badge", "value": 3, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "This bozo got more than they bargained for... now that's a real bargain."},
 
     {"pre": "a", "name": "Bucket of Boiling Oil", "value": 8, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "Pairs great with a fresh doily."},
 
     {"pre": "some", "name": "Bush Meat", "value": 7, "hp": 10, "rarity": UNCOMMON,
-     "areas": [CITY, FOREST, SWAMP], 
+     "areas": [CITY, FOREST, SWAMP],
      "desc": "Never know what you'll find in a deep, dense bush."},
 
     {"pre": "a", "name": "Can of Spam", "value": 3, "hp": 8, "rarity": UNCOMMON,
-     "areas": [CAVE, FOREST, SWAMP], 
+     "areas": [CAVE, FOREST, SWAMP],
      "desc": "Great for a morning meal in the Alleghenies."},
 
     {"pre": "a", "name": "Cracked Monocle", "value": 6, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "Wonder if they were playing Monopoly when it happened?"},
 
     {"pre": "a", "name": "Crispy Daniels Signature Bandana", "value": 15, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "An invaluable relic of a cultural and global icon who was executed sooner than was necessary."},
 
     {"pre": "a", "name": "Digital Camera", "value": 15, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], 
+     "areas": [CAVE, CITY, FOREST, SWAMP],
      "desc": "All of the photos are blurry and appear to have a lot of skin in them."},
 
     {"pre": "an", "name": "Engraved Pocket Watch", "value": 13, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], 
+     "areas": [CAVE, CITY, FOREST, SWAMP],
      "desc": "Engraved with some bozo's SoundCloud handle."},
 
     {"pre": "a", "name": "Fanny Pack", "value": 10, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CITY, FOREST], 
+     "areas": [CITY, FOREST],
      "desc": "Only the coolest of cool people wear fanny packs on the daily."},
 
     {"pre": "a", "name": "Giant Worm", "value": 2, "hp": 6, "rarity": UNCOMMON,
-     "areas": [CAVE], 
+     "areas": [CAVE],
      "desc": "I mean... GIANT."},
 
     {"pre": "a", "name": "Grown Man's Button Collection", "value": 8, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CITY, FOREST], 
+     "areas": [CITY, FOREST],
      "desc": "Most of the buttons are from Area 51, oddly enough. You'd think they'd glow in the dark."},
 
     {"pre": "a", "name": "Hand Sandwich", "value": 6, "hp": 8, "rarity": UNCOMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], 
+     "areas": [CAVE, CITY, FOREST, SWAMP],
      "desc": "What you think it is - a severed human hand between to slices of sourdough."},
 
     {"pre": "a", "name": "Human-Laid Egg", "value": 6, "hp": 9, "rarity": UNCOMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], 
+     "areas": [CAVE, CITY, FOREST, SWAMP],
      "desc": "Straight from the snatch and ready to hatch."},
 
     {"pre": "a", "name": "Lava Lamp", "value": 12, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "Coolest lamp ever invented... tastiest, too."},
 
     {"pre": "some", "name": "Lawn Darts", "value": 8, "hp": 0, "rarity": UNCOMMON,
-     "areas": [FOREST], 
+     "areas": [FOREST],
      "desc": "My dad lost his first three kids in lawn darts accidents."},
 
     {"pre": "a", "name": "Lewd Dream Diary", "value": 5, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], 
+     "areas": [CAVE, CITY, FOREST, SWAMP],
      "desc": "The storytelling and character-development is unmatched in today's literary scene."},
 
     {"pre": "a vial of", "name": "Lubricare Medicinal Lube", "value": 6, "hp": 6, "rarity": UNCOMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], 
+     "areas": [CAVE, CITY, FOREST, SWAMP],
      "desc": "For when you need both lubrication and medication during your time of fornication."},
 
     {"pre": "a", "name": "Mail Order Egg", "value": 6, "hp": 8, "rarity": UNCOMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "An egg - vacuum sealed in a manilla envelope and hand-delivered by the post. Sublime."},
 
     {"pre": "a", "name": "Manly Man Comic Book", "value": 13, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], 
+     "areas": [CAVE, CITY, FOREST, SWAMP],
      "desc": "Manly Man is a superhero who is not only a man but is also very manly as well."},
 
     {"pre": "a", "name": "Mealy Boy Comic Book", "value": 8, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], 
+     "areas": [CAVE, CITY, FOREST, SWAMP],
      "desc": "Mealy Boy is Manly Man's small and impotent sidekick. He is covered in an unknown white powder."},
 
     {"pre": "some", "name": "Mystery Milk", "value": 6, "hp": 9, "rarity": UNCOMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], 
+     "areas": [CAVE, CITY, FOREST, SWAMP],
      "desc": "It's definitely milk. That much we can say for certain."},
 
     {"pre": "a", "name": "One-Ply Dipe", "value": 1, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], 
+     "areas": [CAVE, CITY, FOREST, SWAMP],
      "desc": "Might as well go rogue, 'cause this dipe ain't gonna hold."},
 
     {"pre": "a", "name": "Melted FlaVorIce Pop", "value": 1, "hp": 1, "rarity": UNCOMMON,
-     "areas": [CITY, SWAMP], 
+     "areas": [CITY, SWAMP],
      "desc": "For when you're in the mood to suck down a plastic tube of high-fructose corn syrup and petrochemicals."},
 
     {"pre": "a", "name": "Mineral Formation", "value": 9, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CAVE], 
+     "areas": [CAVE],
      "desc": "A phallic formation of massive proportions."},
 
     {"pre": "a", "name": "Pack of Clove Cigarettes", "value": 7, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CITY, FOREST, SWAMP], 
+     "areas": [CITY, FOREST, SWAMP],
      "desc": "For ages -9 months and up..."},
 
     {"pre": "a", "name": "Pager", "value": 3, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "Great for booty calls."},
 
     {"pre": "a", "name": "Paper Mache Tench Balloon", "value": 15, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "Fun for all ages. May cause death or enlightenment if you're lucky."},
 
     {"pre": "a pair of", "name": "Paternity Pants", "value": 10, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "To help men dress comfortably while their women does all of the work."},
 
     {"pre": "a", "name": "Pound Cake", "value": 12, "hp": 8, "rarity": UNCOMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "What is a pound cake? Seriously, I don't know and refuse to look it up for no good reason."},
 
     {"pre": "a", "name": "Real Tomato", "value": 5, "hp": 6, "rarity": UNCOMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], 
+     "areas": [CAVE, CITY, FOREST, SWAMP],
      "desc": "It's your lucky day."},
 
     {"pre": "a pair of", "name": "Reclaimed Tom's Shoes", "value": 8, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], 
+     "areas": [CAVE, CITY, FOREST, SWAMP],
      "desc": "Ever wonder what happens to the donated pair following a return?"},
 
     {"pre": "a", "name": "Spelling Bee Participation Trophy", "value": 1, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "The recipient lost in the first round. The word was 'i', as in me, myself, and i."},
 
     {"pre": "a", "name": "Spring Chicken", "value": 10, "hp": 10, "rarity": UNCOMMON,
-     "areas": [FOREST], 
+     "areas": [FOREST],
      "desc": "It's called a spring chicken because what it is is, well, that - a spring chicken, frankly."},
 
     {"pre": "a", "name": "Stained White T", "value": 5, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CITY, FOREST, SWAMP], 
+     "areas": [CITY, FOREST, SWAMP],
      "desc": "What was once an unstained white t-shirt is now a stained white t-shirt. What a shame."},
 
     {"pre": "a", "name": "Swedish Sweet Dish", "value": 5, "hp": 10, "rarity": UNCOMMON,
@@ -516,27 +516,27 @@ Search_Discoverables = [
      "desc": "Say it three times fast."},
 
     {"pre": "a", "name": "Tackle Box", "value": 9, "hp": 0, "rarity": UNCOMMON,
-     "areas": [SWAMP], 
+     "areas": [SWAMP],
      "desc": "Full of corn, raspberry extract, and tench-sized lures."},
 
     {"pre": "some", "name": "Teeth", "value": 14, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], 
+     "areas": [CAVE, CITY, FOREST, SWAMP],
      "desc": "Not mouth teeth, mind you..."},
 
     {"pre": "a", "name": "Tench Cookbook", "value": 11, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "10,000 ways to prepare a tench for consumption (including raw)."},
 
     {"pre": "a", "name": "Tench Light", "value": 8, "hp": 0, "rarity": UNCOMMON,
-     "areas": [CAVE, FOREST, SWAMP], 
+     "areas": [CAVE, FOREST, SWAMP],
      "desc": "Used for pleasuring oneself - also used as a nightlight in children's bedrooms."},
 
     {"pre": "a", "name": "Troglodyte", "value": 6, "hp": 10, "rarity": UNCOMMON,
-     "areas": [CAVE], 
+     "areas": [CAVE],
      "desc": "A cave-dwelling being, often mistaken for a cave ape. If you mess with it, it will go ape though."},
 
     {"pre": "an", "name": "Unlabeled Bottle of Various Pills", "value": 20, "hp": 5, "rarity": UNCOMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "Likely a mixture of party drugs, steroids, and erection pills."},
 
     # ============================
@@ -544,31 +544,31 @@ Search_Discoverables = [
     # ============================
 
     {"pre": "were", "name": "Bitten by a Snake", "value": 0, "hp": -10, "rarity": UNCOMMON,
-     "areas": [CAVE, FOREST, SWAMP], 
+     "areas": [CAVE, FOREST, SWAMP],
      "desc": "Slithered right up behind you..."},
 
     {"pre": "were", "name": "Bitten by a Cat", "value": 0, "hp": -7, "rarity": UNCOMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "It narrowly missed your jugular."},
 
     {"pre": "were", "name": "Crushed by a Falling Tree", "value": 0, "hp": -15, "rarity": UNCOMMON,
-     "areas": [FOREST, SWAMP], 
+     "areas": [FOREST, SWAMP],
      "desc": "Fell right on your jines, almost lost your he-nuts."},
 
     {"pre": "were", "name": "Hit by a Falling Branch", "value": 0, "hp": -8, "rarity": UNCOMMON,
-     "areas": [FOREST], 
+     "areas": [FOREST],
      "desc": "Plopped right on your head from high above. Jogged your noggin' pretty good ther'."},
 
     {"pre": "were", "name": "Impaled by a Falling Stalactite", "value": 0, "hp": -13, "rarity": UNCOMMON,
-     "areas": [CAVE], 
+     "areas": [CAVE],
      "desc": "You leaned back to look up, exposing your jines to the sharp point of the mineral formation."},
 
     {"pre": None, "name": "Rolled Your Ankle", "value": 0, "hp": -5, "rarity": UNCOMMON,
-     "areas": [CAVE, CITY, FOREST, SWAMP], 
+     "areas": [CAVE, CITY, FOREST, SWAMP],
      "desc": "If you were an NBA player, you'd be out for six to eight... months."},
 
     {"pre": "were", "name": "Run Over by a Recumbent Bike", "value": 0, "hp": -6, "rarity": UNCOMMON,
-     "areas": [CITY], 
+     "areas": [CITY],
      "desc": "The old bastard just kept on going."},
 
     {"pre": "were", "name": "Wrongfully Slapped by a Righteous Assailant", "value": 0, "hp": -3, "rarity": UNCOMMON,

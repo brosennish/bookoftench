@@ -79,7 +79,7 @@ SOMEWHAT_SPICY_NOODLES = "Somewhat Spicy Noodles"
 SOUR_MILK = "Sour Milk"
 STALE_GREENS = "Stale Greens"
 SUSPICIOUS_GUMBO = "Suspicious Gumbo"
-TALKING_DONKEY = "Talking Donkey"
+SAPIENT_BURRO = "Sapient Burro"
 TENCH_FILET = "Tench Filet"
 TENCHTOSTERONE = "Tenchtosterone"
 TOAD_STOOL = "Toad Stool"
@@ -303,8 +303,8 @@ Items = [
      'desc': 'A big foot', 'sound': EAT},
     {'name': SEWER_GATOR_SKULL, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 100, 'areas': None,
      'desc': 'The skull of the notorious Sewer Gator', 'sound': WHIFF},
-    {'name': TALKING_DONKEY, 'type': BOSS, 'hp': 100, 'cost': 0, 'sell_value': 125, 'areas': None,
-     'desc': 'Smells like onions', 'sound': EAT},
+    {'name': SAPIENT_BURRO, 'type': BOSS, 'hp': 100, 'cost': 0, 'sell_value': 125, 'areas': None,
+     'desc': 'smells like root vegetables', 'sound': EAT},
     {'name': TROLL_TOLL, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 100, 'areas': None,
      'desc': 'You didn\'t have to pay it', 'sound': WHIFF},
     {'name': WENDIGO_ANTLER, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 150, 'areas': None,
