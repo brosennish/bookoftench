@@ -43,6 +43,8 @@ from bookoftench.event_base import EventType
 from bookoftench.model.build import Build, load_builds
 from bookoftench.model.illness import load_illnesses
 from bookoftench.model.player import PlayerWeapon
+from ..data.fishing import ROD_NAMES, FISHING_LEVEL_NAMES
+
 
 # ================================================================================================
 
@@ -107,14 +109,16 @@ class BuildFishingLevelSelection(LinearComponent):
                 print_and_sleep(yellow("Fishing Level must be a numeric value between 0 and 10."))
             elif int(fishing_level) < 0:
                 player.fishing_lvl = 0
+                player.fishing_lvl_name = FISHING_LEVEL_NAMES[player.fishing_lvl]
                 return self.game_state
             elif int(fishing_level) > 10:
                 player.fishing_lvl = 10
+                player.fishing_lvl_name = FISHING_LEVEL_NAMES[player.fishing_lvl]
                 return self.game_state
             else:
                 value = int(fishing_level)
                 player.fishing_lvl = value
-                player.build.fishing_lvl = value
+                player.fishing_lvl_name = FISHING_LEVEL_NAMES[player.fishing_lvl]
                 return self.game_state
 
 # ================================================================================================
@@ -132,14 +136,16 @@ class BuildRodLevelSelection(LinearComponent):
                 print_and_sleep(yellow("Fishing Rod Level must be a numeric value between 0 and 10."))
             elif int(rod_level) < 0:
                 player.rod_lvl = 0
+                player.rod_name = ROD_NAMES[player.rod_lvl]
                 return self.game_state
             elif int(rod_level) > 10:
                 player.rod_lvl = 10
+                player.rod_name = ROD_NAMES[player.rod_lvl]
                 return self.game_state
             else:
                 value = int(rod_level)
                 player.rod_lvl = value
-                player.build.rod_lvl = value
+                player.rod_name = ROD_NAMES[player.rod_lvl]
                 return self.game_state
 
 # ================================================================================================
@@ -569,7 +575,9 @@ class BuildComponent(LabeledSelectionComponent):
 
                 player.lvl = random.randint(1, 3)
                 player.fishing_lvl = random.randint(1, 4)
+                player.fishing_lvl_name = FISHING_LEVEL_NAMES[player.fishing_lvl]
                 player.rod_lvl = random.randint(1, 4)
+                player.rod_name = ROD_NAMES[player.rod_lvl]
 
                 player.base_max_hp = random.randint(80, 120)
                 player.max_hp = player.base_max_hp
@@ -646,12 +654,16 @@ class BuildComponent(LabeledSelectionComponent):
                 player.base_max_hp = build.hp
                 player.max_hp = build.hp
                 player.hp = build.hp
+
                 player.strength = build.str
                 player.acc = build.acc
                 player.coins = build.coins
                 player.luck = build.luck
+
                 player.fishing_lvl = build.fishing_lvl
+                player.fishing_lvl_name = FISHING_LEVEL_NAMES[build.fishing_lvl]
                 player.rod_lvl = build.rod_lvl
+                player.rod_name = ROD_NAMES[build.rod_lvl]
 
                 if build.illness:
                     player.illness = build.illness
@@ -1362,7 +1374,7 @@ class Battle(LabeledSelectionComponent):
         if not self.player.stunned:
             return False
 
-        print_and_sleep(yellow("You are stunned and unable to move!"), 2)
+        print_and_sleep(yellow("You are stunned and unable to move!"), 1)
         self.player.stunned = False
 
         if self.enemy.is_alive() and self.player.is_alive():

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from bookoftench.data.builds import BRO, Builds
+from bookoftench.data.fishing import FISHING_LEVEL_NAMES, ROD_NAMES
 from bookoftench.model.illness import Illness
 from bookoftench.model.item import Item
 from bookoftench.model.perk import Perk
@@ -27,6 +28,13 @@ class Build:
     items: list[Item]
     weapons: list[Weapon]
     perks: list[Perk]
+
+# ================================================================================================
+
+    def __post_init__(self):
+        pass
+
+# ================================================================================================
 
     def __repr__(self) -> str:
         row_1 = dim(" | ").join([

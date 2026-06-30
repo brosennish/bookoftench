@@ -391,7 +391,7 @@ class Combatant(ABC):
         enemy_turn = not isinstance(other, NPC)
 
         if enemy_turn and self.stunned:
-            print_and_sleep(yellow(f"{self.name} is stunned and unable to move!"), 2)
+            print_and_sleep(yellow(f"{self.name} is stunned and unable to move!"), 1)
             self.stunned = False
             return
 
