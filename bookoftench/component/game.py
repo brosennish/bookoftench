@@ -3,7 +3,7 @@ import sys
 from bookoftench.audio import play_sound, stop_all_sounds, play_music
 from bookoftench.component import BuildTypeSelection
 from bookoftench.component.base import GatekeepingComponent, TextDisplayingComponent, BinarySelectionComponent, \
-    LinearComponent, Component
+    LinearComponent, Component, LabeledSelectionComponent, SelectionBinding, functional_component
 from bookoftench.component.menu import ActionMenu
 from bookoftench.component.menu import StartMenu
 from bookoftench.component.registry import register_component
@@ -11,7 +11,7 @@ from bookoftench.data.audio import DEVIL_THUNDER, GREAT_JOB, INTRO_THEME, VICTOR
 from bookoftench.data.components import QUIT_GAME, NEW_GAME, BUILD_SELECTION
 from bookoftench.model import GameState
 from bookoftench.model.util import display_game_stats
-from bookoftench.ui import red, green
+from bookoftench.ui import red, green, cyan
 from bookoftench.util import print_and_sleep, safe_input
 
 # ================================================================================================
@@ -88,7 +88,7 @@ class NewGame(LinearComponent):
 @register_component(BUILD_SELECTION)
 class BuildSelect(LinearComponent):
     def __init__(self, _: GameState):
-        super().__init__(GameState(), TutorialDecision)
+        super().__init__(GameState(), FishingModeSelection)
 
     def execute_current(self) -> GameState:
         stop_all_sounds()
@@ -215,6 +215,59 @@ MAIN MENU
 - Adjust music and sound effects
 - View achievements, statistics, logs, and discoveries
 """))
+
+
+class FishingModeSelection(LabeledSelectionComponent):
+    def __init__(self, game_state: GameState):
+        normal_binding = SelectionBinding(
+            "1",
+            "Normal",
+            functional_component()(lambda: self._set_normal()),
+        )
+
+        unlimited_binding = SelectionBinding(
+            "2",
+            "Unlimited",
+            functional_component()(lambda: self._set_unlimited()),
+        )
+
+        super().__init__(
+            game_state,
+            refresh_menu=True,
+            bindings=[normal_binding, unlimited_binding],
+        )
+
+        self.selection_components = [
+            LabeledSelectionComponent(
+                game_state,
+                [normal_binding, unlimited_binding],
+                top_level_prompt_callback=lambda gs: print_and_sleep(
+                    "Select fishing mode:",
+                    0,
+                ),
+            ),
+        ]
+
+        self.leave = False
+
+    def display_options(self) -> None:
+        for component in self.selection_components:
+            component.display_options()
+
+    def _set_normal(self):
+        self.game_state.unlimited_fishing = False
+        self.leave = True
+        print_and_sleep(cyan("Fishing mode set to Normal."), 1)
+        return TutorialDecision(self.game_state).run()
+
+    def _set_unlimited(self):
+        self.game_state.unlimited_fishing = True
+        self.leave = True
+        print_and_sleep(cyan("Fishing mode set to Unlimited."), 1)
+        return TutorialDecision(self.game_state).run()
+
+    def can_exit(self) -> bool:
+        return self.leave
 
 
 class Intro(BinarySelectionComponent):

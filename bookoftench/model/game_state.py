@@ -55,6 +55,8 @@ class GameState:
 
     pending_boss: bool = False
 
+    unlimited_fishing: bool = False
+
     casino_is_open: bool = True
     coffee_is_open: bool = True
     hospital_is_open: bool = True
