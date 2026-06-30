@@ -94,8 +94,6 @@ class Fishmonger(LabeledSelectionComponent):
 
 # ================================================================================================
 
-    # todo - add logic for cost to increase with player level and vary w/ season
-
     @staticmethod
     def _make_purchase_component(fishing_area: FishingArea) -> type[Component]:
         @functional_component(state_dependent=True)
@@ -103,7 +101,7 @@ class Fishmonger(LabeledSelectionComponent):
             player = game_state.player
             when = "tonight" if game_state.time_of_day == DAY else "tomorrow"
 
-            if game_state.player_went_fishing:
+            if game_state.player_went_fishing and not game_state.unlimited_fishing:
                 print_and_sleep(yellow(f"Boat's already been out. Come back {when}."), 2)
                 return None
             elif fishing_area.travel_cost > player.coins:
