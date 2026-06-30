@@ -53,7 +53,7 @@ from .perk import Perk, activate_perk_print, attach_perk, attach_perks, perk_is_
 from .trait import Trait
 from .weapon import Weapon, load_weapons
 from ..data.audio import GOLF_CLAP, GREAT_JOB, XP
-from ..data.fishing import ROD_NAMES, FISHING_LEVEL_XP_REQUIREMENTS, FISHING_XP_NEEDED
+from ..data.fishing import FISHING_LEVEL_XP_REQUIREMENTS, FISHING_XP_NEEDED, ROD_NAMES, FISHING_LEVEL_NAMES
 from ..data.illnesses import Illnesses
 
 # ================================================================================================
@@ -169,8 +169,9 @@ class Player(Combatant):
     fishing_xp: int = 0
     fishing_xp_needed: int = 10
     fishing_lvl: int = 1
+    fishing_lvl_name: str = None
     rod_lvl: int = 1
-    rod_name: str = "Worm Rod"
+    rod_name: str = None
     max_active_fishing_items: int = 3
     caught_fish: list[Fish] = field(default_factory=list)
     tackle_box: dict[str, Bait] = field(default_factory=dict)

@@ -625,7 +625,7 @@ def get_player_status_view_4(game_state: GameState) -> str:
     ])
 
     fishing_row = dim(" | ").join([
-        f"{orange(player.name)} {dim('-')} Fishing Lvl: {cyan(player.fishing_lvl)}",
+        f"{orange(player.name)} {dim('-')} {cyan(player.fishing_lvl_name)}",
         f"XP: {cyan(fishing_xp_text)}",
         f"{green(player.rod_name)}",
         f"Caught: {blue(len(player.caught_fish))}",

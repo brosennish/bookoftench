@@ -33,6 +33,7 @@ from ..data.audio import COINS
 from ..data.builds import Builds
 from ..data.enemies import HOHKKEN
 from ..data.environment import DAY, DRY, DRYING, FULL, NIGHT, WETTING, Water_Conditions, CLEAR, CLOUDY, MURKY
+from ..data.fishing import ROD_NAMES, FISHING_LEVEL_NAMES
 from ..data.fishing_areas import DRY_SEASON, WET_SEASON
 from ..data.fishing_items import Fishing_Items
 from ..data.illnesses import Illnesses
