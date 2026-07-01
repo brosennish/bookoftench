@@ -31,6 +31,7 @@ from .special_event import SpecialEvent
 from .weapon import Weapon, load_weapons
 from ..data.audio import COINS
 from ..data.builds import Builds
+from ..data.crimes import CRIMES
 from ..data.enemies import HOHKKEN
 from ..data.environment import DAY, DRY, DRYING, FULL, NIGHT, WETTING, Water_Conditions, CLEAR, CLOUDY, MURKY
 from ..data.fishing import ROD_NAMES, FISHING_LEVEL_NAMES
@@ -78,6 +79,7 @@ class GameState:
     found_weapon: Weapon | None = None
 
     wanted: str = ""
+    crimes: list[dict] = field(default_factory=list)
     _bounty: int = 0
 
     status_view: int = 1
@@ -277,6 +279,11 @@ class GameState:
 # ================================================================================================
 
     def refresh_bounty(self) -> None:
+        self.set_wanted_enemy()
+        self.set_crimes()
+        self.set_bounty()
+
+    def set_wanted_enemy(self) -> None:
         valid_areas = [
             area
             for area in self.areas
@@ -290,7 +297,17 @@ class GameState:
 
         enemy: Enemy = load_enemy(random.choice(bounty_area.enemies))
         self.wanted = enemy.name
-        self.bounty = enemy.bounty
+
+    def set_crimes(self) -> None:
+        count = random.randint(1, 3)
+        crimes = random.sample(CRIMES, count)
+        self.crimes = crimes
+
+    def set_bounty(self) -> None:
+        bounty = sum(i['bounty'] for i in self.crimes)
+        self.bounty = bounty
+
+# ================================================================================================
 
     def update_current_area(self, area_name: str, season: str) -> None:
         for area in self.areas:
