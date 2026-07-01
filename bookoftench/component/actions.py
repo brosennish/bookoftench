@@ -1481,6 +1481,7 @@ class BattleEnd(NoOpComponent):
         # --- wanted / bounty ---
         if self.game_state.is_wanted(enemy):
             event_logger.log_event(BountyCollectedEvent(enemy.name))
+            self.game_state.display_bounty_pending = True
         enemy_weapon = enemy.drop_weapon()
         if enemy_weapon is not None:
             player.obtain_enemy_weapon(enemy_weapon)
@@ -1657,8 +1658,3 @@ class Stats(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, display_callback=display_game_stats)
 
-# ================================================================================================
-
-class DisplayWanted(TextDisplayingComponent):
-    def __init__(self, game_state: GameState):
-        super().__init__(game_state, display_callback=display_wanted_enemy)

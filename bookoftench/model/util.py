@@ -1303,10 +1303,12 @@ def get_rarity_text(rarity: str) -> str:
 # ================================================================================================
 
 def display_wanted_enemy(game_state: GameState) -> None:
-    print_and_sleep(f"\n{red('WANTED')}")
-    print_and_sleep(f"{dim('Enemy  |')} {game_state.wanted}")
-    print_and_sleep(f"{dim('Bounty |')} {yellow(game_state.bounty)} coins")
-    print_and_sleep(f"\n{dim('Crimes |')}")
+    print_and_sleep(f"\n{red('=== WANTED ===')}")
+    print_and_sleep(f"{dim('Enemy  |')} {purple(game_state.wanted)}")
+    print_and_sleep(f"{dim('Bounty |')} {purple(game_state.bounty)}")
+    print_and_sleep(f"\n{dim('Crimes:')}")
 
     for crime in game_state.crimes:
-        print_and_sleep(f"{dim(' -')} {crime['crime']}")
+        print_and_sleep(f"{dim(' -')} {yellow(crime['name'])}")
+
+    print_and_sleep("", 3)

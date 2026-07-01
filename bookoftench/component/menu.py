@@ -35,6 +35,8 @@ class ActionMenu(PaginatedMenuComponent):
         )
 
     def display_status(self, game_state: GameState) -> None:
+        self.display_wanted(game_state)
+
         if self.status_view == 1:
             print_and_sleep(get_player_status_view_1(game_state))
         elif self.status_view == 2:
@@ -92,6 +94,13 @@ class ActionMenu(PaginatedMenuComponent):
             ]
             for spec in pages
         ]
+
+    @staticmethod
+    def display_wanted(game_state) -> None:
+        from .wanted import DisplayWanted
+        if game_state.display_bounty_pending:
+            game_state.display_bounty_pending = False
+            DisplayWanted(game_state).run()
 
     def play_theme(self) -> None:
         self.game_state.play_current_area_theme()

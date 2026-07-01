@@ -18,7 +18,7 @@ from .bank import Bank
 from .build import Build
 from .discoverable import Discoverable
 from .enemy import Enemy, load_enemy
-from .events import BountyCollectedEvent, HohkkenEvent, LevelUpEvent, TravelEvent
+from .events import BountyCollectedEvent, HohkkenEvent, LevelUpEvent, TravelEvent, PlayerDeathEvent
 from .fish import Fish
 from .fishing_area import FishingArea
 from .fishing_item import load_fishing_items, FishingItem
@@ -34,7 +34,6 @@ from ..data.builds import Builds
 from ..data.crimes import CRIMES
 from ..data.enemies import HOHKKEN
 from ..data.environment import DAY, DRY, DRYING, FULL, NIGHT, WETTING, Water_Conditions, CLEAR, CLOUDY, MURKY
-from ..data.fishing import ROD_NAMES, FISHING_LEVEL_NAMES
 from ..data.fishing_areas import DRY_SEASON, WET_SEASON
 from ..data.fishing_items import Fishing_Items
 from ..data.illnesses import Illnesses
@@ -81,6 +80,7 @@ class GameState:
     wanted: str = ""
     crimes: list[dict] = field(default_factory=list)
     _bounty: int = 0
+    display_bounty_pending: bool = False
 
     status_view: int = 1
     weapon_format: int = 1
@@ -366,6 +366,10 @@ class GameState:
             self.update_season()
             self.refresh_bounty()
             self.handle_component_statuses()
+
+        @subscribe_function(PlayerDeathEvent)
+        def handle_achievement_event(_: PlayerDeathEvent) -> None:
+            self.display_bounty_pending = True
 
 # ================================================================================================
 
