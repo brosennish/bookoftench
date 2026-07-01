@@ -77,10 +77,10 @@ class GameState:
     found_item: Item | None = None
     found_weapon: Weapon | None = None
 
-    wanted: str = ""
+    wanted: Enemy = None
     crimes: list[dict] = field(default_factory=list)
     _bounty: int = 0
-    display_bounty_pending: bool = False
+    display_bounty_pending: bool = True
 
     status_view: int = 1
     weapon_format: int = 1
@@ -296,7 +296,7 @@ class GameState:
             bounty_area = random.choice(self.areas)
 
         enemy: Enemy = load_enemy(random.choice(bounty_area.enemies))
-        self.wanted = enemy.name
+        self.wanted = enemy
 
     def set_crimes(self) -> None:
         count = random.randint(1, 3)
@@ -366,10 +366,6 @@ class GameState:
             self.update_season()
             self.refresh_bounty()
             self.handle_component_statuses()
-
-        @subscribe_function(PlayerDeathEvent)
-        def handle_achievement_event(_: PlayerDeathEvent) -> None:
-            self.display_bounty_pending = True
 
 # ================================================================================================
 
