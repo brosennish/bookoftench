@@ -8,9 +8,10 @@ LEECHES = "Leeches"
 LIP_RING = "Lip Ring"
 KELP_NET = "Kelp Net"
 MOTION_POTION = "Motion Potion"
-OCEAN_LOTION = "Ocean Lotion"
+SALT_RUB = "Salt Rub"
 REEFER = "Reefer"
 SEA_WEED = "Sea Weed"
+SNAIL_LUBE = "Snail Lube"
 
 # Types
 RAGE = "Rage"
@@ -57,7 +58,13 @@ Fishing_Items = [
      'strength_reduction': 0, 'spit_hook_prevention': False,
      },
 
-    {'name': OCEAN_LOTION, 'description': 'Lowers rage gain by 50% for 3-5 turns.',
+    {'name': SNAIL_LUBE, 'description': 'Lowers speed by 15% for 4-8 turns.',
+     'type': SPEED, 'cost': 12, 'min_turns': 4, 'max_turns': 8,
+     'speed_reduction': 0.15, 'stamina_reduction': 0, 'rage_reduction': 0,
+     'strength_reduction': 0, 'spit_hook_prevention': False,
+     },
+
+    {'name': SALT_RUB, 'description': 'Lowers rage gain by 50% for 3-5 turns.',
      'type': RAGE, 'cost': 35, 'min_turns': 3, 'max_turns': 5,
      'speed_reduction': 0, 'stamina_reduction': 0, 'rage_reduction': 0.50,
      'strength_reduction': 0, 'spit_hook_prevention': False,

@@ -235,7 +235,7 @@ Enemies = [
      'areas': [CITY]},
 
     {'name': GOON, 'trait': '', 'illness': None, 'hp': 105,
-     'weapons': [w.BASEBALL_BAT, w.SHOTGUN, w.BRASS_KNUCKLES],
+     'weapons': [w.BASEBALL_BAT, w.SHOTGUN, w.BRASS_KNUCKLES, w.STUN_GUN],
      'bounty': 175, 'coins': 40, 'type': NORMAL, 'flee': 0.95, 'strength': 1.10, 'acc': 1.05,
      'areas': [CITY]},
 
@@ -255,7 +255,7 @@ Enemies = [
      'areas': [CITY, FOREST]},
 
     {'name': THIEF, 'trait': '', 'illness': None, 'hp': 90,
-     'weapons': [w.KNIFE, w.CROWBAR, w.PISTOL],
+     'weapons': [w.KNIFE, w.CROWBAR, w.PISTOL, w.STUN_GUN],
      'bounty': 160, 'coins': 70, 'type': NORMAL, 'flee': 1.05, 'strength': 0.95, 'acc': 1.04,
      'areas': [CITY]},
 
@@ -344,7 +344,7 @@ Enemies = [
      'areas': [CAVE]},
 
     {'name': FUGITIVE, 'trait': '', 'illness': None, 'hp': 100,
-     'weapons': [w.SHIV, w.INJECTION_NEEDLE, w.PISTOL, w.POCKET_SAND],
+     'weapons': [w.SHIV, w.INJECTION_NEEDLE, w.PISTOL, w.POCKET_SAND, w.STUN_GUN],
      'bounty': 205, 'coins': 20, 'type': NORMAL, 'flee': 0.95, 'strength': 1.07, 'acc': 1.06,
      'areas': [CAVE, FOREST, SWAMP]},
 
@@ -414,7 +414,7 @@ Enemies = [
      'areas': [SWAMP]},
 
     {'name': SMUGGLER, 'trait': '', 'illness': None, 'hp': 105,
-     'weapons': [w.KNIFE, w.INJECTION_NEEDLE, w.POCKET_SAND, w.PISTOL],
+     'weapons': [w.KNIFE, w.INJECTION_NEEDLE, w.POCKET_SAND, w.PISTOL, w.STUN_GUN],
      'bounty': 205, 'coins': 75, 'type': NORMAL, 'flee': 0.95, 'strength': 1.05, 'acc': 1.06,
      'areas': [SWAMP]},
 
@@ -641,7 +641,7 @@ Special_Bosses = [
     {'name': OGRE, 'hp': 255, 'coins': 60, 'trait': JUNKIE,
      'weapons': [w.BARE_HANDS, w.WOODEN_CLUB, w.BONE_CLUB],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1.18, 'acc': 0.95,
-     'item': i.TALKING_DONKEY},
+     'item': i.SAPIENT_BURRO},
 
     {'name': ROUGAROU, 'hp': 235, 'coins': 0, 'trait': None,
      'weapons': [w.CLAWS, w.TEETH, w.FANGS],
@@ -827,7 +827,7 @@ Enemy_Lines = {
     PHROGGER: [
         "Attics are cozier than people give them credit for.",
         "I don't have to phrog. I have money.",
-        "I was raised by a phrogger. Spent my childhood hiding in random people's attics.",
+        "I spent my childhood being silent in random people's attics.",
         "With your bounty, I will buy a mini fridge for the attic I'm phrogging in.",
         "I have a son. He lives with me, learning the ways of phrogging.",
         "My wife wants custody of our son, but she'll never find us.",

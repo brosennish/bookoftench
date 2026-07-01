@@ -13,6 +13,7 @@ from bookoftench.ui import green, red, yellow
 from bookoftench.util import print_and_sleep
 from .achievement import Achievement, AchievementEvent, load_achievements, set_achievement_cache
 from .area import Area, load_areas
+from .bait import Bait, load_baits, Bait_And_Lures
 from .bank import Bank
 from .build import Build
 from .discoverable import Discoverable
@@ -20,6 +21,7 @@ from .enemy import Enemy, load_enemy
 from .events import BountyCollectedEvent, HohkkenEvent, LevelUpEvent, TravelEvent
 from .fish import Fish
 from .fishing_area import FishingArea
+from .fishing_item import load_fishing_items, FishingItem
 from .illness import load_illness
 from .item import Item, load_items
 from .perk import Perk, attach_perk, load_perk, perk_is_active, set_perk_cache
@@ -30,9 +32,27 @@ from .weapon import Weapon, load_weapons
 from ..data.audio import COINS
 from ..data.builds import Builds
 from ..data.enemies import HOHKKEN
-from ..data.enviroment import DAY, DRY, DRYING, FULL, NIGHT, WETTING
+from ..data.environment import DAY, DRY, DRYING, FULL, NIGHT, WETTING, Water_Conditions, CLEAR, CLOUDY, MURKY
+from ..data.fishing import ROD_NAMES, FISHING_LEVEL_NAMES
 from ..data.fishing_areas import DRY_SEASON, WET_SEASON
+from ..data.fishing_items import Fishing_Items
 from ..data.illnesses import Illnesses
+
+from ..data.crimes import Crimes as CrimeData
+
+
+def sum_bounty_from_crimes(enemy: Enemy, area_name: str) -> int:
+    """Pick 1-3 crimes matching the area, sum bounties for the reward."""
+    import random
+    area_crimes = [c for c in CrimeData if area_name in c["areas"]]
+    if not area_crimes:
+        area_crimes = CrimeData  # fallback
+
+    n_crimes = random.randint(1, min(3, len(area_crimes)))
+    selected = random.sample(area_crimes, n_crimes)
+    total = sum(c["bounty"] for c in selected)
+    return total
+
 
 # ================================================================================================
 
@@ -47,8 +67,11 @@ class GameState:
     current_fishing_area: FishingArea | None = None
     current_fish: Fish | None = None
     all_fish: bool = True
+    player_went_fishing: bool = False
 
     pending_boss: bool = False
+
+    unlimited_fishing: bool = False
 
     casino_is_open: bool = True
     coffee_is_open: bool = True
@@ -59,7 +82,8 @@ class GameState:
     fishmonger_is_open: bool = True
     hohkken_is_alive: bool = True
 
-    season: str = DRY_SEASON
+    season: str = field(default=DRY_SEASON)
+    water_condition: str = field(default=CLEAR)
     time_of_day: str = field(default=DAY)
     moon: str = field(default=DRY)
     day: int = 1
@@ -73,10 +97,13 @@ class GameState:
     _bounty: int = 0
 
     status_view: int = 1
+    weapon_format: int = 1
 
     victory: bool = False
 
     achievement_cache: dict[str, Achievement] = field(default_factory=dict)
+    bait_shop_inventory: list[Bait] = field(default_factory=list)
+    fishing_item_shop_inventory: list[FishingItem] = field(default_factory=list)
     # crypto_market_state = None
     discoveries: list[Discoverable] = field(default_factory=list)
     encountered_enemies: list[dict] = field(default_factory=list)
@@ -162,6 +189,9 @@ class GameState:
         self.set_moon()
         self.set_time_of_day()
         self.set_season()
+        self.set_water_condition()
+        self.update_bait_shop_inventory()
+        self.update_fishing_item_shop_inventory()
 
         event_logger.set_counter(self.event_counter)
         set_achievement_cache(self.achievement_cache)
@@ -185,6 +215,53 @@ class GameState:
         else:
             self.season = DRY_SEASON
 
+    def set_water_condition(self):
+        self.water_condition = random.choice(Water_Conditions)
+
+    def get_bite_chance(self) -> float:
+        bite_chance = self.current_fishing_area.bite_chance
+        season = self.season
+        water_condition = self.water_condition
+
+        if season == WET_SEASON:
+            bite_chance += random.uniform(0.05, 0.10)
+        else:
+            bite_chance -= random.uniform(0.05, 0.10)
+
+        if water_condition == CLEAR:
+            bite_chance += random.uniform(0.03, 0.06)
+        elif water_condition == CLOUDY:
+            bite_chance += random.uniform(-0.03, 0.03)
+        elif water_condition == MURKY:
+            bite_chance -= random.uniform(0.03, 0.06)
+
+        bite_chance += min((self.player.fishing_lvl - 1) / 100, 0.05)
+
+        if bite_chance < 0.10:
+            bite_chance = 0.10
+        elif bite_chance > 0.45:
+            bite_chance = 0.45
+
+        return bite_chance
+
+# ================================================================================================
+
+    def update_bait_shop_inventory(self) -> None:
+        selections = random.sample(
+            [bait["name"] for bait in Bait_And_Lures],
+            min(4, len(Bait_And_Lures)),
+        )
+        self.bait_shop_inventory = load_baits(selections)
+
+    def update_fishing_item_shop_inventory(self) -> None:
+        selections = random.sample(
+            [item["name"] for item in Fishing_Items],
+            min(4, len(Fishing_Items)),
+        )
+        self.fishing_item_shop_inventory = load_fishing_items(selections)
+
+# ================================================================================================
+
     def set_time_of_day(self) -> None:
         self.time_of_day = DAY
 
@@ -194,6 +271,11 @@ class GameState:
         else:
             self.day += 1
             self.time_of_day = DAY
+            self.set_water_condition()
+            self.update_bait_shop_inventory()
+            self.update_fishing_item_shop_inventory()
+
+        self.player_went_fishing = False
 
     def set_moon(self) -> None:
         self.moon = random.choice([DRY, DRYING, WETTING, FULL])
@@ -207,6 +289,8 @@ class GameState:
             self.moon = DRYING
         elif self.moon == DRYING:
             self.moon = DRY
+
+# ================================================================================================
 
     def refresh_bounty(self) -> None:
         valid_areas = [
@@ -222,7 +306,7 @@ class GameState:
 
         enemy: Enemy = load_enemy(random.choice(bounty_area.enemies))
         self.wanted = enemy.name
-        self.bounty = enemy.bounty
+        self.bounty = sum_bounty_from_crimes(enemy, bounty_area.name)
 
     def update_current_area(self, area_name: str, season: str) -> None:
         for area in self.areas:

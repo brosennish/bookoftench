@@ -11,7 +11,7 @@ from bookoftench.data.components import ActionMenuDefaults, DISCOVER_DISCOVERABL
     SPAWN_ENEMY, ENCOUNTER_SUB_BOSS, SPECIAL_EVENT
 from bookoftench.data.enemies import Enemy_Adjectives, Traits, WEREWOLF, CONTAGIOUS, NIGHT_OWL, HOHKKEN, BOSS, \
     NORMAL, SPECIAL_BOSS
-from bookoftench.ui import purple, yellow, blue
+from ..ui import purple, yellow, blue, dim, green
 from bookoftench.util import print_and_sleep
 from .enemy import Enemy, load_enemy, Boss, load_boss, load_final_boss, load_special_boss, SpecialBoss
 from .illness import load_illnesses
@@ -19,12 +19,14 @@ from .perk import perk_is_active
 from .shop import Shop
 from .trait import load_traits, load_trait
 from .weapon import load_weapon, make_elite_weapon
-from bookoftench.data.enviroment import NIGHT, FULL
+from bookoftench.data.environment import NIGHT, FULL
 from bookoftench.data.illnesses import Illnesses, LATE_ONSET_SIDS
 from bookoftench.data.perks import SHERLOCK_TENCH
 from bookoftench.data.weapons import CLAWS, BLIND, SPECIAL
 from ..audio import play_sound
 from ..data.audio import ENEMY_APPEARS, OWL_SFX, WEREWOLF_SFX
+from ..data.crimes import Crimes as CrimeData
+
 
 # ================================================================================================
 
@@ -108,7 +110,7 @@ class Area:
     enemies: list[str]
     boss_name: str
     theme: str
-    enemy_count: int = field(default_factory=lambda: random.randint(7, 9))
+    enemy_count: int = field(default_factory=lambda: random.randint(7, 10))
     enemies_killed: int = 0
     enemies_seen: set[str] = field(default_factory=set)
     boss_defeated: bool = False
@@ -188,6 +190,19 @@ class Area:
 
         # --- elite weapon logic ---
         self.handle_elite_weapon()
+
+        # --- wanted / crimes display ---
+        if game_state and game_state.is_wanted(enemy):
+            area_crimes = [c for c in CrimeData if self.name in c["areas"]]
+            if area_crimes:
+                n = random.randint(1, min(3, len(area_crimes)))
+                selected = random.sample(area_crimes, n)
+                print_and_sleep(dim("─" * 40), 0.5)
+                print_and_sleep(purple("☠ WANTED: Known Crimes"), 1)
+                for c in selected:
+                    bounty_str = green(f"[+{sum(1 for s in selected if s['bounty'])} bounty]") if c["bounty"] else dim("(no bounty)")
+                    print_and_sleep(dim(f"• {c['crime']} {bounty_str}"), 1)
+                print_and_sleep(dim("─" * 40), 0.5)
 
         return self.current_enemy
 

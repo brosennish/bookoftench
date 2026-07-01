@@ -11,6 +11,7 @@ class SpecialEvent:
     color: Callable[[str], str]
     sleep: int
     theme: str
+    type: str
     areas: list[str]
     time: list[str]
     moon: list[str] | None

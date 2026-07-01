@@ -9,7 +9,6 @@ from bookoftench.data.audio import COINS, CATCH_FISH, GOLF_CLAP, FISH_ON, CAST, 
 from bookoftench.data.fish import Fish_Species, LEGENDARY, RARE, UNCOMMON, COMMON, SPOOKED, ENRAGED, CALM, AGITATED, \
     SPECIES, VARIANT, STRENGTH, SPEED, RAGE_FACTOR, RARITY, STAMINA, SHALLOWS, BAY, MYTHIC, possible_observations
 from bookoftench.data.boat import FISHING_BATTLE_OPTIONS, GIVE_LINE, OBSERVE, PULL, REEL, USE_ITEM
-from bookoftench.data.fishing_areas import WET_SEASON_BITE_CHANCE_EFFECT, DRY_SEASON_BITE_CHANCE_EFFECT, WET_SEASON
 from bookoftench.data.fishing_items import BARB_HOOK, RAGE
 from bookoftench.model import GameState
 from bookoftench.model.fish import load_fishes
@@ -43,15 +42,7 @@ class DryCastCheck(NoOpComponent):
         return SpawnFish(self.game_state).run()
 
     def dry_check(self) -> bool:
-        bite_chance = self.game_state.current_fishing_area.bite_chance
-
-        season = self.game_state.season
-        if season == WET_SEASON:
-            bite_chance += WET_SEASON_BITE_CHANCE_EFFECT
-        else:
-            bite_chance -= DRY_SEASON_BITE_CHANCE_EFFECT
-
-        bite_chance += ((self.game_state.player.fishing_lvl - 1) / 100)
+        bite_chance = self.game_state.get_bite_chance()
 
         if random.random() < bite_chance:
             value = random.randint(1, 3)
@@ -110,7 +101,7 @@ class SpawnFish(LinearComponent):
 
         if not available:
             self.game_state.current_fish = None
-            print_and_sleep(dim("You got a bite, but nothing took the bait."), 1)
+            print_and_sleep(dim("You got a bite, but it came up dry."), 1)
             return
 
         selection = random.choice(available)
@@ -513,12 +504,7 @@ class FishTurn(NoOpComponent):
         run_mult = fishing_area.run_mult
 
         # --- stamina ---
-        if stamina_ratio < 0.33:
-            stamina_modifier = 0.5
-        elif stamina_ratio < 0.67:
-            stamina_modifier = 0.75
-        else:
-            stamina_modifier = 1
+        stamina_modifier = get_stamina_modifier(stamina_ratio)
 
         # --- state ---
         if fish.state == AGITATED:
@@ -541,6 +527,8 @@ class FishTurn(NoOpComponent):
         run *= state_modifier
         run *= run_mult
 
+        run *= fish.speed_multiplier
+
         if burst:
             total_run = max(1, round(run * 2))
 
@@ -548,9 +536,7 @@ class FishTurn(NoOpComponent):
                 play_sound(WHIFF)
                 print_and_sleep(yellow("The fish had a burst of speed!"))
         else:
-            total_run = max(1, round(run * fish.speed_multiplier))
-
-        fish.distance += total_run
+            total_run = max(1, round(run))
 
         return total_run
 
@@ -569,12 +555,7 @@ class FishTurn(NoOpComponent):
             state_modifier = 1
 
         # --- stamina ---
-        if stamina_ratio < 0.33:
-            stamina_modifier = 1.5
-        elif stamina_ratio < 0.67:
-            stamina_modifier = 1.25
-        else:
-            stamina_modifier = 1
+        stamina_modifier = get_stamina_modifier(stamina_ratio)
 
         original_rage = fish.rage
 
@@ -651,7 +632,7 @@ class Pull(NoOpComponent):
         pull_mult = self.game_state.current_fishing_area.pull_mult
         fish = self.game_state.current_fish
         missing_stamina_ratio = (fish.max_stamina - fish.stamina) / fish.max_stamina
-        pull_bonus = missing_stamina_ratio * 5
+        pull_bonus = missing_stamina_ratio * 4
 
         # --- logic ---
         pull = random.randint(2, 5)
@@ -751,7 +732,7 @@ class Reel(NoOpComponent):
         elif fish.state == ENRAGED:
             reel -= 1
 
-        reel += min(player.fishing_lvl // 2, 3)
+        reel += min(player.fishing_lvl // 3, 2)
         reel *= min(player.strength, 1.15)
         reel *= get_rod_modifier(player)
         reel = max(1, reel)
@@ -854,7 +835,7 @@ class GiveLine(NoOpComponent):
             rage_loss += 4
 
         rage_loss += min(player.fishing_lvl // 2, 3)
-        rage_loss += min(player.rod_lvl - 1, 3)
+        rage_loss += min(player.rod_lvl // 3, 2)
 
         fish.rage -= rage_loss
         fish.rage = max(0, fish.rage)
@@ -910,41 +891,49 @@ class ObserveFish(NoOpComponent):
 
         fish.observed_characteristics.append(observation)
 
+        # todo - refactor
         if observation == SPECIES:
             color = white
             word = SPECIES
             value = fish.base_name
             fish.species_observed = True
             fish.species_known = True
+
         elif observation == VARIANT:
             color = purple
             word = VARIANT
             value = fish.variant if fish.variant else "None"
             fish.variant_observed = True
+
         elif observation == RARITY:
             color = fish.get_rarity_color()
             word = RARITY
             value = fish.rarity
             fish.rarity_observed = True
+
         elif observation == STRENGTH:
             color = yellow
             word = STRENGTH
             value = str(round(fish.strength, 2))
             fish.strength_observed = True
+
         elif observation == STAMINA:
             color = yellow
             word = STAMINA
             value = yellow(f"{fish.stamina}/{fish.max_stamina}")
+
         elif observation == SPEED:
             color = cyan
             word = SPEED
             value = str(round(fish.speed, 2))
             fish.speed_observed = True
+
         elif observation == RAGE_FACTOR:
             color = red
             word = RAGE_FACTOR
             value = str(round(fish.rage_factor, 2))
             fish.rage_factor_observed = True
+
         else:
             return
 
@@ -1016,5 +1005,20 @@ def print_fish_turn_results(run: int, rage_delta: int) -> None:
         print_and_sleep(f"{fish}: {' | '.join(parts)}", 1.5)
 
 
+def get_stamina_modifier(stamina_ratio: float) -> float:
+    if stamina_ratio >= 0.67:
+        return 1.0
+
+    if stamina_ratio >= 0.25:
+        progress = (stamina_ratio - 0.25) / (0.67 - 0.25)
+        return 0.75 + (progress * 0.25)
+
+    if stamina_ratio >= 0.10:
+        progress = (stamina_ratio - 0.10) / (0.25 - 0.10)
+        return 0.5 + ((progress ** 2) * 0.25)
+
+    return 0.5
+
+
 def get_rod_modifier(player: Player) -> float:
-    return 1 + ((player.rod_lvl - 1) * 0.10)
+    return 1 + ((player.rod_lvl - 1) * 0.04)

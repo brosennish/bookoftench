@@ -5,13 +5,13 @@ from bookoftench.ui import blue, cyan, green, yellow, dim
 from bookoftench.util import print_and_sleep
 from .base import LabeledSelectionComponent, SelectionBinding, \
     GatekeepingComponent, functional_component, TextDisplayingComponent
-from .game import ContinueGame, DeathHandler
+from .game import DeathHandler
 from .registry import register_component
 from .. import event_logger
 from ..audio import play_music
 from ..data.audio import LAB_THEME
 from ..data.components import LAB
-from ..data.enviroment import NIGHT
+from ..data.environment import NIGHT
 from ..model.events import PlayerDeathEvent
 
 # ================================================================================================
@@ -76,14 +76,14 @@ def conduct_experiment(game_state: GameState) -> GameState:
     if random.random() < 0.23:
         original = player.strength
         amount = random.uniform(-0.03, 0.03)
-        player.strength = round(player.strength + amount, 2)
+        player.strength = round(max(0.0, min(1.25, player.strength + amount)), 2)
 
         if original != player.strength:
-            if amount > 0:
+            if player.strength > original:
                 print_and_sleep(green(f"Strength: {original} -> {player.strength}"), 1)
                 player.gain_or_lose_luck(0.1)
                 mutation = True
-            elif amount < 0:
+            elif player.strength < original:
                 print_and_sleep(yellow(f"Strength: {original} -> {player.strength}"), 1)
                 player.gain_or_lose_luck(-0.1)
                 mutation = True
@@ -95,14 +95,14 @@ def conduct_experiment(game_state: GameState) -> GameState:
     if random.random() < 0.23:
         original = player.acc
         amount = random.uniform(-0.03, 0.03)
-        player.acc = round(player.acc + amount, 2)
+        player.acc = round(max(0.0, min(1.10, player.acc + amount)), 2)
 
         if original != player.acc:
-            if amount > 0:
+            if player.acc > original:
                 print_and_sleep(green(f"Accuracy: {original} -> {player.acc}"), 1)
                 player.gain_or_lose_luck(0.1)
                 mutation = True
-            elif amount < 0:
+            elif player.acc < original:
                 print_and_sleep(yellow(f"Accuracy: {original} -> {player.acc}"), 1)
                 player.gain_or_lose_luck(-0.1)
                 mutation = True
@@ -112,19 +112,24 @@ def conduct_experiment(game_state: GameState) -> GameState:
     # ============================
 
     if random.random() < 0.21:
-        original = player.max_hp
-        amount = random.randint(-3, 3)
-        player.max_hp += amount
+        original_max_hp = player.max_hp
 
-        if player.hp > player.max_hp:
-            player.hp = player.max_hp
+        amount = random.randint(-3, 3)
+        player.base_max_hp = max(1, player.base_max_hp + amount)
+
+        if player.illness:
+            player.max_hp = max(1, player.base_max_hp - player.illness.hp_loss)
+        else:
+            player.max_hp = player.base_max_hp
+
+        player.hp = min(player.hp, player.max_hp)
 
         if amount > 0:
-            print_and_sleep(green(f"Max HP: {original} -> {player.max_hp}"), 1)
+            print_and_sleep(green(f"Max HP: {original_max_hp} -> {player.max_hp}"), 1)
             player.gain_or_lose_luck(0.1)
             mutation = True
         elif amount < 0:
-            print_and_sleep(yellow(f"Max HP: {original} -> {player.max_hp}"), 1)
+            print_and_sleep(yellow(f"Max HP: {original_max_hp} -> {player.max_hp}"), 1)
             player.gain_or_lose_luck(-0.1)
             mutation = True
 

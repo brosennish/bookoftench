@@ -6,7 +6,7 @@ from bookoftench.component.registry import register_component
 from bookoftench.data.audio import EQUIP_WEAPON, OCEAN_THEME, SHALLOWS_THEME, BAY_THEME
 from bookoftench.data.boat import TACKLE_BOX, FISHING_OPTIONS, CAST, FISHING_LOG, ALL_NEW_ONLY
 from bookoftench.data.components import BOAT, COMPENDIUM
-from bookoftench.data.enviroment import DAY
+from bookoftench.data.environment import DAY
 from bookoftench.data.fish import SHALLOWS, OCEAN, BAY
 from bookoftench.model import GameState
 from bookoftench.model.bait import Bait
@@ -58,9 +58,6 @@ class BoatComponent(LabeledSelectionComponent):
             play_music(OCEAN_THEME)
 
     def _return(self):
-        self.game_state.update_time_of_day()
-        if self.game_state.time_of_day == DAY:
-            self.game_state.update_moon()
         self.leave = True
 
     def can_exit(self) -> bool:
@@ -73,7 +70,7 @@ class BoatComponent(LabeledSelectionComponent):
                 self.leave
                 or (no_casts_left and no_active_fish)
                 or player_dead
-                or no_bait
+                or (no_bait and no_active_fish)
         )
 
     def toggle_fish(self):

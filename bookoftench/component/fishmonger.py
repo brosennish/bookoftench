@@ -7,14 +7,14 @@ from bookoftench.component.base import LabeledSelectionComponent, SelectionBindi
     functional_component, GatekeepingComponent
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import PURCHASE, TRAVEL_THEME, FISHMONGER_THEME_1, FISHMONGER_THEME_2, FISHMONGER_THEME_3
-from bookoftench.data.bait import Bait_And_Lures
+from bookoftench.data.environment import DAY
 from bookoftench.data.fishing_areas import Fishing_Areas
 from bookoftench.data.components import FISHMONGER
-from bookoftench.data.fishing_items import Fishing_Items
+from bookoftench.data.fishing import ROD_UPGRADE_COSTS, ROD_NAMES
 from bookoftench.model import GameState
 from bookoftench.model.fishing_area import load_fishing_areas, FishingArea
-from bookoftench.model.bait import load_baits, Bait
-from bookoftench.model.fishing_item import load_fishing_items, FishingItem
+from bookoftench.model.bait import Bait
+from bookoftench.model.fishing_item import FishingItem
 from bookoftench.model.util import display_fishmonger_header, display_bait_shop_header, display_fishing_item_shop_header
 from bookoftench.ui import blue, yellow, cyan, orange
 from bookoftench.util import print_and_sleep
@@ -94,25 +94,30 @@ class Fishmonger(LabeledSelectionComponent):
 
 # ================================================================================================
 
-    # todo - add logic for cost to increase with player level and vary w/ season
-
     @staticmethod
     def _make_purchase_component(fishing_area: FishingArea) -> type[Component]:
         @functional_component(state_dependent=True)
         def purchase_component(game_state: GameState):
             player = game_state.player
+            when = "tonight" if game_state.time_of_day == DAY else "tomorrow"
 
-            if fishing_area.travel_cost > player.coins:
+            if game_state.player_went_fishing and not game_state.unlimited_fishing:
+                print_and_sleep(yellow(f"Boat's already been out. Come back {when}."), 2)
+                return None
+            elif fishing_area.travel_cost > player.coins:
                 print_and_sleep(yellow(f"Need more coin."), 2)
                 return None
             elif not player.current_bait:
                 print_and_sleep(yellow(f"Equip some bait."), 2)
                 return None
             else:
+                game_state.player_went_fishing = True
                 player.coins -= fishing_area.travel_cost
                 game_state.current_fishing_area = fishing_area
+
                 play_music(TRAVEL_THEME)
                 print_and_sleep(cyan(f"Traveling by boat to the {fishing_area.name}..."), 4)
+
                 BoatComponent(game_state).run()
                 return None
 
@@ -130,12 +135,11 @@ class BaitShop(LabeledSelectionComponent):
         cost = get_rod_upgrade_cost(player)
         cost_display = orange(f"{cost}")
 
-        valid = [i['name'] for i in Bait_And_Lures]
-        available = load_baits(valid)
+        inventory = game_state.bait_shop_inventory
 
         bait_bindings = [ReprBinding(str(i + 1), bait.name,
                                        self._make_purchase_component(bait), bait) for
-                          i, bait in enumerate(available)]
+                          i, bait in enumerate(inventory)]
 
         upgrade_rod_binding = SelectionBinding('U', f"Upgrade Rod ({cost_display})",
                                                functional_component()(lambda: upgrade_rod(player, cost)))
@@ -213,12 +217,11 @@ class FishingItemShop(LabeledSelectionComponent):
         cost = get_rod_upgrade_cost(player)
         cost_display = orange(f"{cost}")
 
-        valid = [i['name'] for i in Fishing_Items]
-        available = load_fishing_items(valid)
+        inventory = game_state.fishing_item_shop_inventory
 
         fishing_item_bindings = [ReprBinding(str(i + 1), fishing_item.name,
                                        self._make_purchase_component(fishing_item), fishing_item) for
-                          i, fishing_item in enumerate(available)]
+                          i, fishing_item in enumerate(inventory)]
 
         upgrade_rod_binding = SelectionBinding('U', f"Upgrade Rod ({cost_display})",
                                                functional_component()(lambda: upgrade_rod(player, cost)))
@@ -283,15 +286,19 @@ class FishingItemShop(LabeledSelectionComponent):
 # ================================================================================================
 
 def get_rod_upgrade_cost(player) -> int:
-    cost = 25 * (player.rod_lvl ** 1.8)
-    return round(cost / 5) * 5
+    return ROD_UPGRADE_COSTS.get(player.rod_lvl, 1000)
 
 def upgrade_rod(player, cost):
+    if player.rod_lvl >= max(ROD_NAMES):
+        print_and_sleep(yellow("Aye, thar's no rod better than the Golden Tench Rod."), 1)
+        return
+
     if player.coins >= cost:
-        original = player.rod_lvl
+        original = player.rod_name
         player.rod_lvl += 1
+        player.rod_name = ROD_NAMES[player.rod_lvl]
         play_sound(PURCHASE)
         player.coins -= cost
-        print_and_sleep(cyan(f"Rod Level: {original} -> {player.rod_lvl}"), 1)
+        print_and_sleep(cyan(f"{original} -> {player.rod_name}"), 2)
     else:
         print_and_sleep(yellow("Need more coin."), 1)

@@ -43,6 +43,8 @@ from bookoftench.event_base import EventType
 from bookoftench.model.build import Build, load_builds
 from bookoftench.model.illness import load_illnesses
 from bookoftench.model.player import PlayerWeapon
+from ..data.fishing import ROD_NAMES, FISHING_LEVEL_NAMES
+
 
 # ================================================================================================
 
@@ -107,12 +109,16 @@ class BuildFishingLevelSelection(LinearComponent):
                 print_and_sleep(yellow("Fishing Level must be a numeric value between 0 and 10."))
             elif int(fishing_level) < 0:
                 player.fishing_lvl = 0
+                player.fishing_lvl_name = FISHING_LEVEL_NAMES[player.fishing_lvl]
                 return self.game_state
             elif int(fishing_level) > 10:
                 player.fishing_lvl = 10
+                player.fishing_lvl_name = FISHING_LEVEL_NAMES[player.fishing_lvl]
                 return self.game_state
             else:
-                player.fishing_lvl = int(fishing_level)
+                value = int(fishing_level)
+                player.fishing_lvl = value
+                player.fishing_lvl_name = FISHING_LEVEL_NAMES[player.fishing_lvl]
                 return self.game_state
 
 # ================================================================================================
@@ -130,12 +136,16 @@ class BuildRodLevelSelection(LinearComponent):
                 print_and_sleep(yellow("Fishing Rod Level must be a numeric value between 0 and 10."))
             elif int(rod_level) < 0:
                 player.rod_lvl = 0
+                player.rod_name = ROD_NAMES[player.rod_lvl]
                 return self.game_state
             elif int(rod_level) > 10:
                 player.rod_lvl = 10
+                player.rod_name = ROD_NAMES[player.rod_lvl]
                 return self.game_state
             else:
-                player.rod_lvl = int(rod_level)
+                value = int(rod_level)
+                player.rod_lvl = value
+                player.rod_name = ROD_NAMES[player.rod_lvl]
                 return self.game_state
 
 # ================================================================================================
@@ -170,9 +180,11 @@ class BuildMaxHPSelection(LinearComponent):
             if not max_hp.isdigit():
                 print_and_sleep(yellow("Max HP must be a numeric value."))
             elif int(max_hp) < 1:
+                player.base_max_hp = 1
                 player.max_hp = 1
                 return self.game_state
             else:
+                player.base_max_hp = int(max_hp)
                 player.max_hp = int(max_hp)
                 return self.game_state
 
@@ -342,6 +354,8 @@ class BuildIllnessSelection(LabeledSelectionComponent):
 
             player.illness = next(i for i in illness)
             player.illness_death_lvl = player.lvl + player.illness.levels_until_death
+            player.max_hp = player.base_max_hp - player.illness.hp_loss
+            player.hp = min(player.hp, player.max_hp)
 
             return BuildBlindSelection(game_state).run()
 
@@ -455,7 +469,7 @@ class BuildWeaponsSelection(LinearComponent):
         weapons_sorted = sorted(weapon_options, key=lambda w: w.damage)
 
         for w in weapons_sorted:
-            print_and_sleep(w.get_complete_format(None, None))
+            print_and_sleep(w.get_build_format(None, None))
 
         selections = []
 
@@ -561,9 +575,12 @@ class BuildComponent(LabeledSelectionComponent):
 
                 player.lvl = random.randint(1, 3)
                 player.fishing_lvl = random.randint(1, 4)
+                player.fishing_lvl_name = FISHING_LEVEL_NAMES[player.fishing_lvl]
                 player.rod_lvl = random.randint(1, 4)
+                player.rod_name = ROD_NAMES[player.rod_lvl]
 
-                player.max_hp = random.randint(80, 120)
+                player.base_max_hp = random.randint(80, 120)
+                player.max_hp = player.base_max_hp
                 hp_deficit = random.randint(1, 40)
                 player.hp = player.max_hp - hp_deficit if random.random() < 0.5 else player.max_hp
 
@@ -589,6 +606,8 @@ class BuildComponent(LabeledSelectionComponent):
                     options = load_illnesses(illness_names)
                     player.illness = random.choice(options)
                     player.illness_death_lvl = player.lvl + player.illness.levels_until_death
+                    player.max_hp = player.base_max_hp - player.illness.hp_loss
+                    player.hp = min(player.hp, player.max_hp)
 
                 # --- items ---
                 items_count = random.randint(0, 3)
@@ -632,18 +651,25 @@ class BuildComponent(LabeledSelectionComponent):
             else:
                 player.lives = build.lives
                 player.lvl = build.lvl
+                player.base_max_hp = build.hp
                 player.max_hp = build.hp
                 player.hp = build.hp
+
                 player.strength = build.str
                 player.acc = build.acc
                 player.coins = build.coins
                 player.luck = build.luck
+
                 player.fishing_lvl = build.fishing_lvl
+                player.fishing_lvl_name = FISHING_LEVEL_NAMES[build.fishing_lvl]
                 player.rod_lvl = build.rod_lvl
+                player.rod_name = ROD_NAMES[build.rod_lvl]
 
                 if build.illness:
                     player.illness = build.illness
-                    player.illness_death_lvl = player.lvl + build.illness.levels_until_death
+                    player.illness_death_lvl = player.lvl + player.illness.levels_until_death
+                    player.max_hp = player.base_max_hp - player.illness.hp_loss
+                    player.hp = min(player.hp, player.max_hp)
 
                 player.items = dict((it.name, it) for it in build.items)
                 player.weapon_dict.clear()
@@ -1244,7 +1270,7 @@ class EncounterBoss(GatekeepingComponent):
     @staticmethod
     @functional_component(state_dependent=True)
     def _all_bosses_dead_component(game_state: GameState):
-        print_and_sleep(yellow("All bosses in this area are currently in Hell.\n"), 1.5)
+        print_and_sleep(yellow("You came up dry."), 1)
         return game_state
 
 # ================================================================================================
@@ -1274,27 +1300,61 @@ class SpawnEnemy(LinearComponent):
         return self.game_state
 
 # ================================================================================================
+# ================================================================================================
 
 class Battle(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
+        attack_binding = SelectionBinding('A', "Attack", Attack)
+        item_binding = SelectionBinding('I', "Use Item", UseItem)
+        switch_weapon_binding = SelectionBinding('S', "Switch Weapon", EquipWeapon)
+        flee_binding = FleeSelectionBinding('F', "Flee", TryFlee, game_state)
+        view_binding = SelectionBinding('V', "View", DisplayInfo)
+        toggle_binding = SelectionBinding(
+            'T',
+            "Toggle",
+            functional_component()(lambda: self._toggle_battle_status_view()),
+        )
+
+        main_bindings = [
+            attack_binding,
+            item_binding,
+            switch_weapon_binding,
+            flee_binding,
+            view_binding,
+        ]
+
+        toggle_bindings = [
+            toggle_binding,
+        ]
+
         super().__init__(
             game_state,
-            top_level_prompt_callback=lambda gs: print_and_sleep(get_battle_status_view(gs)),
-            bindings=[
-                SelectionBinding('A', "Attack", Attack),
-                SelectionBinding('I', "Use Item", UseItem),
-                SelectionBinding('S', "Switch Weapon", EquipWeapon),
-                FleeSelectionBinding('F', "Flee", TryFlee, game_state),
-                SelectionBinding('V', "View", DisplayInfo),
-            ]
+            bindings=[*main_bindings, *toggle_bindings],
         )
+
+        self.selection_components = [
+            LabeledSelectionComponent(
+                game_state,
+                main_bindings,
+                top_level_prompt_callback=lambda gs: print_and_sleep(get_battle_status_view(gs)),
+            ),
+            LabeledSelectionComponent(
+                game_state,
+                toggle_bindings,
+            ),
+        ]
+
         self.player = self.game_state.player
+        self.enemy = self.game_state.current_area.current_enemy
         self.player.can_flee = False
+
         if perk_is_active(DEATH_CAN_WAIT):
             self.player.cheat_death_enabled = True
-        self.enemy = self.game_state.current_area.current_enemy
+
         self.fled = False
         self._subscribe_listeners()
+
+# ================================================================================================
 
     def play_theme(self) -> None:
         current_enemy = self.game_state.current_area.current_enemy
@@ -1306,13 +1366,49 @@ class Battle(LabeledSelectionComponent):
         play_music(theme)
 
     def can_exit(self) -> bool:
-        return self.fled or self.player.can_flee or not (self.player.is_alive() and self.enemy.is_alive())
+        return self.fled or self.player.can_flee or not (
+            self.player.is_alive() and self.enemy.is_alive()
+        )
+
+    def handle_player_stun(self) -> bool:
+        if not self.player.stunned:
+            return False
+
+        print_and_sleep(yellow("You are stunned and unable to move!"), 1)
+        self.player.stunned = False
+
+        if self.enemy.is_alive() and self.player.is_alive():
+            self.enemy.attack(self.player)
+
+        return True
+
+# ================================================================================================
+
+    def display_options(self) -> None:
+        self.handle_player_stun()
+
+        if self.can_exit():
+            return
+
+        self.selection_components[0].display_options()
+        self.selection_components[1].display_options()
+
+    def _toggle_battle_status_view(self):
+        if self.game_state.weapon_format == 1:
+            self.game_state.weapon_format = 2
+            print_and_sleep(dim("Weapon display set to simple."), 1)
+        else:
+            self.game_state.weapon_format = 1
+            print_and_sleep(dim("Weapon display set to complete."), 1)
+
+        return self.game_state
 
     def _subscribe_listeners(self):
         @subscribe_function(FleeEvent)
         def handle_flee(_: FleeEvent):
             self.fled = True
 
+# ================================================================================================
 # ================================================================================================
 
 class EnemyInfect(NoOpComponent):
@@ -1404,11 +1500,12 @@ class BattleEnd(NoOpComponent):
                 if player.add_item(item):
                     print_and_sleep(cyan(f"{item.name} added to sack."), 1)
 
-        # --- logging and updates ---
+        # --- log kill event ---
         event_logger.log_event(KillEvent())
+
+        # --- time changes each kill, moon changes each day ---
+        self.game_state.update_time_of_day()
         if event_logger.get_count(EventType.KILL) % 2 == 0:
-            self.game_state.update_time_of_day()
-        if event_logger.get_count(EventType.KILL) % 4 == 0:
             self.game_state.update_moon()
 
         # --- add enemy to list of liberated enemies ---

@@ -7,7 +7,7 @@ from bookoftench.component.base import LabeledSelectionComponent, ReprBinding, S
 from bookoftench.component.registry import register_component
 from bookoftench.data.audio import PURCHASE, DRINK, COFFEE_THEME
 from bookoftench.data.components import COFFEE_SHOP
-from bookoftench.data.enviroment import DAY
+from bookoftench.data.environment import DAY
 from bookoftench.model import GameState
 from bookoftench.model.coffee_item import CoffeeItem
 from bookoftench.model.coffee_shop import CoffeeShop
@@ -159,8 +159,7 @@ def apply_coffee_effect(item: CoffeeItem, player: Player) -> None:
         event_logger.log_event(PlayerDeathEvent(player.lives))
         return
 
-    player.illness = illness
-    player.illness_death_lvl = player.lvl + illness.levels_until_death
+    player.acquire_illness(illness.name)
 
     print_and_sleep(
         yellow("Coughy coughed on your coffee and now you're sicker than Hell."),
