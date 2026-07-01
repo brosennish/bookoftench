@@ -27,7 +27,7 @@ from bookoftench.model.item import load_items, load_boss_item
 from bookoftench.model.perk import load_perks, Perk, perk_is_active, activate_perk_print, activate_perk_no_print
 from bookoftench.model.util import get_battle_status_view, display_player_achievements, \
     display_game_stats, calculate_flee, display_active_perks, display_battle_info, display_player_attributes, \
-    display_liberated, display_discoveries, display_encountered, display_investments
+    display_liberated, display_discoveries, display_encountered, display_investments, display_wanted_enemy
 from bookoftench.model.weapon import load_discoverable_weapons, load_weapons, make_elite_weapon, make_autographed_weapon
 from bookoftench.ui import green, purple, yellow, dim, red, cyan, blue
 from bookoftench.util import print_and_sleep, safe_input
@@ -1481,6 +1481,7 @@ class BattleEnd(NoOpComponent):
         # --- wanted / bounty ---
         if self.game_state.is_wanted(enemy):
             event_logger.log_event(BountyCollectedEvent(enemy.name))
+            self.game_state.display_bounty_pending = True
         enemy_weapon = enemy.drop_weapon()
         if enemy_weapon is not None:
             player.obtain_enemy_weapon(enemy_weapon)
@@ -1656,3 +1657,4 @@ class DisplayPerks(TextDisplayingComponent):
 class Stats(TextDisplayingComponent):
     def __init__(self, game_state: GameState):
         super().__init__(game_state, display_callback=display_game_stats)
+

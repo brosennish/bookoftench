@@ -25,6 +25,7 @@ CANNED_HORSE = "Canned Horse"
 CARP_FILET = "Carp Filet"
 CATFISH_FILET = "Catfish Filet"
 CENTAURIAN_HOOF = "Centaurian Hoof"
+CHILDS_LOST_LUNCH = "Child's Lost Lunch"
 CRABS_ON_RYE = "Crabs on Rye"
 CRAY = "Cray"
 CRISPY_DANIELS_BLOOD_SOAKED_BANDANA = "Crispy Daniels Blood-soaked Bandana"
@@ -63,7 +64,6 @@ MUSKRAT_SKEWER = "Muskrat Skewer"
 MYSTERY_MEAT = "Mystery Meat"
 MYSTICAL_MUSHROOMS = "Mystical Mushrooms"
 nPnG = "nPnG"
-OCEAN_MAN_LUNCH_BOX = "Ocean Man Lunch Box"
 ORGANIC_SLUDGE = "Organic Sludge"
 OWL_EGG = "Owl Egg"
 OXYGENATED_BIOFILM = "Oxygenated Biofilm"
@@ -83,7 +83,7 @@ SAPIENT_BURRO = "Sapient Burro"
 TENCH_FILET = "Tench Filet"
 TENCHTOSTERONE = "Tenchtosterone"
 TOAD_STOOL = "Toad Stool"
-TROLL_TOLL = "Troll Toll"
+TROLL_SACK = "Troll Sack"
 UNIDENTIFIED_MUSHROOMS = "Unidentified Mushrooms"
 UNWANTED_PROTEIN = "Unwanted Protein"
 VERY_SPICY_NOODLES = "Very Spicy Noodles"
@@ -192,7 +192,7 @@ Items = [
      'sound': DRINK},
     {'name': MOONSHINE, 'type': NORMAL, 'hp': 34, 'cost': 35, 'sell_value': 14, 'areas': [CAVE, SWAMP], 'desc': None,
      'sound': DRINK},
-    {'name': OCEAN_MAN_LUNCH_BOX, 'type': NORMAL, 'hp': 34, 'cost': 35, 'sell_value': 13, 'areas': [CITY, FOREST], 'desc': None,
+    {'name': CHILDS_LOST_LUNCH, 'type': NORMAL, 'hp': 34, 'cost': 35, 'sell_value': 13, 'areas': [CITY, FOREST], 'desc': None,
      'sound': EAT},
     {'name': UNIDENTIFIED_MUSHROOMS, 'type': NORMAL, 'hp': 35, 'cost': 35, 'sell_value': 16, 'areas': [CAVE, FOREST, SWAMP], 'desc': None,
      'sound': EAT},
@@ -304,9 +304,9 @@ Items = [
     {'name': SEWER_GATOR_SKULL, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 100, 'areas': None,
      'desc': 'The skull of the notorious Sewer Gator', 'sound': WHIFF},
     {'name': SAPIENT_BURRO, 'type': BOSS, 'hp': 100, 'cost': 0, 'sell_value': 125, 'areas': None,
-     'desc': 'smells like root vegetables', 'sound': EAT},
-    {'name': TROLL_TOLL, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 100, 'areas': None,
-     'desc': 'You didn\'t have to pay it', 'sound': WHIFF},
+     'desc': 'Smells like root vegetables', 'sound': EAT},
+    {'name': TROLL_SACK, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 100, 'areas': None,
+     'desc': 'Holds coins for the troll beneath its loins and its hole.', 'sound': WHIFF},
     {'name': WENDIGO_ANTLER, 'type': BOSS, 'hp': 0, 'cost': 0, 'sell_value': 150, 'areas': None,
      'desc': 'One of the two antlers that once adorned the magnificent Wendigo', 'sound': WHIFF},
 ]

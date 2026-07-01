@@ -554,7 +554,7 @@ Special_Bosses = [
     {'name': TROLL, 'hp': 235, 'coins': 80, 'trait': None,
      'weapons': [w.BARE_HANDS, w.TORCH_CLUB],
      'bounty': 0, 'type': SPECIAL_BOSS, 'flee': 0.85, 'strength': 1.12, 'acc': 0.95,
-     'item': i.TROLL_TOLL},
+     'item': i.TROLL_SACK},
 
     # ============================
     #            CITY
@@ -715,17 +715,20 @@ Enemy_Lines = {
     # ============================
 
     ARCHAEOLOGIST: [
-        "Ancient people are like us but dead.",
+        "Ancient people are like us, but dead.",
         "When the institute slashed my pay, I had to resort to bounty hunting.",
-        "It will be strange putting something into the ground rather than carefully exhuming it."
+        "It will be strange to bury something rather than to exhume it.",
+        "I was in love with my professor. She was a tench woman.",
+        "The rich man said I get to keep the bones.",
     ],
 
     EXPLORER: [
-        "There's always more holes to explore.",
+        "There are always more holes to explore.",
+        "The most exciting hole is the next one.",
         "I explored my first hole the moment I was born. I've been hooked ever since.",
         "Have you explored the ways and the rules of the world? I keep putting it off...",
         "I saw you on a wanted poster and wish to explore the collection of your bounty.",
-        "I encountered a mole man in a hole. Impossible to understand, but a remarkable specimen nonetheless.",
+        "I was ravaged by a mole man in a hole. It was a remarkable specimen.",
     ],
 
     FUGITIVE: [
@@ -735,23 +738,30 @@ Enemy_Lines = {
         "Did you know there's more than one of Officer Hohkken?",
         "He might look like a donut-eating slob of a cop. But Officer Hohkken has a dark side.",
         "I'm already facing life in Shebokken's underground jail, might as well collect your bounty.",
+        "Shebokken businesses prefer to hire ex-cons. Unfortunately, fugitives don't count.",
     ],
 
     GEM_ZOMBIE: [
         "Gems... GEMS!",
-        "I couldn't afford the tanzanite marmalade on GSN, so I had to come find it myself.",
-        "Gold is lame, I'm only interested in the finest of fine gems.",
+        "I couldn't afford the semi-precious tanzanite broach, so I had to come find it myself.",
+        "Gold is lame, I'm only interested in the finest of semi-fine gems.",
+        "I blow all of my money on gems... everytime.",
+        "I sold a fake gem to a life coach who was trying to get his mistress back.",
+        "The image of a gem-covered turnstyle has branded my eyeballs and permanently watermarked my vision.",
+        "I traded all of my kids for a fake, marmalade-encrusted pendant. Worth the risk.",
     ],
 
     PROSPECTOR: [
         "I found gold the other day. Well, I think it's gold.",
         "Why is that creek over there full of human teeth?",
         "Gold is cool, but I prefer mold. Can't eat gold. Well, you can, but you know what I mean.",
+        "I regularly step over dead bodies while I pan polluted sediment.",
+        "I wish they made cyclops spray... there's one in here that always comes for me.",
     ],
 
     SURVIVOR: [
         "I was attacked by some sort of human-like cave monster. It kept talking about God.",
-        "A mole person tried to drown me in a puddle. Holy moley, am I right?",
+        "A mole person tried to drown me in a puddle. Holy moley, right?",
         "I've seen things you couldn't dream of, and they all tried to kill me.",
     ],
 
@@ -1158,14 +1168,17 @@ Enemy_Lines = {
 # ========================
 
 Enemy_Adjectives = [
-    "Agitated", "Angry", "Animatronic", "Belligerent", "Bestial",
-    "Bloodthirsty", "Braindead", "Brainwashed",
+    "Abominable", "Agitated", "Angry", "Animatronic",
+    "Barbaric", "Belligerent", "Bestial",
+    "Bloodstained", "Blood-soaked", "Bloodthirsty",
+    "Braindead", "Brain-eating", "Brainwashed",
     "Cannibalistic", "Closeted", "Crazy",
     "Crazed", "Cross-eyed", "Cruel", "Cursed", "Damned",
     "Dastardly", "Degenerate",
-    "Delirious", "Demented", "Deplorable",
+    "Delirious", "Demented", "Deplorable", "Demonic",
     "Depraved", "Deranged", "Desperate",
-    "Detestable", "Diabolical", "Dirty", "Disgruntled", "Disillusioned",
+    "Detestable", "Diabolical", "Dirty",
+    "Disgruntled", "Disillusioned",
     "Disfigured", "Disoriented", "Disturbed", "Drug-fueled",
     "Drunken", "Dubious", "Evangelical", "Evil", "Felonious",
     "Forgotten", "Godless", "Greasy", "Greedy", "Grotesque",
@@ -1176,14 +1189,16 @@ Enemy_Adjectives = [
     "Insane", "Insecure", "Inside-out",
     "Malevolent", "Malicious",
     "Merciless", "Misguided", "Money-hungry", "Moralless",
-    "Murderous", "Obscene", "Possessed", "Psychotic",
+    "Murderous", "Nefarious", "Obscene", "Parasitic",
+    "Possessed", "Psychotic",
     "Rabid", "Radioactive", "Rancid",
     "Repugnant", "Repulsive", "Revolting",
-    "Rude", "Ruthless", "Sadistic", "Savage",
-    "Satanic", "Sexually-frustrated",
+    "Rude", "Ruthless", "Sacrilegious", "Sadistic",
+    "Satanic", "Savage", "Sexually-frustrated",
     "Shallow", "Sinful", "Sloppy", "Soulless",
     "Tench-crazed", "Tench-eyed", "Typical", "Unbaptized",
-    "Uncool", "Unforgivable", "Unholy",
+    "Uncool", "Undead", "Unfaithful",
+    "Unforgivable", "Unholy",
     "Uninspired", "Unnatural", "Unstable", "Untethered",
     "Untrustworthy", "Vile", "Violent", "Wretched",
 ]

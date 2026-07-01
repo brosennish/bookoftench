@@ -220,13 +220,13 @@ MAIN MENU
 class FishingModeSelection(LabeledSelectionComponent):
     def __init__(self, game_state: GameState):
         normal_binding = SelectionBinding(
-            "1",
+            "N",
             "Normal (one trip each day/night)",
             functional_component()(lambda: self._set_normal()),
         )
 
         unlimited_binding = SelectionBinding(
-            "2",
+            "U",
             "Unlimited (unlimited trips)",
             functional_component()(lambda: self._set_unlimited()),
         )

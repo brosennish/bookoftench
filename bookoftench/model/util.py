@@ -459,7 +459,7 @@ def get_player_status_view_1(game_state: GameState) -> str:
         )
 
     area_status.extend([
-        f"Wanted: {purple(game_state.wanted)}",
+        f"Wanted: {purple(game_state.wanted.name)}",
         f"Bounty: {purple(game_state.bounty)}",
     ])
 
@@ -508,7 +508,7 @@ def get_player_status_view_2(game_state: GameState) -> str:
         f"{moon} Moon",
         season_color(season),
         water_condition_color(water_condition),
-        f"{purple(game_state.wanted)}",
+        f"{purple(game_state.wanted.name)}",
         f"{purple(game_state.bounty)}",
     ])
 
@@ -566,7 +566,7 @@ def get_player_status_view_3(game_state: GameState) -> str:
             yellow(season) if season == DRY_SEASON else blue(season),
             yellow(tod) if tod == DAY else purple(tod),
             f'{moon} Moon',
-            f'{purple(game_state.wanted)}',
+            f'{purple(game_state.wanted.name)}',
             f'{purple(game_state.bounty)}',
         ])}"
         f"\n"
@@ -1299,3 +1299,19 @@ def get_rarity_text(rarity: str) -> str:
         return blue(rarity)
     else:
         return orange(rarity)
+
+# ================================================================================================
+
+def display_wanted_enemy(game_state: GameState) -> None:
+    area = next(i for i in game_state.wanted.areas)
+
+    print_and_sleep(f"\n{red('SHEBOKKEN PD: MOST WANTED')}")
+    print_and_sleep(f"{dim('Enemy     |')} {purple(game_state.wanted.name)}")
+    print_and_sleep(f"{dim('Bounty    |')} {purple(game_state.bounty)}")
+    print_and_sleep(f"{dim('Last Seen |')} {blue(area)}")
+    print_and_sleep(f"\n{dim('Crimes:')}")
+
+    for crime in game_state.crimes:
+        print_and_sleep(f"{dim(' -')} {yellow(crime['name'])}")
+
+    print_and_sleep("", 3)

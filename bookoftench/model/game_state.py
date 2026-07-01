@@ -18,7 +18,7 @@ from .bank import Bank
 from .build import Build
 from .discoverable import Discoverable
 from .enemy import Enemy, load_enemy
-from .events import BountyCollectedEvent, HohkkenEvent, LevelUpEvent, TravelEvent
+from .events import BountyCollectedEvent, HohkkenEvent, LevelUpEvent, TravelEvent, PlayerDeathEvent
 from .fish import Fish
 from .fishing_area import FishingArea
 from .fishing_item import load_fishing_items, FishingItem
@@ -31,9 +31,9 @@ from .special_event import SpecialEvent
 from .weapon import Weapon, load_weapons
 from ..data.audio import COINS
 from ..data.builds import Builds
+from ..data.crimes import CRIMES
 from ..data.enemies import HOHKKEN
 from ..data.environment import DAY, DRY, DRYING, FULL, NIGHT, WETTING, Water_Conditions, CLEAR, CLOUDY, MURKY
-from ..data.fishing import ROD_NAMES, FISHING_LEVEL_NAMES
 from ..data.fishing_areas import DRY_SEASON, WET_SEASON
 from ..data.fishing_items import Fishing_Items
 from ..data.illnesses import Illnesses
@@ -77,8 +77,10 @@ class GameState:
     found_item: Item | None = None
     found_weapon: Weapon | None = None
 
-    wanted: str = ""
+    wanted: Enemy = None
+    crimes: list[dict] = field(default_factory=list)
     _bounty: int = 0
+    display_bounty_pending: bool = True
 
     status_view: int = 1
     weapon_format: int = 1
@@ -277,6 +279,11 @@ class GameState:
 # ================================================================================================
 
     def refresh_bounty(self) -> None:
+        self.set_wanted_enemy()
+        self.set_crimes()
+        self.set_bounty()
+
+    def set_wanted_enemy(self) -> None:
         valid_areas = [
             area
             for area in self.areas
@@ -289,8 +296,18 @@ class GameState:
             bounty_area = random.choice(self.areas)
 
         enemy: Enemy = load_enemy(random.choice(bounty_area.enemies))
-        self.wanted = enemy.name
-        self.bounty = enemy.bounty
+        self.wanted = enemy
+
+    def set_crimes(self) -> None:
+        count = random.randint(1, 3)
+        crimes = random.sample(CRIMES, count)
+        self.crimes = crimes
+
+    def set_bounty(self) -> None:
+        bounty = sum(i['bounty'] for i in self.crimes)
+        self.bounty = bounty
+
+# ================================================================================================
 
     def update_current_area(self, area_name: str, season: str) -> None:
         for area in self.areas:
