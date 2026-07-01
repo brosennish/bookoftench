@@ -33,7 +33,7 @@ Builds = [
     {'name': YOUNG_SALT, 'label': "Fishermensch",
      'lives': 2, 'lvl': 1, 'hp': 100, 'str': 1, 'acc': 1, 'coins': 35, 'luck': 3,
      'fishing_lvl': 3, 'rod_lvl': 3,
-     'items': [i.CRITICAL_BASS, i.OCEAN_MAN_LUNCH_BOX],
+     'items': [i.CRITICAL_BASS, i.CHILDS_LOST_LUNCH],
      'weapons': [w.BARE_HANDS, w.HARPOON],
      'perks': [],
      'illness': None,
@@ -86,13 +86,24 @@ Builds = [
 # ================================================================================================
 
     {'name': LIZ, 'label': "Liz",
-     'lives': 100, 'lvl': 1, 'hp': 333, 'str': 100, 'acc': 100, 'coins': 10000, 'luck': 7,
+     'lives': 99, 'lvl': 1, 'hp': 333, 'str': 100, 'acc': 100, 'coins': 10000, 'luck': 7,
      'fishing_lvl': 1, 'rod_lvl': 1,
      'items': [i.IOU, i.PHOTOSYNTHOPHYL, i.MOON_RUNE, i.TENCH_FILET],
      'weapons': [w.BARE_HANDS, w.CROSSBOW, w.RIFLE, w.SLEDGEHAMMER],
      'perks': [p.WALLET_CHAIN],
      'illness': None,
      'notes': "It's Liz, boi!"},
+
+# ================================================================================================
+
+    {'name': BRO, 'label': "Bro",
+     'lives': 2, 'lvl': 1, 'hp': 100, 'str': 100, 'acc': 100, 'coins': 25, 'luck': 1,
+     'fishing_lvl': 1, 'rod_lvl': 1,
+     'items': [i.IOU, i.ALIEN_REMAINS],
+     'weapons': [w.BARE_HANDS, w.STUN_GUN, w.KATANA],
+     'perks': [p.CROWS_NEST],
+     'illness': None,
+     'notes': "Bro... really bro?"},
 
 # ================================================================================================
 

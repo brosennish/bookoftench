@@ -25,6 +25,7 @@ CANNED_HORSE = "Canned Horse"
 CARP_FILET = "Carp Filet"
 CATFISH_FILET = "Catfish Filet"
 CENTAURIAN_HOOF = "Centaurian Hoof"
+CHILDS_LOST_LUNCH = "Child's Lost Lunch"
 CRABS_ON_RYE = "Crabs on Rye"
 CRAY = "Cray"
 CRISPY_DANIELS_BLOOD_SOAKED_BANDANA = "Crispy Daniels Blood-soaked Bandana"
@@ -63,7 +64,6 @@ MUSKRAT_SKEWER = "Muskrat Skewer"
 MYSTERY_MEAT = "Mystery Meat"
 MYSTICAL_MUSHROOMS = "Mystical Mushrooms"
 nPnG = "nPnG"
-OCEAN_MAN_LUNCH_BOX = "Ocean Man Lunch Box"
 ORGANIC_SLUDGE = "Organic Sludge"
 OWL_EGG = "Owl Egg"
 OXYGENATED_BIOFILM = "Oxygenated Biofilm"
@@ -192,7 +192,7 @@ Items = [
      'sound': DRINK},
     {'name': MOONSHINE, 'type': NORMAL, 'hp': 34, 'cost': 35, 'sell_value': 14, 'areas': [CAVE, SWAMP], 'desc': None,
      'sound': DRINK},
-    {'name': OCEAN_MAN_LUNCH_BOX, 'type': NORMAL, 'hp': 34, 'cost': 35, 'sell_value': 13, 'areas': [CITY, FOREST], 'desc': None,
+    {'name': CHILDS_LOST_LUNCH, 'type': NORMAL, 'hp': 34, 'cost': 35, 'sell_value': 13, 'areas': [CITY, FOREST], 'desc': None,
      'sound': EAT},
     {'name': UNIDENTIFIED_MUSHROOMS, 'type': NORMAL, 'hp': 35, 'cost': 35, 'sell_value': 16, 'areas': [CAVE, FOREST, SWAMP], 'desc': None,
      'sound': EAT},
