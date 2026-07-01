@@ -1299,3 +1299,14 @@ def get_rarity_text(rarity: str) -> str:
         return blue(rarity)
     else:
         return orange(rarity)
+
+# ================================================================================================
+
+def display_wanted_enemy(game_state: GameState) -> None:
+    print_and_sleep(f"\n{red('WANTED')}")
+    print_and_sleep(f"{dim('Enemy  |')} {game_state.wanted}")
+    print_and_sleep(f"{dim('Bounty |')} {yellow(game_state.bounty)} coins")
+    print_and_sleep(f"\n{dim('Crimes |')}")
+
+    for crime in game_state.crimes:
+        print_and_sleep(f"{dim(' -')} {crime['crime']}")
