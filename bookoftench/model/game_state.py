@@ -38,6 +38,22 @@ from ..data.fishing_areas import DRY_SEASON, WET_SEASON
 from ..data.fishing_items import Fishing_Items
 from ..data.illnesses import Illnesses
 
+from ..data.crimes import Crimes as CrimeData
+
+
+def sum_bounty_from_crimes(enemy: Enemy, area_name: str) -> int:
+    """Pick 1-3 crimes matching the area, sum bounties for the reward."""
+    import random
+    area_crimes = [c for c in CrimeData if area_name in c["areas"]]
+    if not area_crimes:
+        area_crimes = CrimeData  # fallback
+
+    n_crimes = random.randint(1, min(3, len(area_crimes)))
+    selected = random.sample(area_crimes, n_crimes)
+    total = sum(c["bounty"] for c in selected)
+    return total
+
+
 # ================================================================================================
 
 @dataclass
@@ -290,7 +306,7 @@ class GameState:
 
         enemy: Enemy = load_enemy(random.choice(bounty_area.enemies))
         self.wanted = enemy.name
-        self.bounty = enemy.bounty
+        self.bounty = sum_bounty_from_crimes(enemy, bounty_area.name)
 
     def update_current_area(self, area_name: str, season: str) -> None:
         for area in self.areas:
